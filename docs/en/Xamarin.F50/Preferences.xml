@@ -27,19 +27,6 @@
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
-    <Member MemberName=".ctor">
-      <MemberSignature Language="C#" Value="public Preferences (Android.Content.Context context);" />
-      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class Android.Content.Context context) cil managed" />
-      <MemberType>Constructor</MemberType>
-      <Parameters>
-        <Parameter Name="context" Type="Android.Content.Context" />
-      </Parameters>
-      <Docs>
-        <param name="context">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
-      </Docs>
-    </Member>
     <Member MemberName="DoStuff">
       <MemberSignature Language="C#" Value="public static void DoStuff ();" />
       <MemberSignature Language="ILAsm" Value=".method public static hidebysig void DoStuff() cil managed" />
