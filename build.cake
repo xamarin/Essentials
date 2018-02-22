@@ -41,16 +41,20 @@ Task("UpdateDocs")
     .Does(() =>
 {
     // the reference folders to locate assemblies
-    var refAssemblies = "C:/Program Files (x86)/Microsoft Visual Studio/*/*/Common7/IDE/ReferenceAssemblies/Microsoft/Framework/";
-    var refNetNative = "C:/Program Files (x86)/MSBuild/15.0/.Net/.NetNative/*/x86/ilc/lib/Private";
     var refDirs = new List<DirectoryPath>();
-    refDirs.AddRange(GetDirectories(refNetNative));
-    refDirs.AddRange(GetDirectories(refAssemblies + "MonoAndroid/v1.0"));
-    refDirs.AddRange(GetDirectories(refAssemblies + "MonoAndroid/v4.0.3"));
-    refDirs.AddRange(GetDirectories(refAssemblies + "Xamarin.iOS/v1.0"));
-    refDirs.AddRange(GetDirectories(refAssemblies + "Xamarin.TVOS/v1.0"));
-    refDirs.AddRange(GetDirectories(refAssemblies + "Xamarin.WatchOS/v1.0"));
-    refDirs.AddRange(GetDirectories(refAssemblies + "Xamarin.Mac/v2.0"));
+
+    // only Windows needs this, macOS finds everything automatically
+    if (IsRunningOnWindows ()) {
+        var refNetNative = "C:/Program Files (x86)/MSBuild/15.0/.Net/.NetNative/*/x86/ilc/lib/Private";
+        var refAssemblies = "C:/Program Files (x86)/Microsoft Visual Studio/*/*/Common7/IDE/ReferenceAssemblies/Microsoft/Framework/";
+        refDirs.AddRange(GetDirectories(refNetNative));
+        refDirs.AddRange(GetDirectories(refAssemblies + "MonoAndroid/v1.0"));
+        refDirs.AddRange(GetDirectories(refAssemblies + "MonoAndroid/v4.0.3"));
+        refDirs.AddRange(GetDirectories(refAssemblies + "Xamarin.iOS/v1.0"));
+        refDirs.AddRange(GetDirectories(refAssemblies + "Xamarin.TVOS/v1.0"));
+        refDirs.AddRange(GetDirectories(refAssemblies + "Xamarin.WatchOS/v1.0"));
+        refDirs.AddRange(GetDirectories(refAssemblies + "Xamarin.Mac/v2.0"));
+    }
 
     // the assemblies to generate documentation for
     var assemblies = GetFiles("./output/*/*.dll");
