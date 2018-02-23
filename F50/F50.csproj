@@ -57,6 +57,7 @@
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'Xamarin.iOS10' ">
     <Compile Include="**\*.ios.cs" />
+    <Compile Include="**\*.ios.reachability.cs" />
   </ItemGroup>
 
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
