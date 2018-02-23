@@ -21,11 +21,11 @@ var configuration = Argument("configuration", "Release");
 Task("Build")
     .Does(() =>
 {
-    NuGetRestore("./F50.sln", new NuGetRestoreSettings { 
+    NuGetRestore("./Caboodle.sln", new NuGetRestoreSettings { 
         ToolPath = nugetPath,
     });
 
-    MSBuild("./F50.sln", new MSBuildSettings {
+    MSBuild("./Caboodle.sln", new MSBuildSettings {
         Configuration = configuration,
         PlatformTarget = PlatformTarget.MSIL,
         MSBuildPlatform = MSBuildPlatform.x86,
@@ -33,7 +33,7 @@ Task("Build")
 
     CleanDirectories("./output/");
     EnsureDirectoryExists("./output/");
-    CopyDirectory($"./F50/bin/{configuration}", "./output/");
+    CopyDirectory($"./Caboodle/bin/{configuration}", "./output/");
 });
 
 Task("UpdateDocs")
@@ -83,7 +83,7 @@ Task("GenDocs")
     StartProcess(mdocPath, new ProcessSettings {
         Arguments = new ProcessArgumentBuilder()
             .Append("export-msxdoc")
-            .AppendSwitchQuoted("--out", "=", "./output/Xamarin.F50.xml")
+            .AppendSwitchQuoted("--out", "=", "./output/Xamarin.Caboodle.xml")
             .AppendQuoted("./docs/en/")
     });
 });
