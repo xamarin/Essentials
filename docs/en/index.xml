@@ -221,6 +221,7 @@
   <Types>
     <Namespace Name="Xamarin.F50">
       <Type Name="NotImplentedInReferenceAssembly" Kind="Class" />
+      <Type Name="Platform" Kind="Class" />
       <Type Name="Preferences" Kind="Class" />
       <Type Name="PreferencesExtensions" Kind="Class" />
     </Namespace>
