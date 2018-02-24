@@ -36,8 +36,8 @@ namespace Microsoft.Caboodle
 			}
 		}
 
-		public static bool IsConnected
-		{
+		public static NetworkAccess NetworkAccess
+        {
 			get
 			{
 				try
@@ -67,7 +67,7 @@ namespace Microsoft.Caboodle
 									continue;
 
 								if (info.IsConnected)
-									return true;
+									return NetworkAccess.Internet;
 							}
 							catch
 							{
@@ -85,16 +85,16 @@ namespace Microsoft.Caboodle
 								continue;
 
 							if (info.IsConnected)
-								return true;
+								return NetworkAccess.Internet;
 						}
 					}
 
-					return false;
+					return NetworkAccess.None;
 				}
 				catch (Exception e)
 				{
 					Console.WriteLine("Unable to get connected state - do you have ACCESS_NETWORK_STATE permission? - error: {0}", e);
-					return false;
+					return NetworkAccess.Unknown;
 				}
 			}
 		}

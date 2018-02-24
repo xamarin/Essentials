@@ -7,16 +7,26 @@ namespace Microsoft.Caboodle
 {
 	public partial class Connectivity
     {
-		public static bool IsConnected
+		public static NetworkAccess NetworkAccess
 		{
 			get
 			{
 				var profile = NetworkInformation.GetInternetConnectionProfile();
 				if (profile == null)
-					return false;
+					return NetworkAccess.Unknown;
 
 				var level = profile.GetNetworkConnectivityLevel();
-				return level != NetworkConnectivityLevel.None && level != NetworkConnectivityLevel.LocalAccess;
+				switch(level)
+                {
+                    case NetworkConnectivityLevel.LocalAccess:
+                        return NetworkAccess.Local;
+                    case NetworkConnectivityLevel.InternetAccess:
+                        return NetworkAccess.Internet;
+                    case NetworkConnectivityLevel.ConstrainedInternetAccess:
+                        return NetworkAccess.ConstrainedInternet;
+                    default:
+                        return NetworkAccess.None;
+                }
 			}
 		}
 	}

@@ -6,18 +6,20 @@ namespace Microsoft.Caboodle
 {
 	public partial class Connectivity
     {
-		public static bool IsConnected
-		{
+		public static NetworkAccess NetworkAccess
+        {
 			get
 			{
 				var remoteHostStatus = Reachability.RemoteHostStatus();
 				var internetStatus = Reachability.InternetConnectionStatus();
 				
-			    return (internetStatus == NetworkStatus.ReachableViaCarrierDataNetwork ||
+			    var isConnected = (internetStatus == NetworkStatus.ReachableViaCarrierDataNetwork ||
 								internetStatus == NetworkStatus.ReachableViaWiFiNetwork) ||
 							  (remoteHostStatus == NetworkStatus.ReachableViaCarrierDataNetwork ||
 								remoteHostStatus == NetworkStatus.ReachableViaWiFiNetwork);
-			}
+
+                return isConnected ? NetworkAccess.Internet : NetworkAccess.None;
+            }
 		}
     }
 }

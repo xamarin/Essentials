@@ -6,6 +6,6 @@ namespace Microsoft.Caboodle
 {
     public partial class Connectivity
     {
-		public static bool IsConnected { get; }
+		public static NetworkAccess NetworkAccess { get; }
     }
 }

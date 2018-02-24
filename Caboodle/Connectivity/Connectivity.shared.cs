@@ -8,7 +8,7 @@ namespace Microsoft.Caboodle
     {
     }
 
-	public enum ConnectionType
+	public enum ConnectionProfile
 	{
 		Bluetooth,
 		Cellular,
@@ -17,18 +17,28 @@ namespace Microsoft.Caboodle
 		WiFi,
 		Other
 	}
+
+
+	public enum NetworkAccess
+    {
+        ConstrainedInternet,
+        Internet,
+        Local,
+        None,
+        Unknown
+    }
 	
 	public class ConnectivityChangedEventArgs : EventArgs
 	{
-		public bool IsConnected { get; set; }
+		public NetworkAccess NetworkAccess { get; set; }
 	}
 	
-	public class ConnectivityTypeChangedEventArgs : EventArgs
+	public class ConnectivityProfileChangedEventArgs : EventArgs
 	{
-		public IEnumerable<ConnectionType> ConnectionTypes { get; set; }
+		public IEnumerable<ConnectionProfile> Profiles { get; set; }
 	}
 	
 	public delegate void ConnectivityChangedEventHandler(object sender, ConnectivityChangedEventArgs e);
 	
-	public delegate void ConnectivityTypeChangedEventHandler(object sender, ConnectivityTypeChangedEventArgs e);
+	public delegate void ConnectivityProfileChangedEventHandler(object sender, ConnectivityProfileChangedEventArgs e);
 }
