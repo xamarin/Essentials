@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Windows.Networking.Connectivity;
 
-namespace Xamarin.F50
+namespace Microsoft.Caboodle
 {
 	public partial class Connectivity
     {

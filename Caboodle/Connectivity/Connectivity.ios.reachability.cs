@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 
 
-namespace Xamarin.F50
+namespace Microsoft.Caboodle
 {
 
 	/// <summary>
