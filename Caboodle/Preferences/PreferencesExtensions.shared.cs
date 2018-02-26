@@ -4,17 +4,17 @@ namespace Microsoft.Caboodle
 {
 	public static class PreferencesExtensions
 	{
-		public static string Get(this Preferences preferences, string defaultValue = default(string), [CallerMemberName]string key = null) =>
+		public static string Get(this Preferences preferences, string defaultValue, [CallerMemberName]string key = null) =>
 			preferences.Get(key, defaultValue);
-		public static bool Get(this Preferences preferences, bool defaultValue = default(bool), [CallerMemberName]string key = null) =>
+		public static bool Get(this Preferences preferences, bool defaultValue, [CallerMemberName]string key = null) =>
 			preferences.Get(key, defaultValue);
-		public static int Get(this Preferences preferences, int defaultValue = default(int), [CallerMemberName]string key = null) =>
+		public static int Get(this Preferences preferences, int defaultValue, [CallerMemberName]string key = null) =>
 			preferences.Get(key, defaultValue);
-		public static double Get(this Preferences preferences, double defaultValue = default(double), [CallerMemberName]string key = null) =>
+		public static double Get(this Preferences preferences, double defaultValue, [CallerMemberName]string key = null) =>
 			preferences.Get(key, defaultValue);
-		public static float Get(this Preferences preferences, float defaultValue = default(float), [CallerMemberName]string key = null) =>
+		public static float Get(this Preferences preferences, float defaultValue, [CallerMemberName]string key = null) =>
 			preferences.Get(key, defaultValue);
-		public static long Get(this Preferences preferences, long defaultValue = default(long), [CallerMemberName]string key = null) =>
+		public static long Get(this Preferences preferences, long defaultValue, [CallerMemberName]string key = null) =>
 			preferences.Get(key, defaultValue);
 
 		public static string Set(this Preferences preferences, string value, [CallerMemberName]string key = null) =>
