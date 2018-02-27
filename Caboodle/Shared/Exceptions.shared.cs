@@ -12,4 +12,12 @@ namespace Microsoft.Caboodle
 
 		}
 	}
+
+	public class CapabilityNotSupportedException : NotSupportedException
+	{
+	}
+
+	public class CapabilityNotEnabledException : InvalidOperationException
+	{
+	}
 }
