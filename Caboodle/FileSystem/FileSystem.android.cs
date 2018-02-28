@@ -25,7 +25,15 @@ namespace Microsoft.Caboodle
 			if (filename == null)
 				throw new ArgumentNullException(nameof(filename));
 
-			return Task.FromResult(Application.Context.Assets.Open(filename));
+			filename = filename.Replace("\\", "/");
+			try
+			{
+				return Task.FromResult(Application.Context.Assets.Open(filename));
+			}
+			catch (Java.IO.FileNotFoundException ex)
+			{
+				throw new FileNotFoundException(ex.Message, filename, ex);
+			}
 		}
 	}
 }

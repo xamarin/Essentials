@@ -26,6 +26,7 @@ namespace Microsoft.Caboodle
 			if (filename == null)
 				throw new ArgumentNullException(nameof(filename));
 
+			filename = filename.Replace("/", "\\");
 			return Package.Current.InstalledLocation.OpenStreamForReadAsync(filename);
 		}
 	}

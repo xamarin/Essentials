@@ -25,16 +25,9 @@ namespace Microsoft.Caboodle
 			if (filename == null)
 				throw new ArgumentNullException(nameof(filename));
 
-			var dir = Path.GetDirectoryName(filename);
-			var file = Path.GetFileNameWithoutExtension(filename);
-			var ext = Path.GetExtension(filename);
-			if (string.IsNullOrEmpty(ext))
-				ext = null;
-			else
-				ext = ext.Substring(1);
-
-			var bundle = NSBundle.MainBundle.PathForResource(Path.Combine(dir, file), ext);
-			return Task.FromResult((Stream)File.OpenRead(bundle));
+			filename = filename.Replace("\\", "/");
+			var file = Path.Combine(NSBundle.MainBundle.BundlePath, filename);
+			return Task.FromResult((Stream)File.OpenRead(file));
 		}
 
 		static string GetNSDirectory(NSSearchPathDirectory directory)
