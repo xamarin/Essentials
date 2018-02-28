@@ -15,7 +15,7 @@ namespace Microsoft.Caboodle
 			get
 			{
 				var packageManager = Application.Context.PackageManager;
-				var dialIntent = ResolveDialIntent("0000000000");
+				var dialIntent = ResolveDialIntent(new string('0', 10));
 				return dialIntent.ResolveActivity(packageManager) != null;
 			}
 		}

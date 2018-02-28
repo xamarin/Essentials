@@ -7,23 +7,23 @@ namespace Microsoft.Caboodle
 {
 	public static partial class PhoneDialer
 	{
+		private const string NoNetworkProviderCode = "65535";
+
 		public static bool IsSupported
 		{
 			get
 			{
-				var nsUrl = CreateNsUrl("0000000000");
-				var canCall = UIApplication.SharedApplication.CanOpenUrl(nsUrl);
-				
-				if (canCall)
+				var isDialerInstalled = UIApplication.SharedApplication.CanOpenUrl(CreateNsUrl(new string('0', 10)));
+				if (!isDialerInstalled)
 				{
-					using (var netInfo = new CTTelephonyNetworkInfo())
-					{
-						var mnc = netInfo.SubscriberCellularProvider?.MobileNetworkCode;
-						return !string.IsNullOrEmpty(mnc) && mnc != "65535"; // 65535 stands for NoNetwordProvider
-					}
+					return false;
 				}
-				
-				return false;
+
+				using (var netInfo = new CTTelephonyNetworkInfo())
+				{
+					var mnc = netInfo.SubscriberCellularProvider?.MobileNetworkCode;
+					return !string.IsNullOrEmpty(mnc) && mnc != NoNetworkProviderCode;
+				}
 			}
 		}
 
@@ -43,9 +43,6 @@ namespace Microsoft.Caboodle
 			UIApplication.SharedApplication.OpenUrl(nsUrl);
 		}
 
-		private NSUrl CreateNsUrl(string number)
-		{
-			return new NSUrl(new Uri($"tel:{number}").AbsoluteUri);
-		}
+		private static NSUrl CreateNsUrl(string number) => new NSUrl(new Uri($"tel:{number}").AbsoluteUri);
 	}
 }

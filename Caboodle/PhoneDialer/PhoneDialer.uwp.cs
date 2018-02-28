@@ -8,10 +8,7 @@ namespace Microsoft.Caboodle
 		public static bool IsSupported =>
 			 Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.ApplicationModel.Calls.PhoneCallManager");
 
-		public static void Open(string number)
-		{
-			Open(number, null);
-		}
+		public static void Open(string number) => Open(number, null);
 
 		public static void Open(string number, string name)
 		{
