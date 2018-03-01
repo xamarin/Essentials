@@ -12,6 +12,7 @@ namespace Caboodle.Samples.ViewModel
             {
                 new SampleItem("Geocoding", typeof(GeocodingPage), "Easily geocode and reverse geocoding."),
                 new SampleItem("Preferences", typeof(PreferencesPage), "Quickly and easily add persistent preferences."),
+                new SampleItem("File System", typeof(FileSystemPage), "Easily save files to app data."),
             };
         }
 

@@ -4,6 +4,11 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.3.0" />
     <PackageReference Include="Xamarin.Forms" Version="2.5.0.122203" />
@@ -16,6 +21,9 @@
   <ItemGroup>
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="App.xaml.cs">
       <DependentUpon>*.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="View\FileSystemPage.xaml.cs">
+      <DependentUpon>FileSystemPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
