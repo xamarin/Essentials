@@ -48,8 +48,11 @@ namespace Microsoft.Caboodle
 #pragma warning restore CS0618
 			}
 			
-			var dialIntent = ResolveDialIntent(phoneNumber);
-			dialIntent.StartNewActivity();
+			var dialIntent = ResolveDialIntent(phoneNumber)
+				.SetFlags(ActivityFlags.ClearTop)
+				.SetFlags(ActivityFlags.NewTask);
+
+			Application.Context.StartActivity(dialIntent);
 		}
 
 		private static Intent ResolveDialIntent(string number)
