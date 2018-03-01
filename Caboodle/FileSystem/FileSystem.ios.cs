@@ -12,13 +12,13 @@ namespace Microsoft.Caboodle
 		private static string userData;
 
 		public static string CacheDirectory
-			=> cache ?? (cache = GetNSDirectory(NSSearchPathDirectory.CachesDirectory));
+			=> cache ?? (cache = GetDirectory(NSSearchPathDirectory.CachesDirectory));
 
 		public static string AppDataDirectory
-			=> appData ?? (appData = GetNSDirectory(NSSearchPathDirectory.ApplicationSupportDirectory));
+			=> appData ?? (appData = GetDirectory(NSSearchPathDirectory.ApplicationSupportDirectory));
 
 		public static string UserDataDirectory
-			=> userData ?? (userData = GetNSDirectory(NSSearchPathDirectory.DocumentDirectory));
+			=> userData ?? (userData = GetDirectory(NSSearchPathDirectory.DocumentDirectory));
 
 		public static Task<Stream> OpenAppPackageFileAsync(string filename)
 		{
@@ -30,15 +30,14 @@ namespace Microsoft.Caboodle
 			return Task.FromResult((Stream)File.OpenRead(file));
 		}
 
-		static string GetNSDirectory(NSSearchPathDirectory directory)
+		static string GetDirectory(NSSearchPathDirectory directory)
 		{
-			var urls = NSFileManager.DefaultManager.GetUrls(directory, NSSearchPathDomain.User);
-			if (urls == null || urls.Length == 0)
+			var dirs = NSSearchPath.GetDirectories(directory, NSSearchPathDomain.User);
+			if (dirs == null || dirs.Length == 0)
 			{
 				throw new ArgumentException(nameof(directory));
 			}
-
-			return urls[0].Path;
+			return dirs[0];
 		}
 	}
 }
