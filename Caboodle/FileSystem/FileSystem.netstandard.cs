@@ -14,7 +14,7 @@ namespace Microsoft.Caboodle
 		public static string UserDataDirectory
 			=> throw new NotImplentedInReferenceAssembly();
 
-		public static Task<Stream> OpenAppBundleFileAsync(string filename)
+		public static Task<Stream> OpenAppPackageFileAsync(string filename)
 			 => throw new NotImplentedInReferenceAssembly();
 	}
 }

@@ -21,7 +21,7 @@ namespace Microsoft.Caboodle
 		public static string UserDataDirectory
 			=> userData ?? (userData = ApplicationData.Current.LocalFolder.Path);
 
-		public static Task<Stream> OpenAppBundleFileAsync(string filename)
+		public static Task<Stream> OpenAppPackageFileAsync(string filename)
 		{
 			if (filename == null)
 				throw new ArgumentNullException(nameof(filename));

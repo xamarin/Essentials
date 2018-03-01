@@ -12,9 +12,9 @@ namespace Microsoft.Caboodle.Tests
 		}
 
 		[Fact]
-		public async Task OpenAppBundleFileAsync_Fail_On_NetStandard()
+		public async Task OpenAppPackageFileAsync_Fail_On_NetStandard()
 		{
-			await Assert.ThrowsAsync<NotImplentedInReferenceAssembly>(() => FileSystem.OpenAppBundleFileAsync("filename.txt"));
+			await Assert.ThrowsAsync<NotImplentedInReferenceAssembly>(() => FileSystem.OpenAppPackageFileAsync("filename.txt"));
 		}
 	}
 }

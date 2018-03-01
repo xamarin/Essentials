@@ -32,9 +32,9 @@ namespace Caboodle.DeviceTests
 		[InlineData("AppBundleFile_NoExtension", BundleFileContents)]
 		[InlineData("Folder/AppBundleFile_Nested.txt", BundleFileContents)]
 		[InlineData("Folder\\AppBundleFile_Nested.txt", BundleFileContents)]
-		public async Task OpenAppBundleFileAsync_Can_Load_File(string filename, string contents)
+		public async Task OpenAppPackageFileAsync_Can_Load_File(string filename, string contents)
 		{
-			using (var stream = await FileSystem.OpenAppBundleFileAsync(filename))
+			using (var stream = await FileSystem.OpenAppPackageFileAsync(filename))
 			{
 				Assert.NotNull(stream);
 
@@ -48,9 +48,9 @@ namespace Caboodle.DeviceTests
 		}
 
 		[Fact]
-		public async Task OpenAppBundleFileAsync_Throws_If_File_Is_Not_Found()
+		public async Task OpenAppPackageFileAsync_Throws_If_File_Is_Not_Found()
 		{
-			await Assert.ThrowsAsync<FileNotFoundException>(() => FileSystem.OpenAppBundleFileAsync("MissingFile.txt"));
+			await Assert.ThrowsAsync<FileNotFoundException>(() => FileSystem.OpenAppPackageFileAsync("MissingFile.txt"));
 		}
 	}
 }
