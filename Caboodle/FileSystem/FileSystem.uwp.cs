@@ -6,28 +6,28 @@ using Windows.Storage;
 
 namespace Microsoft.Caboodle
 {
-	public static partial class FileSystem
-	{
-		private static string cache;
-		private static string appData;
-		private static string userData;
+    public static partial class FileSystem
+    {
+        private static string cache;
+        private static string appData;
+        private static string userData;
 
-		public static string CacheDirectory
-			=> cache ?? (cache = ApplicationData.Current.LocalCacheFolder.Path);
+        public static string CacheDirectory
+            => cache ?? (cache = ApplicationData.Current.LocalCacheFolder.Path);
 
-		public static string AppDataDirectory
-			=> appData ?? (appData = ApplicationData.Current.LocalFolder.Path);
+        public static string AppDataDirectory
+            => appData ?? (appData = ApplicationData.Current.LocalFolder.Path);
 
-		public static string UserDataDirectory
-			=> userData ?? (userData = ApplicationData.Current.LocalFolder.Path);
+        public static string UserDataDirectory
+            => userData ?? (userData = ApplicationData.Current.LocalFolder.Path);
 
-		public static Task<Stream> OpenAppPackageFileAsync(string filename)
-		{
-			if (filename == null)
-				throw new ArgumentNullException(nameof(filename));
+        public static Task<Stream> OpenAppPackageFileAsync(string filename)
+        {
+            if (filename == null)
+                throw new ArgumentNullException(nameof(filename));
 
-			filename = filename.Replace("/", "\\");
-			return Package.Current.InstalledLocation.OpenStreamForReadAsync(filename);
-		}
-	}
+            filename = filename.Replace("/", "\\");
+            return Package.Current.InstalledLocation.OpenStreamForReadAsync(filename);
+        }
+    }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Microsoft.Caboodle
 {
-	public static partial class FileSystem
-	{
-	}
+    public static partial class FileSystem
+    {
+    }
 }
