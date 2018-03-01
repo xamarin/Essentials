@@ -65,5 +65,6 @@
     <Compile Include="**\*.ios.cs" />
     <Compile Include="**\*.ios.reachability.cs" />
   </ItemGroup>
+  <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
   <Import Project="$(MSBuildProjectDirectory)\mdoc.targets" />
 </Project>
