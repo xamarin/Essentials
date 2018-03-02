@@ -116,7 +116,7 @@ namespace Caboodle.DeviceTests
             var p = new Preferences(sharedName);
             p.Set("DoesContainsKey1", "One");
 
-            Assert.True(p.ContainsKey("ContainsKey1"));
+            Assert.True(p.ContainsKey("DoesContainsKey1"));
         }
 
         [Theory]
