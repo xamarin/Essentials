@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Microsoft.Caboodle.Types
+namespace Microsoft.Caboodle
 {
     public static partial class LocationExtensions
     {
         public static double CalculateDistance(this Location locationStart, Location locationEnd, DistanceUnits units) =>
             Location.CalculateDistance(locationStart, locationEnd, units);
-
     }
 }

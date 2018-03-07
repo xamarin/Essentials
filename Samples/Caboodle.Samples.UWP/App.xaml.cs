@@ -7,7 +7,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Caboodle.Samples.UWP
 {
-    sealed partial class App : Application
+    public sealed partial class App : Application
     {
         public App()
         {
@@ -56,7 +56,7 @@ namespace Caboodle.Samples.UWP
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
 
-        private void OnSuspending(object sender, SuspendingEventArgs e)
+        void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
 

@@ -1,21 +1,20 @@
-﻿using MvvmHelpers;
-using Microsoft.Caboodle;
+﻿using Microsoft.Caboodle;
 
 namespace Caboodle.Samples.ViewModel
 {
     public class PreferencesViewModel : BaseViewModel
     {
-        private const string PreferenceKey = nameof(PreferenceKey);
+        const string preferenceKey = "PreferenceKey";
 
-        private readonly Preferences preferences;
+        readonly Preferences preferences;
 
-        private string preferenceValue;
+        string preferenceValue;
 
         public PreferencesViewModel()
         {
             preferences = new Preferences();
 
-            preferenceValue = preferences.Get(PreferenceKey, string.Empty);
+            preferenceValue = preferences.Get(preferenceKey, string.Empty);
         }
 
         public string PreferenceValue
@@ -24,7 +23,7 @@ namespace Caboodle.Samples.ViewModel
             set
             {
                 preferenceValue = value;
-                preferences.Set(PreferenceKey, value);
+                preferences.Set(preferenceKey, value);
 
                 OnPropertyChanged();
             }
