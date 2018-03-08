@@ -57,6 +57,11 @@
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
     <Compile Include="**\*.ios.cs" />
   </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'MonoAndroid80'">
+    <PackageReference Include="Xamarin.Android.Support.CustomTabs">
+      <Version>25.4.0.2</Version>
+    </PackageReference>
+  </ItemGroup>
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
   <Import Project="$(MSBuildThisFileDirectory)mdoc.targets" />
   <Import Project="$(MSBuildThisFileDirectory)..\CodeStyles.targets" />
