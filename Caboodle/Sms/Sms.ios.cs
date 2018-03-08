@@ -23,25 +23,6 @@ namespace Microsoft.Caboodle
 
             smsController.Finished += (sender, e) => smsController.DismissViewController(true, null);
             UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(smsController, true, null);
-
-            ////smsController.Body = message;
-
-            ////EventHandler<MFMessageComposeResultEventArgs> handler = null;
-            ////handler = (sender, args) =>
-            ////   {
-            ////       smsController.Finished -= handler;
-
-            ////       if (!(sender is UIViewController uiViewController))
-            ////       {
-            ////           throw new ArgumentException("sender");
-            ////       }
-
-            ////       uiViewController.DismissViewController(true, () => { });
-            ////   };
-
-            ////smsController.Finished += handler;
-
-            ////smsController.PresentUsingRootViewController();
         }
 
         public static void PlatformSendSmsInBackground(string recipient, string message)
