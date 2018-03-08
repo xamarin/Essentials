@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Caboodle.Samples.View.SMSPage"
+             Title="SMS"
+             xmlns:viewmodels="clr-namespace:Caboodle.Samples.ViewModel">
+    <ContentPage.BindingContext>
+        <viewmodels:SmsViewModel />
+    </ContentPage.BindingContext>
+
+    <StackLayout>
+        <Label Text="Send sms easy"
+               FontAttributes="Bold"
+               Margin="12" />
+
+        <ScrollView>
+            <StackLayout Padding="12,0,12,12"
+                         Spacing="6">
+                <ActivityIndicator IsVisible="{Binding IsBusy}"
+                                   IsRunning="{Binding IsBusy}" />
+
+                <Label Text="SMS Capability Check:"
+                       FontAttributes="Bold"
+                       Margin="0,6,0,0" />
+                <Label Text="Can Send Sms: " />
+                <Label Text="{Binding CanSendSms}" />
+                <Label Text="Can Send Sms in Background:" />
+                <Label Text="{Binding CanSendSmsInBackground}" />
+
+
+                <Label Text="Send Sms:"
+                       FontAttributes="Bold"
+                       Margin="0,10,0,0" />
+                <Label Text="Recipent:" />
+                <Entry Text="{Binding Recipient}" />
+                <Label Text="Message Text:" />
+                <Entry Text="{Binding MsgText}" />
+                <Button Text="Send SMS"
+                        Command="{Binding SendSmsCommand}"
+                        IsEnabled="{Binding CanSendSms}" />
+                <Button Text="Send SMS in Background"
+                        Command="{Binding SendSmsInBackgroundCommand}"
+                        IsEnabled="{Binding CanSendSmsInBackground}" />
+
+                <!--<Button Text="Detect Placemarks"
+                        Command="{Binding GetAddressCommand}"
+                        IsEnabled="{Binding IsNotBusy}" />
+                <Label Text="{Binding GeocodeAddress}" />
+
+                <Label Text="Reverse Geocoding:"
+                       FontAttributes="Bold"
+                       Margin="0,6,0,0" />
+                <Label Text="Address:" />
+                <Entry Text="{Binding Address}" />
+                <Button Text="Detect Location"
+                        Command="{Binding GetPositionCommand}"
+                        IsEnabled="{Binding IsNotBusy}" />
+                <Label Text="{Binding GeocodePosition}" />-->
+            </StackLayout>
+        </ScrollView>
+    </StackLayout>
+</ContentPage>
