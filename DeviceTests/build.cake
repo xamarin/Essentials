@@ -1,5 +1,6 @@
 #addin nuget:?package=Cake.AppleSimulator
 #addin nuget:?package=Cake.Android.Adb&version=2.0.6
+#addin nuget:?package=Cake.Android.AvdManager&version=1.0.2
 #addin nuget:?package=Cake.FileHelpers
 
 var TARGET = Argument("target", "Default");
@@ -14,8 +15,10 @@ var IOS_TEST_RESULTS_PATH = "./nunit-ios.xml";
 var ANDROID_PROJ = "./Caboodle.DeviceTests.Android/Caboodle.DeviceTests.Android.csproj";
 var ANDROID_APK_PATH = "./Caboodle.DeviceTests.Android/bin/Release/com.xamarin.caboodle.devicetests-Signed.apk";
 var ANDROID_TEST_RESULTS_PATH = "./nunit-android.xml";
-var ANDROID_AVD = "Android_Accelerated_x86_Nougat";
+var ANDROID_AVD = "CABOODLE";
 var ANDROID_PKG_NAME = "com.xamarin.caboodle.devicetests";
+var ANDROID_EMU_TARGET = "system-images;android-26;google_apis;x86";
+var ANDROID_EMU_DEVICE = "Nexus 5X";
 
 var TCP_LISTEN_PORT = 10578;
 var TCP_LISTEN_HOST = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName())
@@ -42,7 +45,7 @@ Task ("build-ios")
 
     // Nuget restore
     MSBuild (IOS_PROJ, c => {
-        c.Configuration = "Debug";
+        c.Configuration = "Release";
         c.Targets.Clear();
         c.Targets.Add("Restore");
     });
@@ -127,6 +130,11 @@ Task ("test-android-emu")
     .IsDependentOn ("build-android")
     .Does (() =>
 {
+    // Create the AVD if necessary
+    Information ("Creating AVD if necessary: {0}...", ANDROID_AVD);
+    if (!AndroidAvdListAvds ().Any (a => a.Name == ANDROID_AVD))
+        AndroidAvdCreate (ANDROID_AVD, ANDROID_EMU_TARGET, ANDROID_EMU_DEVICE, force: true);
+
     // Start up the emulator by name
     Information ("Starting Emulator: {0}...", ANDROID_AVD);
     var emu = StartAndReturnProcess ("emulator", new ProcessSettings { 
