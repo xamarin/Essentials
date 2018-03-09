@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Caboodle.Samples.View.StorageSecurePage"
+             Title="Storage Secured"
+             xmlns:viewmodels="clr-namespace:Caboodle.Samples.ViewModel"
+             >
+    <ContentPage.Content>
+
+        <StackLayout>
+            <Label Text="Quickly and easily securely store data." FontAttributes="Bold" Margin="12" />
+
+            <ScrollView>
+                <StackLayout Padding="12,0,12,12" Spacing="6">
+                    <Label Text="Filename where to save:" />
+                    <Entry Placeholder="Filename..." Text="{Binding FileName}" />
+                    <Label Text="Enter some text to save:" />
+                    <Entry Placeholder="Enter text..." Text="{Binding StoredText}" />
+                    <Button Text="Load" Command="{Binding LoadCommand}" IsEnabled="{Binding IsNotBusy}"/>
+                    <Button Text="Save" Command="{Binding SaveCommand}" IsEnabled="{Binding IsNotBusy}"/>
+                </StackLayout>
+            </ScrollView>
+        </StackLayout>
+
+    </ContentPage.Content>
+</ContentPage>
