@@ -20,6 +20,10 @@ var ANDROID_PKG_NAME = "com.xamarin.caboodle.devicetests";
 var ANDROID_EMU_TARGET = "system-images;android-26;google_apis;x86";
 var ANDROID_EMU_DEVICE = "Nexus 5X";
 
+var UWP_PROJ = "./Caboodle.DeviceTests.UWP/Caboodle.DeviceTests.UWP.csproj";
+var UWP_TEST_RESULTS_PATH = "./nunit-uwp.xml";
+var UWP_PACKAGE_ID = "ec0cc741-fd3e-485c-81be-68815c480690";
+
 var TCP_LISTEN_PORT = 10578;
 var TCP_LISTEN_HOST = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName())
         .AddressList.First(f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).ToString();
@@ -190,6 +194,63 @@ Task ("test-android-emu")
 
     // Close emulator
     emu.Kill();
+});
+
+
+Task ("build-uwp")
+    .Does (() =>
+{
+    // Nuget restore
+    MSBuild (UWP_PROJ, c => {
+        c.Targets.Clear();
+        c.Targets.Add("Restore");
+    });
+
+    // Build the project (with ipa)
+    MSBuild (UWP_PROJ, c => {
+        c.Configuration = "Debug";
+        c.Properties["AppxBundlePlatforms"] = new List<string> { "x86" };
+        c.Properties["AppxBundle"] = new List<string> { "Always" };
+        c.Targets.Clear();
+        c.Targets.Add("Rebuild");
+    });
+});
+
+
+Task ("test-uwp-emu")
+    .IsDependentOn ("build-uwp")
+    .WithCriteria(IsRunningOnWindows())
+    .Does (() =>
+{
+    var uninstallPS = new Action (() => {
+        StartProcess ("powershell", $"Remove-AppxPackage -Package (Get-AppxPackage -Name {UWP_PACKAGE_ID}).PackageFullName");
+    });
+
+    var appxBundlePath = GetFiles("./**/AppPackages/**/*.appxbundle").First ();
+
+    try {
+        // Try to uninstall the app if it exists from before
+        uninstallPS();
+    } catch { }
+
+    // Install the appx
+    Information("Installing appx: {0}", appxBundlePath);
+    StartProcess ("powershell", "Add-AppxPackage -Path \"" + MakeAbsolute(appxBundlePath).FullPath + "\"");
+
+    // Start the TCP Test results listener
+    Information("Started TCP Test Results Listener on port: {0}:{1}", TCP_LISTEN_HOST, TCP_LISTEN_PORT);
+    var tcpListenerTask = DownloadTcpTextAsync (TCP_LISTEN_PORT, UWP_TEST_RESULTS_PATH);
+
+    // Launch the app
+    Information("Running appx: {0}", appxBundlePath);
+    System.Diagnostics.Process.Start($"caboodle-device-tests://?host_ip={TCP_LISTEN_HOST}&host_port={TCP_LISTEN_PORT}");
+
+    // Wait for the test results to come back
+    Information("Waiting for tests...");
+    tcpListenerTask.Wait ();
+
+    // Uninstall the app (this will terminate it too)
+    uninstallPS();
 });
 
 RunTarget(TARGET);
