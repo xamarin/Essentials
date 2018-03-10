@@ -10,7 +10,7 @@ namespace Microsoft.Caboodle
 
         static bool GetCanSendSmsInBackground() => true;
 
-        public static void PlatformSendSms(string recipient, string message)
+        private static void PlatformSendSms(string recipient, string message)
         {
             var msg = new ChatMessage { Body = message };
             if (!string.IsNullOrWhiteSpace(recipient))
@@ -21,7 +21,7 @@ namespace Microsoft.Caboodle
 #pragma warning restore 4014
         }
 
-        public static void PlatformSendSmsInBackground(string recipient, string message)
+        private static void PlatformSendSmsInBackground(string recipient, string message)
         {
                 var sendingMessage = new SmsTextMessage2
                 {

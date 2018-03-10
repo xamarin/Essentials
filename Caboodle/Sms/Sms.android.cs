@@ -11,7 +11,7 @@ namespace Microsoft.Caboodle
 
         static bool GetCanSendSmsInBackground() => true;
 
-        public static void PlatformSendSms(string recipient, string message)
+        private static void PlatformSendSms(string recipient, string message)
         {
             Uri smsUri;
             if (!string.IsNullOrWhiteSpace(recipient))
@@ -24,7 +24,7 @@ namespace Microsoft.Caboodle
             Platform.CurrentContext.StartActivity(smsIntent);
         }
 
-        public static void PlatformSendSmsInBackground(string recipient, string message)
+        private static void PlatformSendSmsInBackground(string recipient, string message)
         {
             var smsManager = SmsManager.Default;
             smsManager.SendTextMessage(recipient, null, message, null, null);

@@ -10,7 +10,7 @@ namespace Microsoft.Caboodle
 
         static bool GetCanSendSmsInBackground() => false;
 
-        public static void PlatformSendSms(string recipient, string message)
+        private static void PlatformSendSms(string recipient, string message)
         {
             var smsController = new MFMessageComposeViewController() { Body = message };
 
@@ -25,7 +25,7 @@ namespace Microsoft.Caboodle
             UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(smsController, true, null);
         }
 
-        public static void PlatformSendSmsInBackground(string recipient, string message)
+        private static void PlatformSendSmsInBackground(string recipient, string message)
         {
             throw new PlatformNotSupportedException("Sending SMS in background not supported on iOS");
         }
