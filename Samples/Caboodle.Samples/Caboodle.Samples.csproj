@@ -11,6 +11,18 @@
   <PropertyGroup Condition=" '$(Configuration)'=='Release' ">
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Content-Mail\caboodle-mail.md" />
+    <None Remove="Content-Mail\caboodle-mail.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content-Mail\caboodle-mail.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content-Mail\caboodle-mail.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="2.5.0.280555" />
@@ -24,10 +36,19 @@
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="App.xaml.cs">
       <DependentUpon>*.xaml</DependentUpon>
     </Compile>
+    <Compile Update="View\EmailPage.xaml.cs">
+      <DependentUpon>EmailPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="**\*.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="View\EmailPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

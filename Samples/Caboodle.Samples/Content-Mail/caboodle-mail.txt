@@ -1,0 +1,7 @@
+﻿Dear user
+
+This is Caboodle.Email sample textual content loaded from file....
+
+Thanks
+Regards
+Caboodle Team

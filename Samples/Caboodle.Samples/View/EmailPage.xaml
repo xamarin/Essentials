@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Caboodle.Samples.View.EmailPage"
+             xmlns:viewmodels="clr-namespace:Caboodle.Samples.ViewModel"
+             Title="Email"
+             >
+    <ContentPage.BindingContext>
+        <viewmodels:EmailViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Easily send Email." FontAttributes="Bold" Margin="12" />
+
+            <ScrollView>
+                <StackLayout Padding="12,0,12,12" Spacing="6">
+                    <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
+
+                    <Button Text="Send Email" Command="{Binding SendEmailCommand}" IsEnabled="{Binding IsNotBusy}"/>
+                    <Label Text="Recepients To:" FontAttributes="Bold" Margin="0,6,0,0" />
+                    <Entry Text="{Binding RecipientsTo}" />
+                    <Label Text="Recepients CC:" FontAttributes="Bold" Margin="0,6,0,0" />
+                    <Entry Text="{Binding RecipientsCC}" />
+                    <Label Text="Recepients BCC:" FontAttributes="Bold" Margin="0,6,0,0" />
+                    <Entry Text="{Binding RecipientsBCC}" />
+                    <Label Text="Subject:" FontAttributes="Bold" Margin="0,6,0,0" />
+                    <Entry Text="{Binding Subject}" />
+                    <Label Text="Body:" FontAttributes="Bold" Margin="0,6,0,0" />
+                    <Editor Text="{Binding Body}" VerticalOptions="FillAndExpand" Keyboard="Chat" />
+
+                </StackLayout>
+            </ScrollView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
