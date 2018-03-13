@@ -61,7 +61,7 @@
               <term>iOS: SuiteName - required to share preferences between apps and/or app extensions</term>
             </item>
             <item>
-              <term>Android: Preferences File - can be used to share bewteen apps</term>
+              <term>Android: Preferences File - can be used to share between apps</term>
             </item>
             <item>
               <term>UWP: Container - specific container within the application settings</term>
@@ -102,7 +102,7 @@
       <Docs>
         <param name="key">Preference key.</param>
         <summary>Checks the existence of a given key.</summary>
-        <returns>Preference value.</returns>
+        <returns>Returns true if the key exists.</returns>
         <remarks></remarks>
       </Docs>
     </Member>
