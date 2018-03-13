@@ -53,7 +53,21 @@ namespace Caboodle.Samples.ViewModel
             await Application.Current.MainPage.DisplayAlert("Battery Event", $"Battery status changes\n Level: {e.ChargeLevel}\n Source: {e.PowerSource}\n State: {e.State}", "OK");
         }
 
-        public void Stop()
+        public override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            Battery.BatteryChanged += OnBatteryChanged;
+        }
+
+        public override void OnDisappearing()
+        {
+            Battery.BatteryChanged -= OnBatteryChanged;
+
+            base.OnDisappearing();
+        }
+
+        void OnBatteryChanged(BatteryChangedEventArgs e)
         {
             if (listening)
             {

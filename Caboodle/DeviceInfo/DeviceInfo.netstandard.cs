@@ -1,4 +1,6 @@
-﻿namespace Microsoft.Caboodle
+﻿using System.Threading.Tasks;
+
+namespace Microsoft.Caboodle
 {
     public static partial class DeviceInfo
     {

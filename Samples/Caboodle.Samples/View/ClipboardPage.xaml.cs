@@ -1,8 +1,8 @@
 ﻿namespace Caboodle.Samples.View
 {
-    public partial class BatteryPage : BasePage
+    public partial class ClipboardPage : BasePage
     {
-        public BatteryPage()
+        public ClipboardPage()
         {
             InitializeComponent();
         }
