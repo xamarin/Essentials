@@ -60,9 +60,8 @@ Here are some frequently asked questions about Caboodle.
 ### Where are the interfaces?
 Some developers prefer an interface based programming model for dependency injection and testing of code. Caboodle does not offer any interfaces and delivers straight API access via direct classes and static properties/methods. There are many reasons that Caboodle is architected this way that include performance, simplicity, and ease of use. We also consider Caboodle a core API of the platform just like System classes, HttpClient, and our platform bindings. 
 
-Additionally, we found most developers create their own interfaces even when using a library that includes interfaces. They do this to they have control over the APIs they actually use, which may be a very small percentage of the overall APIs in the library. Creating your own `ICaboodle` and exposing only the methods and properties you would like to use gives you more flexibility as Caboodle grows and adds additional APIs.
+Additionally, we found most developers create their own interfaces even when using a library that have interfaces. They do this so they have control over the APIs they actually use, which may be a very small percentage of the overall APIs in the library. Creating your own `ICaboodle` and exposing only the methods and properties you would like to use gives you more flexibility as Caboodle grows and adds additional APIs. Using this type of architecture will enable you to both have dependency injection and work with unit testing.
 
-When it comes to unit testing we do plan on offering a simple solution at time of release that will not require interfaces to be created.
 
 ### Does Caboodle replace plugins?
 Plugins offer a wide variety of cross-platform APIs for developers to use in their applications. Plugins will still continue to grow and flourish as they can offer a wider range of APIs and handle unique scenarios that Cabooble may not offer including additional platform support or add features unique to a single platform.
