@@ -41,7 +41,7 @@ namespace Caboodle.Samples.ViewModel
                 return;
 
             IsBusy = true;
-            Sms.SendSms(Recipient, MsgText);
+            Sms.SendSms(Recipient, MsgText, SmsSendType.Foreground);
             IsBusy = false;
         }
 
@@ -51,7 +51,7 @@ namespace Caboodle.Samples.ViewModel
                 return;
 
             IsBusy = true;
-            Sms.PlatformSendSmsInBackground(Recipient, MsgText);
+            Sms.SendSms(Recipient, MsgText, SmsSendType.PreferBackground);
             IsBusy = false;
         }
     }
