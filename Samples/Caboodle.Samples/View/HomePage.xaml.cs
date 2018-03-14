@@ -1,10 +1,10 @@
 ﻿using System;
-using Xamarin.Forms;
 using Caboodle.Samples.Model;
+using Xamarin.Forms;
 
 namespace Caboodle.Samples.View
 {
-    public partial class HomePage : ContentPage
+    public partial class HomePage : BasePage
     {
         public HomePage()
         {

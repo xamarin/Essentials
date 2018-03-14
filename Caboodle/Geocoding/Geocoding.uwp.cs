@@ -7,7 +7,7 @@ using Windows.Services.Maps;
 
 namespace Microsoft.Caboodle
 {
-    public partial class Geocoding
+    public static partial class Geocoding
     {
         public static async Task<IEnumerable<Placemark>> GetPlacemarksAsync(double latitude, double longitude)
         {
@@ -32,11 +32,7 @@ namespace Microsoft.Caboodle
         internal static void ValidateMapKey()
         {
             if (string.IsNullOrWhiteSpace(MapKey) && string.IsNullOrWhiteSpace(MapService.ServiceToken))
-            {
-                Console.WriteLine("Map API key is required on UWP to reverse geolocate.");
                 throw new ArgumentNullException(nameof(MapKey));
-
-            }
 
             if (!string.IsNullOrWhiteSpace(MapKey))
                 MapService.ServiceToken = MapKey;
