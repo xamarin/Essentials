@@ -8,18 +8,14 @@ namespace Microsoft.Caboodle
 {
     public static partial class FileSystem
     {
-        private static string cache;
-        private static string appData;
-        private static string userData;
-
         public static string CacheDirectory
-            => cache ?? (cache = ApplicationData.Current.LocalCacheFolder.Path);
+            => ApplicationData.Current.LocalCacheFolder.Path;
 
         public static string AppDataDirectory
-            => appData ?? (appData = ApplicationData.Current.LocalFolder.Path);
+            => ApplicationData.Current.LocalFolder.Path;
 
         public static string UserDataDirectory
-            => userData ?? (userData = ApplicationData.Current.LocalFolder.Path);
+            => ApplicationData.Current.LocalFolder.Path;
 
         public static Task<Stream> OpenAppPackageFileAsync(string filename)
         {

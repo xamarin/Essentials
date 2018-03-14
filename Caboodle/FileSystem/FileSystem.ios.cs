@@ -7,18 +7,14 @@ namespace Microsoft.Caboodle
 {
     public static partial class FileSystem
     {
-        private static string cache;
-        private static string appData;
-        private static string userData;
-
         public static string CacheDirectory
-            => cache ?? (cache = GetDirectory(NSSearchPathDirectory.CachesDirectory));
+            => GetDirectory(NSSearchPathDirectory.CachesDirectory);
 
         public static string AppDataDirectory
-            => appData ?? (appData = GetDirectory(NSSearchPathDirectory.LibraryDirectory));
+            => GetDirectory(NSSearchPathDirectory.LibraryDirectory);
 
         public static string UserDataDirectory
-            => userData ?? (userData = GetDirectory(NSSearchPathDirectory.DocumentDirectory));
+            => GetDirectory(NSSearchPathDirectory.DocumentDirectory);
 
         public static Task<Stream> OpenAppPackageFileAsync(string filename)
         {
