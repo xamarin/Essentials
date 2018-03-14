@@ -1,6 +1,4 @@
-﻿using System.Windows.Input;
-using Microsoft.Caboodle;
-using Xamarin.Forms;
+﻿using Microsoft.Caboodle;
 
 namespace Caboodle.Samples.ViewModel
 {
