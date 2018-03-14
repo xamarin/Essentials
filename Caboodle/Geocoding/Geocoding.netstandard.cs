@@ -1,11 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Microsoft.Caboodle
 {
     public partial class Geocoding
     {
-        public static IGeocoding Current { get; set; }
+        static AsyncLocal<IGeocoding> current;
+
+        public static IGeocoding Current
+        {
+            get => current.Value;
+            set => current.Value = value;
+        }
 
         public static Task<IEnumerable<Placemark>> GetPlacemarksAsync(double latitude, double longitude) =>
             Current?.GetPlacemarksAsync(latitude, longitude) ?? throw new NotImplentedInReferenceAssembly();
