@@ -9,6 +9,7 @@ namespace Microsoft.Caboodle
     public partial class Preferences
     {
         static readonly object locker = new object();
+
         public bool ContainsKey(string key)
         {
             lock (locker)

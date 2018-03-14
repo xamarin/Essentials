@@ -4,7 +4,6 @@ using System.Text;
 
 namespace Microsoft.Caboodle
 {
-
     public partial class Preferences
     {
         public bool ContainsKey(string key) =>
