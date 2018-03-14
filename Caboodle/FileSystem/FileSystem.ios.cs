@@ -15,7 +15,7 @@ namespace Microsoft.Caboodle
             => cache ?? (cache = GetDirectory(NSSearchPathDirectory.CachesDirectory));
 
         public static string AppDataDirectory
-            => appData ?? (appData = GetDirectory(NSSearchPathDirectory.ApplicationSupportDirectory));
+            => appData ?? (appData = GetDirectory(NSSearchPathDirectory.LibraryDirectory));
 
         public static string UserDataDirectory
             => userData ?? (userData = GetDirectory(NSSearchPathDirectory.DocumentDirectory));

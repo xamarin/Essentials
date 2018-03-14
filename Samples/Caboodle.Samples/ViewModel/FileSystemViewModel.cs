@@ -1,17 +1,16 @@
 ﻿using System.IO;
 using System.Windows.Input;
-using MvvmHelpers;
-using Xamarin.Forms;
 using Microsoft.Caboodle;
+using Xamarin.Forms;
 
 namespace Caboodle.Samples.ViewModel
 {
     public class FileSystemViewModel : BaseViewModel
     {
-        const string TemplateFileName = "FileSystemTemplate.txt";
-        const string LocalFileName = "TheFile.txt";
+        const string templateFileName = "FileSystemTemplate.txt";
+        const string localFileName = "TheFile.txt";
 
-        static string LocalPath = Path.Combine(FileSystem.AppDataDirectory, LocalFileName);
+        static string localPath = Path.Combine(FileSystem.AppDataDirectory, localFileName);
 
         private string currentContents;
 
@@ -38,13 +37,13 @@ namespace Caboodle.Samples.ViewModel
 
         private async void DoLoadFile()
         {
-            if (File.Exists(LocalPath))
+            if (File.Exists(localPath))
             {
-                CurrentContents = File.ReadAllText(LocalPath);
+                CurrentContents = File.ReadAllText(localPath);
             }
             else
             {
-                using (var stream = await FileSystem.OpenAppPackageFileAsync(TemplateFileName))
+                using (var stream = await FileSystem.OpenAppPackageFileAsync(templateFileName))
                 using (var reader = new StreamReader(stream))
                 {
                     CurrentContents = await reader.ReadToEndAsync();
@@ -54,13 +53,13 @@ namespace Caboodle.Samples.ViewModel
 
         private void DoSaveFile()
         {
-            File.WriteAllText(LocalPath, CurrentContents);
+            File.WriteAllText(localPath, CurrentContents);
         }
 
         private void DoDeleteFile()
         {
-            if (File.Exists(LocalPath))
-                File.Delete(LocalPath);
+            if (File.Exists(localPath))
+                File.Delete(localPath);
         }
     }
 }

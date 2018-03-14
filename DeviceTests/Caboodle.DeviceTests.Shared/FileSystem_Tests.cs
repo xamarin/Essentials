@@ -1,13 +1,13 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using Xunit;
 using Microsoft.Caboodle;
+using Xunit;
 
 namespace Caboodle.DeviceTests
 {
     public class FileSystem_Tests
     {
-        private const string BundleFileContents = "This file was in the app bundle.";
+        private const string bundleFileContents = "This file was in the app bundle.";
 
         [Fact]
         public void CacheDirectory_Is_Valid()
@@ -28,10 +28,10 @@ namespace Caboodle.DeviceTests
         }
 
         [Theory]
-        [InlineData("AppBundleFile.txt", BundleFileContents)]
-        [InlineData("AppBundleFile_NoExtension", BundleFileContents)]
-        [InlineData("Folder/AppBundleFile_Nested.txt", BundleFileContents)]
-        [InlineData("Folder\\AppBundleFile_Nested.txt", BundleFileContents)]
+        [InlineData("AppBundleFile.txt", bundleFileContents)]
+        [InlineData("AppBundleFile_NoExtension", bundleFileContents)]
+        [InlineData("Folder/AppBundleFile_Nested.txt", bundleFileContents)]
+        [InlineData("Folder\\AppBundleFile_Nested.txt", bundleFileContents)]
         public async Task OpenAppPackageFileAsync_Can_Load_File(string filename, string contents)
         {
             using (var stream = await FileSystem.OpenAppPackageFileAsync(filename))
