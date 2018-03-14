@@ -1,44 +1,79 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Microsoft.Caboodle
 {
-    public partial class Connectivity
+    public static partial class Connectivity
     {
+        static event ConnectivityChangedEventHandler ConnectivityChanagedInternal;
+
+        static NetworkAccess currentAccess;
+
+        static IEnumerable<ConnectionProfile> currentProfiles;
+
+        public static event ConnectivityChangedEventHandler BatteryChanged
+        {
+            add
+            {
+                var wasRunning = ConnectivityChanagedInternal != null;
+
+                ConnectivityChanagedInternal += value;
+
+                if (!wasRunning && ConnectivityChanagedInternal != null)
+                {
+                    SetCurrent();
+                    StartListeners();
+                }
+            }
+
+            remove
+            {
+                var wasRunning = ConnectivityChanagedInternal != null;
+
+                ConnectivityChanagedInternal -= value;
+
+                if (wasRunning && ConnectivityChanagedInternal == null)
+                    StopListeners();
+            }
+        }
+
+        static void SetCurrent()
+        {
+            currentAccess = NetworkAccess;
+            currentProfiles = Profiles;
+        }
+
+        static void OnConnectivityChanged(NetworkAccess access, IEnumerable<ConnectionProfile> profiles)
+            => OnConnectivityChanged(new ConnectivityChangedEventArgs(access, profiles));
+
+        static void OnConnectivityChanged()
+            => OnConnectivityChanged(NetworkAccess, Profiles);
+
+        static void OnConnectivityChanged(ConnectivityChangedEventArgs e)
+        {
+            if (currentAccess != e.NetworkAccess ||
+                !currentProfiles.SequenceEqual(e.Profiles))
+            {
+                SetCurrent();
+                Platform.BeginInvokeOnMainThread(() => ConnectivityChanagedInternal?.Invoke(e));
+            }
+        }
     }
 
-	public enum ConnectionProfile
-	{
-		Bluetooth,
-		Cellular,
-		Ethernet,
-		WiMAX,
-		WiFi,
-		Other
-	}
+    public delegate void ConnectivityChangedEventHandler(ConnectivityChangedEventArgs e);
 
-
-	public enum NetworkAccess
+    public class ConnectivityChangedEventArgs : EventArgs
     {
-        ConstrainedInternet,
-        Internet,
-        Local,
-        None,
-        Unknown
+        internal ConnectivityChangedEventArgs(NetworkAccess access, IEnumerable<ConnectionProfile> profiles)
+        {
+            NetworkAccess = access;
+            Profiles = profiles;
+        }
+
+        public NetworkAccess NetworkAccess { get; }
+
+        public IEnumerable<ConnectionProfile> Profiles { get; }
     }
-	
-	public class ConnectivityChangedEventArgs : EventArgs
-	{
-		public NetworkAccess NetworkAccess { get; set; }
-	}
-	
-	public class ConnectivityProfileChangedEventArgs : EventArgs
-	{
-		public IEnumerable<ConnectionProfile> Profiles { get; set; }
-	}
-	
-	public delegate void ConnectivityChangedEventHandler(object sender, ConnectivityChangedEventArgs e);
-	
-	public delegate void ConnectivityProfileChangedEventHandler(object sender, ConnectivityProfileChangedEventArgs e);
 }

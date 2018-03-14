@@ -1,47 +1,23 @@
 ﻿using System;
-using System.Net;
-using CoreFoundation;
-using System.Diagnostics;
-using SystemConfiguration;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-
+using System.Diagnostics;
+using System.Net;
+using System.Threading.Tasks;
+using CoreFoundation;
+using SystemConfiguration;
 
 namespace Microsoft.Caboodle
 {
+    internal enum NetworkStatus
+    {
+        NotReachable,
+        ReachableViaCarrierDataNetwork,
+        ReachableViaWiFiNetwork
+    }
 
-	/// <summary>
-	/// Status of network enum
-	/// </summary>
-	[Foundation.Preserve(AllMembers = true)]
-	internal enum NetworkStatus
-	{
-		/// <summary>
-		/// No internet connection
-		/// </summary>
-		NotReachable,
-		/// <summary>
-		/// Reachable view Cellular.
-		/// </summary>
-		ReachableViaCarrierDataNetwork,
-		/// <summary>
-		/// Reachable view wifi
-		/// </summary>
-		ReachableViaWiFiNetwork
-	}
-
-	/// <summary>
-	/// Reachability helper
-	/// </summary>
-	[Foundation.Preserve(AllMembers = true)]
     internal static class Reachability
     {
-
-
-        /// <summary>
-        /// Default host name to use
-        /// </summary>
-        internal static string HostName = "www.microsoft.com";
+        static string hostName = "www.microsoft.com";
 
         /// <summary>
         /// Checks if reachable without requiring a connection
@@ -75,18 +51,14 @@ namespace Microsoft.Caboodle
             if (string.IsNullOrWhiteSpace(host))
                 return false;
 
-            IPAddress address;
-            if (!IPAddress.TryParse(host + ":" + port, out address))
+            if (!IPAddress.TryParse(host + ":" + port, out var address))
             {
                 Debug.WriteLine(host + ":" + port + " is not valid");
                 return false;
             }
             using (var r = new NetworkReachability(host))
             {
-
-                NetworkReachabilityFlags flags;
-
-                if (r.TryGetFlags(out flags))
+                if (r.TryGetFlags(out var flags))
                 {
                     return IsReachableWithoutRequiringConnection(flags);
                 }
@@ -106,17 +78,13 @@ namespace Microsoft.Caboodle
 
             using (var r = new NetworkReachability(host))
             {
-
-                NetworkReachabilityFlags flags;
-
-                if (r.TryGetFlags(out flags))
+                if (r.TryGetFlags(out var flags))
                 {
                     return IsReachableWithoutRequiringConnection(flags);
                 }
             }
             return false;
         }
-
 
         /// <summary>
         /// Raised every time there is an interesting reachable event,
@@ -129,15 +97,12 @@ namespace Microsoft.Caboodle
         {
             await Task.Delay(100);
             ReachabilityChanged?.Invoke(null, EventArgs.Empty);
-
         }
-	
-
 
         static NetworkReachability defaultRouteReachability;
+
         static bool IsNetworkAvailable(out NetworkReachabilityFlags flags)
         {
-
             if (defaultRouteReachability == null)
             {
                 var ip = new IPAddress(0);
@@ -151,10 +116,7 @@ namespace Microsoft.Caboodle
         }
 
         static NetworkReachability remoteHostReachability;
-        /// <summary>
-        /// Checks the remote host status
-        /// </summary>
-        /// <returns></returns>
+
         internal static NetworkStatus RemoteHostStatus()
         {
             NetworkReachabilityFlags flags;
@@ -162,7 +124,7 @@ namespace Microsoft.Caboodle
 
             if (remoteHostReachability == null)
             {
-                remoteHostReachability = new NetworkReachability(HostName);
+                remoteHostReachability = new NetworkReachability(hostName);
 
                 // Need to probe before we queue, or we wont get any meaningful values
                 // this only happens when you create NetworkReachability from a hostname
@@ -172,7 +134,9 @@ namespace Microsoft.Caboodle
                 remoteHostReachability.Schedule(CFRunLoop.Main, CFRunLoop.ModeDefault);
             }
             else
+            {
                 reachable = remoteHostReachability.TryGetFlags(out flags);
+            }
 
             if (!reachable)
                 return NetworkStatus.NotReachable;
@@ -182,7 +146,6 @@ namespace Microsoft.Caboodle
 
             if ((flags & NetworkReachabilityFlags.IsWWAN) != 0)
                 return NetworkStatus.ReachableViaCarrierDataNetwork;
-
 
             return NetworkStatus.ReachableViaWiFiNetwork;
         }
@@ -195,26 +158,26 @@ namespace Microsoft.Caboodle
         {
             var status = new List<NetworkStatus>();
 
-			var defaultNetworkAvailable = IsNetworkAvailable(out var flags);
+            var defaultNetworkAvailable = IsNetworkAvailable(out var flags);
 
-			// If it's a WWAN connection..
-			if ((flags & NetworkReachabilityFlags.IsWWAN) != 0)
-			{
-				status.Add(NetworkStatus.ReachableViaCarrierDataNetwork);
-			}
-			else if (defaultNetworkAvailable)
-			{
-				status.Add(NetworkStatus.ReachableViaWiFiNetwork);
-			}
-			else if (((flags & NetworkReachabilityFlags.ConnectionOnDemand) != 0
-				|| (flags & NetworkReachabilityFlags.ConnectionOnTraffic) != 0)
-				&& (flags & NetworkReachabilityFlags.InterventionRequired) == 0)
-			{
-				// If the connection is on-demand or on-traffic and no user intervention
-				// is required, then assume WiFi.
-				status.Add(NetworkStatus.ReachableViaWiFiNetwork);
-			}
-			
+            // If it's a WWAN connection..
+            if ((flags & NetworkReachabilityFlags.IsWWAN) != 0)
+            {
+                status.Add(NetworkStatus.ReachableViaCarrierDataNetwork);
+            }
+            else if (defaultNetworkAvailable)
+            {
+                status.Add(NetworkStatus.ReachableViaWiFiNetwork);
+            }
+            else if (((flags & NetworkReachabilityFlags.ConnectionOnDemand) != 0
+                || (flags & NetworkReachabilityFlags.ConnectionOnTraffic) != 0)
+                && (flags & NetworkReachabilityFlags.InterventionRequired) == 0)
+            {
+                // If the connection is on-demand or on-traffic and no user intervention
+                // is required, then assume WiFi.
+                status.Add(NetworkStatus.ReachableViaWiFiNetwork);
+            }
+
             return status;
         }
 
@@ -226,11 +189,11 @@ namespace Microsoft.Caboodle
         {
             var status = NetworkStatus.NotReachable;
 
-			var defaultNetworkAvailable = IsNetworkAvailable(out var flags);
+            var defaultNetworkAvailable = IsNetworkAvailable(out var flags);
 
-			// If it's a WWAN connection..
-			if ((flags & NetworkReachabilityFlags.IsWWAN) != 0)
-				status = NetworkStatus.ReachableViaCarrierDataNetwork;
+            // If it's a WWAN connection..
+            if ((flags & NetworkReachabilityFlags.IsWWAN) != 0)
+                status = NetworkStatus.ReachableViaCarrierDataNetwork;
 
             // If the connection is reachable and no connection is required, then assume it's WiFi
             if (defaultNetworkAvailable)
@@ -246,7 +209,6 @@ namespace Microsoft.Caboodle
             {
                 status = NetworkStatus.ReachableViaWiFiNetwork;
             }
-
 
             return status;
         }
@@ -268,6 +230,5 @@ namespace Microsoft.Caboodle
                 defaultRouteReachability = null;
             }
         }
-
     }
 }
