@@ -11,6 +11,10 @@ indent_style = space
 [*.{cs,csx,vb,vbx}]
 indent_size = 4
 
+# Code files
+[*.sln]
+indent_size = 4
+
 # Xml project files
 [*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj}]
 indent_size = 2
@@ -23,10 +27,14 @@ indent_size = 2
 [*.json]
 indent_size = 2
 
+# XML files
+[*.xml]
+indent_size = 2
+
 # Dotnet code style settings:
 [*.{cs,vb}]
 # Sort using and Import directives with System.* appearing first
-dotnet_sort_system_directives_first = false
+dotnet_sort_system_directives_first = true
 # Avoid "this." and "Me." if not necessary
 dotnet_style_qualification_for_field = false:suggestion
 dotnet_style_qualification_for_property = false:suggestion
@@ -55,7 +63,7 @@ dotnet_naming_rule.methods_and_properties_must_be_pascal_case.symbols = method_a
 dotnet_naming_rule.methods_and_properties_must_be_pascal_case.style = pascal_case_style
 
 # Non-public members must be lower-case
-dotnet_naming_symbols.non_public_symbols.applicable_kinds = property,method,field,event,delegate
+dotnet_naming_symbols.non_public_symbols.applicable_kinds = field
 dotnet_naming_symbols.non_public_symbols.applicable_accessibilities = private
 dotnet_naming_style.all_lower_case_style.capitalization = camel_case
 
