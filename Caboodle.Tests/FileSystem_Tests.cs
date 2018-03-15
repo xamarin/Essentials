@@ -8,13 +8,13 @@ namespace Microsoft.Caboodle.Tests
         [Fact]
         public void FileSystem_Fail_On_NetStandard()
         {
-            Assert.Throws<NotImplentedInReferenceAssembly>(() => FileSystem.AppDataDirectory);
+            Assert.Throws<NotImplementedInReferenceAssemblyException>(() => FileSystem.AppDataDirectory);
         }
 
         [Fact]
         public async Task OpenAppPackageFileAsync_Fail_On_NetStandard()
         {
-            await Assert.ThrowsAsync<NotImplentedInReferenceAssembly>(() => FileSystem.OpenAppPackageFileAsync("filename.txt"));
+            await Assert.ThrowsAsync<NotImplementedInReferenceAssemblyException>(() => FileSystem.OpenAppPackageFileAsync("filename.txt"));
         }
     }
 }
