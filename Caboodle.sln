@@ -322,7 +322,6 @@ Global
 		{4BD0D88F-7E7A-4C3B-9E34-BF3717A8FF4B}.Release|x86.ActiveCfg = Release|x86
 		{4BD0D88F-7E7A-4C3B-9E34-BF3717A8FF4B}.Release|x86.Build.0 = Release|x86
 		{4BD0D88F-7E7A-4C3B-9E34-BF3717A8FF4B}.Release|x86.Deploy.0 = Release|x86
->>>>>>> master
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
