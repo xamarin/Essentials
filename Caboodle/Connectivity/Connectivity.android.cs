@@ -136,7 +136,7 @@ namespace Microsoft.Caboodle
                             // there is a possibility, but don't worry about it
                         }
 
-                        if (info == null || !info.IsAvailable)
+                        if (info == null || !info.IsAvailable || !info.IsConnectedOrConnecting)
                             continue;
 
                         yield return GetConnectionType(info.Type, info.TypeName);
