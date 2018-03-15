@@ -18,7 +18,7 @@ namespace Microsoft.Caboodle
             if (filename == null)
                 throw new ArgumentNullException(nameof(filename));
 
-            filename = filename.Replace("\\", Path.DirectorySeparatorChar.ToString());
+            filename = filename.Replace('\\', Path.DirectorySeparatorChar);
             try
             {
                 return Task.FromResult(Application.Context.Assets.Open(filename));

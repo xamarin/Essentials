@@ -19,7 +19,7 @@ namespace Microsoft.Caboodle
             if (filename == null)
                 throw new ArgumentNullException(nameof(filename));
 
-            filename = filename.Replace("/", Path.DirectorySeparatorChar.ToString());
+            filename = filename.Replace('/', Path.DirectorySeparatorChar);
             return Package.Current.InstalledLocation.OpenStreamForReadAsync(filename);
         }
     }
