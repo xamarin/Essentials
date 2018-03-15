@@ -7,15 +7,15 @@ namespace Microsoft.Caboodle
     public static partial class Connectivity
     {
         public static NetworkAccess NetworkAccess =>
-            throw new NotImplentedInReferenceAssembly();
+            throw new NotImplementedInReferenceAssemblyException();
 
         public static IEnumerable<ConnectionProfile> Profiles =>
-            throw new NotImplentedInReferenceAssembly();
+            throw new NotImplementedInReferenceAssemblyException();
 
         static void StartListeners() =>
-            throw new NotImplentedInReferenceAssembly();
+            throw new NotImplementedInReferenceAssemblyException();
 
         static void StopListeners() =>
-            throw new NotImplentedInReferenceAssembly();
+            throw new NotImplementedInReferenceAssemblyException();
     }
 }

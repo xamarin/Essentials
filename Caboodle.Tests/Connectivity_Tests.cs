@@ -7,15 +7,15 @@ namespace Caboodle.Tests
     {
         [Fact]
         public void Network_Access_On_NetStandard() =>
-            Assert.Throws<NotImplentedInReferenceAssembly>(() => Connectivity.NetworkAccess);
+            Assert.Throws<NotImplementedInReferenceAssemblyException>(() => Connectivity.NetworkAccess);
 
         [Fact]
         public void Profiles_On_NetStandard() =>
-            Assert.Throws<NotImplentedInReferenceAssembly>(() => Connectivity.Profiles);
+            Assert.Throws<NotImplementedInReferenceAssemblyException>(() => Connectivity.Profiles);
 
         [Fact]
         public void Connectivity_Changed_Event_On_NetStandard() =>
-            Assert.Throws<NotImplentedInReferenceAssembly>(() => Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged);
+            Assert.Throws<NotImplementedInReferenceAssemblyException>(() => Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged);
 
         void Connectivity_ConnectivityChanged(ConnectivityChangedEventArgs e)
         {
