@@ -51,6 +51,7 @@ namespace Microsoft.Caboodle
 
                     if (networkInterfaceInfo.NetworkAdapter != null)
                     {
+                        // http://www.iana.org/assignments/ianaiftype-mib/ianaiftype-mib
                         switch (networkInterfaceInfo.NetworkAdapter.IanaInterfaceType)
                         {
                             case 6:
@@ -63,6 +64,10 @@ namespace Microsoft.Caboodle
                             case 244:
                                 type = ConnectionProfile.Cellular;
                                 break;
+
+                            // xbox wireless, can skip
+                            case 281:
+                                continue;
                         }
                     }
 

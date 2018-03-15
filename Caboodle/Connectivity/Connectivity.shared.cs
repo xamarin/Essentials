@@ -13,7 +13,7 @@ namespace Microsoft.Caboodle
 
         static IEnumerable<ConnectionProfile> currentProfiles;
 
-        public static event ConnectivityChangedEventHandler BatteryChanged
+        public static event ConnectivityChangedEventHandler ConnectivityChanged
         {
             add
             {
