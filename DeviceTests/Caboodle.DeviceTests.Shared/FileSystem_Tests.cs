@@ -21,12 +21,6 @@ namespace Caboodle.DeviceTests
             Assert.False(string.IsNullOrWhiteSpace(FileSystem.AppDataDirectory));
         }
 
-        [Fact]
-        public void UserDataDirectory_Is_Valid()
-        {
-            Assert.False(string.IsNullOrWhiteSpace(FileSystem.UserDataDirectory));
-        }
-
         [Theory]
         [InlineData("AppBundleFile.txt", bundleFileContents)]
         [InlineData("AppBundleFile_NoExtension", bundleFileContents)]

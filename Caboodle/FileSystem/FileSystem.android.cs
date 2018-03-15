@@ -13,15 +13,12 @@ namespace Microsoft.Caboodle
         public static string AppDataDirectory
             => Application.Context.FilesDir.AbsolutePath;
 
-        public static string UserDataDirectory
-            => Application.Context.FilesDir.AbsolutePath;
-
         public static Task<Stream> OpenAppPackageFileAsync(string filename)
         {
             if (filename == null)
                 throw new ArgumentNullException(nameof(filename));
 
-            filename = filename.Replace("\\", "/");
+            filename = filename.Replace("\\", Path.DirectorySeparatorChar.ToString());
             try
             {
                 return Task.FromResult(Application.Context.Assets.Open(filename));

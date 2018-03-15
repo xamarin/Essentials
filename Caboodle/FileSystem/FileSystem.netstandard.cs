@@ -11,9 +11,6 @@ namespace Microsoft.Caboodle
         public static string AppDataDirectory
             => throw new NotImplentedInReferenceAssembly();
 
-        public static string UserDataDirectory
-            => throw new NotImplentedInReferenceAssembly();
-
         public static Task<Stream> OpenAppPackageFileAsync(string filename)
              => throw new NotImplentedInReferenceAssembly();
     }

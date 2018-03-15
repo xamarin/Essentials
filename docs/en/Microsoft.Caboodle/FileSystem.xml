@@ -66,21 +66,5 @@
         <remarks></remarks>
       </Docs>
     </Member>
-    <Member MemberName="UserDataDirectory">
-      <MemberSignature Language="C#" Value="public static string UserDataDirectory { get; }" />
-      <MemberSignature Language="ILAsm" Value=".property string UserDataDirectory" />
-      <MemberType>Property</MemberType>
-      <AssemblyInfo>
-        <AssemblyVersion>1.0.0.0</AssemblyVersion>
-      </AssemblyInfo>
-      <ReturnValue>
-        <ReturnType>System.String</ReturnType>
-      </ReturnValue>
-      <Docs>
-        <summary>Gets the location where user data can be stored.</summary>
-        <value>The location where user data can be stored.</value>
-        <remarks>This location might visible to the user, and is backed up.</remarks>
-      </Docs>
-    </Member>
   </Members>
 </Type>

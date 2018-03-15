@@ -14,15 +14,12 @@ namespace Microsoft.Caboodle
         public static string AppDataDirectory
             => ApplicationData.Current.LocalFolder.Path;
 
-        public static string UserDataDirectory
-            => ApplicationData.Current.LocalFolder.Path;
-
         public static Task<Stream> OpenAppPackageFileAsync(string filename)
         {
             if (filename == null)
                 throw new ArgumentNullException(nameof(filename));
 
-            filename = filename.Replace("/", "\\");
+            filename = filename.Replace("/", Path.DirectorySeparatorChar.ToString());
             return Package.Current.InstalledLocation.OpenStreamForReadAsync(filename);
         }
     }

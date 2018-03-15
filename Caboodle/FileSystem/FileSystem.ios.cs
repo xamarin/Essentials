@@ -13,15 +13,12 @@ namespace Microsoft.Caboodle
         public static string AppDataDirectory
             => GetDirectory(NSSearchPathDirectory.LibraryDirectory);
 
-        public static string UserDataDirectory
-            => GetDirectory(NSSearchPathDirectory.DocumentDirectory);
-
         public static Task<Stream> OpenAppPackageFileAsync(string filename)
         {
             if (filename == null)
                 throw new ArgumentNullException(nameof(filename));
 
-            filename = filename.Replace("\\", "/");
+            filename = filename.Replace("\\", Path.DirectorySeparatorChar.ToString());
             var file = Path.Combine(NSBundle.MainBundle.BundlePath, filename);
             return Task.FromResult((Stream)File.OpenRead(file));
         }
