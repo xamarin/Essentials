@@ -11,7 +11,7 @@ namespace Microsoft.Caboodle
 
         static NetworkAccess currentAccess;
 
-        static IEnumerable<ConnectionProfile> currentProfiles;
+        static List<ConnectionProfile> currentProfiles;
 
         public static event ConnectivityChangedEventHandler ConnectivityChanged
         {
@@ -42,7 +42,7 @@ namespace Microsoft.Caboodle
         static void SetCurrent()
         {
             currentAccess = NetworkAccess;
-            currentProfiles = Profiles;
+            currentProfiles = new List<ConnectionProfile>(Profiles);
         }
 
         static void OnConnectivityChanged(NetworkAccess access, IEnumerable<ConnectionProfile> profiles)
