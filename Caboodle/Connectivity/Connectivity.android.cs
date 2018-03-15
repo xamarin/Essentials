@@ -76,13 +76,7 @@ namespace Microsoft.Caboodle
 
                                 var info = manager.GetNetworkInfo(network);
 
-                                if (info == null || !info.IsAvailable)
-                                    continue;
-
-                                if (info.IsConnected)
-                                    currentAccess = IsBetterAccess(currentAccess, NetworkAccess.Internet);
-                                else if (info.IsConnectedOrConnecting)
-                                    currentAccess = IsBetterAccess(currentAccess, NetworkAccess.ConstrainedInternet);
+                                ProcessNetworkInfo(info);
                             }
                             catch
                             {
@@ -96,14 +90,19 @@ namespace Microsoft.Caboodle
                         foreach (var info in manager.GetAllNetworkInfo())
 #pragma warning restore CS0618 // Type or member is obsolete
                         {
-                            if (info == null || !info.IsAvailable)
-                                continue;
-
-                            if (info.IsConnected)
-                                currentAccess = IsBetterAccess(currentAccess, NetworkAccess.Internet);
-                            else if (info.IsConnectedOrConnecting)
-                                currentAccess = IsBetterAccess(currentAccess, NetworkAccess.ConstrainedInternet);
+                            ProcessNetworkInfo(info);
                         }
+                    }
+
+                    void ProcessNetworkInfo(NetworkInfo info)
+                    {
+                        if (info == null || !info.IsAvailable)
+                            return;
+
+                        if (info.IsConnected)
+                            currentAccess = IsBetterAccess(currentAccess, NetworkAccess.Internet);
+                        else if (info.IsConnectedOrConnecting)
+                            currentAccess = IsBetterAccess(currentAccess, NetworkAccess.ConstrainedInternet);
                     }
 
                     return currentAccess;
@@ -136,10 +135,9 @@ namespace Microsoft.Caboodle
                             // there is a possibility, but don't worry about it
                         }
 
-                        if (info == null || !info.IsAvailable || !info.IsConnectedOrConnecting)
-                            continue;
-
-                        yield return GetConnectionType(info.Type, info.TypeName);
+                        var p = ProcessNetworkInfo(info);
+                        if (p.HasValue)
+                            yield return p.Value;
                     }
                 }
                 else
@@ -148,11 +146,18 @@ namespace Microsoft.Caboodle
                     foreach (var info in manager.GetAllNetworkInfo())
 #pragma warning restore CS0618 // Type or member is obsolete
                     {
-                        if (info == null || !info.IsAvailable)
-                            continue;
-
-                        yield return GetConnectionType(info.Type, info.TypeName);
+                        var p = ProcessNetworkInfo(info);
+                        if (p.HasValue)
+                            yield return p.Value;
                     }
+                }
+
+                ConnectionProfile? ProcessNetworkInfo(NetworkInfo info)
+                {
+                    if (info == null || !info.IsAvailable || !info.IsConnectedOrConnecting)
+                        return null;
+
+                    return GetConnectionType(info.Type, info.TypeName);
                 }
             }
         }
