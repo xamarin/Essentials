@@ -28,7 +28,8 @@ namespace Microsoft.Caboodle
             var dirs = NSSearchPath.GetDirectories(directory, NSSearchPathDomain.User);
             if (dirs == null || dirs.Length == 0)
             {
-                throw new ArgumentException(nameof(directory));
+                // this should never happen...
+                return null;
             }
             return dirs[0];
         }
