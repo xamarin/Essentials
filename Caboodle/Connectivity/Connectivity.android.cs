@@ -162,7 +162,7 @@ namespace Microsoft.Caboodle
             }
         }
 
-        public static ConnectionProfile GetConnectionType(ConnectivityType connectivityType, string typeName)
+        internal static ConnectionProfile GetConnectionType(ConnectivityType connectivityType, string typeName)
         {
             switch (connectivityType)
             {
