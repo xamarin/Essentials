@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Foundation;
 using ObjCRuntime;
 using UIKit;
@@ -66,13 +67,19 @@ namespace Microsoft.Caboodle
         {
             var notificationCenter = NSNotificationCenter.DefaultCenter;
             var notification = UIApplication.DidChangeStatusBarOrientationNotification;
-            observer = notificationCenter.AddObserver(notification, n => OnScreenMetricsChanaged());
+            observer = notificationCenter.AddObserver(notification, OnScreenMetricsChanaged);
         }
 
         static void StopScreenMetricsListeners()
         {
             observer?.Dispose();
             observer = null;
+        }
+
+        private static void OnScreenMetricsChanaged(NSNotification obj)
+        {
+            var metrics = GetScreenMetrics();
+            OnScreenMetricsChanaged(metrics);
         }
 
         static ScreenOrientation CalculateOrientation()
