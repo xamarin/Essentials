@@ -45,20 +45,20 @@ namespace Microsoft.Caboodle
             set;
         } = new Dictionary<string, string>()
         {
-            {"text", "text/plain" },
-            {"txt", "text/plain" },
-            {"csv", "text/plain" },
-            {"html", "text/html" },
-            {"htm", "text/html" },
-            {"jpg", "image/jpeg" },
-            {"jpeg", "image/jpeg" },
-            {"png", "image/png" },
-            {"doc", "application/msword" },
-            {"pdf", "application/pdf" },
-            {"zip", "application/zip" },
-            {"docx", "application/zip" },
-            {"xlsx", "application/zip" },
-            {"pptx", "application/zip" },
+            { "text", "text/plain" },
+            { "txt", "text/plain" },
+            { "csv", "text/plain" },
+            { "html", "text/html" },
+            { "htm", "text/html" },
+            { "jpg", "image/jpeg" },
+            { "jpeg", "image/jpeg" },
+            { "png", "image/png" },
+            { "doc", "application/msword" },
+            { "pdf", "application/pdf" },
+            { "zip", "application/zip" },
+            { "docx", "application/zip" },
+            { "xlsx", "application/zip" },
+            { "pptx", "application/zip" },
         };
 
         // TODO: check if there is posibility to get the info about status
