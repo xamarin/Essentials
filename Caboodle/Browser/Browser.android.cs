@@ -1,82 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
+
+using AndroidUri = Android.Net.Uri;
 
 namespace Microsoft.Caboodle
 {
-    public partial class Browser
+    public static partial class Browser
     {
-        public static async Task OpenAsync(string uri)
+        public static Task OpenAsync(Uri uri, BrowserLaunchingType launchType)
         {
-            if (string.IsNullOrEmpty(uri))
+            if (uri == null)
             {
-                throw new ArgumentNullException($"Uri cannot be null or empty.");
+                throw new ArgumentNullException(nameof(uri), "Uri cannot be null.");
             }
 
-            await Browser.OpenAsync(new System.Uri(uri), BrowserLaunchingType.UriLauncher);
+            var nativeUri = AndroidUri.Parse(uri.OriginalString);
 
-            return;
-        }
-
-        public static async Task OpenAsync(string uri, BrowserLaunchingType launch_type)
-        {
-            if (string.IsNullOrEmpty(uri))
+            switch (launchType)
             {
-                throw new ArgumentNullException($"Uri cannot be null or empty.");
-            }
-
-            await Browser.OpenAsync(new System.Uri(uri));
-
-            return;
-        }
-
-        public static async Task OpenAsync(System.Uri uri)
-        {
-            await OpenAsync(uri, BrowserLaunchingType.UriLauncher);
-
-            return;
-        }
-
-        public static async Task OpenAsync(System.Uri uri, BrowserLaunchingType launch_type)
-        {
-            await Task.Run(() =>
-            {
-                if (uri == null)
-                {
-                    throw new ArgumentNullException($"Uri cannot be null.");
-                }
-
-                var uri_native = global::Android.Net.Uri.Parse(uri.OriginalString);
-
-                if (launch_type == BrowserLaunchingType.UriLauncher)
-                {
-                    var intent = new Android.Content.Intent(Android.Content.Intent.ActionView, uri_native);
+                case BrowserLaunchingType.SystemBrowser:
+                    var tabsBuilder = new Android.Support.CustomTabs.CustomTabsIntent.Builder();
+                    var tabsIntent = tabsBuilder.Build();
+                    tabsBuilder.SetShowTitle(true);
+                    tabsIntent.LaunchUrl(Platform.CurrentContext, nativeUri);
+                    break;
+                case BrowserLaunchingType.UriLauncher:
+                    var intent = new Android.Content.Intent(Android.Content.Intent.ActionView, nativeUri);
                     intent.SetFlags(Android.Content.ActivityFlags.ClearTop);
                     intent.SetFlags(Android.Content.ActivityFlags.NewTask);
                     Platform.CurrentContext.StartActivity(intent);
-                }
-                else if (launch_type == BrowserLaunchingType.SystemBrowser)
-                {
-                    /*
-                     motz's code UI customization
-                     var toolbarColor = options?.ChromeToolbarColor;
-                     if (toolbarColor != null)
-                         tabsBuilder.SetToolbarColor(toolbarColor.ToNativeColor());
-                    */
+                    break;
+            }
 
-                    var tabsBuilder = new Android.Support.CustomTabs.CustomTabsIntent.Builder();
-                    var intent = tabsBuilder.Build();
-                    tabsBuilder.SetShowTitle(true);
-                    intent.LaunchUrl(Platform.CurrentContext, uri_native);
-
-                    // chrome custom tabs will fall back to normal launching of browser if they don't exist
-                }
-
-                return;
-            });
-
-            return;
+            return Task.CompletedTask;
         }
     }
 }

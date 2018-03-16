@@ -8,9 +8,7 @@ namespace Caboodle.Samples.ViewModel
 {
     public class BrowserViewModel : BaseViewModel
     {
-        private Browser browser;
-
-        private string browserstatus;
+        string browserstatus;
 
         public ICommand OpenUriCommand { get; }
 
@@ -22,9 +20,6 @@ namespace Caboodle.Samples.ViewModel
 
         public BrowserViewModel()
         {
-            BrowserType = BrowserLaunchTypes[0];
-            browser = new Browser();
-
             OpenUriCommand = new Command(async () =>
             {
                 if (IsBusy)
@@ -33,7 +28,7 @@ namespace Caboodle.Samples.ViewModel
                 IsBusy = true;
                 try
                 {
-                    await Browser.OpenAsync(uri);
+                    await Browser.OpenAsync(uri, launchType);
                 }
                 catch (Exception e)
                 {
@@ -49,7 +44,7 @@ namespace Caboodle.Samples.ViewModel
             return;
         }
 
-        string uri;
+        string uri = "http://xamarin.com";
 
         public string Uri
         {
@@ -62,7 +57,7 @@ namespace Caboodle.Samples.ViewModel
             }
         }
 
-        private List<string> browserlaunchertypes = new List<string>
+        List<string> browserlaunchertypes = new List<string>
         {
             $"Uri Launcher",
             $"System Browser(CustomTabs, Safari)",
@@ -78,7 +73,9 @@ namespace Caboodle.Samples.ViewModel
             }
         }
 
-        private string browsertype;
+        BrowserLaunchingType launchType = BrowserLaunchingType.SystemBrowser;
+
+        string browsertype = $"System Browser(CustomTabs, Safari)";
 
         public string BrowserType
         {
@@ -88,20 +85,15 @@ namespace Caboodle.Samples.ViewModel
                 browsertype = value;
                 if (browsertype == "Uri Launcher")
                 {
-                    Browser.AlwaysUseExternal = false;
+                    launchType = BrowserLaunchingType.UriLauncher;
                 }
                 else
                 {
-                    Browser.AlwaysUseExternal = true;
+                    launchType = BrowserLaunchingType.SystemBrowser;
                 }
 
                 OnPropertyChanged();
             }
         }
-
-        private List<string> uris = new List<string>
-        {
-            $"https://xamarin.com",
-        };
     }
 }

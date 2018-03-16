@@ -1,79 +1,39 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
+using Foundation;
+using SafariServices;
 
 namespace Microsoft.Caboodle
 {
-    public partial class Browser
+    public static partial class Browser
     {
-        public static async Task OpenAsync(string uri)
+        public static Task OpenAsync(Uri uri, BrowserLaunchingType launchType)
         {
-            if (string.IsNullOrEmpty(uri))
+            if (uri == null)
             {
-                throw new ArgumentNullException($"Uri cannot be null or empty.");
+                throw new ArgumentNullException(nameof(uri), "Uri cannot be null.");
             }
 
-            await Browser.OpenAsync(new System.Uri(uri));
+            var nativeUrl = new NSUrl(uri.OriginalString);
 
-            return;
-        }
-
-        public static async Task OpenAsync(System.Uri uri)
-        {
-            await Task.Run(
-                () =>
-                {
-                    if (uri == null)
-                    {
-                        throw new ArgumentNullException($"Uri cannot be null.");
-                    }
-
-                    var url_native = new Foundation.NSUrl(uri.OriginalString);
-
-                    if (AlwaysUseExternal)
-                    {
-                        System.Diagnostics.Debug.WriteLine("External");
-
-                        Platform.BeginInvokeOnMainThread(
-                                () =>
-                                UIKit.UIApplication.SharedApplication.OpenUrl(url_native));
-                    }
-                    else
-                    {
-                        System.Diagnostics.Debug.WriteLine("Safari");
-                        var sfViewController = new SafariServices.SFSafariViewController(url_native, false);
-
-                        // set colors here, we can set tintcolors on iOS 10+
-                        Platform.BeginInvokeOnMainThread(
-                                () =>
-                                {
-                                    var vc = GetVisibleViewController();
-
-                                    if (sfViewController.PopoverPresentationController != null)
-                                    {
-                                        sfViewController.PopoverPresentationController.SourceView = vc.View;
-                                    }
-                                    vc.PresentViewController(sfViewController, true, null);
-                                });
-                    }
-                });
-
-            return;
-        }
-
-        private static UIKit.UIViewController GetVisibleViewController()
-        {
-            UIKit.UIViewController vc = null;
-
-            var window = UIKit.UIApplication.SharedApplication.KeyWindow;
-            vc = window.RootViewController;
-            while (vc.PresentedViewController != null)
+            switch (launchType)
             {
-                vc = vc.PresentedViewController;
+                case BrowserLaunchingType.SystemBrowser:
+                    var sfViewController = new SFSafariViewController(nativeUrl, false);
+                    var vc = Platform.GetCurrentViewController();
+
+                    if (sfViewController.PopoverPresentationController != null)
+                    {
+                        sfViewController.PopoverPresentationController.SourceView = vc.View;
+                    }
+                    vc.PresentViewController(sfViewController, true, null);
+                    break;
+                case BrowserLaunchingType.UriLauncher:
+                    UIKit.UIApplication.SharedApplication.OpenUrl(nativeUrl);
+                    break;
             }
 
-            return vc;
+            return Task.CompletedTask;
         }
     }
 }

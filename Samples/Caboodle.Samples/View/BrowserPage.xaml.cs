@@ -9,7 +9,6 @@ using Xamarin.Forms.Xaml;
 
 namespace Caboodle.Samples.View
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class BrowserPage : ContentPage
     {
         public BrowserPage()
