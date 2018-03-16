@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows.Input;
 using Microsoft.Caboodle;
 using Xamarin.Forms;
@@ -8,14 +9,14 @@ namespace Caboodle.Samples.ViewModel
 {
     public class BrowserViewModel : BaseViewModel
     {
-        string browserstatus;
+        string browserStatus;
 
         public ICommand OpenUriCommand { get; }
 
         public string BrowserStatus
         {
-            get => browserstatus;
-            set => SetProperty(ref browserstatus, value);
+            get => browserStatus;
+            set => SetProperty(ref browserStatus, value);
         }
 
         public BrowserViewModel()
@@ -32,8 +33,8 @@ namespace Caboodle.Samples.ViewModel
                 }
                 catch (Exception e)
                 {
-                    browserstatus = $"Unable to open Uri {e.Message}";
-                    System.Diagnostics.Debug.WriteLine(browserstatus);
+                    BrowserStatus = $"Unable to open Uri {e.Message}";
+                    Debug.WriteLine(browserStatus);
                 }
                 finally
                 {
