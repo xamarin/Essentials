@@ -40,8 +40,6 @@ namespace Caboodle.Samples.ViewModel
                     IsBusy = false;
                 }
             });
-
-            return;
         }
 
         string uri = "http://xamarin.com";
@@ -49,12 +47,7 @@ namespace Caboodle.Samples.ViewModel
         public string Uri
         {
             get => uri;
-            set
-            {
-                uri = value;
-
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref uri, value);
         }
 
         List<string> browserlaunchertypes = new List<string>
@@ -63,27 +56,19 @@ namespace Caboodle.Samples.ViewModel
             $"System Browser(CustomTabs, Safari)",
         };
 
-        public List<string> BrowserLaunchTypes
-        {
-            get => browserlaunchertypes;
-            set
-            {
-                browserlaunchertypes = value;
-                OnPropertyChanged();
-            }
-        }
+        public List<string> BrowserLaunchTypes => browserlaunchertypes;
 
         BrowserLaunchingType launchType = BrowserLaunchingType.SystemBrowser;
 
-        string browsertype = $"System Browser(CustomTabs, Safari)";
+        string browserType = $"System Browser(CustomTabs, Safari)";
 
         public string BrowserType
         {
-            get => browsertype;
+            get => browserType;
             set
             {
-                browsertype = value;
-                if (browsertype == "Uri Launcher")
+                SetProperty(ref browserType, value);
+                if (browserType == "Uri Launcher")
                 {
                     launchType = BrowserLaunchingType.UriLauncher;
                 }
@@ -91,8 +76,6 @@ namespace Caboodle.Samples.ViewModel
                 {
                     launchType = BrowserLaunchingType.SystemBrowser;
                 }
-
-                OnPropertyChanged();
             }
         }
     }
