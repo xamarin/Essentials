@@ -1,6 +1,6 @@
 <Type Name="Geocoding" FullName="Microsoft.Caboodle.Geocoding">
-  <TypeSignature Language="C#" Value="public class Geocoding" />
-  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit Geocoding extends System.Object" />
+  <TypeSignature Language="C#" Value="public static class Geocoding" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract sealed beforefieldinit Geocoding extends System.Object" />
   <AssemblyInfo>
     <AssemblyName>Microsoft.Caboodle</AssemblyName>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
