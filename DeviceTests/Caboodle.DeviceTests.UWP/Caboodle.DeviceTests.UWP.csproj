@@ -90,6 +90,9 @@
     <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="UnitTests.HeadlessRunner">
+      <Version>1.0.0</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="2.5.0.280555" />
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.0.6" />
     <PackageReference Include="xunit" Version="2.3.1" />
@@ -124,6 +127,9 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AppBundleFile.txt" />
+    <Content Include="Folder\AppBundleFile_Nested.txt" />
+    <Content Include="AppBundleFile_NoExtension" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-100.png" />
     <Content Include="Assets\LockScreenLogo.scale-125.png" />
