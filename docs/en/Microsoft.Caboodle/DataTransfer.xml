@@ -16,9 +16,9 @@
     </remarks>
   </Docs>
   <Members>
-    <Member MemberName="ShowShareUI">
-      <MemberSignature Language="C#" Value="public static System.Threading.Tasks.Task ShowShareUI (Microsoft.Caboodle.ShareTextRequest request);" />
-      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Tasks.Task ShowShareUI(class Microsoft.Caboodle.ShareTextRequest request) cil managed" />
+    <Member MemberName="RequestAsync">
+      <MemberSignature Language="C#" Value="public static System.Threading.Tasks.Task RequestAsync (Microsoft.Caboodle.ShareTextRequest request);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Tasks.Task RequestAsync(class Microsoft.Caboodle.ShareTextRequest request) cil managed" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
@@ -38,9 +38,9 @@
         </remarks>
       </Docs>
     </Member>
-    <Member MemberName="ShowShareUI">
-      <MemberSignature Language="C#" Value="public static System.Threading.Tasks.Task ShowShareUI (string text);" />
-      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Tasks.Task ShowShareUI(string text) cil managed" />
+    <Member MemberName="RequestAsync">
+      <MemberSignature Language="C#" Value="public static System.Threading.Tasks.Task RequestAsync (string text);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Tasks.Task RequestAsync(string text) cil managed" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
@@ -60,9 +60,9 @@
         </remarks>
       </Docs>
     </Member>
-    <Member MemberName="ShowShareUI">
-      <MemberSignature Language="C#" Value="public static System.Threading.Tasks.Task ShowShareUI (string text, string title);" />
-      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Tasks.Task ShowShareUI(string text, string title) cil managed" />
+    <Member MemberName="RequestAsync">
+      <MemberSignature Language="C#" Value="public static System.Threading.Tasks.Task RequestAsync (string text, string title);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Tasks.Task RequestAsync(string text, string title) cil managed" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>

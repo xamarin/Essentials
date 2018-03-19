@@ -7,7 +7,7 @@ namespace Microsoft.Caboodle
 {
     public static partial class DataTransfer
     {
-        public static Task ShowShareUI(ShareTextRequest request) =>
+        public static Task RequestAsync(ShareTextRequest request) =>
             throw new NotImplementedInReferenceAssemblyException();
     }
 }

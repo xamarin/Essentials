@@ -8,7 +8,7 @@ namespace Microsoft.Caboodle
 {
     public static partial class DataTransfer
     {
-        public static Task ShowShareUI(ShareTextRequest request)
+        public static Task RequestAsync(ShareTextRequest request)
         {
             var items = new List<string>();
             if (!string.IsNullOrWhiteSpace(request.Text))

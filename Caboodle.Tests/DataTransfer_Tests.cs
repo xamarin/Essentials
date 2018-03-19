@@ -1,4 +1,5 @@
-﻿using Microsoft.Caboodle;
+﻿using System.Threading.Tasks;
+using Microsoft.Caboodle;
 using Xunit;
 
 namespace Caboodle.Tests
@@ -6,15 +7,15 @@ namespace Caboodle.Tests
     public class DataTransfer_Tests
     {
         [Fact]
-        public async System.Threading.Tasks.Task Show_Share_UI_Text_NetStandard() =>
-            await Assert.ThrowsAsync<NotImplementedInReferenceAssemblyException>(() => DataTransfer.ShowShareUI("Text"));
+        public async Task Request_Text_NetStandard() =>
+            await Assert.ThrowsAsync<NotImplementedInReferenceAssemblyException>(() => DataTransfer.RequestAsync("Text"));
 
         [Fact]
-        public async System.Threading.Tasks.Task Show_Share_UI_Text_Title_NetStandard() =>
-            await Assert.ThrowsAsync<NotImplementedInReferenceAssemblyException>(() => DataTransfer.ShowShareUI("Text", "Title"));
+        public async Task Request_Text_Title_NetStandard() =>
+            await Assert.ThrowsAsync<NotImplementedInReferenceAssemblyException>(() => DataTransfer.RequestAsync("Text", "Title"));
 
         [Fact]
-        public async System.Threading.Tasks.Task Show_Share_UI_Request_NetStandard() =>
-            await Assert.ThrowsAsync<NotImplementedInReferenceAssemblyException>(() => DataTransfer.ShowShareUI(new ShareTextRequest()));
+        public async Task Request_Text_Request_NetStandard() =>
+            await Assert.ThrowsAsync<NotImplementedInReferenceAssemblyException>(() => DataTransfer.RequestAsync(new ShareTextRequest()));
     }
 }

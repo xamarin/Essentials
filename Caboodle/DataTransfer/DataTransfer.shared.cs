@@ -7,11 +7,11 @@ namespace Microsoft.Caboodle
 {
     public static partial class DataTransfer
     {
-        public static Task ShowShareUI(string text) =>
-            ShowShareUI(new ShareTextRequest(text));
+        public static Task RequestAsync(string text) =>
+            RequestAsync(new ShareTextRequest(text));
 
-        public static Task ShowShareUI(string text, string title) =>
-            ShowShareUI(new ShareTextRequest(text, title));
+        public static Task RequestAsync(string text, string title) =>
+            RequestAsync(new ShareTextRequest(text, title));
     }
 
     public class ShareTextRequest

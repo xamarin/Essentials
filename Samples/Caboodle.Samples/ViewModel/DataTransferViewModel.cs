@@ -15,7 +15,7 @@ namespace Caboodle.Samples.ViewModel
         {
             RequestCommand = new Command(async () =>
             {
-                await DataTransfer.ShowShareUI(new ShareTextRequest
+                await DataTransfer.RequestAsync(new ShareTextRequest
                 {
                     Subject = Subject,
                     Text = ShareText ? Text : null,
