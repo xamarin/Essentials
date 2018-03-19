@@ -1,6 +1,6 @@
-<Type Name="BrowserLaunchingType" FullName="Microsoft.Caboodle.BrowserLaunchingType">
-  <TypeSignature Language="C#" Value="public enum BrowserLaunchingType" />
-  <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed BrowserLaunchingType extends System.Enum" />
+<Type Name="BrowserLaunchType" FullName="Microsoft.Caboodle.BrowserLaunchType">
+  <TypeSignature Language="C#" Value="public enum BrowserLaunchType" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed BrowserLaunchType extends System.Enum" />
   <AssemblyInfo>
     <AssemblyName>Microsoft.Caboodle</AssemblyName>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
@@ -15,13 +15,13 @@
   <Members>
     <Member MemberName="SystemBrowser">
       <MemberSignature Language="C#" Value="SystemBrowser" />
-      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Microsoft.Caboodle.BrowserLaunchingType SystemBrowser = int32(1)" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Microsoft.Caboodle.BrowserLaunchType SystemBrowser = int32(1)" />
       <MemberType>Field</MemberType>
       <AssemblyInfo>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
-        <ReturnType>Microsoft.Caboodle.BrowserLaunchingType</ReturnType>
+        <ReturnType>Microsoft.Caboodle.BrowserLaunchType</ReturnType>
       </ReturnValue>
       <MemberValue>1</MemberValue>
       <Docs>
@@ -30,13 +30,13 @@
     </Member>
     <Member MemberName="UriLauncher">
       <MemberSignature Language="C#" Value="UriLauncher" />
-      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Microsoft.Caboodle.BrowserLaunchingType UriLauncher = int32(0)" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Microsoft.Caboodle.BrowserLaunchType UriLauncher = int32(0)" />
       <MemberType>Field</MemberType>
       <AssemblyInfo>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
-        <ReturnType>Microsoft.Caboodle.BrowserLaunchingType</ReturnType>
+        <ReturnType>Microsoft.Caboodle.BrowserLaunchType</ReturnType>
       </ReturnValue>
       <MemberValue>0</MemberValue>
       <Docs>

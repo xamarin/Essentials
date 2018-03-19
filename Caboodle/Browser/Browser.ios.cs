@@ -7,7 +7,7 @@ namespace Microsoft.Caboodle
 {
     public static partial class Browser
     {
-        public static Task OpenAsync(Uri uri, BrowserLaunchingType launchType)
+        public static Task OpenAsync(Uri uri, BrowserLaunchType launchType)
         {
             if (uri == null)
             {
@@ -18,7 +18,7 @@ namespace Microsoft.Caboodle
 
             switch (launchType)
             {
-                case BrowserLaunchingType.SystemBrowser:
+                case BrowserLaunchType.SystemPreferred:
                     var sfViewController = new SFSafariViewController(nativeUrl, false);
                     var vc = Platform.GetCurrentViewController();
 
@@ -28,7 +28,7 @@ namespace Microsoft.Caboodle
                     }
                     vc.PresentViewController(sfViewController, true, null);
                     break;
-                case BrowserLaunchingType.UriLauncher:
+                case BrowserLaunchType.External:
                     UIKit.UIApplication.SharedApplication.OpenUrl(nativeUrl);
                     break;
             }

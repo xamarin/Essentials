@@ -53,9 +53,9 @@
     <Compile Include="**\*.uwp.cs" />
   </ItemGroup>
   <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
-      <PackageReference Include="Xamarin.Android.Support.CustomTabs" Version="26.1.0.1"/>
-      <Compile Include="**\*.android.cs" />
-    </ItemGroup>
+    <PackageReference Include="Xamarin.Android.Support.CustomTabs" Version="26.1.0.1" />
+    <Compile Include="**\*.android.cs" />
+  </ItemGroup>
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
     <Compile Include="**\*.ios.cs" />
   </ItemGroup>

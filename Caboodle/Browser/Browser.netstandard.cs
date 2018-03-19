@@ -5,7 +5,7 @@ namespace Microsoft.Caboodle
 {
     public static partial class Browser
     {
-        public static Task OpenAsync(Uri uri, BrowserLaunchingType launchType) =>
+        public static Task OpenAsync(Uri uri, BrowserLaunchType launchType) =>
             throw new NotImplementedInReferenceAssemblyException();
     }
 }

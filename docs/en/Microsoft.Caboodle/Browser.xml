@@ -59,8 +59,8 @@
       </Docs>
     </Member>
     <Member MemberName="OpenAsync">
-      <MemberSignature Language="C#" Value="public static System.Threading.Tasks.Task OpenAsync (string uri, Microsoft.Caboodle.BrowserLaunchingType launchingType);" />
-      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Tasks.Task OpenAsync(string uri, valuetype Microsoft.Caboodle.BrowserLaunchingType launchingType) cil managed" />
+      <MemberSignature Language="C#" Value="public static System.Threading.Tasks.Task OpenAsync (string uri, Microsoft.Caboodle.BrowserLaunchType launchingType);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Tasks.Task OpenAsync(string uri, valuetype Microsoft.Caboodle.BrowserLaunchType launchingType) cil managed" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
@@ -70,7 +70,7 @@
       </ReturnValue>
       <Parameters>
         <Parameter Name="uri" Type="System.String" />
-        <Parameter Name="launchingType" Type="Microsoft.Caboodle.BrowserLaunchingType" />
+        <Parameter Name="launchingType" Type="Microsoft.Caboodle.BrowserLaunchType" />
       </Parameters>
       <Docs>
         <param name="uri">Uri to launch.</param>
@@ -83,8 +83,8 @@
       </Docs>
     </Member>
     <Member MemberName="OpenAsync">
-      <MemberSignature Language="C#" Value="public static System.Threading.Tasks.Task OpenAsync (Uri uri, Microsoft.Caboodle.BrowserLaunchingType launchType);" />
-      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Tasks.Task OpenAsync(class System.Uri uri, valuetype Microsoft.Caboodle.BrowserLaunchingType launchType) cil managed" />
+      <MemberSignature Language="C#" Value="public static System.Threading.Tasks.Task OpenAsync (Uri uri, Microsoft.Caboodle.BrowserLaunchType launchType);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Tasks.Task OpenAsync(class System.Uri uri, valuetype Microsoft.Caboodle.BrowserLaunchType launchType) cil managed" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
@@ -94,7 +94,7 @@
       </ReturnValue>
       <Parameters>
         <Parameter Name="uri" Type="System.Uri" />
-        <Parameter Name="launchType" Type="Microsoft.Caboodle.BrowserLaunchingType" />
+        <Parameter Name="launchType" Type="Microsoft.Caboodle.BrowserLaunchType" />
       </Parameters>
       <Docs>
         <param name="uri">Uri to launch.</param>

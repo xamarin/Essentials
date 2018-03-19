@@ -7,7 +7,7 @@ namespace Microsoft.Caboodle
 {
     public static partial class Browser
     {
-        public static Task OpenAsync(Uri uri, BrowserLaunchingType launchType)
+        public static Task OpenAsync(Uri uri, BrowserLaunchType launchType)
         {
             if (uri == null)
             {
@@ -18,13 +18,13 @@ namespace Microsoft.Caboodle
 
             switch (launchType)
             {
-                case BrowserLaunchingType.SystemBrowser:
+                case BrowserLaunchType.SystemPreferred:
                     var tabsBuilder = new Android.Support.CustomTabs.CustomTabsIntent.Builder();
                     var tabsIntent = tabsBuilder.Build();
                     tabsBuilder.SetShowTitle(true);
                     tabsIntent.LaunchUrl(Platform.CurrentContext, nativeUri);
                     break;
-                case BrowserLaunchingType.UriLauncher:
+                case BrowserLaunchType.External:
                     var intent = new Android.Content.Intent(Android.Content.Intent.ActionView, nativeUri);
                     intent.SetFlags(Android.Content.ActivityFlags.ClearTop);
                     intent.SetFlags(Android.Content.ActivityFlags.NewTask);

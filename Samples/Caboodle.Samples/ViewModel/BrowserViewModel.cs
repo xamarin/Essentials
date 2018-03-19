@@ -59,7 +59,7 @@ namespace Caboodle.Samples.ViewModel
 
         public List<string> BrowserLaunchTypes => browserlaunchertypes;
 
-        BrowserLaunchingType launchType = BrowserLaunchingType.SystemBrowser;
+        BrowserLaunchType launchType = BrowserLaunchType.SystemPreferred;
 
         string browserType = $"System Browser(CustomTabs, Safari)";
 
@@ -71,11 +71,11 @@ namespace Caboodle.Samples.ViewModel
                 SetProperty(ref browserType, value);
                 if (browserType == "Uri Launcher")
                 {
-                    launchType = BrowserLaunchingType.UriLauncher;
+                    launchType = BrowserLaunchType.External;
                 }
                 else
                 {
-                    launchType = BrowserLaunchingType.SystemBrowser;
+                    launchType = BrowserLaunchType.SystemPreferred;
                 }
             }
         }
