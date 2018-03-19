@@ -11,42 +11,62 @@ namespace Microsoft.Caboodle
 {
     public static partial class Email
     {
-        public static bool IsEnabled
+        /// Indicating whether Compose Dialog is available
+        public static bool IsComposeSupported
+            => Platform.IsIntentSupported(CreateIntent(
+                new EmailMessage()
+                {
+                    RecipientsTo = new string[] {"mailto:moljac@mailinator.com" },
+                }));
+
+        /// Indicating whether Sending in background is available
+        public static bool IsSendSupported
         {
-            get
-            {
-                return true;
-            }
+            get;
         }
 
-        public static bool IsAvailable
+        private static Intent CreateIntent(EmailMessage message)
         {
-            get
-            {
-                return true;
-            }
+            if (message == null)
+                throw new ArgumentNullException(nameof(message));
+            message.Validate();
+
+            return CreateIntent(message.RecipientsTo, message.RecipientsCC, message.RecipientsBCC, message.Subject, message.Body);
         }
 
-        /// <summary>
-        /// Send Email
-        /// </summary>
-        /// <returns></returns>
-        /// <see cref="http://developer.xamarin.com/recipes/android/networking/email/send_an_email/"/>
-        /// <see cref="http://stackoverflow.com/questions/15946297/sending-email-with-attachment-using-sendto-on-some-devices-doesnt-work"/>
-        public static void Compose(
+        private static Intent CreateIntent(
             string[] recipientsto,
             string[] recipientscc,
             string[] recipientsbcc,
-            string subject,
-            string body,
-            string bodymimetype,
-            string[] attachmentspaths)
+            string subject = null,
+            string body = null,
+            string bodymimetype = null,
+            string[] attachmentspaths = null
+            )
         {
             // TODO: Tuning for Intent Choosers/Pickers
             // Numerous apps can respond to ActionSend
             var i = new Intent(Intent.ActionSendto);
+            i.SetType("plain/text");
             i.SetType("message/rfc822");
-            i.SetData(Android.Net.Uri.Parse("mailto"));
+
+            //i.SetData(Android.Net.Uri.Parse("mailto"));
+
+            if (! (recipientsto?.Length > 0))
+                i.PutExtra(Intent.ExtraEmail, recipientsto);
+
+            if (!(recipientsto?.Length > 0))
+                i.PutExtra(Intent.ExtraCc, recipientsto);
+
+            if (!(recipientsto?.Length > 0))
+                i.PutExtra(Intent.ExtraBcc, recipientsto);
+
+            if (!string.IsNullOrWhiteSpace(body))
+                i.PutExtra(Intent.ExtraSubject, subject);
+
+            if (!string.IsNullOrWhiteSpace(body))
+                i.PutExtra(Intent.ExtraText, body);
+
 
             i.PutExtra(Intent.ExtraSubject, subject);
 
@@ -68,14 +88,37 @@ namespace Microsoft.Caboodle
             {
                 i.AddAttachments(attachmentspaths);
             }
-            i.PutExtra(Intent.ExtraEmail, recipientsto);
-            i.PutExtra(Intent.ExtraCc, recipientscc);
-            i.PutExtra(Intent.ExtraBcc, recipientsbcc);
 
-            Platform.CurrentActivity.StartActivity(i);
+            return i;
+        }
+
+        /// <summary>
+        /// Compose Email
+        /// </summary>
+        /// <returns></returns>
+        /// <see cref="http://developer.xamarin.com/recipes/android/networking/email/send_an_email/"/>
+        /// <see cref="http://stackoverflow.com/questions/15946297/sending-email-with-attachment-using-sendto-on-some-devices-doesnt-work"/>
+        public static async Task ComposeAsync(
+            string[] recipientsto,
+            string[] recipientscc,
+            string[] recipientsbcc,
+            string subject,
+            string body,
+            string bodymimetype,
+            string[] attachmentspaths)
+        {
+            var intent = CreateIntent(
+                recipientsto,
+                recipientscc,
+                recipientsbcc,
+                subject,
+                body,
+                bodymimetype,
+                attachmentspaths);
 
             // var chooser = i.createChooser(i, "Send Mail");
             // Platform.CurrentActivity.StartActivity(chooser);
+            Platform.CurrentActivity.StartActivity(intent);
 
             return;
         }

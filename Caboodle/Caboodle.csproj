@@ -60,6 +60,7 @@
   <ItemGroup>
     <None Remove="Email\Email.netstandard.cs" />
     <None Remove="Email\Email.shared.cs" />
+    <None Remove="Email\EmailMessage.shared.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
   <Import Project="$(MSBuildThisFileDirectory)mdoc.targets" />

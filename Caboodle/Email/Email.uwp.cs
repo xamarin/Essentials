@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Email;
+using Windows.Foundation.Metadata;
 using Windows.Storage;
 using Windows.Storage.Streams;
 
@@ -12,27 +13,15 @@ namespace Microsoft.Caboodle
 {
     public static partial class Email
     {
-        public static bool IsEnabled
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        public static bool IsAvailable
-        {
-            get
-            {
-                return true;
-            }
-        }
+        /// Indicating whether Compose Dialog is available
+        public static bool IsComposeSupported
+            => ApiInformation.IsTypePresent("Windows.ApplicationModel.Email.EmailMessage");
 
         /// <summary>
         /// Send Email
         /// </summary>
         /// <returns></returns>
-        public static void Compose(
+        public static async Task ComposeAsync(
             string[] recipientsto,
             string[] recipientscc,
             string[] recipientsbcc,
@@ -69,10 +58,7 @@ namespace Microsoft.Caboodle
                 emmsg.Attachments.Add(new Windows.ApplicationModel.Email.EmailAttachment(a, stream_reference));
             });
 
-            Task.Run(async () =>
-            {
-                await EmailManager.ShowComposeNewEmailAsync(emmsg);
-            });
+            await EmailManager.ShowComposeNewEmailAsync(emmsg);
 
             return;
         }

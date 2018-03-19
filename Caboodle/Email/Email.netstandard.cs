@@ -4,7 +4,18 @@ namespace Microsoft.Caboodle
 {
     public static partial class Email
     {
-        public static async void Compose(
+        /// Indicating whether Compose Dialog is available
+        public static bool IsComposeSupported
+            => throw new NotImplementedInReferenceAssemblyException();
+
+        /// Indicating whether Sending in background is available
+        public static bool IsSendSupported
+            => throw new NotImplementedInReferenceAssemblyException();
+
+        public static async Task ComposeAsync(EmailMessage message) =>
+                throw new NotImplementedInReferenceAssemblyException();
+
+        public static async Task ComposeAsync(
             string[] recipientsto,
             string[] recipientscc,
             string[] recipientsbcc,
@@ -12,6 +23,9 @@ namespace Microsoft.Caboodle
             string body,
             string bodymimetype,
             string[] attachmentspaths) =>
-                throw new NotImplentedInReferenceAssembly();
+                throw new NotImplementedInReferenceAssemblyException();
+
+        public static async void SendAsync(EmailMessage message) =>
+                throw new NotImplementedInReferenceAssemblyException();
     }
 }

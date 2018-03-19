@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Caboodle
 {
+    /// <summary>
+    /// Email class for
+    /// </summary>
     public static partial class Email
     {
         public static Func<string, string> BodyFormatter
@@ -67,6 +70,39 @@ namespace Microsoft.Caboodle
         // TODO: check if there is posibility to get the info about status
         public static EmailSendEventHandler OnSendError;
     }
+
+    public partial class EmailMessage
+    {
+        public EmailMessage()
+        {
+        }
+
+        public EmailMessage(string[] recipientsto, string subject, string body)
+        {
+        }
+
+        public EmailMessage(EmailMessage message)
+        {
+        }
+
+        public string[] RecipientsTo { get; set; }
+
+        public string[] RecipientsCC { get; set; }
+
+        public string[] RecipientsBCC { get; set; }
+
+        public string Subject { get; set; }
+
+        public string Body { get; set; }
+
+
+        internal void Validate()
+        {
+            if (!(RecipientsTo?.Length > 0))
+                throw new ArgumentException("Email recipients cannot be empty.", nameof(RecipientsTo));
+        }
+    }
+
 
     public delegate void EmailSendEventHandler(EmailSendEventArgs e);
 

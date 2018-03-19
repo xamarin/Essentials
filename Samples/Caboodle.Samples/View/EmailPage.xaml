@@ -17,11 +17,11 @@
                     <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
 
                     <Button Text="Send Email" Command="{Binding SendEmailCommand}" IsEnabled="{Binding IsNotBusy}"/>
-                    <Label Text="Recepients To:" FontAttributes="Bold" Margin="0,6,0,0" />
+                    <Label Text="Recipients To:" FontAttributes="Bold" Margin="0,6,0,0" />
                     <Entry Text="{Binding RecipientsTo}" />
-                    <Label Text="Recepients CC:" FontAttributes="Bold" Margin="0,6,0,0" />
+                    <Label Text="Recipients CC:" FontAttributes="Bold" Margin="0,6,0,0" />
                     <Entry Text="{Binding RecipientsCC}" />
-                    <Label Text="Recepients BCC:" FontAttributes="Bold" Margin="0,6,0,0" />
+                    <Label Text="Recipients BCC:" FontAttributes="Bold" Margin="0,6,0,0" />
                     <Entry Text="{Binding RecipientsBCC}" />
                     <Label Text="Subject:" FontAttributes="Bold" Margin="0,6,0,0" />
                     <Entry Text="{Binding Subject}" />

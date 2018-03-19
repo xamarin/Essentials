@@ -79,7 +79,7 @@ namespace Caboodle.Samples.ViewModel
             set => SetProperty(ref recipientsbcc, value);
         }
 
-        private void OnSendEmail()
+        private async void OnSendEmail()
         {
             if (IsBusy)
             {
@@ -89,7 +89,7 @@ namespace Caboodle.Samples.ViewModel
             IsBusy = true;
             try
             {
-                Email.Compose(
+                await Email.ComposeAsync(
                      RecipientsTo?.Split(new char[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries),
                      RecipientsCC?.Split(new char[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries),
                      RecipientsBCC?.Split(new char[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries),

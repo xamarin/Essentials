@@ -9,17 +9,14 @@ namespace Caboodle.DeviceTests
     public class Email_Tests
     {
         [Fact]
-        public void IsAvailable() =>
-            Assert.True(Email.IsAvailable == true);
+        public void IsComposeSupported() =>
+            Assert.True(Email.IsComposeSupported == true);
 
-        [Fact]
-        public void IsEnabled() =>
-            Assert.True(Email.IsEnabled == true);
 
         [Fact]
         public void Email_SendAsync()
         {
-            Email.Compose(
+            Email.ComposeAsync(
                 new string[] { "moljac@mailinator.com", "moljac01@mailinator.com" },
                 new string[] { "moljac02@mailinator.com" },
                 null,
