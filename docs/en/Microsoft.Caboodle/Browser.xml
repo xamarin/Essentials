@@ -30,7 +30,7 @@
       <Docs>
         <param name="uri">Uri to launch.</param>
         <summary>Open the browser to specified uri.</summary>
-        <returns>Completed task when browser is launches.</returns>
+        <returns>Completed task when browser is launched.</returns>
         <remarks>
           <para></para>
         </remarks>
@@ -52,7 +52,7 @@
       <Docs>
         <param name="uri">Uri to launch.</param>
         <summary>Open the browser to specified uri.</summary>
-        <returns>Completed task when browser is launches.</returns>
+        <returns>Completed task when browser is launched.</returns>
         <remarks>
           <para></para>
         </remarks>
@@ -76,7 +76,7 @@
         <param name="uri">Uri to launch.</param>
         <param name="launchingType">How to launch the browser.</param>
         <summary>Open the browser to specified uri.</summary>
-        <returns>Completed task when browser is launches.</returns>
+        <returns>Completed task when browser is launched.</returns>
         <remarks>
           <para></para>
         </remarks>
@@ -100,7 +100,7 @@
         <param name="uri">Uri to launch.</param>
         <param name="launchType">How to launch the browser.</param>
         <summary>Open the browser to specified uri.</summary>
-        <returns>Completed task when browser is launches.</returns>
+        <returns>Completed task when browser is launched.</returns>
         <remarks>
           <para />
         </remarks>
