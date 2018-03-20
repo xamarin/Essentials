@@ -1,30 +1,30 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MessageUI;
 
 namespace Microsoft.Caboodle
 {
     public static partial class Sms
     {
-        public static bool IsComposeSupported
+        static bool IsComposeSupported
             => MFMessageComposeViewController.CanSendText;
 
         public static Task ComposeAsync(SmsMessage message)
         {
-            if (message == null)
-                throw new ArgumentNullException(nameof(message));
-            message.Validate();
+            if (!IsComposeSupported)
+                throw new FeatureNotSupportedException();
 
             // do this first so we can throw as early as possible
             var controller = Platform.GetCurrentViewController();
 
+            // create the controller
+            var messageController = new MFMessageComposeViewController();
+            if (!string.IsNullOrWhiteSpace(message?.Body))
+                messageController.Body = message.Body;
+            if (!string.IsNullOrWhiteSpace(message?.Recipient))
+                messageController.Recipients = new[] { message.Recipient };
+
             // show the controller
             var tcs = new TaskCompletionSource<bool>();
-            var messageController = new MFMessageComposeViewController
-            {
-                Body = message.Body,
-                Recipients = new[] { message.Recipient }
-            };
             messageController.Finished += (sender, e) =>
             {
                 messageController.DismissViewController(true, null);

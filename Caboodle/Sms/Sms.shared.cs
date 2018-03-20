@@ -1,9 +1,11 @@
-﻿using System;
+﻿using System.Threading.Tasks;
 
 namespace Microsoft.Caboodle
 {
     public static partial class Sms
     {
+        public static Task ComposeAsync()
+            => ComposeAsync(null);
     }
 
     public class SmsMessage
@@ -21,14 +23,5 @@ namespace Microsoft.Caboodle
         public string Body { get; set; }
 
         public string Recipient { get; set; }
-
-        internal void Validate()
-        {
-            if (string.IsNullOrWhiteSpace(Body))
-                throw new ArgumentException("SMS body must not be empty.", nameof(Body));
-
-            if (string.IsNullOrWhiteSpace(Recipient))
-                throw new ArgumentException("SMS recipient must not be empty.", nameof(Recipient));
-        }
     }
 }

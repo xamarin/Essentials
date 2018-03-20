@@ -17,29 +17,16 @@ namespace Caboodle.Samples.ViewModel
         public string Recipient
         {
             get => recipient;
-            set => base.SetProperty(ref recipient, value, onChanged: OnChange);
+            set => base.SetProperty(ref recipient, value);
         }
 
         public string MessageText
         {
             get => messageText;
-            set => SetProperty(ref messageText, value, onChanged: OnChange);
+            set => SetProperty(ref messageText, value);
         }
 
         public ICommand SendSmsCommand { get; }
-
-        public bool CanSend => IsSupported && IsValid;
-
-        public bool IsSupported => Sms.IsComposeSupported;
-
-        public bool IsValid => !string.IsNullOrWhiteSpace(MessageText) && !string.IsNullOrWhiteSpace(Recipient);
-
-        private void OnChange()
-        {
-            OnPropertyChanged(nameof(CanSend));
-            OnPropertyChanged(nameof(IsSupported));
-            OnPropertyChanged(nameof(IsValid));
-        }
 
         async void OnSendSms()
         {
@@ -47,8 +34,15 @@ namespace Caboodle.Samples.ViewModel
                 return;
             IsBusy = true;
 
-            var message = new SmsMessage(MessageText, Recipient);
-            await Sms.ComposeAsync(message);
+            try
+            {
+                var message = new SmsMessage(MessageText, Recipient);
+                await Sms.ComposeAsync(message);
+            }
+            catch (FeatureNotSupportedException)
+            {
+                await DisplayAlert("Sending an SMS is not supported on this device.");
+            }
 
             IsBusy = false;
         }
