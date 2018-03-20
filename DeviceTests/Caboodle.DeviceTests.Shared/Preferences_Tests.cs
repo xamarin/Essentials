@@ -5,11 +5,11 @@ namespace Caboodle.DeviceTests
 {
     public class Preferences_Tests
     {
-        const string sharedName = "Shared";
+        const string sharedNameTestData = "Shared";
 
         [Theory]
         [InlineData("string1", "TEST", null)]
-        [InlineData("string1", "TEST", sharedName)]
+        [InlineData("string1", "TEST", sharedNameTestData)]
         public void Set_Get_String(string key, string value, string sharedName)
         {
             Preferences.Set(key, value, sharedName);
@@ -20,8 +20,8 @@ namespace Caboodle.DeviceTests
         [Theory]
         [InlineData("int1", int.MaxValue - 1, null)]
         [InlineData("sint1", int.MinValue + 1, null)]
-        [InlineData("int1", int.MaxValue - 1, sharedName)]
-        [InlineData("sint1", int.MinValue + 1, sharedName)]
+        [InlineData("int1", int.MaxValue - 1, sharedNameTestData)]
+        [InlineData("sint1", int.MinValue + 1, sharedNameTestData)]
         public void Set_Get_Int(string key, int value, string sharedName)
         {
             Preferences.Set(key, value, sharedName);
@@ -31,8 +31,8 @@ namespace Caboodle.DeviceTests
         [Theory]
         [InlineData("long1", long.MaxValue - 1, null)]
         [InlineData("slong1", long.MinValue + 1, null)]
-        [InlineData("long1", long.MaxValue - 1, sharedName)]
-        [InlineData("slong1", long.MinValue + 1, sharedName)]
+        [InlineData("long1", long.MaxValue - 1, sharedNameTestData)]
+        [InlineData("slong1", long.MinValue + 1, sharedNameTestData)]
         public void Set_Get_Long(string key, long value, string sharedName)
         {
             Preferences.Set(key, value, sharedName);
@@ -42,8 +42,8 @@ namespace Caboodle.DeviceTests
         [Theory]
         [InlineData("float1", float.MaxValue - 1, null)]
         [InlineData("sfloat1", float.MinValue + 1, null)]
-        [InlineData("float1", float.MaxValue - 1, sharedName)]
-        [InlineData("sfloat1", float.MinValue + 1, sharedName)]
+        [InlineData("float1", float.MaxValue - 1, sharedNameTestData)]
+        [InlineData("sfloat1", float.MinValue + 1, sharedNameTestData)]
         public void Set_Get_Float(string key, float value, string sharedName)
         {
             Preferences.Set(key, value, sharedName);
@@ -53,8 +53,8 @@ namespace Caboodle.DeviceTests
         [Theory]
         [InlineData("double1", double.MaxValue - 1, null)]
         [InlineData("sdouble1", double.MinValue + 1, null)]
-        [InlineData("double1", double.MaxValue - 1, sharedName)]
-        [InlineData("sdouble1", double.MinValue + 1, sharedName)]
+        [InlineData("double1", double.MaxValue - 1, sharedNameTestData)]
+        [InlineData("sdouble1", double.MinValue + 1, sharedNameTestData)]
         public void Set_Get_Double(string key, double value, string sharedName)
         {
             Preferences.Set(key, value, sharedName);
@@ -63,7 +63,7 @@ namespace Caboodle.DeviceTests
 
         [Theory]
         [InlineData("bool1", true, null)]
-        [InlineData("bool1", true, sharedName)]
+        [InlineData("bool1", true, sharedNameTestData)]
         public void Set_Get_Bool(string key, bool value, string sharedName)
         {
             Preferences.Set(key, value, sharedName);
@@ -72,7 +72,7 @@ namespace Caboodle.DeviceTests
 
         [Theory]
         [InlineData(null)]
-        [InlineData(sharedName)]
+        [InlineData(sharedNameTestData)]
         public void Remove(string sharedName)
         {
             Preferences.Set("RemoveKey1", "value", sharedName);
@@ -86,7 +86,7 @@ namespace Caboodle.DeviceTests
 
         [Theory]
         [InlineData(null)]
-        [InlineData(sharedName)]
+        [InlineData(sharedNameTestData)]
         public void Clear(string sharedName)
         {
             Preferences.Set("ClearKey1", "value", sharedName);
@@ -94,7 +94,7 @@ namespace Caboodle.DeviceTests
 
             Assert.Equal(2, Preferences.Get("ClearKey2", 0, sharedName));
 
-            Preferences.Clear();
+            Preferences.Clear(sharedName);
 
             Assert.NotEqual("value", Preferences.Get("ClearKey1", null, sharedName));
             Assert.NotEqual(2, Preferences.Get("ClearKey2", 0, sharedName));
@@ -102,7 +102,7 @@ namespace Caboodle.DeviceTests
 
         [Theory]
         [InlineData(null)]
-        [InlineData(sharedName)]
+        [InlineData(sharedNameTestData)]
         public void Does_ContainsKey(string sharedName)
         {
             Preferences.Set("DoesContainsKey1", "One", sharedName);
@@ -112,7 +112,7 @@ namespace Caboodle.DeviceTests
 
         [Theory]
         [InlineData(null)]
-        [InlineData(sharedName)]
+        [InlineData(sharedNameTestData)]
         public void Not_ContainsKey(string sharedName)
         {
             Preferences.Remove("NotContainsKey1", sharedName);
