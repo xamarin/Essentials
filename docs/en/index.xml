@@ -48,6 +48,7 @@
   <Copyright>To be added.</Copyright>
   <Types>
     <Namespace Name="Microsoft.Caboodle">
+      <Type Name="AppInfo" Kind="Class" />
       <Type Name="Battery" Kind="Class" />
       <Type Name="BatteryChangedEventArgs" Kind="Class" />
       <Type Name="BatteryChangedEventHandler" Kind="Delegate" />
