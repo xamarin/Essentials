@@ -12,10 +12,9 @@ namespace Caboodle.DeviceTests
         [InlineData("string1", "TEST", sharedName)]
         public void Set_Get_String(string key, string value, string sharedName)
         {
-            var p = new Preferences(sharedName);
-            p.Set(key, value);
+            Preferences.Set(key, value, sharedName);
 
-            Assert.Equal(value, p.Get(key, null));
+            Assert.Equal(value, Preferences.Get(key, null, sharedName));
         }
 
         [Theory]
@@ -25,9 +24,8 @@ namespace Caboodle.DeviceTests
         [InlineData("sint1", int.MinValue + 1, sharedName)]
         public void Set_Get_Int(string key, int value, string sharedName)
         {
-            var p = new Preferences(sharedName);
-            p.Set(key, value);
-            Assert.Equal(value, p.Get(key, 0));
+            Preferences.Set(key, value, sharedName);
+            Assert.Equal(value, Preferences.Get(key, 0, sharedName));
         }
 
         [Theory]
@@ -37,9 +35,8 @@ namespace Caboodle.DeviceTests
         [InlineData("slong1", long.MinValue + 1, sharedName)]
         public void Set_Get_Long(string key, long value, string sharedName)
         {
-            var p = new Preferences(sharedName);
-            p.Set(key, value);
-            Assert.Equal(value, p.Get(key, 0L));
+            Preferences.Set(key, value, sharedName);
+            Assert.Equal(value, Preferences.Get(key, 0L, sharedName));
         }
 
         [Theory]
@@ -49,9 +46,8 @@ namespace Caboodle.DeviceTests
         [InlineData("sfloat1", float.MinValue + 1, sharedName)]
         public void Set_Get_Float(string key, float value, string sharedName)
         {
-            var p = new Preferences(sharedName);
-            p.Set(key, value);
-            Assert.Equal(value, p.Get(key, 0f));
+            Preferences.Set(key, value, sharedName);
+            Assert.Equal(value, Preferences.Get(key, 0f, sharedName));
         }
 
         [Theory]
@@ -61,9 +57,8 @@ namespace Caboodle.DeviceTests
         [InlineData("sdouble1", double.MinValue + 1, sharedName)]
         public void Set_Get_Double(string key, double value, string sharedName)
         {
-            var p = new Preferences(sharedName);
-            p.Set(key, value);
-            Assert.Equal(value, p.Get(key, 0d));
+            Preferences.Set(key, value, sharedName);
+            Assert.Equal(value, Preferences.Get(key, 0d, sharedName));
         }
 
         [Theory]
@@ -71,9 +66,8 @@ namespace Caboodle.DeviceTests
         [InlineData("bool1", true, sharedName)]
         public void Set_Get_Bool(string key, bool value, string sharedName)
         {
-            var p = new Preferences(sharedName);
-            p.Set(key, value);
-            Assert.Equal(value, p.Get(key, false));
+            Preferences.Set(key, value, sharedName);
+            Assert.Equal(value, Preferences.Get(key, false, sharedName));
         }
 
         [Theory]
@@ -81,14 +75,13 @@ namespace Caboodle.DeviceTests
         [InlineData(sharedName)]
         public void Remove(string sharedName)
         {
-            var p = new Preferences(sharedName);
-            p.Set("RemoveKey1", "value");
+            Preferences.Set("RemoveKey1", "value", sharedName);
 
-            Assert.Equal("value", p.Get("RemoveKey1", null));
+            Assert.Equal("value", Preferences.Get("RemoveKey1", null, sharedName));
 
-            p.Remove("RemoveKey1");
+            Preferences.Remove("RemoveKey1", sharedName);
 
-            Assert.Null(p.Get("RemoveKey1", null));
+            Assert.Null(Preferences.Get("RemoveKey1", null, sharedName));
         }
 
         [Theory]
@@ -96,16 +89,15 @@ namespace Caboodle.DeviceTests
         [InlineData(sharedName)]
         public void Clear(string sharedName)
         {
-            var p = new Preferences(sharedName);
-            p.Set("ClearKey1", "value");
-            p.Set("ClearKey2", 2);
+            Preferences.Set("ClearKey1", "value", sharedName);
+            Preferences.Set("ClearKey2", 2, sharedName);
 
-            Assert.Equal(2, p.Get("ClearKey2", 0));
+            Assert.Equal(2, Preferences.Get("ClearKey2", 0, sharedName));
 
-            p.Clear();
+            Preferences.Clear();
 
-            Assert.NotEqual("value", p.Get("ClearKey1", null));
-            Assert.NotEqual(2, p.Get("ClearKey2", 0));
+            Assert.NotEqual("value", Preferences.Get("ClearKey1", null, sharedName));
+            Assert.NotEqual(2, Preferences.Get("ClearKey2", 0, sharedName));
         }
 
         [Theory]
@@ -113,10 +105,9 @@ namespace Caboodle.DeviceTests
         [InlineData(sharedName)]
         public void Does_ContainsKey(string sharedName)
         {
-            var p = new Preferences(sharedName);
-            p.Set("DoesContainsKey1", "One");
+            Preferences.Set("DoesContainsKey1", "One", sharedName);
 
-            Assert.True(p.ContainsKey("DoesContainsKey1"));
+            Assert.True(Preferences.ContainsKey("DoesContainsKey1", sharedName));
         }
 
         [Theory]
@@ -124,10 +115,9 @@ namespace Caboodle.DeviceTests
         [InlineData(sharedName)]
         public void Not_ContainsKey(string sharedName)
         {
-            var p = new Preferences(sharedName);
-            p.Remove("NotContainsKey1");
+            Preferences.Remove("NotContainsKey1", sharedName);
 
-            Assert.False(p.ContainsKey("NotContainsKey1"));
+            Assert.False(Preferences.ContainsKey("NotContainsKey1", sharedName));
         }
     }
 }

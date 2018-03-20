@@ -6,26 +6,26 @@ using Android.Preferences;
 
 namespace Microsoft.Caboodle
 {
-    public partial class Preferences
+    public static partial class Preferences
     {
         static readonly object locker = new object();
 
-        public bool ContainsKey(string key)
+        static bool PlatformContainsKey(string key, string sharedName)
         {
             lock (locker)
             {
-                using (var sharedPreferences = GetSharedPreferences())
+                using (var sharedPreferences = GetSharedPreferences(sharedName))
                 {
                     return sharedPreferences.Contains(key);
                 }
             }
         }
 
-        public void Remove(string key)
+        static void PlatformRemove(string key, string sharedName)
         {
             lock (locker)
             {
-                using (var sharedPreferences = GetSharedPreferences())
+                using (var sharedPreferences = GetSharedPreferences(sharedName))
                 using (var editor = sharedPreferences.Edit())
                 {
                     editor.Remove(key).Commit();
@@ -33,11 +33,11 @@ namespace Microsoft.Caboodle
             }
         }
 
-        public void Clear()
+        static void PlatformClear(string sharedName)
         {
             lock (locker)
             {
-                using (var sharedPreferences = GetSharedPreferences())
+                using (var sharedPreferences = GetSharedPreferences(sharedName))
                 using (var editor = sharedPreferences.Edit())
                 {
                     editor.Clear().Commit();
@@ -45,11 +45,11 @@ namespace Microsoft.Caboodle
             }
         }
 
-        void Set<T>(string key, T value)
+        static void PlatformSet<T>(string key, T value, string sharedName)
         {
             lock (locker)
             {
-                using (var sharedPreferences = GetSharedPreferences())
+                using (var sharedPreferences = GetSharedPreferences(sharedName))
                 using (var editor = sharedPreferences.Edit())
                 {
                     switch (value)
@@ -79,12 +79,12 @@ namespace Microsoft.Caboodle
             }
         }
 
-        T Get<T>(string key, T defaultValue)
+        static T PlatformGet<T>(string key, T defaultValue, string sharedName)
         {
             lock (locker)
             {
                 object value = null;
-                using (var sharedPreferences = GetSharedPreferences())
+                using (var sharedPreferences = GetSharedPreferences(sharedName))
                 {
                     switch (defaultValue)
                     {
@@ -134,13 +134,13 @@ namespace Microsoft.Caboodle
             }
         }
 
-        ISharedPreferences GetSharedPreferences()
+        static ISharedPreferences GetSharedPreferences(string sharedName)
         {
             var context = Application.Context;
 
-            return string.IsNullOrWhiteSpace(SharedName) ?
+            return string.IsNullOrWhiteSpace(sharedName) ?
                 PreferenceManager.GetDefaultSharedPreferences(context) :
-                    context.GetSharedPreferences(SharedName, FileCreationMode.Private);
+                    context.GetSharedPreferences(sharedName, FileCreationMode.Private);
         }
     }
 }
