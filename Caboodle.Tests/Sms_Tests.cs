@@ -6,9 +6,9 @@ namespace Microsoft.Caboodle.Tests
     public class Sms_Tests
     {
         [Fact]
-        public void Sms_Fail_On_NetStandard()
+        public Task Sms_Fail_On_NetStandard()
         {
-            Assert.Throws<NotImplementedInReferenceAssemblyException>(() => Sms.IsComposeSupported);
+            return Assert.ThrowsAsync<NotImplementedInReferenceAssemblyException>(() => Sms.ComposeAsync());
         }
     }
 }
