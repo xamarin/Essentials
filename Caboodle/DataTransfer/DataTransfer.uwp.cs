@@ -21,7 +21,7 @@ namespace Microsoft.Caboodle
             {
                 var newRequest = e.Request;
 
-                newRequest.Data.Properties.Title = request.Title ?? DeviceInfo.AppName;
+                newRequest.Data.Properties.Title = request.Title ?? AppInfo.Name;
 
                 if (!string.IsNullOrWhiteSpace(request.Text))
                 {
