@@ -4,15 +4,6 @@ namespace Caboodle.Samples.ViewModel
 {
     public class StorageSecureViewModel : BaseViewModel
     {
-        readonly SecureStorage storagesecure;
-
-        public StorageSecureViewModel()
-        {
-            storagesecure = new SecureStorage();
-
-            return;
-        }
-
         private string filename;
 
         public string FileName
