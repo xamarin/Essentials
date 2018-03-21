@@ -16,7 +16,7 @@ namespace Caboodle.Samples.ViewModel
                 new SampleItem("Device Info", typeof(DeviceInfoPage), "Find out about the device with ease."),
                 new SampleItem("Clipboard", typeof(ClipboardPage), "Quickly and easily use clipboard"),
                 new SampleItem("File System", typeof(FileSystemPage), "Easily save files to app data."),
-                new SampleItem("Wake Lock", typeof(WakeLockPage), "Keep the device screen awake."),
+                new SampleItem("Screen Lock", typeof(ScreenLockPage), "Keep the device screen awake."),
             };
         }
 

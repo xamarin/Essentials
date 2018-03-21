@@ -2,7 +2,7 @@
 
 namespace Microsoft.Caboodle
 {
-    public static partial class WakeLock
+    public static partial class ScreenLock
     {
         static readonly object locker = new object();
         static DisplayRequest displayRequest;

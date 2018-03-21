@@ -3,10 +3,10 @@
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                 xmlns:views="clr-namespace:Caboodle.Samples.View"
                 xmlns:viewmodels="clr-namespace:Caboodle.Samples.ViewModel"
-                x:Class="Caboodle.Samples.View.WakeLockPage"
-                Title="Wake Lock">
+                x:Class="Caboodle.Samples.View.ScreenLockPage"
+                Title="Screen Lock">
     <ContentPage.BindingContext>
-        <viewmodels:WakeLockViewModel />
+        <viewmodels:ScreenLockViewModel />
     </ContentPage.BindingContext>
 
     <StackLayout>

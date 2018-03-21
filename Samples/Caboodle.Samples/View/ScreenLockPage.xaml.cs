@@ -1,8 +1,8 @@
 ﻿namespace Caboodle.Samples.View
 {
-    public partial class WakeLockPage : BasePage
+    public partial class ScreenLockPage : BasePage
     {
-        public WakeLockPage()
+        public ScreenLockPage()
         {
             InitializeComponent();
         }

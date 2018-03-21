@@ -4,9 +4,9 @@ using Xamarin.Forms;
 
 namespace Caboodle.Samples.ViewModel
 {
-    public class WakeLockViewModel : BaseViewModel
+    public class ScreenLockViewModel : BaseViewModel
     {
-        public WakeLockViewModel()
+        public ScreenLockViewModel()
         {
             RequestActiveCommand = new Command(OnRequestActive);
             RequestReleaseCommand = new Command(OnRequestRelease);
@@ -18,18 +18,18 @@ namespace Caboodle.Samples.ViewModel
 
         void OnRequestActive()
         {
-            WakeLock.RequestActive();
+            ScreenLock.RequestActive();
 
             OnPropertyChanged(nameof(IsActive));
         }
 
         void OnRequestRelease()
         {
-            WakeLock.RequestRelease();
+            ScreenLock.RequestRelease();
 
             OnPropertyChanged(nameof(IsActive));
         }
 
-        public bool IsActive => WakeLock.IsActive;
+        public bool IsActive => ScreenLock.IsActive;
     }
 }

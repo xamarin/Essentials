@@ -1,6 +1,6 @@
 ﻿namespace Microsoft.Caboodle
 {
-    public static partial class WakeLock
+    public static partial class ScreenLock
     {
     }
 }
