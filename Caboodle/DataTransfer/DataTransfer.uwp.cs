@@ -13,12 +13,14 @@ namespace Microsoft.Caboodle
         {
             var dataTransferManager = DataTransferManager.GetForCurrentView();
 
-            dataTransferManager.DataRequested += new TypedEventHandler<DataTransferManager, DataRequestedEventArgs>(ShareTextHandler);
+            dataTransferManager.DataRequested += ShareTextHandler;
 
             DataTransferManager.ShowShareUI();
 
             void ShareTextHandler(DataTransferManager sender, DataRequestedEventArgs e)
             {
+                dataTransferManager.DataRequested -= ShareTextHandler;
+
                 var newRequest = e.Request;
 
                 newRequest.Data.Properties.Title = request.Title ?? AppInfo.Name;
