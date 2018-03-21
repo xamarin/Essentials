@@ -8,34 +8,32 @@ using Security;
 
 namespace Microsoft.Caboodle
 {
-    /// <summary>
-    /// </summary>
-    public partial class StorageSecure
+    public static partial class SecureStorage
     {
-        public static string Load(string filename)
+        static Task<string> PlatformGetAsync(string key)
         {
             var kc = new KeyChain();
 
-            return kc.ValueForKey(filename);
+            return Task.FromResult(kc.ValueForKey(key));
         }
 
-        public static void Save(string data, string filename)
+        static Task PlatformSetAsync(string key, string data)
         {
             var kc = new KeyChain();
-            kc.SetValueForKey(data, filename);
+            kc.SetValueForKey(data, key);
 
-            return;
+            return Task.CompletedTask;
         }
     }
 
-    public class KeyChain
+    class KeyChain
     {
         private static SecRecord ExistingRecordForKey(string key)
         {
             return new SecRecord(SecKind.GenericPassword)
             {
                 Account = key,
-                Service = StorageSecure.StorageSecureFilename,
+                Service = key, //$"SecureStorage-{AppInfo.PackageName}",
                 Label = key,
             };
         }
@@ -79,7 +77,7 @@ namespace Microsoft.Caboodle
             return new SecRecord(SecKind.GenericPassword)
             {
                 Account = key,
-                Service = StorageSecure.StorageSecureFilename,
+                Service = key, //$"SecureStorage-{AppInfo.PackageName}",
                 Label = key,
                 ValueData = NSData.FromString(value, NSStringEncoding.UTF8),
             };

@@ -10,14 +10,24 @@ using Windows.Storage.Streams;
 
 namespace Microsoft.Caboodle
 {
-    /// <summary>
-    /// </summary>
-    public partial class StorageSecure
+    public partial class SecureStorage
     {
-        public static async Task<string> LoadAsync(string filename)
+        static string GetFilePath(string filename)
         {
+            var dir = Path.Combine(
+                ApplicationData.Current.LocalFolder.Path,
+                localDirName);
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+
+            return Path.Combine(dir, filename + ".dat");
+        }
+
+        static async Task<string> PlatformGetAsync(string key)
+        {
+            var path = GetFilePath(key);
             byte[] bytes_protected;
-            var file = await StorageFile.GetFileFromPathAsync(filename);
+            var file = await StorageFile.GetFileFromPathAsync(path);
 
             using (var stream = await file.OpenStreamForReadAsync().ConfigureAwait(false))
             using (var reader = new BinaryReader(stream))
@@ -34,9 +44,10 @@ namespace Microsoft.Caboodle
             return Encoding.UTF8.GetString(bytes_protected, 0, bytes_protected.Length);
         }
 
-        public static async Task SaveAsync(string data, string filename)
+        static async Task PlatformSetAsync(string key, string data)
         {
-            var file = await StorageFile.GetFileFromPathAsync(filename);
+            var path = GetFilePath(key);
+            var file = await StorageFile.GetFileFromPathAsync(path);
             var bytes = Encoding.UTF8.GetBytes(data);
 
             // LOCAL=user and LOCAL=machine do not require enterprise auth capability
