@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -31,27 +32,6 @@ namespace Microsoft.Caboodle
         }
 
         static string GetVersionString() => Build.VERSION.Release;
-
-        static string GetAppPackageName() => CaboodlePlatform.CurrentContext.PackageName;
-
-        static string GetAppName()
-        {
-            var applicationInfo = CaboodlePlatform.CurrentContext.ApplicationInfo;
-            var packageManager = CaboodlePlatform.CurrentContext.PackageManager;
-            return applicationInfo.LoadLabel(packageManager);
-        }
-
-        static string GetAppVersionString()
-        {
-            SetAppVersions();
-            return appVersionString;
-        }
-
-        static string GetAppBuild()
-        {
-            SetAppVersions();
-            return appBuild;
-        }
 
         static string GetPlatform() => Platforms.Android;
 
@@ -162,6 +142,12 @@ namespace Microsoft.Caboodle
             orientationListener = null;
         }
 
+        static void OnScreenMetricsChanaged()
+        {
+            var metrics = GetScreenMetrics();
+            OnScreenMetricsChanaged(metrics);
+        }
+
         static ScreenRotation CalculateRotation()
         {
             var service = CaboodlePlatform.CurrentContext.GetSystemService(Context.WindowService);
@@ -202,17 +188,6 @@ namespace Microsoft.Caboodle
             }
 
             return ScreenOrientation.Unknown;
-        }
-
-        static void SetAppVersions()
-        {
-            var pm = CaboodlePlatform.CurrentContext.PackageManager;
-            var packageName = CaboodlePlatform.CurrentContext.PackageName;
-            using (var info = pm.GetPackageInfo(packageName, PackageInfoFlags.MetaData))
-            {
-                appVersionString = info.VersionName;
-                appBuild = info.VersionCode.ToString(CultureInfo.InvariantCulture);
-            }
         }
 
         static string GetSystemSetting(string name)

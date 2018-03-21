@@ -10,6 +10,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)'=='Release' ">
     <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,21 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Caboodle\Caboodle.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="App.xaml.cs">
-      <DependentUpon>*.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="View\FlashlightPage.xaml.cs">
-      <DependentUpon>FlashlightPage.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="**\*.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
   </ItemGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)..\..\CodeStyles.targets" />

@@ -1,50 +1,27 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Microsoft.Caboodle
 {
     public static partial class DeviceInfo
     {
-        static string model;
-        static string manufacturer;
-        static string deviceName;
-        static string versionString;
-        static Version versionNumber;
-        static string appName;
-        static string appPackageName;
-        static string appVersionString;
-        static Version appVersionNumber;
-        static string appBuild;
-        static string platform;
-        static string idiom;
-        static DeviceType? deviceType;
-
         static event ScreenMetricsChanagedEventHandler ScreenMetricsChanagedInternal;
 
-        public static string Model => model ?? (model = GetModel());
+        public static string Model => GetModel();
 
-        public static string Manufacturer => manufacturer ?? (manufacturer = GetManufacturer());
+        public static string Manufacturer => GetManufacturer();
 
-        public static string Name => deviceName ?? (deviceName = GetDeviceName());
+        public static string Name => GetDeviceName();
 
-        public static string VersionString => versionString ?? (versionString = GetVersionString());
+        public static string VersionString => GetVersionString();
 
-        public static Version Version => ParseVersion(VersionString, ref versionNumber);
+        public static Version Version => Utils.ParseVersion(VersionString);
 
-        public static string AppPackageName => appPackageName ?? (appPackageName = GetAppPackageName());
+        public static string Platform => GetPlatform();
 
-        public static string AppName => appName ?? (appName = GetAppName());
+        public static string Idiom => GetIdiom();
 
-        public static string AppVersionString => appVersionString ?? (appVersionString = GetAppVersionString());
-
-        public static Version AppVersion => ParseVersion(AppVersionString, ref appVersionNumber);
-
-        public static string AppBuildString => appBuild ?? (appBuild = GetAppBuild());
-
-        public static string Platform => platform ?? (platform = GetPlatform());
-
-        public static string Idiom => idiom ?? (idiom = GetIdiom());
-
-        public static DeviceType DeviceType => deviceType ?? (deviceType = GetDeviceType()).Value;
+        public static DeviceType DeviceType => GetDeviceType();
 
         public static ScreenMetrics ScreenMetrics => GetScreenMetrics();
 
@@ -71,25 +48,11 @@ namespace Microsoft.Caboodle
             }
         }
 
-        static void OnScreenMetricsChanaged()
-            => OnScreenMetricsChanaged(ScreenMetrics);
-
         static void OnScreenMetricsChanaged(ScreenMetrics metrics)
             => OnScreenMetricsChanaged(new ScreenMetricsChanagedEventArgs(metrics));
 
         static void OnScreenMetricsChanaged(ScreenMetricsChanagedEventArgs e)
             => ScreenMetricsChanagedInternal?.Invoke(e);
-
-        static Version ParseVersion(string version, ref Version number)
-        {
-            if (number != null)
-                return number;
-
-            if (!Version.TryParse(version, out number))
-                number = new Version(0, 0);
-
-            return number;
-        }
 
         public static class Idioms
         {
