@@ -24,15 +24,17 @@ Caboodle is focused on the following platforms for our first release:
 ## Current Features:
 The following cross-platform APIs are planned for our first release:
  - [ ] Accelerometer
+ - [X] App Information
  - [x] Battery
- - [ ] Clipboard
+ - [X] Clipboard
  - [ ] Compass
  - [ ] Connectivity
  - [ ] Device Capabilities
  - [x] Device Information
  - [x] File System Helpers
  - [ ] Email
- - [x] Geolocation 
+ - [x] Geocoding 
+ - [ ] Geolocation 
  - [ ] Gyroscope
  - [ ] Magnetometer
  - [ ] Open Browser
