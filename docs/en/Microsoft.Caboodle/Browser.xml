@@ -10,8 +10,8 @@
   </Base>
   <Interfaces />
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Provides a way to display a web page inside an app.</summary>
+    <remarks></remarks>
   </Docs>
   <Members>
     <Member MemberName="OpenAsync">
