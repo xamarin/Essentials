@@ -57,6 +57,10 @@
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
     <Compile Include="**\*.ios.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Flashlight\Flashlight.netstandard.cs" />
+    <None Remove="Flashlight\Flashlight.shared.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
   <Import Project="$(MSBuildThisFileDirectory)mdoc.targets" />
   <Import Project="$(MSBuildThisFileDirectory)..\CodeStyles.targets" />

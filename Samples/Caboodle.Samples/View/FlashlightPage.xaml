@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Caboodle.Samples.View.FlashlightPage"
+             Title="Flashlight"
+             xmlns:viewmodels="clr-namespace:Caboodle.Samples.ViewModel">
+    <ContentPage.BindingContext>
+        <viewmodels:FlashlightViewModel/>
+    </ContentPage.BindingContext>
+
+    <StackLayout>
+        <Label Text="Flashlight" FontAttributes="Bold" Margin="12" />
+
+        <ScrollView>
+            <StackLayout Padding="12,0,12,12" Spacing="6">
+                <Switch IsEnabled="{Binding IsNotBusy}"/>
+                <Button Text="{Binding TextFlashlight}" Command="{Binding ToggleCommand}" IsEnabled="{Binding IsNotBusy}"/>
+            </StackLayout>
+        </ScrollView>
+    </StackLayout>
+
+</ContentPage>
