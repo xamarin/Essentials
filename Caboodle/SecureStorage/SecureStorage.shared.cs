@@ -1,6 +1,7 @@
 ﻿#if !NETSTANDARD1_0
 using System.Security.Cryptography;
 #endif
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Microsoft.Caboodle

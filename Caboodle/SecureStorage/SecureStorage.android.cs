@@ -112,7 +112,6 @@ namespace Microsoft.Caboodle
             }
         }
 
-
         // API 23+ Only
         ISecretKey GetSymmetricKey()
         {
@@ -160,6 +159,7 @@ namespace Microsoft.Caboodle
                 var startDate = new Java.Util.Date();
                 var endDate = new Java.Util.Date(end.Year, end.Month, end.Day);
 
+#pragma warning disable CS0618
                 var builder = new KeyPairGeneratorSpec.Builder(Platform.CurrentContext)
                     .SetAlias(alias)
                     .SetSerialNumber(Java.Math.BigInteger.One)
@@ -168,6 +168,7 @@ namespace Microsoft.Caboodle
                     .SetEndDate(endDate);
 
                 generator.Initialize(builder.Build());
+#pragma warning restore CS0618
             }
 
             return generator.GenerateKeyPair();
