@@ -4,28 +4,20 @@ namespace Caboodle.Samples.ViewModel
 {
     public class StorageSecureViewModel : BaseViewModel
     {
-        private string filename;
+        string filename;
 
         public string FileName
         {
             get => filename;
-            set
-            {
-                filename = value;
-                OnPropertyChanged();
-            }
+            set => base.SetProperty(ref filename, value);
         }
 
-        private string storedtext;
+        string storedtext;
 
         public string StoredText
         {
             get => storedtext;
-            set
-            {
-                storedtext = value;
-                OnPropertyChanged();
-            }
+            set => base.SetProperty(ref storedtext, value);
         }
     }
 }

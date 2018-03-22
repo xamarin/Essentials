@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Security.Cryptography.DataProtection;
 using Windows.Storage;
-using Windows.Storage.Streams;
 
 namespace Microsoft.Caboodle
 {

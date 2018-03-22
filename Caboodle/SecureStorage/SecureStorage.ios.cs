@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 using Foundation;
@@ -28,12 +26,12 @@ namespace Microsoft.Caboodle
 
     class KeyChain
     {
-        private static SecRecord ExistingRecordForKey(string key)
+        static SecRecord ExistingRecordForKey(string key)
         {
             return new SecRecord(SecKind.GenericPassword)
             {
                 Account = key,
-                Service = key, //$"SecureStorage-{AppInfo.PackageName}",
+                Service = key,
                 Label = key,
             };
         }
@@ -67,29 +65,25 @@ namespace Microsoft.Caboodle
 
             var result = SecKeyChain.Add(CreateRecordForNewKeyValue(key, value));
             if (result != SecStatusCode.Success)
-            {
                 throw new Exception($"Error adding record: {result}");
-            }
         }
 
-        private SecRecord CreateRecordForNewKeyValue(string key, string value)
+        SecRecord CreateRecordForNewKeyValue(string key, string value)
         {
             return new SecRecord(SecKind.GenericPassword)
             {
                 Account = key,
-                Service = key, //$"SecureStorage-{AppInfo.PackageName}",
+                Service = key,
                 Label = key,
                 ValueData = NSData.FromString(value, NSStringEncoding.UTF8),
             };
         }
 
-        private bool RemoveRecord(SecRecord record)
+        bool RemoveRecord(SecRecord record)
         {
             var result = SecKeyChain.Remove(record);
             if (result != SecStatusCode.Success)
-            {
                 throw new Exception(string.Format($"Error removing record: {result}"));
-            }
 
             return true;
         }
