@@ -13,9 +13,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Clipboard_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DeviceInfo_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Geocoding_Tests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ScreenLock_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Preferences_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FileSystem_Tests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Sms_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Traits.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils.cs" />
   </ItemGroup>
