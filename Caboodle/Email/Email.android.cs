@@ -6,6 +6,7 @@ using Android;
 using Android.Content;
 using Android.OS;
 using Android.Text;
+using Android.Net;
 
 namespace Microsoft.Caboodle
 {
@@ -16,7 +17,7 @@ namespace Microsoft.Caboodle
             => Platform.IsIntentSupported(CreateIntent(
                 new EmailMessage()
                 {
-                    RecipientsTo = new string[] {"mailto:moljac@mailinator.com" },
+                    RecipientsTo = new string[] {"mailto:caboodle@mailinator.com" },
                 }));
 
         /// Indicating whether Sending in background is available
@@ -44,13 +45,13 @@ namespace Microsoft.Caboodle
             string[] attachmentspaths = null
             )
         {
+            var uri = Android.Net.Uri.Parse("mailto:");
+
             // TODO: Tuning for Intent Choosers/Pickers
             // Numerous apps can respond to ActionSend
-            var i = new Intent(Intent.ActionSendto);
-            i.SetType("plain/text");
-            i.SetType("message/rfc822");
-
-            //i.SetData(Android.Net.Uri.Parse("mailto"));
+            var i = new Intent(Intent.ActionSend, uri);
+            i.SetData(uri);
+            i.SetType("plain/text");    // i.SetType("message/rfc822");
 
             if (! (recipientsto?.Length > 0))
                 i.PutExtra(Intent.ExtraEmail, recipientsto);
@@ -61,28 +62,25 @@ namespace Microsoft.Caboodle
             if (!(recipientsto?.Length > 0))
                 i.PutExtra(Intent.ExtraBcc, recipientsto);
 
-            if (!string.IsNullOrWhiteSpace(body))
+            if (!string.IsNullOrWhiteSpace(subject))
                 i.PutExtra(Intent.ExtraSubject, subject);
 
             if (!string.IsNullOrWhiteSpace(body))
-                i.PutExtra(Intent.ExtraText, body);
-
-
-            i.PutExtra(Intent.ExtraSubject, subject);
-
-            if (bodymimetype == "text/plain")
             {
-                i.PutExtra(Intent.ExtraText, body);
+                if (bodymimetype == "text/plain")
+                {
+                    i.PutExtra(Intent.ExtraText, body);
+                }
+                else if (bodymimetype == "text/html")
+                {
+                    i.PutExtra(Intent.ExtraHtmlText, Html.FromHtml(body, FromHtmlOptions.ModeLegacy));
+                }
+                else
+                {
+                    throw new EmailException($"Invalid {nameof(bodymimetype)}: {bodymimetype}");
+                }
+                i.SetType(bodymimetype);
             }
-            else if (bodymimetype == "text/html")
-            {
-                i.PutExtra(Intent.ExtraText, Html.FromHtml(body, FromHtmlOptions.ModeLegacy));
-            }
-            else
-            {
-                throw new EmailException($"Invalid {nameof(bodymimetype)}: {bodymimetype}");
-            }
-            i.SetType(bodymimetype);
 
             if (attachmentspaths != null)
             {
@@ -116,9 +114,9 @@ namespace Microsoft.Caboodle
                 bodymimetype,
                 attachmentspaths);
 
-            // var chooser = i.createChooser(i, "Send Mail");
-            // Platform.CurrentActivity.StartActivity(chooser);
-            Platform.CurrentActivity.StartActivity(intent);
+            var chooser = Intent.CreateChooser(intent, "Send Mail");
+            Platform.CurrentActivity.StartActivity(chooser);
+            //Platform.CurrentActivity.StartActivity(intent);
 
             return;
         }

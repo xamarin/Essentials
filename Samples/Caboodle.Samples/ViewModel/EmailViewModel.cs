@@ -17,21 +17,13 @@ namespace Caboodle.Samples.ViewModel
         {
             // For testing mailboxes (w/o registration) go to:
             // https://www.mailinator.com
-            tomails = string.Join(",", new string[] { "moljac@mailinator.com", "moljac01@mailinator.com" });
-            ccmails = string.Join(";", new string[] { "moljac@mailinator.com", "moljac02@mailinator.com" });
+            tomails = string.Join(",", new string[] { "caboodle@mailinator.com", "caboodle01@mailinator.com" });
+            ccmails = string.Join(";", new string[] { "caboodle@mailinator.com", "caboodle02@mailinator.com" });
             RecipientsTo = tomails;
             RecipientsCC = ccmails;
             Subject = "Caboodle.Email Test message";
             Body = "This is an email from Caboodle.Email!";
-            /*
-            Attempt to read body from content file
-
-            var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var app = ".";
-            var filename = Path.Combine(app, "Content-Mail", "caboodle-mail.txt");
-            var mailtemplate = File.ReadAllText(filename);
-            */
-
+ 
             SendEmailCommand = new Command(OnSendEmail);
 
             return;
