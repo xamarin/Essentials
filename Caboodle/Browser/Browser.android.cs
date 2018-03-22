@@ -28,6 +28,10 @@ namespace Microsoft.Caboodle
                     var intent = new Android.Content.Intent(Android.Content.Intent.ActionView, nativeUri);
                     intent.SetFlags(Android.Content.ActivityFlags.ClearTop);
                     intent.SetFlags(Android.Content.ActivityFlags.NewTask);
+
+                    if (!Platform.IsIntentSupported(intent))
+                        throw new FeatureNotSupportedException();
+
                     Platform.CurrentContext.StartActivity(intent);
                     break;
             }
