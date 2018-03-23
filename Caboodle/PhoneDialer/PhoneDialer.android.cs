@@ -12,7 +12,7 @@ namespace Microsoft.Caboodle
     {
         const string intentCheck = "00000000000";
 
-        static bool IsSupported
+        internal static bool IsSupported
         {
             get
             {

@@ -9,7 +9,7 @@ namespace Microsoft.Caboodle
     {
         const string noNetworkProviderCode = "65535";
 
-        public static bool IsSupported
+        internal static bool IsSupported
         {
             get
             {
