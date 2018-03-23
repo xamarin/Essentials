@@ -12,7 +12,7 @@
   <Docs>
     <summary>A class to interact with the preferences/settings of the native platform.</summary>
     <remarks>
-      <para>Each platform uses the platform provided native API’s for storing application/user preferences:</para>
+      <para>Each platform uses the platform provided native APIââââ‚¬Å¡¬âââ‚¬Å¾¢s for storing application/user preferences:</para>
       <list type="bullet">
         <item>
           <term>iOS: NSUserDefaults</term>
@@ -257,7 +257,9 @@
         <param name="sharedName">Shared container key.</param>
         <summary>Gets the value for a given key, or the default specified if the key does not exist.</summary>
         <returns>Value for the given key, or the default if it does not exist.</returns>
-        <remarks></remarks>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="Get">
@@ -417,7 +419,9 @@
         <param name="key">Preference key.</param>
         <param name="sharedName">Shared container name.</param>
         <summary>Removes a key and its associated value if it exists.</summary>
-        <remarks></remarks>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="Set">
@@ -438,7 +442,9 @@
         <param name="key">Preference key.</param>
         <param name="value">Preference value.</param>
         <summary>Sets a value for a given key.</summary>
-        <remarks></remarks>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="Set">
@@ -459,7 +465,9 @@
         <param name="key">Preference key.</param>
         <param name="value">Preference value.</param>
         <summary>Sets a value for a given key.</summary>
-        <remarks></remarks>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="Set">
@@ -480,7 +488,9 @@
         <param name="key">Preference key.</param>
         <param name="value">Preference value.</param>
         <summary>Sets a value for a given key.</summary>
-        <remarks></remarks>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="Set">
@@ -501,7 +511,9 @@
         <param name="key">Preference key.</param>
         <param name="value">Preference value.</param>
         <summary>Sets a value for a given key.</summary>
-        <remarks></remarks>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="Set">
@@ -522,7 +534,9 @@
         <param name="key">Preference key.</param>
         <param name="value">Preference value.</param>
         <summary>Sets a value for a given key.</summary>
-        <remarks></remarks>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="Set">
@@ -543,7 +557,9 @@
         <param name="key">Preference key.</param>
         <param name="value">Preference value.</param>
         <summary>Sets a value for a given key.</summary>
-        <remarks></remarks>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="Set">
