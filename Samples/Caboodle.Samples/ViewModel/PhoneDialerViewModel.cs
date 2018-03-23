@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using Microsoft.Caboodle;
 using Xamarin.Forms;
 
@@ -15,22 +16,22 @@ namespace Caboodle.Samples.ViewModel
 
         public ICommand OpenPhoneDialerCommand { get; }
 
-        public bool IsEnabled => PhoneDialer.IsSupported && !string.IsNullOrEmpty(PhoneNumber);
-
-        public string IsSupportedMessage => $"Is supported? {PhoneDialer.IsSupported}";
-
         public string PhoneNumber
         {
             get => phoneNumber;
-            set
-            {
-                if (SetProperty(ref phoneNumber, value))
-                {
-                    OnPropertyChanged(nameof(IsEnabled));
-                }
-            }
+            set => SetProperty(ref phoneNumber, value);
         }
 
-        void OnOpenPhoneDialer() => PhoneDialer.Open(PhoneNumber);
+        async void OnOpenPhoneDialer()
+        {
+            try
+            {
+                PhoneDialer.Open(PhoneNumber);
+            }
+            catch (Exception)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", "Dialer is not supported.", "OK");
+            }
+        }
     }
 }
