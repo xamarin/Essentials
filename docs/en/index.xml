@@ -3,13 +3,13 @@
     <Assembly Name="Microsoft.Caboodle" Version="1.0.0.0">
       <Attributes>
         <Attribute>
-          <AttributeName>System.Diagnostics.Debuggable(System.Diagnostics.DebuggableAttribute+DebuggingModes.IgnoreSymbolStoreSequencePoints)</AttributeName>
+          <AttributeName>System.Diagnostics.Debuggable(System.Diagnostics.DebuggableAttribute+DebuggingModes.Default | System.Diagnostics.DebuggableAttribute+DebuggingModes.DisableOptimizations | System.Diagnostics.DebuggableAttribute+DebuggingModes.IgnoreSymbolStoreSequencePoints | System.Diagnostics.DebuggableAttribute+DebuggingModes.EnableEditAndContinue)</AttributeName>
         </Attribute>
         <Attribute>
           <AttributeName>System.Reflection.AssemblyCompany("Microsoft")</AttributeName>
         </Attribute>
         <Attribute>
-          <AttributeName>System.Reflection.AssemblyConfiguration("Release")</AttributeName>
+          <AttributeName>System.Reflection.AssemblyConfiguration("Debug")</AttributeName>
         </Attribute>
         <Attribute>
           <AttributeName>System.Reflection.AssemblyCopyright("© Microsoft Corporation. All rights reserved.")</AttributeName>
@@ -54,6 +54,8 @@
       <Type Name="BatteryChangedEventHandler" Kind="Delegate" />
       <Type Name="BatteryPowerSource" Kind="Enumeration" />
       <Type Name="BatteryState" Kind="Enumeration" />
+      <Type Name="Browser" Kind="Class" />
+      <Type Name="BrowserLaunchType" Kind="Enumeration" />
       <Type Name="Clipboard" Kind="Class" />
       <Type Name="DataTransfer" Kind="Class" />
       <Type Name="DeviceInfo" Kind="Class" />
@@ -68,6 +70,7 @@
       <Type Name="LocationExtensions" Kind="Class" />
       <Type Name="NotImplementedInReferenceAssemblyException" Kind="Class" />
       <Type Name="PermissionException" Kind="Class" />
+      <Type Name="PhoneDialer" Kind="Class" />
       <Type Name="Placemark" Kind="Class" />
       <Type Name="Platform" Kind="Class" />
       <Type Name="Preferences" Kind="Class" />
