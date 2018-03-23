@@ -12,13 +12,13 @@ namespace Microsoft.Caboodle
         {
             var kc = new KeyChain();
 
-            return Task.FromResult(kc.ValueForKey(key));
+            return Task.FromResult(kc.ValueForKey(key, Alias));
         }
 
         static Task PlatformSetAsync(string key, string data)
         {
             var kc = new KeyChain();
-            kc.SetValueForKey(data, key);
+            kc.SetValueForKey(data, key, Alias);
 
             return Task.CompletedTask;
         }
@@ -26,19 +26,19 @@ namespace Microsoft.Caboodle
 
     class KeyChain
     {
-        static SecRecord ExistingRecordForKey(string key)
+        static SecRecord ExistingRecordForKey(string key, string service)
         {
             return new SecRecord(SecKind.GenericPassword)
             {
                 Account = key,
-                Service = key,
+                Service = service,
                 Label = key,
             };
         }
 
-        public string ValueForKey(string key)
+        public string ValueForKey(string key, string service)
         {
-            var record = ExistingRecordForKey(key);
+            var record = ExistingRecordForKey(key, service);
             SecStatusCode resultCode;
             var match = SecKeyChain.QueryAsRecord(record, out resultCode);
 
@@ -48,32 +48,32 @@ namespace Microsoft.Caboodle
                 return string.Empty;
         }
 
-        public void SetValueForKey(string value, string key)
+        public void SetValueForKey(string value, string key, string service)
         {
-            var record = ExistingRecordForKey(key);
+            var record = ExistingRecordForKey(key, service);
             if (string.IsNullOrEmpty(value))
             {
-                if (!string.IsNullOrEmpty(ValueForKey(key)))
+                if (!string.IsNullOrEmpty(ValueForKey(key, service)))
                     RemoveRecord(record);
 
                 return;
             }
 
             // if the key already exists, remove it
-            if (!string.IsNullOrEmpty(ValueForKey(key)))
+            if (!string.IsNullOrEmpty(ValueForKey(key, service)))
                 RemoveRecord(record);
 
-            var result = SecKeyChain.Add(CreateRecordForNewKeyValue(key, value));
+            var result = SecKeyChain.Add(CreateRecordForNewKeyValue(key, value, service));
             if (result != SecStatusCode.Success)
                 throw new Exception($"Error adding record: {result}");
         }
 
-        SecRecord CreateRecordForNewKeyValue(string key, string value)
+        SecRecord CreateRecordForNewKeyValue(string key, string value, string service)
         {
             return new SecRecord(SecKind.GenericPassword)
             {
                 Account = key,
-                Service = key,
+                Service = service,
                 Label = key,
                 ValueData = NSData.FromString(value, NSStringEncoding.UTF8),
             };
