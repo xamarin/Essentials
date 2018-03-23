@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Android.App;
+using Android.Content;
 using Android.Runtime;
 using Android.Security;
 using Android.Security.Keystore;
@@ -14,48 +15,38 @@ namespace Microsoft.Caboodle
 {
     public static partial class SecureStorage
     {
-        static string GetDirPath()
-        {
-            var p = Path.Combine(Application.Context.FilesDir.AbsolutePath);
-            if (!Directory.Exists(p))
-                Directory.CreateDirectory(p);
-            return p;
-        }
-
-        static string GetFilePath(string filename) =>
-            Path.Combine(GetDirPath(), filename + ".dat");
-
-        static string Alias =>
-            $"{localDirName}-{AppInfo.PackageName}";
-
         static Task<string> PlatformGetAsync(string key)
         {
-            return Task.Run(() =>
-            {
-                var dirPath = GetDirPath();
-                var filePath = GetFilePath(key);
+            var context = Platform.CurrentContext;
 
-                var encryptedData = File.ReadAllBytes(filePath);
+            string encStr;
+            using (var prefs = context.GetSharedPreferences(Alias, FileCreationMode.Private))
+                encStr = prefs.GetString(Utils.Md5Hash(key), null);
 
-                var ks = new AndroidKeyStore(Alias, dirPath);
-                var decryptedData = ks.Decrypt(encryptedData);
+            var encData = Convert.FromBase64String(key);
 
-                return Task.FromResult(decryptedData);
-            });
+            var ks = new AndroidKeyStore(context, Alias);
+            var decryptedData = ks.Decrypt(encData);
+
+            return Task.FromResult(decryptedData);
         }
 
         static Task PlatformSetAsync(string key, string data)
         {
-            return Task.Run(() =>
+            var context = Platform.CurrentContext;
+
+            var ks = new AndroidKeyStore(context, Alias);
+            var encryptedData = ks.Encrypt(data);
+
+            using (var prefs = context.GetSharedPreferences(Alias, FileCreationMode.Private))
+            using (var prefsEditor = prefs.Edit())
             {
-                var dirPath = GetDirPath();
-                var filePath = GetFilePath(key);
+                var encStr = Convert.ToBase64String(encryptedData);
+                prefsEditor.PutString(Utils.Md5Hash(key), encStr);
+                prefsEditor.Commit();
+            }
 
-                var ks = new AndroidKeyStore(Alias, dirPath);
-                var encryptedData = ks.Encrypt(data);
-
-                File.WriteAllBytes(filePath, encryptedData);
-            });
+            return Task.CompletedTask;
         }
     }
 
@@ -63,52 +54,65 @@ namespace Microsoft.Caboodle
     {
         const string androidKeyStore = "AndroidKeyStore"; // this is an Android const value
         const string cipherTransformationAsymmetric = "RSA/ECB/PKCS1Padding";
-        const string cipherTransformationSymmetric = "AES/CBC/PKCS7Padding";
+        const string cipherTransformationSymmetric = "AES/GCM/NoPadding";
 
-        const int initializationVectorLen = 16;
+        const int initializationVectorLen = 12;
 
-        public AndroidKeyStore(string keystoreAlias, string storageDir)
+        public AndroidKeyStore(Context context, string keystoreAlias)
         {
+            appContext = context;
             alias = keystoreAlias;
-            dir = storageDir;
 
             keyStore = KeyStore.GetInstance(androidKeyStore);
             keyStore.Load(null);
         }
 
+        Context appContext;
         string alias;
-        string dir;
         KeyStore keyStore;
 
         ISecretKey GetKey()
         {
-            // If >= API 23 we can use the keystore's symmetric key
+            // If >= API 23 we can use the KeyStore's symmetric key
             if (HasMarshmallow)
                 return GetSymmetricKey();
 
-            // Otherwise we need to wrap our symmetric key with an asymmetric key
-            // and save it somewhere convenient to use to decrypt data in the future
-            // Look for existing default key
-            var keyPath = Path.Combine(dir, "idx.dat");
+            // NOTE: KeyStore in < API 23 can only store asymmetric keys
+            // specifically, only RSA/ECB/PKCS1Padding
+            // So we will wrap our symmetric AES key we just generated
+            // with this and save the encrypted/wrapped key out to
+            // preferences for future use.
+            // ECB should be fine in this case as the AES key should be
+            // contained in one block.
 
-            // Get or create our asymmetric key from the keystore
+            // Get the asymmetric key pair
             var keyPair = GetAsymmetricKeyPair();
 
-            if (File.Exists(keyPath))
+            using (var prefs = appContext.GetSharedPreferences(alias, FileCreationMode.Private))
             {
-                var wrappedKey = File.ReadAllBytes(keyPath);
+                var existingKeyStr = prefs.GetString("KEY", null);
 
-                return UnwrapKey(wrappedKey, keyPair.Private) as ISecretKey;
-            }
-            else
-            {
-                var keyGenerator = KeyGenerator.GetInstance("AES");
-                var defSymmetricKey = keyGenerator.GenerateKey();
+                if (!string.IsNullOrEmpty(existingKeyStr))
+                {
+                    var wrappedKey = Convert.FromBase64String(existingKeyStr);
 
-                var wrappedKey = WrapKey(defSymmetricKey, keyPair.Public);
-                File.WriteAllBytes(keyPath, wrappedKey);
+                    return UnwrapKey(wrappedKey, keyPair.Private) as ISecretKey;
+                }
+                else
+                {
+                    var keyGenerator = KeyGenerator.GetInstance("AES");
+                    var defSymmetricKey = keyGenerator.GenerateKey();
 
-                return defSymmetricKey;
+                    var wrappedKey = WrapKey(defSymmetricKey, keyPair.Public);
+
+                    using (var prefsEditor = prefs.Edit())
+                    {
+                        prefsEditor.PutString("KEY", Convert.ToBase64String(wrappedKey));
+                        prefsEditor.Commit();
+                    }
+
+                    return defSymmetricKey;
+                }
             }
         }
 
@@ -122,11 +126,11 @@ namespace Microsoft.Caboodle
                 var existingSecretKey = existingKey.JavaCast<ISecretKey>();
                 return existingSecretKey;
             }
-            var keyGenerator = KeyGenerator.GetInstance(KeyProperties.KeyAlgorithmAes, androidKeyStore);
 
+            var keyGenerator = KeyGenerator.GetInstance(KeyProperties.KeyAlgorithmAes, androidKeyStore);
             var builder = new KeyGenParameterSpec.Builder(alias, KeyStorePurpose.Encrypt | KeyStorePurpose.Decrypt)
-                .SetBlockModes(KeyProperties.BlockModeCbc)
-                .SetEncryptionPaddings(KeyProperties.EncryptionPaddingPkcs7);
+                .SetBlockModes(KeyProperties.BlockModeGcm)
+                .SetEncryptionPaddings(KeyProperties.EncryptionPaddingNone);
 
             keyGenerator.Init(builder.Build());
 
@@ -145,31 +149,20 @@ namespace Microsoft.Caboodle
             // Otherwise we create a new key
             var generator = KeyPairGenerator.GetInstance(KeyProperties.KeyAlgorithmRsa, androidKeyStore);
 
-            if (HasMarshmallow)
-            {
-                var builder = new KeyGenParameterSpec.Builder(alias, KeyStorePurpose.Encrypt | KeyStorePurpose.Decrypt)
-                    .SetBlockModes(KeyProperties.BlockModeEcb)
-                    .SetEncryptionPaddings(KeyProperties.EncryptionPaddingRsaPkcs1);
-
-                generator.Initialize(builder.Build());
-            }
-            else
-            {
-                var end = DateTime.UtcNow.AddYears(20);
-                var startDate = new Java.Util.Date();
-                var endDate = new Java.Util.Date(end.Year, end.Month, end.Day);
+            var end = DateTime.UtcNow.AddYears(20);
+            var startDate = new Java.Util.Date();
+            var endDate = new Java.Util.Date(end.Year, end.Month, end.Day);
 
 #pragma warning disable CS0618
-                var builder = new KeyPairGeneratorSpec.Builder(Platform.CurrentContext)
-                    .SetAlias(alias)
-                    .SetSerialNumber(Java.Math.BigInteger.One)
-                    .SetSubject(new Javax.Security.Auth.X500.X500Principal($"CN={alias} CA Certificate"))
-                    .SetStartDate(startDate)
-                    .SetEndDate(endDate);
+            var builder = new KeyPairGeneratorSpec.Builder(Platform.CurrentContext)
+                .SetAlias(alias)
+                .SetSerialNumber(Java.Math.BigInteger.One)
+                .SetSubject(new Javax.Security.Auth.X500.X500Principal($"CN={alias} CA Certificate"))
+                .SetStartDate(startDate)
+                .SetEndDate(endDate);
 
-                generator.Initialize(builder.Build());
+            generator.Initialize(builder.Build());
 #pragma warning restore CS0618
-            }
 
             return generator.GenerateKeyPair();
         }
@@ -192,11 +185,13 @@ namespace Microsoft.Caboodle
         {
             var key = GetKey();
 
-            var cipher = Cipher.GetInstance(cipherTransformationSymmetric);
-            cipher.Init(CipherMode.EncryptMode, key);
+            // Generate initialization vector
+            var iv = new byte[initializationVectorLen];
+            var sr = new SecureRandom();
+            sr.NextBytes(iv);
 
-            // Get the android random generated IV used
-            var iv = cipher.GetIV();
+            var cipher = Cipher.GetInstance(cipherTransformationSymmetric);
+            cipher.Init(CipherMode.EncryptMode, key, new GCMParameterSpec(128, iv));
 
             var decryptedData = Encoding.UTF8.GetBytes(data);
             var encryptedBytes = cipher.DoFinal(decryptedData);
@@ -218,9 +213,11 @@ namespace Microsoft.Caboodle
             var cipher = Cipher.GetInstance(cipherTransformationSymmetric);
 
             // IV will be the first 16 bytes of the encrypted data
-            var iv = new IvParameterSpec(data, 0, initializationVectorLen);
+            var iv = new byte[initializationVectorLen];
+            Buffer.BlockCopy(data, 0, iv, 0, initializationVectorLen);
 
-            cipher.Init(CipherMode.DecryptMode, key, iv);
+            var gcm = new GCMParameterSpec(128, iv);
+            cipher.Init(CipherMode.DecryptMode, key, gcm);
 
             // Decrypt starting after the first 16 bytes from the IV
             var decryptedData = cipher.DoFinal(data, initializationVectorLen, data.Length - initializationVectorLen);
