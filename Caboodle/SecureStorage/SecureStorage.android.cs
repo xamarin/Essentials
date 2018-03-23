@@ -23,9 +23,9 @@ namespace Microsoft.Caboodle
             using (var prefs = context.GetSharedPreferences(Alias, FileCreationMode.Private))
                 encStr = prefs.GetString(Utils.Md5Hash(key), null);
 
-            var encData = Convert.FromBase64String(key);
+            var encData = Convert.FromBase64String(encStr);
 
-            var ks = new AndroidKeyStore(context, Alias);
+            var ks = new AndroidKeyStore(context, Alias, AlwaysUseAsymmetricKeyStorage);
             var decryptedData = ks.Decrypt(encData);
 
             return Task.FromResult(decryptedData);
@@ -35,7 +35,7 @@ namespace Microsoft.Caboodle
         {
             var context = Platform.CurrentContext;
 
-            var ks = new AndroidKeyStore(context, Alias);
+            var ks = new AndroidKeyStore(context, Alias, AlwaysUseAsymmetricKeyStorage);
             var encryptedData = ks.Encrypt(data);
 
             using (var prefs = context.GetSharedPreferences(Alias, FileCreationMode.Private))
@@ -48,6 +48,8 @@ namespace Microsoft.Caboodle
 
             return Task.CompletedTask;
         }
+
+        internal static bool AlwaysUseAsymmetricKeyStorage { get; set; } = false;
     }
 
     class AndroidKeyStore
@@ -58,8 +60,9 @@ namespace Microsoft.Caboodle
 
         const int initializationVectorLen = 12;
 
-        public AndroidKeyStore(Context context, string keystoreAlias)
+        public AndroidKeyStore(Context context, string keystoreAlias, bool alwaysUseAsymmetricKeyStorage)
         {
+            alwaysUseAsymmetricKey = alwaysUseAsymmetricKeyStorage;
             appContext = context;
             alias = keystoreAlias;
 
@@ -70,11 +73,12 @@ namespace Microsoft.Caboodle
         Context appContext;
         string alias;
         KeyStore keyStore;
+        bool alwaysUseAsymmetricKey;
 
         ISecretKey GetKey()
         {
             // If >= API 23 we can use the KeyStore's symmetric key
-            if (HasMarshmallow)
+            if (HasMarshmallow && !alwaysUseAsymmetricKey)
                 return GetSymmetricKey();
 
             // NOTE: KeyStore in < API 23 can only store asymmetric keys
@@ -96,7 +100,10 @@ namespace Microsoft.Caboodle
                 {
                     var wrappedKey = Convert.FromBase64String(existingKeyStr);
 
-                    return UnwrapKey(wrappedKey, keyPair.Private) as ISecretKey;
+                    var unwrappedKey = UnwrapKey(wrappedKey, keyPair.Private);
+                    var kp = unwrappedKey.JavaCast<ISecretKey>();
+
+                    return kp;
                 }
                 else
                 {
@@ -130,7 +137,8 @@ namespace Microsoft.Caboodle
             var keyGenerator = KeyGenerator.GetInstance(KeyProperties.KeyAlgorithmAes, androidKeyStore);
             var builder = new KeyGenParameterSpec.Builder(alias, KeyStorePurpose.Encrypt | KeyStorePurpose.Decrypt)
                 .SetBlockModes(KeyProperties.BlockModeGcm)
-                .SetEncryptionPaddings(KeyProperties.EncryptionPaddingNone);
+                .SetEncryptionPaddings(KeyProperties.EncryptionPaddingNone)
+                .SetRandomizedEncryptionRequired(false);
 
             keyGenerator.Init(builder.Build());
 
@@ -139,8 +147,10 @@ namespace Microsoft.Caboodle
 
         KeyPair GetAsymmetricKeyPair()
         {
-            var privateKey = keyStore.GetKey(alias, null) as IPrivateKey;
-            var publicKey = keyStore.GetCertificate(alias)?.PublicKey;
+            var asymmetricAlias = $"{alias}.asymmetric";
+
+            var privateKey = keyStore.GetKey(asymmetricAlias, null)?.JavaCast<IPrivateKey>();
+            var publicKey = keyStore.GetCertificate(asymmetricAlias)?.PublicKey;
 
             // Return the existing key if found
             if (privateKey != null && publicKey != null)
@@ -155,9 +165,9 @@ namespace Microsoft.Caboodle
 
 #pragma warning disable CS0618
             var builder = new KeyPairGeneratorSpec.Builder(Platform.CurrentContext)
-                .SetAlias(alias)
+                .SetAlias(asymmetricAlias)
                 .SetSerialNumber(Java.Math.BigInteger.One)
-                .SetSubject(new Javax.Security.Auth.X500.X500Principal($"CN={alias} CA Certificate"))
+                .SetSubject(new Javax.Security.Auth.X500.X500Principal($"CN={asymmetricAlias} CA Certificate"))
                 .SetStartDate(startDate)
                 .SetEndDate(endDate);
 
@@ -178,7 +188,8 @@ namespace Microsoft.Caboodle
         {
             var cipher = Cipher.GetInstance(cipherTransformationAsymmetric);
             cipher.Init(CipherMode.UnwrapMode, withKey);
-            return cipher.Unwrap(wrappedData, KeyProperties.KeyAlgorithmAes, KeyType.SecretKey);
+            var unwrapped = cipher.Unwrap(wrappedData, KeyProperties.KeyAlgorithmAes, KeyType.SecretKey);
+            return unwrapped;
         }
 
         public byte[] Encrypt(string data)
