@@ -29,15 +29,7 @@ namespace Microsoft.Caboodle
 
         public static void Open(string number)
         {
-            if (string.IsNullOrWhiteSpace(number))
-            {
-                throw new ArgumentNullException(nameof(number));
-            }
-
-            if (!IsSupported)
-            {
-                throw new FeatureNotSupportedException();
-            }
+            ValidateOpen(number);
 
             var nsUrl = CreateNsUrl(number);
             UIApplication.SharedApplication.OpenUrl(nsUrl);

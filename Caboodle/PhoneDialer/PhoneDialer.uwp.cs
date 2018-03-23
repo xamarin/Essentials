@@ -12,15 +12,7 @@ namespace Microsoft.Caboodle
 
         public static void Open(string number, string name)
         {
-            if (string.IsNullOrWhiteSpace(number))
-            {
-                throw new ArgumentNullException(nameof(number));
-            }
-
-            if (!IsSupported)
-            {
-                throw new FeatureNotSupportedException();
-            }
+            ValidateOpen(number);
 
             PhoneCallManager.ShowPhoneCallUI(number, name ?? string.Empty);
         }

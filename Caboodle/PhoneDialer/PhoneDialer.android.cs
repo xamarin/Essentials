@@ -10,29 +10,23 @@ namespace Microsoft.Caboodle
 {
     public static partial class PhoneDialer
     {
-        public static bool IsSupported
+        const string intentCheck = "00000000000";
+
+        static bool IsSupported
         {
             get
             {
                 var packageManager = Application.Context.PackageManager;
-                var dialIntent = ResolveDialIntent(new string('0', 10));
+                var dialIntent = ResolveDialIntent(intentCheck);
                 return dialIntent.ResolveActivity(packageManager) != null;
             }
         }
 
         public static void Open(string number)
         {
-            if (string.IsNullOrWhiteSpace(number))
-            {
-                throw new ArgumentNullException(nameof(number));
-            }
+            ValidateOpen(number);
 
-            if (!IsSupported)
-            {
-                throw new FeatureNotSupportedException();
-            }
-
-            string phoneNumber;
+            var phoneNumber = string.Empty;
             if (Build.VERSION.SdkInt >= BuildVersionCodes.N)
             {
                 phoneNumber = PhoneNumberUtils.FormatNumber(number, Locale.GetDefault(Locale.Category.Format).Country);
