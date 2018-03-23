@@ -19,7 +19,7 @@ namespace Microsoft.Caboodle
 
             if (!IsSupported)
             {
-                throw new CapabilityNotSupportedException();
+                throw new FeatureNotSupportedException();
             }
 
             PhoneCallManager.ShowPhoneCallUI(number, name ?? string.Empty);

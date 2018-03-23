@@ -3,9 +3,9 @@
     public static partial class PhoneDialer
     {
         public static bool IsSupported =>
-            throw new NotImplentedInReferenceAssembly();
+            throw new NotImplementedInReferenceAssemblyException();
 
         public static void Open(string number) =>
-            throw new NotImplentedInReferenceAssembly();
+            throw new NotImplementedInReferenceAssemblyException();
     }
 }
