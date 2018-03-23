@@ -10,57 +10,42 @@ namespace Microsoft.Caboodle
 {
     public partial class SecureStorage
     {
-        static string GetFilePath(string filename)
-        {
-            var dir = Path.Combine(
-                ApplicationData.Current.LocalFolder.Path,
-                localDirName);
-            if (!Directory.Exists(dir))
-                Directory.CreateDirectory(dir);
-
-            return Path.Combine(dir, filename + ".dat");
-        }
-
         static async Task<string> PlatformGetAsync(string key)
         {
-            var path = GetFilePath(key);
-            byte[] bytes_protected;
-            var file = await StorageFile.GetFileFromPathAsync(path);
+            var settings = GetSettings(Alias);
 
-            using (var stream = await file.OpenStreamForReadAsync().ConfigureAwait(false))
-            using (var reader = new BinaryReader(stream))
-            {
-                var length = reader.ReadInt32();
-                var data = reader.ReadBytes(length);
+            var encBytes = settings.Values[key] as byte[];
 
-                var provider = new DataProtectionProvider();
-                var buffer = await provider.UnprotectAsync(data.AsBuffer()).AsTask().ConfigureAwait(false);
+            if (encBytes == null)
+                return null;
 
-                bytes_protected = buffer.ToArray();
-            }
+            var provider = new DataProtectionProvider();
+            var buffer = await provider.UnprotectAsync(encBytes.AsBuffer()).AsTask().ConfigureAwait(false);
 
-            return Encoding.UTF8.GetString(bytes_protected, 0, bytes_protected.Length);
+            return Encoding.UTF8.GetString(buffer.ToArray());
         }
 
         static async Task PlatformSetAsync(string key, string data)
         {
-            var path = GetFilePath(key);
-            var file = await StorageFile.GetFileFromPathAsync(path);
+            var settings = GetSettings(Alias);
+
             var bytes = Encoding.UTF8.GetBytes(data);
 
             // LOCAL=user and LOCAL=machine do not require enterprise auth capability
             var provider = new DataProtectionProvider("LOCAL=user");
             var buffer = await provider.ProtectAsync(bytes.AsBuffer()).AsTask().ConfigureAwait(false);
-            var bytes_protected = buffer.ToArray();
+            var encBytes = buffer.ToArray();
 
-            using (var stream = await file.OpenStreamForWriteAsync().ConfigureAwait(false))
-            using (var writer = new BinaryWriter(stream))
-            {
-                writer.Write((int)bytes_protected.Length);
-                writer.Write(bytes_protected);
-            }
+            settings.Values[key] = encBytes;
+        }
 
-            return;
+        static ApplicationDataContainer GetSettings(string name)
+        {
+            var localSettings = ApplicationData.Current.LocalSettings;
+
+            if (!localSettings.Containers.ContainsKey(name))
+                localSettings.CreateContainer(name, ApplicationDataCreateDisposition.Always);
+            return localSettings.Containers[name];
         }
     }
 }
