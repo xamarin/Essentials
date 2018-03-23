@@ -1,12 +1,13 @@
 ﻿using System;
 using Windows.ApplicationModel.Calls;
+using Windows.Foundation.Metadata;
 
 namespace Microsoft.Caboodle
 {
     public static partial class PhoneDialer
     {
         internal static bool IsSupported =>
-             Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.ApplicationModel.Calls.PhoneCallManager");
+             ApiInformation.IsTypePresent("Windows.ApplicationModel.Calls.PhoneCallManager");
 
         public static void Open(string number)
         {
