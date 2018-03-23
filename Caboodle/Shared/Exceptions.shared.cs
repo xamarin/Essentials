@@ -18,11 +18,20 @@ namespace Microsoft.Caboodle
         }
     }
 
-    public class CapabilityNotSupportedException : NotSupportedException
+    public class FeatureNotSupportedException : NotSupportedException
     {
-    }
+        public FeatureNotSupportedException()
+        {
+        }
 
-    public class CapabilityNotEnabledException : InvalidOperationException
-    {
+        public FeatureNotSupportedException(string message)
+            : base(message)
+        {
+        }
+
+        public FeatureNotSupportedException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
     }
 }
