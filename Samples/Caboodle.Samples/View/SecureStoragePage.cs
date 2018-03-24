@@ -2,9 +2,9 @@
 
 namespace Caboodle.Samples.View
 {
-    public partial class StorageSecurePage : ContentPage
+    public partial class SecureStoragePage : BasePage
     {
-        public StorageSecurePage()
+        public SecureStoragePage()
         {
             InitializeComponent();
         }
