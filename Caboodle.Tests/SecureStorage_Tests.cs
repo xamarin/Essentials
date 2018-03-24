@@ -8,13 +8,13 @@ namespace Microsoft.Caboodle.Tests
         [Fact]
         public async Task SecureStorage_LoadAsync_Fail_On_NetStandard()
         {
-            await Assert.ThrowsAsync<NotImplementedInReferenceAssemblyException>(() => SecureStorage.GetAsync("filename.txt"));
+            await Assert.ThrowsAsync<NotImplementedInReferenceAssemblyException>(() => SecureStorage.GetAsync("key"));
         }
 
         [Fact]
         public async Task SecureStorage_SaveAsync_Fail_On_NetStandard()
         {
-            await Assert.ThrowsAsync<NotImplementedInReferenceAssemblyException>(() => SecureStorage.SetAsync("filename.txt", "data"));
+            await Assert.ThrowsAsync<NotImplementedInReferenceAssemblyException>(() => SecureStorage.SetAsync("key", "data"));
         }
     }
 }
