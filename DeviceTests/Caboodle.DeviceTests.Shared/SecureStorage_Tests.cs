@@ -30,6 +30,12 @@ namespace Microsoft.Caboodle.DeviceTests
         [InlineData("funny*&$%@!._/\\chars", "data3")]
         public async Task Saves_And_Loads(string key, string data)
         {
+#if __IOS__
+            // Don't run this test on Simulator on iOS
+            if (ObjCRuntime.Runtime.Arch != ObjCRuntime.Arch.DEVICE)
+                return;
+#endif
+
             await SecureStorage.SetAsync(key, data);
 
             var c = await SecureStorage.GetAsync(key);
