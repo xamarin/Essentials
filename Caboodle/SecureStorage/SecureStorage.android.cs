@@ -55,10 +55,11 @@ namespace Microsoft.Caboodle
     class AndroidKeyStore
     {
         const string androidKeyStore = "AndroidKeyStore"; // this is an Android const value
+        const string aesAlgorithm = "AES";
         const string cipherTransformationAsymmetric = "RSA/ECB/PKCS1Padding";
         const string cipherTransformationSymmetric = "AES/GCM/NoPadding";
-
-        const int initializationVectorLen = 12;
+        const string prefsMasterKey = "SecureStorageKey";
+        const int initializationVectorLen = 12; // Android supports an IV of 12 for AES/GCM
 
         public AndroidKeyStore(Context context, string keystoreAlias, bool alwaysUseAsymmetricKeyStorage)
         {
@@ -94,7 +95,7 @@ namespace Microsoft.Caboodle
 
             using (var prefs = appContext.GetSharedPreferences(alias, FileCreationMode.Private))
             {
-                var existingKeyStr = prefs.GetString("KEY", null);
+                var existingKeyStr = prefs.GetString(prefsMasterKey, null);
 
                 if (!string.IsNullOrEmpty(existingKeyStr))
                 {
@@ -107,14 +108,14 @@ namespace Microsoft.Caboodle
                 }
                 else
                 {
-                    var keyGenerator = KeyGenerator.GetInstance("AES");
+                    var keyGenerator = KeyGenerator.GetInstance(aesAlgorithm);
                     var defSymmetricKey = keyGenerator.GenerateKey();
 
                     var wrappedKey = WrapKey(defSymmetricKey, keyPair.Public);
 
                     using (var prefsEditor = prefs.Edit())
                     {
-                        prefsEditor.PutString("KEY", Convert.ToBase64String(wrappedKey));
+                        prefsEditor.PutString(prefsMasterKey, Convert.ToBase64String(wrappedKey));
                         prefsEditor.Commit();
                     }
 
