@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
+using Android.OS;
 using Android.Runtime;
 using Android.Security;
 using Android.Security.Keystore;
@@ -79,7 +80,7 @@ namespace Microsoft.Caboodle
         ISecretKey GetKey()
         {
             // If >= API 23 we can use the KeyStore's symmetric key
-            if (HasMarshmallow && !alwaysUseAsymmetricKey)
+            if (Platform.HasApiLevel(BuildVersionCodes.M) && !alwaysUseAsymmetricKey)
                 return GetSymmetricKey();
 
             // NOTE: KeyStore in < API 23 can only store asymmetric keys
@@ -236,8 +237,5 @@ namespace Microsoft.Caboodle
 
             return Encoding.UTF8.GetString(decryptedData);
         }
-
-        static bool HasMarshmallow =>
-            (int)Android.OS.Build.VERSION.SdkInt >= 23;
     }
 }
