@@ -3,6 +3,8 @@ using System.Linq;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.Net;
+using Android.Net.Wifi;
 using Android.OS;
 
 namespace Microsoft.Caboodle
@@ -41,32 +43,8 @@ namespace Microsoft.Caboodle
             return activities.Any();
         }
 
-        internal static bool HasKitKat =>
-            (int)Build.VERSION.SdkInt >= 19;
-
-        internal static bool HasKitKatWatch =>
-            (int)Build.VERSION.SdkInt >= 20;
-
-        internal static bool HasLollipop =>
-            (int)Build.VERSION.SdkInt >= 21;
-
-        internal static bool HasLollipopMr1 =>
-            (int)Build.VERSION.SdkInt >= 22;
-
-        internal static bool HasMarshmallow =>
-           (int)Build.VERSION.SdkInt >= 23;
-
-        internal static bool HasNougat =>
-            (int)Build.VERSION.SdkInt >= 24;
-
-        internal static bool HasNougatMr1 =>
-            (int)Build.VERSION.SdkInt >= 25;
-
-        internal static bool HasOreo =>
-            (int)Build.VERSION.SdkInt >= 26;
-
-        internal static bool HasOreoMr1 =>
-            (int)Build.VERSION.SdkInt >= 27;
+        internal static bool HasApiLevel(BuildVersionCodes versionCode) =>
+            (int)Build.VERSION.SdkInt >= (int)versionCode;
 
         public static void BeginInvokeOnMainThread(Action action)
         {
@@ -77,6 +55,15 @@ namespace Microsoft.Caboodle
 
             handler.Post(action);
         }
+
+        internal static ClipboardManager ClipboardManager
+            => (ClipboardManager)Application.Context.GetSystemService(Context.ClipboardService);
+
+        internal static ConnectivityManager ConnectivityManager =>
+            (ConnectivityManager)Application.Context.GetSystemService(Context.ConnectivityService);
+
+        internal static WifiManager WifiManager =>
+            (WifiManager)Application.Context.GetSystemService(Context.WifiService);
     }
 
     class ActivityLifecycleContextListener : Java.Lang.Object, Application.IActivityLifecycleCallbacks
