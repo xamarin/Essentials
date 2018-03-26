@@ -30,7 +30,7 @@ namespace Caboodle.Samples.ViewModel
             }
             catch (Exception)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Dialer is not supported.", "OK");
+                await DisplayAlert("Dialer is not supported.");
             }
         }
     }
