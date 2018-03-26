@@ -43,6 +43,9 @@ namespace Microsoft.Caboodle
             return activities.Any();
         }
 
+        internal static bool HasApiLevel(BuildVersionCodes versionCode) =>
+            (int)Build.VERSION.SdkInt >= (int)versionCode;
+
         public static void BeginInvokeOnMainThread(Action action)
         {
             if (handler?.Looper != Looper.MainLooper)
