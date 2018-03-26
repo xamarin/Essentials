@@ -27,11 +27,11 @@ namespace Microsoft.Caboodle
             ValidateOpen(number);
 
             var phoneNumber = string.Empty;
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.N)
+            if (Platform.HasNougat)
             {
                 phoneNumber = PhoneNumberUtils.FormatNumber(number, Locale.GetDefault(Locale.Category.Format).Country);
             }
-            else if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
+            else if (Platform.HasLollipop)
             {
                 phoneNumber = PhoneNumberUtils.FormatNumber(number, Locale.Default.Country);
             }
