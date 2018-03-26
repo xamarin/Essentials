@@ -39,6 +39,14 @@ namespace Microsoft.Caboodle
             lock (locker)
             {
                 var appDataContainer = GetApplicationDataContainer(sharedName);
+
+                if (value == null)
+                {
+                    if (appDataContainer.Values.ContainsKey(key))
+                        appDataContainer.Values.Remove(key);
+                    return;
+                }
+
                 appDataContainer.Values[key] = value;
             }
         }

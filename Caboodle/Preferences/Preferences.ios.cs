@@ -51,6 +51,13 @@ namespace Microsoft.Caboodle
             {
                 using (var userDefaults = GetUserDefaults(sharedName))
                 {
+                    if (value == null)
+                    {
+                        if (userDefaults[key] != null)
+                            userDefaults.RemoveObject(key);
+                        return;
+                    }
+
                     switch (value)
                     {
                         case string s:
