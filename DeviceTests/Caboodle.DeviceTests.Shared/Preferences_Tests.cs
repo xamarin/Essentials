@@ -18,6 +18,17 @@ namespace Caboodle.DeviceTests
         }
 
         [Theory]
+        [InlineData("string1", "TEST", null)]
+        [InlineData("string1", "TEST", sharedNameTestData)]
+        public void Set_Set_Null_Get_String(string key, string value, string sharedName)
+        {
+            Preferences.Set(key, value, sharedName);
+            Preferences.Set(key, null, sharedName);
+
+            Assert.Null(Preferences.Get(key, null, sharedName));
+        }
+        
+        [Theory]
         [InlineData("int1", int.MaxValue - 1, null)]
         [InlineData("sint1", int.MinValue + 1, null)]
         [InlineData("int1", int.MaxValue - 1, sharedNameTestData)]
