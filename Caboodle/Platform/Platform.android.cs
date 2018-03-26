@@ -29,13 +29,6 @@ namespace Microsoft.Caboodle
         public static void Init(Activity activity, Bundle bundle) =>
            Init(activity.Application);
 
-        internal static bool HasPermissionInManifest(string permission)
-        {
-            var packageInfo = CurrentContext.PackageManager.GetPackageInfo(CurrentContext.PackageName, PackageInfoFlags.Permissions);
-            var requestedPermissions = packageInfo?.RequestedPermissions;
-            return requestedPermissions?.Any(r => r.Equals(permission, StringComparison.InvariantCultureIgnoreCase)) ?? false;
-        }
-
         internal static bool IsIntentSupported(Intent intent)
         {
             var manager = CurrentContext.PackageManager;
