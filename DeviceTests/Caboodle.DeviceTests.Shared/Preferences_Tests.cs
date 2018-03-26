@@ -27,7 +27,7 @@ namespace Caboodle.DeviceTests
 
             Assert.Null(Preferences.Get(key, null, sharedName));
         }
-        
+
         [Theory]
         [InlineData("int1", int.MaxValue - 1, null)]
         [InlineData("sint1", int.MinValue + 1, null)]
