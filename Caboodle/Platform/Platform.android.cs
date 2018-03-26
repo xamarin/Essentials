@@ -3,6 +3,7 @@ using System.Linq;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.Hardware;
 using Android.Net;
 using Android.Net.Wifi;
 using Android.OS;
@@ -56,14 +57,17 @@ namespace Microsoft.Caboodle
             handler.Post(action);
         }
 
-        internal static ClipboardManager ClipboardManager
-            => (ClipboardManager)Application.Context.GetSystemService(Context.ClipboardService);
+        internal static ClipboardManager ClipboardManager =>
+            Application.Context.GetSystemService(Context.ClipboardService) as ClipboardManager;
 
         internal static ConnectivityManager ConnectivityManager =>
-            (ConnectivityManager)Application.Context.GetSystemService(Context.ConnectivityService);
+            Application.Context.GetSystemService(Context.ConnectivityService) as ConnectivityManager;
 
         internal static WifiManager WifiManager =>
-            (WifiManager)Application.Context.GetSystemService(Context.WifiService);
+            Application.Context.GetSystemService(Context.WifiService) as WifiManager;
+
+        internal static SensorManager SensorManager =>
+            Application.Context.GetSystemService(Context.SensorService) as SensorManager;
     }
 
     class ActivityLifecycleContextListener : Java.Lang.Object, Application.IActivityLifecycleCallbacks
