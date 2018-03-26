@@ -55,7 +55,7 @@ namespace Microsoft.Caboodle
                     var currentAccess = NetworkAccess.None;
                     var manager = Platform.ConnectivityManager;
 
-                    if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
+                    if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
                     {
                         foreach (var network in manager.GetAllNetworks())
                         {
@@ -121,7 +121,7 @@ namespace Microsoft.Caboodle
             {
                 ValidatePermission();
                 var manager = Platform.ConnectivityManager;
-                if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
+                if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
                 {
                     foreach (var network in manager.GetAllNetworks())
                     {

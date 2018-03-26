@@ -31,7 +31,8 @@
           <para>Event that is triggered when a network access or profile has changed.</para>
         </summary>
         <remarks>
-          <para />
+          <para>Can throw PermissionException on Android if ACCESS_NETWORK_STATE is not set in manifest.</para>
+          <para></para>
         </remarks>
       </Docs>
     </Member>
@@ -49,7 +50,7 @@
         <summary>Gets the current state of network access. Does not guarantee full access to the internet.</summary>
         <value>The current network access state.</value>
         <remarks>
-          <para></para>
+          <para>Can throw PermissionException on Android if ACCESS_NETWORK_STATE is not set in manifest.</para>
         </remarks>
       </Docs>
     </Member>
@@ -72,7 +73,7 @@
         <summary>Gets the active connectivity types for the device.</summary>
         <value>List of all connection profiles.</value>
         <remarks>
-          <para></para>
+          <para>Can throw PermissionException on Android if ACCESS_NETWORK_STATE is not set in manifest.</para>
         </remarks>
       </Docs>
     </Member>
