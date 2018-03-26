@@ -17,7 +17,7 @@
             <Label Text="Browser Launch Type:"/>
             <Picker HorizontalOptions="FillAndExpand"
                     ItemsSource="{Binding BrowserLaunchTypes}" 
-                    SelectedIndex="{Binding BrowserType, Mode=TwoWay}" />
+                    SelectedItem="{Binding BrowserType, Mode=TwoWay}" />
 
             <Label Text="{Binding BrowserStatus}"/>
         </StackLayout>
