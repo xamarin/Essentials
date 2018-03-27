@@ -1,24 +1,19 @@
 ﻿using System;
+using Android;
 using Android.OS;
 
 namespace Microsoft.Caboodle
 {
     public static partial class Vibration
     {
-        internal static bool IsSupported
-        {
-            get
-            {
-                if (Platform.HasApiLevel(BuildVersionCodes.Honeycomb))
-                {
-                    return Platform.Vibrator?.HasVibrator == true;
-                }
-                return true;
-            }
-        }
+        static bool hasPermission;
+
+        internal static bool IsSupported => true;
 
         static void PlatformVibrate(TimeSpan duration)
         {
+            ValidatePermission();
+
             var time = (long)duration.TotalMilliseconds;
             if (Platform.HasApiLevel(BuildVersionCodes.O))
             {
@@ -34,7 +29,21 @@ namespace Microsoft.Caboodle
 
         static void PlatformCancel()
         {
+            ValidatePermission();
+
             Platform.Vibrator.Cancel();
+        }
+
+        static void ValidatePermission()
+        {
+            if (hasPermission)
+                return;
+
+            var permission = Manifest.Permission.Vibrate;
+            if (!Platform.HasPermissionInManifest(permission))
+                throw new PermissionException(permission);
+
+            hasPermission = true;
         }
     }
 }
