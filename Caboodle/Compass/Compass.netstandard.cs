@@ -8,13 +8,7 @@ namespace Microsoft.Caboodle
         internal static bool IsSupported =>
             throw new NotImplementedInReferenceAssemblyException();
 
-        public static void Monitor(SensorSpeed sensorSpeed, CancellationToken cancellationToken, Action<double> handler) =>
-            throw new NotImplementedInReferenceAssemblyException();
-
-        static void StartListeners() =>
-               throw new NotImplementedInReferenceAssemblyException();
-
-        static void StopListeners() =>
+        internal static void PlatformMonitor(SensorSpeed sensorSpeed, Action<CompassData> handler) =>
             throw new NotImplementedInReferenceAssemblyException();
     }
 }

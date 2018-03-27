@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
 using CoreLocation;
 
 namespace Microsoft.Caboodle
@@ -11,11 +8,8 @@ namespace Microsoft.Caboodle
         internal static bool IsSupported =>
             CLLocationManager.HeadingAvailable;
 
-        public static void Monitor(SensorSpeed sensorSpeed, CancellationToken cancellationToken, Action<double> handler)
+        internal static void PlatformMonitor(SensorSpeed sensorSpeed, Action<CompassData> handler)
         {
-            if (!IsSupported)
-                throw new FeatureNotSupportedException();
-
             var useSyncContext = false;
 
             var locationManager = new CLLocationManager();
@@ -41,7 +35,7 @@ namespace Microsoft.Caboodle
                     break;
             }
 
-            cancellationToken.Register(CancelledToken, useSyncContext);
+            MonitorCTS.Token.Register(CancelledToken, useSyncContext);
 
             locationManager.UpdatedHeading += LocationManagerUpdatedHeading;
             locationManager.StartUpdatingHeading();
@@ -52,17 +46,19 @@ namespace Microsoft.Caboodle
                 locationManager.StopUpdatingHeading();
                 locationManager?.Dispose();
                 locationManager = null;
+                DisposeToken();
             }
 
             void LocationManagerUpdatedHeading(object sender, CLHeadingUpdatedEventArgs e)
             {
+                var data = new CompassData(e.NewHeading.MagneticHeading);
                 if (useSyncContext)
                 {
-                    Platform.BeginInvokeOnMainThread(() => handler?.Invoke(e.NewHeading.TrueHeading));
+                    Platform.BeginInvokeOnMainThread(() => handler?.Invoke(data));
                 }
                 else
                 {
-                    handler?.Invoke(e.NewHeading.TrueHeading);
+                    handler?.Invoke(data);
                 }
             }
         }

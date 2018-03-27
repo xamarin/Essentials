@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading;
 using System.Windows.Input;
 using Microsoft.Caboodle;
 using Xamarin.Forms;
@@ -16,17 +14,19 @@ namespace Caboodle.Samples.ViewModel
             {
                 try
                 {
-                    token1 = new CancellationTokenSource();
-                    Compass.Monitor((SensorSpeed)Speed1, token1.Token, (degrees) =>
+                    if (Compass.IsMonitoring)
+                        StopCompass2Command.Execute(null);
+
+                    Compass.Monitor((SensorSpeed)Speed1, (data) =>
                     {
                         switch ((SensorSpeed)Speed1)
                         {
                             case SensorSpeed.Fastest:
                             case SensorSpeed.Game:
-                                Platform.BeginInvokeOnMainThread(() => { Compass1 = degrees; });
+                                Platform.BeginInvokeOnMainThread(() => { Compass1 = data.HeadingMagneticNorth; });
                                 break;
                             default:
-                                Compass1 = degrees;
+                                Compass1 = data.HeadingMagneticNorth;
                                 break;
                         }
                     });
@@ -41,26 +41,26 @@ namespace Caboodle.Samples.ViewModel
             StopCompass1Command = new Command(() =>
             {
                 Compass1IsActive = false;
-                token1?.Cancel();
-                token1?.Dispose();
-                token1 = null;
+                Compass.StopMonitor();
             });
 
             StartCompass2Command = new Command(async () =>
             {
                 try
                 {
-                    token2 = new CancellationTokenSource();
-                    Compass.Monitor((SensorSpeed)Speed2, token2.Token, (degrees) =>
+                    if (Compass.IsMonitoring)
+                        StopCompass1Command.Execute(null);
+
+                    Compass.Monitor((SensorSpeed)Speed2, (data) =>
                     {
                         switch ((SensorSpeed)Speed2)
                         {
                             case SensorSpeed.Fastest:
                             case SensorSpeed.Game:
-                                Platform.BeginInvokeOnMainThread(() => { Compass2 = degrees; });
+                                Platform.BeginInvokeOnMainThread(() => { Compass2 = data.HeadingMagneticNorth; });
                                 break;
                             default:
-                                Compass2 = degrees;
+                                Compass2 = data.HeadingMagneticNorth;
                                 break;
                         }
                     });
@@ -75,14 +75,9 @@ namespace Caboodle.Samples.ViewModel
             StopCompass2Command = new Command(() =>
             {
                 Compass2IsActive = false;
-                token2?.Cancel();
-                token2?.Dispose();
-                token2 = null;
+                Compass.StopMonitor();
             });
         }
-
-        CancellationTokenSource token1;
-        CancellationTokenSource token2;
 
         public ICommand StartCompass1Command { get; }
 

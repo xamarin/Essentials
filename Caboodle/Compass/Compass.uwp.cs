@@ -9,11 +9,8 @@ namespace Microsoft.Caboodle
         internal static bool IsSupported =>
             Windows.Devices.Sensors.Compass.GetDefault() != null;
 
-        public static void Monitor(SensorSpeed sensorSpeed, CancellationToken cancellationToken, Action<double> handler)
+        internal static void PlatformMonitor(SensorSpeed sensorSpeed, Action<CompassData> handler)
         {
-            if (!IsSupported)
-                throw new FeatureNotSupportedException();
-
             var useSyncContext = false;
 
             var compass = Windows.Devices.Sensors.Compass.GetDefault();
@@ -33,13 +30,14 @@ namespace Microsoft.Caboodle
                     break;
             }
 
-            cancellationToken.Register(CancelledToken);
+            MonitorCTS.Token.Register(CancelledToken);
 
             void CancelledToken()
             {
                 Platform.BeginInvokeOnMainThread(() =>
                 {
                     compass.ReadingChanged -= CompassReportedInterval;
+                    DisposeToken();
                 });
             }
 
@@ -47,13 +45,14 @@ namespace Microsoft.Caboodle
 
             void CompassReportedInterval(object sender, CompassReadingChangedEventArgs e)
             {
+                var data = new CompassData(e.Reading.HeadingMagneticNorth);
                 if (useSyncContext)
                 {
-                    Platform.BeginInvokeOnMainThread(() => handler?.Invoke(e.Reading.HeadingTrueNorth.Value));
+                    Platform.BeginInvokeOnMainThread(() => handler?.Invoke(data));
                 }
                 else
                 {
-                    handler?.Invoke(e.Reading.HeadingTrueNorth.Value);
+                    handler?.Invoke(data);
                 }
             }
         }
