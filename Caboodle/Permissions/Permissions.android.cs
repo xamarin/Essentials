@@ -11,7 +11,10 @@ namespace Microsoft.Caboodle
 {
     internal static partial class Permissions
     {
-        static TaskCompletionSource<PermissionStatus> tcs;
+        static readonly object locker = new object();
+
+        static Dictionary<PermissionType, Tuple<int, TaskCompletionSource<PermissionStatus>>> requests =
+            new Dictionary<PermissionType, Tuple<int, TaskCompletionSource<PermissionStatus>>>();
 
         static void PlatformEnsureDeclared(PermissionType permission)
         {
@@ -38,10 +41,11 @@ namespace Microsoft.Caboodle
         {
             PlatformEnsureDeclared(permission);
 
+            // If there are no android permissions for the given permission type
+            // just return granted since we have none to ask for
             var androidPermissions = permission.ToAndroidPermissions();
-
             if (androidPermissions == null || !androidPermissions.Any())
-                return Task.FromResult(PermissionStatus.Unknown);
+                return Task.FromResult(PermissionStatus.Granted);
 
             var hasApiM = Platform.HasApiLevel(Android.OS.BuildVersionCodes.M);
             var context = Platform.CurrentContext;
@@ -65,20 +69,65 @@ namespace Microsoft.Caboodle
 
         static async Task<PermissionStatus> PlatformRequestAsync(PermissionType permission)
         {
+            // Check status before requesting first
             if (await PlatformCheckStatusAsync(permission) == PermissionStatus.Granted)
                 return PermissionStatus.Granted;
 
-            var androidPermissions = permission.ToAndroidPermissions();
+            TaskCompletionSource<PermissionStatus> tcs;
+            var doRequest = true;
+            var requestCode = 0;
 
-            var activity = Platform.CurrentActivity;
+            lock (locker)
+            {
+                if (requests.ContainsKey(permission))
+                {
+                    tcs = requests[permission].Item2;
+                    doRequest = false;
+                }
+                else
+                {
+                    tcs = new TaskCompletionSource<PermissionStatus>();
 
-            tcs = new TaskCompletionSource<PermissionStatus>();
+                    // Get new request code and wrap it around for next use if it's going to reach max
+                    if (++requestCode >= int.MaxValue)
+                        requestCode = 1;
 
-            ActivityCompat.RequestPermissions(activity, androidPermissions.ToArray(), 24600913);
+                    requests.Add(permission, Tuple.Create(requestCode, tcs));
+                }
+            }
 
-            var result = await tcs.Task;
+            if (!doRequest)
+                return await tcs.Task;
 
-            return result;
+            var androidPermissions = permission.ToAndroidPermissions().ToArray();
+
+            ActivityCompat.RequestPermissions(Platform.CurrentActivity, androidPermissions, requestCode);
+
+            return await tcs.Task;
+        }
+
+        internal static void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+        {
+            lock (locker)
+            {
+                // Check our pending requests for one with a matching request code
+                foreach (var kvp in requests)
+                {
+                    if (kvp.Value.Item1 == requestCode)
+                    {
+                        var tcs = kvp.Value.Item2;
+
+                        // Look for any denied requests, and deny the whole request if so
+                        // Remember, each PermissionType is tied to 1 or more android permissions
+                        // so if any android permissions denied the whole PermissionType is considered denied
+                        if (grantResults.Any(g => g == Permission.Denied))
+                            tcs.TrySetResult(PermissionStatus.Denied);
+                        else
+                            tcs.TrySetResult(PermissionStatus.Granted);
+                        break;
+                    }
+                }
+            }
         }
     }
 
