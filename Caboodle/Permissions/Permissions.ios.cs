@@ -29,7 +29,7 @@ namespace Microsoft.Caboodle
                     return Task.FromResult(GetLocationStatus());
             }
 
-            return Task.FromResult(PermissionStatus.Unknown);
+            return Task.FromResult(PermissionStatus.Granted);
         }
 
         static Task<PermissionStatus> PlatformRequestAsync(PermissionType permission)
@@ -42,7 +42,7 @@ namespace Microsoft.Caboodle
                     return RequestLocationAsync();
             }
 
-            return Task.FromResult(PermissionStatus.Unknown);
+            return Task.FromResult(PermissionStatus.Granted);
         }
 
         static void EnsureLocationPermissionDeclared(PermissionType permission)
