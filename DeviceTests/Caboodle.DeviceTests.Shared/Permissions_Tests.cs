@@ -12,16 +12,22 @@ namespace Caboodle.DeviceTests
         [Theory]
         [InlineData(PermissionType.Battery)]
         [InlineData(PermissionType.NetworkState)]
-        [InlineData(PermissionType.LocationWhenInUse)]
         internal void Ensure_Declared(PermissionType permission)
         {
             Permissions.EnsureDeclared(permission);
         }
 
         [Theory]
+        [InlineData(PermissionType.LocationWhenInUse)]
+        internal void Ensure_Declared_Throws(PermissionType permission)
+        {
+            Assert.Throws<PermissionException>(() => Permissions.EnsureDeclared(permission));
+        }
+
+        [Theory]
         [InlineData(PermissionType.Battery, PermissionStatus.Granted)]
         [InlineData(PermissionType.NetworkState, PermissionStatus.Granted)]
-        [InlineData(PermissionType.LocationWhenInUse, PermissionStatus.Granted)]
+        [InlineData(PermissionType.LocationWhenInUse, PermissionStatus.Denied)]
         internal async Task Check_Status(PermissionType permission, PermissionStatus expectedStatus)
         {
             var status = await Permissions.CheckStatusAsync(permission);
