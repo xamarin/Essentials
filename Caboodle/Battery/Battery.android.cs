@@ -16,7 +16,7 @@ namespace Microsoft.Caboodle
             if (hasBatteryStatsPermission)
                 return;
 
-            Permissions.EnsureDeclaredAsync(PermissionType.Battery);
+            Permissions.EnsureDeclared(PermissionType.Battery);
 
             hasBatteryStatsPermission = true;
         }

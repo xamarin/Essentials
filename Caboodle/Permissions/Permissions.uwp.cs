@@ -13,23 +13,23 @@ namespace Microsoft.Caboodle
         const string appManifestFilename = "AppxManifest.xml";
         const string appManifestXmlns = "http://schemas.microsoft.com/appx/manifest/foundation/windows10";
 
-        static Task PlatformEnsureDeclaredAsync(PermissionType permission)
+        static void PlatformEnsureDeclared(PermissionType permission)
         {
             var uwpCapabilities = permission.ToUWPCapabilities();
 
+            // If no actual UWP capabilities are required here, just return
             if (uwpCapabilities == null || !uwpCapabilities.Any())
-                return Task.CompletedTask;
+                return;
 
             var doc = XDocument.Load(appManifestFilename, LoadOptions.None);
             var xname = XNamespace.Get(appManifestXmlns);
 
             foreach (var cap in uwpCapabilities)
             {
+                // If the manifest doesn't contain a capability we need, throw
                 if (!doc.Root.XPathSelectElements($"//{xname}Capabilities[@Name='{cap}'")?.Any() ?? false)
                     throw new PermissionException($"You need to declare the capability `{cap}` in your AppxManifest.xml file");
             }
-
-            return Task.CompletedTask;
         }
 
         static Task<PermissionStatus> PlatformCheckStatusAsync(PermissionType permission)

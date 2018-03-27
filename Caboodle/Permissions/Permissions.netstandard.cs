@@ -6,7 +6,7 @@ namespace Microsoft.Caboodle
 {
     internal static partial class Permissions
     {
-        static Task PlatformEnsureDeclaredAsync(PermissionType permission) =>
+        static void PlatformEnsureDeclared(PermissionType permission) =>
             throw new NotImplementedInReferenceAssemblyException();
 
         static Task<PermissionStatus> PlatformCheckStatusAsync(PermissionType permission) =>

@@ -22,7 +22,7 @@ namespace Microsoft.Caboodle
                 return;
 
             // Make sure the manifest has declared this permission
-            Permissions.EnsureDeclaredAsync(PermissionType.NetworkState);
+            Permissions.EnsureDeclared(PermissionType.NetworkState);
 
             hasPermission = true;
         }

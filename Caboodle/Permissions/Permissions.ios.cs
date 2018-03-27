@@ -9,7 +9,7 @@ namespace Microsoft.Caboodle
 {
     internal static partial class Permissions
     {
-        static Task PlatformEnsureDeclaredAsync(PermissionType permission)
+        static void PlatformEnsureDeclared(PermissionType permission)
         {
             switch (permission)
             {
@@ -17,8 +17,6 @@ namespace Microsoft.Caboodle
                     EnsureLocationPermissionDeclared(permission);
                     break;
             }
-
-            return Task.CompletedTask;
         }
 
         static Task<PermissionStatus> PlatformCheckStatusAsync(PermissionType permission)

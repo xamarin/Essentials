@@ -13,12 +13,13 @@ namespace Microsoft.Caboodle
     {
         static TaskCompletionSource<PermissionStatus> tcs;
 
-        static Task PlatformEnsureDeclaredAsync(PermissionType permission)
+        static void PlatformEnsureDeclared(PermissionType permission)
         {
             var androidPermissions = permission.ToAndroidPermissions();
 
+            // No actual android permissions required here, just return
             if (androidPermissions == null || !androidPermissions.Any())
-                return Task.CompletedTask;
+                return;
 
             var context = Platform.CurrentContext;
 
@@ -27,16 +28,15 @@ namespace Microsoft.Caboodle
                 var packageInfo = context.PackageManager.GetPackageInfo(context.PackageName, PackageInfoFlags.Permissions);
                 var requestedPermissions = packageInfo?.RequestedPermissions;
 
+                // If the manifest is missing any of the permissions we need, throw
                 if (!requestedPermissions?.Any(r => r.Equals(ap, StringComparison.OrdinalIgnoreCase)) ?? false)
                     throw new PermissionException($"You need to declare the permission: `{ap}` in your AndroidManifest.xml");
             }
-
-            return Task.CompletedTask;
         }
 
         static Task<PermissionStatus> PlatformCheckStatusAsync(PermissionType permission)
         {
-            PlatformEnsureDeclaredAsync(permission);
+            PlatformEnsureDeclared(permission);
 
             var androidPermissions = permission.ToAndroidPermissions();
 
