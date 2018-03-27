@@ -12,6 +12,7 @@ namespace Microsoft.Caboodle
     internal static partial class Permissions
     {
         static readonly object locker = new object();
+        static int requestCode = 0;
 
         static Dictionary<PermissionType, (int requestCode, TaskCompletionSource<PermissionStatus> tcs)> requests =
             new Dictionary<PermissionType, (int, TaskCompletionSource<PermissionStatus>)>();
@@ -76,7 +77,6 @@ namespace Microsoft.Caboodle
 
             TaskCompletionSource<PermissionStatus> tcs;
             var doRequest = true;
-            var requestCode = 0;
 
             lock (locker)
             {
