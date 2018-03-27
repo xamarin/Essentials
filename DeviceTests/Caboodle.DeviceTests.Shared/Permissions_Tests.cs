@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.Caboodle;
 using Xunit;
 
+#if __ANDROID__
+[assembly: Android.App.UsesPermission(Android.Manifest.Permission.BatteryStats)]
+#endif
+
 namespace Caboodle.DeviceTests
 {
     public class Permissions_Tests
