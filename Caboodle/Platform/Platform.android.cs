@@ -29,6 +29,9 @@ namespace Microsoft.Caboodle
         public static void Init(Activity activity, Bundle bundle) =>
            Init(activity.Application);
 
+        public static void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults) =>
+            Permissions.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
         internal static bool IsIntentSupported(Intent intent)
         {
             var manager = CurrentContext.PackageManager;

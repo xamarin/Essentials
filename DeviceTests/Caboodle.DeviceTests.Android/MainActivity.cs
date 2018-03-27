@@ -39,5 +39,12 @@ namespace Caboodle.DeviceTests.Droid
             // you cannot add more assemblies once calling base
             base.OnCreate(bundle);
         }
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
+        {
+            Microsoft.Caboodle.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 }
