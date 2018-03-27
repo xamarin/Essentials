@@ -11,6 +11,10 @@ namespace Microsoft.Caboodle
     {
         static void PlatformEnsureDeclared(PermissionType permission)
         {
+            // Info.plist declarations were only required in >= iOS 8.0
+            if (!Platform.HasOSVersion(8, 0))
+                return;
+
             var info = NSBundle.MainBundle.InfoDictionary;
 
             if (permission == PermissionType.LocationWhenInUse)
@@ -53,7 +57,7 @@ namespace Microsoft.Caboodle
 
             var status = CLLocationManager.Status;
 
-            if (UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
+            if (Platform.HasOSVersion(8, 0))
             {
                 switch (status)
                 {
