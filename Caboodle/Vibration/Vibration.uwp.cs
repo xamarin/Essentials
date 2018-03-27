@@ -7,27 +7,18 @@ namespace Microsoft.Caboodle
     public static partial class Vibration
     {
         internal static bool IsSupported
-        {
-            get
-            {
-                if (ApiInformation.IsTypePresent("Windows.Phone.Devices.Notification.VibrationDevice"))
-                {
-                    return VibrationDevice.GetDefault() != null;
-                }
-                return false;
-            }
-        }
+            => ApiInformation.IsTypePresent("Windows.Phone.Devices.Notification.VibrationDevice") && DefaultDevice != null;
+
+        static VibrationDevice DefaultDevice => VibrationDevice.GetDefault();
 
         static void PlatformVibrate(TimeSpan duration)
         {
-            var device = VibrationDevice.GetDefault();
-            device.Vibrate(duration);
+            DefaultDevice.Vibrate(duration);
         }
 
         static void PlatformCancel()
         {
-            var device = VibrationDevice.GetDefault();
-            device.Cancel();
+            DefaultDevice.Cancel();
         }
     }
 }
