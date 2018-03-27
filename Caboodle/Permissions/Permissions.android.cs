@@ -18,7 +18,7 @@ namespace Microsoft.Caboodle
 
         static void PlatformEnsureDeclared(PermissionType permission)
         {
-            var androidPermissions = permission.ToAndroidPermissions();
+            var androidPermissions = permission.ToAndroidPermissions(onlyRuntimePermissions: false);
 
             // No actual android permissions required here, just return
             if (androidPermissions == null || !androidPermissions.Any())
@@ -43,7 +43,8 @@ namespace Microsoft.Caboodle
 
             // If there are no android permissions for the given permission type
             // just return granted since we have none to ask for
-            var androidPermissions = permission.ToAndroidPermissions();
+            var androidPermissions = permission.ToAndroidPermissions(onlyRuntimePermissions: true);
+
             if (androidPermissions == null || !androidPermissions.Any())
                 return Task.FromResult(PermissionStatus.Granted);
 
@@ -99,7 +100,7 @@ namespace Microsoft.Caboodle
             if (!doRequest)
                 return await tcs.Task;
 
-            var androidPermissions = permission.ToAndroidPermissions().ToArray();
+            var androidPermissions = permission.ToAndroidPermissions(onlyRuntimePermissions: true).ToArray();
 
             ActivityCompat.RequestPermissions(Platform.CurrentActivity, androidPermissions, requestCode);
 
@@ -133,19 +134,32 @@ namespace Microsoft.Caboodle
 
     internal static class PermissionTypeExtensions
     {
-        internal static string[] ToAndroidPermissions(this PermissionType permissionType)
+        internal static IEnumerable<string> ToAndroidPermissions(this PermissionType permissionType, bool onlyRuntimePermissions)
         {
+            var permissions = new List<(string permission, bool runtimePermission)>();
+
             switch (permissionType)
             {
                 case PermissionType.Battery:
-                    return new[] { Manifest.Permission.BatteryStats };
+                    permissions.Add((Manifest.Permission.BatteryStats, false));
+                    break;
                 case PermissionType.LocationWhenInUse:
-                    return new[] { Manifest.Permission.AccessFineLocation, Manifest.Permission.AccessCoarseLocation };
+                    permissions.Add((Manifest.Permission.AccessFineLocation, true));
+                    permissions.Add((Manifest.Permission.AccessCoarseLocation, true));
+                    break;
                 case PermissionType.NetworkState:
-                    return new[] { Manifest.Permission.AccessNetworkState };
+                    permissions.Add((Manifest.Permission.AccessNetworkState, false));
+                    break;
             }
 
-            return null;
+            if (onlyRuntimePermissions)
+            {
+                return permissions
+                    .Where(p => p.runtimePermission)
+                    .Select(p => p.permission);
+            }
+
+            return permissions.Select(p => p.permission);
         }
     }
 }
