@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Core;
 using Windows.Devices.Enumeration;
 using Windows.Devices.Lights;
 
@@ -12,71 +9,75 @@ namespace Microsoft.Caboodle
 {
     public static partial class Flashlight
     {
+        static readonly object locker = new object();
+        static bool hasLoadedLamp;
         static Lamp lamp;
 
-        /// <summary>
-        /// Flashlight constructor
-        /// </summary>
-        /// <see cref="https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/camera-independent-flashlight"/>
-        static Flashlight()
+        static async Task FindLampAsync()
         {
-            InitializeComponent();
+            // fail fast
+            if (hasLoadedLamp)
+                return;
 
-            return;
-        }
+            Monitor.Enter(locker);
 
-        private static void InitializeComponent()
-        {
-            var task1 = Task.Run<Lamp>(async () => await Lamp.GetDefaultAsync());
+            // we may have loaded it while this was waiting to enter
+            if (hasLoadedLamp)
+                return;
 
-            var task2 = Task.Run<Lamp>(async () =>
+            // find all the lamps
+            var selector = Lamp.GetDeviceSelector();
+            var allLamps = await DeviceInformation.FindAllAsync(selector);
+
+            // find all the back lamps
+            var lampInfo = allLamps.FirstOrDefault(di => di.EnclosureLocation?.Panel == Panel.Back);
+
+            if (lampInfo != null)
             {
-                var selectorString = Lamp.GetDeviceSelector();
-                var devices = Task.Run(async () => await DeviceInformation.FindAllAsync(selectorString));
-
-                var deviceInfo =
-                    devices.Result.FirstOrDefault(di => di.EnclosureLocation != null &&
-                        di.EnclosureLocation.Panel == Windows.Devices.Enumeration.Panel.Back);
-
-                if (deviceInfo == null)
-                {
-                    throw new FlashlightException();
-                }
-
-                return await Lamp.FromIdAsync(deviceInfo.Id);
-            });
-
-            if (task1.Result != null)
-            {
-                lamp = task1.Result;
+                // get the lamp
+                lamp = await Lamp.FromIdAsync(lampInfo.Id);
             }
             else
             {
-                if (task2.Result != null)
+                // if there is no back lamp, use the default lamp
+                lamp = await Lamp.GetDefaultAsync();
+            }
+
+            hasLoadedLamp = true;
+            Monitor.Exit(locker);
+        }
+
+        public static async Task TurnOnAsync()
+        {
+            await FindLampAsync();
+
+            if (lamp == null)
+                throw new FeatureNotSupportedException();
+
+            lock (locker)
+            {
+                if (lamp != null)
                 {
-                    lamp = task2.Result;
+                    lamp.BrightnessLevel = 1.0f;
+                    lamp.IsEnabled = true;
                 }
-                else
+            }
+        }
+
+        public static Task TurnOffAsync()
+        {
+            lock (locker)
+            {
+                if (lamp != null)
                 {
-                    throw new FlashlightException("Flashlight/Lamp not found or cannot be used");
+                    lamp.IsEnabled = false;
+                    lamp.Dispose();
+                    lamp = null;
+                    hasLoadedLamp = false;
                 }
             }
 
-            return;
-        }
-
-        public static void On()
-        {
-            lamp.IsEnabled = true;
-
-            return;
-        }
-
-        public static void Off()
-        {
-            lamp.IsEnabled = false;
-
-            return;
+            return Task.CompletedTask;
         }
     }
 }

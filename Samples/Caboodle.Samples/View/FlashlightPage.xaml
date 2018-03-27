@@ -9,12 +9,17 @@
     </ContentPage.BindingContext>
 
     <StackLayout>
-        <Label Text="Flashlight" FontAttributes="Bold" Margin="12" />
+        <Label Text="A simple way to turn the flashlight on/off" FontAttributes="Bold" Margin="12" />
 
         <ScrollView>
             <StackLayout Padding="12,0,12,12" Spacing="6">
-                <Switch IsEnabled="{Binding IsNotBusy}"/>
-                <Button Text="{Binding TextFlashlight}" Command="{Binding ToggleCommand}" IsEnabled="{Binding IsNotBusy}"/>
+                <Button Text="Toggle Flashlight" Command="{Binding ToggleCommand}" />
+                <Label Text="Flashlight is on." FontAttributes="Italic"
+                       IsVisible="{Binding IsOn}" />
+                <Label Text="Flashlight is off." FontAttributes="Italic"
+                       IsVisible="{Binding IsOn, Converter={StaticResource NegativeConverter}}" />
+                <Label Text="Flashlight is not supported." TextColor="Red" FontAttributes="Italic"
+                       IsVisible="{Binding IsSupported, Converter={StaticResource NegativeConverter}}" />
             </StackLayout>
         </ScrollView>
     </StackLayout>

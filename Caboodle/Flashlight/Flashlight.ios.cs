@@ -1,56 +1,53 @@
-﻿using AVFoundation;
-using Foundation;
-using UIKit;
+﻿using System.Threading.Tasks;
+using AVFoundation;
 
 namespace Microsoft.Caboodle
 {
     public static partial class Flashlight
     {
-        /// <summary>
-        /// Flashlight constructor
-        /// </summary>
-        static Flashlight()
+        static AVCaptureDevice device;
+        static bool hasLoadedDevice;
+
+        public static Task TurnOnAsync()
         {
-            InitializeComponent();
-
-            return;
-        }
-
-        private static AVCaptureDevice device;
-
-        private static void InitializeComponent()
-        {
-            device = AVCaptureDevice.GetDefaultDevice(AVMediaType.Video);
+            FindDevice();
             if (device == null)
+                throw new FeatureNotSupportedException();
+
+            device.SetTorchModeLevel(AVCaptureDevice.MaxAvailableTorchLevel, out var error);
+            device.FlashMode = AVCaptureFlashMode.On;
+
+            return Task.CompletedTask;
+        }
+
+        public static Task TurnOffAsync()
+        {
+            if (device != null)
             {
-                throw new FlashlightException("Flashlight/Lamp not found or cannot be used");
+                device.TorchMode = AVCaptureTorchMode.Off;
+                device.FlashMode = AVCaptureFlashMode.Off;
             }
 
-            NSError error = null;
-            device.LockForConfiguration(out error);
-            if (error != null)
-            {
-                device.UnlockForConfiguration();
+            return Task.CompletedTask;
+        }
+
+        static void FindDevice()
+        {
+            if (hasLoadedDevice)
                 return;
+
+            var captureDevice = AVCaptureDevice.GetDefaultDevice(AVMediaType.Video);
+            if (captureDevice != null)
+            {
+                captureDevice.LockForConfiguration(out var error);
+                if (error == null)
+                {
+                    device = captureDevice;
+                }
+                captureDevice.UnlockForConfiguration();
             }
 
-            return;
-        }
-
-        public static void On()
-        {
-            device.TorchMode = AVCaptureTorchMode.On;
-            device.UnlockForConfiguration();
-
-            return;
-        }
-
-        public static void Off()
-        {
-            device.TorchMode = AVCaptureTorchMode.Off;
-            device.UnlockForConfiguration();
-
-            return;
+            hasLoadedDevice = true;
         }
     }
 }

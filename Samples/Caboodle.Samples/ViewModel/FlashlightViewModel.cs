@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Microsoft.Caboodle;
 using Xamarin.Forms;
 
@@ -9,51 +6,62 @@ namespace Caboodle.Samples.ViewModel
 {
     public class FlashlightViewModel : BaseViewModel
     {
+        private bool isOn;
+        private bool isSupported = true;
+
         public FlashlightViewModel()
         {
-            ToggleCommand = new Command(OnTurnOnOffAsync);
-
-            // switchFlashlight
+            ToggleCommand = new Command(OnToggle);
         }
 
         public ICommand ToggleCommand { get; }
 
-        string textflashlight = "Off";
-
-        public string TextFlashlight
+        public bool IsOn
         {
-            get => textflashlight;
-            set => SetProperty(ref textflashlight, value);
+            get => isOn;
+            set => SetProperty(ref isOn, value);
         }
 
-        async void OnTurnOnOffAsync()
+        public bool IsSupported
         {
-            if (IsBusy)
-                return;
+            get => isSupported;
+            set => SetProperty(ref isSupported, value);
+        }
 
-            IsBusy = true;
+        async void OnToggle()
+        {
             try
             {
-                if (TextFlashlight == "On")
+                if (IsOn)
                 {
-                    await Task.Run(() => Flashlight.Off());
-                    TextFlashlight = "Off";
+                    await Flashlight.TurnOffAsync();
+                    IsOn = false;
                 }
-                else if (TextFlashlight == "Off")
+                else
                 {
-                    await Task.Run(() => Flashlight.On());
-                    TextFlashlight = "On";
+                    await Flashlight.TurnOnAsync();
+                    IsOn = true;
                 }
             }
-            catch (Exception)
+            catch (FeatureNotSupportedException)
             {
+                IsSupported = false;
             }
-            finally
+        }
+
+        public override void OnDisappearing()
+        {
+            try
             {
-                IsBusy = false;
+                Flashlight.TurnOffAsync();
+                IsOn = false;
+            }
+            catch (FeatureNotSupportedException)
+            {
+                IsSupported = false;
             }
 
-            return;
+            base.OnDisappearing();
         }
     }
 }

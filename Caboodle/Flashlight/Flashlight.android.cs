@@ -1,100 +1,120 @@
-﻿using System;
+﻿using System.Threading.Tasks;
 using Android;
-using Android.Content;
 using Android.Content.PM;
+using Android.Graphics;
 using Android.Hardware.Camera2;
 using Android.OS;
+
+using Camera = Android.Hardware.Camera;
 
 namespace Microsoft.Caboodle
 {
     public static partial class Flashlight
     {
-        private static CameraManager manager;
-        private static CameraCharacteristics characteristics;
-        private static string cameraid;
-        private static bool iscamerainfoavailable;
-        private static bool isfeaturecameraflashavailable;
+        static readonly object locker = new object();
+        static bool hasCameraPermission;
 
-        /// <summary>
-        /// Flashlight constructor
-        /// </summary>
-        static Flashlight()
+#pragma warning disable CS0618
+        static Camera camera;
+#pragma warning restore CS0618
+
+        internal static bool IsSupported
+            => Platform.HasSystemFeature(PackageManager.FeatureCameraFlash);
+
+        public static async Task TurnOnAsync()
         {
-            InitializeComponent();
+            ValidateCameraPermission();
 
-            return;
+            if (!IsSupported)
+                throw new FeatureNotSupportedException();
+
+            await ToggleTorchAsync(true);
         }
 
-        public static bool IsAvailable
+        public static async Task TurnOffAsync()
         {
-            get
+            ValidateCameraPermission();
+
+            if (!IsSupported)
+                throw new FeatureNotSupportedException();
+
+            await ToggleTorchAsync(false);
+            await ReleaseCameraAsync();
+        }
+
+        static void ValidateCameraPermission()
+        {
+            // TODO: request camera permissions for API Level >= 23
+
+            if (hasCameraPermission)
+                return;
+
+            var permission = Manifest.Permission.Camera;
+            if (!Platform.HasPermissionInManifest(permission))
+                throw new PermissionException(permission);
+
+            hasCameraPermission = true;
+        }
+
+        static Task ToggleTorchAsync(bool switchOn)
+        {
+            return Task.Run(() =>
             {
-                return isfeaturecameraflashavailable && iscamerainfoavailable;
-            }
-        }
-
-        private static void InitializeComponent()
-        {
-            isfeaturecameraflashavailable = Platform.CurrentActivity.ApplicationContext.
-                        PackageManager.HasSystemFeature(PackageManager.FeatureCameraFlash);
-            manager = Platform.CurrentActivity.GetSystemService(Context.CameraService) as CameraManager;
-            cameraid = manager.GetCameraIdList()[0];
-            characteristics = manager.GetCameraCharacteristics(cameraid);
-            iscamerainfoavailable = (bool)characteristics.Get(CameraCharacteristics.FlashInfoAvailable);
-
-            return;
-        }
-
-        private static bool flashon;
-
-        public static void On()
-        {
-            if (cameraid.Equals("1"))
-            {
-                // camera back
-                if (!flashon)
+                if (Platform.HasApiLevel(BuildVersionCodes.M))
                 {
-                    try
+                    var cameraManager = Platform.CameraManager;
+                    foreach (var id in cameraManager.GetCameraIdList())
                     {
-                        if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
+                        var hasFlash = cameraManager.GetCameraCharacteristics(id).Get(CameraCharacteristics.FlashInfoAvailable);
+                        if (Java.Lang.Boolean.True.Equals(hasFlash))
                         {
-                            manager.SetTorchMode(cameraid, true);
+                            cameraManager.SetTorchMode(id, switchOn);
+                            break;
                         }
                     }
-                    catch (Exception e)
-                    {
-                        throw new FlashlightException($"Flashlight On failed: {e.Message}");
-                    }
-                    flashon = true;
                 }
-            }
+                else
+                {
+                    lock (locker)
+                    {
+                        if (camera == null)
+                        {
+                            var camera = Camera.Open();
+                            if (Platform.HasApiLevel(BuildVersionCodes.Honeycomb))
+                            {
+                                // required for (at least) the Nexus 5
+                                camera.SetPreviewTexture(new SurfaceTexture(0));
+                            }
+                        }
 
-            return;
+                        var param = camera.GetParameters();
+#pragma warning disable CS0618
+                        param.FlashMode = switchOn ? Camera.Parameters.FlashModeTorch : Camera.Parameters.FlashModeOff;
+#pragma warning restore CS0618
+                        camera.SetParameters(param);
+                        camera.StartPreview();
+                    }
+                }
+            });
         }
 
-        public static void Off()
+        static async Task ReleaseCameraAsync()
         {
-            if (cameraid.Equals("1"))
+            await Task.Run(() =>
             {
-                // camera back
-                if (!flashon)
+                lock (locker)
                 {
-                    try
+                    if (camera != null)
                     {
-                        if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
-                        {
-                            manager.SetTorchMode(cameraid, true);
-                        }
+                        camera.StopPreview();
+                        camera.SetPreviewCallback(null);
+                        camera.Unlock();
+                        camera.Release();
+                        camera.Dispose();
+                        camera = null;
                     }
-                    catch (Exception e)
-                    {
-                        throw new FlashlightException($"Flashlight On failed: {e.Message}");
-                    }
-                    flashon = true;
                 }
-            }
-
-            return;
+            });
         }
     }
 }
