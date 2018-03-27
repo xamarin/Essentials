@@ -99,20 +99,19 @@ namespace Microsoft.Caboodle
 
             var locationManager = new CLLocationManager();
 
-            EventHandler<CLAuthorizationChangedEventArgs> authCallback = null;
             var tcs = new TaskCompletionSource<PermissionStatus>();
 
-            authCallback = (sender, e) =>
+            void AuthCallback(object sender, CLAuthorizationChangedEventArgs e)
             {
                 if (e.Status == CLAuthorizationStatus.NotDetermined)
                     return;
 
-                locationManager.AuthorizationChanged -= authCallback;
+                locationManager.AuthorizationChanged -= AuthCallback;
 
                 tcs.TrySetResult(GetLocationStatus());
-            };
+            }
 
-            locationManager.AuthorizationChanged += authCallback;
+            locationManager.AuthorizationChanged += AuthCallback;
 
             locationManager.RequestWhenInUseAuthorization();
 
