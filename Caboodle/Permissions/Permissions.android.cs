@@ -13,8 +13,8 @@ namespace Microsoft.Caboodle
     {
         static readonly object locker = new object();
 
-        static Dictionary<PermissionType, Tuple<int, TaskCompletionSource<PermissionStatus>>> requests =
-            new Dictionary<PermissionType, Tuple<int, TaskCompletionSource<PermissionStatus>>>();
+        static Dictionary<PermissionType, (int requestCode, TaskCompletionSource<PermissionStatus> tcs)> requests =
+            new Dictionary<PermissionType, (int, TaskCompletionSource<PermissionStatus>)>();
 
         static void PlatformEnsureDeclared(PermissionType permission)
         {
@@ -81,7 +81,7 @@ namespace Microsoft.Caboodle
             {
                 if (requests.ContainsKey(permission))
                 {
-                    tcs = requests[permission].Item2;
+                    tcs = requests[permission].tcs;
                     doRequest = false;
                 }
                 else
@@ -92,7 +92,7 @@ namespace Microsoft.Caboodle
                     if (++requestCode >= int.MaxValue)
                         requestCode = 1;
 
-                    requests.Add(permission, Tuple.Create(requestCode, tcs));
+                    requests.Add(permission, (requestCode, tcs));
                 }
             }
 
@@ -113,9 +113,9 @@ namespace Microsoft.Caboodle
                 // Check our pending requests for one with a matching request code
                 foreach (var kvp in requests)
                 {
-                    if (kvp.Value.Item1 == requestCode)
+                    if (kvp.Value.requestCode == requestCode)
                     {
-                        var tcs = kvp.Value.Item2;
+                        var tcs = kvp.Value.tcs;
 
                         // Look for any denied requests, and deny the whole request if so
                         // Remember, each PermissionType is tied to 1 or more android permissions
