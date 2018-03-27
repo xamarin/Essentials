@@ -47,12 +47,12 @@ namespace Microsoft.Caboodle
             if (androidPermissions == null || !androidPermissions.Any())
                 return Task.FromResult(PermissionStatus.Granted);
 
-            var hasApiM = Platform.HasApiLevel(Android.OS.BuildVersionCodes.M);
             var context = Platform.CurrentContext;
+            var targetsMOrHigher = context.ApplicationInfo.TargetSdkVersion >= Android.OS.BuildVersionCodes.M;
 
             foreach (var ap in androidPermissions)
             {
-                if (hasApiM)
+                if (targetsMOrHigher)
                 {
                     if (context.CheckSelfPermission(ap) != Permission.Granted)
                         return Task.FromResult(PermissionStatus.Denied);
