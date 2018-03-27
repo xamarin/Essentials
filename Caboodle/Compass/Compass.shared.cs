@@ -64,7 +64,7 @@ namespace Microsoft.Caboodle
 
     public struct CompassData
     {
-        public CompassData(double headingMagneticNorth)
+        internal CompassData(double headingMagneticNorth)
         {
             HeadingMagneticNorth = headingMagneticNorth;
         }

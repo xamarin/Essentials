@@ -8,6 +8,7 @@ namespace Caboodle.Tests
     {
         public Compass_Tests()
         {
+            Compass.StopMonitor();
             Compass.DisposeToken();
         }
 

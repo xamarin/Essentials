@@ -15,9 +15,6 @@ namespace Microsoft.Caboodle
 
         internal static void PlatformMonitor(SensorSpeed sensorSpeed, Action<CompassData> handler)
         {
-            PreMonitorValidation();
-            CreateToken();
-
             var delay = SensorDelay.Normal;
             var useSyncContext = false;
             switch (sensorSpeed)
