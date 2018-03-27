@@ -11,17 +11,18 @@ namespace Microsoft.Caboodle
     {
         static void PlatformEnsureDeclared(PermissionType permission)
         {
-            switch (permission)
+            var info = NSBundle.MainBundle.InfoDictionary;
+
+            if (permission == PermissionType.LocationWhenInUse)
             {
-                case PermissionType.LocationWhenInUse:
-                    EnsureLocationPermissionDeclared(permission);
-                    break;
+                if (!info.ContainsKey(new NSString("NSLocationWhenInUseUsageDescription")))
+                    throw new PermissionException("On iOS 8.0 and higher you must set either `NSLocationWhenInUseUsageDescription` or `NSLocationAlwaysUsageDescription` in your Info.plist file to enable Authorization Requests for Location updates!");
             }
         }
 
         static Task<PermissionStatus> PlatformCheckStatusAsync(PermissionType permission)
         {
-            EnsureLocationPermissionDeclared(permission);
+            PlatformEnsureDeclared(permission);
 
             switch (permission)
             {
@@ -34,7 +35,7 @@ namespace Microsoft.Caboodle
 
         static Task<PermissionStatus> PlatformRequestAsync(PermissionType permission)
         {
-            EnsureLocationPermissionDeclared(permission);
+            PlatformEnsureDeclared(permission);
 
             switch (permission)
             {
@@ -43,17 +44,6 @@ namespace Microsoft.Caboodle
             }
 
             return Task.FromResult(PermissionStatus.Granted);
-        }
-
-        static void EnsureLocationPermissionDeclared(PermissionType permission)
-        {
-            var info = NSBundle.MainBundle.InfoDictionary;
-
-            if (permission == PermissionType.LocationWhenInUse)
-            {
-                if (!info.ContainsKey(new NSString("NSLocationWhenInUseUsageDescription")))
-                    throw new PermissionException("On iOS 8.0 and higher you must set either `NSLocationWhenInUseUsageDescription` or `NSLocationAlwaysUsageDescription` in your Info.plist file to enable Authorization Requests for Location updates!");
-            }
         }
 
         static PermissionStatus GetLocationStatus()
