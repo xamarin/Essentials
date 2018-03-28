@@ -3,7 +3,7 @@ using System.Linq;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
-using Android.Hardware;
+using Android.Hardware.Camera2;
 using Android.Net;
 using Android.Net.Wifi;
 using Android.OS;
@@ -33,6 +33,19 @@ namespace Microsoft.Caboodle
         public static void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults) =>
             Permissions.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        internal static bool HasSystemFeature(string systemFeature)
+        {
+            var packageManager = CurrentContext.PackageManager;
+            foreach (var feature in packageManager.GetSystemAvailableFeatures())
+            {
+                if (feature.Name.Equals(systemFeature, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         internal static bool IsIntentSupported(Intent intent)
         {
             var manager = CurrentContext.PackageManager;
@@ -53,8 +66,8 @@ namespace Microsoft.Caboodle
             handler.Post(action);
         }
 
-        internal static ClipboardManager ClipboardManager =>
-            Application.Context.GetSystemService(Context.ClipboardService) as ClipboardManager;
+        internal static CameraManager CameraManager =>
+            Application.Context.GetSystemService(Context.CameraService) as CameraManager;
 
         internal static ConnectivityManager ConnectivityManager =>
             Application.Context.GetSystemService(Context.ConnectivityService) as ConnectivityManager;
