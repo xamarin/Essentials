@@ -73,6 +73,9 @@ namespace Microsoft.Caboodle
         internal static ConnectivityManager ConnectivityManager =>
             Application.Context.GetSystemService(Context.ConnectivityService) as ConnectivityManager;
 
+        internal static Vibrator Vibrator =>
+            (Vibrator)Application.Context.GetSystemService(Context.VibratorService);
+
         internal static WifiManager WifiManager =>
             Application.Context.GetSystemService(Context.WifiService) as WifiManager;
 
