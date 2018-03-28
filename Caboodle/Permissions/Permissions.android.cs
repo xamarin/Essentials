@@ -56,7 +56,7 @@ namespace Microsoft.Caboodle
             {
                 if (targetsMOrHigher)
                 {
-                    if (context.CheckSelfPermission(ap) != Permission.Granted)
+                    if (ContextCompat.CheckSelfPermission(context, ap) != Permission.Granted)
                         return Task.FromResult(PermissionStatus.Denied);
                 }
                 else
