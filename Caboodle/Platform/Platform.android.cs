@@ -3,6 +3,7 @@ using System.Linq;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.Hardware;
 using Android.Hardware.Camera2;
 using Android.Net;
 using Android.Net.Wifi;
