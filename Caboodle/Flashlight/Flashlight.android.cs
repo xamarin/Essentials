@@ -12,7 +12,6 @@ namespace Microsoft.Caboodle
     public static partial class Flashlight
     {
         static readonly object locker = new object();
-        static bool hasCameraPermission;
 
 #pragma warning disable CS0618
         static Camera camera;
@@ -23,7 +22,7 @@ namespace Microsoft.Caboodle
 
         public static async Task TurnOnAsync()
         {
-            ValidateCameraPermission();
+            await Permissions.RequireAsync(PermissionType.Flashlight);
 
             if (!IsSupported)
                 throw new FeatureNotSupportedException();
@@ -33,27 +32,13 @@ namespace Microsoft.Caboodle
 
         public static async Task TurnOffAsync()
         {
-            ValidateCameraPermission();
+            await Permissions.RequireAsync(PermissionType.Flashlight);
 
             if (!IsSupported)
                 throw new FeatureNotSupportedException();
 
             await ToggleTorchAsync(false);
             await ReleaseCameraAsync();
-        }
-
-        static void ValidateCameraPermission()
-        {
-            // TODO: request camera permissions for API Level >= 23
-
-            if (hasCameraPermission)
-                return;
-
-            var permission = Manifest.Permission.Camera;
-            if (!Platform.HasPermissionInManifest(permission))
-                throw new PermissionException(permission);
-
-            hasCameraPermission = true;
         }
 
         static Task ToggleTorchAsync(bool switchOn)
