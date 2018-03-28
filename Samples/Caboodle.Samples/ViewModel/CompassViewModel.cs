@@ -8,91 +8,28 @@ namespace Caboodle.Samples.ViewModel
 {
     class CompassViewModel : BaseViewModel
     {
+        bool compass1IsActive;
+        bool compass2IsActive;
+        double compass1;
+        double compass2;
+        int speed1 = 2;
+        int speed2 = 2;
+
         public CompassViewModel()
         {
-            Init();
+            StartCompass1Command = new Command(OnStartCompass1);
+            StopCompass1Command = new Command(OnStopCompass1);
+            StartCompass2Command = new Command(OnStartCompass2);
+            StopCompass2Command = new Command(OnStopCompass2);
         }
 
-        void Init()
-        {
-            StartCompass1Command = new Command(async () =>
-            {
-                try
-                {
-                    if (Compass.IsMonitoring)
-                        StopCompass2Command.Execute(null);
+        public ICommand StartCompass1Command { get; }
 
-                    Compass.Start((SensorSpeed)Speed1, (data) =>
-                    {
-                        switch ((SensorSpeed)Speed1)
-                        {
-                            case SensorSpeed.Fastest:
-                            case SensorSpeed.Game:
-                                Platform.BeginInvokeOnMainThread(() => { Compass1 = data.HeadingMagneticNorth; });
-                                break;
-                            default:
-                                Compass1 = data.HeadingMagneticNorth;
-                                break;
-                        }
-                    });
-                    Compass1IsActive = true;
-                }
-                catch (Exception)
-                {
-                    await DisplayAlert("Compass not supported");
-                }
-            });
+        public ICommand StopCompass1Command { get; }
 
-            StopCompass1Command = new Command(() =>
-            {
-                Compass1IsActive = false;
-                Compass.Stop();
-            });
+        public ICommand StartCompass2Command { get; }
 
-            StartCompass2Command = new Command(async () =>
-            {
-                try
-                {
-                    if (Compass.IsMonitoring)
-                        StopCompass1Command.Execute(null);
-
-                    Compass.Start((SensorSpeed)Speed2, (data) =>
-                    {
-                        switch ((SensorSpeed)Speed2)
-                        {
-                            case SensorSpeed.Fastest:
-                            case SensorSpeed.Game:
-                                Platform.BeginInvokeOnMainThread(() => { Compass2 = data.HeadingMagneticNorth; });
-                                break;
-                            default:
-                                Compass2 = data.HeadingMagneticNorth;
-                                break;
-                        }
-                    });
-                    Compass2IsActive = true;
-                }
-                catch (Exception)
-                {
-                    await DisplayAlert("Compass not supported");
-                }
-            });
-
-            StopCompass2Command = new Command(() =>
-            {
-                Compass2IsActive = false;
-                Compass.Stop();
-            });
-        }
-
-        public ICommand StartCompass1Command { get; private set; }
-
-        public ICommand StopCompass1Command { get; private set; }
-
-        public ICommand StartCompass2Command { get; private set; }
-
-        public ICommand StopCompass2Command { get; private set; }
-
-        bool compass1IsActive;
+        public ICommand StopCompass2Command { get; }
 
         public bool Compass1IsActive
         {
@@ -100,15 +37,11 @@ namespace Caboodle.Samples.ViewModel
             set => SetProperty(ref compass1IsActive, value);
         }
 
-        bool compass2IsActive;
-
         public bool Compass2IsActive
         {
             get => compass2IsActive;
             set => SetProperty(ref compass2IsActive, value);
         }
-
-        double compass1;
 
         public double Compass1
         {
@@ -116,23 +49,17 @@ namespace Caboodle.Samples.ViewModel
             set => SetProperty(ref compass1, value);
         }
 
-        double compass2;
-
         public double Compass2
         {
             get => compass2;
             set => SetProperty(ref compass2, value);
         }
 
-        int speed1 = 2;
-
         public int Speed1
         {
             get => speed1;
             set => SetProperty(ref speed1, value);
         }
-
-        int speed2 = 2;
 
         public int Speed2
         {
@@ -149,11 +76,80 @@ namespace Caboodle.Samples.ViewModel
                 "User Interface"
             };
 
+        async void OnStartCompass1()
+        {
+            try
+            {
+                if (Compass.IsMonitoring)
+                    OnStopCompass2();
+
+                Compass.Start((SensorSpeed)Speed1, (data) =>
+                {
+                    switch ((SensorSpeed)Speed1)
+                    {
+                        case SensorSpeed.Fastest:
+                        case SensorSpeed.Game:
+                            Platform.BeginInvokeOnMainThread(() => { Compass1 = data.HeadingMagneticNorth; });
+                            break;
+                        default:
+                            Compass1 = data.HeadingMagneticNorth;
+                            break;
+                    }
+                });
+                Compass1IsActive = true;
+            }
+            catch (Exception)
+            {
+                await DisplayAlert("Compass not supported");
+            }
+        }
+
+        void OnStopCompass1()
+        {
+            Compass1IsActive = false;
+            Compass.Stop();
+        }
+
+        async void OnStartCompass2()
+        {
+            try
+            {
+                if (Compass.IsMonitoring)
+                    OnStopCompass1();
+
+                Compass.Start((SensorSpeed)Speed2, (data) =>
+                {
+                    switch ((SensorSpeed)Speed2)
+                    {
+                        case SensorSpeed.Fastest:
+                        case SensorSpeed.Game:
+                            Platform.BeginInvokeOnMainThread(() => { Compass2 = data.HeadingMagneticNorth; });
+                            break;
+                        default:
+                            Compass2 = data.HeadingMagneticNorth;
+                            break;
+                    }
+                });
+                Compass2IsActive = true;
+            }
+            catch (Exception)
+            {
+                await DisplayAlert("Compass not supported");
+            }
+        }
+
+        void OnStopCompass2()
+        {
+            Compass2IsActive = false;
+            Compass.Stop();
+        }
+
         public override void OnDisappearing()
         {
+            OnStopCompass1();
+            OnStopCompass2();
+
             base.OnDisappearing();
-            StopCompass1Command.Execute(null);
-            StopCompass2Command.Execute(null);
         }
     }
 }
