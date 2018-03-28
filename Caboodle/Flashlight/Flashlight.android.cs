@@ -21,7 +21,9 @@ namespace Microsoft.Caboodle
         internal static bool IsSupported
             => Platform.HasSystemFeature(PackageManager.FeatureCameraFlash);
 
-        public static async Task TurnOnAsync()
+        internal static bool AlwaysUseCameraApi { get; set; } = false;
+
+        static async Task PlatformTurnOnAsync()
         {
             await Permissions.RequireAsync(PermissionType.Flashlight);
 
@@ -31,7 +33,7 @@ namespace Microsoft.Caboodle
             await ToggleTorchAsync(true);
         }
 
-        public static async Task TurnOffAsync()
+        static async Task PlatformTurnOffAsync()
         {
             await Permissions.RequireAsync(PermissionType.Flashlight);
 
@@ -47,7 +49,7 @@ namespace Microsoft.Caboodle
             {
                 lock (locker)
                 {
-                    if (Platform.HasApiLevel(BuildVersionCodes.M))
+                    if (Platform.HasApiLevel(BuildVersionCodes.M) && !AlwaysUseCameraApi)
                     {
                         var cameraManager = Platform.CameraManager;
                         foreach (var id in cameraManager.GetCameraIdList())

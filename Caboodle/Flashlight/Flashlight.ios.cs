@@ -5,14 +5,14 @@ namespace Microsoft.Caboodle
 {
     public static partial class Flashlight
     {
-        public static Task TurnOnAsync()
+        static Task PlatformTurnOnAsync()
         {
             Toggle(true);
 
             return Task.CompletedTask;
         }
 
-        public static Task TurnOffAsync()
+        static Task PlatformTurnOffAsync()
         {
             Toggle(false);
 

@@ -4,10 +4,10 @@ namespace Microsoft.Caboodle
 {
     public static partial class Flashlight
     {
-        public static Task TurnOnAsync() =>
+        static Task PlatformTurnOnAsync() =>
             throw new NotImplementedInReferenceAssemblyException();
 
-        public static Task TurnOffAsync() =>
+        static Task PlatformTurnOffAsync() =>
             throw new NotImplementedInReferenceAssemblyException();
     }
 }

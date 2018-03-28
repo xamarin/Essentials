@@ -47,7 +47,7 @@ namespace Microsoft.Caboodle
             Monitor.Exit(locker);
         }
 
-        public static async Task TurnOnAsync()
+        static async Task PlatformTurnOnAsync()
         {
             await FindLampAsync();
 
@@ -64,7 +64,7 @@ namespace Microsoft.Caboodle
             }
         }
 
-        public static Task TurnOffAsync()
+        static Task PlatformTurnOffAsync()
         {
             lock (locker)
             {
