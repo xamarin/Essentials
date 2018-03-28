@@ -5,6 +5,9 @@
 
 Output/
 
+# Cake tools
+tools/
+
 # User-specific files
 *.suo
 *.user
@@ -289,3 +292,4 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 **/*.DS_Store
+docs/en/ns-.xml

@@ -2,6 +2,7 @@
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using Android.Runtime;
 using Xunit.Runners.UI;
 
 namespace Caboodle.DeviceTests.Droid
@@ -11,6 +12,8 @@ namespace Caboodle.DeviceTests.Droid
     {
         protected override void OnCreate(Bundle bundle)
         {
+            Microsoft.Caboodle.Platform.Init(this, bundle);
+
             var hostIp = Intent.Extras?.GetString("HOST_IP", null);
             var hostPort = Intent.Extras?.GetInt("HOST_PORT", 10578) ?? 10578;
 
@@ -36,6 +39,13 @@ namespace Caboodle.DeviceTests.Droid
 
             // you cannot add more assemblies once calling base
             base.OnCreate(bundle);
+        }
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
+        {
+            Microsoft.Caboodle.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 }

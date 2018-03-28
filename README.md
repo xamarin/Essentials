@@ -28,22 +28,24 @@ The following cross-platform APIs are planned for our first release:
  - [x] Battery
  - [X] Clipboard
  - [ ] Compass
- - [ ] Connectivity
- - [ ] Device Capabilities
+ - [x] Connectivity
+ - [x] Data Transfer
  - [x] Device Information
  - [x] File System Helpers
  - [ ] Email
+ - [x] Flashlight
  - [x] Geocoding 
  - [ ] Geolocation 
  - [ ] Gyroscope
  - [ ] Magnetometer
- - [ ] Open Browser
- - [ ] Permissions
- - [ ] Phone Dialer
+ - [x] Open Browser
+ - [x] Phone Dialer
  - [x] Preferences
- - [ ] Share Text
- - [ ] SMS
+ - [x] Screen Lock
+ - [x] Secure Storage
+ - [x] SMS
  - [ ] Text-to-Speech
+ - [x] Vibrate
  
 ## Contributing
 Please read through our [Contribution Guide](CONTRIBUTING.md). We are not accepting new PRs for full features, however any issue that is marked as `up for grabs` are open for community contributions. We encourage creating new issues for bugs found during usage that the team will triage. Additionally, we are open for code refactoring suggestions in PRs.
