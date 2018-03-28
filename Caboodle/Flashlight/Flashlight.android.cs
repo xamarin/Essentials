@@ -16,6 +16,7 @@ namespace Microsoft.Caboodle
 #pragma warning disable CS0618
         static Camera camera;
 #pragma warning restore CS0618
+        static SurfaceTexture surface;
 
         internal static bool IsSupported
             => Platform.HasSystemFeature(PackageManager.FeatureCameraFlash);
@@ -38,38 +39,38 @@ namespace Microsoft.Caboodle
                 throw new FeatureNotSupportedException();
 
             await ToggleTorchAsync(false);
-            await ReleaseCameraAsync();
         }
 
         static Task ToggleTorchAsync(bool switchOn)
         {
             return Task.Run(() =>
             {
-                if (Platform.HasApiLevel(BuildVersionCodes.M))
+                lock (locker)
                 {
-                    var cameraManager = Platform.CameraManager;
-                    foreach (var id in cameraManager.GetCameraIdList())
+                    if (Platform.HasApiLevel(BuildVersionCodes.M))
                     {
-                        var hasFlash = cameraManager.GetCameraCharacteristics(id).Get(CameraCharacteristics.FlashInfoAvailable);
-                        if (Java.Lang.Boolean.True.Equals(hasFlash))
+                        var cameraManager = Platform.CameraManager;
+                        foreach (var id in cameraManager.GetCameraIdList())
                         {
-                            cameraManager.SetTorchMode(id, switchOn);
-                            break;
+                            var hasFlash = cameraManager.GetCameraCharacteristics(id).Get(CameraCharacteristics.FlashInfoAvailable);
+                            if (Java.Lang.Boolean.True.Equals(hasFlash))
+                            {
+                                cameraManager.SetTorchMode(id, switchOn);
+                                break;
+                            }
                         }
                     }
-                }
-                else
-                {
-                    lock (locker)
+                    else
                     {
                         if (camera == null)
                         {
-                            var camera = Camera.Open();
-                            if (Platform.HasApiLevel(BuildVersionCodes.Honeycomb))
-                            {
-                                // required for (at least) the Nexus 5
-                                camera.SetPreviewTexture(new SurfaceTexture(0));
-                            }
+                            if (surface == null)
+                                surface = new SurfaceTexture(0);
+
+                            camera = Camera.Open();
+
+                            // Nexus 5 and some devices require a preview texture
+                            camera.SetPreviewTexture(surface);
                         }
 
                         var param = camera.GetParameters();
@@ -77,26 +78,20 @@ namespace Microsoft.Caboodle
                         param.FlashMode = switchOn ? Camera.Parameters.FlashModeTorch : Camera.Parameters.FlashModeOff;
 #pragma warning restore CS0618
                         camera.SetParameters(param);
-                        camera.StartPreview();
-                    }
-                }
-            });
-        }
 
-        static async Task ReleaseCameraAsync()
-        {
-            await Task.Run(() =>
-            {
-                lock (locker)
-                {
-                    if (camera != null)
-                    {
-                        camera.StopPreview();
-                        camera.SetPreviewCallback(null);
-                        camera.Unlock();
-                        camera.Release();
-                        camera.Dispose();
-                        camera = null;
+                        if (switchOn)
+                        {
+                            camera.StartPreview();
+                        }
+                        else
+                        {
+                            camera.StopPreview();
+                            camera.Release();
+                            camera.Dispose();
+                            camera = null;
+                            surface.Dispose();
+                            surface = null;
+                        }
                     }
                 }
             });
