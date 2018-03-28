@@ -21,6 +21,11 @@ namespace Caboodle.DeviceTests
                 return;
 
             Flashlight.AlwaysUseCameraApi = oldCameraApi;
+#elif __IOS__
+            // TODO: remove this as soon as the test harness can filter
+            // the iOS simulator does not emulate a flashlight
+            if (DeviceInfo.DeviceType == DeviceType.Virtual && DeviceInfo.Platform == DeviceInfo.Platforms.iOS)
+                return;
 #endif
             await Flashlight.TurnOnAsync();
             await Flashlight.TurnOffAsync();
