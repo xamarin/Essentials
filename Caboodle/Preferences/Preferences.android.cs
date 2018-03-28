@@ -90,8 +90,6 @@ namespace Microsoft.Caboodle
         {
             lock (locker)
             {
-                var actualType = Type.GetTypeCode(typeof(T));
-
                 object value = null;
                 using (var sharedPreferences = GetSharedPreferences(sharedName))
                 {
