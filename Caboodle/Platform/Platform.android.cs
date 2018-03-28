@@ -78,6 +78,9 @@ namespace Microsoft.Caboodle
 
         internal static SensorManager SensorManager =>
             Application.Context.GetSystemService(Context.SensorService) as SensorManager;
+
+        internal static ClipboardManager ClipboardManager =>
+            Application.Context.GetSystemService(Context.ClipboardService) as ClipboardManager;
     }
 
     class ActivityLifecycleContextListener : Java.Lang.Object, Application.IActivityLifecycleCallbacks
