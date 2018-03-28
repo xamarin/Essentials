@@ -9,12 +9,10 @@ namespace Caboodle.DeviceTests
     {
         public Compass_Tests()
         {
-            Compass.StopMonitor();
+            Compass.Stop();
         }
 
         [Fact]
-        [Trait(Traits.DeviceType, Traits.DeviceTypes.Physical)]
-        [Trait(Traits.DeviceType, Traits.DeviceTypes.Virtual)]
         public void IsSupported()
         {
             if (DeviceInfo.DeviceType == DeviceType.Virtual && DeviceInfo.Platform == DeviceInfo.Platforms.iOS)
@@ -27,8 +25,6 @@ namespace Caboodle.DeviceTests
         }
 
         [Fact]
-        [Trait(Traits.DeviceType, Traits.DeviceTypes.Physical)]
-        [Trait(Traits.DeviceType, Traits.DeviceTypes.Virtual)]
         public void Monitor_Null_Handler()
         {
             if (DeviceInfo.DeviceType == DeviceType.Virtual && DeviceInfo.Platform == DeviceInfo.Platforms.iOS)
@@ -36,13 +32,11 @@ namespace Caboodle.DeviceTests
                 return;
             }
 
-            Assert.Throws<ArgumentNullException>(() => Compass.Monitor(SensorSpeed.Normal, null));
+            Assert.Throws<ArgumentNullException>(() => Compass.Start(SensorSpeed.Normal, null));
         }
 
         [Theory]
         [InlineData(SensorSpeed.Fastest)]
-        [Trait(Traits.DeviceType, Traits.DeviceTypes.Physical)]
-        [Trait(Traits.DeviceType, Traits.DeviceTypes.Virtual)]
         public async Task Monitor(SensorSpeed sensorSpeed)
         {
             if (DeviceInfo.DeviceType == DeviceType.Virtual && DeviceInfo.Platform == DeviceInfo.Platforms.iOS)
@@ -51,7 +45,7 @@ namespace Caboodle.DeviceTests
             }
 
             var tcs = new TaskCompletionSource<CompassData>();
-            Compass.Monitor(sensorSpeed, (data) =>
+            Compass.Start(sensorSpeed, (data) =>
             {
                 tcs.TrySetResult(data);
             });
@@ -63,8 +57,6 @@ namespace Caboodle.DeviceTests
 
         [Theory]
         [InlineData(SensorSpeed.Fastest)]
-        [Trait(Traits.DeviceType, Traits.DeviceTypes.Physical)]
-        [Trait(Traits.DeviceType, Traits.DeviceTypes.Virtual)]
         public async Task IsMonitoring(SensorSpeed sensorSpeed)
         {
             if (DeviceInfo.DeviceType == DeviceType.Virtual && DeviceInfo.Platform == DeviceInfo.Platforms.iOS)
@@ -73,20 +65,18 @@ namespace Caboodle.DeviceTests
             }
 
             var tcs = new TaskCompletionSource<CompassData>();
-            Compass.Monitor(sensorSpeed, (data) =>
+            Compass.Start(sensorSpeed, (data) =>
             {
                 tcs.TrySetResult(data);
             });
 
             var d = await tcs.Task;
             Assert.True(Compass.IsMonitoring);
-            Compass.StopMonitor();
+            Compass.Stop();
         }
 
         [Theory]
         [InlineData(SensorSpeed.Fastest)]
-        [Trait(Traits.DeviceType, Traits.DeviceTypes.Physical)]
-        [Trait(Traits.DeviceType, Traits.DeviceTypes.Virtual)]
         public async Task Stop_Monitor(SensorSpeed sensorSpeed)
         {
             if (DeviceInfo.DeviceType == DeviceType.Virtual && DeviceInfo.Platform == DeviceInfo.Platforms.iOS)
@@ -95,14 +85,14 @@ namespace Caboodle.DeviceTests
             }
 
             var tcs = new TaskCompletionSource<CompassData>();
-            Compass.Monitor(sensorSpeed, (data) =>
+            Compass.Start(sensorSpeed, (data) =>
             {
                 tcs.TrySetResult(data);
             });
 
             var d = await tcs.Task;
 
-            Compass.StopMonitor();
+            Compass.Stop();
 
             Assert.False(Compass.IsMonitoring);
         }

@@ -2,33 +2,42 @@
 using System.Threading;
 using Windows.Devices.Sensors;
 
+using WindowsCompass = Windows.Devices.Sensors.Compass;
+
 namespace Microsoft.Caboodle
 {
     public static partial class Compass
     {
+        // Magic numbers from https://docs.microsoft.com/en-us/uwp/api/windows.devices.sensors.compass.reportinterval#Windows_Devices_Sensors_Compass_ReportInterval
+        internal const uint FastestInterval = 8;
+        internal const uint GameInterval = 22;
+        internal const uint NormalInterval = 33;
+
+        internal static WindowsCompass DefaultCompass =>
+            WindowsCompass.GetDefault();
+
         internal static bool IsSupported =>
-            Windows.Devices.Sensors.Compass.GetDefault() != null;
+            DefaultCompass != null;
 
-        internal static void PlatformMonitor(SensorSpeed sensorSpeed, Action<CompassData> handler)
+        internal static void PlatformStart(SensorSpeed sensorSpeed, Action<CompassData> handler)
         {
+            var compass = DefaultCompass;
             var useSyncContext = false;
-
-            var compass = Windows.Devices.Sensors.Compass.GetDefault();
-
+            var interval = NormalInterval;
             switch (sensorSpeed)
             {
                 case SensorSpeed.Fastest:
-                    compass.ReportInterval = compass.MinimumReportInterval >= 8 ? 8 : compass.MinimumReportInterval;
+                    interval = FastestInterval;
                     break;
                 case SensorSpeed.Game:
-                    compass.ReportInterval = compass.MinimumReportInterval >= 22 ? 22 : compass.MinimumReportInterval;
+                    interval = GameInterval;
                     break;
-                case SensorSpeed.Normal:
-                case SensorSpeed.Ui:
-                    compass.ReportInterval = compass.MinimumReportInterval >= 33 ? 33 : compass.MinimumReportInterval;
+                default:
                     useSyncContext = true;
                     break;
             }
+
+            compass.ReportInterval = compass.MinimumReportInterval >= interval ? interval : compass.MinimumReportInterval;
 
             MonitorCTS.Token.Register(CancelledToken);
 

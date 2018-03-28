@@ -13,7 +13,7 @@ namespace Microsoft.Caboodle
             Platform.SensorManager?.GetDefaultSensor(SensorType.Accelerometer) != null &&
             Platform.SensorManager?.GetDefaultSensor(SensorType.MagneticField) != null;
 
-        internal static void PlatformMonitor(SensorSpeed sensorSpeed, Action<CompassData> handler)
+        internal static void PlatformStart(SensorSpeed sensorSpeed, Action<CompassData> handler)
         {
             var delay = SensorDelay.Normal;
             var useSyncContext = false;

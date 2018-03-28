@@ -8,7 +8,7 @@ namespace Microsoft.Caboodle
         public static bool IsMonitoring =>
             MonitorCTS != null && !MonitorCTS.IsCancellationRequested;
 
-        public static void Monitor(SensorSpeed sensorSpeed, Action<CompassData> handler)
+        public static void Start(SensorSpeed sensorSpeed, Action<CompassData> handler)
         {
             if (handler == null)
             {
@@ -17,10 +17,10 @@ namespace Microsoft.Caboodle
 
             PreMonitorValidation();
             CreateToken();
-            PlatformMonitor(sensorSpeed, handler);
+            PlatformStart(sensorSpeed, handler);
         }
 
-        public static void StopMonitor()
+        public static void Stop()
         {
             if (MonitorCTS == null)
                 return;

@@ -34,7 +34,7 @@
         </remarks>
       </Docs>
     </Member>
-    <Member MemberName="Monitor">
+    <Member MemberName="Start">
       <MemberSignature Language="C#" Value="public static void Monitor (Microsoft.Caboodle.SensorSpeed sensorSpeed, Action&lt;Microsoft.Caboodle.CompassData&gt; handler);" />
       <MemberSignature Language="ILAsm" Value=".method public static hidebysig void Monitor(valuetype Microsoft.Caboodle.SensorSpeed sensorSpeed, class System.Action`1&lt;valuetype Microsoft.Caboodle.CompassData&gt; handler) cil managed" />
       <MemberType>Method</MemberType>
@@ -55,7 +55,7 @@
         <remarks>Will throw FeatureNotSupportedException if not supported on device. Will throw InvalidOperationException if already monitoring. Will throw ArgumentNullException if handler is null.</remarks>
       </Docs>
     </Member>
-    <Member MemberName="StopMonitor">
+    <Member MemberName="Stop">
       <MemberSignature Language="C#" Value="public static void StopMonitor ();" />
       <MemberSignature Language="ILAsm" Value=".method public static hidebysig void StopMonitor() cil managed" />
       <MemberType>Method</MemberType>

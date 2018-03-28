@@ -8,7 +8,7 @@ namespace Caboodle.Tests
     {
         public Compass_Tests()
         {
-            Compass.StopMonitor();
+            Compass.Stop();
             Compass.DisposeToken();
         }
 
@@ -18,11 +18,11 @@ namespace Caboodle.Tests
 
         [Fact]
         public void Monitor_Null_Handler_On_NetStandard() =>
-            Assert.Throws<ArgumentNullException>(() => Compass.Monitor(SensorSpeed.Normal, null));
+            Assert.Throws<ArgumentNullException>(() => Compass.Start(SensorSpeed.Normal, null));
 
         [Fact]
         public void Monitor_On_NetStandard() =>
-            Assert.Throws<NotImplementedInReferenceAssemblyException>(() => Compass.Monitor(SensorSpeed.Normal, (data) => { }));
+            Assert.Throws<NotImplementedInReferenceAssemblyException>(() => Compass.Start(SensorSpeed.Normal, (data) => { }));
 
         [Fact]
         public void IsMonitoring_Default_On_NetStandard() =>
@@ -47,7 +47,7 @@ namespace Caboodle.Tests
         public void Stop_Monitor_NetStandard()
         {
             Compass.CreateToken();
-            Compass.StopMonitor();
+            Compass.Stop();
             Assert.False(Compass.IsMonitoring);
         }
     }

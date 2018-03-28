@@ -66,11 +66,6 @@
     <Compile Include="**\*.ios.cs" />
     <Compile Include="**\*.ios.*.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="Compass\Compass.netstandard.cs" />
-    <None Remove="Compass\Compass.shared.cs" />
-    <None Remove="Types\SensorSpeed.shared.cs" />
-  </ItemGroup>
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
   <Import Project="$(MSBuildThisFileDirectory)mdoc.targets" />
   <Import Project="$(MSBuildThisFileDirectory)..\CodeStyles.targets" />

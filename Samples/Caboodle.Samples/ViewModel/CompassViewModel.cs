@@ -10,6 +10,11 @@ namespace Caboodle.Samples.ViewModel
     {
         public CompassViewModel()
         {
+            Init();
+        }
+
+        void Init()
+        {
             StartCompass1Command = new Command(async () =>
             {
                 try

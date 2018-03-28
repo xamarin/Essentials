@@ -5,10 +5,16 @@ namespace Microsoft.Caboodle
 {
     public static partial class Compass
     {
+        // The angular distance is measured relative to the last delivered heading event. Align with UWP numbers
+        internal const double FastestFilter = .01;
+        internal const double GameFilter = .5;
+        internal const double NormalFilter = 1;
+        internal const double UiFilter = 2;
+
         internal static bool IsSupported =>
             CLLocationManager.HeadingAvailable;
 
-        internal static void PlatformMonitor(SensorSpeed sensorSpeed, Action<CompassData> handler)
+        internal static void PlatformStart(SensorSpeed sensorSpeed, Action<CompassData> handler)
         {
             var useSyncContext = false;
 
@@ -16,20 +22,20 @@ namespace Microsoft.Caboodle
             switch (sensorSpeed)
             {
                 case SensorSpeed.Fastest:
-                    locationManager.HeadingFilter = .1;
+                    locationManager.HeadingFilter = FastestFilter;
                     locationManager.DesiredAccuracy = CLLocation.AccurracyBestForNavigation;
                     break;
                 case SensorSpeed.Game:
-                    locationManager.HeadingFilter = .5;
+                    locationManager.HeadingFilter = GameFilter;
                     locationManager.DesiredAccuracy = CLLocation.AccurracyBestForNavigation;
                     break;
                 case SensorSpeed.Normal:
-                    locationManager.HeadingFilter = 1;
+                    locationManager.HeadingFilter = NormalFilter;
                     locationManager.DesiredAccuracy = CLLocation.AccuracyBest;
                     useSyncContext = true;
                     break;
                 case SensorSpeed.Ui:
-                    locationManager.HeadingFilter = 1.5;
+                    locationManager.HeadingFilter = UiFilter;
                     locationManager.DesiredAccuracy = CLLocation.AccuracyBest;
                     useSyncContext = true;
                     break;
@@ -42,10 +48,13 @@ namespace Microsoft.Caboodle
 
             void CancelledToken()
             {
-                locationManager.UpdatedHeading -= LocationManagerUpdatedHeading;
-                locationManager.StopUpdatingHeading();
-                locationManager?.Dispose();
-                locationManager = null;
+                if (locationManager != null)
+                {
+                    locationManager.UpdatedHeading -= LocationManagerUpdatedHeading;
+                    locationManager.StopUpdatingHeading();
+                    locationManager.Dispose();
+                    locationManager = null;
+                }
                 DisposeToken();
             }
 
