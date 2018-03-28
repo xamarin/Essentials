@@ -63,6 +63,7 @@
     <Compile Include="**\*.android.*.cs" />
   </ItemGroup>
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
+    <Reference Include="System.Json" />
     <Compile Include="**\*.ios.cs" />
     <Compile Include="**\*.ios.*.cs" />
   </ItemGroup>

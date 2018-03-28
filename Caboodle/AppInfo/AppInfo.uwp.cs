@@ -1,10 +1,8 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
-using Windows.Graphics.Display;
-using Windows.Security.ExchangeActiveSyncProvisioning;
-using Windows.System.Profile;
-using Windows.UI.ViewManagement;
+using Windows.Services.Store;
 
 namespace Microsoft.Caboodle
 {
@@ -22,5 +20,21 @@ namespace Microsoft.Caboodle
 
         static string GetBuild()
             => Package.Current.Id.Version.Build.ToString(CultureInfo.InvariantCulture);
+
+        static async Task<string> PlatformGetLatestVersionStringAsync()
+        {
+            var context = StoreContext.GetDefault();
+            var updates = await context.GetAppAndOptionalStorePackageUpdatesAsync();
+
+            if (updates.Count > 0)
+            {
+                var version = updates[0].Package.Id.Version;
+                return $"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
+            }
+            else
+            {
+                return VersionString;
+            }
+        }
     }
 }
