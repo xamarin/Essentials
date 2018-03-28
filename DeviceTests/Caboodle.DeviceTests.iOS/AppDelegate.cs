@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using Foundation;
 using UIKit;
 using UnitTests.HeadlessRunner;
-using XUnitFilter = UnitTests.HeadlessRunner.Xunit.XUnitFilter;
 
 namespace Caboodle.DeviceTests.iOS
 {
@@ -20,11 +18,7 @@ namespace Caboodle.DeviceTests.iOS
                 int port;
                 if (int.TryParse(testCfg[1], out port))
                 {
-                    var filters = new List<XUnitFilter>
-                    {
-                        new XUnitFilter(Traits.DeviceType, Traits.DeviceTypes.ToExclude, true)
-                    };
-                    Tests.RunAsync(ip, port, filters, typeof(Battery_Tests).Assembly);
+                    Tests.RunAsync(ip, port, Traits.GetCommonTraits(), typeof(Battery_Tests).Assembly);
                 }
             }
 

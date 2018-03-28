@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
 using UnitTests.HeadlessRunner;
 using Xunit.Runners.UI;
-using XUnitFilter = UnitTests.HeadlessRunner.Xunit.XUnitFilter;
 
 namespace Caboodle.DeviceTests.Droid
 {
@@ -22,11 +20,7 @@ namespace Caboodle.DeviceTests.Droid
 
             if (!string.IsNullOrEmpty(hostIp))
             {
-                var filters = new List<XUnitFilter>
-                {
-                    new XUnitFilter(Traits.DeviceType, Traits.DeviceTypes.ToExclude, true)
-                };
-                Tests.RunAsync(hostIp, hostPort, filters, typeof(Battery_Tests).Assembly);
+                Tests.RunAsync(hostIp, hostPort, Traits.GetCommonTraits(), typeof(Battery_Tests).Assembly);
             }
 
             // tests can be inside the main assembly
