@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Foundation;
 using MessageUI;
 
 namespace Microsoft.Caboodle
@@ -25,6 +26,15 @@ namespace Microsoft.Caboodle
                 controller.SetCcRecipients(message.Cc.ToArray());
             if (message?.Bcc.Count > 0)
                 controller.SetBccRecipients(message.Bcc.ToArray());
+
+            if (message?.Attachments?.Count > 0)
+            {
+                foreach (var attachment in message.Attachments)
+                {
+                    var data = NSData.FromFile(attachment.FilePath);
+                    controller.AddAttachmentData(data, attachment.MimeType, attachment.Name);
+                }
+            }
 
             // show the controller
             var tcs = new TaskCompletionSource<bool>();
