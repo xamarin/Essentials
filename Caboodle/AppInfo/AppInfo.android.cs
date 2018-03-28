@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Globalization;
+using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Android.App;
-using Android.Content;
 using Android.Content.PM;
-using Android.Content.Res;
-using Android.OS;
-using Android.Provider;
-using Android.Runtime;
-using Android.Views;
+
 using CaboodlePlatform = Microsoft.Caboodle.Platform;
 
 namespace Microsoft.Caboodle
@@ -42,6 +38,25 @@ namespace Microsoft.Caboodle
             {
                 return info.VersionCode.ToString(CultureInfo.InvariantCulture);
             }
+        }
+
+        static async Task<string> PlatformGetLatestVersionStringAsync()
+        {
+            var version = string.Empty;
+            var url = $"https://play.google.com/store/apps/details?id={GetPackageName()}";
+
+            using (var client = new HttpClient())
+            {
+                var content = await client.GetStringAsync(url);
+
+                var versionMatch = Regex.Match(content, "<div class=\"content\" itemprop=\"softwareVersion\">(.*?)</div>").Groups[1];
+                if (versionMatch.Success)
+                {
+                    version = versionMatch.Value.Trim();
+                }
+            }
+
+            return version;
         }
     }
 }

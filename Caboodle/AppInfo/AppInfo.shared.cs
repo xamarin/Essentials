@@ -14,5 +14,9 @@ namespace Microsoft.Caboodle
         public static Version Version => Utils.ParseVersion(VersionString);
 
         public static string BuildString => GetBuild();
+
+        public static Task<string> GetLatestVersionStringAsync() => PlatformGetLatestVersionStringAsync();
+
+        public static async Task<Version> GetLatestVersionAsync() => Utils.ParseVersion(await GetLatestVersionStringAsync());
     }
 }

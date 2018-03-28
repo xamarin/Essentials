@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Json;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Foundation;
-using ObjCRuntime;
-using UIKit;
 
 namespace Microsoft.Caboodle
 {
@@ -18,5 +18,21 @@ namespace Microsoft.Caboodle
 
         static string GetBundleValue(string key)
            => NSBundle.MainBundle.ObjectForInfoDictionary(key).ToString();
+
+        static async Task<string> PlatformGetLatestVersionStringAsync()
+        {
+            var version = string.Empty;
+            var url = $"http://itunes.apple.com/lookup?bundleId={GetPackageName()}";
+
+            using (var client = new HttpClient())
+            {
+                var content = await client.GetStringAsync(url);
+
+                var appStoreItem = JsonValue.Parse(content);
+                version = appStoreItem["results"][0]["version"];
+            }
+
+            return version;
+        }
     }
 }
