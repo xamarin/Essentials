@@ -7,7 +7,10 @@ using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using UnitTests.HeadlessRunner;
 using Xunit.Runners.UI;
+using XUnitFilter = UnitTests.HeadlessRunner.Xunit.XUnitFilter;
+using System.Collections.Generic;
 
 namespace Caboodle.DeviceTests.UWP
 {
@@ -30,7 +33,11 @@ namespace Caboodle.DeviceTests.UWP
 #pragma warning disable 4014
                         try
                         {
-                            UnitTests.HeadlessRunner.Tests.RunAsync(ip, port, typeof(Battery_Tests).Assembly);
+                            var filters = new List<XUnitFilter>
+                            {
+                                new XUnitFilter(Traits.DeviceType, Traits.DeviceTypes.ToExclude, true)
+                            };
+                            Tests.RunAsync(ip, port, filters, typeof(Battery_Tests).Assembly);
                         }
                         catch (Exception ex)
                         {
