@@ -22,7 +22,7 @@ namespace Caboodle.Samples.ViewModel
                     if (Compass.IsMonitoring)
                         StopCompass2Command.Execute(null);
 
-                    Compass.Monitor((SensorSpeed)Speed1, (data) =>
+                    Compass.Start((SensorSpeed)Speed1, (data) =>
                     {
                         switch ((SensorSpeed)Speed1)
                         {
@@ -46,7 +46,7 @@ namespace Caboodle.Samples.ViewModel
             StopCompass1Command = new Command(() =>
             {
                 Compass1IsActive = false;
-                Compass.StopMonitor();
+                Compass.Stop();
             });
 
             StartCompass2Command = new Command(async () =>
@@ -56,7 +56,7 @@ namespace Caboodle.Samples.ViewModel
                     if (Compass.IsMonitoring)
                         StopCompass1Command.Execute(null);
 
-                    Compass.Monitor((SensorSpeed)Speed2, (data) =>
+                    Compass.Start((SensorSpeed)Speed2, (data) =>
                     {
                         switch ((SensorSpeed)Speed2)
                         {
@@ -80,17 +80,17 @@ namespace Caboodle.Samples.ViewModel
             StopCompass2Command = new Command(() =>
             {
                 Compass2IsActive = false;
-                Compass.StopMonitor();
+                Compass.Stop();
             });
         }
 
-        public ICommand StartCompass1Command { get; }
+        public ICommand StartCompass1Command { get; private set; }
 
-        public ICommand StopCompass1Command { get; }
+        public ICommand StopCompass1Command { get; private set; }
 
-        public ICommand StartCompass2Command { get; }
+        public ICommand StartCompass2Command { get; private set; }
 
-        public ICommand StopCompass2Command { get; }
+        public ICommand StopCompass2Command { get; private set; }
 
         bool compass1IsActive;
 
