@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,28 +11,18 @@ namespace Caboodle.Samples.ViewModel
 {
     public class EmailViewModel : BaseViewModel
     {
-        string tomails;
-        string ccmails;
+        string subject;
+        string body;
+        string recipientsTo;
+        string recipientsCc;
+        string recipientsBcc;
 
         public EmailViewModel()
         {
-            // For testing mailboxes (w/o registration) go to:
-            // https://www.mailinator.com
-            tomails = string.Join(",", new string[] { "caboodle@mailinator.com", "caboodle01@mailinator.com" });
-            ccmails = string.Join(";", new string[] { "caboodle@mailinator.com", "caboodle02@mailinator.com" });
-            RecipientsTo = tomails;
-            RecipientsCC = ccmails;
-            Subject = "Caboodle.Email Test message";
-            Body = "This is an email from Caboodle.Email!";
- 
             SendEmailCommand = new Command(OnSendEmail);
-
-            return;
         }
 
         public ICommand SendEmailCommand { get; }
-
-        string subject;
 
         public string Subject
         {
@@ -39,66 +30,54 @@ namespace Caboodle.Samples.ViewModel
             set => SetProperty(ref subject, value);
         }
 
-        string body;
-
         public string Body
         {
             get => body;
             set => SetProperty(ref body, value);
         }
 
-        string recipientsto;
-
         public string RecipientsTo
         {
-            get => recipientsto;
-            set => SetProperty(ref recipientsto, value);
+            get => recipientsTo;
+            set => SetProperty(ref recipientsTo, value);
         }
 
-        string recipientscc;
-
-        public string RecipientsCC
+        public string RecipientsCc
         {
-            get => recipientscc;
-            set => SetProperty(ref recipientscc, value);
+            get => recipientsCc;
+            set => SetProperty(ref recipientsCc, value);
         }
 
-        string recipientsbcc;
-
-        public string RecipientsBCC
+        public string RecipientsBcc
         {
-            get => recipientsbcc;
-            set => SetProperty(ref recipientsbcc, value);
+            get => recipientsBcc;
+            set => SetProperty(ref recipientsBcc, value);
         }
 
-        private async void OnSendEmail()
+        async void OnSendEmail()
         {
             if (IsBusy)
-            {
                 return;
-            }
 
             IsBusy = true;
             try
             {
-                await Email.ComposeAsync(
-                     RecipientsTo?.Split(new char[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries),
-                     RecipientsCC?.Split(new char[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries),
-                     RecipientsBCC?.Split(new char[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries),
-                     Subject,
-                     Body,
-                     "text/plain",
-                     null);
-            }
-            catch (Exception)
-            {
+                await Email.ComposeAsync(new EmailMessage
+                {
+                    Subject = Subject,
+                    Body = Body,
+                    To = Split(RecipientsTo),
+                    Cc = Split(RecipientsCc),
+                    Bcc = Split(RecipientsBcc),
+                });
             }
             finally
             {
                 IsBusy = false;
             }
-
-            return;
         }
+
+        List<string> Split(string recipients)
+            => recipients?.Split(new char[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries)?.ToList();
     }
 }

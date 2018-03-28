@@ -3,33 +3,33 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Caboodle.Samples.View.EmailPage"
              xmlns:viewmodels="clr-namespace:Caboodle.Samples.ViewModel"
-             Title="Email"
-             >
+             Title="Email">
     <ContentPage.BindingContext>
         <viewmodels:EmailViewModel />
     </ContentPage.BindingContext>
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Easily send Email." FontAttributes="Bold" Margin="12" />
 
-            <ScrollView>
-                <StackLayout Padding="12,0,12,12" Spacing="6">
-                    <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
+    <StackLayout>
+        <Label Text="Easily send Email." FontAttributes="Bold" Margin="12" />
 
-                    <Button Text="Send Email" Command="{Binding SendEmailCommand}" IsEnabled="{Binding IsNotBusy}"/>
-                    <Label Text="Recipients To:" FontAttributes="Bold" Margin="0,6,0,0" />
-                    <Entry Text="{Binding RecipientsTo}" />
-                    <Label Text="Recipients CC:" FontAttributes="Bold" Margin="0,6,0,0" />
-                    <Entry Text="{Binding RecipientsCC}" />
-                    <Label Text="Recipients BCC:" FontAttributes="Bold" Margin="0,6,0,0" />
-                    <Entry Text="{Binding RecipientsBCC}" />
-                    <Label Text="Subject:" FontAttributes="Bold" Margin="0,6,0,0" />
-                    <Entry Text="{Binding Subject}" />
-                    <Label Text="Body:" FontAttributes="Bold" Margin="0,6,0,0" />
-                    <Editor Text="{Binding Body}" VerticalOptions="FillAndExpand" Keyboard="Chat" />
+        <ScrollView>
+            <StackLayout Padding="12,0,12,12" Spacing="6">
+                <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
 
-                </StackLayout>
-            </ScrollView>
-        </StackLayout>
-    </ContentPage.Content>
+                <Button Text="Send Email" Command="{Binding SendEmailCommand}" IsEnabled="{Binding IsNotBusy}"/>
+
+                <Label Text="Recipients To:" />
+                <Entry Text="{Binding RecipientsTo}" />
+                <Label Text="Recipients CC:" />
+                <Entry Text="{Binding RecipientsCc}" />
+                <Label Text="Recipients BCC:" />
+                <Entry Text="{Binding RecipientsBcc}" />
+                <Label Text="Subject:" />
+                <Entry Text="{Binding Subject}" />
+                <Label Text="Body:" />
+                <Editor Text="{Binding Body}" VerticalOptions="FillAndExpand" Keyboard="Chat" />
+
+            </StackLayout>
+        </ScrollView>
+    </StackLayout>
+
 </ContentPage>

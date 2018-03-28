@@ -1,74 +1,41 @@
-﻿using System.IO;
-using System.Threading.Tasks;
-using Foundation;
+﻿using System.Threading.Tasks;
 using MessageUI;
-using UIKit;
 
 namespace Microsoft.Caboodle
 {
     public static partial class Email
     {
-        public static bool IsComposeSupported
-            => MFMessageComposeViewController.CanSendText;
+        internal static bool IsComposeSupported
+            => MFMailComposeViewController.CanSendMail;
 
-        /// <summary>
-        /// Send Email
-        /// </summary>
-        /// <returns></returns>
-        public static async Task ComposeAsync(
-            string[] recipientsto,
-            string[] recipientscc,
-            string[] recipientsbcc,
-            string subject,
-            string body,
-            string bodymimetype,
-            string[] attachmentspaths)
+        static Task PlatformComposeAsync(EmailMessage message)
         {
-            var vc_mailcompose = new MFMailComposeViewController();
+            // do this first so we can throw as early as possible
+            var parentController = Platform.GetCurrentViewController();
 
-            vc_mailcompose.SetSubject(subject);
-            var is_html = false;
-            if (bodymimetype == "text/plain")
+            // create the controller
+            var controller = new MFMailComposeViewController();
+            if (!string.IsNullOrEmpty(message?.Body))
+                controller.SetMessageBody(message.Body, message?.BodyFormat == EmailBodyFormat.Html);
+            if (!string.IsNullOrEmpty(message?.Subject))
+                controller.SetSubject(message.Subject);
+            if (message?.To.Count > 0)
+                controller.SetToRecipients(message.To.ToArray());
+            if (message?.Cc.Count > 0)
+                controller.SetCcRecipients(message.Cc.ToArray());
+            if (message?.Bcc.Count > 0)
+                controller.SetBccRecipients(message.Bcc.ToArray());
+
+            // show the controller
+            var tcs = new TaskCompletionSource<bool>();
+            controller.Finished += (sender, e) =>
             {
-                is_html = false;
-            }
-            else if (bodymimetype == "text/html")
-            {
-                is_html = true;
-            }
-            else
-            {
-                throw new EmailException($"Invalid {nameof(bodymimetype)}: {bodymimetype}");
-            }
+                controller.DismissViewController(true, null);
+                tcs.SetResult(e.Result == MFMailComposeResult.Sent);
+            };
+            parentController.PresentViewController(controller, true, null);
 
-            vc_mailcompose.SetMessageBody(body, is_html);
-            vc_mailcompose.SetToRecipients(recipientsto);
-            vc_mailcompose.SetCcRecipients(recipientscc);
-            vc_mailcompose.SetBccRecipients(recipientsbcc);
-            vc_mailcompose.Finished += (s, e) => ((MFMailComposeViewController)s).DismissViewController(true, () => { });
-
-            if (attachmentspaths != null)
-            {
-                foreach (var a in attachmentspaths)
-                {
-                    vc_mailcompose.AddAttachmentData(NSData.FromFile(a), GetMimeType(a), Path.GetFileName(a));
-                }
-            }
-            var vc = GetPresentedVewController();
-            await vc.PresentViewControllerAsync(vc_mailcompose, true);
-
-            return;
-        }
-
-        private static UIViewController GetPresentedVewController()
-        {
-            var vc = UIApplication.SharedApplication.KeyWindow.RootViewController;
-            while (vc.PresentedViewController != null)
-            {
-                vc = vc.PresentedViewController;
-            }
-
-            return vc;
+            return tcs.Task;
         }
     }
 }
