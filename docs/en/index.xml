@@ -36,6 +36,18 @@
           <AttributeName>System.Runtime.CompilerServices.CompilationRelaxations(8)</AttributeName>
         </Attribute>
         <Attribute>
+          <AttributeName>System.Runtime.CompilerServices.InternalsVisibleTo("Caboodle.Tests")</AttributeName>
+        </Attribute>
+        <Attribute>
+          <AttributeName>System.Runtime.CompilerServices.InternalsVisibleTo("Caboodle.DeviceTests.Android")</AttributeName>
+        </Attribute>
+        <Attribute>
+          <AttributeName>System.Runtime.CompilerServices.InternalsVisibleTo("Caboodle.DeviceTests.UWP")</AttributeName>
+        </Attribute>
+        <Attribute>
+          <AttributeName>System.Runtime.CompilerServices.InternalsVisibleTo("CaboodleDeviceTestsiOS")</AttributeName>
+        </Attribute>
+        <Attribute>
           <AttributeName>System.Runtime.CompilerServices.RuntimeCompatibility(WrapNonExceptionThrows=true)</AttributeName>
         </Attribute>
         <Attribute>
@@ -57,6 +69,10 @@
       <Type Name="Browser" Kind="Class" />
       <Type Name="BrowserLaunchType" Kind="Enumeration" />
       <Type Name="Clipboard" Kind="Class" />
+      <Type Name="ConnectionProfile" Kind="Enumeration" />
+      <Type Name="Connectivity" Kind="Class" />
+      <Type Name="ConnectivityChangedEventArgs" Kind="Class" />
+      <Type Name="ConnectivityChangedEventHandler" Kind="Delegate" />
       <Type Name="DataTransfer" Kind="Class" />
       <Type Name="DeviceInfo" Kind="Class" />
       <Type Name="DeviceInfo+Idioms" Kind="Class" />
@@ -65,9 +81,11 @@
       <Type Name="DistanceUnits" Kind="Enumeration" />
       <Type Name="FeatureNotSupportedException" Kind="Class" />
       <Type Name="FileSystem" Kind="Class" />
+      <Type Name="Flashlight" Kind="Class" />
       <Type Name="Geocoding" Kind="Class" />
       <Type Name="Location" Kind="Class" />
       <Type Name="LocationExtensions" Kind="Class" />
+      <Type Name="NetworkAccess" Kind="Enumeration" />
       <Type Name="NotImplementedInReferenceAssemblyException" Kind="Class" />
       <Type Name="PermissionException" Kind="Class" />
       <Type Name="PhoneDialer" Kind="Class" />
@@ -80,9 +98,11 @@
       <Type Name="ScreenMetricsChanagedEventHandler" Kind="Delegate" />
       <Type Name="ScreenOrientation" Kind="Enumeration" />
       <Type Name="ScreenRotation" Kind="Enumeration" />
+      <Type Name="SecureStorage" Kind="Class" />
       <Type Name="ShareTextRequest" Kind="Class" />
       <Type Name="Sms" Kind="Class" />
       <Type Name="SmsMessage" Kind="Class" />
+      <Type Name="Vibration" Kind="Class" />
     </Namespace>
   </Types>
   <Title>Untitled</Title>
