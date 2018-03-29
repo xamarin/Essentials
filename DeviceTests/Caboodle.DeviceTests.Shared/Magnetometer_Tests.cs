@@ -5,16 +5,15 @@ using Xunit;
 
 namespace Caboodle.DeviceTests
 {
-    public class Compass_Tests
+    public class Magnetometer_Tests
     {
         bool TestSupported =>
-               DeviceInfo.Platform == DeviceInfo.Platforms.Android ||
-               DeviceInfo.Platform == DeviceInfo.Platforms.UWP ||
-               (DeviceInfo.DeviceType == DeviceType.Physical && DeviceInfo.Platform == DeviceInfo.Platforms.iOS);
+            DeviceInfo.Platform == DeviceInfo.Platforms.Android ||
+            (DeviceInfo.DeviceType == DeviceType.Physical && DeviceInfo.Platform == DeviceInfo.Platforms.iOS);
 
-        public Compass_Tests()
+        public Magnetometer_Tests()
         {
-            Compass.Stop();
+            Magnetometer.Stop();
         }
 
         [Fact]
@@ -22,11 +21,11 @@ namespace Caboodle.DeviceTests
         {
             if (!TestSupported)
             {
-                Assert.False(Compass.IsSupported);
+                Assert.False(Magnetometer.IsSupported);
                 return;
             }
 
-            Assert.True(Compass.IsSupported);
+            Assert.True(Magnetometer.IsSupported);
         }
 
         [Fact]
@@ -37,7 +36,7 @@ namespace Caboodle.DeviceTests
                 return;
             }
 
-            Assert.Throws<ArgumentNullException>(() => Compass.Start(SensorSpeed.Normal, null));
+            Assert.Throws<ArgumentNullException>(() => Magnetometer.Start(SensorSpeed.Normal, null));
         }
 
         [Theory]
@@ -49,15 +48,17 @@ namespace Caboodle.DeviceTests
                 return;
             }
 
-            var tcs = new TaskCompletionSource<CompassData>();
-            Compass.Start(sensorSpeed, (data) =>
+            var tcs = new TaskCompletionSource<MagnetometerData>();
+            Magnetometer.Start(sensorSpeed, (data) =>
             {
                 tcs.TrySetResult(data);
             });
 
             var d = await tcs.Task;
 
-            Assert.True(d.HeadingMagneticNorth >= 0);
+            Assert.True(d.MagneticFieldX != 0);
+            Assert.True(d.MagneticFieldY != 0);
+            Assert.True(d.MagneticFieldZ != 0);
         }
 
         [Theory]
@@ -69,15 +70,15 @@ namespace Caboodle.DeviceTests
                 return;
             }
 
-            var tcs = new TaskCompletionSource<CompassData>();
-            Compass.Start(sensorSpeed, (data) =>
+            var tcs = new TaskCompletionSource<MagnetometerData>();
+            Magnetometer.Start(sensorSpeed, (data) =>
             {
                 tcs.TrySetResult(data);
             });
 
             var d = await tcs.Task;
-            Assert.True(Compass.IsMonitoring);
-            Compass.Stop();
+            Assert.True(Magnetometer.IsMonitoring);
+            Magnetometer.Stop();
         }
 
         [Theory]
@@ -89,17 +90,17 @@ namespace Caboodle.DeviceTests
                 return;
             }
 
-            var tcs = new TaskCompletionSource<CompassData>();
-            Compass.Start(sensorSpeed, (data) =>
+            var tcs = new TaskCompletionSource<MagnetometerData>();
+            Magnetometer.Start(sensorSpeed, (data) =>
             {
                 tcs.TrySetResult(data);
             });
 
             var d = await tcs.Task;
 
-            Compass.Stop();
+            Magnetometer.Stop();
 
-            Assert.False(Compass.IsMonitoring);
+            Assert.False(Magnetometer.IsMonitoring);
         }
     }
 }
