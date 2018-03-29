@@ -57,7 +57,7 @@ namespace Microsoft.Caboodle
             {
                 if (session != null)
                 {
-                    session = new NFCNdefReaderSession(this, DispatchQueue.CurrentQueue, false);
+                    session = new NFCNdefReaderSession(this, DispatchQueue.CurrentQueue, true);
                     session.BeginSession();
                 }
             }
@@ -76,11 +76,16 @@ namespace Microsoft.Caboodle
                 {
                     NdefMessageReceived?.Invoke(new NdefMessageReceivedEventArgs(message.ToByteArray()));
                 }
+
+                TagDeparted?.Invoke(NfcTagEventArgs.Empty);
+
+                // session has been invalidated after first read
+                session = null;
             }
 
             public void DidInvalidate(NFCNdefReaderSession session, NSError error)
             {
-                // TODO: probably throw
+                // TODO: probably throw if error != null
             }
         }
     }
