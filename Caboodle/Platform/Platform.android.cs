@@ -5,6 +5,7 @@ using Android.Content;
 using Android.Content.PM;
 using Android.Hardware;
 using Android.Hardware.Camera2;
+using Android.Locations;
 using Android.Net;
 using Android.Net.Wifi;
 using Android.OS;
@@ -84,6 +85,9 @@ namespace Microsoft.Caboodle
 
         internal static ClipboardManager ClipboardManager =>
             Application.Context.GetSystemService(Context.ClipboardService) as ClipboardManager;
+
+        internal static LocationManager LocationManager =>
+            (LocationManager)Application.Context.GetSystemService(Context.LocationService);
     }
 
     class ActivityLifecycleContextListener : Java.Lang.Object, Application.IActivityLifecycleCallbacks
