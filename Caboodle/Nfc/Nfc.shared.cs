@@ -4,70 +4,35 @@ namespace Microsoft.Caboodle
 {
     public static partial class Nfc
     {
-        static event NfcTagEventHandler TagArrivedInternal;
+        static bool isListening;
 
-        static event NfcTagEventHandler TagDepartedInternal;
-
-        static event NdefMessageReceivedEventHandler NdefMessageReceivedInternal;
-
-        static bool HasTagListeners => TagArrivedInternal != null || TagDepartedInternal != null;
-
-        public static event NfcTagEventHandler TagArrived
+        public static bool IsListening
         {
-            add
+            get => isListening;
+            set
             {
-                var wasRunning = HasTagListeners;
-                TagArrivedInternal += value;
-                if (!wasRunning && HasTagListeners)
-                    StartTagListeners();
-            }
-
-            remove
-            {
-                var wasRunning = HasTagListeners;
-                TagArrivedInternal -= value;
-                if (wasRunning && !HasTagListeners)
-                    StopTagListeners();
+                if (isListening != value)
+                {
+                    isListening = value;
+                    if (isListening)
+                    {
+                        StartTagListeners();
+                        StartNdefMessageListeners();
+                    }
+                    else
+                    {
+                        StopNdefMessageListeners();
+                        StopTagListeners();
+                    }
+                }
             }
         }
 
-        public static event NfcTagEventHandler TagDeparted
-        {
-            add
-            {
-                var wasRunning = HasTagListeners;
-                TagDepartedInternal += value;
-                if (!wasRunning && HasTagListeners)
-                    StartTagListeners();
-            }
+        public static event NfcTagEventHandler TagArrived;
 
-            remove
-            {
-                var wasRunning = HasTagListeners;
-                TagDepartedInternal -= value;
-                if (wasRunning && HasTagListeners)
-                    StopTagListeners();
-            }
-        }
+        public static event NfcTagEventHandler TagDeparted;
 
-        public static event NdefMessageReceivedEventHandler NdefMessageReceived
-        {
-            add
-            {
-                var wasRunning = NdefMessageReceivedInternal != null;
-                NdefMessageReceivedInternal += value;
-                if (!wasRunning && NdefMessageReceivedInternal != null)
-                    StartNdefMessageListeners();
-            }
-
-            remove
-            {
-                var wasRunning = NdefMessageReceivedInternal != null;
-                NdefMessageReceivedInternal -= value;
-                if (wasRunning && NdefMessageReceivedInternal == null)
-                    StopNdefMessageListeners();
-            }
-        }
+        public static event NdefMessageReceivedEventHandler NdefMessageReceived;
 
         public static void PublishMessage(string messageType, byte[] message)
             => PlatformPublishMessage(messageType, message);

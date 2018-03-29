@@ -87,12 +87,12 @@ namespace Microsoft.Caboodle
 
         static void OnDeviceArrived(ProximityDevice sender)
         {
-            TagArrivedInternal?.Invoke(NfcTagEventArgs.Empty);
+            TagArrived?.Invoke(NfcTagEventArgs.Empty);
         }
 
         static void OnDeviceDeparted(ProximityDevice sender)
         {
-            TagDepartedInternal?.Invoke(NfcTagEventArgs.Empty);
+            TagDeparted?.Invoke(NfcTagEventArgs.Empty);
         }
 
         static void StartNdefMessageListeners()
@@ -119,7 +119,7 @@ namespace Microsoft.Caboodle
         static void OnNdefMessageReceived(ProximityDevice sender, ProximityMessage message)
         {
             var bytes = message.Data.ToArray();
-            NdefMessageReceivedInternal?.Invoke(new NdefMessageReceivedEventArgs(bytes));
+            NdefMessageReceived?.Invoke(new NdefMessageReceivedEventArgs(bytes));
         }
     }
 }
