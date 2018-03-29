@@ -19,24 +19,25 @@ namespace Caboodle.DeviceTests.UWP
             if (args.Kind == ActivationKind.Protocol)
             {
                 var protocolArgs = (ProtocolActivatedEventArgs)args;
-                if (!string.IsNullOrEmpty(protocolArgs?.Uri?.Query))
+                if (!string.IsNullOrEmpty(protocolArgs?.Uri?.Host))
                 {
-                    var q = HttpUtility.ParseQueryString(protocolArgs.Uri.Query);
-                    var ip = q["host_ip"];
-                    int port;
-                    if (!string.IsNullOrEmpty(ip) && int.TryParse(q["host_port"], out port))
+                    var parts = protocolArgs.Uri.Host.Split('_');
+                    if (parts.Length >= 2 && !string.IsNullOrEmpty(parts[0]))
                     {
+                        if (int.TryParse(parts[1], out var port))
+                        {
 #pragma warning disable 4014
-                        try
-                        {
-                            Tests.RunAsync(ip, port, Traits.GetCommonTraits(), typeof(Battery_Tests).Assembly);
-                        }
-                        catch (Exception ex)
-                        {
-                            var m = new MessageDialog("Ex: " + ex.ToString());
-                            await m.ShowAsync();
-                        }
+                            try
+                            {
+                                Tests.RunAsync(parts[0], port, Traits.GetCommonTraits(), typeof(Battery_Tests).Assembly);
+                            }
+                            catch (Exception ex)
+                            {
+                                var m = new MessageDialog("Ex: " + ex.ToString());
+                                await m.ShowAsync();
+                            }
 #pragma warning restore 4014
+                        }
                     }
                 }
             }
