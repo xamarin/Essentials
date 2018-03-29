@@ -7,11 +7,12 @@ using Foundation;
 namespace Microsoft.Caboodle
 {
     public static partial class Magnetometer
-    { // The angular distance is measured relative to the last delivered heading event. Align with UWP numbers
-        internal const double FastestFilter = .01;
-        internal const double GameFilter = .5;
-        internal const double NormalFilter = 1;
-        internal const double UiFilter = 2;
+    { // Timing intervales to match android sensor speeds in seconds
+        // https://stackoverflow.com/questions/10044158/android-sensors
+        internal const double FastestInterval = .02;
+        internal const double GameInterval = .04;
+        internal const double UiInterval = .08;
+        internal const double NormalInterval = .225;
 
         internal static bool IsSupported =>
             Platform.MotionManager?.MagnetometerAvailable ?? false;
@@ -24,17 +25,17 @@ namespace Microsoft.Caboodle
             switch (sensorSpeed)
             {
                 case SensorSpeed.Fastest:
-                    manager.MagnetometerUpdateInterval = FastestFilter;
+                    manager.MagnetometerUpdateInterval = FastestInterval;
                     break;
                 case SensorSpeed.Game:
-                    manager.MagnetometerUpdateInterval = GameFilter;
+                    manager.MagnetometerUpdateInterval = GameInterval;
                     break;
                 case SensorSpeed.Normal:
-                    manager.MagnetometerUpdateInterval = NormalFilter;
+                    manager.MagnetometerUpdateInterval = NormalInterval;
                     useSyncContext = true;
                     break;
                 case SensorSpeed.Ui:
-                    manager.MagnetometerUpdateInterval = UiFilter;
+                    manager.MagnetometerUpdateInterval = UiInterval;
                     useSyncContext = true;
                     break;
             }

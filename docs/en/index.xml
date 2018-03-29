@@ -87,6 +87,8 @@
       <Type Name="Geocoding" Kind="Class" />
       <Type Name="Location" Kind="Class" />
       <Type Name="LocationExtensions" Kind="Class" />
+      <Type Name="Magnetometer" Kind="Class" />
+      <Type Name="MagnetometerData" Kind="Structure" />
       <Type Name="NetworkAccess" Kind="Enumeration" />
       <Type Name="NotImplementedInReferenceAssemblyException" Kind="Class" />
       <Type Name="PermissionException" Kind="Class" />
