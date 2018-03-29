@@ -91,8 +91,6 @@ namespace Microsoft.Caboodle
             if (!UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
                 return Task.FromResult(PermissionStatus.Unknown);
 
-            var locationManager = new CLLocationManager();
-
             var tcs = new TaskCompletionSource<PermissionStatus>();
 
             void AuthCallback(object sender, CLAuthorizationChangedEventArgs e)
@@ -100,14 +98,14 @@ namespace Microsoft.Caboodle
                 if (e.Status == CLAuthorizationStatus.NotDetermined)
                     return;
 
-                locationManager.AuthorizationChanged -= AuthCallback;
+                Platform.LocationManager.AuthorizationChanged -= AuthCallback;
 
                 tcs.TrySetResult(GetLocationStatus());
             }
 
-            locationManager.AuthorizationChanged += AuthCallback;
+            Platform.LocationManager.AuthorizationChanged += AuthCallback;
 
-            locationManager.RequestWhenInUseAuthorization();
+            Platform.LocationManager.RequestWhenInUseAuthorization();
 
             return tcs.Task;
         }

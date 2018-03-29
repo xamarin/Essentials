@@ -15,8 +15,7 @@ namespace Microsoft.Caboodle
         {
             await Permissions.RequireAsync(PermissionType.LocationWhenInUse).ConfigureAwait(false);
 
-            var mngr = new CLLocationManager();
-            var location = mngr.Location;
+            var location = Platform.LocationManager.Location;
 
             return new Location
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using CoreLocation;
 using Foundation;
 using UIKit;
 
@@ -51,5 +52,10 @@ namespace Microsoft.Caboodle
 
             return viewController;
         }
+
+        static CLLocationManager locationManager;
+
+        internal static CLLocationManager LocationManager =>
+            locationManager ?? (locationManager = new CLLocationManager());
     }
 }
