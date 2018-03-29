@@ -11,10 +11,10 @@ namespace Microsoft.Caboodle
             PlatformLastKnownLocationAsync();
 
         public static Task<Location> GetLocationAsync() =>
-            PlatformLocationAsync(new GeolocationRequest(), null);
+            PlatformLocationAsync(new GeolocationRequest(), default(CancellationToken));
 
         public static Task<Location> GetLocationAsync(GeolocationRequest request) =>
-            PlatformLocationAsync(request ?? new GeolocationRequest(), null);
+            PlatformLocationAsync(request ?? new GeolocationRequest(), default(CancellationToken));
 
         public static Task<Location> GetLocationAsync(GeolocationRequest request, CancellationToken cancelToken) =>
             PlatformLocationAsync(request ?? new GeolocationRequest(), cancelToken);

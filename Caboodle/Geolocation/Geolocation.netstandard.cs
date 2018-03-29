@@ -9,7 +9,7 @@ namespace Microsoft.Caboodle
         static Task<Location> PlatformLastKnownLocationAsync() =>
             throw new NotImplementedInReferenceAssemblyException();
 
-        static Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken? cancellationToken) =>
+        static Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken) =>
             throw new NotImplementedInReferenceAssemblyException();
     }
 }

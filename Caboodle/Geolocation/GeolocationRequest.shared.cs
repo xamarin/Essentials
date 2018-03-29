@@ -1,6 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace Microsoft.Caboodle
 {
@@ -36,13 +34,13 @@ namespace Microsoft.Caboodle
     {
         public GeolocationRequest()
         {
-            Timeout = null;
+            Timeout = TimeSpan.Zero;
             DesiredAccuracy = GeolocationAccuracy.Medium;
         }
- 
+
         public GeolocationRequest(GeolocationAccuracy accuracy)
         {
-            Timeout = null;
+            Timeout = TimeSpan.Zero;
             DesiredAccuracy = accuracy;
         }
 
@@ -52,7 +50,7 @@ namespace Microsoft.Caboodle
             DesiredAccuracy = accuracy;
         }
 
-        public TimeSpan? Timeout { get; set; }
+        public TimeSpan Timeout { get; set; }
 
         public GeolocationAccuracy DesiredAccuracy { get; set; }
     }

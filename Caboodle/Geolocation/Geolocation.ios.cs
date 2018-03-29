@@ -14,7 +14,7 @@ namespace Microsoft.Caboodle
             return null;
         }
 
-        static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken? cancellationToken)
+        static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
         {
             await Permissions.RequireAsync(PermissionType.LocationWhenInUse).ConfigureAwait(false);
 

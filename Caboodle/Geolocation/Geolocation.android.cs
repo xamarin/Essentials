@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Android.App;
 using Android.Locations;
 using Android.OS;
 using Android.Runtime;
+
 using AndroidLocation = Android.Locations.Location;
 
 namespace Microsoft.Caboodle
@@ -42,9 +41,9 @@ namespace Microsoft.Caboodle
             };
         }
 
-        static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken? cancellationToken)
+        static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
         {
-            await Permissions.RequireAsync(PermissionType.LocationWhenInUse);
+            await Permissions.RequireAsync(PermissionType.LocationWhenInUse).ConfigureAwait(false);
 
             var locationManager = Platform.LocationManager;
 
@@ -61,14 +60,12 @@ namespace Microsoft.Caboodle
             var listener = new SingleLocationListener();
             listener.LocationHandler = HandleLocation;
 
-            // Create a new linked cancellation token source if the cancellation token was given
-            var cancelTokenSrc = cancellationToken.HasValue ?
-                CancellationTokenSource.CreateLinkedTokenSource(cancellationToken.Value) :
-                new CancellationTokenSource();
+            // Create a new linked cancellation token source
+            var cancelTokenSrc = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
             // If a timeout was given, make the token source cancel after it expires
-            if (request.Timeout.HasValue)
-                cancelTokenSrc.CancelAfter(request.Timeout.Value);
+            if (request.Timeout > TimeSpan.Zero)
+                cancelTokenSrc.CancelAfter(request.Timeout);
 
             // Our Cancel method will handle the actual cancellation logic
             cancelTokenSrc.Token.Register(Cancel);
