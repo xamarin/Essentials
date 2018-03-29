@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Email;
 using Windows.Foundation.Metadata;
-using Windows.Storage;
-using Windows.Storage.Streams;
 
-using NativeEmailAttachment = Windows.ApplicationModel.Email.EmailAttachment;
 using NativeEmailMessage = Windows.ApplicationModel.Email.EmailMessage;
 
 namespace Microsoft.Caboodle
@@ -21,27 +18,14 @@ namespace Microsoft.Caboodle
             if (message != null && message.BodyFormat != EmailBodyFormat.PlainText)
                 throw new FeatureNotSupportedException("UWP can only compose plain text email messages.");
 
-            var nativeMessage = new NativeEmailMessage
-            {
-                Body = message?.Body,
-                Subject = message?.Subject,
-            };
+            var nativeMessage = new NativeEmailMessage();
+            if (!string.IsNullOrEmpty(message?.Body))
+                nativeMessage.Body = message.Body;
+            if (!string.IsNullOrEmpty(message?.Subject))
+                nativeMessage.Subject = message.Subject;
             Sync(message?.To, nativeMessage.To);
             Sync(message?.Cc, nativeMessage.CC);
             Sync(message?.Bcc, nativeMessage.Bcc);
-
-            if (message?.Attachments?.Count > 0)
-            {
-                foreach (var attachment in message.Attachments)
-                {
-                    var file = await StorageFile.GetFileFromPathAsync(attachment.FilePath);
-                    var data = RandomAccessStreamReference.CreateFromFile(file);
-                    var nativeAttachment = new NativeEmailAttachment(attachment.Name, data);
-                    if (!string.IsNullOrWhiteSpace(attachment.MimeType))
-                        nativeAttachment.MimeType = attachment.MimeType;
-                    nativeMessage.Attachments.Add(nativeAttachment);
-                }
-            }
 
             await EmailManager.ShowComposeNewEmailAsync(nativeMessage);
         }

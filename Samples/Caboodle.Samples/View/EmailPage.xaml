@@ -26,7 +26,8 @@
                 <Label Text="Subject:" />
                 <Entry Text="{Binding Subject}" />
                 <Label Text="Body:" />
-                <Editor Text="{Binding Body}" VerticalOptions="FillAndExpand" Keyboard="Chat" />
+                <Editor Text="{Binding Body}" Keyboard="Chat"
+                        VerticalOptions="FillAndExpand" HeightRequest="200" />
 
             </StackLayout>
         </ScrollView>

@@ -1,11 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Android.Content;
 using Android.OS;
 using Android.Text;
-
-using AndroidUri = Android.Net.Uri;
-using JavaFile = Java.IO.File;
 
 namespace Microsoft.Caboodle
 {
@@ -63,23 +59,6 @@ namespace Microsoft.Caboodle
                 intent.PutExtra(Intent.ExtraCc, message.Cc.ToArray());
             if (message.Bcc?.Count > 0)
                 intent.PutExtra(Intent.ExtraBcc, message.Bcc.ToArray());
-
-            if (message?.Attachments?.Count > 0)
-            {
-                // TODO: we may want to use FileProvider
-                // intent.AddFlags(ActivityFlags.GrantReadUriPermission);
-
-                var uris = new List<IParcelable>();
-                foreach (var attachment in message.Attachments)
-                {
-                    // TODO: we may want to use FileProvider
-                    // var file = new JavaFile(attachment.FilePath);
-                    // uris.Add(FileProvider.GetUriForFile(Platform.CurrentContext, $"{AppInfo.PackageName}.fileprovider", file));
-
-                    uris.Add(AndroidUri.Parse($"file://{attachment.FilePath}"));
-                }
-                intent.PutParcelableArrayListExtra(Intent.ExtraStream, uris);
-            }
 
             return intent;
         }

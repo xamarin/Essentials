@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -37,47 +36,13 @@ namespace Microsoft.Caboodle
 
         public string Body { get; set; }
 
-        public List<string> To { get; set; }
-
-        public List<string> Cc { get; set; }
-
-        public List<string> Bcc { get; set; }
-
         public EmailBodyFormat BodyFormat { get; set; }
 
-        public List<EmailAttachment> Attachments { get; set; }
-    }
+        public List<string> To { get; set; } = new List<string>();
 
-    public class EmailAttachment
-    {
-        public EmailAttachment()
-        {
-        }
+        public List<string> Cc { get; set; } = new List<string>();
 
-        public EmailAttachment(string filePath)
-        {
-            Name = Path.GetFileName(filePath);
-            FilePath = filePath;
-        }
-
-        public EmailAttachment(string name, string filePath)
-        {
-            Name = name;
-            FilePath = filePath;
-        }
-
-        public EmailAttachment(string name, string filePath, string mimeType)
-        {
-            Name = name;
-            FilePath = filePath;
-            MimeType = mimeType;
-        }
-
-        public string Name { get; set; }
-
-        public string MimeType { get; set; }
-
-        public string FilePath { get; set; }
+        public List<string> Bcc { get; set; } = new List<string>();
     }
 
     public enum EmailBodyFormat
