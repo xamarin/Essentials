@@ -8,10 +8,5 @@ namespace Caboodle.DeviceTests
 {
     public class Email_Tests
     {
-        [Fact]
-        public void IsComposeSupported()
-        {
-            Assert.True(Email.IsComposeSupported == true);
-        }
     }
 }
