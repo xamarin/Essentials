@@ -17,7 +17,7 @@ namespace Microsoft.Caboodle
                 DesiredAccuracy = PositionAccuracy.Default,
             };
             geolocator.AllowFallbackToConsentlessPositions();
-            var location = await geolocator.GetGeopositionAsync();
+            var location = await geolocator.GetGeopositionAsync().AsTask().ConfigureAwait(false);
 
             if (location?.Coordinate == null)
                 return null;
@@ -39,7 +39,7 @@ namespace Microsoft.Caboodle
             {
                 DesiredAccuracyInMeters = ToMeters(request.DesiredAccuracy)
             };
-            var location = await geolocator.GetGeopositionAsync();
+            var location = await geolocator.GetGeopositionAsync().AsTask().ConfigureAwait(false);
 
             if (location?.Coordinate == null)
                 return null;
