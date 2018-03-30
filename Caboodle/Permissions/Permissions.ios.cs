@@ -37,17 +37,21 @@ namespace Microsoft.Caboodle
             return Task.FromResult(PermissionStatus.Granted);
         }
 
-        static Task<PermissionStatus> PlatformRequestAsync(PermissionType permission)
+        static async Task<PermissionStatus> PlatformRequestAsync(PermissionType permission)
         {
+            // Check status before requesting first
+            if (await PlatformCheckStatusAsync(permission) == PermissionStatus.Granted)
+                return PermissionStatus.Granted;
+
             PlatformEnsureDeclared(permission);
 
             switch (permission)
             {
                 case PermissionType.LocationWhenInUse:
-                    return RequestLocationAsync();
+                    return await RequestLocationAsync();
             }
 
-            return Task.FromResult(PermissionStatus.Granted);
+            return PermissionStatus.Granted;
         }
 
         static PermissionStatus GetLocationStatus()
