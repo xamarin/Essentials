@@ -22,6 +22,7 @@ namespace Microsoft.Caboodle
 
             UseSyncContext = sensorSpeed == SensorSpeed.Normal || sensorSpeed == SensorSpeed.Ui;
             PlatformStart(sensorSpeed);
+            isMonitoring = true;
         }
 
         public static void Stop()
