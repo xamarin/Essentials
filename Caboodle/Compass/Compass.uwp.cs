@@ -31,7 +31,7 @@ namespace Microsoft.Caboodle
                     break;
             }
 
-            compass.ReportInterval = compass.MinimumReportInterval >= interval ? interval : compass.MinimumReportInterval;
+            compass.ReportInterval = compass.MinimumReportInterval >= interval ? compass.MinimumReportInterval : interval;
 
             compass.ReadingChanged += CompassReportedInterval;
         }
@@ -44,10 +44,7 @@ namespace Microsoft.Caboodle
 
         internal static void PlatformStop()
         {
-            Platform.BeginInvokeOnMainThread(() =>
-            {
-                DefaultCompass.ReadingChanged -= CompassReportedInterval;
-            });
+            DefaultCompass.ReadingChanged -= CompassReportedInterval;
         }
     }
 }
