@@ -64,7 +64,7 @@
         <summary>Gets Z-axis magnetid field in mciroteslas.</summary>
         <value>Z-axis data.</value>
         <remarks>
-          <para />
+          <para></para>
         </remarks>
       </Docs>
     </Member>

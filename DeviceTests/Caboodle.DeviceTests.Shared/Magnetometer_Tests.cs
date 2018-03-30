@@ -28,17 +28,6 @@ namespace Caboodle.DeviceTests
             Assert.True(Magnetometer.IsSupported);
         }
 
-        [Fact]
-        public void Monitor_Null_Handler()
-        {
-            if (!TestSupported)
-            {
-                return;
-            }
-
-            Assert.Throws<ArgumentNullException>(() => Magnetometer.Start(SensorSpeed.Normal, null));
-        }
-
         [Theory]
         [InlineData(SensorSpeed.Fastest)]
         public async Task Monitor(SensorSpeed sensorSpeed)
@@ -49,16 +38,21 @@ namespace Caboodle.DeviceTests
             }
 
             var tcs = new TaskCompletionSource<MagnetometerData>();
-            Magnetometer.Start(sensorSpeed, (data) =>
+            Magnetometer.ReadingChanged += Magnetometer_ReadingChanged;
+            Magnetometer.Start(sensorSpeed);
+
+            void Magnetometer_ReadingChanged(MagnetometerChangedEventArgs e)
             {
-                tcs.TrySetResult(data);
-            });
+                tcs.TrySetResult(e.Reading);
+            }
 
             var d = await tcs.Task;
 
             Assert.True(d.MagneticFieldX != 0);
             Assert.True(d.MagneticFieldY != 0);
             Assert.True(d.MagneticFieldZ != 0);
+            Magnetometer.Stop();
+            Magnetometer.ReadingChanged -= Magnetometer_ReadingChanged;
         }
 
         [Theory]
@@ -71,14 +65,18 @@ namespace Caboodle.DeviceTests
             }
 
             var tcs = new TaskCompletionSource<MagnetometerData>();
-            Magnetometer.Start(sensorSpeed, (data) =>
+            Magnetometer.ReadingChanged += Magnetometer_ReadingChanged;
+            Magnetometer.Start(sensorSpeed);
+
+            void Magnetometer_ReadingChanged(MagnetometerChangedEventArgs e)
             {
-                tcs.TrySetResult(data);
-            });
+                tcs.TrySetResult(e.Reading);
+            }
 
             var d = await tcs.Task;
             Assert.True(Magnetometer.IsMonitoring);
             Magnetometer.Stop();
+            Magnetometer.ReadingChanged -= Magnetometer_ReadingChanged;
         }
 
         [Theory]
@@ -91,14 +89,19 @@ namespace Caboodle.DeviceTests
             }
 
             var tcs = new TaskCompletionSource<MagnetometerData>();
-            Magnetometer.Start(sensorSpeed, (data) =>
+
+            Magnetometer.ReadingChanged += Magnetometer_ReadingChanged;
+            Magnetometer.Start(sensorSpeed);
+
+            void Magnetometer_ReadingChanged(MagnetometerChangedEventArgs e)
             {
-                tcs.TrySetResult(data);
-            });
+                tcs.TrySetResult(e.Reading);
+            }
 
             var d = await tcs.Task;
 
             Magnetometer.Stop();
+            Magnetometer.ReadingChanged -= Magnetometer_ReadingChanged;
 
             Assert.False(Magnetometer.IsMonitoring);
         }

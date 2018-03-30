@@ -34,23 +34,33 @@
         </remarks>
       </Docs>
     </Member>
-    <Member MemberName="Start">
-      <MemberSignature Language="C#" Value="public static void Start (Microsoft.Caboodle.SensorSpeed sensorSpeed, Action&lt;Microsoft.Caboodle.MagnetometerData&gt; handler);" />
-      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void Start(valuetype Microsoft.Caboodle.SensorSpeed sensorSpeed, class System.Action`1&lt;valuetype Microsoft.Caboodle.MagnetometerData&gt; handler) cil managed" />
-      <MemberType>Method</MemberType>
+    <Member MemberName="ReadingChanged">
+      <MemberSignature Language="C#" Value="public static event Microsoft.Caboodle.MagnetometerChangedEventHandler ReadingChanged;" />
+      <MemberSignature Language="ILAsm" Value=".event class Microsoft.Caboodle.MagnetometerChangedEventHandler ReadingChanged" />
+      <MemberType>Event</MemberType>
       <AssemblyInfo>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
       </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Microsoft.Caboodle.MagnetometerChangedEventHandler</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Event triggered when reading of sensor changes.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Start">
+      <MemberSignature Language="C#" Value="public static void Start (Microsoft.Caboodle.SensorSpeed sensorSpeed);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void Start(valuetype Microsoft.Caboodle.SensorSpeed sensorSpeed) cil managed" />
+      <MemberType>Method</MemberType>
       <ReturnValue>
         <ReturnType>System.Void</ReturnType>
       </ReturnValue>
       <Parameters>
         <Parameter Name="sensorSpeed" Type="Microsoft.Caboodle.SensorSpeed" />
-        <Parameter Name="handler" Type="System.Action&lt;Microsoft.Caboodle.MagnetometerData&gt;" />
       </Parameters>
       <Docs>
         <param name="sensorSpeed">Speed to get sensor information.</param>
-        <param name="handler">Handler callback when sensort changes.</param>
         <summary>Start monitoring for changes to magnetometer.</summary>
         <remarks>Will throw FeatureNotSupportedException if not supported on device. Will throw InvalidOperationException if already monitoring. Will throw ArgumentNullException if handler is null.</remarks>
       </Docs>

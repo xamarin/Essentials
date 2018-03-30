@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Microsoft.Caboodle
+﻿namespace Microsoft.Caboodle
 {
     public static partial class Magnetometer
     {
         internal static bool IsSupported =>
             throw new NotImplementedInReferenceAssemblyException();
 
-        internal static void PlatformStart(SensorSpeed sensorSpeed, Action<MagnetometerData> handler) =>
+        internal static void PlatformStart(SensorSpeed sensorSpeed) =>
+            throw new NotImplementedInReferenceAssemblyException();
+
+        internal static void PlatformStop() =>
             throw new NotImplementedInReferenceAssemblyException();
     }
 }

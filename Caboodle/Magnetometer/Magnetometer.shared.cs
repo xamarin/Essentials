@@ -1,41 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
 
 namespace Microsoft.Caboodle
 {
     public static partial class Magnetometer
     {
-        public static bool IsMonitoring =>
-               MonitorCTS != null && !MonitorCTS.IsCancellationRequested;
+        public static event MagnetometerChangedEventHandler ReadingChanged;
 
-        public static void Start(SensorSpeed sensorSpeed, Action<MagnetometerData> handler)
-        {
-            if (handler == null)
-            {
-                throw new ArgumentNullException(nameof(handler));
-            }
+        public static bool IsMonitoring => isMonitoring;
 
-            PreMonitorValidation();
-            CreateToken();
-            PlatformStart(sensorSpeed, handler);
-        }
-
-        public static void Stop()
-        {
-            if (MonitorCTS == null)
-                return;
-
-            if (!MonitorCTS.Token.CanBeCanceled || MonitorCTS.Token.IsCancellationRequested)
-                return;
-
-            MonitorCTS.Cancel();
-        }
-
-        internal static CancellationTokenSource MonitorCTS { get; set; }
-
-        internal static void PreMonitorValidation()
+        public static void Start(SensorSpeed sensorSpeed)
         {
             if (!IsSupported)
             {
@@ -44,24 +17,49 @@ namespace Microsoft.Caboodle
 
             if (IsMonitoring)
             {
-                throw new InvalidOperationException("Magnetometer is already being monitored. Please stop to start a new session.");
+                return;
             }
+
+            UseSyncContext = sensorSpeed == SensorSpeed.Normal || sensorSpeed == SensorSpeed.Ui;
+            PlatformStart(sensorSpeed);
         }
 
-        internal static void CreateToken()
+        public static void Stop()
         {
-            DisposeToken();
-            MonitorCTS = new CancellationTokenSource();
+            PlatformStop();
+            isMonitoring = false;
         }
 
-        internal static void DisposeToken()
+        static bool isMonitoring;
+
+        internal static bool UseSyncContext { get; set; }
+
+        internal static void OnChanged(MagnetometerData reading)
+            => OnChanged(new MagnetometerChangedEventArgs(reading));
+
+        internal static void OnChanged(MagnetometerChangedEventArgs e)
         {
-            if (MonitorCTS == null)
+            if (ReadingChanged == null)
                 return;
 
-            MonitorCTS.Dispose();
-            MonitorCTS = null;
+            if (UseSyncContext)
+            {
+                Platform.BeginInvokeOnMainThread(() => ReadingChanged?.Invoke(e));
+            }
+            else
+            {
+                ReadingChanged?.Invoke(e);
+            }
         }
+    }
+
+    public delegate void MagnetometerChangedEventHandler(MagnetometerChangedEventArgs e);
+
+    public class MagnetometerChangedEventArgs : EventArgs
+    {
+        internal MagnetometerChangedEventArgs(MagnetometerData reading) => Reading = reading;
+
+        public MagnetometerData Reading { get; }
     }
 
     public struct MagnetometerData

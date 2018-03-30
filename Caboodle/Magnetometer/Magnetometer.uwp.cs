@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Windows.Devices.Sensors;
 using WindowsMagnetometer = Windows.Devices.Sensors.Magnetometer;
 
@@ -19,10 +17,9 @@ namespace Microsoft.Caboodle
         internal static bool IsSupported =>
             DefaultMagnetometer != null;
 
-        internal static void PlatformStart(SensorSpeed sensorSpeed, Action<MagnetometerData> handler)
+        internal static void PlatformStart(SensorSpeed sensorSpeed)
         {
             var sensor = DefaultMagnetometer;
-            var useSyncContext = false;
             var interval = NormalInterval;
             switch (sensorSpeed)
             {
@@ -32,39 +29,26 @@ namespace Microsoft.Caboodle
                 case SensorSpeed.Game:
                     interval = GameInterval;
                     break;
-                default:
-                    useSyncContext = true;
-                    break;
             }
 
             sensor.ReportInterval = sensor.MinimumReportInterval >= interval ? interval : sensor.MinimumReportInterval;
 
-            MonitorCTS.Token.Register(CancelledToken);
-
-            void CancelledToken()
-            {
-                Platform.BeginInvokeOnMainThread(() =>
-                {
-                    sensor.ReadingChanged -= DataUpdated;
-                    DisposeToken();
-                });
-            }
-
             sensor.ReadingChanged += DataUpdated;
+        }
 
-            void DataUpdated(object sender, MagnetometerReadingChangedEventArgs e)
+        static void DataUpdated(object sender, MagnetometerReadingChangedEventArgs e)
+        {
+            var reading = e.Reading;
+            var data = new MagnetometerData(reading.MagneticFieldX, reading.MagneticFieldY, reading.MagneticFieldZ);
+            OnChanged(data);
+        }
+
+        internal static void PlatformStop()
+        {
+            Platform.BeginInvokeOnMainThread(() =>
             {
-                var reading = e.Reading;
-                var data = new MagnetometerData(reading.MagneticFieldX, reading.MagneticFieldY, reading.MagneticFieldZ);
-                if (useSyncContext)
-                {
-                    Platform.BeginInvokeOnMainThread(() => handler?.Invoke(data));
-                }
-                else
-                {
-                    handler?.Invoke(data);
-                }
-            }
+                DefaultMagnetometer.ReadingChanged -= DataUpdated;
+            });
         }
     }
 }

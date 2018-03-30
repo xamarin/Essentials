@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using CoreMotion;
 using Foundation;
 
@@ -17,10 +15,8 @@ namespace Microsoft.Caboodle
         internal static bool IsSupported =>
             Platform.MotionManager?.MagnetometerAvailable ?? false;
 
-        internal static void PlatformStart(SensorSpeed sensorSpeed, Action<MagnetometerData> handler)
+        internal static void PlatformStart(SensorSpeed sensorSpeed)
         {
-            var useSyncContext = false;
-
             var manager = Platform.MotionManager;
             switch (sensorSpeed)
             {
@@ -32,23 +28,13 @@ namespace Microsoft.Caboodle
                     break;
                 case SensorSpeed.Normal:
                     manager.MagnetometerUpdateInterval = NormalInterval;
-                    useSyncContext = true;
                     break;
                 case SensorSpeed.Ui:
                     manager.MagnetometerUpdateInterval = UiInterval;
-                    useSyncContext = true;
                     break;
             }
 
-            MonitorCTS.Token.Register(CancelledToken, useSyncContext);
-
             manager.StartMagnetometerUpdates(NSOperationQueue.CurrentQueue, DataUpdated);
-
-            void CancelledToken()
-            {
-                manager?.StopMagnetometerUpdates();
-                DisposeToken();
-            }
 
             void DataUpdated(CMMagnetometerData data, NSError error)
             {
@@ -57,15 +43,11 @@ namespace Microsoft.Caboodle
 
                 var field = data.MagneticField;
                 var magnetometerData = new MagnetometerData(field.X, field.Y, field.Z);
-                if (useSyncContext)
-                {
-                    Platform.BeginInvokeOnMainThread(() => handler?.Invoke(magnetometerData));
-                }
-                else
-                {
-                    handler?.Invoke(magnetometerData);
-                }
+                OnChanged(magnetometerData);
             }
         }
+
+        internal static void PlatformStop() =>
+            Platform.MotionManager?.StopMagnetometerUpdates();
     }
 }

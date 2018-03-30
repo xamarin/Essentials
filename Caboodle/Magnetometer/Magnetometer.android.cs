@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Android.Hardware;
+﻿using Android.Hardware;
 using Android.Runtime;
 
 namespace Microsoft.Caboodle
@@ -11,10 +8,12 @@ namespace Microsoft.Caboodle
         internal static bool IsSupported =>
                Platform.SensorManager?.GetDefaultSensor(SensorType.MagneticField) != null;
 
-        internal static void PlatformStart(SensorSpeed sensorSpeed, Action<MagnetometerData> handler)
+        static MagnetometerListener listener;
+        static Sensor magnetometer;
+
+        internal static void PlatformStart(SensorSpeed sensorSpeed)
         {
             var delay = SensorDelay.Normal;
-            var useSyncContext = false;
             switch (sensorSpeed)
             {
                 case SensorSpeed.Normal:
@@ -25,39 +24,34 @@ namespace Microsoft.Caboodle
                     break;
                 case SensorSpeed.Game:
                     delay = SensorDelay.Game;
-                    useSyncContext = true;
                     break;
                 case SensorSpeed.Ui:
                     delay = SensorDelay.Ui;
-                    useSyncContext = true;
                     break;
             }
 
-            var sensorListener = new MagnetometerListener(useSyncContext, handler, delay);
+            listener = new MagnetometerListener();
+            magnetometer = Platform.SensorManager.GetDefaultSensor(SensorType.MagneticField);
+            Platform.SensorManager.RegisterListener(listener, magnetometer, delay);
+        }
 
-            MonitorCTS.Token.Register(CancelledToken, useSyncContext);
-
-            void CancelledToken()
+        internal static void PlatformStop()
+        {
+            if (listener == null || magnetometer == null)
             {
-                sensorListener.Dispose();
-                sensorListener = null;
-                DisposeToken();
+                return;
             }
+
+            Platform.SensorManager.UnregisterListener(listener, magnetometer);
+            listener.Dispose();
+            listener = null;
         }
     }
 
-    internal class MagnetometerListener : Java.Lang.Object, ISensorEventListener, IDisposable
+    internal class MagnetometerListener : Java.Lang.Object, ISensorEventListener
     {
-        Action<MagnetometerData> handler;
-        Sensor magnetometer;
-        bool useSyncContext;
-
-        internal MagnetometerListener(bool useSyncContext, Action<MagnetometerData> handler, SensorDelay delay)
+        public MagnetometerListener()
         {
-            this.useSyncContext = useSyncContext;
-            this.handler = handler;
-            magnetometer = Platform.SensorManager.GetDefaultSensor(SensorType.MagneticField);
-            Platform.SensorManager.RegisterListener(this, magnetometer, delay);
         }
 
         public void OnAccuracyChanged(Sensor sensor, [GeneratedEnum] SensorStatus accuracy)
@@ -67,30 +61,7 @@ namespace Microsoft.Caboodle
         public void OnSensorChanged(SensorEvent e)
         {
             var data = new MagnetometerData(e.Values[0], e.Values[1], e.Values[2]);
-            if (useSyncContext)
-            {
-                Platform.BeginInvokeOnMainThread(() => handler?.Invoke(data));
-            }
-            else
-            {
-                handler?.Invoke(data);
-            }
-        }
-
-        bool disposed = false;
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-            if (!disposed)
-            {
-                if (disposing)
-                {
-                    Platform.SensorManager.UnregisterListener(this, magnetometer);
-                }
-
-                disposed = true;
-            }
+            Magnetometer.OnChanged(data);
         }
     }
 }

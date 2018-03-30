@@ -13,36 +13,37 @@ namespace Caboodle.Samples.ViewModel
         {
             StartCommand = new Command(OnStart);
             StopCommand = new Command(OnStop);
+            Magnetometer.ReadingChanged += Magnetometer_ReadingChanged;
+        }
+
+        private void Magnetometer_ReadingChanged(MagnetometerChangedEventArgs e)
+        {
+            var data = e.Reading;
+            var change = Pow(data.MagneticFieldX - x, 2.0) + Pow(data.MagneticFieldY - y, 2.0) + Pow(data.MagneticFieldZ - z, 2.0);
+            switch ((SensorSpeed)Speed)
+            {
+                case SensorSpeed.Fastest:
+                case SensorSpeed.Game:
+                    Platform.BeginInvokeOnMainThread(() =>
+                    {
+                        X = data.MagneticFieldX;
+                        Y = data.MagneticFieldY;
+                        Z = data.MagneticFieldZ;
+                    });
+                    break;
+                default:
+                    X = data.MagneticFieldX;
+                    Y = data.MagneticFieldY;
+                    Z = data.MagneticFieldZ;
+                    break;
+            }
         }
 
         async void OnStart()
         {
             try
             {
-                Magnetometer.Start((SensorSpeed)Speed, (data) =>
-                {
-                    var change = Pow(data.MagneticFieldX - x, 2.0) + Pow(data.MagneticFieldY - y, 2.0) + Pow(data.MagneticFieldZ - z, 2.0);
-                    var text = change > 3000.0 ? "Magnetometer senses something." : "Nothing";
-                    switch ((SensorSpeed)Speed)
-                    {
-                        case SensorSpeed.Fastest:
-                        case SensorSpeed.Game:
-                            Platform.BeginInvokeOnMainThread(() =>
-                            {
-                                X = data.MagneticFieldX;
-                                Y = data.MagneticFieldY;
-                                Z = data.MagneticFieldZ;
-                                Info = text;
-                            });
-                            break;
-                        default:
-                            X = data.MagneticFieldX;
-                            Y = data.MagneticFieldY;
-                            Z = data.MagneticFieldZ;
-                            Info = text;
-                            break;
-                    }
-                });
+                Magnetometer.Start((SensorSpeed)Speed);
                 IsActive = true;
             }
             catch (Exception)
@@ -85,14 +86,6 @@ namespace Caboodle.Samples.ViewModel
             set => SetProperty(ref z, value);
         }
 
-        string info = string.Empty;
-
-        public string Info
-        {
-            get => info;
-            set => SetProperty(ref info, value);
-        }
-
         bool isActive;
 
         public bool IsActive
@@ -121,6 +114,7 @@ namespace Caboodle.Samples.ViewModel
         public override void OnDisappearing()
         {
             OnStop();
+            Magnetometer.ReadingChanged -= Magnetometer_ReadingChanged;
             base.OnDisappearing();
         }
     }
