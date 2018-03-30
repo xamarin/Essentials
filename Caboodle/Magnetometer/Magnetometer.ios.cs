@@ -35,16 +35,16 @@ namespace Microsoft.Caboodle
             }
 
             manager.StartMagnetometerUpdates(NSOperationQueue.CurrentQueue, DataUpdated);
+        }
 
-            void DataUpdated(CMMagnetometerData data, NSError error)
-            {
-                if (data == null)
-                    return;
+        static void DataUpdated(CMMagnetometerData data, NSError error)
+        {
+            if (data == null)
+                return;
 
-                var field = data.MagneticField;
-                var magnetometerData = new MagnetometerData(field.X, field.Y, field.Z);
-                OnChanged(magnetometerData);
-            }
+            var field = data.MagneticField;
+            var magnetometerData = new MagnetometerData(field.X, field.Y, field.Z);
+            OnChanged(magnetometerData);
         }
 
         internal static void PlatformStop() =>
