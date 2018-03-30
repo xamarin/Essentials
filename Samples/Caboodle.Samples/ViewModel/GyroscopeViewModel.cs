@@ -6,16 +6,16 @@ using Xamarin.Forms;
 
 namespace Caboodle.Samples.ViewModel
 {
-    public class MagnetometerViewModel : BaseViewModel
+    public class GyroscopeViewModel : BaseViewModel
     {
-        public MagnetometerViewModel()
+        public GyroscopeViewModel()
         {
             StartCommand = new Command(OnStart);
             StopCommand = new Command(OnStop);
-            Magnetometer.ReadingChanged += Magnetometer_ReadingChanged;
+            Gyroscope.ReadingChanged += Gyroscope_ReadingChanged;
         }
 
-        private void Magnetometer_ReadingChanged(MagnetometerChangedEventArgs e)
+        private void Gyroscope_ReadingChanged(GyroscopeChangedEventArgs e)
         {
             var data = e.Reading;
             switch ((SensorSpeed)Speed)
@@ -24,15 +24,15 @@ namespace Caboodle.Samples.ViewModel
                 case SensorSpeed.Game:
                     Platform.BeginInvokeOnMainThread(() =>
                     {
-                        X = data.MagneticFieldX;
-                        Y = data.MagneticFieldY;
-                        Z = data.MagneticFieldZ;
+                        X = data.AngularVelocityX;
+                        Y = data.AngularVelocityY;
+                        Z = data.AngularVelocityZ;
                     });
                     break;
                 default:
-                    X = data.MagneticFieldX;
-                    Y = data.MagneticFieldY;
-                    Z = data.MagneticFieldZ;
+                    X = data.AngularVelocityX;
+                    Y = data.AngularVelocityY;
+                    Z = data.AngularVelocityZ;
                     break;
             }
         }
@@ -41,19 +41,19 @@ namespace Caboodle.Samples.ViewModel
         {
             try
             {
-                Magnetometer.Start((SensorSpeed)Speed);
+                Gyroscope.Start((SensorSpeed)Speed);
                 IsActive = true;
             }
             catch (Exception)
             {
-                await DisplayAlert("Magnetometer not supported");
+                await DisplayAlert("Gyroscope not supported");
             }
         }
 
         void OnStop()
         {
             IsActive = false;
-            Magnetometer.Stop();
+            Gyroscope.Stop();
         }
 
         public ICommand StartCommand { get; }
@@ -112,7 +112,7 @@ namespace Caboodle.Samples.ViewModel
         public override void OnDisappearing()
         {
             OnStop();
-            Magnetometer.ReadingChanged -= Magnetometer_ReadingChanged;
+            Gyroscope.ReadingChanged -= Gyroscope_ReadingChanged;
             base.OnDisappearing();
         }
     }

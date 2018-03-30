@@ -1,6 +1,6 @@
-<Type Name="Magnetometer" FullName="Microsoft.Caboodle.Magnetometer">
-  <TypeSignature Language="C#" Value="public static class Magnetometer" />
-  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract sealed beforefieldinit Magnetometer extends System.Object" />
+<Type Name="Accelerometer" FullName="Microsoft.Caboodle.Accelerometer">
+  <TypeSignature Language="C#" Value="public static class Accelerometer" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract sealed beforefieldinit Accelerometer extends System.Object" />
   <AssemblyInfo>
     <AssemblyName>Microsoft.Caboodle</AssemblyName>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
@@ -10,7 +10,9 @@
   </Base>
   <Interfaces />
   <Docs>
-    <summary>Detect device's orentation relative to Earth's magnetic field.</summary>
+    <summary>
+      <para>Accelerometer data of the acceleration of the device in three dimensional space.</para>
+    </summary>
     <remarks>
       <para></para>
     </remarks>
@@ -27,7 +29,7 @@
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gets if magnetometer is being monitored.</summary>
+        <summary>Gets if acceleromter is being monitored.</summary>
         <value>If monitoring.</value>
         <remarks>
           <para />
@@ -35,18 +37,20 @@
       </Docs>
     </Member>
     <Member MemberName="ReadingChanged">
-      <MemberSignature Language="C#" Value="public static event Microsoft.Caboodle.MagnetometerChangedEventHandler ReadingChanged;" />
-      <MemberSignature Language="ILAsm" Value=".event class Microsoft.Caboodle.MagnetometerChangedEventHandler ReadingChanged" />
+      <MemberSignature Language="C#" Value="public static event Microsoft.Caboodle.AccelerometerChangedEventHandler ReadingChanged;" />
+      <MemberSignature Language="ILAsm" Value=".event class Microsoft.Caboodle.AccelerometerChangedEventHandler ReadingChanged" />
       <MemberType>Event</MemberType>
       <AssemblyInfo>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
-        <ReturnType>Microsoft.Caboodle.MagnetometerChangedEventHandler</ReturnType>
+        <ReturnType>Microsoft.Caboodle.AccelerometerChangedEventHandler</ReturnType>
       </ReturnValue>
       <Docs>
         <summary>Event triggered when reading of sensor changes.</summary>
-        <remarks>To be added.</remarks>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="Start">
@@ -63,8 +67,10 @@
         <Parameter Name="sensorSpeed" Type="Microsoft.Caboodle.SensorSpeed" />
       </Parameters>
       <Docs>
-        <param name="sensorSpeed">Speed to get sensor information.</param>
-        <summary>Start monitoring for changes to magnetometer.</summary>
+        <param name="sensorSpeed">
+          <para>Speed to monitor the sensor.</para>
+        </param>
+        <summary>Start monitoring for changes to acceleromter.</summary>
         <remarks>Will throw FeatureNotSupportedException if not supported on device. Will throw ArgumentNullException if handler is null.</remarks>
       </Docs>
     </Member>
@@ -80,9 +86,9 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>Stop monitoring for changes to magnetometer.</summary>
+        <summary>Stop monitoring for changes to acceleromter.</summary>
         <remarks>
-          <para></para>
+          <para />
         </remarks>
       </Docs>
     </Member>

@@ -1,20 +1,20 @@
 ﻿using System;
 using Windows.Devices.Sensors;
-using WindowsMagnetometer = Windows.Devices.Sensors.Magnetometer;
+using WindowsGyro = Windows.Devices.Sensors.Gyrometer;
 
 namespace Microsoft.Caboodle
 {
-    public static partial class Magnetometer
+    public static partial class Gyroscope
     {
         // Magic numbers from https://docs.microsoft.com/en-us/uwp/api/windows.devices.sensors.compass.reportinterval#Windows_Devices_Sensors_Compass_ReportInterval
         internal const uint FastestInterval = 8;
         internal const uint GameInterval = 22;
         internal const uint NormalInterval = 33;
 
-        static WindowsMagnetometer sensor;
+        static WindowsGyro sensor;
 
-        internal static WindowsMagnetometer DefaultSensor =>
-            WindowsMagnetometer.GetDefault();
+        internal static WindowsGyro DefaultSensor =>
+            WindowsGyro.GetDefault();
 
         internal static bool IsSupported =>
             DefaultSensor != null;
@@ -38,10 +38,10 @@ namespace Microsoft.Caboodle
             sensor.ReadingChanged += DataUpdated;
         }
 
-        static void DataUpdated(object sender, MagnetometerReadingChangedEventArgs e)
+        static void DataUpdated(object sender, GyrometerReadingChangedEventArgs e)
         {
             var reading = e.Reading;
-            var data = new MagnetometerData(reading.MagneticFieldX, reading.MagneticFieldY, reading.MagneticFieldZ);
+            var data = new GyroscopeData(reading.AngularVelocityX, reading.AngularVelocityY, reading.AngularVelocityZ);
             OnChanged(data);
         }
 

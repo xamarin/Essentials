@@ -30,7 +30,7 @@
         <summary>Gets the reading of the magnetometer.</summary>
         <value>The reading.</value>
         <remarks>
-          <para />
+          <para></para>
         </remarks>
       </Docs>
     </Member>

@@ -6,16 +6,16 @@ using Xamarin.Forms;
 
 namespace Caboodle.Samples.ViewModel
 {
-    public class MagnetometerViewModel : BaseViewModel
+    public class AccelerometerViewModel : BaseViewModel
     {
-        public MagnetometerViewModel()
+        public AccelerometerViewModel()
         {
             StartCommand = new Command(OnStart);
             StopCommand = new Command(OnStop);
-            Magnetometer.ReadingChanged += Magnetometer_ReadingChanged;
+            Accelerometer.ReadingChanged += Accelerometer_ReadingChanged;
         }
 
-        private void Magnetometer_ReadingChanged(MagnetometerChangedEventArgs e)
+        private void Accelerometer_ReadingChanged(AccelerometerChangedEventArgs e)
         {
             var data = e.Reading;
             switch ((SensorSpeed)Speed)
@@ -24,15 +24,15 @@ namespace Caboodle.Samples.ViewModel
                 case SensorSpeed.Game:
                     Platform.BeginInvokeOnMainThread(() =>
                     {
-                        X = data.MagneticFieldX;
-                        Y = data.MagneticFieldY;
-                        Z = data.MagneticFieldZ;
+                        X = data.AccelerometerX;
+                        Y = data.AccelerometerY;
+                        Z = data.AccelerometerZ;
                     });
                     break;
                 default:
-                    X = data.MagneticFieldX;
-                    Y = data.MagneticFieldY;
-                    Z = data.MagneticFieldZ;
+                    X = data.AccelerometerX;
+                    Y = data.AccelerometerY;
+                    Z = data.AccelerometerZ;
                     break;
             }
         }
@@ -41,19 +41,19 @@ namespace Caboodle.Samples.ViewModel
         {
             try
             {
-                Magnetometer.Start((SensorSpeed)Speed);
+                Accelerometer.Start((SensorSpeed)Speed);
                 IsActive = true;
             }
             catch (Exception)
             {
-                await DisplayAlert("Magnetometer not supported");
+                await DisplayAlert("Accelerometer not supported");
             }
         }
 
         void OnStop()
         {
             IsActive = false;
-            Magnetometer.Stop();
+            Accelerometer.Stop();
         }
 
         public ICommand StartCommand { get; }
@@ -112,7 +112,7 @@ namespace Caboodle.Samples.ViewModel
         public override void OnDisappearing()
         {
             OnStop();
-            Magnetometer.ReadingChanged -= Magnetometer_ReadingChanged;
+            Accelerometer.ReadingChanged -= Accelerometer_ReadingChanged;
             base.OnDisappearing();
         }
     }
