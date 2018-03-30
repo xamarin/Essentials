@@ -27,10 +27,10 @@
         <ReturnType>System.Double</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gets the value for the X-Axis.</summary>
+        <summary>Gets the value for the X-Axis in rad/s.</summary>
         <value>The X-Axis value.</value>
         <remarks>
-          <para />
+          <para></para>
         </remarks>
       </Docs>
     </Member>
@@ -45,7 +45,7 @@
         <ReturnType>System.Double</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gets the value for the Y-Axis.</summary>
+        <summary>Gets the value for the Y-Axis in rad/s.</summary>
         <value>The Y-Axis value.</value>
         <remarks>To be added.</remarks>
       </Docs>
@@ -61,7 +61,7 @@
         <ReturnType>System.Double</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gets the value for the Z-Axis.</summary>
+        <summary>Gets the value for the Z-Axis in rad/s.</summary>
         <value>The Z-Axis value.</value>
         <remarks>
           <para />
