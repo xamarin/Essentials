@@ -11,6 +11,8 @@ namespace Microsoft.Caboodle
         internal const uint GameInterval = 22;
         internal const uint NormalInterval = 33;
 
+        static WindowsCompass sensor;
+
         internal static WindowsCompass DefaultCompass =>
             WindowsCompass.GetDefault();
 
@@ -19,7 +21,7 @@ namespace Microsoft.Caboodle
 
         internal static void PlatformStart(SensorSpeed sensorSpeed)
         {
-            var compass = DefaultCompass;
+            sensor = DefaultCompass;
             var interval = NormalInterval;
             switch (sensorSpeed)
             {
@@ -31,9 +33,9 @@ namespace Microsoft.Caboodle
                     break;
             }
 
-            compass.ReportInterval = compass.MinimumReportInterval >= interval ? compass.MinimumReportInterval : interval;
+            sensor.ReportInterval = sensor.MinimumReportInterval >= interval ? sensor.MinimumReportInterval : interval;
 
-            compass.ReadingChanged += CompassReportedInterval;
+            sensor.ReadingChanged += CompassReportedInterval;
         }
 
         static void CompassReportedInterval(object sender, CompassReadingChangedEventArgs e)
@@ -44,7 +46,7 @@ namespace Microsoft.Caboodle
 
         internal static void PlatformStop()
         {
-            DefaultCompass.ReadingChanged -= CompassReportedInterval;
+            sensor.ReadingChanged -= CompassReportedInterval;
         }
     }
 }
