@@ -46,7 +46,7 @@ namespace Caboodle.DeviceTests
             }
 
             var d = await tcs.Task;
-            
+
             Gyroscope.Stop();
             Gyroscope.ReadingChanged -= Gyroscope_ReadingChanged;
         }
