@@ -46,10 +46,7 @@ namespace Caboodle.DeviceTests
             }
 
             var d = await tcs.Task;
-
-            Assert.True(d.AngularVelocityX != 0);
-            Assert.True(d.AngularVelocityY != 0);
-            Assert.True(d.AngularVelocityZ != 0);
+            
             Gyroscope.Stop();
             Gyroscope.ReadingChanged -= Gyroscope_ReadingChanged;
         }

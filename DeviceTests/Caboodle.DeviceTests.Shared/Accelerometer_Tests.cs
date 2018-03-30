@@ -47,9 +47,6 @@ namespace Caboodle.DeviceTests
 
             var d = await tcs.Task;
 
-            Assert.True(d.AccelerometerX != 0);
-            Assert.True(d.AccelerometerY != 0);
-            Assert.True(d.AccelerometerZ != 0);
             Accelerometer.Stop();
             Accelerometer.ReadingChanged -= Accelerometer_ReadingChanged;
         }

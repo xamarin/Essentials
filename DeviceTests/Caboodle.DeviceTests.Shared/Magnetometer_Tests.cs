@@ -48,9 +48,6 @@ namespace Caboodle.DeviceTests
 
             var d = await tcs.Task;
 
-            Assert.True(d.MagneticFieldX != 0);
-            Assert.True(d.MagneticFieldY != 0);
-            Assert.True(d.MagneticFieldZ != 0);
             Magnetometer.Stop();
             Magnetometer.ReadingChanged -= Magnetometer_ReadingChanged;
         }
