@@ -7,7 +7,7 @@ namespace Caboodle.DeviceTests
     public class Gyroscope_Tests
     {
         bool TestSupported =>
-            DeviceInfo.Platform == DeviceInfo.Platforms.Android ||
+            (DeviceInfo.DeviceType == DeviceType.Physical && DeviceInfo.Platform == DeviceInfo.Platforms.Android) ||
             (DeviceInfo.DeviceType == DeviceType.Physical && DeviceInfo.Platform == DeviceInfo.Platforms.iOS);
 
         public Gyroscope_Tests()
