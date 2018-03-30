@@ -31,7 +31,7 @@ namespace Microsoft.Caboodle
                     break;
             }
 
-            sensor.ReportInterval = sensor.MinimumReportInterval >= interval ? interval : sensor.MinimumReportInterval;
+            sensor.ReportInterval = sensor.MinimumReportInterval >= interval ? sensor.MinimumReportInterval : interval;
 
             sensor.ReadingChanged += DataUpdated;
         }
@@ -45,10 +45,7 @@ namespace Microsoft.Caboodle
 
         internal static void PlatformStop()
         {
-            Platform.BeginInvokeOnMainThread(() =>
-            {
-                DefaultMagnetometer.ReadingChanged -= DataUpdated;
-            });
+            DefaultMagnetometer.ReadingChanged -= DataUpdated;
         }
     }
 }
