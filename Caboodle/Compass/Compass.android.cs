@@ -50,6 +50,10 @@ namespace Microsoft.Caboodle
             Platform.SensorManager.UnregisterListener(listener, magnetometer);
             listener.Dispose();
             listener = null;
+            magnetometer?.Dispose();
+            magnetometer = null;
+            accelerometer?.Dispose();
+            accelerometer = null;
         }
     }
 
@@ -108,6 +112,19 @@ namespace Microsoft.Caboodle
             {
                 destination[i] = source[i];
             }
+        }
+
+        bool disposed;
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (!disposing || disposed)
+                return;
+
+            disposed = true;
+            accelerometer = null;
+            magnetometer = null;
         }
     }
 }
