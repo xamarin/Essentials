@@ -36,7 +36,7 @@ namespace Microsoft.Caboodle
 
             accelerometer = Platform.SensorManager.GetDefaultSensor(SensorType.Accelerometer);
             magnetometer = Platform.SensorManager.GetDefaultSensor(SensorType.MagneticField);
-            listener = new SensorListener(accelerometer.Id, magnetometer.Id, delay);
+            listener = new SensorListener(accelerometer.Name, magnetometer.Name, delay);
             Platform.SensorManager.RegisterListener(listener, accelerometer, delay);
             Platform.SensorManager.RegisterListener(listener, magnetometer, delay);
         }
@@ -62,10 +62,10 @@ namespace Microsoft.Caboodle
         float[] r = new float[9];
         float[] orientation = new float[3];
 
-        int magnetometer;
-        int accelerometer;
+        string magnetometer;
+        string accelerometer;
 
-        internal SensorListener(int accelerometer, int magnetometer, SensorDelay delay)
+        internal SensorListener(string accelerometer, string magnetometer, SensorDelay delay)
         {
             this.magnetometer = magnetometer;
             this.accelerometer = accelerometer;
@@ -77,12 +77,12 @@ namespace Microsoft.Caboodle
 
         public void OnSensorChanged(SensorEvent e)
         {
-            if (e.Sensor.Id == accelerometer && !lastAccelerometerSet)
+            if (e.Sensor.Name == accelerometer && !lastAccelerometerSet)
             {
                 CopyValues(e.Values, lastAccelerometer);
                 lastAccelerometerSet = true;
             }
-            else if (e.Sensor.Id == magnetometer && !lastMagnetometerSet)
+            else if (e.Sensor.Name == magnetometer && !lastMagnetometerSet)
             {
                 CopyValues(e.Values, lastMagnetometer);
                 lastMagnetometerSet = true;
