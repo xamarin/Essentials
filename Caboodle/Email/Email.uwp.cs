@@ -32,12 +32,12 @@ namespace Microsoft.Caboodle
 
         static void Sync(List<string> recipients, IList<EmailRecipient> nativeRecipients)
         {
-            if (recipients != null)
+            if (recipients == null)
+                return null;
+
+            foreach (var recipient in recipients)
             {
-                foreach (var recipient in recipients)
-                {
-                    nativeRecipients.Add(new EmailRecipient(recipient));
-                }
+                nativeRecipients.Add(new EmailRecipient(recipient));
             }
         }
     }
