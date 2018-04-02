@@ -11,6 +11,7 @@ namespace Caboodle.Samples.ViewModel
             Items = new ObservableCollection<SampleItem>
             {
                 new SampleItem("Accelerometer", typeof(AccelerometerPage), "Retrieve acceleration data of the device in three dimensional space."),
+                new SampleItem("All Sensors", typeof(AllSensorsPage), "All Sensors on 1 Page"),
                 new SampleItem("Battery", typeof(BatteryPage), "Easily detect battery level, source, and state."),
                 new SampleItem("Browser", typeof(BrowserPage), "Quickly and easily open a browser to a specific website."),
                 new SampleItem("Clipboard", typeof(ClipboardPage), "Quickly and easily use clipboard"),
