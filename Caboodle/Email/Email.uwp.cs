@@ -33,7 +33,7 @@ namespace Microsoft.Caboodle
         static void Sync(List<string> recipients, IList<EmailRecipient> nativeRecipients)
         {
             if (recipients == null)
-                return null;
+                return;
 
             foreach (var recipient in recipients)
             {
