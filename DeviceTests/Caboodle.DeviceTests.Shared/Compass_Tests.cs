@@ -29,17 +29,6 @@ namespace Caboodle.DeviceTests
             Assert.True(Compass.IsSupported);
         }
 
-        [Fact]
-        public void Monitor_Null_Handler()
-        {
-            if (!TestSupported)
-            {
-                return;
-            }
-
-            Assert.Throws<ArgumentNullException>(() => Compass.Start(SensorSpeed.Normal, null));
-        }
-
         [Theory]
         [InlineData(SensorSpeed.Fastest)]
         public async Task Monitor(SensorSpeed sensorSpeed)
@@ -50,14 +39,19 @@ namespace Caboodle.DeviceTests
             }
 
             var tcs = new TaskCompletionSource<CompassData>();
-            Compass.Start(sensorSpeed, (data) =>
+
+            Compass.ReadingChanged += Compass_ReadingChanged;
+            void Compass_ReadingChanged(CompassChangedEventArgs e)
             {
-                tcs.TrySetResult(data);
-            });
+                tcs.TrySetResult(e.Reading);
+            }
+            Compass.Start(sensorSpeed);
 
             var d = await tcs.Task;
 
             Assert.True(d.HeadingMagneticNorth >= 0);
+            Compass.Stop();
+            Compass.ReadingChanged -= Compass_ReadingChanged;
         }
 
         [Theory]
@@ -70,14 +64,18 @@ namespace Caboodle.DeviceTests
             }
 
             var tcs = new TaskCompletionSource<CompassData>();
-            Compass.Start(sensorSpeed, (data) =>
+            Compass.ReadingChanged += Compass_ReadingChanged;
+            void Compass_ReadingChanged(CompassChangedEventArgs e)
             {
-                tcs.TrySetResult(data);
-            });
+                tcs.TrySetResult(e.Reading);
+            }
+            Compass.Start(sensorSpeed);
 
             var d = await tcs.Task;
             Assert.True(Compass.IsMonitoring);
+
             Compass.Stop();
+            Compass.ReadingChanged -= Compass_ReadingChanged;
         }
 
         [Theory]
@@ -90,14 +88,17 @@ namespace Caboodle.DeviceTests
             }
 
             var tcs = new TaskCompletionSource<CompassData>();
-            Compass.Start(sensorSpeed, (data) =>
+            Compass.ReadingChanged += Compass_ReadingChanged;
+            void Compass_ReadingChanged(CompassChangedEventArgs e)
             {
-                tcs.TrySetResult(data);
-            });
+                tcs.TrySetResult(e.Reading);
+            }
+            Compass.Start(sensorSpeed);
 
             var d = await tcs.Task;
 
             Compass.Stop();
+            Compass.ReadingChanged -= Compass_ReadingChanged;
 
             Assert.False(Compass.IsMonitoring);
         }
