@@ -83,6 +83,9 @@
       <Type Name="DeviceInfo+Platforms" Kind="Class" />
       <Type Name="DeviceType" Kind="Enumeration" />
       <Type Name="DistanceUnits" Kind="Enumeration" />
+      <Type Name="Email" Kind="Class" />
+      <Type Name="EmailBodyFormat" Kind="Enumeration" />
+      <Type Name="EmailMessage" Kind="Class" />
       <Type Name="FeatureNotSupportedException" Kind="Class" />
       <Type Name="FileSystem" Kind="Class" />
       <Type Name="Flashlight" Kind="Class" />
