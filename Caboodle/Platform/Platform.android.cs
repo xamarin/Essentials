@@ -3,6 +3,8 @@ using System.Linq;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.Hardware;
+using Android.Hardware.Camera2;
 using Android.Net;
 using Android.Net.Wifi;
 using Android.OS;
@@ -29,11 +31,20 @@ namespace Microsoft.Caboodle
         public static void Init(Activity activity, Bundle bundle) =>
            Init(activity.Application);
 
-        internal static bool HasPermissionInManifest(string permission)
+        public static void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults) =>
+            Permissions.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        internal static bool HasSystemFeature(string systemFeature)
         {
-            var packageInfo = CurrentContext.PackageManager.GetPackageInfo(CurrentContext.PackageName, PackageInfoFlags.Permissions);
-            var requestedPermissions = packageInfo?.RequestedPermissions;
-            return requestedPermissions?.Any(r => r.Equals(permission, StringComparison.InvariantCultureIgnoreCase)) ?? false;
+            var packageManager = CurrentContext.PackageManager;
+            foreach (var feature in packageManager.GetSystemAvailableFeatures())
+            {
+                if (feature.Name.Equals(systemFeature, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         internal static bool IsIntentSupported(Intent intent)
@@ -56,14 +67,23 @@ namespace Microsoft.Caboodle
             handler.Post(action);
         }
 
-        internal static ClipboardManager ClipboardManager
-            => (ClipboardManager)Application.Context.GetSystemService(Context.ClipboardService);
+        internal static CameraManager CameraManager =>
+            Application.Context.GetSystemService(Context.CameraService) as CameraManager;
 
         internal static ConnectivityManager ConnectivityManager =>
-            (ConnectivityManager)Application.Context.GetSystemService(Context.ConnectivityService);
+            Application.Context.GetSystemService(Context.ConnectivityService) as ConnectivityManager;
+
+        internal static Vibrator Vibrator =>
+            (Vibrator)Application.Context.GetSystemService(Context.VibratorService);
 
         internal static WifiManager WifiManager =>
-            (WifiManager)Application.Context.GetSystemService(Context.WifiService);
+            Application.Context.GetSystemService(Context.WifiService) as WifiManager;
+
+        internal static SensorManager SensorManager =>
+            Application.Context.GetSystemService(Context.SensorService) as SensorManager;
+
+        internal static ClipboardManager ClipboardManager =>
+            Application.Context.GetSystemService(Context.ClipboardService) as ClipboardManager;
     }
 
     class ActivityLifecycleContextListener : Java.Lang.Object, Application.IActivityLifecycleCallbacks

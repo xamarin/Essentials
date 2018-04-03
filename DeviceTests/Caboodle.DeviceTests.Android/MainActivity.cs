@@ -2,6 +2,8 @@
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using Android.Runtime;
+using UnitTests.HeadlessRunner;
 using Xunit.Runners.UI;
 
 namespace Caboodle.DeviceTests.Droid
@@ -17,7 +19,9 @@ namespace Caboodle.DeviceTests.Droid
             var hostPort = Intent.Extras?.GetInt("HOST_PORT", 10578) ?? 10578;
 
             if (!string.IsNullOrEmpty(hostIp))
-                UnitTests.HeadlessRunner.Tests.RunAsync(hostIp, hostPort, typeof(Battery_Tests).Assembly);
+            {
+                Tests.RunAsync(hostIp, hostPort, Traits.GetCommonTraits(), typeof(Battery_Tests).Assembly);
+            }
 
             // tests can be inside the main assembly
             AddTestAssembly(Assembly.GetExecutingAssembly());
@@ -38,6 +42,13 @@ namespace Caboodle.DeviceTests.Droid
 
             // you cannot add more assemblies once calling base
             base.OnCreate(bundle);
+        }
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
+        {
+            Microsoft.Caboodle.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 }

@@ -69,6 +69,14 @@
       <Type Name="Browser" Kind="Class" />
       <Type Name="BrowserLaunchType" Kind="Enumeration" />
       <Type Name="Clipboard" Kind="Class" />
+      <Type Name="Compass" Kind="Class" />
+      <Type Name="CompassChangedEventArgs" Kind="Class" />
+      <Type Name="CompassChangedEventHandler" Kind="Delegate" />
+      <Type Name="CompassData" Kind="Structure" />
+      <Type Name="ConnectionProfile" Kind="Enumeration" />
+      <Type Name="Connectivity" Kind="Class" />
+      <Type Name="ConnectivityChangedEventArgs" Kind="Class" />
+      <Type Name="ConnectivityChangedEventHandler" Kind="Delegate" />
       <Type Name="DataTransfer" Kind="Class" />
       <Type Name="DeviceInfo" Kind="Class" />
       <Type Name="DeviceInfo+Idioms" Kind="Class" />
@@ -77,9 +85,11 @@
       <Type Name="DistanceUnits" Kind="Enumeration" />
       <Type Name="FeatureNotSupportedException" Kind="Class" />
       <Type Name="FileSystem" Kind="Class" />
+      <Type Name="Flashlight" Kind="Class" />
       <Type Name="Geocoding" Kind="Class" />
       <Type Name="Location" Kind="Class" />
       <Type Name="LocationExtensions" Kind="Class" />
+      <Type Name="NetworkAccess" Kind="Enumeration" />
       <Type Name="NotImplementedInReferenceAssemblyException" Kind="Class" />
       <Type Name="PermissionException" Kind="Class" />
       <Type Name="PhoneDialer" Kind="Class" />
@@ -93,9 +103,11 @@
       <Type Name="ScreenOrientation" Kind="Enumeration" />
       <Type Name="ScreenRotation" Kind="Enumeration" />
       <Type Name="SecureStorage" Kind="Class" />
+      <Type Name="SensorSpeed" Kind="Enumeration" />
       <Type Name="ShareTextRequest" Kind="Class" />
       <Type Name="Sms" Kind="Class" />
       <Type Name="SmsMessage" Kind="Class" />
+      <Type Name="Vibration" Kind="Class" />
     </Namespace>
   </Types>
   <Title>Untitled</Title>
