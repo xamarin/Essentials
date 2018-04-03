@@ -10,8 +10,8 @@
   </Base>
   <Interfaces />
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Provides an easy way to allow the user to send emails.</summary>
+    <remarks></remarks>
   </Docs>
   <Members>
     <Member MemberName="ComposeAsync">
@@ -26,9 +26,9 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <summary>Opens the default email client to allow the user to send the message.</summary>
+        <returns></returns>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ComposeAsync">
@@ -45,10 +45,10 @@
         <Parameter Name="message" Type="Microsoft.Caboodle.EmailMessage" />
       </Parameters>
       <Docs>
-        <param name="message">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="message">The email message.</param>
+        <summary>Opens the default email client to allow the user to send the message.</summary>
+        <returns></returns>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ComposeAsync">
@@ -73,12 +73,12 @@
         </Parameter>
       </Parameters>
       <Docs>
-        <param name="subject">To be added.</param>
-        <param name="body">To be added.</param>
-        <param name="to">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="subject">The email subject.</param>
+        <param name="body">The email body.</param>
+        <param name="to">The email recipients.</param>
+        <summary>Opens the default email client to allow the user to send the message with the provided subject, body and recipients.</summary>
+        <returns></returns>
+        <remarks></remarks>
       </Docs>
     </Member>
   </Members>

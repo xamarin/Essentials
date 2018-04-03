@@ -9,8 +9,8 @@
     <BaseTypeName>System.Enum</BaseTypeName>
   </Base>
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Represents various types of email body formats.</summary>
+    <remarks></remarks>
   </Docs>
   <Members>
     <Member MemberName="Html">
@@ -25,7 +25,7 @@
       </ReturnValue>
       <MemberValue>1</MemberValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>The email message body is HTML.</summary>
       </Docs>
     </Member>
     <Member MemberName="PlainText">
@@ -40,7 +40,7 @@
       </ReturnValue>
       <MemberValue>0</MemberValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>The email message body is plain text.</summary>
       </Docs>
     </Member>
   </Members>
