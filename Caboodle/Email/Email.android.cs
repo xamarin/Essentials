@@ -8,7 +8,7 @@ namespace Microsoft.Caboodle
     public static partial class Email
     {
         static readonly EmailMessage testEmail =
-            new EmailMessage("Testing Caboodle", "This is a test email.", "caboodle.example.org");
+            new EmailMessage("Testing Caboodle", "This is a test email.", "caboodle@example.org");
 
         internal static bool IsComposeSupported
             => Platform.IsIntentSupported(CreateIntent(testEmail));
