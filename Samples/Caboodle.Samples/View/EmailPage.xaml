@@ -9,7 +9,7 @@
     </ContentPage.BindingContext>
 
     <StackLayout>
-        <Label Text="Easily send Email." FontAttributes="Bold" Margin="12" />
+        <Label Text="Easily send email messages." FontAttributes="Bold" Margin="12" />
 
         <ScrollView>
             <StackLayout Padding="12,0,12,12" Spacing="6">
