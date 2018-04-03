@@ -6,7 +6,7 @@ namespace Microsoft.Caboodle
     {
         internal static bool IsComposeSupported => false;
 
-        public static Task PlatformComposeAsync(SmsMessage message)
+        static Task PlatformComposeAsync(SmsMessage message)
             => throw new NotImplementedInReferenceAssemblyException();
     }
 }
