@@ -15,7 +15,7 @@ namespace Microsoft.Caboodle
 
         static Dictionary<string, List<string>> versionTrail;
 
-        public static void Track()
+        static VersionTracking()
         {
             IsFirstLaunchEver = !Preferences.ContainsKey(versionsKey, sharedName) || !Preferences.ContainsKey(buildsKey, sharedName);
             if (IsFirstLaunchEver)
@@ -107,7 +107,7 @@ namespace Microsoft.Caboodle
             => Preferences.Get(key, null, sharedName)?.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries) ?? new string[0];
 
         static void WriteHistory(string key, IEnumerable<string> history)
-            => string.Join("|", history);
+            => Preferences.Set(key, string.Join("|", history), sharedName);
 
         static string GetPrevious(string key)
         {
