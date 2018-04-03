@@ -11,13 +11,13 @@ namespace Microsoft.Caboodle
         const string versionsKey = "VersionTracking.Versions";
         const string buildsKey = "VersionTracking.Builds";
 
-        static readonly Preferences preferences = new Preferences($"{AppInfo.PackageName}.caboodle");
+        static readonly string sharedName = $"{AppInfo.PackageName}.caboodle";
 
         static Dictionary<string, List<string>> versionTrail;
 
         public static void Track()
         {
-            IsFirstLaunchEver = !preferences.ContainsKey(versionsKey) || !preferences.ContainsKey(buildsKey);
+            IsFirstLaunchEver = !Preferences.ContainsKey(versionsKey, sharedName) || !Preferences.ContainsKey(buildsKey, sharedName);
             if (IsFirstLaunchEver)
             {
                 versionTrail = new Dictionary<string, List<string>>
@@ -104,7 +104,7 @@ namespace Microsoft.Caboodle
         }
 
         static string[] ReadHistory(string key)
-            => preferences.Get(key, null)?.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries) ?? new string[0];
+            => Preferences.Get(key, null, sharedName)?.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries) ?? new string[0];
 
         static void WriteHistory(string key, IEnumerable<string> history)
             => string.Join("|", history);
