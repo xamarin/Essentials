@@ -279,7 +279,8 @@ Task ("test-uwp-emu")
 
     // Launch the app
     Information("Running appx: {0}", appxBundlePath);
-    System.Diagnostics.Process.Start($"caboodle-device-tests://{TCP_LISTEN_HOST}_{TCP_LISTEN_PORT}");
+    var ip = TCP_LISTEN_HOST.Replace(".", "-");
+    System.Diagnostics.Process.Start($"caboodle-device-tests://{ip}_{TCP_LISTEN_PORT}");
 
     // Wait for the test results to come back
     Information("Waiting for tests...");
