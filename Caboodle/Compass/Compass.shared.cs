@@ -30,10 +30,10 @@ namespace Microsoft.Caboodle
             {
                 PlatformStart(sensorSpeed);
             }
-            catch (Exception ex)
+            catch
             {
                 IsMonitoring = false;
-                throw ex;
+                throw;
             }
         }
 
@@ -50,10 +50,10 @@ namespace Microsoft.Caboodle
             {
                 PlatformStop();
             }
-            catch (Exception ex)
+            catch
             {
                 IsMonitoring = true;
-                throw ex;
+                throw;
             }
         }
 
