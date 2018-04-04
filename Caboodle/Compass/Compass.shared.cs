@@ -23,8 +23,18 @@ namespace Microsoft.Caboodle
                 return;
             }
 
-            PlatformStart(sensorSpeed);
             IsMonitoring = true;
+
+            UseSyncContext = sensorSpeed == SensorSpeed.Normal || sensorSpeed == SensorSpeed.Ui;
+            try
+            {
+                PlatformStart(sensorSpeed);
+            }
+            catch (Exception ex)
+            {
+                IsMonitoring = false;
+                throw ex;
+            }
         }
 
         public static void Stop()
@@ -34,8 +44,17 @@ namespace Microsoft.Caboodle
                 return;
             }
 
-            PlatformStop();
             IsMonitoring = false;
+
+            try
+            {
+                PlatformStop();
+            }
+            catch (Exception ex)
+            {
+                IsMonitoring = true;
+                throw ex;
+            }
         }
 
         internal static void OnChanged(CompassData reading)
