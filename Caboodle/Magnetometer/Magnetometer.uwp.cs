@@ -47,6 +47,9 @@ namespace Microsoft.Caboodle
 
         internal static void PlatformStop()
         {
+            if (sensor == null)
+                return;
+
             sensor.ReadingChanged -= DataUpdated;
         }
     }
