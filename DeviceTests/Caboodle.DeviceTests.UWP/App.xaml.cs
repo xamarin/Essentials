@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Web;
 using UnitTests.HeadlessRunner;
 using Windows.ApplicationModel.Activation;
@@ -12,7 +13,7 @@ namespace Caboodle.DeviceTests.UWP
 {
     public sealed partial class App : RunnerApplication
     {
-        protected override async void OnActivated(IActivatedEventArgs args)
+        protected override void OnActivated(IActivatedEventArgs args)
         {
             base.OnActivated(args);
 
@@ -24,19 +25,26 @@ namespace Caboodle.DeviceTests.UWP
                     var parts = protocolArgs.Uri.Host.Split('_');
                     if (parts.Length >= 2 && !string.IsNullOrEmpty(parts[0]))
                     {
+                        var ip = parts[0]?.Replace('-', '.');
+
                         if (int.TryParse(parts[1], out var port))
                         {
-#pragma warning disable 4014
-                            try
+                            Task.Run(() =>
                             {
-                                Tests.RunAsync(parts[0], port, Traits.GetCommonTraits(), typeof(Battery_Tests).Assembly);
-                            }
-                            catch (Exception ex)
-                            {
-                                var m = new MessageDialog("Ex: " + ex.ToString());
-                                await m.ShowAsync();
-                            }
-#pragma warning restore 4014
+                                var xunitRunner = new UnitTests.HeadlessRunner.Xunit.XUnitTestInstrumentation
+                                {
+                                    NetworkLogEnabled = true,
+                                    NetworkLogHost = ip,
+                                    NetworkLogPort = port,
+                                    ResultsFormat = TestResultsFormat.XunitV2,
+                                    Filters = Traits.GetCommonTraits()
+                                };
+
+                                var asm = typeof(App).GetTypeInfo().Assembly;
+                                var asmFilename = asm.GetName().Name + ".exe";
+
+                                xunitRunner.Run(new TestAssemblyInfo(asm, asmFilename));
+                            });
                         }
                     }
                 }
