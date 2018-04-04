@@ -29,6 +29,11 @@ namespace Microsoft.Caboodle
 
         public static void Stop()
         {
+            if (!IsMonitoring)
+            {
+                return;
+            }
+
             PlatformStop();
             IsMonitoring = false;
         }

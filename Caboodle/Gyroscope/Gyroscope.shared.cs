@@ -6,7 +6,7 @@ namespace Microsoft.Caboodle
     {
         public static event GyroscopeChangedEventHandler ReadingChanged;
 
-        public static bool IsMonitoring => isMonitoring;
+        public static bool IsMonitoring { get; private set; }
 
         public static void Start(SensorSpeed sensorSpeed)
         {
@@ -22,16 +22,19 @@ namespace Microsoft.Caboodle
 
             UseSyncContext = sensorSpeed == SensorSpeed.Normal || sensorSpeed == SensorSpeed.Ui;
             PlatformStart(sensorSpeed);
-            isMonitoring = true;
+            IsMonitoring = true;
         }
 
         public static void Stop()
         {
-            PlatformStop();
-            isMonitoring = false;
-        }
+            if (!IsMonitoring)
+            {
+                return;
+            }
 
-        static bool isMonitoring;
+            PlatformStop();
+            IsMonitoring = false;
+        }
 
         internal static bool UseSyncContext { get; set; }
 
