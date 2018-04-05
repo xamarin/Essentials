@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using CoreLocation;
 using CoreMotion;
 using Foundation;
 using UIKit;
