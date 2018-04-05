@@ -90,7 +90,8 @@ namespace Caboodle.Samples.ViewModel
                 $"Latitude: {location.Latitude}\n" +
                 $"Longitude: {location.Longitude}\n" +
                 $"Accuracy: {location.Accuracy}\n" +
-                $"Timestamp (UTC): {location.TimestampUtc}";
+                $"Date (UTC): {location.TimestampUtc:d}\n" +
+                $"Time (UTC): {location.TimestampUtc:T}";
         }
     }
 }

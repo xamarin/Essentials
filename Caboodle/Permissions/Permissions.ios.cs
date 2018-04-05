@@ -9,6 +9,10 @@ namespace Microsoft.Caboodle
 {
     internal static partial class Permissions
     {
+        static readonly object locationLocker = new object();
+        static CLLocationManager locationManager;
+        static TaskCompletionSource<PermissionStatus> locationTcs;
+
         static void PlatformEnsureDeclared(PermissionType permission)
         {
             // Info.plist declarations were only required in >= iOS 8.0
@@ -95,23 +99,36 @@ namespace Microsoft.Caboodle
             if (!UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
                 return Task.FromResult(PermissionStatus.Unknown);
 
-            var tcs = new TaskCompletionSource<PermissionStatus>();
-
-            void AuthCallback(object sender, CLAuthorizationChangedEventArgs e)
+            lock (locationLocker)
             {
-                if (e.Status == CLAuthorizationStatus.NotDetermined)
-                    return;
+                if (locationTcs == null)
+                {
+                    locationTcs = new TaskCompletionSource<PermissionStatus>();
+                    locationManager = new CLLocationManager();
 
-                Platform.LocationManager.AuthorizationChanged -= AuthCallback;
+                    locationManager.AuthorizationChanged += LocationAuthCallback;
+                    locationManager.RequestWhenInUseAuthorization();
+                }
 
-                tcs.TrySetResult(GetLocationStatus());
+                return locationTcs.Task;
             }
+        }
 
-            Platform.LocationManager.AuthorizationChanged += AuthCallback;
+        static void LocationAuthCallback(object sender, CLAuthorizationChangedEventArgs e)
+        {
+            if (e.Status == CLAuthorizationStatus.NotDetermined)
+                return;
 
-            Platform.LocationManager.RequestWhenInUseAuthorization();
-
-            return tcs.Task;
+            lock (locationLocker)
+            {
+                if (locationTcs != null)
+                {
+                    locationManager.AuthorizationChanged -= LocationAuthCallback;
+                    locationTcs.TrySetResult(GetLocationStatus());
+                    locationTcs = null;
+                    locationManager = null;
+                }
+            }
         }
     }
 }

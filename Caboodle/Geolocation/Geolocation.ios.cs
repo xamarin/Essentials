@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CoreLocation;
@@ -15,7 +16,8 @@ namespace Microsoft.Caboodle
         {
             await Permissions.RequireAsync(PermissionType.LocationWhenInUse).ConfigureAwait(false);
 
-            var location = Platform.LocationManager.Location;
+            var manager = new CLLocationManager();
+            var location = manager.Location;
 
             return new Location
             {
@@ -30,7 +32,48 @@ namespace Microsoft.Caboodle
         {
             await Permissions.RequireAsync(PermissionType.LocationWhenInUse).ConfigureAwait(false);
 
-            return null;
+            var manager = new CLLocationManager();
+
+            var tcs = new TaskCompletionSource<CLLocation>();
+
+            var listener = new SingleLocationListener();
+            listener.LocationHandler += HandleLocation;
+
+            cancellationToken = Utils.TimeoutToken(cancellationToken, request.Timeout);
+            cancellationToken.Register(Cancel);
+
+            manager.DesiredAccuracy = request.DesiredAccuracyInMeters;
+            manager.Delegate = listener;
+
+            // we're only listening for a single update
+            manager.PausesLocationUpdatesAutomatically = false;
+
+            manager.StartUpdatingLocation();
+
+            var clLocation = await tcs.Task.ConfigureAwait(false);
+
+            if (clLocation == null)
+                return null;
+
+            return new Location
+            {
+                Latitude = clLocation.Coordinate.Latitude,
+                Longitude = clLocation.Coordinate.Longitude,
+                Accuracy = clLocation.HorizontalAccuracy,
+                TimestampUtc = ToDate(clLocation.Timestamp)
+            };
+
+            void HandleLocation(CLLocation location)
+            {
+                manager.StopUpdatingLocation();
+                tcs.TrySetResult(location);
+            }
+
+            void Cancel()
+            {
+                manager.StopUpdatingLocation();
+                tcs.TrySetResult(null);
+            }
         }
 
         static DateTimeOffset ToDate(NSDate timestamp)
@@ -42,6 +85,28 @@ namespace Microsoft.Caboodle
             catch
             {
                 return DateTimeOffset.UtcNow;
+            }
+        }
+
+        class SingleLocationListener : CLLocationManagerDelegate
+        {
+            bool wasRaised = false;
+
+            public Action<CLLocation> LocationHandler { get; set; }
+
+            public override void LocationsUpdated(CLLocationManager manager, CLLocation[] locations)
+            {
+                if (wasRaised)
+                    return;
+
+                wasRaised = true;
+
+                var location = locations.FirstOrDefault();
+
+                if (location == null)
+                    return;
+
+                LocationHandler?.Invoke(location);
             }
         }
     }

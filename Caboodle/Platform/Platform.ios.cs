@@ -54,11 +54,6 @@ namespace Microsoft.Caboodle
             return viewController;
         }
 
-        static CLLocationManager locationManager;
-
-        internal static CLLocationManager LocationManager =>
-            locationManager ?? (locationManager = new CLLocationManager());
-
         static CMMotionManager motionManager;
 
         internal static CMMotionManager MotionManager =>

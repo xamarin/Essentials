@@ -17,6 +17,7 @@ namespace Microsoft.Caboodle
                 DesiredAccuracy = PositionAccuracy.Default,
             };
             geolocator.AllowFallbackToConsentlessPositions();
+
             var location = await geolocator.GetGeopositionAsync().AsTask().ConfigureAwait(false);
 
             if (location?.Coordinate == null)
@@ -37,9 +38,12 @@ namespace Microsoft.Caboodle
 
             var geolocator = new Geolocator
             {
-                DesiredAccuracyInMeters = ToMeters(request.DesiredAccuracy)
+                DesiredAccuracyInMeters = request.DesiredAccuracyInMeters
             };
-            var location = await geolocator.GetGeopositionAsync().AsTask().ConfigureAwait(false);
+
+            cancellationToken = Utils.TimeoutToken(cancellationToken, request.Timeout);
+
+            var location = await geolocator.GetGeopositionAsync().AsTask(cancellationToken).ConfigureAwait(false);
 
             if (location?.Coordinate == null)
                 return null;
@@ -51,25 +55,6 @@ namespace Microsoft.Caboodle
                 TimestampUtc = location.Coordinate.Timestamp,
                 Accuracy = location.Coordinate.Accuracy
             };
-        }
-
-        static uint ToMeters(GeolocationAccuracy accuracy)
-        {
-            switch (accuracy)
-            {
-                case GeolocationAccuracy.Lowest:
-                    return 3000;
-                case GeolocationAccuracy.Low:
-                    return 1000;
-                case GeolocationAccuracy.Medium:
-                    return 100;
-                case GeolocationAccuracy.High:
-                    return 10;
-                case GeolocationAccuracy.Best:
-                    return 1;
-                default:
-                    return 100;
-            }
         }
     }
 }

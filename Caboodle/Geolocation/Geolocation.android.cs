@@ -60,47 +60,11 @@ namespace Microsoft.Caboodle
             var listener = new SingleLocationListener();
             listener.LocationHandler = HandleLocation;
 
-            // Create a new linked cancellation token source
-            var cancelTokenSrc = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-
-            // If a timeout was given, make the token source cancel after it expires
-            if (request.Timeout > TimeSpan.Zero)
-                cancelTokenSrc.CancelAfter(request.Timeout);
-
-            // Our Cancel method will handle the actual cancellation logic
-            cancelTokenSrc.Token.Register(Cancel);
+            cancellationToken = Utils.TimeoutToken(cancellationToken, request.Timeout);
+            cancellationToken.Register(Cancel);
 
             // Start getting location updates
             locationManager.RequestLocationUpdates(provider, 0, 0, listener);
-
-            void HandleLocation(AndroidLocation location)
-            {
-                // Immediately stop location updates
-                RemoveUpdates();
-
-                // Set our result
-                tcs.TrySetResult(location);
-            }
-
-            void Cancel()
-            {
-                // Try to stop the listener if it's not already
-                RemoveUpdates();
-
-                // Set a null result since we cancelled
-                tcs.TrySetResult(null);
-            }
-
-            void RemoveUpdates()
-            {
-                try
-                {
-                    locationManager.RemoveUpdates(listener);
-                }
-                catch
-                {
-                }
-            }
 
             var androidLocation = await tcs.Task.ConfigureAwait(false);
 
@@ -114,6 +78,29 @@ namespace Microsoft.Caboodle
                 TimestampUtc = androidLocation.GetTimestamp(),
                 Accuracy = androidLocation.Accuracy
             };
+
+            void HandleLocation(AndroidLocation location)
+            {
+                RemoveUpdates();
+                tcs.TrySetResult(location);
+            }
+
+            void Cancel()
+            {
+                RemoveUpdates();
+                tcs.TrySetResult(null);
+            }
+
+            void RemoveUpdates()
+            {
+                try
+                {
+                    locationManager.RemoveUpdates(listener);
+                }
+                catch
+                {
+                }
+            }
         }
 
         class SingleLocationListener : Java.Lang.Object, ILocationListener
