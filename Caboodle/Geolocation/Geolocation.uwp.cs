@@ -38,7 +38,7 @@ namespace Microsoft.Caboodle
 
             var geolocator = new Geolocator
             {
-                DesiredAccuracyInMeters = request.DesiredAccuracyInMeters
+                DesiredAccuracyInMeters = request.PlatformDesiredAccuracy;
             };
 
             cancellationToken = Utils.TimeoutToken(cancellationToken, request.Timeout);

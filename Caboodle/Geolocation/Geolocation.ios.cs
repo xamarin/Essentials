@@ -42,7 +42,7 @@ namespace Microsoft.Caboodle
             cancellationToken = Utils.TimeoutToken(cancellationToken, request.Timeout);
             cancellationToken.Register(Cancel);
 
-            manager.DesiredAccuracy = request.DesiredAccuracyInMeters;
+            manager.DesiredAccuracy = request.PlatformDesiredAccuracy;
             manager.Delegate = listener;
 
             // we're only listening for a single update

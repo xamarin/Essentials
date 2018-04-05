@@ -30,7 +30,7 @@ namespace Microsoft.Caboodle
         Best
     }
 
-    public class GeolocationRequest
+    public partial class GeolocationRequest
     {
         public GeolocationRequest()
         {
@@ -53,27 +53,5 @@ namespace Microsoft.Caboodle
         public TimeSpan Timeout { get; set; }
 
         public GeolocationAccuracy DesiredAccuracy { get; set; }
-
-        internal uint DesiredAccuracyInMeters
-        {
-            get
-            {
-                switch (DesiredAccuracy)
-                {
-                    case GeolocationAccuracy.Lowest:
-                        return 3000;
-                    case GeolocationAccuracy.Low:
-                        return 1000;
-                    case GeolocationAccuracy.Medium:
-                        return 100;
-                    case GeolocationAccuracy.High:
-                        return 10;
-                    case GeolocationAccuracy.Best:
-                        return 1;
-                    default:
-                        return 100;
-                }
-            }
-        }
     }
 }
