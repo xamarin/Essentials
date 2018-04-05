@@ -24,7 +24,7 @@
           <AttributeName>System.Reflection.AssemblyInformationalVersion("1.0.0")</AttributeName>
         </Attribute>
         <Attribute>
-          <AttributeName>System.Reflection.AssemblyProduct("Microsoft.Caboodle (Xamarin.iOS10)")</AttributeName>
+          <AttributeName>System.Reflection.AssemblyProduct("Microsoft.Caboodle (netstandard2.0)")</AttributeName>
         </Attribute>
         <Attribute>
           <AttributeName>System.Reflection.AssemblyTitle("Microsoft.Caboodle")</AttributeName>
@@ -51,7 +51,7 @@
           <AttributeName>System.Runtime.CompilerServices.RuntimeCompatibility(WrapNonExceptionThrows=true)</AttributeName>
         </Attribute>
         <Attribute>
-          <AttributeName>System.Runtime.Versioning.TargetFramework("Xamarin.iOS,Version=v1.0", FrameworkDisplayName="Xamarin.iOS")</AttributeName>
+          <AttributeName>System.Runtime.Versioning.TargetFramework(".NETStandard,Version=v2.0", FrameworkDisplayName="")</AttributeName>
         </Attribute>
       </Attributes>
     </Assembly>
@@ -60,6 +60,10 @@
   <Copyright>To be added.</Copyright>
   <Types>
     <Namespace Name="Microsoft.Caboodle">
+      <Type Name="Accelerometer" Kind="Class" />
+      <Type Name="AccelerometerChangedEventArgs" Kind="Class" />
+      <Type Name="AccelerometerChangedEventHandler" Kind="Delegate" />
+      <Type Name="AccelerometerData" Kind="Structure" />
       <Type Name="AppInfo" Kind="Class" />
       <Type Name="Battery" Kind="Class" />
       <Type Name="BatteryChangedEventArgs" Kind="Class" />
@@ -70,6 +74,8 @@
       <Type Name="BrowserLaunchType" Kind="Enumeration" />
       <Type Name="Clipboard" Kind="Class" />
       <Type Name="Compass" Kind="Class" />
+      <Type Name="CompassChangedEventArgs" Kind="Class" />
+      <Type Name="CompassChangedEventHandler" Kind="Delegate" />
       <Type Name="CompassData" Kind="Structure" />
       <Type Name="ConnectionProfile" Kind="Enumeration" />
       <Type Name="Connectivity" Kind="Class" />
@@ -81,12 +87,23 @@
       <Type Name="DeviceInfo+Platforms" Kind="Class" />
       <Type Name="DeviceType" Kind="Enumeration" />
       <Type Name="DistanceUnits" Kind="Enumeration" />
+      <Type Name="Email" Kind="Class" />
+      <Type Name="EmailBodyFormat" Kind="Enumeration" />
+      <Type Name="EmailMessage" Kind="Class" />
       <Type Name="FeatureNotSupportedException" Kind="Class" />
       <Type Name="FileSystem" Kind="Class" />
       <Type Name="Flashlight" Kind="Class" />
       <Type Name="Geocoding" Kind="Class" />
+      <Type Name="Gyroscope" Kind="Class" />
+      <Type Name="GyroscopeChangedEventArgs" Kind="Class" />
+      <Type Name="GyroscopeChangedEventHandler" Kind="Delegate" />
+      <Type Name="GyroscopeData" Kind="Structure" />
       <Type Name="Location" Kind="Class" />
       <Type Name="LocationExtensions" Kind="Class" />
+      <Type Name="Magnetometer" Kind="Class" />
+      <Type Name="MagnetometerChangedEventArgs" Kind="Class" />
+      <Type Name="MagnetometerChangedEventHandler" Kind="Delegate" />
+      <Type Name="MagnetometerData" Kind="Structure" />
       <Type Name="NetworkAccess" Kind="Enumeration" />
       <Type Name="NotImplementedInReferenceAssemblyException" Kind="Class" />
       <Type Name="PermissionException" Kind="Class" />
@@ -95,7 +112,7 @@
       <Type Name="Platform" Kind="Class" />
       <Type Name="Preferences" Kind="Class" />
       <Type Name="ScreenLock" Kind="Class" />
-      <Type Name="ScreenMetrics" Kind="Class" />
+      <Type Name="ScreenMetrics" Kind="Structure" />
       <Type Name="ScreenMetricsChanagedEventArgs" Kind="Class" />
       <Type Name="ScreenMetricsChanagedEventHandler" Kind="Delegate" />
       <Type Name="ScreenOrientation" Kind="Enumeration" />

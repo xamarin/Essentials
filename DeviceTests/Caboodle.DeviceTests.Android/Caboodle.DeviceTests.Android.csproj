@@ -43,6 +43,7 @@
     <AndroidSupportedAbis>armeabi;armeabi-v7a;x86;x86_64;arm64-v8a</AndroidSupportedAbis>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
+    <AndroidLinkSkip />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
@@ -61,7 +62,7 @@
     <PackageReference Include="Xamarin.Android.Support.CustomTabs" Version="26.1.0.1" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.devices" Version="2.3.3" />
-    <PackageReference Include="UnitTests.HeadlessRunner" Version="1.1.0" />
+    <PackageReference Include="UnitTests.HeadlessRunner" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Caboodle\Caboodle.csproj">

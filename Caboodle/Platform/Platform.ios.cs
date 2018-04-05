@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using CoreLocation;
+using CoreMotion;
 using Foundation;
 using UIKit;
 
@@ -57,5 +58,10 @@ namespace Microsoft.Caboodle
 
         internal static CLLocationManager LocationManager =>
             locationManager ?? (locationManager = new CLLocationManager());
+
+        static CMMotionManager motionManager;
+
+        internal static CMMotionManager MotionManager =>
+            motionManager ?? (motionManager = new CMMotionManager());
     }
 }
