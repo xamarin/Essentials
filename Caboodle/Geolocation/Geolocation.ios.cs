@@ -34,7 +34,7 @@ namespace Microsoft.Caboodle
 
             var manager = new CLLocationManager();
 
-            var tcs = new TaskCompletionSource<CLLocation>();
+            var tcs = new TaskCompletionSource<CLLocation>(manager);
 
             var listener = new SingleLocationListener();
             listener.LocationHandler += HandleLocation;
