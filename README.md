@@ -68,7 +68,7 @@ Additionally, we found most developers create their own interfaces even when usi
 
 
 ### Does Xamarin.Essentials replace plugins?
-Plugins offer a wide variety of cross-platform APIs for developers to use in their applications. Plugins will still continue to grow and flourish as they can offer a wider range of APIs and handle unique scenarios that Cabooble may not offer including additional platform support or add features unique to a single platform.
+Plugins offer a wide variety of cross-platform APIs for developers to use in their applications. Plugins will still continue to grow and flourish as they can offer a wider range of APIs and handle unique scenarios that Xamarin.Essentials may not offer including additional platform support or add features unique to a single platform.
 
 ## License
 Please see the [License](LICENSE).
