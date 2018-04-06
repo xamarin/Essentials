@@ -11,10 +11,10 @@ namespace Xamarin.Essentials
             PlatformLastKnownLocationAsync();
 
         public static Task<Location> GetLocationAsync() =>
-            PlatformLocationAsync(new GeolocationRequest(), default(CancellationToken));
+            PlatformLocationAsync(new GeolocationRequest(), default);
 
         public static Task<Location> GetLocationAsync(GeolocationRequest request) =>
-            PlatformLocationAsync(request ?? new GeolocationRequest(), default(CancellationToken));
+            PlatformLocationAsync(request ?? new GeolocationRequest(), default);
 
         public static Task<Location> GetLocationAsync(GeolocationRequest request, CancellationToken cancelToken) =>
             PlatformLocationAsync(request ?? new GeolocationRequest(), cancelToken);
