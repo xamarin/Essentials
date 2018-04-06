@@ -1,4 +1,4 @@
-﻿namespace Caboodle.Samples.View
+﻿namespace Samples.View
 {
     public partial class GeolocationPage : BasePage
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Input;
-using Microsoft.Caboodle;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
-namespace Caboodle.Samples.ViewModel
+namespace Samples.ViewModel
 {
     public class GeolocationViewModel : BaseViewModel
     {

@@ -8,7 +8,7 @@ using Android.Runtime;
 
 using AndroidLocation = Android.Locations.Location;
 
-namespace Microsoft.Caboodle
+namespace Xamarin.Essentials
 {
     public static partial class Geolocation
     {

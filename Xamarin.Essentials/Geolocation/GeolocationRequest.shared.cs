@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Microsoft.Caboodle
+namespace Xamarin.Essentials
 {
     public enum GeolocationAccuracy
     {

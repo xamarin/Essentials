@@ -75,7 +75,7 @@ namespace Xamarin.Essentials
             Application.Context.GetSystemService(Context.ConnectivityService) as ConnectivityManager;
 
         internal static Vibrator Vibrator =>
-            (Vibrator)Application.Context.GetSystemService(Context.VibratorService);
+            Application.Context.GetSystemService(Context.VibratorService) as Vibrator;
 
         internal static WifiManager WifiManager =>
             Application.Context.GetSystemService(Context.WifiService) as WifiManager;
@@ -87,7 +87,7 @@ namespace Xamarin.Essentials
             Application.Context.GetSystemService(Context.ClipboardService) as ClipboardManager;
 
         internal static LocationManager LocationManager =>
-            (LocationManager)Application.Context.GetSystemService(Context.LocationService);
+            Application.Context.GetSystemService(Context.LocationService) as LocationManager;
     }
 
     class ActivityLifecycleContextListener : Java.Lang.Object, Application.IActivityLifecycleCallbacks

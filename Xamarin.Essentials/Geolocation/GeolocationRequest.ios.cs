@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using CoreLocation;
 
-namespace Microsoft.Caboodle
+namespace Xamarin.Essentials
 {
     public partial class GeolocationRequest
     {

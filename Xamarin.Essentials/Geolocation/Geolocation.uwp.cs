@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 
-namespace Microsoft.Caboodle
+namespace Xamarin.Essentials
 {
     public static partial class Geolocation
     {

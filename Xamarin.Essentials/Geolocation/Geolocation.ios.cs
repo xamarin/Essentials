@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using CoreLocation;
 using Foundation;
 
-namespace Microsoft.Caboodle
+namespace Xamarin.Essentials
 {
     public static partial class Geolocation
     {
