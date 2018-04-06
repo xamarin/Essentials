@@ -64,7 +64,7 @@ Here are some frequently asked questions about Xamarin.Essentials.
 ### Where are the interfaces?
 Some developers prefer an interface based programming model for dependency injection and testing of code. Xamarin.Essentials does not offer any interfaces and delivers straight API access via direct classes and static properties/methods. There are many reasons that Xamarin.Essentials is architected this way that include performance, simplicity, and ease of use. We also consider Xamarin.Essentials a core API of the platform just like System classes, HttpClient, and our platform bindings. 
 
-Additionally, we found most developers create their own interfaces even when using a library that have interfaces. They do this so they have control over the APIs they actually use, which may be a very small percentage of the overall APIs in the library. Creating your own `IXamarin.Essentials` and exposing only the methods and properties you would like to use gives you more flexibility as Xamarin.Essentials grows and adds additional APIs. Using this type of architecture will enable you to both have dependency injection and work with unit testing.
+Additionally, we found most developers create their own interfaces even when using a library that have interfaces. They do this so they have control over the APIs they actually use, which may be a very small percentage of the overall APIs in the library. Creating your own `IXamarinEssentials` and exposing only the methods and properties you would like to use gives you more flexibility as Xamarin.Essentials grows and adds additional APIs. Using this type of architecture will enable you to both have dependency injection and work with unit testing.
 
 
 ### Does Xamarin.Essentials replace plugins?
