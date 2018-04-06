@@ -18,7 +18,7 @@ namespace Xamarin.Essentials
             };
             geolocator.AllowFallbackToConsentlessPositions();
 
-            var location = await geolocator.GetGeopositionAsync().AsTask().ConfigureAwait(false);
+            var location = await geolocator.GetGeopositionAsync().AsTask();
 
             if (location?.Coordinate == null)
                 return null;
@@ -34,7 +34,7 @@ namespace Xamarin.Essentials
 
         static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
         {
-            await Permissions.RequireAsync(PermissionType.LocationWhenInUse).ConfigureAwait(false);
+            await Permissions.RequireAsync(PermissionType.LocationWhenInUse);
 
             var geolocator = new Geolocator
             {
@@ -43,7 +43,7 @@ namespace Xamarin.Essentials
 
             cancellationToken = Utils.TimeoutToken(cancellationToken, request.Timeout);
 
-            var location = await geolocator.GetGeopositionAsync().AsTask(cancellationToken).ConfigureAwait(false);
+            var location = await geolocator.GetGeopositionAsync().AsTask(cancellationToken);
 
             if (location?.Coordinate == null)
                 return null;

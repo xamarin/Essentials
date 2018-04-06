@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
 
         static async Task<Location> PlatformLastKnownLocationAsync()
         {
-            await Permissions.RequireAsync(PermissionType.LocationWhenInUse).ConfigureAwait(false);
+            await Permissions.RequireAsync(PermissionType.LocationWhenInUse);
 
             var lm = Platform.LocationManager;
             AndroidLocation bestLocation = null;
@@ -43,7 +43,7 @@ namespace Xamarin.Essentials
 
         static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
         {
-            await Permissions.RequireAsync(PermissionType.LocationWhenInUse).ConfigureAwait(false);
+            await Permissions.RequireAsync(PermissionType.LocationWhenInUse);
 
             var locationManager = Platform.LocationManager;
 
@@ -53,7 +53,7 @@ namespace Xamarin.Essentials
             // If no providers exist, we can't get a location
             // Let's punt and try to get the last known location
             if (string.IsNullOrEmpty(provider))
-                return await GetLastKnownLocationAsync().ConfigureAwait(false);
+                return await GetLastKnownLocationAsync();
 
             var tcs = new TaskCompletionSource<AndroidLocation>();
 
@@ -66,7 +66,7 @@ namespace Xamarin.Essentials
             // Start getting location updates
             locationManager.RequestLocationUpdates(provider, 0, 0, listener);
 
-            var androidLocation = await tcs.Task.ConfigureAwait(false);
+            var androidLocation = await tcs.Task;
 
             if (androidLocation == null)
                 return null;

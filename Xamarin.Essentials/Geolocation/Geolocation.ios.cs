@@ -14,7 +14,7 @@ namespace Xamarin.Essentials
 
         static async Task<Location> PlatformLastKnownLocationAsync()
         {
-            await Permissions.RequireAsync(PermissionType.LocationWhenInUse).ConfigureAwait(false);
+            await Permissions.RequireAsync(PermissionType.LocationWhenInUse);
 
             var manager = new CLLocationManager();
             var location = manager.Location;
@@ -30,7 +30,7 @@ namespace Xamarin.Essentials
 
         static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
         {
-            await Permissions.RequireAsync(PermissionType.LocationWhenInUse).ConfigureAwait(false);
+            await Permissions.RequireAsync(PermissionType.LocationWhenInUse);
 
             var manager = new CLLocationManager();
 
@@ -50,7 +50,7 @@ namespace Xamarin.Essentials
 
             manager.StartUpdatingLocation();
 
-            var clLocation = await tcs.Task.ConfigureAwait(false);
+            var clLocation = await tcs.Task;
 
             if (clLocation == null)
                 return null;
