@@ -19,13 +19,7 @@ namespace Xamarin.Essentials
             var manager = new CLLocationManager();
             var location = manager.Location;
 
-            return new Location
-            {
-                Latitude = location.Coordinate.Latitude,
-                Longitude = location.Coordinate.Longitude,
-                Accuracy = location.HorizontalAccuracy,
-                TimestampUtc = ToDate(location.Timestamp)
-            };
+            return location.ToLocation();
         }
 
         static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
@@ -55,13 +49,7 @@ namespace Xamarin.Essentials
             if (clLocation == null)
                 return null;
 
-            return new Location
-            {
-                Latitude = clLocation.Coordinate.Latitude,
-                Longitude = clLocation.Coordinate.Longitude,
-                Accuracy = clLocation.HorizontalAccuracy,
-                TimestampUtc = ToDate(clLocation.Timestamp)
-            };
+            return clLocation.ToLocation();
 
             void HandleLocation(CLLocation location)
             {
@@ -73,18 +61,6 @@ namespace Xamarin.Essentials
             {
                 manager.StopUpdatingLocation();
                 tcs.TrySetResult(null);
-            }
-        }
-
-        static DateTimeOffset ToDate(NSDate timestamp)
-        {
-            try
-            {
-                return new DateTimeOffset((DateTime)timestamp);
-            }
-            catch
-            {
-                return DateTimeOffset.UtcNow;
             }
         }
 

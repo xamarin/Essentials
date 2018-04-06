@@ -32,13 +32,7 @@ namespace Xamarin.Essentials
             if (bestLocation == null)
                 return null;
 
-            return new Location
-            {
-                Latitude = bestLocation.Latitude,
-                Longitude = bestLocation.Longitude,
-                TimestampUtc = bestLocation.GetTimestamp(),
-                Accuracy = bestLocation.Accuracy
-            };
+            return bestLocation.ToLocation();
         }
 
         static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
@@ -71,13 +65,7 @@ namespace Xamarin.Essentials
             if (androidLocation == null)
                 return null;
 
-            return new Location
-            {
-                Latitude = androidLocation.Latitude,
-                Longitude = androidLocation.Longitude,
-                TimestampUtc = androidLocation.GetTimestamp(),
-                Accuracy = androidLocation.Accuracy
-            };
+            return androidLocation.ToLocation();
 
             void HandleLocation(AndroidLocation location)
             {
@@ -168,8 +156,7 @@ namespace Xamarin.Essentials
                     break;
             }
 
-            return locationManager.GetBestProvider(criteria, true)
-                ?? locationManager.GetProviders(true).First();
+            return locationManager.GetBestProvider(criteria, true) ?? locationManager.GetProviders(true).First();
         }
 
         internal static bool IsBetterLocation(AndroidLocation location, AndroidLocation bestLocation)

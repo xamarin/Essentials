@@ -23,13 +23,7 @@ namespace Xamarin.Essentials
             if (location?.Coordinate == null)
                 return null;
 
-            return new Location
-            {
-                Latitude = location.Coordinate.Point.Position.Latitude,
-                Longitude = location.Coordinate.Point.Position.Longitude,
-                TimestampUtc = location.Coordinate.Timestamp,
-                Accuracy = location.Coordinate.Accuracy
-            };
+            return location.ToLocation();
         }
 
         static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
@@ -38,7 +32,7 @@ namespace Xamarin.Essentials
 
             var geolocator = new Geolocator
             {
-                DesiredAccuracyInMeters = request.PlatformDesiredAccuracy;
+                DesiredAccuracyInMeters = request.PlatformDesiredAccuracy
             };
 
             cancellationToken = Utils.TimeoutToken(cancellationToken, request.Timeout);
