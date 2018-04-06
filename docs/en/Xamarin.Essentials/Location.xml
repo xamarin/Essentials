@@ -102,9 +102,9 @@
         <ReturnType>System.Nullable&lt;System.Double&gt;</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets the accuracy (in meters) of the location.</summary>
+        <value>The location accuracy.</value>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="CalculateDistance">
@@ -257,7 +257,7 @@
       </ReturnValue>
       <Docs>
         <summary>Gets or sets the timestamp of the location.</summary>
-        <value>Utc timestamp.</value>
+        <value>UTC timestamp.</value>
         <remarks>
           <para></para>
         </remarks>
