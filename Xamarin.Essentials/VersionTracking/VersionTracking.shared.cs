@@ -11,7 +11,7 @@ namespace Xamarin.Essentials
         const string versionsKey = "VersionTracking.Versions";
         const string buildsKey = "VersionTracking.Builds";
 
-        static readonly string sharedName = $"{AppInfo.PackageName}.Xamarin.Essentials";
+        static readonly string sharedName = Preferences.PrivatePreferencesSharedName;
 
         static Dictionary<string, List<string>> versionTrail;
 
@@ -52,6 +52,11 @@ namespace Xamarin.Essentials
                 WriteHistory(versionsKey, versionTrail[versionsKey]);
                 WriteHistory(buildsKey, versionTrail[buildsKey]);
             }
+        }
+
+        [Preserve]
+        public static void Track()
+        {
         }
 
         public static bool IsFirstLaunchEver { get; private set; }
