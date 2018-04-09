@@ -83,13 +83,7 @@ namespace Xamarin.Essentials
 
             void RemoveUpdates()
             {
-                try
-                {
-                    locationManager.RemoveUpdates(listener);
-                }
-                catch
-                {
-                }
+                locationManager.RemoveUpdates(listener);
             }
         }
 
@@ -158,7 +152,7 @@ namespace Xamarin.Essentials
                     break;
             }
 
-            return locationManager.GetBestProvider(criteria, true) ?? locationManager.GetProviders(true).First();
+            return locationManager.GetBestProvider(criteria, true) ?? locationManager.GetProviders(true).FirstOrDefault();
         }
 
         internal static bool IsBetterLocation(AndroidLocation location, AndroidLocation bestLocation)
