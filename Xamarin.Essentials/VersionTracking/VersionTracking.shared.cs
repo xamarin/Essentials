@@ -54,6 +54,11 @@ namespace Xamarin.Essentials
             }
         }
 
+        public static void Track()
+        {
+            // This method doesn't do anything, but is here just to trigger the static constructor.
+        }
+
         public static bool IsFirstLaunchEver { get; private set; }
 
         public static bool IsFirstLaunchForCurrentVersion { get; private set; }
