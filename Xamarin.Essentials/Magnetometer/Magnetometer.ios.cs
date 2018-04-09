@@ -34,7 +34,7 @@ namespace Xamarin.Essentials
                     break;
             }
 
-            manager.StartMagnetometerUpdates(NSOperationQueue.CurrentQueue, DataUpdated);
+            manager.StartMagnetometerUpdates(Platform.CurrentQueue, DataUpdated);
         }
 
         static void DataUpdated(CMMagnetometerData data, NSError error)

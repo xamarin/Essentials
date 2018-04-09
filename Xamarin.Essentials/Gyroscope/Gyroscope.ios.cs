@@ -34,7 +34,7 @@ namespace Xamarin.Essentials
                     break;
             }
 
-            manager.StartGyroUpdates(NSOperationQueue.CurrentQueue, DataUpdated);
+            manager.StartGyroUpdates(Platform.CurrentQueue, DataUpdated);
         }
 
         static void DataUpdated(CMGyroData data, NSError error)
