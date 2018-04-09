@@ -58,7 +58,7 @@ namespace Xamarin.Essentials
         internal static CMMotionManager MotionManager =>
             motionManager ?? (motionManager = new CMMotionManager());
 
-        internal static NSOperationQueue CurrentQueue =>
+        internal static NSOperationQueue GetCurrentQueue() =>
             NSOperationQueue.CurrentQueue ?? new NSOperationQueue();
     }
 }
