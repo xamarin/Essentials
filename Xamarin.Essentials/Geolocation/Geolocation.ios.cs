@@ -24,6 +24,9 @@ namespace Xamarin.Essentials
 
         static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
         {
+            if (!NSThread.Current.IsMainThread)
+                throw new InvalidOperationException("Location must be requested from the main thread.");
+
             await Permissions.RequireAsync(PermissionType.LocationWhenInUse);
 
             var manager = new CLLocationManager();
@@ -77,7 +80,7 @@ namespace Xamarin.Essentials
 
                 wasRaised = true;
 
-                var location = locations.FirstOrDefault();
+                var location = locations.LastOrDefault();
 
                 if (location == null)
                     return;
