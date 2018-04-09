@@ -55,7 +55,7 @@ namespace Xamarin.Essentials
         }
 
         [Preserve]
-        public static Track()
+        public static void Track()
         {
         }
 
