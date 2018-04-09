@@ -26,48 +26,45 @@ namespace Xamarin.Essentials
         {
             await Permissions.RequireAsync(PermissionType.LocationWhenInUse);
 
-            var tcs = new TaskCompletionSource<CLLocation>();
-
             // the location manager requires an active run loop
             // so just use the main loop
-            Platform.BeginInvokeOnMainThread(() =>
-            {
-                var manager = new CLLocationManager();
+            CLLocationManager manager = null;
+            NSRunLoop.Main.InvokeOnMainThread(() => manager = new CLLocationManager());
 
-                var listener = new SingleLocationListener();
-                listener.LocationHandler += HandleLocation;
+            var tcs = new TaskCompletionSource<CLLocation>(manager);
 
-                cancellationToken = Utils.TimeoutToken(cancellationToken, request.Timeout);
-                cancellationToken.Register(Cancel);
+            var listener = new SingleLocationListener();
+            listener.LocationHandler += HandleLocation;
 
-                manager.DesiredAccuracy = request.PlatformDesiredAccuracy;
-                manager.Delegate = listener;
+            cancellationToken = Utils.TimeoutToken(cancellationToken, request.Timeout);
+            cancellationToken.Register(Cancel);
 
-                // we're only listening for a single update
-                manager.PausesLocationUpdatesAutomatically = false;
+            manager.DesiredAccuracy = request.PlatformDesiredAccuracy;
+            manager.Delegate = listener;
 
-                manager.StartUpdatingLocation();
+            // we're only listening for a single update
+            manager.PausesLocationUpdatesAutomatically = false;
 
-                void HandleLocation(CLLocation location)
-                {
-                    manager.StopUpdatingLocation();
-                    tcs.TrySetResult(location);
-                }
+            manager.StartUpdatingLocation();
 
-                void Cancel()
-                {
-                    manager.StopUpdatingLocation();
-                    tcs.TrySetResult(null);
-                }
-            });
-
-            // still wait and return on the background thread
             var clLocation = await tcs.Task;
 
             if (clLocation == null)
                 return null;
 
             return clLocation.ToLocation();
+
+            void HandleLocation(CLLocation location)
+            {
+                manager.StopUpdatingLocation();
+                tcs.TrySetResult(location);
+            }
+
+            void Cancel()
+            {
+                manager.StopUpdatingLocation();
+                tcs.TrySetResult(null);
+            }
         }
 
         class SingleLocationListener : CLLocationManagerDelegate
