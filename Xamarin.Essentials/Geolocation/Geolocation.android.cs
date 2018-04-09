@@ -41,11 +41,11 @@ namespace Xamarin.Essentials
 
             var locationManager = Platform.LocationManager;
 
-            // Get the best possible provider for the requested accuracy
+            // get the best possible provider for the requested accuracy
             var provider = GetBestProvider(locationManager, request.DesiredAccuracy);
 
-            // If no providers exist, we can't get a location
-            // Let's punt and try to get the last known location
+            // if no providers exist, we can't get a location
+            // let's punt and try to get the last known location
             if (string.IsNullOrEmpty(provider))
                 return await GetLastKnownLocationAsync();
 
@@ -57,8 +57,10 @@ namespace Xamarin.Essentials
             cancellationToken = Utils.TimeoutToken(cancellationToken, request.Timeout);
             cancellationToken.Register(Cancel);
 
-            // Start getting location updates
-            locationManager.RequestLocationUpdates(provider, 0, 0, listener);
+            // start getting location updates
+            // make sure to use a thread with a looper
+            var looper = Looper.MyLooper() ?? Looper.MainLooper;
+            locationManager.RequestLocationUpdates(provider, 0, 0, listener, looper);
 
             var androidLocation = await tcs.Task;
 
