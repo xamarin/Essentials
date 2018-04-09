@@ -6,10 +6,12 @@ using Xunit;
 
 namespace DeviceTests
 {
+    // TEST NOTES:
+    //   - a human needs to accept permissions
     public class Geolocation_Tests
     {
-        /*
         [Fact]
+        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
         public async Task Get_LastKnownLocation_Is_Something()
         {
             var location = await Geolocation.GetLastKnownLocationAsync();
@@ -29,6 +31,7 @@ namespace DeviceTests
         }
 
         [Fact]
+        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
         public async Task Get_Location_Is_Something()
         {
             var location = await Geolocation.GetLocationAsync();
@@ -48,6 +51,7 @@ namespace DeviceTests
         }
 
         [Fact]
+        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
         public async Task Get_Location_With_Request_Is_Something()
         {
             var request = new GeolocationRequest(GeolocationAccuracy.Best);
@@ -66,6 +70,5 @@ namespace DeviceTests
             Assert.True(location.TimestampUtc < DateTimeOffset.UtcNow);
             Assert.True(location.TimestampUtc > DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(1)));
         }
-        */
     }
 }
