@@ -24,47 +24,50 @@ namespace Xamarin.Essentials
 
         static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
         {
-            if (!NSThread.Current.IsMainThread)
-                throw new InvalidOperationException("Location must be requested from the main thread.");
-
             await Permissions.RequireAsync(PermissionType.LocationWhenInUse);
 
-            var manager = new CLLocationManager();
+            var tcs = new TaskCompletionSource<CLLocation>();
 
-            var tcs = new TaskCompletionSource<CLLocation>(manager);
+            // the location manager requires an active run loop
+            // so just use the main loop
+            Platform.BeginInvokeOnMainThread(() =>
+            {
+                var manager = new CLLocationManager();
 
-            var listener = new SingleLocationListener();
-            listener.LocationHandler += HandleLocation;
+                var listener = new SingleLocationListener();
+                listener.LocationHandler += HandleLocation;
 
-            cancellationToken = Utils.TimeoutToken(cancellationToken, request.Timeout);
-            cancellationToken.Register(Cancel);
+                cancellationToken = Utils.TimeoutToken(cancellationToken, request.Timeout);
+                cancellationToken.Register(Cancel);
 
-            manager.DesiredAccuracy = request.PlatformDesiredAccuracy;
-            manager.Delegate = listener;
+                manager.DesiredAccuracy = request.PlatformDesiredAccuracy;
+                manager.Delegate = listener;
 
-            // we're only listening for a single update
-            manager.PausesLocationUpdatesAutomatically = false;
+                // we're only listening for a single update
+                manager.PausesLocationUpdatesAutomatically = false;
 
-            manager.StartUpdatingLocation();
+                manager.StartUpdatingLocation();
 
+                void HandleLocation(CLLocation location)
+                {
+                    manager.StopUpdatingLocation();
+                    tcs.TrySetResult(location);
+                }
+
+                void Cancel()
+                {
+                    manager.StopUpdatingLocation();
+                    tcs.TrySetResult(null);
+                }
+            });
+
+            // still wait and return on the background thread
             var clLocation = await tcs.Task;
 
             if (clLocation == null)
                 return null;
 
             return clLocation.ToLocation();
-
-            void HandleLocation(CLLocation location)
-            {
-                manager.StopUpdatingLocation();
-                tcs.TrySetResult(location);
-            }
-
-            void Cancel()
-            {
-                manager.StopUpdatingLocation();
-                tcs.TrySetResult(null);
-            }
         }
 
         class SingleLocationListener : CLLocationManagerDelegate
