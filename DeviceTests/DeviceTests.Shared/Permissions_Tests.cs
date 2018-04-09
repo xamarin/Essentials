@@ -5,10 +5,6 @@ using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xunit;
 
-#if __ANDROID__
-[assembly: Android.App.UsesPermission(Android.Manifest.Permission.BatteryStats)]
-#endif
-
 namespace DeviceTests
 {
     public class Permissions_Tests
