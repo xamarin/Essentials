@@ -1,6 +1,6 @@
 <Overview>
   <Assemblies>
-    <Assembly Name="Microsoft.Caboodle" Version="1.0.0.0">
+    <Assembly Name="Xamarin.Essentials" Version="1.0.0.0">
       <Attributes>
         <Attribute>
           <AttributeName>System.Diagnostics.Debuggable(System.Diagnostics.DebuggableAttribute+DebuggingModes.IgnoreSymbolStoreSequencePoints)</AttributeName>
@@ -15,7 +15,7 @@
           <AttributeName>System.Reflection.AssemblyCopyright("© Microsoft Corporation. All rights reserved.")</AttributeName>
         </Attribute>
         <Attribute>
-          <AttributeName>System.Reflection.AssemblyDescription("Microsoft Caboodle: a kit of essential API's for your apps")</AttributeName>
+          <AttributeName>System.Reflection.AssemblyDescription("Xamarin.Essentials: a kit of essential API's for your apps")</AttributeName>
         </Attribute>
         <Attribute>
           <AttributeName>System.Reflection.AssemblyFileVersion("1.0.0.0")</AttributeName>
@@ -24,10 +24,10 @@
           <AttributeName>System.Reflection.AssemblyInformationalVersion("1.0.0")</AttributeName>
         </Attribute>
         <Attribute>
-          <AttributeName>System.Reflection.AssemblyProduct("Microsoft.Caboodle (Xamarin.iOS10)")</AttributeName>
+          <AttributeName>System.Reflection.AssemblyProduct("Xamarin.Essentials (netstandard2.0)")</AttributeName>
         </Attribute>
         <Attribute>
-          <AttributeName>System.Reflection.AssemblyTitle("Microsoft.Caboodle")</AttributeName>
+          <AttributeName>System.Reflection.AssemblyTitle("Xamarin.Essentials")</AttributeName>
         </Attribute>
         <Attribute>
           <AttributeName>System.Resources.NeutralResourcesLanguage("en")</AttributeName>
@@ -36,10 +36,22 @@
           <AttributeName>System.Runtime.CompilerServices.CompilationRelaxations(8)</AttributeName>
         </Attribute>
         <Attribute>
+          <AttributeName>System.Runtime.CompilerServices.InternalsVisibleTo("Tests")</AttributeName>
+        </Attribute>
+        <Attribute>
+          <AttributeName>System.Runtime.CompilerServices.InternalsVisibleTo("DeviceTests.Android")</AttributeName>
+        </Attribute>
+        <Attribute>
+          <AttributeName>System.Runtime.CompilerServices.InternalsVisibleTo("DeviceTests.UWP")</AttributeName>
+        </Attribute>
+        <Attribute>
+          <AttributeName>System.Runtime.CompilerServices.InternalsVisibleTo("Xamarin.EssentialsDeviceTestsiOS")</AttributeName>
+        </Attribute>
+        <Attribute>
           <AttributeName>System.Runtime.CompilerServices.RuntimeCompatibility(WrapNonExceptionThrows=true)</AttributeName>
         </Attribute>
         <Attribute>
-          <AttributeName>System.Runtime.Versioning.TargetFramework("Xamarin.iOS,Version=v1.0", FrameworkDisplayName="Xamarin.iOS")</AttributeName>
+          <AttributeName>System.Runtime.Versioning.TargetFramework(".NETStandard,Version=v2.0", FrameworkDisplayName="")</AttributeName>
         </Attribute>
       </Attributes>
     </Assembly>
@@ -47,7 +59,11 @@
   <Remarks>To be added.</Remarks>
   <Copyright>To be added.</Copyright>
   <Types>
-    <Namespace Name="Microsoft.Caboodle">
+    <Namespace Name="Xamarin.Essentials">
+      <Type Name="Accelerometer" Kind="Class" />
+      <Type Name="AccelerometerChangedEventArgs" Kind="Class" />
+      <Type Name="AccelerometerChangedEventHandler" Kind="Delegate" />
+      <Type Name="AccelerometerData" Kind="Structure" />
       <Type Name="AppInfo" Kind="Class" />
       <Type Name="Battery" Kind="Class" />
       <Type Name="BatteryChangedEventArgs" Kind="Class" />
@@ -57,17 +73,38 @@
       <Type Name="Browser" Kind="Class" />
       <Type Name="BrowserLaunchType" Kind="Enumeration" />
       <Type Name="Clipboard" Kind="Class" />
+      <Type Name="Compass" Kind="Class" />
+      <Type Name="CompassChangedEventArgs" Kind="Class" />
+      <Type Name="CompassChangedEventHandler" Kind="Delegate" />
+      <Type Name="CompassData" Kind="Structure" />
+      <Type Name="ConnectionProfile" Kind="Enumeration" />
+      <Type Name="Connectivity" Kind="Class" />
+      <Type Name="ConnectivityChangedEventArgs" Kind="Class" />
+      <Type Name="ConnectivityChangedEventHandler" Kind="Delegate" />
       <Type Name="DataTransfer" Kind="Class" />
       <Type Name="DeviceInfo" Kind="Class" />
       <Type Name="DeviceInfo+Idioms" Kind="Class" />
       <Type Name="DeviceInfo+Platforms" Kind="Class" />
       <Type Name="DeviceType" Kind="Enumeration" />
       <Type Name="DistanceUnits" Kind="Enumeration" />
+      <Type Name="Email" Kind="Class" />
+      <Type Name="EmailBodyFormat" Kind="Enumeration" />
+      <Type Name="EmailMessage" Kind="Class" />
       <Type Name="FeatureNotSupportedException" Kind="Class" />
       <Type Name="FileSystem" Kind="Class" />
+      <Type Name="Flashlight" Kind="Class" />
       <Type Name="Geocoding" Kind="Class" />
+      <Type Name="Gyroscope" Kind="Class" />
+      <Type Name="GyroscopeChangedEventArgs" Kind="Class" />
+      <Type Name="GyroscopeChangedEventHandler" Kind="Delegate" />
+      <Type Name="GyroscopeData" Kind="Structure" />
       <Type Name="Location" Kind="Class" />
       <Type Name="LocationExtensions" Kind="Class" />
+      <Type Name="Magnetometer" Kind="Class" />
+      <Type Name="MagnetometerChangedEventArgs" Kind="Class" />
+      <Type Name="MagnetometerChangedEventHandler" Kind="Delegate" />
+      <Type Name="MagnetometerData" Kind="Structure" />
+      <Type Name="NetworkAccess" Kind="Enumeration" />
       <Type Name="NotImplementedInReferenceAssemblyException" Kind="Class" />
       <Type Name="PermissionException" Kind="Class" />
       <Type Name="PhoneDialer" Kind="Class" />
@@ -75,33 +112,37 @@
       <Type Name="Platform" Kind="Class" />
       <Type Name="Preferences" Kind="Class" />
       <Type Name="ScreenLock" Kind="Class" />
-      <Type Name="ScreenMetrics" Kind="Class" />
+      <Type Name="ScreenMetrics" Kind="Structure" />
       <Type Name="ScreenMetricsChanagedEventArgs" Kind="Class" />
       <Type Name="ScreenMetricsChanagedEventHandler" Kind="Delegate" />
       <Type Name="ScreenOrientation" Kind="Enumeration" />
       <Type Name="ScreenRotation" Kind="Enumeration" />
+      <Type Name="SecureStorage" Kind="Class" />
+      <Type Name="SensorSpeed" Kind="Enumeration" />
       <Type Name="ShareTextRequest" Kind="Class" />
       <Type Name="Sms" Kind="Class" />
       <Type Name="SmsMessage" Kind="Class" />
+      <Type Name="VersionTracking" Kind="Class" />
+      <Type Name="Vibration" Kind="Class" />
     </Namespace>
   </Types>
   <Title>Untitled</Title>
   <ExtensionMethods>
     <ExtensionMethod>
       <Targets>
-        <Target Type="T:Microsoft.Caboodle.Location" />
+        <Target Type="T:Xamarin.Essentials.Location" />
       </Targets>
       <Member MemberName="CalculateDistance">
-        <MemberSignature Language="C#" Value="public static double CalculateDistance (this Microsoft.Caboodle.Location locationStart, Microsoft.Caboodle.Location locationEnd, Microsoft.Caboodle.DistanceUnits units);" />
-        <MemberSignature Language="ILAsm" Value=".method public static hidebysig float64 CalculateDistance(class Microsoft.Caboodle.Location locationStart, class Microsoft.Caboodle.Location locationEnd, valuetype Microsoft.Caboodle.DistanceUnits units) cil managed" />
+        <MemberSignature Language="C#" Value="public static double CalculateDistance (this Xamarin.Essentials.Location locationStart, Xamarin.Essentials.Location locationEnd, Xamarin.Essentials.DistanceUnits units);" />
+        <MemberSignature Language="ILAsm" Value=".method public static hidebysig float64 CalculateDistance(class Xamarin.Essentials.Location locationStart, class Xamarin.Essentials.Location locationEnd, valuetype Xamarin.Essentials.DistanceUnits units) cil managed" />
         <MemberType>ExtensionMethod</MemberType>
         <ReturnValue>
           <ReturnType>System.Double</ReturnType>
         </ReturnValue>
         <Parameters>
-          <Parameter Name="locationStart" Type="Microsoft.Caboodle.Location" RefType="this" />
-          <Parameter Name="locationEnd" Type="Microsoft.Caboodle.Location" />
-          <Parameter Name="units" Type="Microsoft.Caboodle.DistanceUnits" />
+          <Parameter Name="locationStart" Type="Xamarin.Essentials.Location" RefType="this" />
+          <Parameter Name="locationEnd" Type="Xamarin.Essentials.Location" />
+          <Parameter Name="units" Type="Xamarin.Essentials.DistanceUnits" />
         </Parameters>
         <Docs>
           <param name="locationStart">Start location to calculate from.</param>
@@ -109,7 +150,7 @@
           <param name="units">Units to use during calculation.</param>
           <summary>Extension to calculate distance from location to another location.</summary>
         </Docs>
-        <Link Type="Microsoft.Caboodle.LocationExtensions" Member="M:Microsoft.Caboodle.LocationExtensions.CalculateDistance(Microsoft.Caboodle.Location,Microsoft.Caboodle.Location,Microsoft.Caboodle.DistanceUnits)" />
+        <Link Type="Xamarin.Essentials.LocationExtensions" Member="M:Xamarin.Essentials.LocationExtensions.CalculateDistance(Xamarin.Essentials.Location,Xamarin.Essentials.Location,Xamarin.Essentials.DistanceUnits)" />
       </Member>
     </ExtensionMethod>
   </ExtensionMethods>
