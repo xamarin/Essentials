@@ -12,21 +12,10 @@ namespace DeviceTests
         [Theory]
         [InlineData(PermissionType.Battery)]
         [InlineData(PermissionType.NetworkState)]
+        [InlineData(PermissionType.LocationWhenInUse)]
         internal void Ensure_Declared(PermissionType permission)
         {
             Permissions.EnsureDeclared(permission);
-        }
-
-        [Theory]
-        [InlineData(PermissionType.LocationWhenInUse)]
-        internal void Ensure_Declared_Throws(PermissionType permission)
-        {
-            if (DeviceInfo.Platform == DeviceInfo.Platforms.UWP)
-            {
-                return;
-            }
-
-            Assert.Throws<PermissionException>(() => Permissions.EnsureDeclared(permission));
         }
 
         [Theory]
@@ -37,18 +26,6 @@ namespace DeviceTests
             var status = await Permissions.CheckStatusAsync(permission);
 
             Assert.Equal(expectedStatus, status);
-        }
-
-        [Theory]
-        [InlineData(PermissionType.LocationWhenInUse)]
-        internal Task Check_Status_Throws(PermissionType permission)
-        {
-            if (DeviceInfo.Platform == DeviceInfo.Platforms.UWP)
-            {
-                return Task.CompletedTask;
-            }
-
-            return Assert.ThrowsAsync<PermissionException>(async () => await Permissions.CheckStatusAsync(permission));
         }
 
         [Theory]
