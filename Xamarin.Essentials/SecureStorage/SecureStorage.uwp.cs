@@ -35,7 +35,7 @@ namespace Xamarin.Essentials
             var provider = new DataProtectionProvider("LOCAL=user");
 
             var buffer = await provider.ProtectAsync(bytes.AsBuffer());
-          
+
             var encBytes = buffer.ToArray();
 
             settings.Values[key] = encBytes;
