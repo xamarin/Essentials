@@ -93,7 +93,7 @@
     </ItemGroup>
     <RemoveDir Directories="$(TmpDir)" />
     <MakeDir Directories="$(TmpDir)" />
-    <Copy SourceFiles="$(MDocDocumentationDirectory)\frameworks.xml" DestinationFolder="$(TmpDir)" />
+    <Copy SourceFiles="$(MDocDocumentationDirectory)\..\frameworks.xml" DestinationFolder="$(TmpDir)" />
     <Copy SourceFiles="%(MDocAssembly.Identity)" DestinationFolder="$(TmpDir)$([System.IO.Path]::GetFileName($([System.IO.Path]::GetDirectoryName(%(MDocAssembly.Identity)))))" />
     <Exec Command="$(_ManagedExeLauncher) &quot;$(MDocToolPath)&quot; update -lang=DocId --frameworks=&quot;$(TmpDir)frameworks.xml&quot; --out=&quot;$(MDocDocumentationDirectory)&quot; $(MDocReferenceAssemblies)" />
     <_FormatDocs DocsRoot="$(MDocDocumentationDirectory)" />
