@@ -52,7 +52,7 @@ namespace Xamarin.Essentials
                             return BatteryState.Full;
                         return BatteryState.NotCharging;
                     case Windows.System.Power.BatteryStatus.NotPresent:
-                        return BatteryState.Unknown;
+                        return BatteryState.NotPresent;
                 }
 
                 if (ChargeLevel >= 1.0)
@@ -67,7 +67,7 @@ namespace Xamarin.Essentials
             get
             {
                 var currentStatus = State;
-                if (currentStatus == BatteryState.Full || currentStatus == BatteryState.Charging)
+                if (currentStatus == BatteryState.Full || currentStatus == BatteryState.Charging || currentState == BatteryState.NotPresent)
                     return BatteryPowerSource.Ac;
 
                 if (currentStatus == BatteryState.Unknown)

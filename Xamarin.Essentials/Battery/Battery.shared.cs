@@ -71,7 +71,8 @@ namespace Xamarin.Essentials
         Charging,
         Discharging,
         Full,
-        NotCharging
+        NotCharging,
+        NotPresent
     }
 
     public enum BatteryPowerSource
