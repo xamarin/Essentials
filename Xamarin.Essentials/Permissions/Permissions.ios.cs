@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CoreLocation;
 using Foundation;
-using UIKit;
 
 namespace Xamarin.Essentials
 {
@@ -11,16 +8,12 @@ namespace Xamarin.Essentials
     {
         static void PlatformEnsureDeclared(PermissionType permission)
         {
-            // Info.plist declarations were only required in >= iOS 8.0
-            if (!Platform.HasOSVersion(8, 0))
-                return;
-
             var info = NSBundle.MainBundle.InfoDictionary;
 
             if (permission == PermissionType.LocationWhenInUse)
             {
                 if (!info.ContainsKey(new NSString("NSLocationWhenInUseUsageDescription")))
-                    throw new PermissionException("On iOS 8.0 and higher you must set either `NSLocationWhenInUseUsageDescription` or `NSLocationAlwaysUsageDescription` in your Info.plist file to enable Authorization Requests for Location updates!");
+                    throw new PermissionException("On iOS 8.0 and higher you must set either `NSLocationWhenInUseUsageDescription` in your Info.plist file to enable Authorization Requests for Location updates!");
             }
         }
 
@@ -61,25 +54,10 @@ namespace Xamarin.Essentials
 
             var status = CLLocationManager.Status;
 
-            if (Platform.HasOSVersion(8, 0))
-            {
-                switch (status)
-                {
-                    case CLAuthorizationStatus.AuthorizedAlways:
-                    case CLAuthorizationStatus.AuthorizedWhenInUse:
-                        return PermissionStatus.Granted;
-                    case CLAuthorizationStatus.Denied:
-                        return PermissionStatus.Denied;
-                    case CLAuthorizationStatus.Restricted:
-                        return PermissionStatus.Restricted;
-                    default:
-                        return PermissionStatus.Unknown;
-                }
-            }
-
             switch (status)
             {
-                case CLAuthorizationStatus.Authorized:
+                case CLAuthorizationStatus.AuthorizedAlways:
+                case CLAuthorizationStatus.AuthorizedWhenInUse:
                     return PermissionStatus.Granted;
                 case CLAuthorizationStatus.Denied:
                     return PermissionStatus.Denied;
@@ -90,17 +68,16 @@ namespace Xamarin.Essentials
             }
         }
 
+        static CLLocationManager locationManager;
+
         static Task<PermissionStatus> RequestLocationAsync()
         {
-            if (!UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
-                return Task.FromResult(PermissionStatus.Unknown);
+            locationManager = new CLLocationManager();
 
-            var manager = new CLLocationManager();
+            var tcs = new TaskCompletionSource<PermissionStatus>(locationManager);
 
-            var tcs = new TaskCompletionSource<PermissionStatus>(manager);
-
-            manager.AuthorizationChanged += LocationAuthCallback;
-            manager.RequestWhenInUseAuthorization();
+            locationManager.AuthorizationChanged += LocationAuthCallback;
+            locationManager.RequestWhenInUseAuthorization();
 
             return tcs.Task;
 
@@ -109,8 +86,10 @@ namespace Xamarin.Essentials
                 if (e.Status == CLAuthorizationStatus.NotDetermined)
                     return;
 
-                manager.AuthorizationChanged -= LocationAuthCallback;
+                locationManager.AuthorizationChanged -= LocationAuthCallback;
                 tcs.TrySetResult(GetLocationStatus());
+                locationManager.Dispose();
+                locationManager = null;
             }
         }
     }
