@@ -1,0 +1,6 @@
+<Frameworks>
+  <Framework Name="xamarin-essentials" Source="xamarin-essentials" />
+  <Framework Name="xamarin-essentials-android" Source="xamarin-essentials-android" />
+  <Framework Name="xamarin-essentials-ios" Source="xamarin-essentials-ios" />
+  <Framework Name="xamarin-essentials-uwp" Source="xamarin-essentials-uwp" />
+</Frameworks>
