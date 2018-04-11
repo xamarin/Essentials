@@ -10,6 +10,9 @@ namespace Xamarin.Essentials
         internal const uint GameInterval = 22;
         internal const uint NormalInterval = 33;
 
+        // keep around a reference so we can stop this same instance
+        static WindowsGyro sensor;
+
         internal static WindowsGyro DefaultSensor =>
             WindowsGyro.GetDefault();
 
@@ -18,7 +21,7 @@ namespace Xamarin.Essentials
 
         internal static void PlatformStart(SensorSpeed sensorSpeed)
         {
-            var sensor = DefaultSensor;
+            sensor = DefaultSensor;
 
             var interval = NormalInterval;
             switch (sensorSpeed)
@@ -45,7 +48,6 @@ namespace Xamarin.Essentials
 
         internal static void PlatformStop()
         {
-            var sensor = DefaultSensor;
             sensor.ReadingChanged -= DataUpdated;
         }
     }
