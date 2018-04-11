@@ -23,6 +23,7 @@ namespace Caboodle.Samples.ViewModel
                 new SampleItem("Screen Lock", typeof(ScreenLockPage), "Keep the device screen awake."),
                 new SampleItem("Secure Storage", typeof(SecureStoragePage), "Securely store data."),
                 new SampleItem("SMS", typeof(SMSPage), "Easily send SMS messages."),
+                new SampleItem("Text To Speech", typeof(TextToSpeechPage), "Speak!"),
             };
         }
 

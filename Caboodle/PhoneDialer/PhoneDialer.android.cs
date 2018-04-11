@@ -29,11 +29,11 @@ namespace Microsoft.Caboodle
             var phoneNumber = string.Empty;
             if (Platform.HasApiLevel(BuildVersionCodes.N))
             {
-                phoneNumber = PhoneNumberUtils.FormatNumber(number, Locale.GetDefault(Locale.Category.Format).Country);
+                phoneNumber = PhoneNumberUtils.FormatNumber(number, Java.Util.Locale.GetDefault(Java.Util.Locale.Category.Format).Country);
             }
             else if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
             {
-                phoneNumber = PhoneNumberUtils.FormatNumber(number, Locale.Default.Country);
+                phoneNumber = PhoneNumberUtils.FormatNumber(number, Java.Util.Locale.Default.Country);
             }
             else
             {
