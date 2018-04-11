@@ -4,14 +4,14 @@ using Xamarin.Forms;
 
 namespace Samples.ViewModel
 {
-    class DataTransferViewModel : BaseViewModel
+    public class DataTransferViewModel : BaseViewModel
     {
-        bool shareText = true;
-        bool shareUri;
-        string text;
-        string uri;
-        string subject;
-        string title;
+        private bool shareText = true;
+        private bool shareUri;
+        private string text;
+        private string uri;
+        private string subject;
+        private string title;
 
         public ICommand RequestCommand { get; }
 
@@ -56,7 +56,7 @@ namespace Samples.ViewModel
             set => SetProperty(ref title, value);
         }
 
-        async void OnRequest()
+        private async void OnRequest()
         {
             await DataTransfer.RequestAsync(new ShareTextRequest
             {

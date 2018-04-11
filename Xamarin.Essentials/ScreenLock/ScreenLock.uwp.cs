@@ -4,8 +4,8 @@ namespace Xamarin.Essentials
 {
     public static partial class ScreenLock
     {
-        static readonly object locker = new object();
-        static DisplayRequest displayRequest;
+        private static readonly object locker = new object();
+        private static DisplayRequest displayRequest;
 
         public static bool IsActive
         {

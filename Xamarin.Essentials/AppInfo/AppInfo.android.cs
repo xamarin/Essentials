@@ -5,16 +5,16 @@ namespace Xamarin.Essentials
 {
     public static partial class AppInfo
     {
-        static string GetPackageName() => Platform.CurrentContext.PackageName;
+        private static string GetPackageName() => Platform.CurrentContext.PackageName;
 
-        static string GetName()
+        private static string GetName()
         {
             var applicationInfo = Platform.CurrentContext.ApplicationInfo;
             var packageManager = Platform.CurrentContext.PackageManager;
             return applicationInfo.LoadLabel(packageManager);
         }
 
-        static string GetVersionString()
+        private static string GetVersionString()
         {
             var pm = Platform.CurrentContext.PackageManager;
             var packageName = Platform.CurrentContext.PackageName;
@@ -24,7 +24,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static string GetBuild()
+        private static string GetBuild()
         {
             var pm = Platform.CurrentContext.PackageManager;
             var packageName = Platform.CurrentContext.PackageName;

@@ -8,11 +8,11 @@ namespace Samples.ViewModel
 {
     public class GyroscopeViewModel : BaseViewModel
     {
-        double x;
-        double y;
-        double z;
-        bool isActive;
-        int speed = 2;
+        private double x;
+        private double y;
+        private double z;
+        private bool isActive;
+        private int speed = 2;
 
         public GyroscopeViewModel()
         {
@@ -73,7 +73,7 @@ namespace Samples.ViewModel
             base.OnDisappearing();
         }
 
-        void OnReadingChanged(GyroscopeChangedEventArgs e)
+        private void OnReadingChanged(GyroscopeChangedEventArgs e)
         {
             var data = e.Reading;
             switch ((SensorSpeed)Speed)
@@ -95,7 +95,7 @@ namespace Samples.ViewModel
             }
         }
 
-        async void OnStart()
+        private async void OnStart()
         {
             try
             {
@@ -108,7 +108,7 @@ namespace Samples.ViewModel
             }
         }
 
-        void OnStop()
+        private void OnStop()
         {
             IsActive = false;
             Gyroscope.Stop();

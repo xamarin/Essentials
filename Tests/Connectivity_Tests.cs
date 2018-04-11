@@ -17,7 +17,7 @@ namespace Tests
         public void Connectivity_Changed_Event_On_NetStandard() =>
             Assert.Throws<NotImplementedInReferenceAssemblyException>(() => Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged);
 
-        void Connectivity_ConnectivityChanged(ConnectivityChangedEventArgs e)
+        private void Connectivity_ConnectivityChanged(ConnectivityChangedEventArgs e)
         {
         }
     }

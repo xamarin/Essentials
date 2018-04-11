@@ -5,7 +5,7 @@ namespace Samples.ViewModel
 {
     public class BaseViewModel : ObservableObject
     {
-        bool isBusy;
+        private bool isBusy;
 
         public bool IsBusy
         {

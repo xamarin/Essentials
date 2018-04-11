@@ -6,8 +6,8 @@ namespace Samples.ViewModel
 {
     public class FlashlightViewModel : BaseViewModel
     {
-        bool isOn;
-        bool isSupported = true;
+        private bool isOn;
+        private bool isSupported = true;
 
         public FlashlightViewModel()
         {
@@ -43,7 +43,7 @@ namespace Samples.ViewModel
             base.OnDisappearing();
         }
 
-        async void OnToggle()
+        private async void OnToggle()
         {
             try
             {

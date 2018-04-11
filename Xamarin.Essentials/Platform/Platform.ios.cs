@@ -53,7 +53,7 @@ namespace Xamarin.Essentials
             return viewController;
         }
 
-        static CMMotionManager motionManager;
+        private static CMMotionManager motionManager;
 
         internal static CMMotionManager MotionManager =>
             motionManager ?? (motionManager = new CMMotionManager());

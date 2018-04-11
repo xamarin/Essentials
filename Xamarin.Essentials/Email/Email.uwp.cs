@@ -13,7 +13,7 @@ namespace Xamarin.Essentials
         internal static bool IsComposeSupported
             => ApiInformation.IsTypePresent("Windows.ApplicationModel.Email.EmailManager");
 
-        static async Task PlatformComposeAsync(EmailMessage message)
+        private static async Task PlatformComposeAsync(EmailMessage message)
         {
             if (message != null && message.BodyFormat != EmailBodyFormat.PlainText)
                 throw new FeatureNotSupportedException("UWP can only compose plain text email messages.");
@@ -30,7 +30,7 @@ namespace Xamarin.Essentials
             await EmailManager.ShowComposeNewEmailAsync(nativeMessage);
         }
 
-        static void Sync(List<string> recipients, IList<EmailRecipient> nativeRecipients)
+        private static void Sync(List<string> recipients, IList<EmailRecipient> nativeRecipients)
         {
             if (recipients == null)
                 return;

@@ -11,10 +11,10 @@ namespace Xamarin.Essentials
 {
     internal static partial class Permissions
     {
-        const string appManifestFilename = "AppxManifest.xml";
-        const string appManifestXmlns = "http://schemas.microsoft.com/appx/manifest/foundation/windows10";
+        private const string appManifestFilename = "AppxManifest.xml";
+        private const string appManifestXmlns = "http://schemas.microsoft.com/appx/manifest/foundation/windows10";
 
-        static void PlatformEnsureDeclared(PermissionType permission)
+        private static void PlatformEnsureDeclared(PermissionType permission)
         {
             var uwpCapabilities = permission.ToUWPCapabilities();
 
@@ -35,7 +35,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static Task<PermissionStatus> PlatformCheckStatusAsync(PermissionType permission)
+        private static Task<PermissionStatus> PlatformCheckStatusAsync(PermissionType permission)
         {
             switch (permission)
             {
@@ -46,10 +46,10 @@ namespace Xamarin.Essentials
             return Task.FromResult(PermissionStatus.Granted);
         }
 
-        static Task<PermissionStatus> PlatformRequestAsync(PermissionType permission) =>
+        private static Task<PermissionStatus> PlatformRequestAsync(PermissionType permission) =>
             PlatformCheckStatusAsync(permission);
 
-        static async Task<PermissionStatus> CheckLocationAsync()
+        private static async Task<PermissionStatus> CheckLocationAsync()
         {
             var accessStatus = await Geolocator.RequestAccessAsync();
 
@@ -67,7 +67,7 @@ namespace Xamarin.Essentials
 
     internal static class PermissionTypeExtensions
     {
-        internal static string[] ToUWPCapabilities(this PermissionType permissionType)
+        public static string[] ToUWPCapabilities(this PermissionType permissionType)
         {
             switch (permissionType)
             {

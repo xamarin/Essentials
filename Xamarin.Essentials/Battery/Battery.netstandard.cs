@@ -2,10 +2,10 @@
 {
     public static partial class Battery
     {
-        static void StartBatteryListeners() =>
+        private static void StartBatteryListeners() =>
             throw new NotImplementedInReferenceAssemblyException();
 
-        static void StopBatteryListeners() =>
+        private static void StopBatteryListeners() =>
             throw new NotImplementedInReferenceAssemblyException();
 
         public static double ChargeLevel =>

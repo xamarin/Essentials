@@ -7,13 +7,13 @@ namespace Xamarin.Essentials
 {
     public static class VersionTracking
     {
-        const string versionTrailKey = "VersionTracking.Trail";
-        const string versionsKey = "VersionTracking.Versions";
-        const string buildsKey = "VersionTracking.Builds";
+        private const string versionTrailKey = "VersionTracking.Trail";
+        private const string versionsKey = "VersionTracking.Versions";
+        private const string buildsKey = "VersionTracking.Builds";
 
-        static readonly string sharedName = Preferences.PrivatePreferencesSharedName;
+        private static readonly string sharedName = Preferences.PrivatePreferencesSharedName;
 
-        static Dictionary<string, List<string>> versionTrail;
+        private static Dictionary<string, List<string>> versionTrail;
 
         static VersionTracking()
         {
@@ -108,13 +108,13 @@ namespace Xamarin.Essentials
             return sb.ToString();
         }
 
-        static string[] ReadHistory(string key)
+        private static string[] ReadHistory(string key)
             => Preferences.Get(key, null, sharedName)?.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries) ?? new string[0];
 
-        static void WriteHistory(string key, IEnumerable<string> history)
+        private static void WriteHistory(string key, IEnumerable<string> history)
             => Preferences.Set(key, string.Join("|", history), sharedName);
 
-        static string GetPrevious(string key)
+        private static string GetPrevious(string key)
         {
             var trail = versionTrail[key];
             return (trail.Count >= 2) ? trail[trail.Count - 2] : null;

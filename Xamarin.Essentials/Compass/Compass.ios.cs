@@ -13,9 +13,9 @@ namespace Xamarin.Essentials
         internal static bool IsSupported =>
             CLLocationManager.HeadingAvailable;
 
-        static CLLocationManager locationManager;
+        private static CLLocationManager locationManager;
 
-        internal static void PlatformStart(SensorSpeed sensorSpeed)
+        private static void PlatformStart(SensorSpeed sensorSpeed)
         {
             locationManager = new CLLocationManager();
             switch (sensorSpeed)
@@ -42,13 +42,13 @@ namespace Xamarin.Essentials
             locationManager.StartUpdatingHeading();
         }
 
-        static void LocationManagerUpdatedHeading(object sender, CLHeadingUpdatedEventArgs e)
+        private static void LocationManagerUpdatedHeading(object sender, CLHeadingUpdatedEventArgs e)
         {
             var data = new CompassData(e.NewHeading.MagneticHeading);
             OnChanged(data);
         }
 
-        internal static void PlatformStop()
+        private static void PlatformStop()
         {
             if (locationManager == null)
             {

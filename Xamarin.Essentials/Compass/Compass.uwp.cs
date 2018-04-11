@@ -11,15 +11,15 @@ namespace Xamarin.Essentials
         internal const uint GameInterval = 22;
         internal const uint NormalInterval = 33;
 
-        static WindowsCompass sensor;
+        private static WindowsCompass sensor;
 
-        internal static WindowsCompass DefaultCompass =>
+        private static WindowsCompass DefaultCompass =>
             WindowsCompass.GetDefault();
 
         internal static bool IsSupported =>
             DefaultCompass != null;
 
-        internal static void PlatformStart(SensorSpeed sensorSpeed)
+        private static void PlatformStart(SensorSpeed sensorSpeed)
         {
             sensor = DefaultCompass;
             var interval = NormalInterval;
@@ -38,13 +38,13 @@ namespace Xamarin.Essentials
             sensor.ReadingChanged += CompassReportedInterval;
         }
 
-        static void CompassReportedInterval(object sender, CompassReadingChangedEventArgs e)
+        private static void CompassReportedInterval(object sender, CompassReadingChangedEventArgs e)
         {
             var data = new CompassData(e.Reading.HeadingMagneticNorth);
             OnChanged(data);
         }
 
-        internal static void PlatformStop()
+        private static void PlatformStop()
         {
             if (sensor == null)
                 return;

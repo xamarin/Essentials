@@ -6,16 +6,16 @@ namespace Xamarin.Essentials
 {
     public static partial class Connectivity
     {
-        static void StartListeners() =>
+        private static void StartListeners() =>
             Reachability.ReachabilityChanged += ReachabilityChanged;
 
-        static async void ReachabilityChanged(object sender, EventArgs e)
+        private static async void ReachabilityChanged(object sender, EventArgs e)
         {
             await Task.Delay(100);
             OnConnectivityChanged();
         }
 
-        static void StopListeners() =>
+        private static void StopListeners() =>
             Reachability.ReachabilityChanged -= ReachabilityChanged;
 
         public static NetworkAccess NetworkAccess

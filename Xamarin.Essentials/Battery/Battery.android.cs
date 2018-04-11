@@ -6,11 +6,11 @@ namespace Xamarin.Essentials
 {
     public static partial class Battery
     {
-        static BatteryBroadcastReceiver batteryReceiver;
+        private static BatteryBroadcastReceiver batteryReceiver;
 
-        static bool hasBatteryStatsPermission;
+        private static bool hasBatteryStatsPermission;
 
-        static void ValidateBatteryStatsPermission()
+        private static void ValidateBatteryStatsPermission()
         {
             if (hasBatteryStatsPermission)
                 return;
@@ -20,14 +20,14 @@ namespace Xamarin.Essentials
             hasBatteryStatsPermission = true;
         }
 
-        static void StartBatteryListeners()
+        private static void StartBatteryListeners()
         {
             ValidateBatteryStatsPermission();
             batteryReceiver = new BatteryBroadcastReceiver(OnBatteryChanged);
             Platform.CurrentContext.RegisterReceiver(batteryReceiver, new IntentFilter(Intent.ActionBatteryChanged));
         }
 
-        static void StopBatteryListeners()
+        private static void StopBatteryListeners()
         {
             Platform.CurrentContext.UnregisterReceiver(batteryReceiver);
             batteryReceiver?.Dispose();
@@ -105,9 +105,9 @@ namespace Xamarin.Essentials
         }
     }
 
-    class BatteryBroadcastReceiver : BroadcastReceiver
+    internal class BatteryBroadcastReceiver : BroadcastReceiver
     {
-        Action onChanged;
+        private Action onChanged;
 
         public BatteryBroadcastReceiver(Action onChanged) =>
             this.onChanged = onChanged;

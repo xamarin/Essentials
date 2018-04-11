@@ -23,7 +23,7 @@ namespace Xamarin.Essentials
             return Task.FromResult((Stream)File.OpenRead(file));
         }
 
-        static string GetDirectory(NSSearchPathDirectory directory)
+        private static string GetDirectory(NSSearchPathDirectory directory)
         {
             var dirs = NSSearchPath.GetDirectories(directory, NSSearchPathDomain.User);
             if (dirs == null || dirs.Length == 0)

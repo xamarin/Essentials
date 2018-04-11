@@ -9,7 +9,7 @@ namespace Xamarin.Essentials
 {
     public partial class SecureStorage
     {
-        static async Task<string> PlatformGetAsync(string key)
+        private static async Task<string> PlatformGetAsync(string key)
         {
             var settings = GetSettings(Alias);
 
@@ -25,7 +25,7 @@ namespace Xamarin.Essentials
             return Encoding.UTF8.GetString(buffer.ToArray());
         }
 
-        static async Task PlatformSetAsync(string key, string data)
+        private static async Task PlatformSetAsync(string key, string data)
         {
             var settings = GetSettings(Alias);
 
@@ -41,7 +41,7 @@ namespace Xamarin.Essentials
             settings.Values[key] = encBytes;
         }
 
-        static ApplicationDataContainer GetSettings(string name)
+        private static ApplicationDataContainer GetSettings(string name)
         {
             var localSettings = ApplicationData.Current.LocalSettings;
 

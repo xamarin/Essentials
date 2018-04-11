@@ -11,7 +11,7 @@ namespace Samples.View
             InitializeComponent();
         }
 
-        async void OnSampleTapped(object sender, ItemTappedEventArgs e)
+        private async void OnSampleTapped(object sender, ItemTappedEventArgs e)
         {
             var item = e.Item as SampleItem;
             if (item == null)

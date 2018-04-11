@@ -9,12 +9,12 @@ namespace Xamarin.Essentials
         internal static bool IsSupported
             => ApiInformation.IsTypePresent("Windows.Phone.Devices.Notification.VibrationDevice") && DefaultDevice != null;
 
-        static VibrationDevice DefaultDevice => VibrationDevice.GetDefault();
+        private static VibrationDevice DefaultDevice => VibrationDevice.GetDefault();
 
-        static void PlatformVibrate(TimeSpan duration) =>
+        private static void PlatformVibrate(TimeSpan duration) =>
             DefaultDevice.Vibrate(duration);
 
-        static void PlatformCancel() =>
+        private static void PlatformCancel() =>
             DefaultDevice.Cancel();
     }
 }

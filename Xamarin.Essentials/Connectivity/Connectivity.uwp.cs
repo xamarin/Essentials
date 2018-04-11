@@ -6,13 +6,13 @@ namespace Xamarin.Essentials
 {
     public static partial class Connectivity
     {
-        static void StartListeners() =>
+        private static void StartListeners() =>
              NetworkInformation.NetworkStatusChanged += NetworkStatusChanged;
 
-        static void NetworkStatusChanged(object sender) =>
+        private static void NetworkStatusChanged(object sender) =>
             OnConnectivityChanged();
 
-        static void StopListeners() =>
+        private static void StopListeners() =>
              NetworkInformation.NetworkStatusChanged -= NetworkStatusChanged;
 
         public static NetworkAccess NetworkAccess

@@ -6,8 +6,8 @@ namespace Samples.ViewModel
 {
     public class VibrationViewModel : BaseViewModel
     {
-        int duration = 500;
-        bool isSupported = true;
+        private int duration = 500;
+        private bool isSupported = true;
 
         public VibrationViewModel()
         {
@@ -38,7 +38,7 @@ namespace Samples.ViewModel
             base.OnDisappearing();
         }
 
-        void OnVibrate()
+        private void OnVibrate()
         {
             try
             {
@@ -50,7 +50,7 @@ namespace Samples.ViewModel
             }
         }
 
-        void OnCancel()
+        private void OnCancel()
         {
             try
             {

@@ -10,19 +10,19 @@ namespace Xamarin.Essentials
 {
     public static partial class Flashlight
     {
-        static readonly object locker = new object();
+        private static readonly object locker = new object();
 
 #pragma warning disable CS0618
-        static Camera camera;
+        private static Camera camera;
 #pragma warning restore CS0618
-        static SurfaceTexture surface;
+        private static SurfaceTexture surface;
 
         internal static bool IsSupported
             => Platform.HasSystemFeature(PackageManager.FeatureCameraFlash);
 
         internal static bool AlwaysUseCameraApi { get; set; } = false;
 
-        static async Task PlatformTurnOnAsync()
+        private static async Task PlatformTurnOnAsync()
         {
             await Permissions.RequireAsync(PermissionType.Flashlight);
 
@@ -32,7 +32,7 @@ namespace Xamarin.Essentials
             await ToggleTorchAsync(true);
         }
 
-        static async Task PlatformTurnOffAsync()
+        private static async Task PlatformTurnOffAsync()
         {
             await Permissions.RequireAsync(PermissionType.Flashlight);
 
@@ -42,7 +42,7 @@ namespace Xamarin.Essentials
             await ToggleTorchAsync(false);
         }
 
-        static Task ToggleTorchAsync(bool switchOn)
+        private static Task ToggleTorchAsync(bool switchOn)
         {
             return Task.Run(() =>
             {

@@ -7,9 +7,9 @@ namespace Samples.ViewModel
 {
     public class GeolocationViewModel : BaseViewModel
     {
-        string lastLocation;
-        string currentLocation;
-        int accuracy = (int)GeolocationAccuracy.Medium;
+        private string lastLocation;
+        private string currentLocation;
+        private int accuracy = (int)GeolocationAccuracy.Medium;
 
         public GeolocationViewModel()
         {
@@ -42,7 +42,7 @@ namespace Samples.ViewModel
             set => SetProperty(ref accuracy, value);
         }
 
-        async void OnGetLastLocation()
+        private async void OnGetLastLocation()
         {
             if (IsBusy)
                 return;
@@ -60,7 +60,7 @@ namespace Samples.ViewModel
             IsBusy = false;
         }
 
-        async void OnGetCurrentLocation()
+        private async void OnGetCurrentLocation()
         {
             if (IsBusy)
                 return;
@@ -79,7 +79,7 @@ namespace Samples.ViewModel
             IsBusy = false;
         }
 
-        string FormatLocation(Location location)
+        private string FormatLocation(Location location)
         {
             if (location == null)
             {

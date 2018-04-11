@@ -8,7 +8,7 @@ namespace Xamarin.Essentials
         internal static bool IsComposeSupported
             => MFMessageComposeViewController.CanSendText;
 
-        static Task PlatformComposeAsync(SmsMessage message)
+        private static Task PlatformComposeAsync(SmsMessage message)
         {
             // do this first so we can throw as early as possible
             var controller = Platform.GetCurrentViewController();

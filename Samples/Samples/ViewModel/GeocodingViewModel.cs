@@ -8,11 +8,11 @@ namespace Samples.ViewModel
 {
     public class GeocodingViewModel : BaseViewModel
     {
-        string lat = "47.673988";
-        string lon = "-122.121513";
-        string address = "Microsoft Building 25 Redmond WA USA";
-        string geocodeAddress;
-        string geocodePosition;
+        private string lat = "47.673988";
+        private string lon = "-122.121513";
+        private string address = "Microsoft Building 25 Redmond WA USA";
+        private string geocodeAddress;
+        private string geocodePosition;
 
         public GeocodingViewModel()
         {
@@ -54,7 +54,7 @@ namespace Samples.ViewModel
             set => SetProperty(ref geocodePosition, value);
         }
 
-        async void OnGetPosition()
+        private async void OnGetPosition()
         {
             if (IsBusy)
                 return;
@@ -85,7 +85,7 @@ namespace Samples.ViewModel
             }
         }
 
-        async void OnGetAddress()
+        private async void OnGetAddress()
         {
             if (IsBusy)
                 return;

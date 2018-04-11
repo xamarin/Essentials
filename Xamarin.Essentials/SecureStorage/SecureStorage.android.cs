@@ -14,7 +14,7 @@ namespace Xamarin.Essentials
 {
     public static partial class SecureStorage
     {
-        static Task<string> PlatformGetAsync(string key)
+        private static Task<string> PlatformGetAsync(string key)
         {
             var context = Platform.CurrentContext;
 
@@ -30,7 +30,7 @@ namespace Xamarin.Essentials
             return Task.FromResult(decryptedData);
         }
 
-        static Task PlatformSetAsync(string key, string data)
+        private static Task PlatformSetAsync(string key, string data)
         {
             var context = Platform.CurrentContext;
 
@@ -51,14 +51,19 @@ namespace Xamarin.Essentials
         internal static bool AlwaysUseAsymmetricKeyStorage { get; set; } = false;
     }
 
-    class AndroidKeyStore
+    internal class AndroidKeyStore
     {
-        const string androidKeyStore = "AndroidKeyStore"; // this is an Android const value
-        const string aesAlgorithm = "AES";
-        const string cipherTransformationAsymmetric = "RSA/ECB/PKCS1Padding";
-        const string cipherTransformationSymmetric = "AES/GCM/NoPadding";
-        const string prefsMasterKey = "SecureStorageKey";
-        const int initializationVectorLen = 12; // Android supports an IV of 12 for AES/GCM
+        private const string androidKeyStore = "AndroidKeyStore"; // this is an Android const value
+        private const string aesAlgorithm = "AES";
+        private const string cipherTransformationAsymmetric = "RSA/ECB/PKCS1Padding";
+        private const string cipherTransformationSymmetric = "AES/GCM/NoPadding";
+        private const string prefsMasterKey = "SecureStorageKey";
+        private const int initializationVectorLen = 12; // Android supports an IV of 12 for AES/GCM
+
+        private Context appContext;
+        private string alias;
+        private KeyStore keyStore;
+        private bool alwaysUseAsymmetricKey;
 
         public AndroidKeyStore(Context context, string keystoreAlias, bool alwaysUseAsymmetricKeyStorage)
         {
@@ -70,12 +75,7 @@ namespace Xamarin.Essentials
             keyStore.Load(null);
         }
 
-        Context appContext;
-        string alias;
-        KeyStore keyStore;
-        bool alwaysUseAsymmetricKey;
-
-        ISecretKey GetKey()
+        private ISecretKey GetKey()
         {
             // If >= API 23 we can use the KeyStore's symmetric key
             if (Platform.HasApiLevel(BuildVersionCodes.M) && !alwaysUseAsymmetricKey)
@@ -124,7 +124,7 @@ namespace Xamarin.Essentials
         }
 
         // API 23+ Only
-        ISecretKey GetSymmetricKey()
+        private ISecretKey GetSymmetricKey()
         {
             var existingKey = keyStore.GetKey(alias, null);
 
@@ -145,7 +145,7 @@ namespace Xamarin.Essentials
             return keyGenerator.GenerateKey();
         }
 
-        KeyPair GetAsymmetricKeyPair()
+        private KeyPair GetAsymmetricKeyPair()
         {
             var asymmetricAlias = $"{alias}.asymmetric";
 
@@ -177,14 +177,14 @@ namespace Xamarin.Essentials
             return generator.GenerateKeyPair();
         }
 
-        byte[] WrapKey(IKey keyToWrap, IKey withKey)
+        private byte[] WrapKey(IKey keyToWrap, IKey withKey)
         {
             var cipher = Cipher.GetInstance(cipherTransformationAsymmetric);
             cipher.Init(CipherMode.WrapMode, withKey);
             return cipher.Wrap(keyToWrap);
         }
 
-        IKey UnwrapKey(byte[] wrappedData, IKey withKey)
+        private IKey UnwrapKey(byte[] wrappedData, IKey withKey)
         {
             var cipher = Cipher.GetInstance(cipherTransformationAsymmetric);
             cipher.Init(CipherMode.UnwrapMode, withKey);

@@ -7,13 +7,13 @@ namespace Xamarin.Essentials
 {
     public static partial class Email
     {
-        static readonly EmailMessage testEmail =
+        private static readonly EmailMessage testEmail =
             new EmailMessage("Testing Xamarin.Essentials", "This is a test email.", "Xamarin.Essentials@example.org");
 
         internal static bool IsComposeSupported
             => Platform.IsIntentSupported(CreateIntent(testEmail));
 
-        static Task PlatformComposeAsync(EmailMessage message)
+        private static Task PlatformComposeAsync(EmailMessage message)
         {
             var intent = CreateIntent(message)
                 .SetFlags(ActivityFlags.ClearTop)
@@ -24,7 +24,7 @@ namespace Xamarin.Essentials
             return Task.FromResult(true);
         }
 
-        static Intent CreateIntent(EmailMessage message)
+        private static Intent CreateIntent(EmailMessage message)
         {
             var intent = new Intent(Intent.ActionSend);
             intent.SetType("message/rfc822");

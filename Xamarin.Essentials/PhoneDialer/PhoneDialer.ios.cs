@@ -7,7 +7,7 @@ namespace Xamarin.Essentials
 {
     public static partial class PhoneDialer
     {
-        const string noNetworkProviderCode = "65535";
+        private const string noNetworkProviderCode = "65535";
 
         internal static bool IsSupported
         {
@@ -35,6 +35,6 @@ namespace Xamarin.Essentials
             UIApplication.SharedApplication.OpenUrl(nsUrl);
         }
 
-        static NSUrl CreateNsUrl(string number) => new NSUrl(new Uri($"tel:{number}").AbsoluteUri);
+        private static NSUrl CreateNsUrl(string number) => new NSUrl(new Uri($"tel:{number}").AbsoluteUri);
     }
 }

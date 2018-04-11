@@ -18,14 +18,14 @@ namespace Samples.ViewModel
 
         public ICommand RequestReleaseCommand { get; }
 
-        void OnRequestActive()
+        private void OnRequestActive()
         {
             ScreenLock.RequestActive();
 
             OnPropertyChanged(nameof(IsActive));
         }
 
-        void OnRequestRelease()
+        private void OnRequestRelease()
         {
             ScreenLock.RequestRelease();
 

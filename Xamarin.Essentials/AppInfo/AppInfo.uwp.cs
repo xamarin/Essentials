@@ -5,17 +5,17 @@ namespace Xamarin.Essentials
 {
     public static partial class AppInfo
     {
-        static string GetPackageName() => Package.Current.Id.Name;
+        private static string GetPackageName() => Package.Current.Id.Name;
 
-        static string GetName() => Package.Current.DisplayName;
+        private static string GetName() => Package.Current.DisplayName;
 
-        static string GetVersionString()
+        private static string GetVersionString()
         {
             var version = Package.Current.Id.Version;
             return $"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
         }
 
-        static string GetBuild()
+        private static string GetBuild()
             => Package.Current.Id.Version.Build.ToString(CultureInfo.InvariantCulture);
     }
 }

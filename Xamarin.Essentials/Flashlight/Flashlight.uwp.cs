@@ -9,11 +9,11 @@ namespace Xamarin.Essentials
 {
     public static partial class Flashlight
     {
-        static readonly object locker = new object();
-        static bool hasLoadedLamp;
-        static Lamp lamp;
+        private static readonly object locker = new object();
+        private static bool hasLoadedLamp;
+        private static Lamp lamp;
 
-        static async Task FindLampAsync()
+        private static async Task FindLampAsync()
         {
             // fail fast
             if (hasLoadedLamp)
@@ -47,7 +47,7 @@ namespace Xamarin.Essentials
             Monitor.Exit(locker);
         }
 
-        static async Task PlatformTurnOnAsync()
+        private static async Task PlatformTurnOnAsync()
         {
             await FindLampAsync();
 
@@ -64,7 +64,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static Task PlatformTurnOffAsync()
+        private static Task PlatformTurnOffAsync()
         {
             lock (locker)
             {

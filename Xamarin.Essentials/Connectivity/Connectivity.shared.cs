@@ -6,11 +6,11 @@ namespace Xamarin.Essentials
 {
     public static partial class Connectivity
     {
-        static event ConnectivityChangedEventHandler ConnectivityChanagedInternal;
+        private static event ConnectivityChangedEventHandler ConnectivityChanagedInternal;
 
-        static NetworkAccess currentAccess;
+        private static NetworkAccess currentAccess;
 
-        static List<ConnectionProfile> currentProfiles;
+        private static List<ConnectionProfile> currentProfiles;
 
         public static event ConnectivityChangedEventHandler ConnectivityChanged
         {
@@ -38,19 +38,19 @@ namespace Xamarin.Essentials
             }
         }
 
-        static void SetCurrent()
+        private static void SetCurrent()
         {
             currentAccess = NetworkAccess;
             currentProfiles = new List<ConnectionProfile>(Profiles);
         }
 
-        static void OnConnectivityChanged(NetworkAccess access, IEnumerable<ConnectionProfile> profiles)
+        private static void OnConnectivityChanged(NetworkAccess access, IEnumerable<ConnectionProfile> profiles)
             => OnConnectivityChanged(new ConnectivityChangedEventArgs(access, profiles));
 
-        static void OnConnectivityChanged()
+        private static void OnConnectivityChanged()
             => OnConnectivityChanged(NetworkAccess, Profiles);
 
-        static void OnConnectivityChanged(ConnectivityChangedEventArgs e)
+        private static void OnConnectivityChanged(ConnectivityChangedEventArgs e)
         {
             if (currentAccess != e.NetworkAccess ||
                 !currentProfiles.SequenceEqual(e.Profiles))

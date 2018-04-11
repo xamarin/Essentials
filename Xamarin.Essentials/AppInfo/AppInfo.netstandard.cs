@@ -2,12 +2,12 @@
 {
     public static partial class AppInfo
     {
-        static string GetPackageName() => throw new NotImplementedInReferenceAssemblyException();
+        private static string GetPackageName() => throw new NotImplementedInReferenceAssemblyException();
 
-        static string GetName() => throw new NotImplementedInReferenceAssemblyException();
+        private static string GetName() => throw new NotImplementedInReferenceAssemblyException();
 
-        static string GetVersionString() => throw new NotImplementedInReferenceAssemblyException();
+        private static string GetVersionString() => throw new NotImplementedInReferenceAssemblyException();
 
-        static string GetBuild() => throw new NotImplementedInReferenceAssemblyException();
+        private static string GetBuild() => throw new NotImplementedInReferenceAssemblyException();
     }
 }

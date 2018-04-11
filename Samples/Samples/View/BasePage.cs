@@ -33,7 +33,7 @@ namespace Samples.View
             base.OnDisappearing();
         }
 
-        Task OnDisplayAlert(string message)
+        private Task OnDisplayAlert(string message)
         {
             return DisplayAlert(Title, message, "OK");
         }

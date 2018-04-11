@@ -7,7 +7,7 @@ namespace Xamarin.Essentials
 {
     internal static partial class PlacemarkExtensions
     {
-        internal static IEnumerable<Placemark> ToPlacemarks(this IEnumerable<AndroidAddress> addresses)
+        public static IEnumerable<Placemark> ToPlacemarks(this IEnumerable<AndroidAddress> addresses)
         {
             return addresses.Select(address => new Placemark
             {

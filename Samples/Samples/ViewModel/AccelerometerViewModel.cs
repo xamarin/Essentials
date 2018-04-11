@@ -8,11 +8,11 @@ namespace Samples.ViewModel
 {
     public class AccelerometerViewModel : BaseViewModel
     {
-        double x;
-        double y;
-        double z;
-        bool isActive;
-        int speed = 2;
+        private double x;
+        private double y;
+        private double z;
+        private bool isActive;
+        private int speed = 2;
 
         public AccelerometerViewModel()
         {
@@ -73,7 +73,7 @@ namespace Samples.ViewModel
             base.OnDisappearing();
         }
 
-        async void OnStart()
+        private async void OnStart()
         {
             try
             {
@@ -86,13 +86,13 @@ namespace Samples.ViewModel
             }
         }
 
-        void OnStop()
+        private void OnStop()
         {
             IsActive = false;
             Accelerometer.Stop();
         }
 
-        void OnReadingChanged(AccelerometerChangedEventArgs e)
+        private void OnReadingChanged(AccelerometerChangedEventArgs e)
         {
             var data = e.Reading;
             switch ((SensorSpeed)Speed)

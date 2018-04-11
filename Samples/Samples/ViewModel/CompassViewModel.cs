@@ -6,14 +6,14 @@ using Xamarin.Forms;
 
 namespace Samples.ViewModel
 {
-    class CompassViewModel : BaseViewModel
+    public class CompassViewModel : BaseViewModel
     {
-        bool compass1IsActive;
-        bool compass2IsActive;
-        double compass1;
-        double compass2;
-        int speed1 = 2;
-        int speed2 = 2;
+        private bool compass1IsActive;
+        private bool compass2IsActive;
+        private double compass1;
+        private double compass2;
+        private int speed1 = 2;
+        private int speed2 = 2;
 
         public CompassViewModel()
         {
@@ -84,7 +84,7 @@ namespace Samples.ViewModel
             base.OnDisappearing();
         }
 
-        async void OnStartCompass1()
+        private async void OnStartCompass1()
         {
             try
             {
@@ -102,7 +102,7 @@ namespace Samples.ViewModel
             }
         }
 
-        void OnCompass1ReadingChanged(CompassChangedEventArgs e)
+        private void OnCompass1ReadingChanged(CompassChangedEventArgs e)
         {
             switch ((SensorSpeed)Speed1)
             {
@@ -116,14 +116,14 @@ namespace Samples.ViewModel
             }
         }
 
-        void OnStopCompass1()
+        private void OnStopCompass1()
         {
             Compass1IsActive = false;
             Compass.Stop();
             Compass.ReadingChanged -= OnCompass1ReadingChanged;
         }
 
-        async void OnStartCompass2()
+        private async void OnStartCompass2()
         {
             try
             {
@@ -140,7 +140,7 @@ namespace Samples.ViewModel
             }
         }
 
-        void OnCompass2ReadingChanged(CompassChangedEventArgs e)
+        private void OnCompass2ReadingChanged(CompassChangedEventArgs e)
         {
             var data = e.Reading;
             switch ((SensorSpeed)Speed2)
@@ -155,7 +155,7 @@ namespace Samples.ViewModel
             }
         }
 
-        void OnStopCompass2()
+        private void OnStopCompass2()
         {
             Compass2IsActive = false;
             Compass.Stop();

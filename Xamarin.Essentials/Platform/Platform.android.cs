@@ -14,8 +14,8 @@ namespace Xamarin.Essentials
 {
     public static partial class Platform
     {
-        static Handler handler;
-        static ActivityLifecycleContextListener lifecycleListener;
+        private static Handler handler;
+        private static ActivityLifecycleContextListener lifecycleListener;
 
         internal static Context CurrentContext =>
             lifecycleListener?.Context ?? Application.Context;
@@ -90,9 +90,9 @@ namespace Xamarin.Essentials
             Application.Context.GetSystemService(Context.LocationService) as LocationManager;
     }
 
-    class ActivityLifecycleContextListener : Java.Lang.Object, Application.IActivityLifecycleCallbacks
+    internal class ActivityLifecycleContextListener : Java.Lang.Object, Application.IActivityLifecycleCallbacks
     {
-        WeakReference<Activity> currentActivity = new WeakReference<Activity>(null);
+        private WeakReference<Activity> currentActivity = new WeakReference<Activity>(null);
 
         public Context Context =>
             Activity ?? Application.Context;

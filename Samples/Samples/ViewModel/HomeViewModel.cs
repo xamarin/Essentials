@@ -8,10 +8,10 @@ namespace Samples.ViewModel
 {
     public class HomeViewModel : BaseViewModel
     {
-        bool alreadyAppeared;
-        SampleItem[] samples;
-        IEnumerable<SampleItem> filteredItems;
-        string filterText;
+        private bool alreadyAppeared;
+        private SampleItem[] samples;
+        private IEnumerable<SampleItem> filteredItems;
+        private string filterText;
 
         public HomeViewModel()
         {
@@ -197,7 +197,7 @@ namespace Samples.ViewModel
             }
         }
 
-        static IEnumerable<SampleItem> Filter(IEnumerable<SampleItem> samples, string filterText)
+        private static IEnumerable<SampleItem> Filter(IEnumerable<SampleItem> samples, string filterText)
         {
             if (!string.IsNullOrWhiteSpace(filterText))
             {

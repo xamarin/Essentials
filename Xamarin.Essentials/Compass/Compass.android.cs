@@ -11,11 +11,11 @@ namespace Xamarin.Essentials
             Platform.SensorManager?.GetDefaultSensor(SensorType.Accelerometer) != null &&
             Platform.SensorManager?.GetDefaultSensor(SensorType.MagneticField) != null;
 
-        static SensorListener listener;
-        static Sensor magnetometer;
-        static Sensor accelerometer;
+        private static SensorListener listener;
+        private static Sensor magnetometer;
+        private static Sensor accelerometer;
 
-        internal static void PlatformStart(SensorSpeed sensorSpeed)
+        private static void PlatformStart(SensorSpeed sensorSpeed)
         {
             var delay = SensorDelay.Normal;
             switch (sensorSpeed)
@@ -41,7 +41,7 @@ namespace Xamarin.Essentials
             Platform.SensorManager.RegisterListener(listener, magnetometer, delay);
         }
 
-        internal static void PlatformStop()
+        private static void PlatformStop()
         {
             if (listener == null)
                 return;
@@ -53,19 +53,19 @@ namespace Xamarin.Essentials
         }
     }
 
-    class SensorListener : Java.Lang.Object, ISensorEventListener, IDisposable
+    internal class SensorListener : Java.Lang.Object, ISensorEventListener, IDisposable
     {
-        float[] lastAccelerometer = new float[3];
-        float[] lastMagnetometer = new float[3];
-        bool lastAccelerometerSet;
-        bool lastMagnetometerSet;
-        float[] r = new float[9];
-        float[] orientation = new float[3];
+        private float[] lastAccelerometer = new float[3];
+        private float[] lastMagnetometer = new float[3];
+        private bool lastAccelerometerSet;
+        private bool lastMagnetometerSet;
+        private float[] r = new float[9];
+        private float[] orientation = new float[3];
 
-        string magnetometer;
-        string accelerometer;
+        private string magnetometer;
+        private string accelerometer;
 
-        internal SensorListener(string accelerometer, string magnetometer, SensorDelay delay)
+        public SensorListener(string accelerometer, string magnetometer, SensorDelay delay)
         {
             this.magnetometer = magnetometer;
             this.accelerometer = accelerometer;
@@ -102,7 +102,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        void CopyValues(IList<float> source, float[] destination)
+        private void CopyValues(IList<float> source, float[] destination)
         {
             for (var i = 0; i < source.Count; ++i)
             {

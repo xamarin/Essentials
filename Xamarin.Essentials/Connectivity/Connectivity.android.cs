@@ -9,10 +9,10 @@ namespace Xamarin.Essentials
 {
     public partial class Connectivity
     {
-        static ConnectivityBroadcastReceiver conectivityReceiver;
-        static bool hasPermission;
+        private static ConnectivityBroadcastReceiver conectivityReceiver;
+        private static bool hasPermission;
 
-        static void ValidatePermission()
+        private static void ValidatePermission()
         {
             if (hasPermission)
                 return;
@@ -23,21 +23,21 @@ namespace Xamarin.Essentials
             hasPermission = true;
         }
 
-        static void StartListeners()
+        private static void StartListeners()
         {
             ValidatePermission();
             conectivityReceiver = new ConnectivityBroadcastReceiver(OnConnectivityChanged);
             Platform.CurrentContext.RegisterReceiver(conectivityReceiver, new IntentFilter(ConnectivityManager.ConnectivityAction));
         }
 
-        static void StopListeners()
+        private static void StopListeners()
         {
             Platform.CurrentContext.UnregisterReceiver(conectivityReceiver);
             conectivityReceiver?.Dispose();
             conectivityReceiver = null;
         }
 
-        static NetworkAccess IsBetterAccess(NetworkAccess currentAccess, NetworkAccess newAccess) =>
+        private static NetworkAccess IsBetterAccess(NetworkAccess currentAccess, NetworkAccess newAccess) =>
             newAccess > currentAccess ? newAccess : currentAccess;
 
         public static NetworkAccess NetworkAccess
@@ -157,7 +157,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        internal static ConnectionProfile GetConnectionType(ConnectivityType connectivityType, string typeName)
+        private static ConnectionProfile GetConnectionType(ConnectivityType connectivityType, string typeName)
         {
             switch (connectivityType)
             {
@@ -201,9 +201,9 @@ namespace Xamarin.Essentials
         }
     }
 
-    class ConnectivityBroadcastReceiver : BroadcastReceiver
+    internal class ConnectivityBroadcastReceiver : BroadcastReceiver
     {
-        Action onChanged;
+        private Action onChanged;
 
         public ConnectivityBroadcastReceiver(Action onChanged) =>
             this.onChanged = onChanged;

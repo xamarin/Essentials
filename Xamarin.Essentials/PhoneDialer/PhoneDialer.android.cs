@@ -9,7 +9,7 @@ namespace Xamarin.Essentials
 {
     public static partial class PhoneDialer
     {
-        const string intentCheck = "00000000000";
+        private const string intentCheck = "00000000000";
 
         internal static bool IsSupported
         {
@@ -48,7 +48,7 @@ namespace Xamarin.Essentials
             Application.Context.StartActivity(dialIntent);
         }
 
-        static Intent ResolveDialIntent(string number)
+        private static Intent ResolveDialIntent(string number)
         {
             var telUri = Uri.Parse($"tel:{number}");
             return new Intent(Intent.ActionDial, telUri);

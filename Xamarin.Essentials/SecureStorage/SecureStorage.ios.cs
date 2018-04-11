@@ -8,14 +8,14 @@ namespace Xamarin.Essentials
 {
     public static partial class SecureStorage
     {
-        static Task<string> PlatformGetAsync(string key)
+        private static Task<string> PlatformGetAsync(string key)
         {
             var kc = new KeyChain();
 
             return Task.FromResult(kc.ValueForKey(key, Alias));
         }
 
-        static Task PlatformSetAsync(string key, string data)
+        private static Task PlatformSetAsync(string key, string data)
         {
             var kc = new KeyChain();
             kc.SetValueForKey(data, key, Alias);
@@ -24,9 +24,9 @@ namespace Xamarin.Essentials
         }
     }
 
-    class KeyChain
+    internal class KeyChain
     {
-        static SecRecord ExistingRecordForKey(string key, string service)
+        private static SecRecord ExistingRecordForKey(string key, string service)
         {
             return new SecRecord(SecKind.GenericPassword)
             {
@@ -68,7 +68,7 @@ namespace Xamarin.Essentials
                 throw new Exception($"Error adding record: {result}");
         }
 
-        SecRecord CreateRecordForNewKeyValue(string key, string value, string service)
+        private SecRecord CreateRecordForNewKeyValue(string key, string value, string service)
         {
             return new SecRecord(SecKind.GenericPassword)
             {
@@ -79,7 +79,7 @@ namespace Xamarin.Essentials
             };
         }
 
-        bool RemoveRecord(SecRecord record)
+        private bool RemoveRecord(SecRecord record)
         {
             var result = SecKeyChain.Remove(record);
             if (result != SecStatusCode.Success)
