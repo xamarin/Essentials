@@ -9,13 +9,13 @@ namespace Xamarin.Essentials
 {
     internal static partial class PlatformExtensions
     {
-        internal static void WatchForError(this IAsyncAction self) =>
+        public static void WatchForError(this IAsyncAction self) =>
             self.AsTask().WatchForError();
 
-        internal static void WatchForError<T>(this IAsyncOperation<T> self) =>
+        public static void WatchForError<T>(this IAsyncOperation<T> self) =>
             self.AsTask().WatchForError();
 
-        internal static void WatchForError(this Task self)
+        public static void WatchForError(this Task self)
         {
             var context = SynchronizationContext.Current;
             if (context == null)

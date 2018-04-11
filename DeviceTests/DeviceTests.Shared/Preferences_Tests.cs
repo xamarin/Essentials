@@ -5,7 +5,7 @@ namespace DeviceTests
 {
     public class Preferences_Tests
     {
-        const string sharedNameTestData = "Shared";
+        private const string sharedNameTestData = "Shared";
 
         [Theory]
         [InlineData("string1", "TEST", null)]

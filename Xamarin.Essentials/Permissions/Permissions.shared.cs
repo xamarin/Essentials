@@ -6,16 +6,16 @@ namespace Xamarin.Essentials
 {
     internal static partial class Permissions
     {
-        internal static void EnsureDeclared(PermissionType permission) =>
+        public static void EnsureDeclared(PermissionType permission) =>
             PlatformEnsureDeclared(permission);
 
-        internal static Task<PermissionStatus> CheckStatusAsync(PermissionType permission) =>
+        public static Task<PermissionStatus> CheckStatusAsync(PermissionType permission) =>
             PlatformCheckStatusAsync(permission);
 
-        internal static Task<PermissionStatus> RequestAsync(PermissionType permission) =>
+        public static Task<PermissionStatus> RequestAsync(PermissionType permission) =>
             PlatformRequestAsync(permission);
 
-        internal static async Task RequireAsync(PermissionType permission)
+        public static async Task RequireAsync(PermissionType permission)
         {
             if (await RequestAsync(permission) != PermissionStatus.Granted)
                 throw new PermissionException($"{permission} was not granted.");

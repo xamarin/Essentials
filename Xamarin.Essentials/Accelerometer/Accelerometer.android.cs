@@ -8,10 +8,10 @@ namespace Xamarin.Essentials
         internal static bool IsSupported =>
                Platform.SensorManager?.GetDefaultSensor(SensorType.Accelerometer) != null;
 
-        static AccelerometerListener listener;
-        static Sensor accelerometer;
+        private static AccelerometerListener listener;
+        private static Sensor accelerometer;
 
-        internal static void PlatformStart(SensorSpeed sensorSpeed)
+        private static void PlatformStart(SensorSpeed sensorSpeed)
         {
             var delay = SensorDelay.Normal;
             switch (sensorSpeed)
@@ -35,7 +35,7 @@ namespace Xamarin.Essentials
             Platform.SensorManager.RegisterListener(listener, accelerometer, delay);
         }
 
-        internal static void PlatformStop()
+        private static void PlatformStop()
         {
             if (listener == null || accelerometer == null)
             {
@@ -48,7 +48,7 @@ namespace Xamarin.Essentials
         }
     }
 
-    class AccelerometerListener : Java.Lang.Object, ISensorEventListener
+    internal class AccelerometerListener : Java.Lang.Object, ISensorEventListener
     {
         public AccelerometerListener()
         {

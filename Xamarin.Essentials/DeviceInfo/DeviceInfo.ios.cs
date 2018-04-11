@@ -6,19 +6,19 @@ namespace Xamarin.Essentials
 {
     public static partial class DeviceInfo
     {
-        static NSObject observer;
+        private static NSObject observer;
 
-        static string GetModel() => UIDevice.CurrentDevice.Model;
+        private static string GetModel() => UIDevice.CurrentDevice.Model;
 
-        static string GetManufacturer() => "Apple";
+        private static string GetManufacturer() => "Apple";
 
-        static string GetDeviceName() => UIDevice.CurrentDevice.Name;
+        private static string GetDeviceName() => UIDevice.CurrentDevice.Name;
 
-        static string GetVersionString() => UIDevice.CurrentDevice.SystemVersion;
+        private static string GetVersionString() => UIDevice.CurrentDevice.SystemVersion;
 
-        static string GetPlatform() => Platforms.iOS;
+        private static string GetPlatform() => Platforms.iOS;
 
-        static string GetIdiom()
+        private static string GetIdiom()
         {
             switch (UIDevice.CurrentDevice.UserInterfaceIdiom)
             {
@@ -35,10 +35,10 @@ namespace Xamarin.Essentials
             }
         }
 
-        static DeviceType GetDeviceType()
+        private static DeviceType GetDeviceType()
             => Runtime.Arch == Arch.DEVICE ? DeviceType.Physical : DeviceType.Virtual;
 
-        static ScreenMetrics GetScreenMetrics()
+        private static ScreenMetrics GetScreenMetrics()
         {
             var bounds = UIScreen.MainScreen.Bounds;
             var scale = UIScreen.MainScreen.Scale;
@@ -53,26 +53,26 @@ namespace Xamarin.Essentials
             };
         }
 
-        static void StartScreenMetricsListeners()
+        private static void StartScreenMetricsListeners()
         {
             var notificationCenter = NSNotificationCenter.DefaultCenter;
             var notification = UIApplication.DidChangeStatusBarOrientationNotification;
             observer = notificationCenter.AddObserver(notification, OnScreenMetricsChanaged);
         }
 
-        static void StopScreenMetricsListeners()
+        private static void StopScreenMetricsListeners()
         {
             observer?.Dispose();
             observer = null;
         }
 
-        static void OnScreenMetricsChanaged(NSNotification obj)
+        private static void OnScreenMetricsChanaged(NSNotification obj)
         {
             var metrics = GetScreenMetrics();
             OnScreenMetricsChanaged(metrics);
         }
 
-        static ScreenOrientation CalculateOrientation()
+        private static ScreenOrientation CalculateOrientation()
         {
             var orientation = UIApplication.SharedApplication.StatusBarOrientation;
 
@@ -82,7 +82,7 @@ namespace Xamarin.Essentials
             return ScreenOrientation.Portrait;
         }
 
-        static ScreenRotation CalculateRotation()
+        private static ScreenRotation CalculateRotation()
         {
             var orientation = UIApplication.SharedApplication.StatusBarOrientation;
 

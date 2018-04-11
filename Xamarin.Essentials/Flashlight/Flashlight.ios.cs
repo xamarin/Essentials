@@ -5,21 +5,21 @@ namespace Xamarin.Essentials
 {
     public static partial class Flashlight
     {
-        static Task PlatformTurnOnAsync()
+        private static Task PlatformTurnOnAsync()
         {
             Toggle(true);
 
             return Task.CompletedTask;
         }
 
-        static Task PlatformTurnOffAsync()
+        private static Task PlatformTurnOffAsync()
         {
             Toggle(false);
 
             return Task.CompletedTask;
         }
 
-        static void Toggle(bool on)
+        private static void Toggle(bool on)
         {
             var captureDevice = AVCaptureDevice.GetDefaultDevice(AVMediaType.Video);
             if (captureDevice == null || !(captureDevice.HasFlash || captureDevice.HasTorch))

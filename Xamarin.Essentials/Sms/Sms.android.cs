@@ -12,7 +12,7 @@ namespace Xamarin.Essentials
         internal static bool IsComposeSupported
             => Platform.IsIntentSupported(CreateIntent("0000000000"));
 
-        static Task PlatformComposeAsync(SmsMessage message)
+        private static Task PlatformComposeAsync(SmsMessage message)
         {
             var intent = CreateIntent(message)
                 .SetFlags(ActivityFlags.ClearTop)
@@ -23,10 +23,10 @@ namespace Xamarin.Essentials
             return Task.FromResult(true);
         }
 
-        static Intent CreateIntent(SmsMessage message)
+        private static Intent CreateIntent(SmsMessage message)
             => CreateIntent(message?.Recipient, message?.Body);
 
-        static Intent CreateIntent(string recipient, string body = null)
+        private static Intent CreateIntent(string recipient, string body = null)
         {
             Intent intent = null;
 

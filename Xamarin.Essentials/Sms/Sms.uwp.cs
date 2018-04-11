@@ -10,7 +10,7 @@ namespace Xamarin.Essentials
         internal static bool IsComposeSupported
             => ApiInformation.IsTypePresent("Windows.ApplicationModel.Chat.ChatMessageManager");
 
-        static Task PlatformComposeAsync(SmsMessage message)
+        private static Task PlatformComposeAsync(SmsMessage message)
         {
             var chat = new ChatMessage();
             if (!string.IsNullOrWhiteSpace(message?.Body))

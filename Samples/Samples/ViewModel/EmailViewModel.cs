@@ -9,11 +9,11 @@ namespace Samples.ViewModel
 {
     public class EmailViewModel : BaseViewModel
     {
-        string subject;
-        string body;
-        string recipientsTo;
-        string recipientsCc;
-        string recipientsBcc;
+        private string subject;
+        private string body;
+        private string recipientsTo;
+        private string recipientsCc;
+        private string recipientsBcc;
 
         public EmailViewModel()
         {
@@ -52,7 +52,7 @@ namespace Samples.ViewModel
             set => SetProperty(ref recipientsBcc, value);
         }
 
-        async void OnSendEmail()
+        private async void OnSendEmail()
         {
             if (IsBusy)
                 return;
@@ -75,7 +75,7 @@ namespace Samples.ViewModel
             }
         }
 
-        List<string> Split(string recipients)
+        private List<string> Split(string recipients)
             => recipients?.Split(new char[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries)?.ToList();
     }
 }

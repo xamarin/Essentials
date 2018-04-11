@@ -6,7 +6,7 @@ namespace DeviceTests
 {
     public class Accelerometer_Tests
     {
-        bool TestSupported =>
+        private bool TestSupported =>
             DeviceInfo.Platform == DeviceInfo.Platforms.Android ||
 #if WINDOWS_UWP
             (Windows.Devices.Sensors.Accelerometer.GetDefault() != null) ||

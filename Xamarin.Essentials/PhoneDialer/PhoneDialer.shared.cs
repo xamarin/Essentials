@@ -4,7 +4,7 @@ namespace Xamarin.Essentials
 {
     public static partial class PhoneDialer
     {
-        internal static void ValidateOpen(string number)
+        private static void ValidateOpen(string number)
         {
             if (string.IsNullOrWhiteSpace(number))
             {

@@ -4,9 +4,9 @@ using Xamarin.Forms;
 
 namespace Samples.ViewModel
 {
-    class ClipboardViewModel : BaseViewModel
+    public class ClipboardViewModel : BaseViewModel
     {
-        string fieldValue;
+        private string fieldValue;
 
         public ClipboardViewModel()
         {
@@ -24,9 +24,9 @@ namespace Samples.ViewModel
             set => SetProperty(ref fieldValue, value);
         }
 
-        void OnCopy() => Clipboard.SetText(FieldValue);
+        private void OnCopy() => Clipboard.SetText(FieldValue);
 
-        async void OnPaste()
+        private async void OnPaste()
         {
             var text = await Clipboard.GetTextAsync();
             if (!string.IsNullOrWhiteSpace(text))

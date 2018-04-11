@@ -6,8 +6,8 @@ namespace Samples.ViewModel
 {
     public class SecureStorageViewModel : BaseViewModel
     {
-        string key;
-        string securedValue;
+        private string key;
+        private string securedValue;
 
         public SecureStorageViewModel()
         {
@@ -31,7 +31,7 @@ namespace Samples.ViewModel
 
         public ICommand SaveCommand { get; }
 
-        async void OnLoad()
+        private async void OnLoad()
         {
             if (IsBusy)
                 return;
@@ -42,7 +42,7 @@ namespace Samples.ViewModel
             IsBusy = false;
         }
 
-        async void OnSave()
+        private async void OnSave()
         {
             if (IsBusy)
                 return;

@@ -9,9 +9,9 @@ namespace Samples.ViewModel
 {
     public class BrowserViewModel : BaseViewModel
     {
-        string browserStatus;
-        string uri = "http://xamarin.com";
-        int browserType = (int)BrowserLaunchType.SystemPreferred;
+        private string browserStatus;
+        private string uri = "http://xamarin.com";
+        private int browserType = (int)BrowserLaunchType.SystemPreferred;
 
         public BrowserViewModel()
         {
@@ -45,7 +45,7 @@ namespace Samples.ViewModel
             set => SetProperty(ref browserType, value);
         }
 
-        async void OpenUri()
+        private async void OpenUri()
         {
             if (IsBusy)
                 return;

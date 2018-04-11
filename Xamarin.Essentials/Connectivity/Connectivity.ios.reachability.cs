@@ -17,14 +17,16 @@ namespace Xamarin.Essentials
 
     internal static class Reachability
     {
-        static string hostName = "www.microsoft.com";
+        private static string hostName = "www.microsoft.com";
+        private static NetworkReachability defaultRouteReachability;
+        private static NetworkReachability remoteHostReachability;
 
         /// <summary>
         /// Checks if reachable without requiring a connection
         /// </summary>
         /// <param name="flags"></param>
         /// <returns></returns>
-        internal static bool IsReachableWithoutRequiringConnection(NetworkReachabilityFlags flags)
+        public static bool IsReachableWithoutRequiringConnection(NetworkReachabilityFlags flags)
         {
             // Is it reachable with the current network configuration?
             var isReachable = (flags & NetworkReachabilityFlags.Reachable) != 0;
@@ -46,7 +48,7 @@ namespace Xamarin.Essentials
         /// <param name="host"></param>
         /// <param name="port"></param>
         /// <returns></returns>
-        internal static bool IsHostReachable(string host, int port)
+        public static bool IsHostReachable(string host, int port)
         {
             if (string.IsNullOrWhiteSpace(host))
                 return false;
@@ -71,7 +73,7 @@ namespace Xamarin.Essentials
         /// </summary>
         /// <param name="host"></param>
         /// <returns></returns>
-        internal static bool IsHostReachable(string host)
+        public static bool IsHostReachable(string host)
         {
             if (string.IsNullOrWhiteSpace(host))
                 return false;
@@ -91,17 +93,15 @@ namespace Xamarin.Essentials
         /// we do not even pass the info as to what changed, and
         /// we lump all three status we probe into one
         /// </summary>
-        internal static event EventHandler ReachabilityChanged;
+        public static event EventHandler ReachabilityChanged;
 
-        static async void OnChange(NetworkReachabilityFlags flags)
+        private static async void OnChange(NetworkReachabilityFlags flags)
         {
             await Task.Delay(100);
             ReachabilityChanged?.Invoke(null, EventArgs.Empty);
         }
 
-        static NetworkReachability defaultRouteReachability;
-
-        static bool IsNetworkAvailable(out NetworkReachabilityFlags flags)
+        private static bool IsNetworkAvailable(out NetworkReachabilityFlags flags)
         {
             if (defaultRouteReachability == null)
             {
@@ -115,9 +115,7 @@ namespace Xamarin.Essentials
             return IsReachableWithoutRequiringConnection(flags);
         }
 
-        static NetworkReachability remoteHostReachability;
-
-        internal static NetworkStatus RemoteHostStatus()
+        public static NetworkStatus RemoteHostStatus()
         {
             NetworkReachabilityFlags flags;
             bool reachable;
@@ -154,7 +152,7 @@ namespace Xamarin.Essentials
         /// Checks internet connection status
         /// </summary>
         /// <returns></returns>
-        internal static IEnumerable<NetworkStatus> GetActiveConnectionType()
+        public static IEnumerable<NetworkStatus> GetActiveConnectionType()
         {
             var status = new List<NetworkStatus>();
 
@@ -216,7 +214,7 @@ namespace Xamarin.Essentials
         /// <summary>
         /// Dispose
         /// </summary>
-        internal static void Dispose()
+        public static void Dispose()
         {
             if (remoteHostReachability != null)
             {

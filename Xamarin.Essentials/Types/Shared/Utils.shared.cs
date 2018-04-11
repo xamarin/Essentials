@@ -7,9 +7,9 @@ using System.Threading;
 
 namespace Xamarin.Essentials
 {
-    class Utils
+    internal class Utils
     {
-        internal static Version ParseVersion(string version)
+        public static Version ParseVersion(string version)
         {
             if (Version.TryParse(version, out var number))
                 return number;
@@ -17,7 +17,7 @@ namespace Xamarin.Essentials
             return new Version(0, 0);
         }
 
-        internal static string Md5Hash(string input)
+        public static string Md5Hash(string input)
         {
 #if NETSTANDARD1_0
             throw new NotImplementedInReferenceAssemblyException();
@@ -33,7 +33,7 @@ namespace Xamarin.Essentials
 #endif
         }
 
-        internal static CancellationToken TimeoutToken(CancellationToken cancellationToken, TimeSpan timeout)
+        public static CancellationToken TimeoutToken(CancellationToken cancellationToken, TimeSpan timeout)
         {
             // create a new linked cancellation token source
             var cancelTokenSrc = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);

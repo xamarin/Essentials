@@ -7,20 +7,20 @@ namespace Xamarin.Essentials
 {
     public static partial class DeviceInfo
     {
-        static readonly EasClientDeviceInformation deviceInfo;
+        private static readonly EasClientDeviceInformation deviceInfo;
 
         static DeviceInfo()
         {
             deviceInfo = new EasClientDeviceInformation();
         }
 
-        static string GetModel() => deviceInfo.SystemProductName;
+        private static string GetModel() => deviceInfo.SystemProductName;
 
-        static string GetManufacturer() => deviceInfo.SystemManufacturer;
+        private static string GetManufacturer() => deviceInfo.SystemManufacturer;
 
-        static string GetDeviceName() => deviceInfo.FriendlyName;
+        private static string GetDeviceName() => deviceInfo.FriendlyName;
 
-        static string GetVersionString()
+        private static string GetVersionString()
         {
             var version = AnalyticsInfo.VersionInfo.DeviceFamilyVersion;
 
@@ -36,9 +36,9 @@ namespace Xamarin.Essentials
             return version;
         }
 
-        static string GetPlatform() => Platforms.UWP;
+        private static string GetPlatform() => Platforms.UWP;
 
-        static string GetIdiom()
+        private static string GetIdiom()
         {
             switch (AnalyticsInfo.VersionInfo.DeviceFamily)
             {
@@ -60,7 +60,7 @@ namespace Xamarin.Essentials
             return Idioms.Unsupported;
         }
 
-        static DeviceType GetDeviceType()
+        private static DeviceType GetDeviceType()
         {
             var isVirtual = deviceInfo.SystemProductName == "Virtual";
 
@@ -70,7 +70,7 @@ namespace Xamarin.Essentials
             return DeviceType.Physical;
         }
 
-        static ScreenMetrics GetScreenMetrics(DisplayInformation di = null)
+        private static ScreenMetrics GetScreenMetrics(DisplayInformation di = null)
         {
             di = di ?? DisplayInformation.GetForCurrentView();
 
@@ -92,7 +92,7 @@ namespace Xamarin.Essentials
             };
         }
 
-        static void StartScreenMetricsListeners()
+        private static void StartScreenMetricsListeners()
         {
             Xamarin.Essentials.Platform.BeginInvokeOnMainThread(() =>
             {
@@ -103,7 +103,7 @@ namespace Xamarin.Essentials
             });
         }
 
-        static void StopScreenMetricsListeners()
+        private static void StopScreenMetricsListeners()
         {
             Xamarin.Essentials.Platform.BeginInvokeOnMainThread(() =>
             {
@@ -114,13 +114,13 @@ namespace Xamarin.Essentials
             });
         }
 
-        static void OnDisplayInformationChanged(DisplayInformation di, object args)
+        private static void OnDisplayInformationChanged(DisplayInformation di, object args)
         {
             var metrics = GetScreenMetrics(di);
             OnScreenMetricsChanaged(metrics);
         }
 
-        static ScreenOrientation CalculateOrientation(DisplayInformation di)
+        private static ScreenOrientation CalculateOrientation(DisplayInformation di)
         {
             switch (di.CurrentOrientation)
             {
@@ -135,7 +135,7 @@ namespace Xamarin.Essentials
             return ScreenOrientation.Unknown;
         }
 
-        static ScreenRotation CalculateRotation(DisplayInformation di)
+        private static ScreenRotation CalculateRotation(DisplayInformation di)
         {
             var native = di.NativeOrientation;
             var current = di.CurrentOrientation;

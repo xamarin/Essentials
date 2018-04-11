@@ -10,15 +10,15 @@ namespace Xamarin.Essentials
         internal const uint GameInterval = 22;
         internal const uint NormalInterval = 33;
 
-        static WindowsGyro sensor;
+        private static WindowsGyro sensor;
 
-        internal static WindowsGyro DefaultSensor =>
+        private static WindowsGyro DefaultSensor =>
             WindowsGyro.GetDefault();
 
         internal static bool IsSupported =>
             DefaultSensor != null;
 
-        internal static void PlatformStart(SensorSpeed sensorSpeed)
+        private static void PlatformStart(SensorSpeed sensorSpeed)
         {
             sensor = DefaultSensor;
             var interval = NormalInterval;
@@ -37,14 +37,14 @@ namespace Xamarin.Essentials
             sensor.ReadingChanged += DataUpdated;
         }
 
-        static void DataUpdated(object sender, GyrometerReadingChangedEventArgs e)
+        private static void DataUpdated(object sender, GyrometerReadingChangedEventArgs e)
         {
             var reading = e.Reading;
             var data = new GyroscopeData(reading.AngularVelocityX, reading.AngularVelocityY, reading.AngularVelocityZ);
             OnChanged(data);
         }
 
-        internal static void PlatformStop()
+        private static void PlatformStop()
         {
             if (sensor == null)
                 return;

@@ -12,9 +12,9 @@ namespace Xamarin.Essentials
 {
     public static partial class Geolocation
     {
-        const long twoMinutes = 120000;
+        private const long twoMinutes = 120000;
 
-        static async Task<Location> PlatformLastKnownLocationAsync()
+        private static async Task<Location> PlatformLastKnownLocationAsync()
         {
             await Permissions.RequireAsync(PermissionType.LocationWhenInUse);
 
@@ -35,7 +35,7 @@ namespace Xamarin.Essentials
             return bestLocation.ToLocation();
         }
 
-        static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
+        private static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
         {
             await Permissions.RequireAsync(PermissionType.LocationWhenInUse);
 
@@ -87,36 +87,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        class SingleLocationListener : Java.Lang.Object, ILocationListener
-        {
-            bool wasRaised = false;
-
-            public Action<AndroidLocation> LocationHandler { get; set; }
-
-            public void OnLocationChanged(AndroidLocation location)
-            {
-                if (wasRaised)
-                    return;
-
-                wasRaised = true;
-
-                LocationHandler?.Invoke(location);
-            }
-
-            public void OnProviderDisabled(string provider)
-            {
-            }
-
-            public void OnProviderEnabled(string provider)
-            {
-            }
-
-            public void OnStatusChanged(string provider, [GeneratedEnum] Availability status, Bundle extras)
-            {
-            }
-        }
-
-        static string GetBestProvider(LocationManager locationManager, GeolocationAccuracy accuracy)
+        private static string GetBestProvider(LocationManager locationManager, GeolocationAccuracy accuracy)
         {
             var criteria = new Criteria();
             criteria.BearingRequired = false;
@@ -155,7 +126,7 @@ namespace Xamarin.Essentials
             return locationManager.GetBestProvider(criteria, true) ?? locationManager.GetProviders(true).FirstOrDefault();
         }
 
-        internal static bool IsBetterLocation(AndroidLocation location, AndroidLocation bestLocation)
+        private static bool IsBetterLocation(AndroidLocation location, AndroidLocation bestLocation)
         {
             if (bestLocation == null)
                 return true;
@@ -189,6 +160,35 @@ namespace Xamarin.Essentials
                 return true;
 
             return false;
+        }
+    }
+
+    internal class SingleLocationListener : Java.Lang.Object, ILocationListener
+    {
+        private bool wasRaised = false;
+
+        public Action<AndroidLocation> LocationHandler { get; set; }
+
+        public void OnLocationChanged(AndroidLocation location)
+        {
+            if (wasRaised)
+                return;
+
+            wasRaised = true;
+
+            LocationHandler?.Invoke(location);
+        }
+
+        public void OnProviderDisabled(string provider)
+        {
+        }
+
+        public void OnProviderEnabled(string provider)
+        {
+        }
+
+        public void OnStatusChanged(string provider, [GeneratedEnum] Availability status, Bundle extras)
+        {
         }
     }
 }

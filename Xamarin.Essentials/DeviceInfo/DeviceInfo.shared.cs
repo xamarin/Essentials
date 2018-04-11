@@ -4,7 +4,7 @@ namespace Xamarin.Essentials
 {
     public static partial class DeviceInfo
     {
-        static event ScreenMetricsChanagedEventHandler ScreenMetricsChanagedInternal;
+        private static event ScreenMetricsChanagedEventHandler ScreenMetricsChanagedInternal;
 
         public static string Model => GetModel();
 
@@ -47,10 +47,10 @@ namespace Xamarin.Essentials
             }
         }
 
-        static void OnScreenMetricsChanaged(ScreenMetrics metrics)
+        private static void OnScreenMetricsChanaged(ScreenMetrics metrics)
             => OnScreenMetricsChanaged(new ScreenMetricsChanagedEventArgs(metrics));
 
-        static void OnScreenMetricsChanaged(ScreenMetricsChanagedEventArgs e)
+        private static void OnScreenMetricsChanaged(ScreenMetricsChanagedEventArgs e)
             => ScreenMetricsChanagedInternal?.Invoke(e);
 
         public static class Idioms

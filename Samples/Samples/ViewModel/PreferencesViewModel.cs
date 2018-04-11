@@ -4,9 +4,9 @@ namespace Samples.ViewModel
 {
     public class PreferencesViewModel : BaseViewModel
     {
-        const string preferenceKey = "PreferenceKey";
+        private const string preferenceKey = "PreferenceKey";
 
-        string preferenceValue;
+        private string preferenceValue;
 
         public PreferencesViewModel()
         {

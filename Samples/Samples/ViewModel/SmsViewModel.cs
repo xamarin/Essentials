@@ -6,8 +6,8 @@ namespace Samples.ViewModel
 {
     public class SmsViewModel : BaseViewModel
     {
-        string recipient;
-        string messageText;
+        private string recipient;
+        private string messageText;
 
         public SmsViewModel()
         {
@@ -28,7 +28,7 @@ namespace Samples.ViewModel
 
         public ICommand SendSmsCommand { get; }
 
-        async void OnSendSms()
+        private async void OnSendSms()
         {
             if (IsBusy)
                 return;

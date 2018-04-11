@@ -10,10 +10,10 @@ namespace Xamarin.Essentials
         public static IEnumerable<ConnectionProfile> Profiles =>
             throw new NotImplementedInReferenceAssemblyException();
 
-        static void StartListeners() =>
+        private static void StartListeners() =>
             throw new NotImplementedInReferenceAssemblyException();
 
-        static void StopListeners() =>
+        private static void StopListeners() =>
             throw new NotImplementedInReferenceAssemblyException();
     }
 }

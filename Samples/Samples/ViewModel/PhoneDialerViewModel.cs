@@ -7,7 +7,7 @@ namespace Samples.ViewModel
 {
     public class PhoneDialerViewModel : BaseViewModel
     {
-        string phoneNumber;
+        private string phoneNumber;
 
         public PhoneDialerViewModel()
         {
@@ -22,7 +22,7 @@ namespace Samples.ViewModel
             set => SetProperty(ref phoneNumber, value);
         }
 
-        async void OnOpenPhoneDialer()
+        private async void OnOpenPhoneDialer()
         {
             try
             {

@@ -2,16 +2,16 @@
 {
     public static partial class Battery
     {
-        static void StartBatteryListeners() =>
+        private static void StartBatteryListeners() =>
             DefaultBattery.ReportUpdated += ReportUpdated;
 
-        static void StopBatteryListeners() =>
+        private static void StopBatteryListeners() =>
             DefaultBattery.ReportUpdated -= ReportUpdated;
 
-        static void ReportUpdated(object sender, object e)
+        private static void ReportUpdated(object sender, object e)
             => Platform.BeginInvokeOnMainThread(OnBatteryChanged);
 
-        static Windows.Devices.Power.Battery DefaultBattery =>
+        private static Windows.Devices.Power.Battery DefaultBattery =>
             Windows.Devices.Power.Battery.AggregateBattery;
 
         public static double ChargeLevel

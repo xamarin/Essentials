@@ -12,13 +12,13 @@ namespace Xamarin.Essentials
 {
     internal static partial class Permissions
     {
-        static readonly object locker = new object();
-        static int requestCode = 0;
+        private static readonly object locker = new object();
+        private static int requestCode = 0;
 
-        static Dictionary<PermissionType, (int requestCode, TaskCompletionSource<PermissionStatus> tcs)> requests =
+        private static Dictionary<PermissionType, (int requestCode, TaskCompletionSource<PermissionStatus> tcs)> requests =
             new Dictionary<PermissionType, (int, TaskCompletionSource<PermissionStatus>)>();
 
-        static void PlatformEnsureDeclared(PermissionType permission)
+        private static void PlatformEnsureDeclared(PermissionType permission)
         {
             var androidPermissions = permission.ToAndroidPermissions(onlyRuntimePermissions: false);
 
@@ -39,7 +39,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static Task<PermissionStatus> PlatformCheckStatusAsync(PermissionType permission)
+        private static Task<PermissionStatus> PlatformCheckStatusAsync(PermissionType permission)
         {
             PlatformEnsureDeclared(permission);
 
@@ -70,7 +70,7 @@ namespace Xamarin.Essentials
             return Task.FromResult(PermissionStatus.Granted);
         }
 
-        static async Task<PermissionStatus> PlatformRequestAsync(PermissionType permission)
+        private static async Task<PermissionStatus> PlatformRequestAsync(PermissionType permission)
         {
             // Check status before requesting first
             if (await PlatformCheckStatusAsync(permission) == PermissionStatus.Granted)
@@ -108,7 +108,7 @@ namespace Xamarin.Essentials
             return await tcs.Task;
         }
 
-        internal static void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+        public static void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
         {
             lock (locker)
             {
@@ -135,7 +135,7 @@ namespace Xamarin.Essentials
 
     internal static class PermissionTypeExtensions
     {
-        internal static IEnumerable<string> ToAndroidPermissions(this PermissionType permissionType, bool onlyRuntimePermissions)
+        public static IEnumerable<string> ToAndroidPermissions(this PermissionType permissionType, bool onlyRuntimePermissions)
         {
             var permissions = new List<(string permission, bool runtimePermission)>();
 

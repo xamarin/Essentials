@@ -6,7 +6,7 @@ namespace Xamarin.Essentials
 {
     internal static partial class Permissions
     {
-        static void PlatformEnsureDeclared(PermissionType permission)
+        private static void PlatformEnsureDeclared(PermissionType permission)
         {
             var info = NSBundle.MainBundle.InfoDictionary;
 
@@ -17,7 +17,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static Task<PermissionStatus> PlatformCheckStatusAsync(PermissionType permission)
+        private static Task<PermissionStatus> PlatformCheckStatusAsync(PermissionType permission)
         {
             PlatformEnsureDeclared(permission);
 
@@ -30,7 +30,7 @@ namespace Xamarin.Essentials
             return Task.FromResult(PermissionStatus.Granted);
         }
 
-        static async Task<PermissionStatus> PlatformRequestAsync(PermissionType permission)
+        private static async Task<PermissionStatus> PlatformRequestAsync(PermissionType permission)
         {
             // Check status before requesting first
             if (await PlatformCheckStatusAsync(permission) == PermissionStatus.Granted)
@@ -47,7 +47,7 @@ namespace Xamarin.Essentials
             return PermissionStatus.Granted;
         }
 
-        static PermissionStatus GetLocationStatus()
+        private static PermissionStatus GetLocationStatus()
         {
             if (!CLLocationManager.LocationServicesEnabled)
                 return PermissionStatus.Disabled;
@@ -68,9 +68,9 @@ namespace Xamarin.Essentials
             }
         }
 
-        static CLLocationManager locationManager;
+        private static CLLocationManager locationManager;
 
-        static Task<PermissionStatus> RequestLocationAsync()
+        private static Task<PermissionStatus> RequestLocationAsync()
         {
             locationManager = new CLLocationManager();
 

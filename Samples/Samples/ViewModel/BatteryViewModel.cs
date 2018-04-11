@@ -28,7 +28,7 @@ namespace Samples.ViewModel
             base.OnDisappearing();
         }
 
-        void OnBatteryChanged(BatteryChangedEventArgs e)
+        private void OnBatteryChanged(BatteryChangedEventArgs e)
         {
             OnPropertyChanged(nameof(Level));
             OnPropertyChanged(nameof(State));

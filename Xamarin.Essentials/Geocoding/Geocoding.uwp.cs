@@ -28,7 +28,7 @@ namespace Xamarin.Essentials
             return queryResults?.Locations?.ToLocations();
         }
 
-        internal static void ValidateMapKey()
+        private static void ValidateMapKey()
         {
             if (string.IsNullOrWhiteSpace(MapKey) && string.IsNullOrWhiteSpace(MapService.ServiceToken))
                 throw new ArgumentNullException(nameof(MapKey));

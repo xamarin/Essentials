@@ -4,13 +4,13 @@ namespace Xamarin.Essentials
 {
     public static partial class Battery
     {
-        static event BatteryChangedEventHandler BatteryChanagedInternal;
+        private static event BatteryChangedEventHandler BatteryChanagedInternal;
 
-        static double currentLevel;
+        private static double currentLevel;
 
-        static BatteryPowerSource currentSource;
+        private static BatteryPowerSource currentSource;
 
-        static BatteryState currentState;
+        private static BatteryState currentState;
 
         public static event BatteryChangedEventHandler BatteryChanged
         {
@@ -38,20 +38,20 @@ namespace Xamarin.Essentials
             }
         }
 
-        static void SetCurrent()
+        private static void SetCurrent()
         {
             currentLevel = Battery.ChargeLevel;
             currentSource = Battery.PowerSource;
             currentState = Battery.State;
         }
 
-        static void OnBatteryChanged(double level, BatteryState state, BatteryPowerSource source)
+        private static void OnBatteryChanged(double level, BatteryState state, BatteryPowerSource source)
             => OnBatteryChanged(new BatteryChangedEventArgs(level, state, source));
 
-        static void OnBatteryChanged()
+        private static void OnBatteryChanged()
             => OnBatteryChanged(ChargeLevel, State, PowerSource);
 
-        static void OnBatteryChanged(BatteryChangedEventArgs e)
+        private static void OnBatteryChanged(BatteryChangedEventArgs e)
         {
             if (currentLevel != e.ChargeLevel ||
                 currentSource != e.PowerSource ||

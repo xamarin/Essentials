@@ -4,7 +4,7 @@ namespace Samples.ViewModel
 {
     public class DeviceInfoViewModel : BaseViewModel
     {
-        ScreenMetrics screenMetrics;
+        private ScreenMetrics screenMetrics;
 
         public string Model => DeviceInfo.Model;
 
@@ -41,7 +41,7 @@ namespace Samples.ViewModel
             base.OnDisappearing();
         }
 
-        void OnScreenMetricsChanged(ScreenMetricsChanagedEventArgs e)
+        private void OnScreenMetricsChanged(ScreenMetricsChanagedEventArgs e)
         {
             ScreenMetrics = e.Metrics;
         }

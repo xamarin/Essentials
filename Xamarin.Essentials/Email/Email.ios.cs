@@ -8,7 +8,7 @@ namespace Xamarin.Essentials
         internal static bool IsComposeSupported
             => MFMailComposeViewController.CanSendMail;
 
-        static Task PlatformComposeAsync(EmailMessage message)
+        private static Task PlatformComposeAsync(EmailMessage message)
         {
             // do this first so we can throw as early as possible
             var parentController = Platform.GetCurrentViewController();

@@ -11,15 +11,15 @@ namespace Xamarin.Essentials
 {
     public static partial class DeviceInfo
     {
-        const int tabletCrossover = 600;
+        private const int tabletCrossover = 600;
 
-        static OrientationEventListener orientationListener;
+        private static OrientationEventListener orientationListener;
 
-        static string GetModel() => Build.Model;
+        private static string GetModel() => Build.Model;
 
-        static string GetManufacturer() => Build.Manufacturer;
+        private static string GetManufacturer() => Build.Manufacturer;
 
-        static string GetDeviceName()
+        private static string GetDeviceName()
         {
             var name = GetSystemSetting("device_name");
             if (string.IsNullOrWhiteSpace(name))
@@ -27,11 +27,11 @@ namespace Xamarin.Essentials
             return name;
         }
 
-        static string GetVersionString() => Build.VERSION.Release;
+        private static string GetVersionString() => Build.VERSION.Release;
 
-        static string GetPlatform() => Platforms.Android;
+        private static string GetPlatform() => Platforms.Android;
 
-        static string GetIdiom()
+        private static string GetIdiom()
         {
             var currentIdiom = Idioms.Unsupported;
 
@@ -77,7 +77,7 @@ namespace Xamarin.Essentials
             return currentIdiom;
         }
 
-        static string DetectIdiom(UiMode uiMode)
+        private static string DetectIdiom(UiMode uiMode)
         {
             if (uiMode.HasFlag(UiMode.TypeNormal))
                 return Idioms.Phone;
@@ -89,7 +89,7 @@ namespace Xamarin.Essentials
             return Idioms.Unsupported;
         }
 
-        static DeviceType GetDeviceType()
+        private static DeviceType GetDeviceType()
         {
             var isEmulator =
                 Build.Fingerprint.StartsWith("generic", StringComparison.InvariantCulture) ||
@@ -107,7 +107,7 @@ namespace Xamarin.Essentials
             return DeviceType.Physical;
         }
 
-        static ScreenMetrics GetScreenMetrics()
+        private static ScreenMetrics GetScreenMetrics()
         {
             var displayMetrics = Essentials.Platform.CurrentContext.Resources?.DisplayMetrics;
 
@@ -121,26 +121,26 @@ namespace Xamarin.Essentials
             };
         }
 
-        static void StartScreenMetricsListeners()
+        private static void StartScreenMetricsListeners()
         {
             orientationListener = new Listener(Application.Context, OnScreenMetricsChanaged);
             orientationListener.Enable();
         }
 
-        static void StopScreenMetricsListeners()
+        private static void StopScreenMetricsListeners()
         {
             orientationListener?.Disable();
             orientationListener?.Dispose();
             orientationListener = null;
         }
 
-        static void OnScreenMetricsChanaged()
+        private static void OnScreenMetricsChanaged()
         {
             var metrics = GetScreenMetrics();
             OnScreenMetricsChanaged(metrics);
         }
 
-        static ScreenRotation CalculateRotation()
+        private static ScreenRotation CalculateRotation()
         {
             var service = Essentials.Platform.CurrentContext.GetSystemService(Context.WindowService);
             var display = service?.JavaCast<IWindowManager>()?.DefaultDisplay;
@@ -163,7 +163,7 @@ namespace Xamarin.Essentials
             return ScreenRotation.Rotation0;
         }
 
-        static ScreenOrientation CalculateOrientation()
+        private static ScreenOrientation CalculateOrientation()
         {
             var config = Essentials.Platform.CurrentContext.Resources?.Configuration;
 
@@ -182,20 +182,20 @@ namespace Xamarin.Essentials
             return ScreenOrientation.Unknown;
         }
 
-        static string GetSystemSetting(string name)
+        private static string GetSystemSetting(string name)
            => Settings.System.GetString(Essentials.Platform.CurrentContext.ContentResolver, name);
+    }
 
-        class Listener : OrientationEventListener
+    internal class Listener : OrientationEventListener
+    {
+        private Action onChanged;
+
+        public Listener(Context context, Action handler)
+            : base(context)
         {
-            Action onChanged;
-
-            public Listener(Context context, Action handler)
-                : base(context)
-            {
-                onChanged = handler;
-            }
-
-            public override void OnOrientationChanged(int orientation) => onChanged();
+            onChanged = handler;
         }
+
+        public override void OnOrientationChanged(int orientation) => onChanged();
     }
 }

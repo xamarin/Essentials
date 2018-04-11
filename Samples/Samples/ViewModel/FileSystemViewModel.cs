@@ -7,12 +7,12 @@ namespace Samples.ViewModel
 {
     public class FileSystemViewModel : BaseViewModel
     {
-        const string templateFileName = "FileSystemTemplate.txt";
-        const string localFileName = "TheFile.txt";
+        private const string templateFileName = "FileSystemTemplate.txt";
+        private const string localFileName = "TheFile.txt";
 
-        static string localPath = Path.Combine(FileSystem.AppDataDirectory, localFileName);
+        private static string localPath = Path.Combine(FileSystem.AppDataDirectory, localFileName);
 
-        string currentContents;
+        private string currentContents;
 
         public FileSystemViewModel()
         {
@@ -35,7 +35,7 @@ namespace Samples.ViewModel
             set => SetProperty(ref currentContents, value);
         }
 
-        async void DoLoadFile()
+        private async void DoLoadFile()
         {
             if (File.Exists(localPath))
             {
@@ -51,12 +51,12 @@ namespace Samples.ViewModel
             }
         }
 
-        void DoSaveFile()
+        private void DoSaveFile()
         {
             File.WriteAllText(localPath, CurrentContents);
         }
 
-        void DoDeleteFile()
+        private void DoDeleteFile()
         {
             if (File.Exists(localPath))
                 File.Delete(localPath);

@@ -7,10 +7,10 @@ namespace Xamarin.Essentials
     {
         internal static bool IsSupported => true;
 
-        static void PlatformVibrate(TimeSpan duration) =>
+        private static void PlatformVibrate(TimeSpan duration) =>
             SystemSound.Vibrate.PlaySystemSound();
 
-        static void PlatformCancel()
+        private static void PlatformCancel()
         {
         }
     }

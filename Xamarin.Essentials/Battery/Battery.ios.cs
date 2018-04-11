@@ -5,17 +5,17 @@ namespace Xamarin.Essentials
 {
     public static partial class Battery
     {
-        static NSObject levelObserver;
-        static NSObject stateObserver;
+        private static NSObject levelObserver;
+        private static NSObject stateObserver;
 
-        static void StartBatteryListeners()
+        private static void StartBatteryListeners()
         {
             UIDevice.CurrentDevice.BatteryMonitoringEnabled = true;
             levelObserver = UIDevice.Notifications.ObserveBatteryLevelDidChange(BatteryChangedNotification);
             stateObserver = UIDevice.Notifications.ObserveBatteryStateDidChange(BatteryChangedNotification);
         }
 
-        static void StopBatteryListeners()
+        private static void StopBatteryListeners()
         {
             UIDevice.CurrentDevice.BatteryMonitoringEnabled = false;
             levelObserver?.Dispose();
@@ -24,7 +24,7 @@ namespace Xamarin.Essentials
             stateObserver = null;
         }
 
-        static void BatteryChangedNotification(object sender, NSNotificationEventArgs args)
+        private static void BatteryChangedNotification(object sender, NSNotificationEventArgs args)
             => Platform.BeginInvokeOnMainThread(OnBatteryChanged);
 
         public static double ChargeLevel

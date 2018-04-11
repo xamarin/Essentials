@@ -6,9 +6,9 @@ namespace Xamarin.Essentials
 {
     public static partial class Preferences
     {
-        static readonly object locker = new object();
+        private static readonly object locker = new object();
 
-        static bool PlatformContainsKey(string key, string sharedName)
+        private static bool PlatformContainsKey(string key, string sharedName)
         {
             lock (locker)
             {
@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static void PlatformRemove(string key, string sharedName)
+        private static void PlatformRemove(string key, string sharedName)
         {
             lock (locker)
             {
@@ -28,7 +28,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static void PlatformClear(string sharedName)
+        private static void PlatformClear(string sharedName)
         {
             lock (locker)
             {
@@ -45,7 +45,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static void PlatformSet<T>(string key, T value, string sharedName)
+        private static void PlatformSet<T>(string key, T value, string sharedName)
         {
             lock (locker)
             {
@@ -84,7 +84,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static T PlatformGet<T>(string key, T defaultValue, string sharedName)
+        private static T PlatformGet<T>(string key, T defaultValue, string sharedName)
         {
             object value = null;
 
@@ -129,7 +129,7 @@ namespace Xamarin.Essentials
             return (T)value;
         }
 
-        static NSUserDefaults GetUserDefaults(string sharedName)
+        private static NSUserDefaults GetUserDefaults(string sharedName)
         {
             if (!string.IsNullOrWhiteSpace(sharedName))
                 return new NSUserDefaults(sharedName, NSUserDefaultsType.SuiteName);

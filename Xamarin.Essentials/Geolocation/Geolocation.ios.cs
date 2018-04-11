@@ -12,7 +12,7 @@ namespace Xamarin.Essentials
         internal static bool IsSupported
             => CLLocationManager.LocationServicesEnabled;
 
-        static async Task<Location> PlatformLastKnownLocationAsync()
+        private static async Task<Location> PlatformLastKnownLocationAsync()
         {
             await Permissions.RequireAsync(PermissionType.LocationWhenInUse);
 
@@ -22,7 +22,7 @@ namespace Xamarin.Essentials
             return location.ToLocation();
         }
 
-        static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
+        private static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
         {
             await Permissions.RequireAsync(PermissionType.LocationWhenInUse);
 
@@ -66,27 +66,27 @@ namespace Xamarin.Essentials
                 tcs.TrySetResult(null);
             }
         }
+    }
 
-        class SingleLocationListener : CLLocationManagerDelegate
+    internal class SingleLocationListener : CLLocationManagerDelegate
+    {
+        private bool wasRaised = false;
+
+        public Action<CLLocation> LocationHandler { get; set; }
+
+        public override void LocationsUpdated(CLLocationManager manager, CLLocation[] locations)
         {
-            bool wasRaised = false;
+            if (wasRaised)
+                return;
 
-            public Action<CLLocation> LocationHandler { get; set; }
+            wasRaised = true;
 
-            public override void LocationsUpdated(CLLocationManager manager, CLLocation[] locations)
-            {
-                if (wasRaised)
-                    return;
+            var location = locations.LastOrDefault();
 
-                wasRaised = true;
+            if (location == null)
+                return;
 
-                var location = locations.LastOrDefault();
-
-                if (location == null)
-                    return;
-
-                LocationHandler?.Invoke(location);
-            }
+            LocationHandler?.Invoke(location);
         }
     }
 }

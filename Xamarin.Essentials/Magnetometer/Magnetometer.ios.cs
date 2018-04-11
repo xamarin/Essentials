@@ -4,7 +4,8 @@ using Foundation;
 namespace Xamarin.Essentials
 {
     public static partial class Magnetometer
-    { // Timing intervales to match android sensor speeds in seconds
+    {
+        // Timing intervales to match android sensor speeds in seconds
         // https://stackoverflow.com/questions/10044158/android-sensors
         internal const double FastestInterval = .02;
         internal const double GameInterval = .04;
@@ -14,7 +15,7 @@ namespace Xamarin.Essentials
         internal static bool IsSupported =>
             Platform.MotionManager?.MagnetometerAvailable ?? false;
 
-        internal static void PlatformStart(SensorSpeed sensorSpeed)
+        private static void PlatformStart(SensorSpeed sensorSpeed)
         {
             var manager = Platform.MotionManager;
             switch (sensorSpeed)
@@ -36,7 +37,7 @@ namespace Xamarin.Essentials
             manager.StartMagnetometerUpdates(Platform.GetCurrentQueue(), DataUpdated);
         }
 
-        static void DataUpdated(CMMagnetometerData data, NSError error)
+        private static void DataUpdated(CMMagnetometerData data, NSError error)
         {
             if (data == null)
                 return;
@@ -46,7 +47,7 @@ namespace Xamarin.Essentials
             OnChanged(magnetometerData);
         }
 
-        internal static void PlatformStop() =>
+        private static void PlatformStop() =>
             Platform.MotionManager?.StopMagnetometerUpdates();
     }
 }

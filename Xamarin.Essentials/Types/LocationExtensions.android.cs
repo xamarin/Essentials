@@ -29,7 +29,7 @@ namespace Xamarin.Essentials
                 Accuracy = location.HasAccuracy ? location.Accuracy : (float?)null
             };
 
-        static readonly DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private static readonly DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         internal static DateTimeOffset GetTimestamp(this AndroidLocation location)
         {
