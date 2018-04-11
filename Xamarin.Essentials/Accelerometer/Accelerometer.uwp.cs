@@ -10,8 +10,6 @@ namespace Xamarin.Essentials
         internal const uint GameInterval = 22;
         internal const uint NormalInterval = 33;
 
-        static WindowsAccelerometer sensor;
-
         internal static WindowsAccelerometer DefaultSensor =>
             WindowsAccelerometer.GetDefault();
 
@@ -20,7 +18,8 @@ namespace Xamarin.Essentials
 
         internal static void PlatformStart(SensorSpeed sensorSpeed)
         {
-            sensor = DefaultSensor;
+            var sensor = DefaultSensor;
+
             var interval = NormalInterval;
             switch (sensorSpeed)
             {
@@ -46,9 +45,7 @@ namespace Xamarin.Essentials
 
         internal static void PlatformStop()
         {
-            if (sensor == null)
-                return;
-
+            var sensor = DefaultSensor;
             sensor.ReadingChanged -= DataUpdated;
         }
     }

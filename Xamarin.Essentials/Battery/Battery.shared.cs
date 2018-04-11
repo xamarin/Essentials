@@ -6,12 +6,6 @@ namespace Xamarin.Essentials
     {
         static event BatteryChangedEventHandler BatteryChanagedInternal;
 
-        static double currentLevel;
-
-        static BatteryPowerSource currentSource;
-
-        static BatteryState currentState;
-
         public static event BatteryChangedEventHandler BatteryChanged
         {
             add
@@ -21,10 +15,7 @@ namespace Xamarin.Essentials
                 BatteryChanagedInternal += value;
 
                 if (!wasRunning && BatteryChanagedInternal != null)
-                {
-                    SetCurrent();
                     StartBatteryListeners();
-                }
             }
 
             remove
@@ -38,13 +29,6 @@ namespace Xamarin.Essentials
             }
         }
 
-        static void SetCurrent()
-        {
-            currentLevel = Battery.ChargeLevel;
-            currentSource = Battery.PowerSource;
-            currentState = Battery.State;
-        }
-
         static void OnBatteryChanged(double level, BatteryState state, BatteryPowerSource source)
             => OnBatteryChanged(new BatteryChangedEventArgs(level, state, source));
 
@@ -52,15 +36,7 @@ namespace Xamarin.Essentials
             => OnBatteryChanged(ChargeLevel, State, PowerSource);
 
         static void OnBatteryChanged(BatteryChangedEventArgs e)
-        {
-            if (currentLevel != e.ChargeLevel ||
-                currentSource != e.PowerSource ||
-                currentState != e.State)
-            {
-                SetCurrent();
-                BatteryChanagedInternal?.Invoke(e);
-            }
-        }
+            => BatteryChanagedInternal?.Invoke(e);
     }
 
     public enum BatteryState
