@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Microsoft.Caboodle
+namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
@@ -31,7 +31,7 @@ namespace Microsoft.Caboodle
         }
     }
 
-    public enum Pithch
+    public enum Pitch
     {
         XLow,
         Low,
@@ -70,23 +70,23 @@ namespace Microsoft.Caboodle
         {
             var volume = 0.5f;
 
-            if (v == Caboodle.Volume.XSoft)
+            if (v == Essentials.Volume.XSoft)
             {
                 volume = 0.1f;
             }
-            else if (v == Caboodle.Volume.Soft)
+            else if (v == Essentials.Volume.Soft)
             {
                 volume = 0.25f;
             }
-            else if (v == Caboodle.Volume.Silent)
+            else if (v == Essentials.Volume.Silent)
             {
                 volume = 0.5f;
             }
-            else if (v == Caboodle.Volume.Loud)
+            else if (v == Essentials.Volume.Loud)
             {
                 volume = 0.75f;
             }
-            else if (v == Caboodle.Volume.XLoud)
+            else if (v == Essentials.Volume.XLoud)
             {
                 volume = 1.0f;
             }

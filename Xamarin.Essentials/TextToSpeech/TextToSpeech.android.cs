@@ -6,30 +6,32 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Android.OS;
 using Android.Speech.Tts;
+using Xamarin.Essentials;
 
-namespace Microsoft.Caboodle
+namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
-        private const int maxSpeechInputLengthDefault = 4000;
+        const int maxSpeechInputLengthDefault = 4000;
 
         public static int MaxSpeechInputLength
         {
             get
             {
-                if ((int)Android.OS.Build.VERSION.SdkInt < 18)
+                if ((int)Build.VERSION.SdkInt < 18)
                 {
                     return maxSpeechInputLengthDefault;
                 }
                 else
                 {
-                    return Android.Speech.Tts.TextToSpeech.MaxSpeechInputLength;
+                    return global::Android.Speech.Tts.TextToSpeech.MaxSpeechInputLength;
                 }
             }
         }
 
-        static Android.Speech.Tts.TextToSpeech textToSpeech;
+        static global::Android.Speech.Tts.TextToSpeech textToSpeech;
 
         static TextToSpeech()
         {
@@ -44,7 +46,7 @@ namespace Microsoft.Caboodle
         {
             // set up the TextToSpeech object
             // third parameter is the speech engine to use
-            textToSpeech = new Android.Speech.Tts.TextToSpeech(Platform.CurrentContext, default(TextToSpeechListener), "com.google.android.tts");
+            textToSpeech = new global::Android.Speech.Tts.TextToSpeech(Platform.CurrentContext, default(TextToSpeechListener), "com.google.android.tts");
 
             var locales = await GetLocalesAsync();
 
@@ -72,7 +74,7 @@ namespace Microsoft.Caboodle
                 textToSpeech.SetPitch(settings.Pitch.Value);
                 textToSpeech.SetSpeechRate(settings.SpeakRate.Value);
 
-                var bundle = Android.OS.Bundle.Empty;
+                var bundle = Bundle.Empty;
                 string stringutteranceid = null;
 
                 if (settings.Volume.HasValue)
@@ -195,7 +197,7 @@ namespace Microsoft.Caboodle
             return Task.FromResult(locales);
         }
 
-        private static Dictionary<string, string> iso3166Alpha2ToAlpha3Mapping;
+        static Dictionary<string, string> iso3166Alpha2ToAlpha3Mapping;
 
         public static Dictionary<string, string> ISO3166Alpha2ToAlpha3Mapping
         {
@@ -216,9 +218,9 @@ namespace Microsoft.Caboodle
         }
     }
 
-    internal class TextToSpeechListener : Java.Lang.Object, Android.Speech.Tts.TextToSpeech.IOnInitListener, IDisposable
+    internal class TextToSpeechListener : Java.Lang.Object, global::Android.Speech.Tts.TextToSpeech.IOnInitListener, IDisposable
     {
-        public Android.Speech.Tts.TextToSpeech TextToSpeechNative
+        public global::Android.Speech.Tts.TextToSpeech TextToSpeechNative
         {
             get;
             set;

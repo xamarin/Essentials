@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 
-namespace Microsoft.Caboodle
+namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Windows.Media.SpeechSynthesis;
 using Windows.UI.Xaml.Controls;
 
-namespace Microsoft.Caboodle
+namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {

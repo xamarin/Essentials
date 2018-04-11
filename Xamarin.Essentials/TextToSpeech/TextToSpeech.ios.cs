@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AVFoundation;
 
-namespace Microsoft.Caboodle
+namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
@@ -51,7 +51,7 @@ namespace Microsoft.Caboodle
             return;
         }
 
-        private static AVSpeechUtterance GetSpeechUtterance(string text, SpeakSettings settings)
+        static AVSpeechUtterance GetSpeechUtterance(string text, SpeakSettings settings)
         {
             var voice = GetVoiceFromLanguage(settings.Locale.Language);
 
@@ -101,7 +101,7 @@ namespace Microsoft.Caboodle
             return speechUtterance;
         }
 
-        private static float PlatformSpecificPitch(float pitch)
+        static float PlatformSpecificPitch(float pitch)
         {
             var p = 1.0f;
 
@@ -117,7 +117,7 @@ namespace Microsoft.Caboodle
             return p;
         }
 
-        private static float PlatformSpecificRate(float rate)
+        static float PlatformSpecificRate(float rate)
         {
             var r = 1.0f;
 
@@ -133,7 +133,7 @@ namespace Microsoft.Caboodle
             return r;
         }
 
-        private static float PlatformSpecificVolume(float volume)
+        static float PlatformSpecificVolume(float volume)
         {
             var v = 1.0f;
 
@@ -149,7 +149,7 @@ namespace Microsoft.Caboodle
             return v;
         }
 
-        private static AVSpeechSynthesisVoice GetVoiceFromLanguage(string language)
+        static AVSpeechSynthesisVoice GetVoiceFromLanguage(string language)
         {
             var voice = AVSpeechSynthesisVoice.FromLanguage(language);
             if (voice == null)

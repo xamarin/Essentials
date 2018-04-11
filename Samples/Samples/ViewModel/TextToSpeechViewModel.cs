@@ -1,9 +1,10 @@
 ﻿using System.Threading;
 using System.Windows.Input;
-using Microsoft.Caboodle;
+using Samples.ViewModel;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
-namespace Caboodle.Samples.ViewModel
+namespace Samples.ViewModel
 {
     public class TextToSpeechViewModel : BaseViewModel
     {
@@ -20,7 +21,7 @@ namespace Caboodle.Samples.ViewModel
             return;
         }
 
-        private void OnSpeak(object obj)
+        private async void OnSpeak(object obj)
         {
             var settings = new SpeakSettings()
             {
@@ -31,11 +32,11 @@ namespace Caboodle.Samples.ViewModel
 
             if (AdvancedSettings)
             {
-                TextToSpeech.SpeakAsync(Text, settings, default(CancellationToken));
+                await TextToSpeech.SpeakAsync(Text, settings, default(CancellationToken));
             }
             else
             {
-                TextToSpeech.SpeakAsync(Text, default(CancellationToken));
+                await TextToSpeech.SpeakAsync(Text, default(CancellationToken));
             }
 
             return;
