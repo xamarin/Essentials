@@ -15,6 +15,12 @@ namespace DeviceTests
 
         public Compass_Tests()
         {
+            if (!TestSupported)
+            {
+                Assert.False(Compass.IsSupported);
+                return;
+            }
+
             Compass.Stop();
         }
 

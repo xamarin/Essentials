@@ -16,6 +16,12 @@ namespace DeviceTests
 
         public Magnetometer_Tests()
         {
+            if (!TestSupported)
+            {
+                Assert.False(Magnetometer.IsSupported);
+                return;
+            }
+
             Magnetometer.Stop();
         }
 

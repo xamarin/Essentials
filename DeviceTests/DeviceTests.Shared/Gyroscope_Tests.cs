@@ -15,6 +15,12 @@ namespace DeviceTests
 
         public Gyroscope_Tests()
         {
+            if (!TestSupported)
+            {
+                Assert.False(Gyroscope.IsSupported);
+                return;
+            }
+
             Gyroscope.Stop();
         }
 

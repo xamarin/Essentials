@@ -15,6 +15,12 @@ namespace DeviceTests
 
         public Accelerometer_Tests()
         {
+            if (!TestSupported)
+            {
+                Assert.False(Accelerometer.IsSupported);
+                return;
+            }
+
             Accelerometer.Stop();
         }
 
