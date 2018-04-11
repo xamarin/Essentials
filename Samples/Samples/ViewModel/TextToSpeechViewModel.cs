@@ -11,7 +11,7 @@ namespace Samples.ViewModel
         public TextToSpeechViewModel()
         {
             SpeakCommand = new Command(OnSpeak);
-            Text = "Caboodle by Microsoft";
+            Text = "Xamarin Essentials!";
 
             AdvancedSettings = false;
             Volume = 0.5f;
@@ -21,7 +21,7 @@ namespace Samples.ViewModel
             return;
         }
 
-        private async void OnSpeak(object obj)
+        void OnSpeak(object obj)
         {
             var settings = new SpeakSettings()
             {
@@ -32,11 +32,11 @@ namespace Samples.ViewModel
 
             if (AdvancedSettings)
             {
-                await TextToSpeech.SpeakAsync(Text, settings, default(CancellationToken));
+                TextToSpeech.SpeakAsync(Text, settings, default(CancellationToken));
             }
             else
             {
-                await TextToSpeech.SpeakAsync(Text, default(CancellationToken));
+                TextToSpeech.SpeakAsync(Text, default(CancellationToken));
             }
 
             return;
