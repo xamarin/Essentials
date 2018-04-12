@@ -16,44 +16,24 @@ namespace Xamarin.Essentials
     {
         const int maxSpeechInputLengthDefault = 4000;
 
-        public static int MaxSpeechInputLength
-        {
-            get
-            {
-                if ((int)Build.VERSION.SdkInt < 18)
-                {
-                    return maxSpeechInputLengthDefault;
-                }
-                else
-                {
-                    return global::Android.Speech.Tts.TextToSpeech.MaxSpeechInputLength;
-                }
-            }
-        }
-
         static global::Android.Speech.Tts.TextToSpeech textToSpeech;
 
         static TextToSpeech()
         {
-            Initialize();
+            Task.Run(() => Initialize());
 
             return;
         }
 
         static Java.Util.Locale localedefault = null;
 
-        static async void Initialize()
+        static async Task Initialize()
         {
             // set up the TextToSpeech object
             // third parameter is the speech engine to use
             textToSpeech = new global::Android.Speech.Tts.TextToSpeech(Platform.CurrentContext, default(TextToSpeechListener), "com.google.android.tts");
 
             var locales = await GetLocalesAsync();
-
-            // set up the speech to use the default langauge
-            // if a language is not available, then the default language is used.
-            localedefault = Java.Util.Locale.Default;
-            textToSpeech.SetLanguage(localedefault);
 
             return;
         }
@@ -68,70 +48,75 @@ namespace Xamarin.Essentials
                 throw new ArgumentNullException(nameof(text), "Text cannot be null or empty string");
             }
 
+            Task initialization = null;
+            if (textToSpeech == null)
+            {
+                initialization = Initialize();
+            }
+
+            var parts = SplitText(text, maxSpeechInputLengthDefault);
+
             await Task.Run(() =>
             {
+                initialization?.Wait();
+
                 // set the speed and pitch
-                textToSpeech.SetPitch(settings.Pitch.Value);
-                textToSpeech.SetSpeechRate(settings.SpeakRate.Value);
+                // textToSpeech.SetPitch(settings.Pitch.Value);
+                // textToSpeech.SetSpeechRate(settings.SpeakRate.Value);
 
                 var bundle = Bundle.Empty;
                 string stringutteranceid = null;
 
-                if (settings.Volume.HasValue)
+                foreach (var t in parts)
                 {
+                    textToSpeech.Speak(t, QueueMode.Flush, bundle, stringutteranceid);
                 }
-
-                textToSpeech.Speak(text, QueueMode.Flush, bundle, stringutteranceid);
             });
 
             return;
         }
 
-        public static async Task SpeakAsync1(string text, SpeakSettings settings, CancellationToken cancelToken = default(CancellationToken))
+        private static List<string> SplitText(string text, int maxSpeechInputLengthDefault)
         {
-            if (text.Length >= TextToSpeech.MaxSpeechInputLength)
+            var max = maxSpeechInputLengthDefault;
+
+            if ((int)Build.VERSION.SdkInt >= 18)
             {
-                throw new ArgumentException(nameof(text), "Text length too long!");
+                max = global::Android.Speech.Tts.TextToSpeech.MaxSpeechInputLength;
             }
 
-            if (string.IsNullOrWhiteSpace(text))
+            var count = (text.Length / maxSpeechInputLengthDefault) + 1;
+            Console.WriteLine($"count = {count}");
+            var parts = new List<string>();
+            for (var i = 0; i < count; i++)
             {
-                return;
+                var position = i * max;
+                var length = max;
+                if (i == count - 1)
+                {
+                    length = text.Length - position;
+                }
+                Console.WriteLine($"i        = {i}");
+                Console.WriteLine($"position = {position}");
+                Console.WriteLine($"length   = {length}");
+
+                var p = text.Substring(position, length);
+
+                Console.WriteLine($"p = {p}");
+                parts.Add(p);
             }
 
-            if (!string.IsNullOrWhiteSpace(settings.Locale.Language))
-            {
-                Java.Util.Locale locale = null;
-                if (!string.IsNullOrWhiteSpace(settings.Locale.Country))
-                {
-                    locale = new Java.Util.Locale(settings.Locale.Language, settings.Locale.Country, null);
-                }
-                else
-                {
-                    locale = new Java.Util.Locale(settings.Locale.Language, null, null);
-                }
-
-                var result = textToSpeech.IsLanguageAvailable(locale);
-                if (result == LanguageAvailableResult.CountryAvailable)
-                {
-                    textToSpeech.SetLanguage(locale);
-                }
-                else
-                {
-                    Console.WriteLine("Locale: " + locale + " was not valid, setting to default.");
-                }
-            }
-            else
-            {
-            }
-
-            await Task.Run(() => { });
-
-            return;
+            return parts;
         }
 
         public static Task<List<Locale>> GetLocalesAsync()
         {
+            // set up the speech to use the default langauge
+            // if a language is not available, then the default language is used.
+            localedefault = Java.Util.Locale.Default;
+
+            // textToSpeech.SetLanguage(localedefault);
+
             var locales = new List<Locale>();
 
             if (textToSpeech != null && TextToSpeech.Initialized)
