@@ -28,8 +28,8 @@
 
         public static bool HasGyroscope =>
 #if __ANDROID__
-            // android emulates the gyroscope
-            true;
+            // Android does not emulate, but most devices have, a gyroscope
+            Xamarin.Essentials.DeviceInfo.DeviceType == Xamarin.Essentials.DeviceType.Physical;
 #elif __IOS__
             // all iOS devices (and only devices) have a gyroscope
             Xamarin.Essentials.DeviceInfo.DeviceType == Xamarin.Essentials.DeviceType.Physical;
