@@ -9,18 +9,17 @@ namespace Xamarin.Essentials
         static void StartListeners()
         {
             listener = new ReachabilityListener();
-            listener.ReachabilityChanged += ReachabilityChanged;
+            listener.ReachabilityChanged += OnConnectivityChanged;
         }
 
         static void StopListeners()
         {
-            listener?.Dispose();
-            listener = null;
-        }
+            if (listener == null)
+                return;
 
-        static void ReachabilityChanged()
-        {
-            OnConnectivityChanged();
+            listener.ReachabilityChanged -= OnConnectivityChanged;
+            listener.Dispose();
+            listener = null;
         }
 
         public static NetworkAccess NetworkAccess
