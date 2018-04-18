@@ -14,28 +14,44 @@ namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
-        const int maxSpeechInputLengthDefault = 4000;
+        const int maxSpeechInputLengthDefault = 10; // 4000;
 
         static global::Android.Speech.Tts.TextToSpeech textToSpeech;
 
         static TextToSpeech()
         {
-            Task.Run(() => Initialize());
+            Initialize();
 
             return;
         }
 
         static Java.Util.Locale localedefault = null;
 
-        static async Task Initialize()
+        public static Task<bool> Initialize()
         {
-            // set up the TextToSpeech object
-            // third parameter is the speech engine to use
-            textToSpeech = new global::Android.Speech.Tts.TextToSpeech(Platform.CurrentContext, default(TextToSpeechListener), "com.google.android.tts");
+            if (Initialized)
+            {
+                return Task<bool>.FromResult(true);
+            }
 
-            var locales = await GetLocalesAsync();
+            var tcs = new TaskCompletionSource<bool>();
+            try
+            {
+                // set up the TextToSpeech object
+                // third parameter is the speech engine to use
+                var ttsl = new TextToSpeechListener();
+                textToSpeech = new global::Android.Speech.Tts.TextToSpeech(Platform.CurrentContext, ttsl, "com.google.android.tts");
+                var listener_initialized = ttsl.Initialize(textToSpeech).Result;
+                textToSpeech.SetLanguage(localedefault);
 
-            return;
+                Initialized = true;
+            }
+            catch (Exception e)
+            {
+                tcs.SetException(e);
+            }
+
+            return tcs.Task;
         }
 
         public static async Task SpeakAsync(string text, CancellationToken cancelToken = default(CancellationToken)) =>
@@ -48,18 +64,20 @@ namespace Xamarin.Essentials
                 throw new ArgumentNullException(nameof(text), "Text cannot be null or empty string");
             }
 
-            Task initialization = null;
-            if (textToSpeech == null)
+            if (!Initialized)
             {
-                initialization = Initialize();
+                throw new InvalidProgramException("TTS Engine not initialized");
             }
 
-            var parts = SplitText(text, maxSpeechInputLengthDefault);
+            var max = maxSpeechInputLengthDefault;
+            if ((int)Build.VERSION.SdkInt >= 18)
+            {
+                max = global::Android.Speech.Tts.TextToSpeech.MaxSpeechInputLength;
+            }
+            var parts = text.Split(max);
 
             await Task.Run(() =>
             {
-                initialization?.Wait();
-
                 // set the speed and pitch
                 // textToSpeech.SetPitch(settings.Pitch.Value);
                 // textToSpeech.SetSpeechRate(settings.SpeakRate.Value);
@@ -76,64 +94,20 @@ namespace Xamarin.Essentials
             return;
         }
 
-        private static List<string> SplitText(string text, int maxSpeechInputLengthDefault)
-        {
-            var max = maxSpeechInputLengthDefault;
-
-            if ((int)Build.VERSION.SdkInt >= 18)
-            {
-                max = global::Android.Speech.Tts.TextToSpeech.MaxSpeechInputLength;
-            }
-
-            var count = (text.Length / maxSpeechInputLengthDefault) + 1;
-            Console.WriteLine($"count = {count}");
-            var parts = new List<string>();
-            for (var i = 0; i < count; i++)
-            {
-                var position = i * max;
-                var length = max;
-                if (i == count - 1)
-                {
-                    length = text.Length - position;
-                }
-                Console.WriteLine($"i        = {i}");
-                Console.WriteLine($"position = {position}");
-                Console.WriteLine($"length   = {length}");
-
-                var p = text.Substring(position, length);
-
-                Console.WriteLine($"p = {p}");
-                parts.Add(p);
-            }
-
-            return parts;
-        }
-
         public static Task<List<Locale>> GetLocalesAsync()
         {
             // set up the speech to use the default langauge
             // if a language is not available, then the default language is used.
-            localedefault = Java.Util.Locale.Default;
-
-            // textToSpeech.SetLanguage(localedefault);
 
             var locales = new List<Locale>();
 
             if (textToSpeech != null && TextToSpeech.Initialized)
             {
-                var sdk = (int)global::Android.OS.Build.VERSION.SdkInt;
-                if (sdk < 21)
+                if (!Platform.HasApiLevel(BuildVersionCodes.Lollipop))
                 {
                     return Task.FromResult<List<Locale>>(locales);
                 }
-                else if (sdk == 21)
-                {
-                    var locales_21 = from l in textToSpeech.AvailableLanguages
-                                     select new Locale(l.Language, l.Country, l.DisplayName);
-
-                    locales = locales_21.ToList();
-                }
-                else if (sdk > 21)
+                else
                 {
                     try
                     {
@@ -175,9 +149,6 @@ namespace Xamarin.Essentials
                     }
                 }
             }
-            else
-            {
-            }
 
             return Task.FromResult(locales);
         }
@@ -205,6 +176,13 @@ namespace Xamarin.Essentials
 
     internal class TextToSpeechListener : Java.Lang.Object, global::Android.Speech.Tts.TextToSpeech.IOnInitListener, IDisposable
     {
+        public TextToSpeechListener()
+        {
+            LocaleNative = Java.Util.Locale.Default;
+
+            return;
+        }
+
         public global::Android.Speech.Tts.TextToSpeech TextToSpeechNative
         {
             get;
@@ -221,6 +199,21 @@ namespace Xamarin.Essentials
         {
             TextToSpeechNative.Stop();
             TextToSpeechNative = null;
+        }
+
+        public Task<bool> Initialize(global::Android.Speech.Tts.TextToSpeech tts)
+        {
+            var tcs = new TaskCompletionSource<bool>();
+            try
+            {
+                TextToSpeechNative = tts;
+            }
+            catch (Exception e)
+            {
+                tcs.SetException(e);
+            }
+
+            return tcs.Task;
         }
 
         public void OnInit(OperationResult status)

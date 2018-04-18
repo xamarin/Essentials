@@ -7,7 +7,8 @@ namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
-        public static int MaxSpeechInputLength { get; }
+        public static Task<bool> Initialize() =>
+            throw new NotImplementedInReferenceAssemblyException();
 
         public static Task SpeakAsync(string text, CancellationToken cancelToken = default(CancellationToken)) =>
             throw new NotImplementedInReferenceAssemblyException();

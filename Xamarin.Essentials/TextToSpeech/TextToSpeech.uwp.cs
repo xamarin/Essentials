@@ -11,6 +11,32 @@ namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
+        static MediaElement mediaElement = null;
+        static SpeechSynthesizer synth = null;
+
+        public static Task<bool> Initialize()
+        {
+            if (Initialized)
+            {
+                return Task<bool>.FromResult(true);
+            }
+
+            var tcs = new TaskCompletionSource<bool>();
+            try
+            {
+                mediaElement = new MediaElement();
+                synth = new Windows.Media.SpeechSynthesis.SpeechSynthesizer();
+
+                Initialized = true;
+            }
+            catch (Exception e)
+            {
+                tcs.SetException(e);
+            }
+
+            return tcs.Task;
+        }
+
         public static async Task SpeakAsync(string text, CancellationToken cancelToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(text))
@@ -18,8 +44,6 @@ namespace Xamarin.Essentials
                 throw new ArgumentNullException(nameof(text), "Text cannot be null or empty string");
             }
 
-            var mediaElement = new MediaElement();
-            var synth = new Windows.Media.SpeechSynthesis.SpeechSynthesizer();
             var stream = await synth.SynthesizeTextToStreamAsync(text);
 
             mediaElement.SetSource(stream, stream.ContentType);

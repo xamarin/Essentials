@@ -10,13 +10,35 @@ namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
+        static AVSpeechSynthesizer speechSynthesizer = null;
+
+        public static Task<bool> Initialize()
+        {
+            if (Initialized)
+            {
+                return Task<bool>.FromResult(true);
+            }
+
+            var tcs = new TaskCompletionSource<bool>();
+            try
+            {
+                var speechSynthesizer = new AVSpeechSynthesizer();
+
+                Initialized = true;
+            }
+            catch (Exception e)
+            {
+                tcs.SetException(e);
+            }
+
+            return tcs.Task;
+        }
+
         public static async Task SpeakAsync(string text, CancellationToken cancelToken = default(CancellationToken))
         {
             await Task.Run(() =>
             {
                 System.Diagnostics.Debug.WriteLine($"{text}");
-
-                var speechSynthesizer = new AVSpeechSynthesizer();
                 var speechUtterance = new AVSpeechUtterance(text)
                 {
                     Voice = AVSpeechSynthesisVoice.FromLanguage("en-US"),

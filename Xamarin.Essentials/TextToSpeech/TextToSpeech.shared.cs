@@ -13,6 +13,18 @@ namespace Xamarin.Essentials
             get;
             set;
         }
+
+        public static Locale Locale
+        {
+            get;
+            set;
+        }
+
+        public static IEnumerable<Locale> Locales
+        {
+            get;
+            set;
+        }
     }
 
     public partial struct Locale

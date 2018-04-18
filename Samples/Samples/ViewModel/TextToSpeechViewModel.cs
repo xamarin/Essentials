@@ -11,12 +11,14 @@ namespace Samples.ViewModel
         public TextToSpeechViewModel()
         {
             SpeakCommand = new Command(OnSpeak);
-            Text = "Xamarin Essentials!";
+            Text = "Xamarin Essentials, formerly known as Caboodle! To make you start easier with Xamarin.";
 
             AdvancedSettings = false;
             Volume = 0.5f;
             Pitch = 1.0f;
             Rate = 1.0f;
+
+            TextToSpeech.Initialize();
 
             return;
         }
