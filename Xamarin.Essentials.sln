@@ -13,15 +13,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Xamarin.Essentials.ruleset = Xamarin.Essentials.ruleset
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A14D061F-382D-4609-A3B0-E1D0BF7AB6AC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.Essentials", "Xamarin.Essentials\Xamarin.Essentials.csproj", "{63A4F6A1-48BF-4D32-AED7-82F605EDB042}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xamarin.Essentials", "Xamarin.Essentials\Xamarin.Essentials.csproj", "{63A4F6A1-48BF-4D32-AED7-82F605EDB042}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{77C2F93D-6EB7-49F7-A74A-C80499EC206A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{77C2F93D-6EB7-49F7-A74A-C80499EC206A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{706C0487-6930-4E55-8720-C17D9FE6CA91}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples", "Samples\Samples\Samples.csproj", "{2550ED91-8AE1-4E9A-A964-C11515C8FA28}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples", "Samples\Samples\Samples.csproj", "{2550ED91-8AE1-4E9A-A964-C11515C8FA28}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.Android", "Samples\Samples.Android\Samples.Android.csproj", "{C1CD30D3-52CA-4F8E-8499-BE88567CA2F8}"
 EndProject

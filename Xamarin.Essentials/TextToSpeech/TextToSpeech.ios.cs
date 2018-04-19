@@ -39,13 +39,13 @@ namespace Xamarin.Essentials
             await Task.Run(() =>
             {
                 System.Diagnostics.Debug.WriteLine($"{text}");
-                var speechUtterance = new AVSpeechUtterance(text)
-                {
-                    Voice = AVSpeechSynthesisVoice.FromLanguage("en-US"),
-                    Volume = 0.75f,
-                    PitchMultiplier = 1.0f,
-                    Rate = AVSpeechUtterance.MaximumSpeechRate / 5,
-                };
+                var speechUtterance = GetSpeechUtterance(text, null);
+
+                speechUtterance.Voice = AVSpeechSynthesisVoice.FromLanguage("en-US");
+
+                System.Diagnostics.Debug.WriteLine($"     Volume    = {speechUtterance.Volume}");
+                System.Diagnostics.Debug.WriteLine($"     SpeakRate = {speechUtterance.Rate}");
+                System.Diagnostics.Debug.WriteLine($"     Pitch     = {speechUtterance.PitchMultiplier}");
 
                 speechSynthesizer.SpeakUtterance(speechUtterance);
             });
@@ -60,13 +60,13 @@ namespace Xamarin.Essentials
 
             await Task.Run(() =>
             {
-                System.Diagnostics.Debug.WriteLine($"{text}");
-                System.Diagnostics.Debug.WriteLine($"     Volume    = {settings.Volume}");
-                System.Diagnostics.Debug.WriteLine($"     SpeakRate = {settings.SpeakRate}");
-                System.Diagnostics.Debug.WriteLine($"     Pitch     = {settings.Pitch}");
-
                 var speechSynthesizer = new AVSpeechSynthesizer();
                 var speechUtterance = GetSpeechUtterance(text, settings);
+
+                System.Diagnostics.Debug.WriteLine($"     Volume    = {speechUtterance.Volume}");
+                System.Diagnostics.Debug.WriteLine($"     SpeakRate = {speechUtterance.Rate}");
+                System.Diagnostics.Debug.WriteLine($"     Pitch     = {speechUtterance.PitchMultiplier}");
+
                 speechSynthesizer.SpeakUtterance(speechUtterance);
             });
 
@@ -75,6 +75,17 @@ namespace Xamarin.Essentials
 
         static AVSpeechUtterance GetSpeechUtterance(string text, SpeakSettings settings)
         {
+            if (settings == null)
+            {
+                return new AVSpeechUtterance(text)
+                {
+                    Voice = AVSpeechSynthesisVoice.FromLanguage("en-US"),
+                    Volume = 2.0f,
+                    PitchMultiplier = 1.0f,
+                    Rate = AVSpeechUtterance.MaximumSpeechRate / 5
+                };
+            }
+
             var voice = GetVoiceFromLanguage(settings.Locale.Language);
 
             if (voice == null)
@@ -99,7 +110,10 @@ namespace Xamarin.Essentials
             }
             else
             {
-                speechrate = AVSpeechUtterance.MaximumSpeechRate / 4;
+                speechrate = 0.3f;
+
+                // speechrate = AVSpeechUtterance.MaximumSpeechRate / 4;
+                // (AVSpeechUtterance.MinimumSpeechRate + AVSpeechUtterance.DefaultSpeechRate)*0.5;
             }
 
             float volume;
@@ -199,7 +213,7 @@ namespace Xamarin.Essentials
         }
     }
 
-    public partial struct SpeakSettings
+    public partial class SpeakSettings
     {
         public float PitchToPlatformSpecific(float pitch)
         {

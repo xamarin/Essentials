@@ -18,8 +18,6 @@ namespace Samples.ViewModel
             Pitch = 1.0f;
             Rate = 1.0f;
 
-            TextToSpeech.Initialize();
-
             return;
         }
 

@@ -71,12 +71,31 @@ namespace Xamarin.Essentials
         XLoud
     }
 
-    public partial struct SpeakSettings
+    public partial class SpeakSettings
     {
-        public Locale Locale;
-        public float? Pitch;
-        public float? SpeakRate;
-        public float? Volume;
+        public Locale Locale
+        {
+            get;
+            set;
+        }
+
+        public float? Pitch
+        {
+            get;
+            set;
+        }
+
+        public float? SpeakRate
+        {
+            get;
+            set;
+        }
+
+        public float? Volume
+        {
+            get;
+            set;
+        }
 
         public float VolumeAsNumeric(Volume v)
         {
