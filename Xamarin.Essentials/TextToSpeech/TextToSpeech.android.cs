@@ -37,7 +37,7 @@ namespace Xamarin.Essentials
                 max = global::Android.Speech.Tts.TextToSpeech.MaxSpeechInputLength;
             }
 
-            await textToSpeech.Speak(text, max);
+            await textToSpeech.Speak(text, max, settings);
 
             return;
         }
@@ -174,8 +174,26 @@ namespace Xamarin.Essentials
             tts = null;
         }
 
-        public async Task Speak(string text, int max)
+        public async Task Speak(string text, int max, SpeakSettings settings)
         {
+            if (settings != null)
+            {
+                if (settings.Locale.Language != null)
+                {
+                    var locale = new Java.Util.Locale(settings.Locale.Language);
+                    tts.SetLanguage(locale);
+                }
+
+                if (settings.Pitch.HasValue)
+                {
+                    tts.SetPitch(settings.Pitch.Value);
+                }
+                if (settings.SpeakRate.HasValue)
+                {
+                    tts.SetPitch(settings.SpeakRate.Value);
+                }
+           }
+
             var parts = text.Split(max);
 
             await Task.Run(() =>
