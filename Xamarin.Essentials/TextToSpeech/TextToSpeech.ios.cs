@@ -22,7 +22,7 @@ namespace Xamarin.Essentials
             var tcs = new TaskCompletionSource<bool>();
             try
             {
-                var speechSynthesizer = new AVSpeechSynthesizer();
+                speechSynthesizer = new AVSpeechSynthesizer();
 
                 Initialized = true;
             }
@@ -36,23 +36,13 @@ namespace Xamarin.Essentials
 
         public static async Task SpeakAsync(string text, CancellationToken cancelToken = default(CancellationToken))
         {
-            await Task.Run(() =>
-            {
-                System.Diagnostics.Debug.WriteLine($"{text}");
-                var speechUtterance = GetSpeechUtterance(text, null);
-
-                speechUtterance.Voice = AVSpeechSynthesisVoice.FromLanguage("en-US");
-
-                System.Diagnostics.Debug.WriteLine($"     Volume    = {speechUtterance.Volume}");
-                System.Diagnostics.Debug.WriteLine($"     SpeakRate = {speechUtterance.Rate}");
-                System.Diagnostics.Debug.WriteLine($"     Pitch     = {speechUtterance.PitchMultiplier}");
-
-                speechSynthesizer.SpeakUtterance(speechUtterance);
-            });
+            await SpeakAsync(text, null, cancelToken);
         }
 
         public static async Task SpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default(CancellationToken))
         {
+            Initialized = await Initialize();
+
             if (string.IsNullOrEmpty(text))
             {
                 throw new ArgumentNullException(nameof(text), "Text cannot be null or empty string");
@@ -60,7 +50,6 @@ namespace Xamarin.Essentials
 
             await Task.Run(() =>
             {
-                var speechSynthesizer = new AVSpeechSynthesizer();
                 var speechUtterance = GetSpeechUtterance(text, settings);
 
                 System.Diagnostics.Debug.WriteLine($"     Volume    = {speechUtterance.Volume}");
@@ -80,9 +69,9 @@ namespace Xamarin.Essentials
                 return new AVSpeechUtterance(text)
                 {
                     Voice = AVSpeechSynthesisVoice.FromLanguage("en-US"),
-                    Volume = 2.0f,
-                    PitchMultiplier = 1.0f,
-                    Rate = AVSpeechUtterance.MaximumSpeechRate / 5
+                    Volume = 0.75f,
+                    PitchMultiplier = 1f,
+                    Rate = 0.5f,
                 };
             }
 
