@@ -44,8 +44,11 @@ namespace Xamarin.Essentials
                 throw new ArgumentNullException(nameof(text), "Text cannot be null or empty string");
             }
 
-            var stream = await synth.SynthesizeTextToStreamAsync(text);
+            var ssml = GetSpeakParametersSSMLProsody(text, null);
 
+            var mediaElement = new MediaElement();
+            var synth = new Windows.Media.SpeechSynthesis.SpeechSynthesizer();
+            var stream = await synth.SynthesizeSsmlToStreamAsync(ssml.ToString());
             mediaElement.SetSource(stream, stream.ContentType);
             mediaElement.Play();
 
@@ -59,25 +62,42 @@ namespace Xamarin.Essentials
                 throw new ArgumentNullException(nameof(text), "Text cannot be null or empty string");
             }
 
+            var ssml = GetSpeakParametersSSMLProsody(text, settings);
+
+            var mediaElement = new MediaElement();
+            var synth = new Windows.Media.SpeechSynthesis.SpeechSynthesizer();
+            var stream = await synth.SynthesizeSsmlToStreamAsync(ssml.ToString());
+            mediaElement.SetSource(stream, stream.ContentType);
+            mediaElement.Play();
+
+            return;
+        }
+
+        static string GetSpeakParametersSSMLProsody(string text, SpeakSettings settings)
+        {
             var v = "default";
-            if (settings.Volume.HasValue)
-            {
-                v = SpeakSettings.ProsodyVolume(settings.Volume);
-            }
-
             var p = "default";
-            if (settings.Pitch.HasValue)
-            {
-                p = SpeakSettings.ProsodyPitch(settings.Pitch);
-            }
-
             var r = "default";
-            if (settings.SpeakRate.HasValue)
-            {
-                r = SpeakSettings.ProsodySpeakRate(settings.SpeakRate);
-            }
 
             var lc = SpeakSettings.LocalCode();
+
+            if (settings != null)
+            {
+                if (settings.Volume.HasValue)
+                {
+                    v = SpeakSettings.ProsodyVolume(settings.Volume);
+                }
+
+                if (settings.Pitch.HasValue)
+                {
+                    p = SpeakSettings.ProsodyPitch(settings.Pitch);
+                }
+
+                if (settings.SpeakRate.HasValue)
+                {
+                    r = SpeakSettings.ProsodySpeakRate(settings.SpeakRate);
+                }
+            }
 
             // SSML generation
             var sbssml = new StringBuilder();
@@ -87,18 +107,11 @@ namespace Xamarin.Essentials
 
             System.Diagnostics.Debug.WriteLine(sbssml.ToString());
 
-            var mediaElement = new MediaElement();
-            var synth = new Windows.Media.SpeechSynthesis.SpeechSynthesizer();
-            var stream = await synth.SynthesizeSsmlToStreamAsync(sbssml.ToString());
-
-            mediaElement.SetSource(stream, stream.ContentType);
-            mediaElement.Play();
-
-            return;
+            return sbssml.ToString();
         }
     }
 
-    public partial struct SpeakSettings
+    public partial class SpeakSettings
     {
         public static string LocalCode()
         {
