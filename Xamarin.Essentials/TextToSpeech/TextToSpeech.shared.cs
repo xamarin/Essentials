@@ -42,7 +42,6 @@ namespace Xamarin.Essentials
             Slow,
             Medium,
             Fast,
-            Xast,
             XFast
         }
 
