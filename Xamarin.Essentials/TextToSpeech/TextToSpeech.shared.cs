@@ -8,23 +8,14 @@ namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
-        public static bool Initialized
-        {
-            get;
-            set;
-        }
+        public static Task<IEnumerable<Locale>> GetLocalesAsync() =>
+            PlatformGetLocalesAsync();
 
-        public static Locale Locale
-        {
-            get;
-            set;
-        }
+        public static Task SpeakAsync(string text, CancellationToken cancelToken = default) =>
+            PlatformSpeakAsync(text, default, cancelToken);
 
-        public static IEnumerable<Locale> Locales
-        {
-            get;
-            set;
-        }
+        public static Task SpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default) =>
+            PlatformSpeakAsync(text, settings, cancelToken);
     }
 
     public partial struct Locale
@@ -58,7 +49,8 @@ namespace Xamarin.Essentials
         Slow,
         Medium,
         Fast,
-        Xast
+        Xast,
+        XFast
     }
 
     public enum Volume
@@ -79,50 +71,83 @@ namespace Xamarin.Essentials
             set;
         }
 
+        float? pitch;
+
         public float? Pitch
         {
-            get;
-            set;
+            get
+            {
+                return pitch;
+            }
+
+            set
+            {
+                if (value < 0 || value > 2)
+                    throw new ArgumentOutOfRangeException("Pitch must be >= 0.0f and <= 2.0f");
+                pitch = value;
+            }
         }
+
+        float? speakRate;
 
         public float? SpeakRate
         {
-            get;
-            set;
+            get
+            {
+                return speakRate;
+            }
+
+            set
+            {
+                if (value < 0 || value > 2)
+                    throw new ArgumentOutOfRangeException("SpeakRate must be >= 0.0f and <= 2.0f");
+
+                speakRate = value;
+            }
         }
+
+        float? volume;
 
         public float? Volume
         {
-            get;
-            set;
+            get
+            {
+                return volume;
+            }
+
+            set
+            {
+                if (value < 0 || value > 1)
+                    throw new ArgumentOutOfRangeException("Volume must be >= 0.0f and <= 1.0f");
+
+                volume = value;
+            }
         }
 
-        public float VolumeAsNumeric(Volume v)
+        public SpeakSettings SetVolume(Volume volume)
         {
-            var volume = 0.5f;
+            if (volume == Essentials.Volume.Silent)
+                Volume = 0f;
+            if (volume == Essentials.Volume.XSoft)
+                Volume = 0.1f;
+            else if (volume == Essentials.Volume.Soft)
+                Volume = 0.25f;
+            else if (volume == Essentials.Volume.Medium)
+                Volume = 0.5f;
+            else if (volume == Essentials.Volume.Loud)
+                Volume = 0.75f;
+            else if (volume == Essentials.Volume.XLoud)
+                Volume = 1.0f;
+            else
+                Volume = 0.5f;
 
-            if (v == Essentials.Volume.XSoft)
-            {
-                volume = 0.1f;
-            }
-            else if (v == Essentials.Volume.Soft)
-            {
-                volume = 0.25f;
-            }
-            else if (v == Essentials.Volume.Silent)
-            {
-                volume = 0.5f;
-            }
-            else if (v == Essentials.Volume.Loud)
-            {
-                volume = 0.75f;
-            }
-            else if (v == Essentials.Volume.XLoud)
-            {
-                volume = 1.0f;
-            }
-
-            return volume;
+            return this;
         }
+
+        public SpeakSettings SetSpeakRate(SpeakRate speakRate) =>
+            PlatformSetSpeakRate(speakRate);
+
+        public SpeakSettings SetPitch(Pitch pitch) =>
+            PlatformSetPitch(pitch);
     }
 }

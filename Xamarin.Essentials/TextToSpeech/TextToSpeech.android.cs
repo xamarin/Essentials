@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Android.OS;
 using Android.Speech.Tts;
-using Xamarin.Essentials;
+using AndroidTextToSpeech = Android.Speech.Tts.TextToSpeech;
 
 namespace Xamarin.Essentials
 {
@@ -16,148 +16,77 @@ namespace Xamarin.Essentials
     {
         const int maxSpeechInputLengthDefault = 4000;
 
-        static TextToSpeechImplementation textToSpeech;
+        static WeakReference<TextToSpeechImplementation> textToSpeechRef = null;
 
-        public static async Task SpeakAsync(string text, CancellationToken cancelToken = default(CancellationToken)) =>
-             await SpeakAsync(text, default(SpeakSettings), cancelToken);
+        static TextToSpeechImplementation GetTextToSpeech()
+        {
+            TextToSpeechImplementation tts = null;
+            if (textToSpeechRef == null || !textToSpeechRef.TryGetTarget(out tts))
+            {
+                tts = new TextToSpeechImplementation();
+                textToSpeechRef = new WeakReference<TextToSpeechImplementation>(tts);
+            }
 
-        public static async Task SpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default(CancellationToken))
+            return tts;
+        }
+
+        internal static async Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
         {
             if (string.IsNullOrEmpty(text))
-            {
                 throw new ArgumentNullException(nameof(text), "Text cannot be null or empty string");
-            }
 
-            textToSpeech = new TextToSpeechImplementation();
-            Initialized = await textToSpeech.Initialize();
-
-            var max = maxSpeechInputLengthDefault;
-            if ((int)Build.VERSION.SdkInt >= 18)
+            using (var textToSpeech = GetTextToSpeech())
             {
-                max = global::Android.Speech.Tts.TextToSpeech.MaxSpeechInputLength;
+                var max = maxSpeechInputLengthDefault;
+                if (Platform.HasApiLevel(BuildVersionCodes.JellyBeanMr2))
+                    max = AndroidTextToSpeech.MaxSpeechInputLength;
+
+                // We need to await this otherwise
+                await textToSpeech.SpeakAsync(text, max, settings, cancelToken);
             }
-
-            await textToSpeech.Speak(text, max, settings);
-
-            return;
         }
 
-        public static Task<List<Locale>> GetLocalesAsync()
+        internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync()
         {
-            // set up the speech to use the default langauge
-            // if a language is not available, then the default language is used.
-
-            var locales = new List<Locale>();
-
-            if (textToSpeech != null && TextToSpeech.Initialized)
-            {
-                if (!Platform.HasApiLevel(BuildVersionCodes.Lollipop))
-                {
-                    return Task.FromResult<List<Locale>>(locales);
-                }
-                else
-                {
-                    try
-                    {
-                        var localesavailable = Java.Util.Locale.GetAvailableLocales();
-                        foreach (var l in localesavailable)
-                        {
-                            try
-                            {
-                                var result = textToSpeech.TextToSpeech.IsLanguageAvailable(l);
-                                string name = null;
-
-                                switch (result)
-                                {
-                                    case LanguageAvailableResult.Available:
-                                        name = l.DisplayLanguage;
-                                        break;
-                                    case LanguageAvailableResult.CountryAvailable:
-                                        name = l.DisplayLanguage;
-                                        break;
-                                    case LanguageAvailableResult.CountryVarAvailable:
-                                        name = l.DisplayLanguage;
-                                        break;
-                                }
-
-                                locales.Add(new Locale(l.Language, l.Country, l.DisplayName));
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine("Error checking language; " + l + " " + ex);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        var sb = new StringBuilder("Something went horribly wrong, defaulting to old implementation to get languages: ");
-                        sb.Append($"{ex.Message}");
-                        System.Diagnostics.Debug.WriteLine($"{sb.ToString()}");
-                        throw new InvalidProgramException($"{sb.ToString()}");
-                    }
-                }
-            }
-
-            return Task.FromResult(locales);
+            using (var textToSpeech = GetTextToSpeech())
+                return textToSpeech.GetLocalesAsync();
         }
 
-        static Dictionary<string, string> iso3166Alpha2ToAlpha3Mapping;
-
-        public static Dictionary<string, string> ISO3166Alpha2ToAlpha3Mapping
-        {
-            get
-            {
-                if (iso3166Alpha2ToAlpha3Mapping == null)
-                {
-                    iso3166Alpha2ToAlpha3Mapping =
-                    CultureInfo
-                        .GetCultures(CultureTypes.SpecificCultures)
-                        .Select(region => new RegionInfo(region.LCID))
-                        .GroupBy(region => region.ThreeLetterISORegionName)
-                        .ToDictionary(group => group.Key, group => group.First().TwoLetterISORegionName);
-                }
-
-                return iso3166Alpha2ToAlpha3Mapping;
-            }
-        }
+        internal static Dictionary<string, string> ISO3166Alpha2ToAlpha3Mapping =>
+            CultureInfo
+                .GetCultures(CultureTypes.SpecificCultures)
+                .Select(region => new RegionInfo(region.LCID))
+                .GroupBy(region => region.ThreeLetterISORegionName)
+                .ToDictionary(group => group.Key, group => group.First().TwoLetterISORegionName);
     }
 
-    internal class TextToSpeechImplementation : Java.Lang.Object, global::Android.Speech.Tts.TextToSpeech.IOnInitListener
+    internal class TextToSpeechImplementation : Java.Lang.Object, AndroidTextToSpeech.IOnInitListener,
+#pragma warning disable CS0618
+        AndroidTextToSpeech.IOnUtteranceCompletedListener
+#pragma warning restore CS0618
     {
-        static Java.Util.Locale localedefault = null;
-
-        global::Android.Speech.Tts.TextToSpeech tts;
-
-        public global::Android.Speech.Tts.TextToSpeech TextToSpeech
-        {
-            get
-            {
-                return tts;
-            }
-        }
-
+        AndroidTextToSpeech tts;
         TaskCompletionSource<bool> tcs;
-
-        public Locale Locale
-        {
-            get;
-            set;
-        }
+        TaskCompletionSource<object> tcsUtterances;
 
         public TextToSpeechImplementation()
         {
         }
 
-        public Task<bool> Initialize()
+        Task<bool> Initialize()
         {
+            if (tcs != null && tts != null)
+                return tcs.Task;
+
             tcs = new TaskCompletionSource<bool>();
             try
             {
-                localedefault = Java.Util.Locale.Default;
-
                 // set up the TextToSpeech object
-                // third parameter is the speech engine to use
-                tts = new global::Android.Speech.Tts.TextToSpeech(Platform.CurrentContext, this, "com.google.android.tts");
+                tts = new AndroidTextToSpeech(Platform.CurrentContext, this);
+#pragma warning disable CS0618
+                tts.SetOnUtteranceCompletedListener(this);
+#pragma warning restore CS0618
+
             }
             catch (Exception e)
             {
@@ -169,13 +98,38 @@ namespace Xamarin.Essentials
 
         public new void Dispose()
         {
-            tts.Stop();
-            tts.Shutdown();
+            tts?.Stop();
+            tts?.Shutdown();
             tts = null;
         }
 
-        public async Task Speak(string text, int max, SpeakSettings settings)
+        int numExpectedUtterances = 0;
+        int numCompletedUtterances = 0;
+
+        public async Task SpeakAsync(string text, int max, SpeakSettings settings, CancellationToken cancelToken)
         {
+            await Initialize();
+
+            // Wait for any previous calls to finish up
+            if (tcsUtterances?.Task != null)
+                await tcsUtterances.Task;
+
+            if (cancelToken != null)
+            {
+                cancelToken.Register(() =>
+                {
+                    try
+                    {
+                        tts?.Stop();
+
+                        tcsUtterances?.TrySetResult(null);
+                    }
+                    catch
+                    {
+                    }
+                });
+            }
+
             if (settings != null)
             {
                 if (settings.Locale.Language != null)
@@ -185,26 +139,42 @@ namespace Xamarin.Essentials
                 }
 
                 if (settings.Pitch.HasValue)
-                {
                     tts.SetPitch(settings.Pitch.Value);
-                }
+
                 if (settings.SpeakRate.HasValue)
-                {
-                    tts.SetPitch(settings.SpeakRate.Value);
-                }
-           }
+                    tts.SetSpeechRate(settings.SpeakRate.Value);
+            }
 
             var parts = text.Split(max);
 
-            await Task.Run(() =>
-            {
-                foreach (var t in parts)
-                {
-                    tts.Speak(t, QueueMode.Flush, null, null);
-                }
-            });
+            numExpectedUtterances = parts.Count;
+            tcsUtterances = new TaskCompletionSource<object>();
 
-            return;
+            var guid = Guid.NewGuid().ToString();
+
+            for (var i = 0; i < parts.Count; i++)
+            {
+                if (cancelToken.IsCancellationRequested)
+                    break;
+
+                // We require the utterance id to be set if we want the completed listener to fire
+                var map = new Dictionary<string, string>
+                {
+                    { AndroidTextToSpeech.Engine.KeyParamUtteranceId, $"{guid}.{i}" }
+                };
+
+                if (settings != null && settings.Volume.HasValue)
+                    map.Add(AndroidTextToSpeech.Engine.KeyParamVolume, settings.Volume.Value.ToString());
+
+#pragma warning disable CS0618
+
+                // We use an obsolete overload here so it works on older API levels at runtime
+                // Flush on first entry and add (to not flush our own previous) subsequent entries
+                tts.Speak(parts[i], i == 0 ? QueueMode.Flush : QueueMode.Add, map);
+#pragma warning restore CS0618
+            }
+
+            await tcsUtterances.Task;
         }
 
         public void OnInit(OperationResult status)
@@ -220,50 +190,110 @@ namespace Xamarin.Essentials
 
             return;
         }
-    }
 
-    public partial struct Locale
-    {
-        public static IEnumerable<Locale> GetLocalesAvailable(string language, string country)
+        public async Task<IEnumerable<Locale>> GetLocalesAsync()
         {
-            return Java.Util.Locale.GetAvailableLocales()
-                  .Where(a => !string.IsNullOrWhiteSpace(a.Language) && !string.IsNullOrWhiteSpace(a.Country))
-                  .Select(a => new Locale(a.Language, a.Country, a.DisplayName))
-                  .GroupBy(c => c.ToString())
-                  .Select(g => g.First());
+            await Initialize();
+
+            if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
+            {
+                try
+                {
+                    return tts.AvailableLanguages.Select(a => new Locale(a.Language, a.Country, a.DisplayName));
+                }
+                catch
+                {
+                }
+            }
+
+            var locales = new List<Locale>();
+            var availableLocales = Java.Util.Locale.GetAvailableLocales();
+
+            foreach (var l in availableLocales)
+            {
+                try
+                {
+                    var r = tts.IsLanguageAvailable(l);
+
+                    if (r == LanguageAvailableResult.Available
+                        || r == LanguageAvailableResult.CountryAvailable
+                        || r == LanguageAvailableResult.CountryVarAvailable)
+                    {
+                        locales.Add(new Locale(l.Language, l.Country, l.DisplayName));
+                    }
+                }
+                catch
+                {
+                }
+            }
+
+            return locales
+                .GroupBy(c => c.ToString())
+                .Select(g => g.First());
+        }
+
+        public void OnUtteranceCompleted(string utteranceId)
+        {
+            numCompletedUtterances++;
+            if (numCompletedUtterances >= numExpectedUtterances)
+                tcsUtterances?.TrySetResult(null);
         }
     }
 
     public partial class SpeakSettings
     {
-        public float PitchToPlatformSpecific(float pitch)
+        internal SpeakSettings PlatformSetSpeakRate(SpeakRate speakRate)
         {
-            return pitch;
+            switch (speakRate)
+            {
+                case Essentials.SpeakRate.XSlow:
+                    Pitch = 0.3f;
+                    break;
+                case Essentials.SpeakRate.Slow:
+                    Pitch = 0.7f;
+                    break;
+                case Essentials.SpeakRate.Medium:
+                    Pitch = 1.0f;
+                    break;
+                case Essentials.SpeakRate.Fast:
+                    Pitch = 1.3f;
+                    break;
+                case Essentials.SpeakRate.XFast:
+                    Pitch = 2.0f;
+                    break;
+                default:
+                    Pitch = 1.0f;
+                    break;
+            }
+
+            return this;
         }
 
-        public float PitchFromPlatformSpecific(float pitch)
+        internal SpeakSettings PlatformSetPitch(Pitch pitch)
         {
-            return pitch;
-        }
+            switch (pitch)
+            {
+                case Essentials.Pitch.XLow:
+                    Pitch = 0.3f;
+                    break;
+                case Essentials.Pitch.Low:
+                    Pitch = 0.7f;
+                    break;
+                case Essentials.Pitch.Medium:
+                    Pitch = 1.0f;
+                    break;
+                case Essentials.Pitch.High:
+                    Pitch = 1.3f;
+                    break;
+                case Essentials.Pitch.XHigh:
+                    Pitch = 1.6f;
+                    break;
+                default:
+                    Pitch = 1.0f;
+                    break;
+            }
 
-        public float VolumeToPlatformSpecific(float volume)
-        {
-            return volume;
-        }
-
-        public float VolumeFromPlatformSpecific(float volume)
-        {
-            return volume;
-        }
-
-        public float SpeakRateToPlatformSpecific(float rate)
-        {
-            return rate;
-        }
-
-        public float SpeakRateFromPlatformSpecific(float rate)
-        {
-            return rate;
+            return this;
         }
     }
 }

@@ -7,16 +7,19 @@ namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
-        public static Task<bool> Initialize() =>
+        internal static Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default) =>
             throw new NotImplementedInReferenceAssemblyException();
 
-        public static Task SpeakAsync(string text, CancellationToken cancelToken = default(CancellationToken)) =>
+        internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
+            throw new NotImplementedInReferenceAssemblyException();
+    }
+
+    public partial class SpeakSettings
+    {
+        internal SpeakSettings PlatformSetSpeakRate(SpeakRate speakRate) =>
             throw new NotImplementedInReferenceAssemblyException();
 
-        public static Task SpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default(CancellationToken)) =>
-            throw new NotImplementedInReferenceAssemblyException();
-
-        public static Task GetLocalesAsync() =>
+        internal SpeakSettings PlatformSetPitch(Pitch pitch) =>
             throw new NotImplementedInReferenceAssemblyException();
     }
 }

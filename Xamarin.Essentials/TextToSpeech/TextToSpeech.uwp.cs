@@ -11,66 +11,36 @@ namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
-        static MediaElement mediaElement = null;
-        static SpeechSynthesizer synth = null;
+        internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
+            Task.FromResult(SpeechSynthesizer.AllVoices.Select(v => new Locale(v.Language, null, v.DisplayName)));
 
-        public static Task<bool> Initialize()
-        {
-            if (Initialized)
-            {
-                return Task<bool>.FromResult(true);
-            }
-
-            var tcs = new TaskCompletionSource<bool>();
-            try
-            {
-                mediaElement = new MediaElement();
-                synth = new Windows.Media.SpeechSynthesis.SpeechSynthesizer();
-
-                Initialized = true;
-            }
-            catch (Exception e)
-            {
-                tcs.SetException(e);
-            }
-
-            return tcs.Task;
-        }
-
-        public static async Task SpeakAsync(string text, CancellationToken cancelToken = default(CancellationToken))
+        internal static async Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
         {
             if (string.IsNullOrEmpty(text))
-            {
                 throw new ArgumentNullException(nameof(text), "Text cannot be null or empty string");
-            }
-
-            var ssml = GetSpeakParametersSSMLProsody(text, null);
-
-            var mediaElement = new MediaElement();
-            var synth = new Windows.Media.SpeechSynthesis.SpeechSynthesizer();
-            var stream = await synth.SynthesizeSsmlToStreamAsync(ssml.ToString());
-            mediaElement.SetSource(stream, stream.ContentType);
-            mediaElement.Play();
-
-            return;
-        }
-
-        public static async Task SpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default(CancellationToken))
-        {
-            if (string.IsNullOrEmpty(text))
-            {
-                throw new ArgumentNullException(nameof(text), "Text cannot be null or empty string");
-            }
 
             var ssml = GetSpeakParametersSSMLProsody(text, settings);
 
             var mediaElement = new MediaElement();
-            var synth = new Windows.Media.SpeechSynthesis.SpeechSynthesizer();
+            var synth = new SpeechSynthesizer();
             var stream = await synth.SynthesizeSsmlToStreamAsync(ssml.ToString());
+
+            if (cancelToken != null)
+            {
+                cancelToken.Register(() =>
+                {
+                    try
+                    {
+                        mediaElement?.Stop();
+                    }
+                    catch
+                    {
+                    }
+                });
+            }
+
             mediaElement.SetSource(stream, stream.ContentType);
             mediaElement.Play();
-
-            return;
         }
 
         static string GetSpeakParametersSSMLProsody(string text, SpeakSettings settings)
@@ -79,24 +49,19 @@ namespace Xamarin.Essentials
             var p = "default";
             var r = "default";
 
-            var lc = SpeakSettings.LocalCode();
+            // Look for the specified language, otherwise the default voice
+            var lc = settings?.Locale.Language ?? SpeechSynthesizer.DefaultVoice.Language;
 
             if (settings != null)
             {
                 if (settings.Volume.HasValue)
-                {
-                    v = SpeakSettings.ProsodyVolume(settings.Volume);
-                }
+                    v = ProsodyVolume(settings.Volume);
 
                 if (settings.Pitch.HasValue)
-                {
-                    p = SpeakSettings.ProsodyPitch(settings.Pitch);
-                }
+                    p = ProsodyPitch(settings.Pitch);
 
                 if (settings.SpeakRate.HasValue)
-                {
-                    r = SpeakSettings.ProsodySpeakRate(settings.SpeakRate);
-                }
+                    r = ProsodySpeakRate(settings.SpeakRate);
             }
 
             // SSML generation
@@ -105,134 +70,118 @@ namespace Xamarin.Essentials
             sbssml.AppendLine($"<prosody pitch='{p}' rate='{r}' volume='{v}'>{text}</prosody> ");
             sbssml.AppendLine($"</speak>");
 
-            System.Diagnostics.Debug.WriteLine(sbssml.ToString());
-
             return sbssml.ToString();
+        }
+
+        static string ProsodyPitch(float? pitch)
+        {
+            if (!pitch.HasValue)
+                return "default";
+            else if (pitch.Value >= 1.6f)
+                return "x-high";
+            else if (pitch.Value >= 1.1f)
+                return "high";
+            else if (pitch.Value >= .9f)
+                return "medium";
+            else if (pitch.Value >= .4f)
+                return "low";
+
+            return "x-low";
+        }
+
+        static string ProsodySpeakRate(float? speakRate)
+        {
+            var r = "default";
+
+            if (!speakRate.HasValue)
+                return r;
+            else if (speakRate <= 0.3f)
+                return "x-slow";
+            else if (speakRate > 0.3f && speakRate <= 0.7f)
+                return "slow";
+            else if (speakRate > 0.7f && speakRate <= 1.0f)
+                return "medium";
+            else if (speakRate > 1.0f && speakRate <= 1.5f)
+                return "fast";
+            else if (speakRate > 1.5f)
+                return "x-fast";
+
+            return r;
+        }
+
+        static string ProsodyVolume(float? volume)
+        {
+            if (volume.Value > .8f)
+                return "x-loud";
+            else if (volume.Value > 0.6f && volume.Value <= 0.8f)
+                return "loud";
+            else if (volume.Value > 0.4f && volume.Value <= 0.6f)
+                return "medium";
+            else if (volume.Value > 0.2f && volume.Value <= 0.4f)
+                return "soft";
+            else if (volume.Value > 0.0f && volume.Value <= 0.2f)
+                return "x-soft";
+            else if (volume.Value < 0.0f)
+                return "silent";
+
+            return "default";
         }
     }
 
     public partial class SpeakSettings
     {
-        public static string LocalCode()
+        internal SpeakSettings PlatformSetSpeakRate(SpeakRate speakRate)
         {
-            var lc = "en-US";
-
-            var voices = from voice in SpeechSynthesizer.AllVoices
-                         where voice.Language == lc && voice.Gender.Equals(VoiceGender.Female)
-                         select voice;
-
-            if (!voices.Any())
+            switch (speakRate)
             {
-                lc = SpeechSynthesizer.DefaultVoice.Language;
+                case Essentials.SpeakRate.XSlow:
+                    SpeakRate = 0.3f;
+                    break;
+                case Essentials.SpeakRate.Slow:
+                    SpeakRate = 0.7f;
+                    break;
+                case Essentials.SpeakRate.Medium:
+                    SpeakRate = 1.0f;
+                    break;
+                case Essentials.SpeakRate.Fast:
+                    SpeakRate = 1.5f;
+                    break;
+                case Essentials.SpeakRate.XFast:
+                    SpeakRate = 2.0f;
+                    break;
+                default:
+                    SpeakRate = 1.0f;
+                    break;
             }
 
-            return lc;
+            return this;
         }
 
-        public static string ProsodyPitch(float? pitch)
+        internal SpeakSettings PlatformSetPitch(Pitch pitch)
         {
-            var p = "default";
-
-            if (!pitch.HasValue)
+            switch (pitch)
             {
-                p = "default";
-            }
-            else if (pitch.Value >= 1.6f)
-            {
-                p = "x-high";
-            }
-            else if (pitch.Value >= 1.1f)
-            {
-                p = "high";
-            }
-            else if (pitch.Value >= .9f)
-            {
-                p = "medium";
-            }
-            else if (pitch.Value >= .4f)
-            {
-                p = "low";
-            }
-            else
-            {
-                p = "x-low";
+                case Essentials.Pitch.XLow:
+                    Pitch = 0.3f;
+                    break;
+                case Essentials.Pitch.Low:
+                    Pitch = 0.7f;
+                    break;
+                case Essentials.Pitch.Medium:
+                    Pitch = 1.0f;
+                    break;
+                case Essentials.Pitch.High:
+                    Pitch = 1.3f;
+                    break;
+                case Essentials.Pitch.XHigh:
+                    Pitch = 1.6f;
+                    break;
+                default:
+                    Pitch = null;
+                    break;
             }
 
-            return p;
-        }
-
-        public static string ProsodySpeakRate(float? pitch)
-        {
-            var r = "default";
-
-            return r;
-        }
-
-        public static string ProsodyVolume(float? volume)
-        {
-            var v = "default";
-
-            if (volume.Value > .8f)
-            {
-                v = "x-loud";
-            }
-            else if (volume.Value > 0.6f && volume.Value <= 0.8f)
-            {
-                v = "loud";
-            }
-            else if (volume.Value > 0.4f && volume.Value <= 0.6f)
-            {
-                v = "medium";
-            }
-            else if (volume.Value > 0.2f && volume.Value <= 0.4f)
-            {
-                v = "soft";
-            }
-            else if (volume.Value > 0.0f && volume.Value <= 0.2f)
-            {
-                v = "x-soft";
-            }
-            else if (volume.Value < 0.0f)
-            {
-                v = "silent";
-            }
-
-            return v;
-        }
-
-        public float PitchToPlatformSpecific(float pitch)
-        {
-            if (pitch < 0.0 || pitch > 1.0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(pitch));
-            }
-
-            return pitch;
-        }
-
-        public float PitchFromPlatformSpecific(float pitch)
-        {
-            return pitch;
-        }
-
-        public float VolumeToPlatformSpecific(float volume)
-        {
-            return volume;
-        }
-
-        public float VolumeFromPlatformSpecific(float volume)
-        {
-            return volume;
-        }
-
-        public float SpeakRateToPlatformSpecific(float rate)
-        {
-            return rate;
-        }
-
-        public float SpeakRateFromPlatformSpecific(float rate)
-        {
-            return rate;
+            return this;
         }
     }
 }
