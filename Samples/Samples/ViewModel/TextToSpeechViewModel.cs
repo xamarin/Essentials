@@ -14,7 +14,7 @@ namespace Samples.ViewModel
             Text = "Xamarin Essentials makes text to speech easy!";
 
             AdvancedSettings = false;
-            Volume = 0.5f;
+            Volume = 1.0f;
             Pitch = 1.0f;
             Rate = 1.0f;
 
