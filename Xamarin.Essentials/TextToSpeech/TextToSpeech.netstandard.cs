@@ -16,10 +16,10 @@ namespace Xamarin.Essentials
 
     public partial class SpeakSettings
     {
-        internal SpeakSettings PlatformSetSpeakRate(SpeakRate speakRate) =>
+        internal SpeakSettings PlatformSetSpeakRate(TextToSpeech.SpeakRate speakRate) =>
             throw new NotImplementedInReferenceAssemblyException();
 
-        internal SpeakSettings PlatformSetPitch(Pitch pitch) =>
+        internal SpeakSettings PlatformSetPitch(TextToSpeech.Pitch pitch) =>
             throw new NotImplementedInReferenceAssemblyException();
     }
 }

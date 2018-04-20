@@ -16,6 +16,35 @@ namespace Xamarin.Essentials
 
         public static Task SpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default) =>
             PlatformSpeakAsync(text, settings, cancelToken);
+
+        public enum Pitch
+        {
+            XLow,
+            Low,
+            Medium,
+            High,
+            XHigh
+        }
+
+        public enum SpeakRate
+        {
+            XSlow,
+            Slow,
+            Medium,
+            Fast,
+            Xast,
+            XFast
+        }
+
+        public enum Volume
+        {
+            Silent,
+            XSoft,
+            Soft,
+            Medium,
+            Loud,
+            XLoud
+        }
     }
 
     public partial struct Locale
@@ -32,35 +61,6 @@ namespace Xamarin.Essentials
             Country = country;
             Name = name;
         }
-    }
-
-    public enum Pitch
-    {
-        XLow,
-        Low,
-        Medium,
-        High,
-        XHigh
-    }
-
-    public enum SpeakRate
-    {
-        XSlow,
-        Slow,
-        Medium,
-        Fast,
-        Xast,
-        XFast
-    }
-
-    public enum Volume
-    {
-        Silent,
-        XSoft,
-        Soft,
-        Medium,
-        Loud,
-        XLoud
     }
 
     public partial class SpeakSettings
@@ -124,19 +124,19 @@ namespace Xamarin.Essentials
             }
         }
 
-        public SpeakSettings SetVolume(Volume volume)
+        public SpeakSettings SetVolume(TextToSpeech.Volume volume)
         {
-            if (volume == Essentials.Volume.Silent)
+            if (volume == TextToSpeech.Volume.Silent)
                 Volume = 0f;
-            if (volume == Essentials.Volume.XSoft)
+            if (volume == TextToSpeech.Volume.XSoft)
                 Volume = 0.1f;
-            else if (volume == Essentials.Volume.Soft)
+            else if (volume == TextToSpeech.Volume.Soft)
                 Volume = 0.25f;
-            else if (volume == Essentials.Volume.Medium)
+            else if (volume == TextToSpeech.Volume.Medium)
                 Volume = 0.5f;
-            else if (volume == Essentials.Volume.Loud)
+            else if (volume == TextToSpeech.Volume.Loud)
                 Volume = 0.75f;
-            else if (volume == Essentials.Volume.XLoud)
+            else if (volume == TextToSpeech.Volume.XLoud)
                 Volume = 1.0f;
             else
                 Volume = 0.5f;
@@ -144,10 +144,10 @@ namespace Xamarin.Essentials
             return this;
         }
 
-        public SpeakSettings SetSpeakRate(SpeakRate speakRate) =>
+        public SpeakSettings SetSpeakRate(TextToSpeech.SpeakRate speakRate) =>
             PlatformSetSpeakRate(speakRate);
 
-        public SpeakSettings SetPitch(Pitch pitch) =>
+        public SpeakSettings SetPitch(TextToSpeech.Pitch pitch) =>
             PlatformSetPitch(pitch);
     }
 }

@@ -99,7 +99,7 @@ namespace Xamarin.Essentials
 
     public partial class SpeakSettings
     {
-        internal SpeakSettings PlatformSetSpeakRate(SpeakRate speakRate)
+        internal SpeakSettings PlatformSetSpeakRate(TextToSpeech.SpeakRate speakRate)
         {
             var min = AVSpeechUtterance.MinimumSpeechRate;
             var max = AVSpeechUtterance.MaximumSpeechRate;
@@ -107,19 +107,19 @@ namespace Xamarin.Essentials
 
             switch (speakRate)
             {
-                case Essentials.SpeakRate.XSlow:
+                case TextToSpeech.SpeakRate.XSlow:
                     SpeakRate = min;
                     break;
-                case Essentials.SpeakRate.Slow:
+                case TextToSpeech.SpeakRate.Slow:
                     SpeakRate = min + ((def - min) / 2.0f);
                     break;
-                case Essentials.SpeakRate.Medium:
+                case TextToSpeech.SpeakRate.Medium:
                     SpeakRate = def;
                     break;
-                case Essentials.SpeakRate.Fast:
+                case TextToSpeech.SpeakRate.Fast:
                     SpeakRate = def + ((max - def) / 2.0f);
                     break;
-                case Essentials.SpeakRate.XFast:
+                case TextToSpeech.SpeakRate.XFast:
                     SpeakRate = max;
                     break;
                 default:
@@ -130,23 +130,23 @@ namespace Xamarin.Essentials
             return this;
         }
 
-        internal SpeakSettings PlatformSetPitch(Pitch pitch)
+        internal SpeakSettings PlatformSetPitch(TextToSpeech.Pitch pitch)
         {
             switch (pitch)
             {
-                case Essentials.Pitch.XLow:
+                case TextToSpeech.Pitch.XLow:
                     Pitch = 0.5f;
                     break;
-                case Essentials.Pitch.Low:
+                case TextToSpeech.Pitch.Low:
                     Pitch = 0.7f;
                     break;
-                case Essentials.Pitch.Medium:
+                case TextToSpeech.Pitch.Medium:
                     Pitch = 1.0f;
                     break;
-                case Essentials.Pitch.High:
+                case TextToSpeech.Pitch.High:
                     Pitch = 1.5f;
                     break;
-                case Essentials.Pitch.XHigh:
+                case TextToSpeech.Pitch.XHigh:
                     Pitch = 2.0f;
                     break;
                 default:
