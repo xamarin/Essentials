@@ -15,6 +15,10 @@ namespace Xamarin.Essentials
     public static partial class TextToSpeech
     {
         const int maxSpeechInputLengthDefault = 4000;
+        internal const float PlatformSpeakRateMin = 0f;
+        internal const float PlatformSpeakRateMax = 2f;
+        internal const float PlatformPitchMin = 0f;
+        internal const float PlatformPitchMax = 2f;
 
         static WeakReference<TextToSpeechImplementation> textToSpeechRef = null;
 
@@ -51,13 +55,6 @@ namespace Xamarin.Essentials
             using (var textToSpeech = GetTextToSpeech())
                 return textToSpeech.GetLocalesAsync();
         }
-
-        internal static Dictionary<string, string> ISO3166Alpha2ToAlpha3Mapping =>
-            CultureInfo
-                .GetCultures(CultureTypes.SpecificCultures)
-                .Select(region => new RegionInfo(region.LCID))
-                .GroupBy(region => region.ThreeLetterISORegionName)
-                .ToDictionary(group => group.Key, group => group.First().TwoLetterISORegionName);
     }
 
     internal class TextToSpeechImplementation : Java.Lang.Object, AndroidTextToSpeech.IOnInitListener,
@@ -139,10 +136,16 @@ namespace Xamarin.Essentials
                 }
 
                 if (settings.Pitch.HasValue)
-                    tts.SetPitch(settings.Pitch.Value);
+                {
+                    var pitch = TextToSpeech.PlatformNormalize(TextToSpeech.PlatformPitchMin, TextToSpeech.PlatformPitchMax, settings.Pitch.Value / TextToSpeech.PlatformPitchMax);
+                    tts.SetPitch(pitch);
+                }
 
                 if (settings.SpeakRate.HasValue)
-                    tts.SetSpeechRate(settings.SpeakRate.Value);
+                {
+                    var speakRate = TextToSpeech.PlatformNormalize(TextToSpeech.PlatformSpeakRateMin, TextToSpeech.PlatformSpeakRateMax, settings.SpeakRate.Value / TextToSpeech.PlatformSpeakRateMax);
+                    tts.SetSpeechRate(speakRate);
+                }
             }
 
             var parts = text.Split(max);
@@ -237,63 +240,6 @@ namespace Xamarin.Essentials
             numCompletedUtterances++;
             if (numCompletedUtterances >= numExpectedUtterances)
                 tcsUtterances?.TrySetResult(null);
-        }
-    }
-
-    public partial class SpeakSettings
-    {
-        internal SpeakSettings PlatformSetSpeakRate(TextToSpeech.SpeakRate speakRate)
-        {
-            switch (speakRate)
-            {
-                case TextToSpeech.SpeakRate.XSlow:
-                    Pitch = 0.3f;
-                    break;
-                case TextToSpeech.SpeakRate.Slow:
-                    Pitch = 0.7f;
-                    break;
-                case TextToSpeech.SpeakRate.Medium:
-                    Pitch = 1.0f;
-                    break;
-                case TextToSpeech.SpeakRate.Fast:
-                    Pitch = 1.3f;
-                    break;
-                case TextToSpeech.SpeakRate.XFast:
-                    Pitch = 2.0f;
-                    break;
-                default:
-                    Pitch = 1.0f;
-                    break;
-            }
-
-            return this;
-        }
-
-        internal SpeakSettings PlatformSetPitch(TextToSpeech.Pitch pitch)
-        {
-            switch (pitch)
-            {
-                case TextToSpeech.Pitch.XLow:
-                    Pitch = 0.3f;
-                    break;
-                case TextToSpeech.Pitch.Low:
-                    Pitch = 0.7f;
-                    break;
-                case TextToSpeech.Pitch.Medium:
-                    Pitch = 1.0f;
-                    break;
-                case TextToSpeech.Pitch.High:
-                    Pitch = 1.3f;
-                    break;
-                case TextToSpeech.Pitch.XHigh:
-                    Pitch = 1.6f;
-                    break;
-                default:
-                    Pitch = 1.0f;
-                    break;
-            }
-
-            return this;
         }
     }
 }

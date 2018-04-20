@@ -55,13 +55,13 @@ namespace Xamarin.Essentials
             if (settings != null)
             {
                 if (settings.Volume.HasValue)
-                    v = ProsodyVolume(settings.Volume);
+                    v = (settings.Volume.Value * 100f).ToString();
 
                 if (settings.Pitch.HasValue)
                     p = ProsodyPitch(settings.Pitch);
 
                 if (settings.SpeakRate.HasValue)
-                    r = ProsodySpeakRate(settings.SpeakRate);
+                    r = settings.SpeakRate.Value.ToString();
             }
 
             // SSML generation
@@ -77,111 +77,19 @@ namespace Xamarin.Essentials
         {
             if (!pitch.HasValue)
                 return "default";
-            else if (pitch.Value >= 1.6f)
-                return "x-high";
-            else if (pitch.Value >= 1.1f)
-                return "high";
-            else if (pitch.Value >= .9f)
-                return "medium";
-            else if (pitch.Value >= .4f)
+
+            if (pitch.Value <= 0.25f)
+                return "x-low";
+            else if (pitch.Value > 0.25f && pitch.Value <= 0.75f)
                 return "low";
-
-            return "x-low";
-        }
-
-        static string ProsodySpeakRate(float? speakRate)
-        {
-            var r = "default";
-
-            if (!speakRate.HasValue)
-                return r;
-            else if (speakRate <= 0.3f)
-                return "x-slow";
-            else if (speakRate > 0.3f && speakRate <= 0.7f)
-                return "slow";
-            else if (speakRate > 0.7f && speakRate <= 1.0f)
+            else if (pitch.Value > 0.75f && pitch.Value <= 1.25f)
                 return "medium";
-            else if (speakRate > 1.0f && speakRate <= 1.5f)
-                return "fast";
-            else if (speakRate > 1.5f)
-                return "x-fast";
-
-            return r;
-        }
-
-        static string ProsodyVolume(float? volume)
-        {
-            if (volume.Value > .8f)
-                return "x-loud";
-            else if (volume.Value > 0.6f && volume.Value <= 0.8f)
-                return "loud";
-            else if (volume.Value > 0.4f && volume.Value <= 0.6f)
-                return "medium";
-            else if (volume.Value > 0.2f && volume.Value <= 0.4f)
-                return "soft";
-            else if (volume.Value > 0.0f && volume.Value <= 0.2f)
-                return "x-soft";
-            else if (volume.Value < 0.0f)
-                return "silent";
+            else if (pitch.Value > 1.25f && pitch.Value <= 1.75f)
+                return "high";
+            else if (pitch.Value > 1.75f)
+                return "x-high";
 
             return "default";
-        }
-    }
-
-    public partial class SpeakSettings
-    {
-        internal SpeakSettings PlatformSetSpeakRate(TextToSpeech.SpeakRate speakRate)
-        {
-            switch (speakRate)
-            {
-                case TextToSpeech.SpeakRate.XSlow:
-                    SpeakRate = 0.3f;
-                    break;
-                case TextToSpeech.SpeakRate.Slow:
-                    SpeakRate = 0.7f;
-                    break;
-                case TextToSpeech.SpeakRate.Medium:
-                    SpeakRate = 1.0f;
-                    break;
-                case TextToSpeech.SpeakRate.Fast:
-                    SpeakRate = 1.5f;
-                    break;
-                case TextToSpeech.SpeakRate.XFast:
-                    SpeakRate = 2.0f;
-                    break;
-                default:
-                    SpeakRate = 1.0f;
-                    break;
-            }
-
-            return this;
-        }
-
-        internal SpeakSettings PlatformSetPitch(TextToSpeech.Pitch pitch)
-        {
-            switch (pitch)
-            {
-                case TextToSpeech.Pitch.XLow:
-                    Pitch = 0.3f;
-                    break;
-                case TextToSpeech.Pitch.Low:
-                    Pitch = 0.7f;
-                    break;
-                case TextToSpeech.Pitch.Medium:
-                    Pitch = 1.0f;
-                    break;
-                case TextToSpeech.Pitch.High:
-                    Pitch = 1.3f;
-                    break;
-                case TextToSpeech.Pitch.XHigh:
-                    Pitch = 1.6f;
-                    break;
-                default:
-                    Pitch = null;
-                    break;
-            }
-
-            return this;
         }
     }
 }
