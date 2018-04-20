@@ -1,0 +1,103 @@
+<Type Name="TextToSpeech+SpeakRate" FullName="Xamarin.Essentials.TextToSpeech+SpeakRate">
+  <TypeSignature Language="C#" Value="public enum TextToSpeech.SpeakRate" />
+  <TypeSignature Language="ILAsm" Value=".class nested public auto ansi sealed TextToSpeech/SpeakRate extends System.Enum" />
+  <TypeSignature Language="DocId" Value="T:Xamarin.Essentials.TextToSpeech.SpeakRate" />
+  <AssemblyInfo>
+    <AssemblyName>Xamarin.Essentials</AssemblyName>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Enum</BaseTypeName>
+  </Base>
+  <Docs>
+    <summary>A collection of commonly used speaking rates (speeds) for Text to Speech.</summary>
+    <remarks></remarks>
+  </Docs>
+  <Members>
+    <Member MemberName="Fast">
+      <MemberSignature Language="C#" Value="Fast" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Xamarin.Essentials.TextToSpeech/SpeakRate Fast = int32(3)" />
+      <MemberSignature Language="DocId" Value="F:Xamarin.Essentials.TextToSpeech.SpeakRate.Fast" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Xamarin.Essentials.TextToSpeech+SpeakRate</ReturnType>
+      </ReturnValue>
+      <MemberValue>3</MemberValue>
+      <Docs>
+        <summary>Fast Speaking Rate.</summary>
+      </Docs>
+    </Member>
+    <Member MemberName="Medium">
+      <MemberSignature Language="C#" Value="Medium" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Xamarin.Essentials.TextToSpeech/SpeakRate Medium = int32(2)" />
+      <MemberSignature Language="DocId" Value="F:Xamarin.Essentials.TextToSpeech.SpeakRate.Medium" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Xamarin.Essentials.TextToSpeech+SpeakRate</ReturnType>
+      </ReturnValue>
+      <MemberValue>2</MemberValue>
+      <Docs>
+        <summary>Medium or Default Speaking Rate.</summary>
+      </Docs>
+    </Member>
+    <Member MemberName="Slow">
+      <MemberSignature Language="C#" Value="Slow" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Xamarin.Essentials.TextToSpeech/SpeakRate Slow = int32(1)" />
+      <MemberSignature Language="DocId" Value="F:Xamarin.Essentials.TextToSpeech.SpeakRate.Slow" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Xamarin.Essentials.TextToSpeech+SpeakRate</ReturnType>
+      </ReturnValue>
+      <MemberValue>1</MemberValue>
+      <Docs>
+        <summary>Slow Speaking Rate.</summary>
+      </Docs>
+    </Member>
+    <Member MemberName="XFast">
+      <MemberSignature Language="C#" Value="XFast" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Xamarin.Essentials.TextToSpeech/SpeakRate XFast = int32(5)" />
+      <MemberSignature Language="DocId" Value="F:Xamarin.Essentials.TextToSpeech.SpeakRate.XFast" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Xamarin.Essentials.TextToSpeech+SpeakRate</ReturnType>
+      </ReturnValue>
+      <MemberValue>5</MemberValue>
+      <Docs>
+        <summary>Extra Fast Speaking Rate.</summary>
+      </Docs>
+    </Member>
+    <Member MemberName="XSlow">
+      <MemberSignature Language="C#" Value="XSlow" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Xamarin.Essentials.TextToSpeech/SpeakRate XSlow = int32(0)" />
+      <MemberSignature Language="DocId" Value="F:Xamarin.Essentials.TextToSpeech.SpeakRate.XSlow" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Xamarin.Essentials.TextToSpeech+SpeakRate</ReturnType>
+      </ReturnValue>
+      <MemberValue>0</MemberValue>
+      <Docs>
+        <summary>Extra Slow Speaking Rate</summary>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
