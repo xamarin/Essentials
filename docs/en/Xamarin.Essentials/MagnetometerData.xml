@@ -30,7 +30,7 @@
         <ReturnType>System.Double</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gets X-axis magnetic field in mciroteslas.</summary>
+        <summary>Gets X-axis magnetic field in microteslas.</summary>
         <value>X-axis data</value>
         <remarks></remarks>
       </Docs>
@@ -48,7 +48,7 @@
         <ReturnType>System.Double</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gets Y-axis magnetic field in mciroteslas.</summary>
+        <summary>Gets Y-axis magnetic field in microteslas.</summary>
         <value>Y-axis data.</value>
         <remarks>
           <para />
@@ -68,7 +68,7 @@
         <ReturnType>System.Double</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gets Z-axis magnetid field in mciroteslas.</summary>
+        <summary>Gets Z-axis magnetid field in microteslas.</summary>
         <value>Z-axis data.</value>
         <remarks>
           <para></para>
