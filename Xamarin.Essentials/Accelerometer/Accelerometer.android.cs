@@ -58,7 +58,7 @@ namespace Xamarin.Essentials
 
         public void OnSensorChanged(SensorEvent e)
         {
-            var data = new AccelerometerData(e.Values[0], e.Values[1], e.Values[2]);
+            var data = new AccelerometerData(e.Values[0] / 9.81, e.Values[1] / 9.81, e.Values[2] / 9.81);
             Accelerometer.OnChanged(data);
         }
     }
