@@ -24,24 +24,24 @@ namespace Xamarin.Essentials
 
         static async Task PlatformTurnOnAsync()
         {
-            await CheckSupport();
+            await CheckSupportAsync();
 
             await ToggleTorchAsync(true);
         }
+        
+        static async Task PlatformTurnOffAsync()
+        {
+            await CheckSupportAsync();
 
-        private static async Task CheckSupport()
+            await ToggleTorchAsync(false);
+        }
+        
+        static async Task CheckSupportAsync()
         {
             if (!IsSupported)
                 throw new FeatureNotSupportedException();
 
             await Permissions.RequireAsync(PermissionType.Flashlight);
-        }
-
-        static async Task PlatformTurnOffAsync()
-        {
-            await CheckSupport();
-
-            await ToggleTorchAsync(false);
         }
 
         static Task ToggleTorchAsync(bool switchOn)
