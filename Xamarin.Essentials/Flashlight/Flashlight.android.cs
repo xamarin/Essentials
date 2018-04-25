@@ -28,14 +28,14 @@ namespace Xamarin.Essentials
 
             await ToggleTorchAsync(true);
         }
-        
+
         static async Task PlatformTurnOffAsync()
         {
             await CheckSupportAsync();
 
             await ToggleTorchAsync(false);
         }
-        
+
         static async Task CheckSupportAsync()
         {
             if (!IsSupported)
