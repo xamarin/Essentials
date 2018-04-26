@@ -18,8 +18,6 @@ namespace Samples.ViewModel
         {
             StartCommand = new Command(OnStart);
             StopCommand = new Command(OnStop);
-
-            Magnetometer.ReadingChanged += OnReadingChanged;
         }
 
         public ICommand StartCommand { get; }
@@ -65,6 +63,12 @@ namespace Samples.ViewModel
             set => SetProperty(ref speed, value);
         }
 
+        public override void OnAppearing()
+        {
+            Magnetometer.ReadingChanged += OnReadingChanged;
+            base.OnAppearing();
+        }
+
         public override void OnDisappearing()
         {
             OnStop();
@@ -82,15 +86,15 @@ namespace Samples.ViewModel
                 case SensorSpeed.Game:
                     Platform.BeginInvokeOnMainThread(() =>
                     {
-                        X = data.MagneticFieldX;
-                        Y = data.MagneticFieldY;
-                        Z = data.MagneticFieldZ;
+                        X = data.MagneticField.X;
+                        Y = data.MagneticField.Y;
+                        Z = data.MagneticField.Z;
                     });
                     break;
                 default:
-                    X = data.MagneticFieldX;
-                    Y = data.MagneticFieldY;
-                    Z = data.MagneticFieldZ;
+                    X = data.MagneticField.X;
+                    Y = data.MagneticField.Y;
+                    Z = data.MagneticField.Z;
                     break;
             }
         }
@@ -104,7 +108,7 @@ namespace Samples.ViewModel
             }
             catch (Exception)
             {
-                await DisplayAlert("Magnetometer not supported");
+                await DisplayAlertAsync("Magnetometer not supported");
             }
         }
 

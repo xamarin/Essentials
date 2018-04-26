@@ -105,11 +105,13 @@ namespace Xamarin.Essentials
         static (string Provider, float Accuracy) GetBestProvider(LocationManager locationManager, GeolocationAccuracy accuracy)
         {
             // Criteria: https://developer.android.com/reference/android/location/Criteria
-
-            var criteria = new Criteria();
-            criteria.BearingRequired = false;
-            criteria.AltitudeRequired = false;
-            criteria.SpeedRequired = false;
+          
+            var criteria = new Criteria
+            {
+                BearingRequired = false,
+                AltitudeRequired = false,
+                SpeedRequired = false
+            };
 
             var accuracyDistance = 100;
 

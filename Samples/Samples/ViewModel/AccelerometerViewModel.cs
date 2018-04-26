@@ -18,8 +18,6 @@ namespace Samples.ViewModel
         {
             StartCommand = new Command(OnStart);
             StopCommand = new Command(OnStop);
-
-            Accelerometer.ReadingChanged += OnReadingChanged;
         }
 
         public ICommand StartCommand { get; }
@@ -65,6 +63,12 @@ namespace Samples.ViewModel
             set => SetProperty(ref speed, value);
         }
 
+        public override void OnAppearing()
+        {
+            Accelerometer.ReadingChanged += OnReadingChanged;
+            base.OnAppearing();
+        }
+
         public override void OnDisappearing()
         {
             OnStop();
@@ -82,7 +86,7 @@ namespace Samples.ViewModel
             }
             catch (Exception)
             {
-                await DisplayAlert("Accelerometer not supported");
+                await DisplayAlertAsync("Accelerometer not supported");
             }
         }
 
@@ -101,15 +105,15 @@ namespace Samples.ViewModel
                 case SensorSpeed.Game:
                     Platform.BeginInvokeOnMainThread(() =>
                     {
-                        X = data.AccelerometerX;
-                        Y = data.AccelerometerY;
-                        Z = data.AccelerometerZ;
+                        X = data.Acceleration.X;
+                        Y = data.Acceleration.Y;
+                        Z = data.Acceleration.Z;
                     });
                     break;
                 default:
-                    X = data.AccelerometerX;
-                    Y = data.AccelerometerY;
-                    Z = data.AccelerometerZ;
+                    X = data.Acceleration.X;
+                    Y = data.Acceleration.Y;
+                    Z = data.Acceleration.Z;
                     break;
             }
         }
