@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.OS;
@@ -21,6 +18,7 @@ namespace Xamarin.Essentials
         internal const float PlatformPitchMax = 2f;
 
         static WeakReference<TextToSpeechImplementation> textToSpeechRef = null;
+        static SemaphoreSlim semaphore;
 
         static TextToSpeechImplementation GetTextToSpeech()
         {
@@ -36,8 +34,8 @@ namespace Xamarin.Essentials
 
         internal static async Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
         {
-            if (string.IsNullOrEmpty(text))
-                throw new ArgumentNullException(nameof(text), "Text cannot be null or empty string");
+            if (semaphore == null)
+                semaphore = new SemaphoreSlim(1, 1);
 
             using (var textToSpeech = GetTextToSpeech())
             {
@@ -45,8 +43,16 @@ namespace Xamarin.Essentials
                 if (Platform.HasApiLevel(BuildVersionCodes.JellyBeanMr2))
                     max = AndroidTextToSpeech.MaxSpeechInputLength;
 
-                // We need to await this otherwise
-                await textToSpeech.SpeakAsync(text, max, settings, cancelToken);
+                try
+                {
+                    await semaphore.WaitAsync(cancelToken);
+                    await textToSpeech.SpeakAsync(text, max, settings, cancelToken);
+                }
+                finally
+                {
+                    if (semaphore.CurrentCount == 0)
+                        semaphore.Release();
+                }
             }
         }
 
@@ -127,25 +133,22 @@ namespace Xamarin.Essentials
                 });
             }
 
-            if (settings != null)
+            if (settings?.Locale.Language != null)
             {
-                if (settings.Locale.Language != null)
-                {
-                    var locale = new Java.Util.Locale(settings.Locale.Language);
-                    tts.SetLanguage(locale);
-                }
+                var locale = new Java.Util.Locale(settings.Locale.Language);
+                tts.SetLanguage(locale);
+            }
 
-                if (settings.Pitch.HasValue)
-                {
-                    var pitch = TextToSpeech.PlatformNormalize(TextToSpeech.PlatformPitchMin, TextToSpeech.PlatformPitchMax, settings.Pitch.Value / TextToSpeech.PlatformPitchMax);
-                    tts.SetPitch(pitch);
-                }
+            if (settings?.Pitch.HasValue ?? false)
+            {
+                var pitch = TextToSpeech.PlatformNormalize(TextToSpeech.PlatformPitchMin, TextToSpeech.PlatformPitchMax, settings.Pitch.Value / TextToSpeech.PlatformPitchMax);
+                tts.SetPitch(pitch);
+            }
 
-                if (settings.SpeakRate.HasValue)
-                {
-                    var speakRate = TextToSpeech.PlatformNormalize(TextToSpeech.PlatformSpeakRateMin, TextToSpeech.PlatformSpeakRateMax, settings.SpeakRate.Value / TextToSpeech.PlatformSpeakRateMax);
-                    tts.SetSpeechRate(speakRate);
-                }
+            if (settings?.SpeakRate.HasValue ?? false)
+            {
+                var speakRate = TextToSpeech.PlatformNormalize(TextToSpeech.PlatformSpeakRateMin, TextToSpeech.PlatformSpeakRateMax, settings.SpeakRate.Value / TextToSpeech.PlatformSpeakRateMax);
+                tts.SetSpeechRate(speakRate);
             }
 
             var parts = text.Split(max);
@@ -190,8 +193,6 @@ namespace Xamarin.Essentials
             {
                 tcs.TrySetException(new ArgumentException("Failed to initialize TTS engine"));
             }
-
-            return;
         }
 
         public async Task<IEnumerable<Locale>> GetLocalesAsync()

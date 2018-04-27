@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Samples.ViewModel;
 using Xamarin.Essentials;
@@ -8,39 +9,66 @@ namespace Samples.ViewModel
 {
     public class TextToSpeechViewModel : BaseViewModel
     {
+        CancellationTokenSource cts;
+
         public TextToSpeechViewModel()
         {
-            SpeakCommand = new Command(OnSpeak);
+            SpeakCommand = new Command<bool>(OnSpeak);
+            CancelCommand = new Command(OnCancel);
+
             Text = "Xamarin Essentials makes text to speech easy!";
 
             AdvancedSettings = false;
             Volume = 1.0f;
             Pitch = 1.0f;
             Rate = 1.0f;
-
-            return;
         }
 
-        void OnSpeak(object obj)
+        void OnSpeak(bool multiple)
         {
-            var settings = new SpeakSettings()
+            if (IsBusy)
+                return;
+
+            IsBusy = true;
+
+            cts = new CancellationTokenSource();
+
+            var settings = AdvancedSettings ?
+            new SpeakSettings()
             {
                 Volume = Volume,
                 Pitch = Pitch,
                 SpeakRate = Rate,
-            };
+            }
+            : null;
 
-            if (AdvancedSettings)
+            if (multiple)
             {
-                TextToSpeech.SpeakAsync(Text, settings, default(CancellationToken));
+                Task.Run(async () =>
+                {
+                    await TextToSpeech.SpeakAsync(Text, settings, cts.Token);
+                    await TextToSpeech.SpeakAsync(Text, settings, cts.Token);
+                    await TextToSpeech.SpeakAsync(Text, settings, cts.Token);
+                    IsBusy = false;
+                });
             }
             else
             {
-                TextToSpeech.SpeakAsync(Text, default(CancellationToken));
+                TextToSpeech.SpeakAsync(Text, settings, cts.Token).ContinueWith((t) => { IsBusy = false; });
             }
-
-            return;
         }
+
+        void OnCancel()
+        {
+            if (!IsBusy && !cts.IsCancellationRequested)
+                return;
+
+            cts.Cancel();
+
+            IsBusy = false;
+        }
+
+        public ICommand CancelCommand { get; }
 
         public ICommand SpeakCommand { get; }
 

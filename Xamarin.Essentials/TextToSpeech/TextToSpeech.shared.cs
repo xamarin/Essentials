@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,10 +21,33 @@ namespace Xamarin.Essentials
             PlatformGetLocalesAsync();
 
         public static Task SpeakAsync(string text, CancellationToken cancelToken = default) =>
-            PlatformSpeakAsync(text, default, cancelToken);
+            SpeakAsync(text, default, cancelToken);
 
-        public static Task SpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default) =>
-            PlatformSpeakAsync(text, settings, cancelToken);
+        public static Task SpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
+        {
+            if (string.IsNullOrEmpty(text))
+                throw new ArgumentNullException(nameof(text), "Text cannot be null or empty string");
+
+            if (settings?.SpeakRate.HasValue ?? false)
+            {
+                if (settings.SpeakRate.Value < SpeakRateMin || settings.SpeakRate.Value > SpeakRateMax)
+                    throw new ArgumentOutOfRangeException($"SpeakRate must be >= {SpeakRateMin} and <= {SpeakRateMax}");
+            }
+
+            if (settings?.Volume.HasValue ?? false)
+            {
+                if (settings.Volume.Value < VolumeMin || settings.Volume.Value > VolumeMax)
+                    throw new ArgumentOutOfRangeException($"Volume must be >= {VolumeMin} and <= {VolumeMax}");
+            }
+
+            if (settings?.Pitch.HasValue ?? false)
+            {
+                if (settings.Pitch.Value < PitchMin || settings.Pitch.Value > PitchMax)
+                    throw new ArgumentOutOfRangeException($"Pitch must be >= {PitchMin} and <= {PitchMin}");
+            }
+
+            return PlatformSpeakAsync(text, settings, cancelToken);
+        }
 
         public enum Pitch
         {
@@ -81,64 +103,13 @@ namespace Xamarin.Essentials
 
     public partial class SpeakSettings
     {
-        public Locale Locale
-        {
-            get;
-            set;
-        }
+        public Locale Locale { get; set; }
 
-        float? pitch;
+        public float? Pitch { get; set; }
 
-        public float? Pitch
-        {
-            get
-            {
-                return pitch;
-            }
+        public float? SpeakRate { get; set; }
 
-            set
-            {
-                if (value < TextToSpeech.PitchMin || value > TextToSpeech.PitchMax)
-                    throw new ArgumentOutOfRangeException($"Pitch must be >= {TextToSpeech.PitchMin} and <= {TextToSpeech.PitchMin}");
-                pitch = value;
-            }
-        }
-
-        float? speakRate;
-
-        public float? SpeakRate
-        {
-            get
-            {
-                return speakRate;
-            }
-
-            set
-            {
-                if (value < TextToSpeech.SpeakRateMin || value > TextToSpeech.SpeakRateMax)
-                    throw new ArgumentOutOfRangeException($"SpeakRate must be >= {TextToSpeech.SpeakRateMin} and <= {TextToSpeech.SpeakRateMax}");
-
-                speakRate = value;
-            }
-        }
-
-        float? volume;
-
-        public float? Volume
-        {
-            get
-            {
-                return volume;
-            }
-
-            set
-            {
-                if (value < TextToSpeech.VolumeMin || value > TextToSpeech.VolumeMax)
-                    throw new ArgumentOutOfRangeException($"Volume must be >= {TextToSpeech.VolumeMin} and <= {TextToSpeech.VolumeMax}");
-
-                volume = value;
-            }
-        }
+        public float? Volume { get; set; }
 
         public SpeakSettings SetVolume(TextToSpeech.Volume volume)
         {

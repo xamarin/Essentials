@@ -4,73 +4,105 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.Foundation;
+using Windows.Media.Core;
+using Windows.Media.Playback;
 using Windows.Media.SpeechSynthesis;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
+        static SemaphoreSlim semaphore;
+        static SpeechSynthesizer speechSynthesizer;
+
         internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
             Task.FromResult(SpeechSynthesizer.AllVoices.Select(v => new Locale(v.Language, null, v.DisplayName)));
 
         internal static async Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
         {
-            if (string.IsNullOrEmpty(text))
-                throw new ArgumentNullException(nameof(text), "Text cannot be null or empty string");
+            if (semaphore == null)
+                semaphore = new SemaphoreSlim(1, 1);
 
-            var ssml = GetSpeakParametersSSMLProsody(text, settings);
+            if (speechSynthesizer == null)
+                speechSynthesizer = new SpeechSynthesizer();
 
-            var mediaElement = new MediaElement();
-            var synth = new SpeechSynthesizer();
-            var stream = await synth.SynthesizeSsmlToStreamAsync(ssml.ToString());
-
-            if (cancelToken != null)
+            try
             {
-                cancelToken.Register(() =>
-                {
-                    try
-                    {
-                        mediaElement?.Stop();
-                    }
-                    catch
-                    {
-                    }
-                });
-            }
+                await semaphore.WaitAsync(cancelToken);
 
-            mediaElement.SetSource(stream, stream.ContentType);
-            mediaElement.Play();
+                var tcs = new TaskCompletionSource<object>();
+
+                try
+                {
+                    var player = new MediaPlayer();
+
+                    var ssml = GetSpeakParametersSSMLProsody(text, settings);
+
+                    var stream = await speechSynthesizer.SynthesizeSsmlToStreamAsync(ssml);
+
+                    player.MediaEnded += PlayerMediaEnded;
+                    player.Source = MediaSource.CreateFromStream(stream, stream.ContentType);
+                    player.Play();
+
+                    void OnCancel()
+                    {
+                        player.PlaybackSession.PlaybackRate = 0;
+                        tcs.TrySetResult(null);
+                    }
+
+                    using (cancelToken.Register(OnCancel))
+                    {
+                        await tcs.Task;
+                    }
+
+                    player.MediaEnded -= PlayerMediaEnded;
+                    player.Dispose();
+
+                    void PlayerMediaEnded(MediaPlayer sender, object args)
+                    {
+                        tcs.TrySetResult(null);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Unable to playback stream: " + ex);
+                }
+            }
+            finally
+            {
+                if (semaphore.CurrentCount == 0)
+                    semaphore.Release();
+            }
         }
 
         static string GetSpeakParametersSSMLProsody(string text, SpeakSettings settings)
         {
-            var v = "default";
-            var p = "default";
-            var r = "default";
+            var volume = "default";
+            var pitch = "default";
+            var rate = "default";
 
             // Look for the specified language, otherwise the default voice
-            var lc = settings?.Locale.Language ?? SpeechSynthesizer.DefaultVoice.Language;
+            var locale = settings?.Locale.Language ?? SpeechSynthesizer.DefaultVoice.Language;
 
-            if (settings != null)
-            {
-                if (settings.Volume.HasValue)
-                    v = (settings.Volume.Value * 100f).ToString();
+            if (settings?.Volume.HasValue ?? false)
+                volume = (settings.Volume.Value * 100f).ToString();
 
-                if (settings.Pitch.HasValue)
-                    p = ProsodyPitch(settings.Pitch);
+            if (settings?.Pitch.HasValue ?? false)
+                pitch = ProsodyPitch(settings.Pitch);
 
-                if (settings.SpeakRate.HasValue)
-                    r = settings.SpeakRate.Value.ToString();
-            }
+            if (settings?.SpeakRate.HasValue ?? false)
+                rate = settings.SpeakRate.Value.ToString();
 
             // SSML generation
-            var sbssml = new StringBuilder();
-            sbssml.AppendLine($"<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='{lc}'>");
-            sbssml.AppendLine($"<prosody pitch='{p}' rate='{r}' volume='{v}'>{text}</prosody> ");
-            sbssml.AppendLine($"</speak>");
+            var ssml = new StringBuilder();
+            ssml.AppendLine($"<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='{locale}'>");
+            ssml.AppendLine($"<prosody pitch='{pitch}' rate='{rate}' volume='{volume}'>{text}</prosody> ");
+            ssml.AppendLine($"</speak>");
 
-            return sbssml.ToString();
+            return ssml.ToString();
         }
 
         static string ProsodyPitch(float? pitch)

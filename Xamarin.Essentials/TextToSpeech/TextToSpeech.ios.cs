@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using AVFoundation;
@@ -17,15 +15,37 @@ namespace Xamarin.Essentials
         const float platformPitchDefault = 1f;
         const float platformVolumeDefault = 1f;
 
+        static AVSpeechSynthesizer speechSynthesizer;
+        static TaskCompletionSource<object> currentSpeak;
+        static SemaphoreSlim semaphore;
+
         internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
             Task.FromResult(AVSpeechSynthesisVoice.GetSpeechVoices()
                 .Select(v => new Locale(v.Language, null, v.Language)));
 
-        internal static Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
+        internal static async Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
         {
-            if (string.IsNullOrEmpty(text))
-                throw new ArgumentNullException(nameof(text), "Text cannot be null or empty string");
+            if (speechSynthesizer == null)
+                speechSynthesizer = new AVSpeechSynthesizer();
 
+            if (semaphore == null)
+                semaphore = new SemaphoreSlim(1, 1);
+
+            try
+            {
+                await semaphore.WaitAsync(cancelToken);
+                var speechUtterance = GetSpeechUtterance(text, settings);
+                await SpeakUtterance(speechUtterance, cancelToken);
+            }
+            finally
+            {
+                if (semaphore.CurrentCount == 0)
+                    semaphore.Release();
+            }
+        }
+
+        private static AVSpeechUtterance GetSpeechUtterance(string text, SpeakSettings settings)
+        {
             AVSpeechUtterance speechUtterance;
 
             if (settings == null)
@@ -53,7 +73,7 @@ namespace Xamarin.Essentials
                     PlatformNormalize(AVSpeechUtterance.MinimumSpeechRate, AVSpeechUtterance.MaximumSpeechRate, settings.SpeakRate.Value / SpeakRateMax) :
                     AVSpeechUtterance.DefaultSpeechRate;
 
-                var volume = settings.Volume.HasValue ? settings.Volume.Value : platformVolumeDefault;
+                var volume = settings.Volume ?? platformVolumeDefault;
 
                 speechUtterance = new AVSpeechUtterance(text)
                 {
@@ -64,25 +84,35 @@ namespace Xamarin.Essentials
                 };
             }
 
-            var speechSynthesizer = new AVSpeechSynthesizer();
+            return speechUtterance;
+        }
 
-            if (cancelToken != null)
+        internal static async Task SpeakUtterance(AVSpeechUtterance speechUtterance, CancellationToken cancelToken)
+        {
+            try
             {
-                cancelToken.Register(() =>
+                currentSpeak = new TaskCompletionSource<object>();
+
+                speechSynthesizer.DidFinishSpeechUtterance += OnFinishedSpeechUtterance;
+                speechSynthesizer.SpeakUtterance(speechUtterance);
+                using (cancelToken.Register(TryCancel))
                 {
-                    try
-                    {
-                        speechSynthesizer?.StopSpeaking(AVSpeechBoundary.Immediate);
-                    }
-                    catch
-                    {
-                    }
-                });
+                    await currentSpeak.Task;
+                }
             }
+            finally
+            {
+                speechSynthesizer.DidFinishSpeechUtterance -= OnFinishedSpeechUtterance;
+            }
+        }
 
-            speechSynthesizer.SpeakUtterance(speechUtterance);
+        static void OnFinishedSpeechUtterance(object sender, AVSpeechSynthesizerUteranceEventArgs args) =>
+            currentSpeak?.TrySetResult(null);
 
-            return Task.CompletedTask;
+        static void TryCancel()
+        {
+            speechSynthesizer?.StopSpeaking(AVSpeechBoundary.Word);
+            currentSpeak?.TrySetCanceled();
         }
     }
 }
