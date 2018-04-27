@@ -26,7 +26,7 @@ namespace Xamarin.Essentials
             {
                 var location = lm.GetLastKnownLocation(provider);
 
-                if (bestLocation == null || IsBetterLocation(location, bestLocation))
+                if (location != null && IsBetterLocation(location, bestLocation))
                     bestLocation = location;
             }
 
