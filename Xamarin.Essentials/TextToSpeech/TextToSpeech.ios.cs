@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ namespace Xamarin.Essentials
         const float platformVolumeDefault = 1f;
 
         static AVSpeechSynthesizer speechSynthesizer;
-        static TaskCompletionSource<object> currentSpeak;
+        static TaskCompletionSource<bool> tcsUtterance;
         static SemaphoreSlim semaphore;
 
         internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
@@ -91,13 +90,13 @@ namespace Xamarin.Essentials
         {
             try
             {
-                currentSpeak = new TaskCompletionSource<object>();
+                tcsUtterance = new TaskCompletionSource<bool>();
 
                 speechSynthesizer.DidFinishSpeechUtterance += OnFinishedSpeechUtterance;
                 speechSynthesizer.SpeakUtterance(speechUtterance);
                 using (cancelToken.Register(TryCancel))
                 {
-                    await currentSpeak.Task;
+                    await tcsUtterance.Task;
                 }
             }
             finally
@@ -107,12 +106,12 @@ namespace Xamarin.Essentials
         }
 
         static void OnFinishedSpeechUtterance(object sender, AVSpeechSynthesizerUteranceEventArgs args) =>
-            currentSpeak?.TrySetResult(null);
+            tcsUtterance?.TrySetResult(true);
 
         static void TryCancel()
         {
             speechSynthesizer?.StopSpeaking(AVSpeechBoundary.Word);
-            currentSpeak?.TrySetCanceled();
+            tcsUtterance?.TrySetResult(true);
         }
     }
 }

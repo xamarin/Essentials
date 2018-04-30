@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Windows.Foundation;
 using Windows.Media.Core;
 using Windows.Media.Playback;
 using Windows.Media.SpeechSynthesis;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 
 namespace Xamarin.Essentials
 {
@@ -33,7 +30,7 @@ namespace Xamarin.Essentials
             {
                 await semaphore.WaitAsync(cancelToken);
 
-                var tcs = new TaskCompletionSource<object>();
+                var tcsUtterance = new TaskCompletionSource<bool>();
 
                 try
                 {
@@ -50,12 +47,12 @@ namespace Xamarin.Essentials
                     void OnCancel()
                     {
                         player.PlaybackSession.PlaybackRate = 0;
-                        tcs.TrySetResult(null);
+                        tcsUtterance.TrySetResult(true);
                     }
 
                     using (cancelToken.Register(OnCancel))
                     {
-                        await tcs.Task;
+                        await tcsUtterance.Task;
                     }
 
                     player.MediaEnded -= PlayerMediaEnded;
@@ -63,7 +60,7 @@ namespace Xamarin.Essentials
 
                     void PlayerMediaEnded(MediaPlayer sender, object args)
                     {
-                        tcs.TrySetResult(null);
+                        tcsUtterance.TrySetResult(true);
                     }
                 }
                 catch (Exception ex)

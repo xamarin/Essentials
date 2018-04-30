@@ -69,8 +69,8 @@ namespace Xamarin.Essentials
 #pragma warning restore CS0618
     {
         AndroidTextToSpeech tts;
-        TaskCompletionSource<bool> tcs;
-        TaskCompletionSource<object> tcsUtterances;
+        TaskCompletionSource<bool> tcsInitialize;
+        TaskCompletionSource<bool> tcsUtterances;
 
         public TextToSpeechImplementation()
         {
@@ -78,10 +78,10 @@ namespace Xamarin.Essentials
 
         Task<bool> Initialize()
         {
-            if (tcs != null && tts != null)
-                return tcs.Task;
+            if (tcsInitialize != null && tts != null)
+                return tcsInitialize.Task;
 
-            tcs = new TaskCompletionSource<bool>();
+            tcsInitialize = new TaskCompletionSource<bool>();
             try
             {
                 // set up the TextToSpeech object
@@ -93,10 +93,10 @@ namespace Xamarin.Essentials
             }
             catch (Exception e)
             {
-                tcs.SetException(e);
+                tcsInitialize.SetException(e);
             }
 
-            return tcs.Task;
+            return tcsInitialize.Task;
         }
 
         public new void Dispose()
@@ -125,7 +125,7 @@ namespace Xamarin.Essentials
                     {
                         tts?.Stop();
 
-                        tcsUtterances?.TrySetResult(null);
+                        tcsUtterances?.TrySetResult(true);
                     }
                     catch
                     {
@@ -154,7 +154,7 @@ namespace Xamarin.Essentials
             var parts = text.Split(max);
 
             numExpectedUtterances = parts.Count;
-            tcsUtterances = new TaskCompletionSource<object>();
+            tcsUtterances = new TaskCompletionSource<bool>();
 
             var guid = Guid.NewGuid().ToString();
 
@@ -187,11 +187,11 @@ namespace Xamarin.Essentials
         {
             if (status.Equals(OperationResult.Success))
             {
-                tcs.TrySetResult(true);
+                tcsInitialize.TrySetResult(true);
             }
             else
             {
-                tcs.TrySetException(new ArgumentException("Failed to initialize TTS engine"));
+                tcsInitialize.TrySetException(new ArgumentException("Failed to initialize TTS engine"));
             }
         }
 
@@ -240,7 +240,7 @@ namespace Xamarin.Essentials
         {
             numCompletedUtterances++;
             if (numCompletedUtterances >= numExpectedUtterances)
-                tcsUtterances?.TrySetResult(null);
+                tcsUtterances?.TrySetResult(true);
         }
     }
 }

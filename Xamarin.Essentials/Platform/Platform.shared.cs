@@ -7,14 +7,14 @@ namespace Xamarin.Essentials
     {
         internal static Task InvokeOnMainThread(Action action)
         {
-            var tcs = new TaskCompletionSource<object>();
+            var tcs = new TaskCompletionSource<bool>();
 
             BeginInvokeOnMainThread(() =>
             {
                 try
                 {
                     action();
-                    tcs.TrySetResult(null);
+                    tcs.TrySetResult(true);
                 }
                 catch (Exception ex)
                 {
