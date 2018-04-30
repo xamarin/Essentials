@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Samples.ViewModel;
@@ -15,6 +16,7 @@ namespace Samples.ViewModel
         {
             SpeakCommand = new Command<bool>(OnSpeak);
             CancelCommand = new Command(OnCancel);
+            PickLocaleCommand = new Command(async () => await OnPickLocale());
 
             Text = "Xamarin Essentials makes text to speech easy!";
 
@@ -39,6 +41,7 @@ namespace Samples.ViewModel
                 Volume = Volume,
                 Pitch = Pitch,
                 SpeakRate = Rate,
+                Locale = selectedLocale
             }
             : null;
 
@@ -46,7 +49,7 @@ namespace Samples.ViewModel
             {
                 Task.Run(async () =>
                 {
-                    await TextToSpeech.SpeakAsync(Text + " 1 ", settings, cts.Token);
+                    await TextToSpeech.SpeakAsync(Text + " 1 ", settings, cancelToken: cts.Token);
                     await TextToSpeech.SpeakAsync(Text + " 2 ", settings, cts.Token);
                     await TextToSpeech.SpeakAsync(Text + " 3 ", settings, cts.Token);
                     IsBusy = false;
@@ -68,9 +71,21 @@ namespace Samples.ViewModel
             IsBusy = false;
         }
 
+        Locale selectedLocale;
+
+        async Task OnPickLocale()
+        {
+            var items = await TextToSpeech.GetLocalesAsync();
+            var result = await Application.Current.MainPage.DisplayActionSheet("Pick", "OK", null, items.Select(i => i.Name).ToArray());
+            selectedLocale = items.FirstOrDefault(i => i.Name == result);
+            Locale = (result == "OK" || string.IsNullOrEmpty(result)) ? "Default" : result;
+        }
+
         public ICommand CancelCommand { get; }
 
         public ICommand SpeakCommand { get; }
+
+        public ICommand PickLocaleCommand { get; }
 
         string text;
 
@@ -110,6 +125,14 @@ namespace Samples.ViewModel
         {
             get => rate;
             set => SetProperty(ref rate, value);
+        }
+
+        string locale = "Default";
+
+        public string Locale
+        {
+            get => locale;
+            set => SetProperty(ref locale, value);
         }
     }
 }
