@@ -54,9 +54,7 @@ namespace Samples.ViewModel
             }
             else
             {
-                TextToSpeech.SpeakAsync(Text, settings, cts.Token).ContinueWith((t) => { });
-                TextToSpeech.SpeakAsync(Text + " 2 ", settings, cts.Token).ContinueWith((t) => { });
-                TextToSpeech.SpeakAsync(Text + " 3 ", settings, cts.Token).ContinueWith((t) => { IsBusy = false; });
+                TextToSpeech.SpeakAsync(Text, settings, cts.Token).ContinueWith((t) => { IsBusy = false; });
             }
         }
 

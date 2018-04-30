@@ -17,8 +17,6 @@ namespace Xamarin.Essentials
 
         internal static async Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
         {
-            await semaphore.WaitAsync(cancelToken);
-
             var tcsUtterance = new TaskCompletionSource<bool>();
 
             try
@@ -57,6 +55,7 @@ namespace Xamarin.Essentials
             catch (Exception ex)
             {
                 Console.WriteLine("Unable to playback stream: " + ex);
+                tcsUtterance.TrySetException(ex);
             }
         }
 
