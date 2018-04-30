@@ -9,7 +9,6 @@ namespace Xamarin.Essentials
     public static partial class TextToSpeech
     {
         static AVSpeechSynthesizer speechSynthesizer;
-        static TaskCompletionSource<bool> tcsUtterance;
         static SemaphoreSlim semaphore;
 
         internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
@@ -67,9 +66,9 @@ namespace Xamarin.Essentials
 
         internal static async Task SpeakUtterance(AVSpeechUtterance speechUtterance, CancellationToken cancelToken)
         {
+            var tcsUtterance = new TaskCompletionSource<bool>();
             try
             {
-                tcsUtterance = new TaskCompletionSource<bool>();
                 speechSynthesizer.DidFinishSpeechUtterance += OnFinishedSpeechUtterance;
                 speechSynthesizer.SpeakUtterance(speechUtterance);
                 using (cancelToken.Register(TryCancel))
@@ -81,15 +80,15 @@ namespace Xamarin.Essentials
             {
                 speechSynthesizer.DidFinishSpeechUtterance -= OnFinishedSpeechUtterance;
             }
-        }
 
-        static void OnFinishedSpeechUtterance(object sender, AVSpeechSynthesizerUteranceEventArgs args) =>
-            tcsUtterance?.TrySetResult(true);
+            void TryCancel()
+            {
+                speechSynthesizer?.StopSpeaking(AVSpeechBoundary.Word);
+                tcsUtterance?.TrySetResult(true);
+            }
 
-        static void TryCancel()
-        {
-            speechSynthesizer?.StopSpeaking(AVSpeechBoundary.Word);
-            tcsUtterance?.TrySetResult(true);
+            void OnFinishedSpeechUtterance(object sender, AVSpeechSynthesizerUteranceEventArgs args) =>
+                tcsUtterance?.TrySetResult(true);
         }
     }
 }

@@ -14,12 +14,10 @@ namespace Xamarin.Essentials
         const int maxSpeechInputLengthDefault = 4000;
 
         static WeakReference<TextToSpeechImplementation> textToSpeechRef = null;
-        static SemaphoreSlim semaphore;
 
         static TextToSpeechImplementation GetTextToSpeech()
         {
-            TextToSpeechImplementation tts = null;
-            if (textToSpeechRef == null || !textToSpeechRef.TryGetTarget(out tts))
+            if (textToSpeechRef == null || !textToSpeechRef.TryGetTarget(out var tts))
             {
                 tts = new TextToSpeechImplementation();
                 textToSpeechRef = new WeakReference<TextToSpeechImplementation>(tts);
@@ -28,27 +26,15 @@ namespace Xamarin.Essentials
             return tts;
         }
 
-        internal static async Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
+        internal static Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
         {
-            if (semaphore == null)
-                semaphore = new SemaphoreSlim(1, 1);
-
             using (var textToSpeech = GetTextToSpeech())
             {
                 var max = maxSpeechInputLengthDefault;
                 if (Platform.HasApiLevel(BuildVersionCodes.JellyBeanMr2))
                     max = AndroidTextToSpeech.MaxSpeechInputLength;
 
-                try
-                {
-                    await semaphore.WaitAsync(cancelToken);
-                    await textToSpeech.SpeakAsync(text, max, settings, cancelToken);
-                }
-                finally
-                {
-                    if (semaphore.CurrentCount == 0)
-                        semaphore.Release();
-                }
+                return textToSpeech.SpeakAsync(text, max, settings, cancelToken);
             }
         }
 
@@ -187,7 +173,7 @@ namespace Xamarin.Essentials
             }
             else
             {
-                tcsInitialize.TrySetException(new ArgumentException("Failed to initialize TTS engine"));
+                tcsInitialize.TrySetException(new ArgumentException("Failed to initialize Text to Speech engine."));
             }
         }
 
