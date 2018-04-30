@@ -46,15 +46,17 @@ namespace Samples.ViewModel
             {
                 Task.Run(async () =>
                 {
-                    await TextToSpeech.SpeakAsync(Text, settings, cts.Token);
-                    await TextToSpeech.SpeakAsync(Text, settings, cts.Token);
-                    await TextToSpeech.SpeakAsync(Text, settings, cts.Token);
+                    await TextToSpeech.SpeakAsync(Text + " 1 ", settings, cts.Token);
+                    await TextToSpeech.SpeakAsync(Text + " 2 ", settings, cts.Token);
+                    await TextToSpeech.SpeakAsync(Text + " 3 ", settings, cts.Token);
                     IsBusy = false;
                 });
             }
             else
             {
-                TextToSpeech.SpeakAsync(Text, settings, cts.Token).ContinueWith((t) => { IsBusy = false; });
+                TextToSpeech.SpeakAsync(Text, settings, cts.Token).ContinueWith((t) => { });
+                TextToSpeech.SpeakAsync(Text + " 2 ", settings, cts.Token).ContinueWith((t) => { });
+                TextToSpeech.SpeakAsync(Text + " 3 ", settings, cts.Token).ContinueWith((t) => { IsBusy = false; });
             }
         }
 

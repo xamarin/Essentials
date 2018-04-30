@@ -12,66 +12,51 @@ namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
-        static SemaphoreSlim semaphore;
-        static SpeechSynthesizer speechSynthesizer;
-
         internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
             Task.FromResult(SpeechSynthesizer.AllVoices.Select(v => new Locale(v.Language, null, v.DisplayName)));
 
         internal static async Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
         {
-            if (semaphore == null)
-                semaphore = new SemaphoreSlim(1, 1);
+            await semaphore.WaitAsync(cancelToken);
 
-            if (speechSynthesizer == null)
-                speechSynthesizer = new SpeechSynthesizer();
+            var tcsUtterance = new TaskCompletionSource<bool>();
 
             try
             {
-                await semaphore.WaitAsync(cancelToken);
+                var player = new MediaPlayer();
 
-                var tcsUtterance = new TaskCompletionSource<bool>();
+                var ssml = GetSpeakParametersSSMLProsody(text, settings);
 
-                try
+                var speechSynthesizer = new SpeechSynthesizer();
+
+                var stream = await speechSynthesizer.SynthesizeSsmlToStreamAsync(ssml);
+
+                player.MediaEnded += PlayerMediaEnded;
+                player.Source = MediaSource.CreateFromStream(stream, stream.ContentType);
+                player.Play();
+
+                void OnCancel()
                 {
-                    var player = new MediaPlayer();
-
-                    var ssml = GetSpeakParametersSSMLProsody(text, settings);
-
-                    var stream = await speechSynthesizer.SynthesizeSsmlToStreamAsync(ssml);
-
-                    player.MediaEnded += PlayerMediaEnded;
-                    player.Source = MediaSource.CreateFromStream(stream, stream.ContentType);
-                    player.Play();
-
-                    void OnCancel()
-                    {
-                        player.PlaybackSession.PlaybackRate = 0;
-                        tcsUtterance.TrySetResult(true);
-                    }
-
-                    using (cancelToken.Register(OnCancel))
-                    {
-                        await tcsUtterance.Task;
-                    }
-
-                    player.MediaEnded -= PlayerMediaEnded;
-                    player.Dispose();
-
-                    void PlayerMediaEnded(MediaPlayer sender, object args)
-                    {
-                        tcsUtterance.TrySetResult(true);
-                    }
+                    player.PlaybackSession.PlaybackRate = 0;
+                    tcsUtterance.TrySetResult(true);
                 }
-                catch (Exception ex)
+
+                using (cancelToken.Register(OnCancel))
                 {
-                    Console.WriteLine("Unable to playback stream: " + ex);
+                    await tcsUtterance.Task;
+                }
+
+                player.MediaEnded -= PlayerMediaEnded;
+                player.Dispose();
+
+                void PlayerMediaEnded(MediaPlayer sender, object args)
+                {
+                    tcsUtterance.TrySetResult(true);
                 }
             }
-            finally
+            catch (Exception ex)
             {
-                if (semaphore.CurrentCount == 0)
-                    semaphore.Release();
+                Console.WriteLine("Unable to playback stream: " + ex);
             }
         }
 

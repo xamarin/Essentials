@@ -8,32 +8,14 @@ namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
-        static AVSpeechSynthesizer speechSynthesizer;
-        static SemaphoreSlim semaphore;
-
         internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
             Task.FromResult(AVSpeechSynthesisVoice.GetSpeechVoices()
                 .Select(v => new Locale(v.Language, null, v.Language)));
 
-        internal static async Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
+        internal static Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
         {
-            if (speechSynthesizer == null)
-                speechSynthesizer = new AVSpeechSynthesizer();
-
-            if (semaphore == null)
-                semaphore = new SemaphoreSlim(1, 1);
-
-            try
-            {
-                await semaphore.WaitAsync(cancelToken);
-                var speechUtterance = GetSpeechUtterance(text, settings);
-                await SpeakUtterance(speechUtterance, cancelToken);
-            }
-            finally
-            {
-                if (semaphore.CurrentCount == 0)
-                    semaphore.Release();
-            }
+            var speechUtterance = GetSpeechUtterance(text, settings);
+            return SpeakUtterance(speechUtterance, cancelToken);
         }
 
         private static AVSpeechUtterance GetSpeechUtterance(string text, SpeakSettings settings)
@@ -67,6 +49,7 @@ namespace Xamarin.Essentials
         internal static async Task SpeakUtterance(AVSpeechUtterance speechUtterance, CancellationToken cancelToken)
         {
             var tcsUtterance = new TaskCompletionSource<bool>();
+            var speechSynthesizer = new AVSpeechSynthesizer();
             try
             {
                 speechSynthesizer.DidFinishSpeechUtterance += OnFinishedSpeechUtterance;
@@ -87,8 +70,11 @@ namespace Xamarin.Essentials
                 tcsUtterance?.TrySetResult(true);
             }
 
-            void OnFinishedSpeechUtterance(object sender, AVSpeechSynthesizerUteranceEventArgs args) =>
-                tcsUtterance?.TrySetResult(true);
+            void OnFinishedSpeechUtterance(object sender, AVSpeechSynthesizerUteranceEventArgs args)
+            {
+                if (speechUtterance == args.Utterance)
+                    tcsUtterance?.TrySetResult(true);
+            }
         }
     }
 }

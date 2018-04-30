@@ -19,13 +19,15 @@ namespace Xamarin.Essentials
         internal const float VolumeDefault = 0.5f;
         internal const float VolumeMin = 0.0f;
 
+        static SemaphoreSlim semaphore;
+
         public static Task<IEnumerable<Locale>> GetLocalesAsync() =>
             PlatformGetLocalesAsync();
 
         public static Task SpeakAsync(string text, CancellationToken cancelToken = default) =>
             SpeakAsync(text, default, cancelToken);
 
-        public static Task SpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
+        public static async Task SpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
         {
             if (string.IsNullOrEmpty(text))
                 throw new ArgumentNullException(nameof(text), "Text cannot be null or empty string");
@@ -48,7 +50,19 @@ namespace Xamarin.Essentials
                     throw new ArgumentOutOfRangeException($"Pitch must be >= {PitchMin} and <= {PitchMin}");
             }
 
-            return PlatformSpeakAsync(text, settings, cancelToken);
+            if (semaphore == null)
+                semaphore = new SemaphoreSlim(1, 1);
+
+            try
+            {
+                await semaphore.WaitAsync(cancelToken);
+                await PlatformSpeakAsync(text, settings, cancelToken);
+            }
+            finally
+            {
+                if (semaphore.CurrentCount == 0)
+                    semaphore.Release();
+            }
         }
 
         internal static float PlatformNormalize(float min, float max, float percent)
