@@ -9,7 +9,7 @@ namespace Xamarin.Essentials
     public static partial class TextToSpeech
     {
         static AVSpeechSynthesizer speechSynthesizer;
-        static TaskCompletionSource<object> currentSpeak;
+        static TaskCompletionSource<bool> currentSpeak;
         static SemaphoreSlim semaphore;
 
         internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
@@ -69,7 +69,7 @@ namespace Xamarin.Essentials
         {
             try
             {
-                currentSpeak = new TaskCompletionSource<object>();
+                currentSpeak = new TaskCompletionSource<bool>();
 
                 speechSynthesizer.DidFinishSpeechUtterance += OnFinishedSpeechUtterance;
                 speechSynthesizer.SpeakUtterance(speechUtterance);
@@ -85,7 +85,7 @@ namespace Xamarin.Essentials
         }
 
         static void OnFinishedSpeechUtterance(object sender, AVSpeechSynthesizerUteranceEventArgs args) =>
-            currentSpeak?.TrySetResult(null);
+            currentSpeak?.TrySetResult(true);
 
         static void TryCancel()
         {

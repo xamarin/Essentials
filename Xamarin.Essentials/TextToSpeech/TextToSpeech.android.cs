@@ -66,7 +66,7 @@ namespace Xamarin.Essentials
     {
         AndroidTextToSpeech tts;
         TaskCompletionSource<bool> tcs;
-        TaskCompletionSource<object> tcsUtterances;
+        TaskCompletionSource<bool> tcsUtterances;
 
         public TextToSpeechImplementation()
         {
@@ -121,7 +121,7 @@ namespace Xamarin.Essentials
                     {
                         tts?.Stop();
 
-                        tcsUtterances?.TrySetResult(null);
+                        tcsUtterances?.TrySetResult(true);
                     }
                     catch
                     {
@@ -150,7 +150,7 @@ namespace Xamarin.Essentials
             var parts = text.Split(max);
 
             numExpectedUtterances = parts.Count;
-            tcsUtterances = new TaskCompletionSource<object>();
+            tcsUtterances = new TaskCompletionSource<bool>();
 
             var guid = Guid.NewGuid().ToString();
 
@@ -236,7 +236,7 @@ namespace Xamarin.Essentials
         {
             numCompletedUtterances++;
             if (numCompletedUtterances >= numExpectedUtterances)
-                tcsUtterances?.TrySetResult(null);
+                tcsUtterances?.TrySetResult(true);
         }
     }
 }

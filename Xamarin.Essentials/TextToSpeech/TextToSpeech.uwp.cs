@@ -30,7 +30,7 @@ namespace Xamarin.Essentials
             {
                 await semaphore.WaitAsync(cancelToken);
 
-                var tcs = new TaskCompletionSource<object>();
+                var tcs = new TaskCompletionSource<bool>();
 
                 try
                 {
@@ -47,7 +47,7 @@ namespace Xamarin.Essentials
                     void OnCancel()
                     {
                         player.PlaybackSession.PlaybackRate = 0;
-                        tcs.TrySetResult(null);
+                        tcs.TrySetResult(true);
                     }
 
                     using (cancelToken.Register(OnCancel))
@@ -60,7 +60,7 @@ namespace Xamarin.Essentials
 
                     void PlayerMediaEnded(MediaPlayer sender, object args)
                     {
-                        tcs.TrySetResult(null);
+                        tcs.TrySetResult(true);
                     }
                 }
                 catch (Exception ex)
