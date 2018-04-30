@@ -1,19 +1,14 @@
 ﻿using System;
 using Android.App;
-using Android.Content;
 using Android.Content.Res;
 using Android.OS;
 using Android.Provider;
-using Android.Runtime;
-using Android.Views;
 
 namespace Xamarin.Essentials
 {
     public static partial class DeviceInfo
     {
         const int tabletCrossover = 600;
-
-        static OrientationEventListener orientationListener;
 
         static string GetModel() => Build.Model;
 
@@ -36,7 +31,7 @@ namespace Xamarin.Essentials
             var currentIdiom = Idioms.Unsupported;
 
             // first try UiModeManager
-            using (var uiModeManager = UiModeManager.FromContext(Essentials.Platform.CurrentContext))
+            using (var uiModeManager = UiModeManager.FromContext(Essentials.Platform.AppContext))
             {
                 var uiMode = uiModeManager?.CurrentModeType ?? UiMode.TypeUndefined;
                 currentIdiom = DetectIdiom(uiMode);
@@ -45,7 +40,7 @@ namespace Xamarin.Essentials
             // then try Configuration
             if (currentIdiom == Idioms.Unsupported)
             {
-                var configuration = Essentials.Platform.CurrentContext.Resources?.Configuration;
+                var configuration = Essentials.Platform.AppContext.Resources?.Configuration;
                 if (configuration != null)
                 {
                     var uiMode = configuration.UiMode;
@@ -64,7 +59,7 @@ namespace Xamarin.Essentials
             // start clutching at straws
             if (currentIdiom == Idioms.Unsupported)
             {
-                var metrics = Essentials.Platform.CurrentContext.Resources?.DisplayMetrics;
+                var metrics = Essentials.Platform.AppContext.Resources?.DisplayMetrics;
                 if (metrics != null)
                 {
                     var minSize = Math.Min(metrics.WidthPixels, metrics.HeightPixels);
@@ -107,95 +102,7 @@ namespace Xamarin.Essentials
             return DeviceType.Physical;
         }
 
-        static ScreenMetrics GetScreenMetrics()
-        {
-            var displayMetrics = Essentials.Platform.CurrentContext.Resources?.DisplayMetrics;
-
-            return new ScreenMetrics
-            {
-                Orientation = CalculateOrientation(),
-                Rotation = CalculateRotation(),
-                Width = displayMetrics?.WidthPixels ?? 0,
-                Height = displayMetrics?.HeightPixels ?? 0,
-                Density = displayMetrics?.Density ?? 0
-            };
-        }
-
-        static void StartScreenMetricsListeners()
-        {
-            orientationListener = new Listener(Application.Context, OnScreenMetricsChanaged);
-            orientationListener.Enable();
-        }
-
-        static void StopScreenMetricsListeners()
-        {
-            orientationListener?.Disable();
-            orientationListener?.Dispose();
-            orientationListener = null;
-        }
-
-        static void OnScreenMetricsChanaged()
-        {
-            var metrics = GetScreenMetrics();
-            OnScreenMetricsChanaged(metrics);
-        }
-
-        static ScreenRotation CalculateRotation()
-        {
-            var service = Essentials.Platform.CurrentContext.GetSystemService(Context.WindowService);
-            var display = service?.JavaCast<IWindowManager>()?.DefaultDisplay;
-
-            if (display != null)
-            {
-                switch (display.Rotation)
-                {
-                    case SurfaceOrientation.Rotation270:
-                        return ScreenRotation.Rotation270;
-                    case SurfaceOrientation.Rotation180:
-                        return ScreenRotation.Rotation180;
-                    case SurfaceOrientation.Rotation90:
-                        return ScreenRotation.Rotation90;
-                    case SurfaceOrientation.Rotation0:
-                        return ScreenRotation.Rotation0;
-                }
-            }
-
-            return ScreenRotation.Rotation0;
-        }
-
-        static ScreenOrientation CalculateOrientation()
-        {
-            var config = Essentials.Platform.CurrentContext.Resources?.Configuration;
-
-            if (config != null)
-            {
-                switch (config.Orientation)
-                {
-                    case Orientation.Landscape:
-                        return ScreenOrientation.Landscape;
-                    case Orientation.Portrait:
-                    case Orientation.Square:
-                        return ScreenOrientation.Portrait;
-                }
-            }
-
-            return ScreenOrientation.Unknown;
-        }
-
         static string GetSystemSetting(string name)
-           => Settings.System.GetString(Essentials.Platform.CurrentContext.ContentResolver, name);
-    }
-
-    class Listener : OrientationEventListener
-    {
-        Action onChanged;
-
-        public Listener(Context context, Action handler)
-            : base(context)
-        {
-            onChanged = handler;
-        }
-
-        public override void OnOrientationChanged(int orientation) => onChanged();
+           => Settings.System.GetString(Essentials.Platform.AppContext.ContentResolver, name);
     }
 }
