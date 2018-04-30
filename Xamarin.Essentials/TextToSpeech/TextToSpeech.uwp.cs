@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Windows.Foundation;
 using Windows.Media.Core;
 using Windows.Media.Playback;
 using Windows.Media.SpeechSynthesis;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 
 namespace Xamarin.Essentials
 {

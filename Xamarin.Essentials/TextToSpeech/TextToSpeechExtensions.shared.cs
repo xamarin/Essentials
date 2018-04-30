@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Xamarin.Essentials
 {
@@ -53,10 +49,12 @@ namespace Xamarin.Essentials
                     positionbegin = positionbegin + p.Length + 1;
                     positionend = positionbegin + max;
                     position = positionbegin;
+
                     Debug.WriteLine($"------------------------------");
                     Debug.WriteLine($"positionbegin = {positionbegin}");
                     Debug.WriteLine($"positionend   = {positionend}");
                     Debug.WriteLine($"position      = {position}");
+
                     parts.Add(p);
                 }
             }

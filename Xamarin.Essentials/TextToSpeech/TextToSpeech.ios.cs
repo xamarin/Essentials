@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,12 +8,6 @@ namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
-        const string enUS = "en-US";
-        const float platformPitchMin = 0f;
-        const float platformPitchMax = 2f;
-        const float platformPitchDefault = 1f;
-        const float platformVolumeDefault = 1f;
-
         static AVSpeechSynthesizer speechSynthesizer;
         static TaskCompletionSource<object> currentSpeak;
         static SemaphoreSlim semaphore;
@@ -46,42 +39,27 @@ namespace Xamarin.Essentials
 
         private static AVSpeechUtterance GetSpeechUtterance(string text, SpeakSettings settings)
         {
-            AVSpeechUtterance speechUtterance;
+            var speechUtterance = new AVSpeechUtterance(text);
 
-            if (settings == null)
+            if (settings != null)
             {
-                speechUtterance = new AVSpeechUtterance(text)
-                {
-                    Voice = AVSpeechSynthesisVoice.FromLanguage(enUS),
-                    Volume = platformVolumeDefault,
-                    PitchMultiplier = platformPitchDefault,
-                    Rate = AVSpeechUtterance.DefaultSpeechRate,
-                };
-            }
-            else
-            {
-                var voice = AVSpeechSynthesisVoice.FromLanguage(settings.Locale.Language) ??
+                // null voice if fine - it is the default
+                speechUtterance.Voice =
+                    AVSpeechSynthesisVoice.FromLanguage(settings.Locale.Language) ??
                     AVSpeechSynthesisVoice.FromLanguage(AVSpeechSynthesisVoice.CurrentLanguageCode);
 
-                if (voice == null)
-                    voice = AVSpeechSynthesisVoice.FromLanguage(enUS);
+                // the platform has a range of 0.5 - 2.0
+                // anything lower than 0.5 is set to 0.5
+                if (settings.Pitch.HasValue)
+                    speechUtterance.PitchMultiplier = settings.Pitch.Value;
 
-                var pitch = settings.Pitch.HasValue ?
-                    PlatformNormalize(platformPitchMin, platformPitchMax, settings.Pitch.Value / platformPitchMax) : platformPitchDefault;
-
-                var speechrate = settings.SpeakRate.HasValue ?
+                // TODO: this is nothing useful
+                speechUtterance.Rate = settings.SpeakRate.HasValue ?
                     PlatformNormalize(AVSpeechUtterance.MinimumSpeechRate, AVSpeechUtterance.MaximumSpeechRate, settings.SpeakRate.Value / SpeakRateMax) :
                     AVSpeechUtterance.DefaultSpeechRate;
 
-                var volume = settings.Volume ?? platformVolumeDefault;
-
-                speechUtterance = new AVSpeechUtterance(text)
-                {
-                    Voice = voice,
-                    Rate = speechrate,
-                    PitchMultiplier = pitch,
-                    Volume = volume,
-                };
+                if (settings.Volume.HasValue)
+                    speechUtterance.Volume = settings.Volume.Value;
             }
 
             return speechUtterance;
