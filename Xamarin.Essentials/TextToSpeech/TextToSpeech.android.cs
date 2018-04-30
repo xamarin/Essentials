@@ -12,10 +12,6 @@ namespace Xamarin.Essentials
     public static partial class TextToSpeech
     {
         const int maxSpeechInputLengthDefault = 4000;
-        internal const float PlatformSpeakRateMin = 0f;
-        internal const float PlatformSpeakRateMax = 2f;
-        internal const float PlatformPitchMin = 0f;
-        internal const float PlatformPitchMax = 2f;
 
         static WeakReference<TextToSpeechImplementation> textToSpeechRef = null;
         static SemaphoreSlim semaphore;
@@ -85,7 +81,7 @@ namespace Xamarin.Essentials
             try
             {
                 // set up the TextToSpeech object
-                tts = new AndroidTextToSpeech(Platform.CurrentContext, this);
+                tts = new AndroidTextToSpeech(Platform.AppContext, this);
 #pragma warning disable CS0618
                 tts.SetOnUtteranceCompletedListener(this);
 #pragma warning restore CS0618
@@ -141,13 +137,13 @@ namespace Xamarin.Essentials
 
             if (settings?.Pitch.HasValue ?? false)
             {
-                var pitch = TextToSpeech.PlatformNormalize(TextToSpeech.PlatformPitchMin, TextToSpeech.PlatformPitchMax, settings.Pitch.Value / TextToSpeech.PlatformPitchMax);
+                var pitch = settings.Pitch.Value;
                 tts.SetPitch(pitch);
             }
 
             if (settings?.SpeakRate.HasValue ?? false)
             {
-                var speakRate = TextToSpeech.PlatformNormalize(TextToSpeech.PlatformSpeakRateMin, TextToSpeech.PlatformSpeakRateMax, settings.SpeakRate.Value / TextToSpeech.PlatformSpeakRateMax);
+                var speakRate = settings.SpeakRate.Value;
                 tts.SetSpeechRate(speakRate);
             }
 

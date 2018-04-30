@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Xamarin.Essentials
+﻿namespace Xamarin.Essentials
 {
     public static partial class PhoneDialer
     {

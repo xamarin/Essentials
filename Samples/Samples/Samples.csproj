@@ -20,12 +20,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Xamarin.Essentials\Xamarin.Essentials.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="View\TextToSpeechPage.xaml.cs">
-      <DependentUpon>TextToSpeechPage.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
   
   <Import Project="$(MSBuildThisFileDirectory)..\..\CodeStyles.targets" />
 

@@ -82,6 +82,7 @@
       <Type Name="ConnectivityChangedEventArgs" Kind="Class" />
       <Type Name="ConnectivityChangedEventHandler" Kind="Delegate" />
       <Type Name="DataTransfer" Kind="Class" />
+      <Type Name="DeviceDisplay" Kind="Class" />
       <Type Name="DeviceInfo" Kind="Class" />
       <Type Name="DeviceInfo+Idioms" Kind="Class" />
       <Type Name="DeviceInfo+Platforms" Kind="Class" />
@@ -101,6 +102,7 @@
       <Type Name="GyroscopeChangedEventArgs" Kind="Class" />
       <Type Name="GyroscopeChangedEventHandler" Kind="Delegate" />
       <Type Name="GyroscopeData" Kind="Structure" />
+      <Type Name="Locale" Kind="Structure" />
       <Type Name="Location" Kind="Class" />
       <Type Name="LocationExtensions" Kind="Class" />
       <Type Name="Magnetometer" Kind="Class" />
@@ -125,6 +127,8 @@
       <Type Name="ShareTextRequest" Kind="Class" />
       <Type Name="Sms" Kind="Class" />
       <Type Name="SmsMessage" Kind="Class" />
+      <Type Name="SpeakSettings" Kind="Class" />
+      <Type Name="TextToSpeech" Kind="Class" />
       <Type Name="VersionTracking" Kind="Class" />
       <Type Name="Vibration" Kind="Class" />
     </Namespace>
