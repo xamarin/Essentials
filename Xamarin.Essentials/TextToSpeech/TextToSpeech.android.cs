@@ -127,12 +127,6 @@ namespace Xamarin.Essentials
                 tts.SetPitch(pitch);
             }
 
-            if (settings?.SpeakRate.HasValue ?? false)
-            {
-                var speakRate = settings.SpeakRate.Value;
-                tts.SetSpeechRate(speakRate);
-            }
-
             var parts = text.Split(max);
 
             numExpectedUtterances = parts.Count;

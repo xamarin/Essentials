@@ -23,7 +23,6 @@ namespace Samples.ViewModel
             AdvancedSettings = false;
             Volume = 1.0f;
             Pitch = 1.0f;
-            Rate = 1.0f;
         }
 
         void OnSpeak(bool multiple)
@@ -40,7 +39,6 @@ namespace Samples.ViewModel
             {
                 Volume = Volume,
                 Pitch = Pitch,
-                SpeakRate = Rate,
                 Locale = selectedLocale
             }
             : null;
@@ -115,14 +113,6 @@ namespace Samples.ViewModel
         {
             get => pitch;
             set => SetProperty(ref pitch, value);
-        }
-
-        float rate;
-
-        public float Rate
-        {
-            get => rate;
-            set => SetProperty(ref rate, value);
         }
 
         string locale = "Default";

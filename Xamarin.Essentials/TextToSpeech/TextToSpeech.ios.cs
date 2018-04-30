@@ -34,11 +34,6 @@ namespace Xamarin.Essentials
                 if (settings.Pitch.HasValue)
                     speechUtterance.PitchMultiplier = settings.Pitch.Value;
 
-                // TODO: this is nothing useful
-                speechUtterance.Rate = settings.SpeakRate.HasValue ?
-                    PlatformNormalize(AVSpeechUtterance.MinimumSpeechRate, AVSpeechUtterance.MaximumSpeechRate, settings.SpeakRate.Value / SpeakRateMax) :
-                    AVSpeechUtterance.DefaultSpeechRate;
-
                 if (settings.Volume.HasValue)
                     speechUtterance.Volume = settings.Volume.Value;
             }

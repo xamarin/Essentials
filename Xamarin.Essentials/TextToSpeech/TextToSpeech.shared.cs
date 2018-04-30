@@ -7,10 +7,6 @@ namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
-        internal const float SpeakRateMax = 2.0f;
-        internal const float SpeakRateDefault = 1.0f;
-        internal const float SpeakRateMin = 0.0f;
-
         internal const float PitchMax = 2.0f;
         internal const float PitchDefault = 1.0f;
         internal const float PitchMin = 0.0f;
@@ -31,12 +27,6 @@ namespace Xamarin.Essentials
         {
             if (string.IsNullOrEmpty(text))
                 throw new ArgumentNullException(nameof(text), "Text cannot be null or empty string");
-
-            if (settings?.SpeakRate.HasValue ?? false)
-            {
-                if (settings.SpeakRate.Value < SpeakRateMin || settings.SpeakRate.Value > SpeakRateMax)
-                    throw new ArgumentOutOfRangeException($"SpeakRate must be >= {SpeakRateMin} and <= {SpeakRateMax}");
-            }
 
             if (settings?.Volume.HasValue ?? false)
             {
@@ -94,8 +84,6 @@ namespace Xamarin.Essentials
         public Locale Locale { get; set; }
 
         public float? Pitch { get; set; }
-
-        public float? SpeakRate { get; set; }
 
         public float? Volume { get; set; }
     }

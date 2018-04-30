@@ -74,9 +74,6 @@ namespace Xamarin.Essentials
             if (settings?.Pitch.HasValue ?? false)
                 pitch = ProsodyPitch(settings.Pitch);
 
-            if (settings?.SpeakRate.HasValue ?? false)
-                rate = settings.SpeakRate.Value.ToString();
-
             // SSML generation
             var ssml = new StringBuilder();
             ssml.AppendLine($"<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='{locale}'>");
