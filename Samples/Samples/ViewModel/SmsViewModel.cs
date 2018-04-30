@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -41,7 +42,11 @@ namespace Samples.ViewModel
             }
             catch (FeatureNotSupportedException)
             {
-                await DisplayAlert("Sending an SMS is not supported on this device.");
+                await DisplayAlertAsync("Sending an SMS is not supported on this device.");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlertAsync($"Unable to send Sms: {ex.Message}");
             }
 
             IsBusy = false;

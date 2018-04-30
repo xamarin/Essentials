@@ -18,8 +18,6 @@ namespace Samples.ViewModel
         {
             StartCommand = new Command(OnStart);
             StopCommand = new Command(OnStop);
-
-            Gyroscope.ReadingChanged += OnReadingChanged;
         }
 
         public ICommand StartCommand { get; }
@@ -65,6 +63,12 @@ namespace Samples.ViewModel
             set => SetProperty(ref speed, value);
         }
 
+        public override void OnAppearing()
+        {
+            Gyroscope.ReadingChanged += OnReadingChanged;
+            base.OnAppearing();
+        }
+
         public override void OnDisappearing()
         {
             OnStop();
@@ -82,15 +86,15 @@ namespace Samples.ViewModel
                 case SensorSpeed.Game:
                     Platform.BeginInvokeOnMainThread(() =>
                     {
-                        X = data.AngularVelocityX;
-                        Y = data.AngularVelocityY;
-                        Z = data.AngularVelocityZ;
+                        X = data.AngularVelocity.X;
+                        Y = data.AngularVelocity.Y;
+                        Z = data.AngularVelocity.Z;
                     });
                     break;
                 default:
-                    X = data.AngularVelocityX;
-                    Y = data.AngularVelocityY;
-                    Z = data.AngularVelocityZ;
+                    X = data.AngularVelocity.X;
+                    Y = data.AngularVelocity.Y;
+                    Z = data.AngularVelocity.Z;
                     break;
             }
         }
@@ -102,9 +106,9 @@ namespace Samples.ViewModel
                 Gyroscope.Start((SensorSpeed)Speed);
                 IsActive = true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                await DisplayAlert("Gyroscope not supported");
+                await DisplayAlertAsync($"Unable to start gyroscope: {ex.Message}");
             }
         }
 
