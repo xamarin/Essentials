@@ -47,13 +47,11 @@ namespace Samples.ViewModel
 
             if (multiple)
             {
-                Task.Run(async () =>
-                {
-                    await TextToSpeech.SpeakAsync(Text + " 1 ", settings, cancelToken: cts.Token);
-                    await TextToSpeech.SpeakAsync(Text + " 2 ", settings, cts.Token);
-                    await TextToSpeech.SpeakAsync(Text + " 3 ", settings, cts.Token);
-                    IsBusy = false;
-                });
+                Task.WhenAll(
+                    TextToSpeech.SpeakAsync(Text + " 1 ", settings, cancelToken: cts.Token),
+                    TextToSpeech.SpeakAsync(Text + " 2 ", settings, cancelToken: cts.Token),
+                    TextToSpeech.SpeakAsync(Text + " 3 ", settings, cancelToken: cts.Token))
+                    .ContinueWith((t) => { IsBusy = false; });
             }
             else
             {
