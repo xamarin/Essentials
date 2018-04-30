@@ -370,7 +370,6 @@
       <Member Id="M:Xamarin.Essentials.SpeakSettings.#ctor" />
       <Member Id="P:Xamarin.Essentials.SpeakSettings.Locale" />
       <Member Id="P:Xamarin.Essentials.SpeakSettings.Pitch" />
-      <Member Id="P:Xamarin.Essentials.SpeakSettings.SpeakRate" />
       <Member Id="P:Xamarin.Essentials.SpeakSettings.Volume" />
     </Type>
     <Type Name="Xamarin.Essentials.TextToSpeech" Id="T:Xamarin.Essentials.TextToSpeech">

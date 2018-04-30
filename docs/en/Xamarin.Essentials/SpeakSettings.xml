@@ -66,24 +66,6 @@
         <remarks>This value should be between 0f and 2.0f.</remarks>
       </Docs>
     </Member>
-    <Member MemberName="SpeakRate">
-      <MemberSignature Language="C#" Value="public Nullable&lt;float&gt; SpeakRate { get; set; }" />
-      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Nullable`1&lt;float32&gt; SpeakRate" />
-      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.SpeakSettings.SpeakRate" />
-      <MemberType>Property</MemberType>
-      <AssemblyInfo>
-        <AssemblyName>Xamarin.Essentials</AssemblyName>
-        <AssemblyVersion>1.0.0.0</AssemblyVersion>
-      </AssemblyInfo>
-      <ReturnValue>
-        <ReturnType>System.Nullable&lt;System.Single&gt;</ReturnType>
-      </ReturnValue>
-      <Docs>
-        <summary>The speak rate to use when speaking.</summary>
-        <value></value>
-        <remarks>This value should be between 0f and 2.0f.</remarks>
-      </Docs>
-    </Member>
     <Member MemberName="Volume">
       <MemberSignature Language="C#" Value="public Nullable&lt;float&gt; Volume { get; set; }" />
       <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Nullable`1&lt;float32&gt; Volume" />
