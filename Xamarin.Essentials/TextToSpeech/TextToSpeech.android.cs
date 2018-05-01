@@ -133,7 +133,7 @@ namespace Xamarin.Essentials
                 tts.SetPitch(pitch);
             }
 
-            var parts = text.Split(max);
+            var parts = text.SplitSpeak(max);
 
             numExpectedUtterances = parts.Count;
             tcsUtterances = new TaskCompletionSource<bool>();

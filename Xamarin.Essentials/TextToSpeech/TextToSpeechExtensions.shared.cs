@@ -5,7 +5,7 @@ namespace Xamarin.Essentials
 {
     internal static partial class TextToSpeechExtensions
     {
-        public static List<string> Split(this string text, int max)
+        internal static List<string> SplitSpeak(this string text, int max)
         {
             var parts = new List<string>();
             if (text.Length <= max)
@@ -24,6 +24,14 @@ namespace Xamarin.Essentials
                 {
                     while (positionend > positionbegin)
                     {
+                        if (positionend >= text.Length)
+                        {
+                            // we just need the rest of it
+                            p = text.Substring(positionbegin, text.Length - positionbegin);
+                            parts.Add(p);
+                            return parts;
+                        }
+
                         var ch = text[positionend];
                         if (char.IsWhiteSpace(ch) || char.IsPunctuation(ch))
                         {
