@@ -26,7 +26,7 @@ namespace Xamarin.Essentials
             return tts;
         }
 
-        internal static Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
+        internal static async Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
         {
             using (var textToSpeech = GetTextToSpeech())
             {
@@ -34,7 +34,9 @@ namespace Xamarin.Essentials
                 if (Platform.HasApiLevel(BuildVersionCodes.JellyBeanMr2))
                     max = AndroidTextToSpeech.MaxSpeechInputLength;
 
-                return textToSpeech.SpeakAsync(text, max, settings, cancelToken);
+                // must await here else it will get collected.
+
+                await textToSpeech.SpeakAsync(text, max, settings, cancelToken);
             }
         }
 
@@ -45,7 +47,6 @@ namespace Xamarin.Essentials
         }
     }
 
-    [Preserve(AllMembers = true)]
     internal class TextToSpeechImplementation : Java.Lang.Object, AndroidTextToSpeech.IOnInitListener,
 #pragma warning disable CS0618
         AndroidTextToSpeech.IOnUtteranceCompletedListener
