@@ -10,7 +10,7 @@ namespace Xamarin.Essentials
     {
         internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
             Task.FromResult(AVSpeechSynthesisVoice.GetSpeechVoices()
-                .Select(v => new Locale(v.Language, null, v.Language)));
+                .Select(v => new Locale(v.Language, null, v.Language, v.Identifier)));
 
         internal static Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
         {

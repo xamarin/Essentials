@@ -13,7 +13,7 @@ namespace Xamarin.Essentials
     public static partial class TextToSpeech
     {
         internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
-            Task.FromResult(SpeechSynthesizer.AllVoices.Select(v => new Locale(v.Language, null, v.DisplayName)));
+            Task.FromResult(SpeechSynthesizer.AllVoices.Select(v => new Locale(v.Language, null, v.DisplayName, v.Id)));
 
         internal static async Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
         {
@@ -26,6 +26,12 @@ namespace Xamarin.Essentials
                 var ssml = GetSpeakParametersSSMLProsody(text, settings);
 
                 var speechSynthesizer = new SpeechSynthesizer();
+
+                if (!string.IsNullOrWhiteSpace(settings?.Locale.Id))
+                {
+                    var voiceInfo = SpeechSynthesizer.AllVoices.FirstOrDefault(v => v.Id == settings.Locale.Id) ?? SpeechSynthesizer.DefaultVoice;
+                    speechSynthesizer.Voice = voiceInfo;
+                }
 
                 var stream = await speechSynthesizer.SynthesizeSsmlToStreamAsync(ssml);
 

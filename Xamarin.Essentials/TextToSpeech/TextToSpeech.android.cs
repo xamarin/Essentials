@@ -45,6 +45,7 @@ namespace Xamarin.Essentials
         }
     }
 
+    [Preserve(AllMembers = true)]
     internal class TextToSpeechImplementation : Java.Lang.Object, AndroidTextToSpeech.IOnInitListener,
 #pragma warning disable CS0618
         AndroidTextToSpeech.IOnUtteranceCompletedListener
@@ -179,7 +180,7 @@ namespace Xamarin.Essentials
             {
                 try
                 {
-                    return tts.AvailableLanguages.Select(a => new Locale(a.Language, a.Country, a.DisplayName));
+                    return tts.AvailableLanguages.Select(a => new Locale(a.Language, a.Country, a.DisplayName, string.Empty));
                 }
                 catch
                 {
@@ -199,7 +200,7 @@ namespace Xamarin.Essentials
                         || r == LanguageAvailableResult.CountryAvailable
                         || r == LanguageAvailableResult.CountryVarAvailable)
                     {
-                        locales.Add(new Locale(l.Language, l.Country, l.DisplayName));
+                        locales.Add(new Locale(l.Language, l.Country, l.DisplayName, string.Empty));
                     }
                 }
                 catch

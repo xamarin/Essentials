@@ -71,11 +71,14 @@ namespace Xamarin.Essentials
 
         public string Name { get; }
 
-        internal Locale(string language, string country, string name)
+        public string Id { get; }
+
+        internal Locale(string language, string country, string name, string id)
         {
             Language = language;
             Country = country;
             Name = name;
+            Id = id;
         }
     }
 
