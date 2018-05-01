@@ -26,24 +26,28 @@ namespace Xamarin.Essentials
             return tts;
         }
 
-        internal static async Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
+        internal static Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
         {
-            using (var textToSpeech = GetTextToSpeech())
-            {
-                var max = maxSpeechInputLengthDefault;
-                if (Platform.HasApiLevel(BuildVersionCodes.JellyBeanMr2))
-                    max = AndroidTextToSpeech.MaxSpeechInputLength;
+            var textToSpeech = GetTextToSpeech();
 
-                // must await here else it will get collected.
+            if (textToSpeech == null)
+                throw new PlatformNotSupportedException("Unable to start text-to-speech engine, not supported on device.");
 
-                await textToSpeech.SpeakAsync(text, max, settings, cancelToken);
-            }
+            var max = maxSpeechInputLengthDefault;
+            if (Platform.HasApiLevel(BuildVersionCodes.JellyBeanMr2))
+                max = AndroidTextToSpeech.MaxSpeechInputLength;
+
+            return textToSpeech.SpeakAsync(text, max, settings, cancelToken);
         }
 
         internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync()
         {
-            using (var textToSpeech = GetTextToSpeech())
-                return textToSpeech.GetLocalesAsync();
+            var textToSpeech = GetTextToSpeech();
+
+            if (textToSpeech == null)
+                throw new PlatformNotSupportedException("Unable to start text-to-speech engine, not supported on device.");
+
+            return textToSpeech.GetLocalesAsync();
         }
     }
 
