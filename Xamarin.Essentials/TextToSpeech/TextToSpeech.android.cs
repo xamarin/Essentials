@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Android.OS;
 using Android.Speech.Tts;
 using AndroidTextToSpeech = Android.Speech.Tts.TextToSpeech;
+using JavaLocale = Java.Util.Locale;
 
 namespace Xamarin.Essentials
 {
@@ -123,8 +124,17 @@ namespace Xamarin.Essentials
 
             if (settings?.Locale.Language != null)
             {
-                var locale = new Java.Util.Locale(settings.Locale.Language);
+                JavaLocale locale = null;
+                if (!string.IsNullOrWhiteSpace(settings?.Locale.Country))
+                    locale = new JavaLocale(settings.Locale.Language, settings.Locale.Country);
+                else
+                    locale = new JavaLocale(settings.Locale.Language);
+
                 tts.SetLanguage(locale);
+            }
+            else
+            {
+                SetDefaultLanguage();
             }
 
             if (settings?.Pitch.HasValue ?? false)
@@ -187,33 +197,29 @@ namespace Xamarin.Essentials
                 {
                     return tts.AvailableLanguages.Select(a => new Locale(a.Language, a.Country, a.DisplayName, string.Empty));
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Console.WriteLine("Something went horribly wrong, defaulting to old implementation to get languages: " + ex);
                 }
             }
 
-            var locales = new List<Locale>();
-            var availableLocales = Java.Util.Locale.GetAvailableLocales();
-
-            foreach (var l in availableLocales)
-            {
-                try
+            return JavaLocale.GetAvailableLocales().
+                Where(l =>
                 {
-                    var r = tts.IsLanguageAvailable(l);
-
-                    if (r == LanguageAvailableResult.Available
-                        || r == LanguageAvailableResult.CountryAvailable
-                        || r == LanguageAvailableResult.CountryVarAvailable)
+                    try
                     {
-                        locales.Add(new Locale(l.Language, l.Country, l.DisplayName, string.Empty));
+                        var r = tts.IsLanguageAvailable(l);
+                        return r == LanguageAvailableResult.Available
+                            || r == LanguageAvailableResult.CountryAvailable
+                            || r == LanguageAvailableResult.CountryVarAvailable;
                     }
-                }
-                catch
-                {
-                }
-            }
-
-            return locales
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error checking language; " + l + " " + ex);
+                    }
+                    return false;
+                }).
+                Select(l => new Locale(l.Language, l.Country, l.DisplayName, string.Empty))
                 .GroupBy(c => c.ToString())
                 .Select(g => g.First());
         }
@@ -224,5 +230,31 @@ namespace Xamarin.Essentials
             if (numCompletedUtterances >= numExpectedUtterances)
                 tcsUtterances?.TrySetResult(true);
         }
+
+#pragma warning disable 0618
+        void SetDefaultLanguage()
+        {
+            if (Platform.HasApiLevel(BuildVersionCodes.JellyBeanMr2))
+            {
+                try
+                {
+                    if (tts.DefaultLanguage == null && tts.Language != null)
+                        tts.SetLanguage(tts.Language);
+                    else if (tts.DefaultLanguage != null)
+                        tts.SetLanguage(tts.DefaultLanguage);
+                }
+                catch
+                {
+                    if (tts.Language != null)
+                        tts.SetLanguage(tts.Language);
+                }
+            }
+            else
+            {
+                if (tts.Language != null)
+                    tts.SetLanguage(tts.Language);
+            }
+        }
+#pragma warning restore 0618
     }
 }
