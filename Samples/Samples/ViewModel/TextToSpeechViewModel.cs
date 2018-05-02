@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Samples.ViewModel;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -11,6 +10,13 @@ namespace Samples.ViewModel
     public class TextToSpeechViewModel : BaseViewModel
     {
         CancellationTokenSource cts;
+
+        string text;
+        bool advancedSettings;
+        float volume;
+        float pitch;
+        string locale = "Default";
+        Locale selectedLocale;
 
         public TextToSpeechViewModel()
         {
@@ -25,6 +31,13 @@ namespace Samples.ViewModel
             Pitch = 1.0f;
         }
 
+        public override void OnDisappearing()
+        {
+            OnCancel();
+
+            base.OnDisappearing();
+        }
+
         void OnSpeak(bool multiple)
         {
             if (IsBusy)
@@ -34,27 +47,32 @@ namespace Samples.ViewModel
 
             cts = new CancellationTokenSource();
 
-            var settings = AdvancedSettings ?
-            new SpeakSettings()
+            SpeakSettings settings = null;
+            if (AdvancedSettings)
             {
-                Volume = Volume,
-                Pitch = Pitch,
-                Locale = selectedLocale
+                settings = new SpeakSettings
+                {
+                    Volume = Volume,
+                    Pitch = Pitch,
+                    Locale = selectedLocale
+                };
             }
-            : null;
 
+            Task speaks = null;
             if (multiple)
             {
-                Task.WhenAll(
+                speaks = Task.WhenAll(
                     TextToSpeech.SpeakAsync(Text + " 1 ", settings, cancelToken: cts.Token),
                     TextToSpeech.SpeakAsync(Text + " 2 ", settings, cancelToken: cts.Token),
-                    TextToSpeech.SpeakAsync(Text + " 3 ", settings, cancelToken: cts.Token))
-                    .ContinueWith((t) => { IsBusy = false; });
+                    TextToSpeech.SpeakAsync(Text + " 3 ", settings, cancelToken: cts.Token));
             }
             else
             {
-                TextToSpeech.SpeakAsync(Text, settings, cts.Token).ContinueWith((t) => { IsBusy = false; });
+                speaks = TextToSpeech.SpeakAsync(Text, settings, cts.Token);
             }
+
+            // use ContinueWith so we don't have to catch the cancelled exceptions
+            speaks.ContinueWith(t => IsBusy = false);
         }
 
         void OnCancel()
@@ -67,13 +85,14 @@ namespace Samples.ViewModel
             IsBusy = false;
         }
 
-        Locale selectedLocale;
-
         async Task OnPickLocale()
         {
-            var items = await TextToSpeech.GetLocalesAsync();
-            var result = await Application.Current.MainPage.DisplayActionSheet("Pick", "OK", null, items.Select(i => i.Name).ToArray());
-            selectedLocale = items.FirstOrDefault(i => i.Name == result);
+            var locales = await TextToSpeech.GetLocalesAsync();
+            var names = locales.Select(i => i.Name).ToArray();
+
+            var result = await Application.Current.MainPage.DisplayActionSheet("Pick", "OK", null, names);
+
+            selectedLocale = locales.FirstOrDefault(i => i.Name == result);
             Locale = (result == "OK" || string.IsNullOrEmpty(result)) ? "Default" : result;
         }
 
@@ -83,15 +102,11 @@ namespace Samples.ViewModel
 
         public ICommand PickLocaleCommand { get; }
 
-        string text;
-
         public string Text
         {
             get => text;
             set => SetProperty(ref text, value);
         }
-
-        bool advancedSettings;
 
         public bool AdvancedSettings
         {
@@ -99,23 +114,17 @@ namespace Samples.ViewModel
             set => SetProperty(ref advancedSettings, value);
         }
 
-        float volume;
-
         public float Volume
         {
             get => volume;
             set => SetProperty(ref volume, value);
         }
 
-        float pitch;
-
         public float Pitch
         {
             get => pitch;
             set => SetProperty(ref pitch, value);
         }
-
-        string locale = "Default";
 
         public string Locale
         {
