@@ -9,7 +9,7 @@ namespace Xamarin.Essentials
     public static partial class SecureStorage
     {
         public static SecAccessible DefaultAccessible { get; set; } =
-            SecAccessible.AfterFirstUnlockThisDeviceOnly;
+            SecAccessible.AfterFirstUnlock;
 
         public static Task<string> GetAsync(string key, SecAccessible accessible)
         {
