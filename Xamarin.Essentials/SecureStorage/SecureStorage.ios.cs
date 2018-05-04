@@ -8,6 +8,9 @@ namespace Xamarin.Essentials
 {
     public static partial class SecureStorage
     {
+        public static SecAccessible DefaultAccessible { get; set; } =
+            SecAccessible.AfterFirstUnlockThisDeviceOnly;
+
         public static Task<string> GetAsync(string key, SecAccessible accessible)
         {
             if (string.IsNullOrWhiteSpace(key))
@@ -33,10 +36,10 @@ namespace Xamarin.Essentials
         }
 
         static Task<string> PlatformGetAsync(string key) =>
-            GetAsync(key, SecAccessible.AfterFirstUnlockThisDeviceOnly);
+            GetAsync(key, DefaultAccessible);
 
         static Task PlatformSetAsync(string key, string data) =>
-            SetAsync(key, data, SecAccessible.AfterFirstUnlockThisDeviceOnly);
+            SetAsync(key, data, DefaultAccessible);
     }
 
     class KeyChain
