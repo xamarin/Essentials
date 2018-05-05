@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
                 var can = MFMailComposeViewController.CanSendMail;
                 if (!can)
                 {
-                    var url = NSUrl.FromString("mailto://?to=test@xamarin.com");
+                    var url = NSUrl.FromString("mailto:");
                     NSRunLoop.Main.InvokeOnMainThread(() => can = UIApplication.SharedApplication.CanOpenUrl(url));
                 }
                 return can;
@@ -63,28 +63,13 @@ namespace Xamarin.Essentials
 
         static Task ComposeWithUrl(EmailMessage message)
         {
-            if (message != null && message.BodyFormat != EmailBodyFormat.PlainText)
-                throw new FeatureNotSupportedException("iOS can only compose plain text email messages when a default email account is not set up.");
-
-            var parts = new List<string>();
-            if (!string.IsNullOrEmpty(message?.Body))
-                parts.Add("body=" + Uri.EscapeUriString(message.Body));
-            if (!string.IsNullOrEmpty(message?.Subject))
-                parts.Add("subject=" + Uri.EscapeUriString(message.Subject));
-            if (message?.To.Count > 0)
-                parts.Add("to=" + string.Join(",", message.To));
-            if (message?.Cc.Count > 0)
-                parts.Add("cc=" + string.Join(",", message.Cc));
-            if (message?.Bcc.Count > 0)
-                parts.Add("bcc=" + string.Join(",", message.Bcc));
-
-            var url = "mailto://?" + string.Join("&", parts);
+            var url = GetMailToUri(message);
 
             var tcs = new TaskCompletionSource<bool>();
             NSRunLoop.Main.InvokeOnMainThread(() =>
             {
                 var nsurl = NSUrl.FromString(url);
-                UIApplication.SharedApplication.OpenUrl(nsurl, (NSDictionary)null, r => tcs.TrySetResult(r));
+                UIApplication.SharedApplication.OpenUrl(nsurl, new UIApplicationOpenUrlOptions(), r => tcs.TrySetResult(r));
             });
             return tcs.Task;
         }
