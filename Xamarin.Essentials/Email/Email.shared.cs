@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,7 +24,7 @@ namespace Xamarin.Essentials
         static string GetMailToUri(EmailMessage message)
         {
             if (message != null && message.BodyFormat != EmailBodyFormat.PlainText)
-                throw new Exception("Only EmailBodyFormat.PlainText is supported if no email account is set up.");
+                throw new FeatureNotSupportedException("Only EmailBodyFormat.PlainText is supported if no email account is set up.");
 
             var parts = new List<string>();
             if (!string.IsNullOrEmpty(message?.Body))
