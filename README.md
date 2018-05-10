@@ -15,7 +15,9 @@ iOS, Android, and UWP offer unique operating system and platform APIs that devel
 | Jenkins      | Device Tests | macOS    | [![Build Status](https://jenkins.mono-project.com/buildStatus/icon?job=Components-Essentials-DeviceTests-Mac)](https://jenkins.mono-project.com/job/Components-Essentials-DeviceTests-Mac) |
 
 ## Installation
-Xamarin.Essentials is available on NuGet: [![NuGet](https://img.shields.io/nuget/vpre/Xamarin.Essentials.svg?label=NuGet)](https://www.nuget.org/packages/Xamarin.Essentials)
+Xamarin.Essentials is available via:
+* NuGet Official Releases: [![NuGet](https://img.shields.io/nuget/vpre/Xamarin.Essentials.svg?label=NuGet)](https://www.nuget.org/packages/Xamarin.Essentials)
+* MyGet Development Feed: https://www.myget.org/F/xamarin-essentials/api/v3/index.json
 
 Please read our [Getting Started with Xamarin.Essentials guide](https://docs.microsoft.com/xamarin/essentials/get-started) for full setup instructions.
 
