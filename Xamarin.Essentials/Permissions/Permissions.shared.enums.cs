@@ -24,6 +24,7 @@
         Battery,
         Camera,
         Flashlight,
+        LaunchApp,
         LocationWhenInUse,
         NetworkState,
         Vibrate,
