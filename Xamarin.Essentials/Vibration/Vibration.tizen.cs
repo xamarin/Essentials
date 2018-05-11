@@ -1,16 +1,18 @@
 ﻿using System;
+using System.Linq;
+using Tizen.System;
 
 namespace Xamarin.Essentials
 {
     public static partial class Vibration
     {
         internal static bool IsSupported
-            => throw new NotImplementedInReferenceAssemblyException();
+            => Vibrator.NumberOfVibrators > 0;
 
         static void PlatformVibrate(TimeSpan duration)
-            => throw new NotImplementedInReferenceAssemblyException();
+            => Vibrator.Vibrators.FirstOrDefault()?.Vibrate((int)duration.TotalMilliseconds, 0);
 
         static void PlatformCancel()
-            => throw new NotImplementedInReferenceAssemblyException();
+            => Vibrator.Vibrators.FirstOrDefault()?.Stop();
     }
 }
