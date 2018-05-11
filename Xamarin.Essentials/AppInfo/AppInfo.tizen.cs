@@ -12,17 +12,7 @@ namespace Xamarin.Essentials
             => Application.Current.ApplicationInfo.Label;
 
         static string GetVersionString()
-        {
-            try
-            {
-                var packageId = Application.Current.ApplicationInfo.PackageId;
-                return PackageManager.GetPackage(packageId).Version;
-            }
-            catch
-            {
-                return string.Empty;
-            }
-        }
+            => Platform.CurrentPackage.Version;
 
         static string GetBuild()
             => Version.Build.ToString(CultureInfo.InvariantCulture);
