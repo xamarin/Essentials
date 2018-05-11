@@ -1,11 +1,21 @@
 ﻿using System;
 using ElmSharp;
+using Tizen.Applications;
 using Tizen.System;
 
 namespace Xamarin.Essentials
 {
     public static partial class Platform
     {
+        internal static Package CurrentPackage
+        {
+            get
+            {
+                var packageId = Application.Current.ApplicationInfo.PackageId;
+                return PackageManager.GetPackage(packageId);
+            }
+        }
+
         static void PlatformBeginInvokeOnMainThread(Action action)
         {
             if (EcoreMainloop.IsMainThread)
