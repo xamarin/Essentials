@@ -16,7 +16,7 @@
       <para>Each platform uses the platform provided native API's for storing data securely:</para>
       <list type="bullet">
         <item>
-          <term>iOS: Data is stored in KeyChain.</term>
+          <term>iOS: Data is stored in KeyChain. Additional information on SecAccessible at: <see cref="https://developer.xamarin.com/api/type/Security.SecAccessible/" /></term>
         </item>
         <item>
           <term>Android: Encryption keys are stored in KeyStore and encrypted data is stored in a named shared preference container (PackageId.Xamarin.Essentials).</term>
@@ -42,9 +42,9 @@
         <ReturnType>Security.SecAccessible</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>iOS: Default SecAccessible to use for all Get/Set calls to KeyChain. Default value is AfterFirstUnlock.</summary>
+        <value>The SecAccessible to use for all KeyChain access.</value>
+        <remarks>For more information see: <see cref="https://developer.xamarin.com/api/type/Security.SecAccessible/" /></remarks>
       </Docs>
     </Member>
     <Member MemberName="GetAsync">
@@ -66,7 +66,9 @@
         <param name="key">Storage Key.</param>
         <summary>Gets the decrypted value for a given Key.</summary>
         <returns>Decrypted string.</returns>
-        <remarks></remarks>
+        <remarks>
+          <para></para>
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="GetAsync">
@@ -86,11 +88,13 @@
         <Parameter Name="accessible" Type="Security.SecAccessible" />
       </Parameters>
       <Docs>
-        <param name="key">To be added.</param>
-        <param name="accessible">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="key">Storage Key.</param>
+        <param name="accessible">SecAccessible for iOS to use</param>
+        <summary>Gets the decrypted value for a given Key. iOS override to specify SecAccessible for the KeyChain.</summary>
+        <returns>iOS: Default SecAccessible to use for all Get/Set calls to KeyChain. Default value is AfterFirstUnlock.</returns>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="SetAsync">
@@ -113,8 +117,12 @@
         <param name="key">Storage Key.</param>
         <param name="value">The value to be encrypted.</param>
         <summary>Stores the value which is encrypted, for a given Key.</summary>
-        <returns></returns>
-        <remarks></remarks>
+        <returns>
+          <para></para>
+        </returns>
+        <remarks>
+          <para></para>
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="SetAsync">
@@ -135,12 +143,14 @@
         <Parameter Name="accessible" Type="Security.SecAccessible" />
       </Parameters>
       <Docs>
-        <param name="key">To be added.</param>
+        <param name="key">Storage Key.</param>
         <param name="value">To be added.</param>
         <param name="accessible">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <summary>Stores the value which is encrypted, for a given Key. iOS override to specify SecAccessible for the KeyChain.</summary>
+        <returns>Stores the value which is encrypted, for a given Key. iOS override to specify SecAccessible for the KeyChain.</returns>
+        <remarks>
+          <para></para>
+        </remarks>
       </Docs>
     </Member>
   </Members>
