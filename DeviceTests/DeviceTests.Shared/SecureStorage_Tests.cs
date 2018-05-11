@@ -20,10 +20,6 @@ namespace DeviceTests
         public async Task Saves_And_Loads(string key, string data, bool emulatePreApi23)
         {
 #if __IOS__
-            // TODO: we don't know how to write iOS apps, it appears, so just skip for now
-            if (DeviceInfo.DeviceType == DeviceType.Virtual)
-                return;
-
             // Try the new platform specific api
             await SecureStorage.SetAsync(key, data, Security.SecAccessible.AfterFirstUnlock);
 
