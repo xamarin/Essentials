@@ -5,19 +5,26 @@ namespace Xamarin.Essentials
 {
     public static partial class AppInfo
     {
-        static string PlatformGetPackageName()
+        static string GetPackageName()
             => Application.Current.ApplicationInfo.PackageId;
 
-        static string PlatformGetName()
+        static string GetName()
             => Application.Current.ApplicationInfo.Label;
 
-        static string PlatformGetVersionString()
-            => Platform.CurrentPackage.Version;
+        static string GetVersionString()
+        {
+            try
+            {
+                var packageId = Application.Current.ApplicationInfo.PackageId;
+                return PackageManager.GetPackage(packageId).Version;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
 
-        static string PlatformGetBuild()
+        static string GetBuild()
             => Version.Build.ToString(CultureInfo.InvariantCulture);
-
-        static void PlatformOpenSettings()
-            => throw new NotImplementedInReferenceAssemblyException();
     }
 }
