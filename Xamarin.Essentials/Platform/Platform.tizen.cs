@@ -14,11 +14,7 @@ namespace Xamarin.Essentials
                 EcoreMainloop.PostAndWakeUp(action);
         }
 
-        internal static string GetSystemInfo(string item)
-        {
-            Information.TryGetValue<string>($"http://tizen.org/system/{item}", out var value);
-            return value;
-        }
+        internal static string GetSystemInfo(string item) => GetSystemInfo<string>(item);
 
         internal static T GetSystemInfo<T>(string item)
         {
@@ -26,11 +22,7 @@ namespace Xamarin.Essentials
             return value;
         }
 
-        internal static string GetFeatureInfo(string item)
-        {
-            Information.TryGetValue<string>($"http://tizen.org/feature/{item}", out var value);
-            return value;
-        }
+        internal static string GetFeatureInfo(string item) => GetFeatureInfo<string>(item);
 
         internal static T GetFeatureInfo<T>(string item)
         {
