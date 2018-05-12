@@ -73,10 +73,6 @@
     <Compile Include="**\*.ios.cs" />
     <Compile Include="**\*.ios.*.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="OrientationSensor\OrientationSensor.netstandard.cs" />
-    <None Remove="OrientationSensor\OrientationSensor.shared.cs" />
-  </ItemGroup>
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
   <Import Project="$(MSBuildThisFileDirectory)mdoc.targets" />
   <Import Project="$(MSBuildThisFileDirectory)..\CodeStyles.targets" />

@@ -21,12 +21,6 @@
     <ProjectReference Include="..\..\Xamarin.Essentials\Xamarin.Essentials.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Update="View\OrientationSensorPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  
   <Import Project="$(MSBuildThisFileDirectory)..\..\CodeStyles.targets" />
 
 </Project>
