@@ -13,10 +13,6 @@ namespace DeviceTests
         [InlineData("test.txt2", "data2", false)]
         [InlineData("noextension2", "data22", false)]
         [InlineData("funny*&$%@!._/\\chars2", "data32", false)]
-#if __IOS__
-        // TODO: the iOS simulators have issues with the way we set up our tests... we need to fix that
-        [Trait(Traits.DeviceType, Traits.DeviceTypes.Physical)]
-#endif
         public async Task Saves_And_Loads(string key, string data, bool emulatePreApi23)
         {
 #if __IOS__
