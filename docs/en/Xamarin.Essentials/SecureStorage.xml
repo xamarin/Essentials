@@ -91,10 +91,10 @@
         <param name="key">Storage Key.</param>
         <param name="accessible">SecAccessible for iOS to use</param>
         <summary>Gets the decrypted value for a given Key. iOS override to specify SecAccessible for the KeyChain.</summary>
-        <returns>iOS: Default SecAccessible to use for all Get/Set calls to KeyChain. Default value is AfterFirstUnlock.</returns>
-        <remarks>
-          <para />
-        </remarks>
+        <returns>
+          <para></para>
+        </returns>
+        <remarks>iOS: Default SecAccessible to use for all Get/Set calls to KeyChain. Default value is AfterFirstUnlock.</remarks>
       </Docs>
     </Member>
     <Member MemberName="SetAsync">
@@ -144,10 +144,12 @@
       </Parameters>
       <Docs>
         <param name="key">Storage Key.</param>
-        <param name="value">To be added.</param>
+        <param name="value">The value to be encrypted.</param>
         <param name="accessible">To be added.</param>
         <summary>Stores the value which is encrypted, for a given Key. iOS override to specify SecAccessible for the KeyChain.</summary>
-        <returns>Stores the value which is encrypted, for a given Key. iOS override to specify SecAccessible for the KeyChain.</returns>
+        <returns>
+          <para></para>
+        </returns>
         <remarks>
           <para></para>
         </remarks>
