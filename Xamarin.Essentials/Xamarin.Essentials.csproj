@@ -21,8 +21,8 @@
     <Owners>microsoft,Xamarin,XamarinNuGet</Owners>
     <NeutralLanguage>en</NeutralLanguage>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
-    <RepositoryUrl>https://github.com/xamarin/Xamarin.Essentials</RepositoryUrl>
-    <PackageReleaseNotes>See: https://github.com/xamarin/Xamarin.Essentials</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/xamarin/Essentials</RepositoryUrl>
+    <PackageReleaseNotes>See: https://github.com/xamarin/Essentials</PackageReleaseNotes>
     <LangVersion>7.1</LangVersion>
     <DefineConstants>$(DefineConstants);</DefineConstants>
     <UseFullSemVerForNuGet>false</UseFullSemVerForNuGet>
