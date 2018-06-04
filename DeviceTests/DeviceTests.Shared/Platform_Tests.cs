@@ -14,5 +14,14 @@ namespace DeviceTests
                 Assert.True(Platform.IsMainThread);
             });
         }
+
+        [Fact]
+        public Task IsNotOnMainThread()
+        {
+            return Task.Run(() =>
+            {
+                Assert.False(Platform.IsMainThread);
+            });
+        }
     }
 }
