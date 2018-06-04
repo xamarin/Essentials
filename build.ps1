@@ -17,15 +17,15 @@ if ($IsMacOS) {
 Write-Output "Using MSBuild from: $msbuild"
 
 # Build the projects
-& $msbuild "./Xamarin.Essentials.sln" /restore /t:Build /p:Configuration=Release /p:ContinuousIntegrationBuild=true
+& $msbuild "./Xamarin.Essentials.sln" /restore /t:Build /p:Configuration=Release /p:ContinuousIntegrationBuild=true /p:Deterministic=false
 if ($lastexitcode -ne 0) { exit $lastexitcode; }
 
 # Create the stable NuGet package
-& $msbuild "./Xamarin.Essentials/Xamarin.Essentials.csproj" /t:Pack /p:Configuration=Release /p:ContinuousIntegrationBuild=true /p:VersionSuffix=".$env:BUILD_NUMBER"
+& $msbuild "./Xamarin.Essentials/Xamarin.Essentials.csproj" /t:Pack /p:Configuration=Release /p:ContinuousIntegrationBuild=true /p:Deterministic=false /p:VersionSuffix=".$env:BUILD_NUMBER"
 if ($lastexitcode -ne 0) { exit $lastexitcode; }
 
 # Create the beta NuGet package
-& $msbuild "./Xamarin.Essentials/Xamarin.Essentials.csproj" /t:Pack /p:Configuration=Release /p:ContinuousIntegrationBuild=true /p:VersionSuffix=".$env:BUILD_NUMBER-beta"
+& $msbuild "./Xamarin.Essentials/Xamarin.Essentials.csproj" /t:Pack /p:Configuration=Release /p:ContinuousIntegrationBuild=true /p:Deterministic=false /p:VersionSuffix=".$env:BUILD_NUMBER-beta"
 if ($lastexitcode -ne 0) { exit $lastexitcode; }
 
 # Copy everything into the output folder
