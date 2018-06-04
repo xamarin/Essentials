@@ -47,7 +47,7 @@
   <ItemGroup>
     <PackageReference Include="mdoc" Version="5.6.4" PrivateAssets="All" />
     <PackageReference Include="MSBuild.Sdk.Extras" Version="1.4.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-62909-01" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-62925-02" PrivateAssets="All"/>
     <PackageReference Include="System.Numerics.Vectors" Version="4.4.0" />
     <Compile Include="**\*.shared.cs" />
     <Compile Include="**\*.shared.*.cs" />
