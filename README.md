@@ -23,7 +23,7 @@ Please read our [Getting Started with Xamarin.Essentials guide](https://docs.mic
 
 ## Documentation
 
-Browser our [full documentation for Xamarin.Essentials](https://docs.microsoft.com/xamarin/essentials) including feature guides on how to use each feature.
+Browse our [full documentation for Xamarin.Essentials](https://docs.microsoft.com/xamarin/essentials) including feature guides on how to use each feature.
 
 ## Supported Platforms
 Xamarin.Essentials is focused on the following platforms for our first release:
@@ -40,9 +40,10 @@ The following cross-platform APIs are planned for our first release:
  - [x] [Compass](https://docs.microsoft.com/xamarin/essentials/compass)
  - [x] [Connectivity](https://docs.microsoft.com/xamarin/essentials/connectivity)
  - [x] [Data Transfer](https://docs.microsoft.com/xamarin/essentials/data-transfer)
+ - [x] [Device Display Information](https://docs.microsoft.com/en-us/xamarin/essentials/device-display)
  - [x] [Device Information](https://docs.microsoft.com/xamarin/essentials/device-information)
- - [x] [File System Helpers](https://docs.microsoft.com/xamarin/essentials/file-system-helpers)
  - [x] [Email](https://docs.microsoft.com/xamarin/essentials/email)
+ - [x] [File System Helpers](https://docs.microsoft.com/xamarin/essentials/file-system-helpers)
  - [x] [Flashlight](https://docs.microsoft.com/xamarin/essentials/flashlight)
  - [x] [Geocoding](https://docs.microsoft.com/xamarin/essentials/geocoding)
  - [x] [Geolocation](https://docs.microsoft.com/xamarin/essentials/geolocation)
