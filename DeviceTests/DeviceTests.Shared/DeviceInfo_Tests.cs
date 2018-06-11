@@ -54,6 +54,10 @@ namespace DeviceTests
         }
 
         [Fact]
+        public void App_Is_Not_Lower_Power_mode() =>
+            Assert.False(DeviceInfo.IsLowPowerModeEnabled);
+
+        [Fact]
         public void App_Build_Is_Correct()
         {
             Assert.Equal("1", AppInfo.BuildString);
