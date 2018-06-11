@@ -104,5 +104,13 @@ namespace Xamarin.Essentials
 
         static string GetSystemSetting(string name)
            => Settings.System.GetString(Essentials.Platform.AppContext.ContentResolver, name);
+
+        static bool GetIsLowPowerModeEnabled()
+        {
+            if (Essentials.Platform.HasApiLevel(BuildVersionCodes.Lollipop))
+                return Essentials.Platform.PowerManager?.IsPowerSaveMode ?? false;
+
+            return false;
+        }
     }
 }

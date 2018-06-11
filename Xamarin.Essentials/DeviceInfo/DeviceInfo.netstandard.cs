@@ -15,5 +15,7 @@
         static string GetIdiom() => throw new NotImplementedInReferenceAssemblyException();
 
         static DeviceType GetDeviceType() => throw new NotImplementedInReferenceAssemblyException();
+
+        static bool GetIsLowPowerModeEnabled() => throw new NotImplementedInReferenceAssemblyException();
     }
 }

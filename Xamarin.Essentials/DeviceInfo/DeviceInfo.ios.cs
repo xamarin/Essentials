@@ -35,5 +35,8 @@ namespace Xamarin.Essentials
 
         static DeviceType GetDeviceType()
             => Runtime.Arch == Arch.DEVICE ? DeviceType.Physical : DeviceType.Virtual;
+
+        static bool GetIsLowPowerModeEnabled() =>
+            NSProcessInfo.ProcessInfo?.LowPowerModeEnabled ?? false;
     }
 }

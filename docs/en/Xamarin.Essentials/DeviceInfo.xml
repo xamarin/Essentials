@@ -13,7 +13,7 @@
   <Docs>
     <summary>Represents information about the device.</summary>
     <remarks>
-      <para />
+      <para></para>
     </remarks>
   </Docs>
   <Members>
@@ -33,7 +33,7 @@
         <summary>Gets the type of device the application is running on.</summary>
         <value>The device type.</value>
         <remarks>
-          <para />
+          <para></para>
         </remarks>
       </Docs>
     </Member>
@@ -57,6 +57,24 @@
         </remarks>
       </Docs>
     </Member>
+    <Member MemberName="IsLowPowerModeEnabled">
+      <MemberSignature Language="C#" Value="public static bool IsLowPowerModeEnabled { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property bool IsLowPowerModeEnabled" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.DeviceInfo.IsLowPowerModeEnabled" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Gets if the device is in power save or low power mode.</summary>
+        <value>To be added.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
     <Member MemberName="Manufacturer">
       <MemberSignature Language="C#" Value="public static string Manufacturer { get; }" />
       <MemberSignature Language="ILAsm" Value=".property string Manufacturer" />
@@ -73,7 +91,7 @@
         <summary>Gets the manufacturer of the device.</summary>
         <value>Device manufacturer.</value>
         <remarks>
-          <para />
+          <para></para>
         </remarks>
       </Docs>
     </Member>
@@ -93,7 +111,7 @@
         <summary>Gets the model of the device.</summary>
         <value>Device model.</value>
         <remarks>
-          <para />
+          <para></para>
         </remarks>
       </Docs>
     </Member>
@@ -133,7 +151,7 @@
         <summary>Gets the platform or operating system of the device.</summary>
         <value>The platform of device.</value>
         <remarks>
-          <para />
+          <para></para>
         </remarks>
       </Docs>
     </Member>
@@ -153,7 +171,7 @@
         <summary>Gets the version of the operating system.</summary>
         <value>The device operating system.</value>
         <remarks>
-          <para />
+          <para></para>
         </remarks>
       </Docs>
     </Member>
@@ -173,7 +191,7 @@
         <summary>Gets the version of the operating system.</summary>
         <value>The version of the operating system.</value>
         <remarks>
-          <para />
+          <para></para>
         </remarks>
       </Docs>
     </Member>

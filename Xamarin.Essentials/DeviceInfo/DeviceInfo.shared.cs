@@ -20,6 +20,8 @@ namespace Xamarin.Essentials
 
         public static DeviceType DeviceType => GetDeviceType();
 
+        public static bool IsLowPowerModeEnabled => GetIsLowPowerModeEnabled();
+
         public static class Idioms
         {
             // try to match Xamarin.Forms:

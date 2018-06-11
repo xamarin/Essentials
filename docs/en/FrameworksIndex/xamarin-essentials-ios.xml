@@ -106,6 +106,7 @@
     <Type Name="Xamarin.Essentials.DeviceInfo" Id="T:Xamarin.Essentials.DeviceInfo">
       <Member Id="P:Xamarin.Essentials.DeviceInfo.DeviceType" />
       <Member Id="P:Xamarin.Essentials.DeviceInfo.Idiom" />
+      <Member Id="P:Xamarin.Essentials.DeviceInfo.IsLowPowerModeEnabled" />
       <Member Id="P:Xamarin.Essentials.DeviceInfo.Manufacturer" />
       <Member Id="P:Xamarin.Essentials.DeviceInfo.Model" />
       <Member Id="P:Xamarin.Essentials.DeviceInfo.Name" />
