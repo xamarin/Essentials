@@ -1,20 +1,12 @@
-﻿using Windows.System.Power;
-
-namespace Xamarin.Essentials
+﻿namespace Xamarin.Essentials
 {
     public static partial class Battery
     {
-        static void StartBatteryListeners()
-        {
+        static void StartBatteryListeners() =>
             DefaultBattery.ReportUpdated += ReportUpdated;
-            PowerManager.EnergySaverStatusChanged += ReportUpdated;
-        }
 
-        static void StopBatteryListeners()
-        {
+        static void StopBatteryListeners() =>
             DefaultBattery.ReportUpdated -= ReportUpdated;
-            PowerManager.EnergySaverStatusChanged -= ReportUpdated;
-        }
 
         static void ReportUpdated(object sender, object e)
             => Platform.BeginInvokeOnMainThread(OnBatteryChanged);
@@ -83,8 +75,5 @@ namespace Xamarin.Essentials
                 }
             }
         }
-
-        static EnergySaverStatus PlatformEnergySaverStatus =>
-            PowerManager.EnergySaverStatus == Windows.System.Power.EnergySaverStatus.On ? EnergySaverStatus.On : EnergySaverStatus.Off;
     }
 }

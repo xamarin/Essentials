@@ -14,20 +14,27 @@ namespace Samples.ViewModel
 
         public BatteryPowerSource PowerSource => Battery.PowerSource;
 
-        public EnergySaverStatus EnergySaverStatus => Battery.EnergySaverStatus;
+        public EnergySaverStatus EnergySaverStatus => Power.EnergySaverStatus;
 
         public override void OnAppearing()
         {
             base.OnAppearing();
 
             Battery.BatteryChanged += OnBatteryChanged;
+            Power.EnergySaverStatusChanaged += OnEnergySaverStatusChanaged;
         }
 
         public override void OnDisappearing()
         {
             Battery.BatteryChanged -= OnBatteryChanged;
+            Power.EnergySaverStatusChanaged -= OnEnergySaverStatusChanaged;
 
             base.OnDisappearing();
+        }
+
+        void OnEnergySaverStatusChanaged(EnergySaverStatusChanagedEventArgs e)
+        {
+            OnPropertyChanged(nameof(EnergySaverStatus));
         }
 
         void OnBatteryChanged(BatteryChangedEventArgs e)
@@ -35,7 +42,6 @@ namespace Samples.ViewModel
             OnPropertyChanged(nameof(Level));
             OnPropertyChanged(nameof(State));
             OnPropertyChanged(nameof(PowerSource));
-            OnPropertyChanged(nameof(EnergySaverStatus));
         }
     }
 }

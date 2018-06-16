@@ -11,15 +11,12 @@ namespace Xamarin.Essentials
         static double currentLevel;
         static BatteryPowerSource currentSource;
         static BatteryState currentState;
-        static EnergySaverStatus currentSaverStatus;
 
         public static double ChargeLevel => PlatformChargeLevel;
 
         public static BatteryState State => PlatformState;
 
         public static BatteryPowerSource PowerSource => PlatformPowerSource;
-
-        public static EnergySaverStatus EnergySaverStatus => PlatformEnergySaverStatus;
 
         public static event BatteryChangedEventHandler BatteryChanged
         {
@@ -52,18 +49,17 @@ namespace Xamarin.Essentials
             currentLevel = Battery.ChargeLevel;
             currentSource = Battery.PowerSource;
             currentState = Battery.State;
-            currentSaverStatus = Battery.EnergySaverStatus;
         }
 
-        static void OnBatteryChanged(double level, BatteryState state, BatteryPowerSource source, EnergySaverStatus saverStatus)
-            => OnBatteryChanged(new BatteryChangedEventArgs(level, state, source, saverStatus));
+        static void OnBatteryChanged(double level, BatteryState state, BatteryPowerSource source)
+            => OnBatteryChanged(new BatteryChangedEventArgs(level, state, source));
 
         static void OnBatteryChanged()
-            => OnBatteryChanged(ChargeLevel, State, PowerSource, EnergySaverStatus);
+            => OnBatteryChanged(ChargeLevel, State, PowerSource);
 
         static void OnBatteryChanged(BatteryChangedEventArgs e)
         {
-            if (currentLevel != e.ChargeLevel || currentSource != e.PowerSource || currentState != e.State || currentSaverStatus != e.EnergySaverStatus)
+            if (currentLevel != e.ChargeLevel || currentSource != e.PowerSource || currentState != e.State)
             {
                 SetCurrent();
                 BatteryChanagedInternal?.Invoke(e);
@@ -90,23 +86,15 @@ namespace Xamarin.Essentials
         Wireless
     }
 
-    public enum EnergySaverStatus
-    {
-        Unknown,
-        On,
-        Off
-    }
-
     public delegate void BatteryChangedEventHandler(BatteryChangedEventArgs e);
 
     public class BatteryChangedEventArgs : EventArgs
     {
-        internal BatteryChangedEventArgs(double level, BatteryState state, BatteryPowerSource source, EnergySaverStatus saverStatus)
+        internal BatteryChangedEventArgs(double level, BatteryState state, BatteryPowerSource source)
         {
             ChargeLevel = level;
             State = state;
             PowerSource = source;
-            EnergySaverStatus = saverStatus;
         }
 
         public double ChargeLevel { get; }
@@ -114,7 +102,5 @@ namespace Xamarin.Essentials
         public BatteryState State { get; }
 
         public BatteryPowerSource PowerSource { get; }
-
-        public EnergySaverStatus EnergySaverStatus { get; }
     }
 }
