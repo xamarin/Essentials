@@ -4,7 +4,7 @@ using Xunit;
 namespace DeviceTests
 {
     // TEST NOTES:
-    //   - these tests require a battery to be present
+    //   - many of these tests require a battery to be present
     public class Battery_Tests
     {
         [Fact]
@@ -41,6 +41,12 @@ namespace DeviceTests
                 return;
 
             Assert.NotEqual(BatteryPowerSource.Unknown, Battery.PowerSource);
+        }
+
+        [Fact]
+        public void App_Is_Not_Lower_Power_mode()
+        {
+            Assert.Equal(EnergySaverStatus.Off, Battery.EnergySaverStatus);
         }
     }
 }

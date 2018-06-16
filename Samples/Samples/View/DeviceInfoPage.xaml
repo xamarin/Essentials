@@ -21,7 +21,6 @@
                 <Label Text="{Binding Platform, StringFormat='Platform: {0}'}" />
                 <Label Text="{Binding Idiom, StringFormat='Idiom: {0}'}" />
                 <Label Text="{Binding DeviceType, StringFormat='Device Type: {0}'}" />
-                <Label Text="{Binding LowPowerMode, StringFormat='Low Power Mode: {0}'}" />
 
                 <Label Text="Screen Metrics:" FontAttributes="Bold" Margin="0,6,0,0" />
                 <Label Text="{Binding ScreenMetrics.Width, StringFormat='Width: {0}'}" />

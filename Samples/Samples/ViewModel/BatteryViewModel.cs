@@ -14,6 +14,8 @@ namespace Samples.ViewModel
 
         public BatteryPowerSource PowerSource => Battery.PowerSource;
 
+        public EnergySaverStatus EnergySaverStatus => Battery.EnergySaverStatus;
+
         public override void OnAppearing()
         {
             base.OnAppearing();
@@ -33,6 +35,7 @@ namespace Samples.ViewModel
             OnPropertyChanged(nameof(Level));
             OnPropertyChanged(nameof(State));
             OnPropertyChanged(nameof(PowerSource));
+            OnPropertyChanged(nameof(EnergySaverStatus));
         }
     }
 }

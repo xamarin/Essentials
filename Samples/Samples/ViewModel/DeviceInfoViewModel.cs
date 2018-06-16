@@ -18,8 +18,6 @@ namespace Samples.ViewModel
 
         public string Idiom => DeviceInfo.Idiom;
 
-        public string LowPowerMode => DeviceInfo.IsLowPowerModeEnabled ? "Enabled" : "Disabled";
-
         public DeviceType DeviceType => DeviceInfo.DeviceType;
 
         public ScreenMetrics ScreenMetrics

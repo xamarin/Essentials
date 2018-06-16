@@ -12,8 +12,13 @@ namespace Xamarin.Essentials
         {
             Permissions.EnsureDeclared(PermissionType.Battery);
 
+            var filter = new IntentFilter();
+            filter.AddAction(Intent.ActionBatteryChanged);
+            if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
+                filter.AddAction(PowerManager.ActionPowerSaveModeChanged);
+
             batteryReceiver = new BatteryBroadcastReceiver(OnBatteryChanged);
-            Platform.AppContext.RegisterReceiver(batteryReceiver, new IntentFilter(Intent.ActionBatteryChanged));
+            Platform.AppContext.RegisterReceiver(batteryReceiver, filter);
         }
 
         static void StopBatteryListeners()
@@ -99,6 +104,18 @@ namespace Xamarin.Essentials
 
                     return BatteryPowerSource.Battery;
                 }
+            }
+        }
+
+        static EnergySaverStatus PlatformEnergySaverStatus
+        {
+            get
+            {
+                var status = false;
+                if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
+                    status = Platform.PowerManager?.IsPowerSaveMode ?? false;
+
+                return status ? EnergySaverStatus.On : EnergySaverStatus.Off;
             }
         }
     }

@@ -1,6 +1,4 @@
-﻿using Windows.Graphics.Display;
-using Windows.Security.ExchangeActiveSyncProvisioning;
-using Windows.System.Power;
+﻿using Windows.Security.ExchangeActiveSyncProvisioning;
 using Windows.System.Profile;
 using Windows.UI.ViewManagement;
 
@@ -70,8 +68,5 @@ namespace Xamarin.Essentials
 
             return DeviceType.Physical;
         }
-
-        static bool GetIsLowPowerModeEnabled() =>
-            PowerManager.EnergySaverStatus == EnergySaverStatus.On;
     }
 }
