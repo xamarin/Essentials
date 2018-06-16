@@ -19,6 +19,8 @@ namespace Xamarin.Essentials
 
         public static BatteryPowerSource PowerSource => PlatformPowerSource;
 
+        public static EnergySaverStatus EnergySaverStatus => PlatformEnergySaverStatus;
+
         public static event BatteryChangedEventHandler BatteryChanged
         {
             add
@@ -44,8 +46,6 @@ namespace Xamarin.Essentials
                     StopBatteryListeners();
             }
         }
-
-        public static EnergySaverStatus EnergySaverStatus => PlatformEnergySaverStatus;
 
         static void SetCurrent()
         {
