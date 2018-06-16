@@ -1,4 +1,5 @@
-﻿using Windows.Security.ExchangeActiveSyncProvisioning;
+﻿using Windows.Graphics.Display;
+using Windows.Security.ExchangeActiveSyncProvisioning;
 using Windows.System.Profile;
 using Windows.UI.ViewManagement;
 
