@@ -5,30 +5,23 @@ namespace Xamarin.Essentials
 {
     public static partial class Accelerometer
     {
-        internal const uint FastestInterval = 20;
-        internal const uint GameInterval = 40;
-        internal const uint UiInterval = 80;
+        internal const uint GameInterval = 20;
+        internal const uint UiInterval = 60;
 
-        static TizenAccelerometer sensor;
+        internal static TizenAccelerometer DefaultSensor =>
+            (TizenAccelerometer)Platform.GetDefaultSensor(SensorType.Accelerometer);
 
-        internal static bool IsSupported
-        {
-            get
-            {
-                return TizenAccelerometer.IsSupported;
-            }
-        }
+        internal static bool IsSupported =>
+            TizenAccelerometer.IsSupported;
 
         static void PlatformStart(SensorSpeed sensorSpeed)
         {
-            sensor = new TizenAccelerometer();
-
             uint interval = 0;
 
             switch (sensorSpeed)
             {
                 case SensorSpeed.Fastest:
-                    interval = FastestInterval;
+                    interval = (uint)DefaultSensor.MinInterval;
                     break;
                 case SensorSpeed.Game:
                     interval = GameInterval;
@@ -38,22 +31,20 @@ namespace Xamarin.Essentials
                     break;
             }
 
-            sensor.Interval = interval;
-            sensor.DataUpdated += DataUpdated;
-            sensor.Start();
+            DefaultSensor.Interval = interval;
+            DefaultSensor.DataUpdated += DataUpdated;
+            DefaultSensor.Start();
         }
 
         static void PlatformStop()
         {
-            sensor.DataUpdated -= DataUpdated;
-            sensor.Stop();
-            sensor.Dispose();
+            DefaultSensor.DataUpdated -= DataUpdated;
+            DefaultSensor.Stop();
         }
 
         static void DataUpdated(object sender, AccelerometerDataUpdatedEventArgs e)
         {
-            var data = new AccelerometerData(e.X, e.Y, e.Z);
-            OnChanged(data);
+            OnChanged(new AccelerometerData(e.X, e.Y, e.Z));
         }
     }
 }
