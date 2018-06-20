@@ -1,14 +1,50 @@
-﻿namespace Xamarin.Essentials
+﻿using Tizen.Sensor;
+using TizenOrientationSensor = Tizen.Sensor.OrientationSensor;
+
+namespace Xamarin.Essentials
 {
     public static partial class Compass
     {
+        internal const uint GameInterval = 20;
+        internal const uint UiInterval = 60;
+
+        internal static TizenOrientationSensor DefaultSensor =>
+            (TizenOrientationSensor)Platform.GetDefaultSensor(SensorType.OrientationSensor);
+
         internal static bool IsSupported =>
-            throw new NotImplementedInReferenceAssemblyException();
+            TizenOrientationSensor.IsSupported;
 
-        internal static void PlatformStart(SensorSpeed sensorSpeed) =>
-            throw new NotImplementedInReferenceAssemblyException();
+        internal static void PlatformStart(SensorSpeed sensorSpeed)
+        {
+            uint interval = 0;
 
-        internal static void PlatformStop() =>
-            throw new NotImplementedInReferenceAssemblyException();
+            switch (sensorSpeed)
+            {
+                case SensorSpeed.Fastest:
+                    interval = (uint)DefaultSensor.MinInterval;
+                    break;
+                case SensorSpeed.Game:
+                    interval = GameInterval;
+                    break;
+                case SensorSpeed.Ui:
+                    interval = UiInterval;
+                    break;
+            }
+
+            DefaultSensor.Interval = interval;
+            DefaultSensor.DataUpdated += DataUpdated;
+            DefaultSensor.Start();
+        }
+
+        internal static void PlatformStop()
+        {
+            DefaultSensor.DataUpdated -= DataUpdated;
+            DefaultSensor.Stop();
+        }
+
+        static void DataUpdated(object sender, OrientationSensorDataUpdatedEventArgs e)
+        {
+            OnChanged(new CompassData(e.Azimuth));
+        }
     }
 }
