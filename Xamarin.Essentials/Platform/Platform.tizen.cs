@@ -6,6 +6,7 @@ using Tizen.System;
 using TizenAccelerometer = Tizen.Sensor.Accelerometer;
 using TizenGyroscope = Tizen.Sensor.Gyroscope;
 using TizenMagnetometer = Tizen.Sensor.Magnetometer;
+using TizenOrientationSensor = Tizen.Sensor.OrientationSensor;
 
 namespace Xamarin.Essentials
 {
@@ -14,6 +15,7 @@ namespace Xamarin.Essentials
         static TizenAccelerometer accelerometer = null;
         static TizenGyroscope gyroscope = null;
         static TizenMagnetometer magnetometer = null;
+        static TizenOrientationSensor orientationSensor = null;
 
         internal static Package CurrentPackage
         {
@@ -70,6 +72,12 @@ namespace Xamarin.Essentials
                         Platform.magnetometer = new TizenMagnetometer();
                     }
                     return Platform.magnetometer;
+                case SensorType.OrientationSensor:
+                    if (Platform.orientationSensor == null)
+                    {
+                        Platform.orientationSensor = new TizenOrientationSensor();
+                    }
+                    return Platform.orientationSensor;
                 default:
                     return null;
             }
@@ -80,6 +88,7 @@ namespace Xamarin.Essentials
     {
         Accelerometer,
         Gyroscope,
-        Magnetometer
+        Magnetometer,
+        OrientationSensor
     }
 }
