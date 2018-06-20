@@ -65,7 +65,7 @@ namespace Xamarin.Essentials
                     }
                     return Platform.gyroscope;
                 case SensorType.Magnetometer:
-                    if (Platform.magnetometer != null)
+                    if (Platform.magnetometer == null)
                     {
                         Platform.magnetometer = new TizenMagnetometer();
                     }
