@@ -19,7 +19,7 @@ namespace Xamarin.Essentials
         }
 
         static void PowerChangedNotification(NSNotification notification)
-            => Platform.BeginInvokeOnMainThread(OnPowerChanged);
+            => MainThread.BeginInvokeOnMainThread(OnPowerChanged);
 
         static EnergySaverStatus PlatformEnergySaverStatus =>
             NSProcessInfo.ProcessInfo?.LowPowerModeEnabled == true ? EnergySaverStatus.On : EnergySaverStatus.Off;

@@ -15,7 +15,7 @@ namespace Xamarin.Essentials
         }
 
         static void ReportUpdated(object sender, object e)
-            => Platform.BeginInvokeOnMainThread(OnPowerChanged);
+            => MainThread.BeginInvokeOnMainThread(OnPowerChanged);
 
         static EnergySaverStatus PlatformEnergySaverStatus =>
             PowerManager.EnergySaverStatus == Windows.System.Power.EnergySaverStatus.On ? EnergySaverStatus.On : EnergySaverStatus.Off;
