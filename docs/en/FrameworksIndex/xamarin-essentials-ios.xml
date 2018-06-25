@@ -231,6 +231,7 @@
       <Member Id="M:Xamarin.Essentials.Location.KilometersToMiles(System.Double)" />
       <Member Id="M:Xamarin.Essentials.Location.MilesToKilometers(System.Double)" />
       <Member Id="P:Xamarin.Essentials.Location.Accuracy" />
+      <Member Id="P:Xamarin.Essentials.Location.Altitude" />
       <Member Id="P:Xamarin.Essentials.Location.Latitude" />
       <Member Id="P:Xamarin.Essentials.Location.Longitude" />
       <Member Id="P:Xamarin.Essentials.Location.TimestampUtc" />
@@ -299,11 +300,11 @@
       <Member Id="P:Xamarin.Essentials.Placemark.SubThoroughfare" />
       <Member Id="P:Xamarin.Essentials.Placemark.Thoroughfare" />
     </Type>
+    <Type Name="Xamarin.Essentials.Platform" Id="T:Xamarin.Essentials.Platform" />
     <Type Name="Xamarin.Essentials.Power" Id="T:Xamarin.Essentials.Power">
       <Member Id="E:Xamarin.Essentials.Power.EnergySaverStatusChanaged" />
       <Member Id="P:Xamarin.Essentials.Power.EnergySaverStatus" />
     </Type>
-    <Type Name="Xamarin.Essentials.Platform" Id="T:Xamarin.Essentials.Platform" />
     <Type Name="Xamarin.Essentials.Preferences" Id="T:Xamarin.Essentials.Preferences">
       <Member Id="M:Xamarin.Essentials.Preferences.Clear" />
       <Member Id="M:Xamarin.Essentials.Preferences.Clear(System.String)" />
