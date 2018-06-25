@@ -16,6 +16,7 @@
       <para />
     </remarks>
   </Docs>
+  <Members>
     <Member MemberName="Init">
       <MemberSignature Language="C#" Value="public static void Init (Android.App.Application application);" />
       <MemberSignature Language="ILAsm" Value=".method public static hidebysig void Init(class Android.App.Application application) cil managed" />
