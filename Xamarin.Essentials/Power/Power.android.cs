@@ -1,6 +1,7 @@
 ﻿using System;
 using Android.Content;
 using Android.OS;
+using Debug = System.Diagnostics.Debug;
 
 namespace Xamarin.Essentials
 {
@@ -28,7 +29,7 @@ namespace Xamarin.Essentials
             }
             catch (Java.Lang.IllegalArgumentException)
             {
-                Console.WriteLine("Power receiver already unregistered. Disposing of it.");
+                Debug.WriteLine("Power receiver already unregistered. Disposing of it.");
             }
             powerReceiver.Dispose();
             powerReceiver = null;
