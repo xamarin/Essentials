@@ -1,19 +1,79 @@
 ﻿using System.Collections.Generic;
+using Tizen.Network.Connection;
 
 namespace Xamarin.Essentials
 {
     public static partial class Connectivity
     {
-        static NetworkAccess PlatformNetworkAccess =>
-            throw new NotImplementedInReferenceAssemblyException();
+        static IList<ConnectionProfile> profiles = new List<ConnectionProfile>();
 
-        static IEnumerable<ConnectionProfile> PlatformProfiles =>
-            throw new NotImplementedInReferenceAssemblyException();
+        internal static void OnChanged(object sender, object e)
+        {
+            GetProfileListAsync();
+        }
 
-        static void StartListeners() =>
-            throw new NotImplementedInReferenceAssemblyException();
+        internal static async void GetProfileListAsync()
+        {
+            var list = await ConnectionProfileManager.GetProfileListAsync(ProfileListType.Connected);
+            profiles.Clear();
+            foreach (var result in list)
+            {
+                switch (result.Type)
+                {
+                    case ConnectionProfileType.Bt:
+                        profiles.Add(ConnectionProfile.Bluetooth);
+                        break;
 
-        static void StopListeners() =>
-            throw new NotImplementedInReferenceAssemblyException();
+                    case ConnectionProfileType.Cellular:
+                        profiles.Add(ConnectionProfile.Cellular);
+                        break;
+
+                    case ConnectionProfileType.Ethernet:
+                        profiles.Add(ConnectionProfile.Ethernet);
+                        break;
+
+                    case ConnectionProfileType.WiFi:
+                        profiles.Add(ConnectionProfile.WiFi);
+                        break;
+                }
+            }
+            OnConnectivityChanged();
+        }
+
+        static NetworkAccess PlatformNetworkAccess
+        {
+            get
+            {
+                var currentAccess = ConnectionManager.CurrentConnection;
+                switch (currentAccess.Type)
+                {
+                    case ConnectionType.WiFi:
+                    case ConnectionType.Cellular:
+                    case ConnectionType.Ethernet:
+                        return NetworkAccess.Internet;
+                    default:
+                        return NetworkAccess.None;
+                }
+            }
+        }
+
+        static IEnumerable<ConnectionProfile> PlatformProfiles
+        {
+            get
+            {
+                return profiles;
+            }
+        }
+
+        static void StartListeners()
+        {
+            ConnectionManager.ConnectionTypeChanged += OnChanged;
+            GetProfileListAsync();
+        }
+
+        static void StopListeners()
+        {
+            ConnectionManager.ConnectionTypeChanged -= OnChanged;
+        }
     }
 }
