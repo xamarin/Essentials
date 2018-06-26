@@ -1,13 +1,17 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 
 namespace Xamarin.Essentials
 {
     public static partial class Culture
     {
-        public static CultureInfo PlatformCurrent =>
+        static string PlatformInstalledUICulture =>
+            CultureInfo.InstalledUICulture.Name;
+
+        static CultureInfo PlatformGetCurrentUICulture(Func<string, CultureInfo> mappingOverride) =>
             CultureInfo.CurrentUICulture;
 
-        public static void PlatformSetLocale(CultureInfo cultureInfo)
+        static void PlatformSetCurrentUICulture(CultureInfo cultureInfo)
         {
             CultureInfo.CurrentCulture = cultureInfo;
             CultureInfo.CurrentUICulture = cultureInfo;

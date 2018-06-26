@@ -1,47 +1,51 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Threading;
 
 namespace Xamarin.Essentials
 {
     public static partial class Culture
     {
-        public static void PlatformSetLocale(CultureInfo cultureInfo)
+        static string PlatformInstalledUICulture =>
+            Java.Util.Locale.Default.ToString();
+
+        static void PlatformSetCurrentUICulture(CultureInfo cultureInfo)
         {
             Thread.CurrentThread.CurrentCulture = cultureInfo;
             Thread.CurrentThread.CurrentUICulture = cultureInfo;
         }
 
-        public static CultureInfo PlatformCurrent
+        static CultureInfo PlatformGetCurrentUICulture(Func<string, CultureInfo> mappingOverride)
         {
-            get
-            {
-                var netLanguage = "en";
-                var androidLocale = Java.Util.Locale.Default;
-                netLanguage = ToDotnetLanguage(androidLocale.ToString().Replace("_", "-"));
+            var netLanguage = ToDotnetLanguage(InstalledUICulture.Replace("_", "-"));
 
-                // this gets called a lot - try/catch can be expensive so consider caching or something
-                CultureInfo ci = null;
+            // this gets called a lot - try/catch can be expensive so consider caching or something
+            CultureInfo ci = null;
+            try
+            {
+                ci = new CultureInfo(netLanguage);
+            }
+            catch (CultureNotFoundException)
+            {
+                if (mappingOverride != null)
+                {
+                    return mappingOverride(InstalledUICulture);
+                }
+
+                // locale not valid .NET culture (eg. "en-ES" : English in Spain)
+                // fallback to first characters, in this case "en"
                 try
                 {
-                    ci = new CultureInfo(netLanguage);
+                    var fallback = ToDotnetFallbackLanguage(new InternalCulture(netLanguage));
+                    ci = new CultureInfo(fallback);
                 }
                 catch (CultureNotFoundException)
                 {
-                    // iOS locale not valid .NET culture (eg. "en-ES" : English in Spain)
-                    // fallback to first characters, in this case "en"
-                    try
-                    {
-                        var fallback = ToDotnetFallbackLanguage(new PlatformCulture(netLanguage));
-                        ci = new CultureInfo(fallback);
-                    }
-                    catch (CultureNotFoundException)
-                    {
-                        // iOS language not valid .NET culture, falling back to English
-                        ci = new CultureInfo("en");
-                    }
+                    // language not valid .NET culture, falling back to English
+                    ci = new CultureInfo("en");
                 }
-                return ci;
             }
+            return ci;
         }
 
         static string ToDotnetLanguage(string androidLanguage)
@@ -69,7 +73,7 @@ namespace Xamarin.Essentials
             return netLanguage;
         }
 
-        static string ToDotnetFallbackLanguage(PlatformCulture platCulture)
+        static string ToDotnetFallbackLanguage(InternalCulture platCulture)
         {
             var netLanguage = platCulture.LanguageCode; // use the first part of the identifier (two chars, usually);
             switch (platCulture.LanguageCode)

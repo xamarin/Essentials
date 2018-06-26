@@ -5,19 +5,25 @@ namespace Xamarin.Essentials
 {
     public static partial class Culture
     {
-        public static CultureInfo Current =>
-            PlatformCurrent;
+        public static string InstalledUICulture =>
+            PlatformInstalledUICulture;
 
-        public static void SetLocale(CultureInfo cultureInfo) =>
-            PlatformSetLocale(cultureInfo);
+        public static CultureInfo GetCurrentUICulture() =>
+            PlatformGetCurrentUICulture(null);
 
-        internal class PlatformCulture
+        public static CultureInfo GetCurrentUICulture(Func<string, CultureInfo> mappingOverride) =>
+            PlatformGetCurrentUICulture(mappingOverride);
+
+        public static void SetCurrentUICulture(CultureInfo cultureInfo) =>
+            PlatformSetCurrentUICulture(cultureInfo);
+
+        internal class InternalCulture
         {
-            internal PlatformCulture(string platformCultureString)
+            internal InternalCulture(string platformCultureString)
             {
                 if (string.IsNullOrEmpty(platformCultureString))
                 {
-                    throw new ArgumentException("Expected culture identifier", "platformCultureString"); // in C# 6 use nameof(platformCultureString)
+                    throw new ArgumentException("Expected culture identifier", nameof(platformCultureString));
                 }
                 PlatformString = platformCultureString.Replace("_", "-"); // .NET expects dash, not underscore
                 var dashIndex = PlatformString.IndexOf("-", StringComparison.Ordinal);
@@ -34,11 +40,11 @@ namespace Xamarin.Essentials
                 }
             }
 
-            public string PlatformString { get; private set; }
+            public string PlatformString { get; }
 
-            public string LanguageCode { get; private set; }
+            public string LanguageCode { get; }
 
-            public string LocaleCode { get; private set; }
+            public string LocaleCode { get; }
 
             public override string ToString() => PlatformString;
         }
