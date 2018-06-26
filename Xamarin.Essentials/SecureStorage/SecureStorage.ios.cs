@@ -40,6 +40,20 @@ namespace Xamarin.Essentials
 
         static Task PlatformSetAsync(string key, string data) =>
             SetAsync(key, data, DefaultAccessible);
+
+        static bool PlatformRemove(string key)
+        {
+            var kc = new KeyChain(DefaultAccessible);
+
+            return kc.Remove(key, Alias);
+        }
+
+        static void PlatformRemoveAll()
+        {
+            var kc = new KeyChain(DefaultAccessible);
+
+            kc.RemoveAll(Alias);
+        }
     }
 
     class KeyChain
@@ -87,6 +101,30 @@ namespace Xamarin.Essentials
             var result = SecKeyChain.Add(CreateRecordForNewKeyValue(key, value, service));
             if (result != SecStatusCode.Success)
                 throw new Exception($"Error adding record: {result}");
+        }
+
+        internal bool Remove(string key, string service)
+        {
+            var record = ExistingRecordForKey(key, service);
+            var match = SecKeyChain.QueryAsRecord(record, out var resultCode);
+
+            if (resultCode == SecStatusCode.Success)
+            {
+                RemoveRecord(record);
+                return true;
+            }
+
+            return false;
+        }
+
+        internal void RemoveAll(string service)
+        {
+            var query = new SecRecord(SecKind.GenericPassword)
+            {
+                Service = service
+            };
+
+            SecKeyChain.Remove(query);
         }
 
         SecRecord CreateRecordForNewKeyValue(string key, string value, string service)

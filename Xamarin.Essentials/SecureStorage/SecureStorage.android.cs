@@ -51,6 +51,44 @@ namespace Xamarin.Essentials
             return Task.CompletedTask;
         }
 
+        static bool PlatformRemove(string key)
+        {
+            var context = Platform.AppContext;
+
+            var ks = new AndroidKeyStore(context, Alias, AlwaysUseAsymmetricKeyStorage);
+
+            using (var prefs = context.GetSharedPreferences(Alias, FileCreationMode.Private))
+            {
+                if (prefs.Contains(key))
+                {
+                    using (var prefsEditor = prefs.Edit())
+                    {
+                        prefsEditor.Remove(key);
+                        prefsEditor.Commit();
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        static void PlatformRemoveAll()
+        {
+            var context = Platform.AppContext;
+
+            var ks = new AndroidKeyStore(context, Alias, AlwaysUseAsymmetricKeyStorage);
+
+            using (var prefs = context.GetSharedPreferences(Alias, FileCreationMode.Private))
+            using (var prefsEditor = prefs.Edit())
+            {
+                foreach (var key in prefs.All.Keys)
+                    prefsEditor.Remove(key);
+
+                prefsEditor.Commit();
+            }
+        }
+
         internal static bool AlwaysUseAsymmetricKeyStorage { get; set; } = false;
     }
 
