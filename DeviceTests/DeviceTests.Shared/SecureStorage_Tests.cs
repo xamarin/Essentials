@@ -19,7 +19,7 @@ namespace DeviceTests
             // Try the new platform specific api
             await SecureStorage.SetAsync(key, data, Security.SecAccessible.AfterFirstUnlock);
 
-            var b = await SecureStorage.GetAsync(key, Security.SecAccessible.AfterFirstUnlock);
+            var b = await SecureStorage.GetAsync(key);
 
             Assert.Equal(data, b);
 #endif
