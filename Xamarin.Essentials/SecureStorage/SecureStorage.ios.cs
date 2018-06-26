@@ -11,16 +11,6 @@ namespace Xamarin.Essentials
         public static SecAccessible DefaultAccessible { get; set; } =
             SecAccessible.AfterFirstUnlock;
 
-        public static Task<string> GetAsync(string key, SecAccessible accessible)
-        {
-            if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentNullException(nameof(key));
-
-            var kc = new KeyChain(accessible);
-
-            return Task.FromResult(kc.ValueForKey(key, Alias));
-        }
-
         public static Task SetAsync(string key, string value, SecAccessible accessible)
         {
             if (string.IsNullOrWhiteSpace(key))
@@ -36,7 +26,7 @@ namespace Xamarin.Essentials
         }
 
         static Task<string> PlatformGetAsync(string key) =>
-            GetAsync(key, DefaultAccessible);
+            GetAsync(key);
 
         static Task PlatformSetAsync(string key, string data) =>
             SetAsync(key, data, DefaultAccessible);
