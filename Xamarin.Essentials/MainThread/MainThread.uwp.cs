@@ -7,7 +7,7 @@ namespace Xamarin.Essentials
     public static partial class MainThread
     {
         static bool PlatformIsMainThread =>
-        CoreApplication.MainView.CoreWindow?.Dispatcher?.HasThreadAccess ?? false;
+            CoreApplication.MainView.CoreWindow?.Dispatcher?.HasThreadAccess ?? false;
 
         static void PlatformBeginInvokeOnMainThread(Action action)
         {
