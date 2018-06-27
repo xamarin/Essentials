@@ -55,7 +55,7 @@ namespace Xamarin.Essentials
         {
             var context = Platform.AppContext;
 
-            var ks = new AndroidKeyStore(context, Alias, AlwaysUseAsymmetricKeyStorage);
+            key = Utils.Md5Hash(key);
 
             using (var prefs = context.GetSharedPreferences(Alias, FileCreationMode.Private))
             {
@@ -76,8 +76,6 @@ namespace Xamarin.Essentials
         static void PlatformRemoveAll()
         {
             var context = Platform.AppContext;
-
-            var ks = new AndroidKeyStore(context, Alias, AlwaysUseAsymmetricKeyStorage);
 
             using (var prefs = context.GetSharedPreferences(Alias, FileCreationMode.Private))
             using (var prefsEditor = prefs.Edit())
