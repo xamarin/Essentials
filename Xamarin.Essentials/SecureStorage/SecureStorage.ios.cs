@@ -25,8 +25,16 @@ namespace Xamarin.Essentials
             return Task.CompletedTask;
         }
 
-        static Task<string> PlatformGetAsync(string key) =>
-            GetAsync(key);
+        static Task<string> PlatformGetAsync(string key)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentNullException(nameof(key));
+
+            var kc = new KeyChain(DefaultAccessible);
+            var value = kc.ValueForKey(key, Alias);
+
+            return Task.FromResult(value);
+        }
 
         static Task PlatformSetAsync(string key, string data) =>
             SetAsync(key, data, DefaultAccessible);
