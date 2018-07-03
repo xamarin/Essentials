@@ -1,41 +1,44 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Android.Content;
 using Android.Content.PM;
+using AndroidUri = Android.Net.Uri;
+using Uri = System.Uri;
 
-namespace Xamarin.Essentials.Launcher
+namespace Xamarin.Essentials
 {
     public static partial class Launcher
     {
-        static Task<bool> PlatformCanOpenAsync(string uri)
+        public static Task<bool> PlatformCanOpenAsync(string uri)
         {
-            var intent = new Intent(uri);
+            var intent = CreateIntent(uri.ToString());
             var manager = Platform.AppContext.PackageManager;
             var supportedResolvedInfos = manager.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly);
             return Task.FromResult(supportedResolvedInfos.Any());
         }
 
-        static Task<bool> PlatformCanOpenAsync(Uri uri)
+        public static Task<bool> PlatformCanOpenAsync(Uri uri)
         {
-            var intent = new Intent(uri.ToString());
-            var manager = Platform.AppContext.PackageManager;
-            var supportedResolvedInfos = manager.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly);
-            return Task.FromResult(supportedResolvedInfos.Any());
+            return PlatformCanOpenAsync(uri.ToString());
         }
 
-        static Task PlatformOpenAsync(string uri)
+        public static Task PlatformOpenAsync(string uri)
         {
-            var intent = new Intent(uri);
+            var intent = CreateIntent(uri.ToString());
             Platform.AppContext.StartActivity(intent);
             return Task.CompletedTask;
         }
 
-        static Task PlatformOpenAsync(Uri uri)
+        public static Task PlatformOpenAsync(Uri uri)
         {
-            var intent = new Intent(uri.ToString());
-            Platform.AppContext.StartActivity(intent);
-            return Task.CompletedTask;
+            return PlatformOpenAsync(uri.ToString());
+        }
+
+        static Intent CreateIntent(string uri)
+        {
+            var androidUri = AndroidUri.Parse(uri.ToString());
+            var intent = new Intent(Intent.ActionView, androidUri);
+            return intent;
         }
     }
 }
