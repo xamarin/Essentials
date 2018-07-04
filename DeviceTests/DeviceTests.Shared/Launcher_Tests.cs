@@ -21,37 +21,37 @@ namespace DeviceTests
 
         [Theory]
         [InlineData("http://www.example.com")]
-        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
         public async Task Can_Open_Browser_Uri_As_String(string uri)
         {
-            var success = await Launcher.CanOpenAsync(uri).ConfigureAwait(false);
-            Assert.True(success);
+            Assert.True(await Launcher.CanOpenAsync(uri));
         }
 
         [Theory]
         [InlineData("http://www.example.com")]
-        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
         public async Task Can_Open_Browser_Uri_As_Uri(string uri)
         {
-            var success = await Launcher.CanOpenAsync(new Uri(uri));
-            Assert.True(success);
+            Assert.True(await Launcher.CanOpenAsync(new Uri(uri)));
         }
 
         [Theory]
         [InlineData("LITERAL GARBAGE")]
-        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
-        public async Task Can_Not_Open_Browser_Uri_As_String(string uri)
+        public async Task Can_Not_Open_Uri_As_String_Throws_InvalidUriException(string uri)
         {
-            var success = await Launcher.CanOpenAsync(uri).ConfigureAwait(false);
-            Assert.False(success);
+            await Assert.ThrowsAsync<UriFormatException>(() => Launcher.CanOpenAsync(uri));
         }
 
         [Theory]
-        [InlineData("LITERAL GARBAGE")]
-        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
-        public async Task Can_Not_Open_Browser_Uri_As_Uri(string uri)
+        [InlineData("ms-invalidurifortest:abc")]
+        public async Task Can_Not_Open_Uri_As_Uri_No_Target_Found(string uri)
         {
-            await Assert.ThrowsAsync<UriFormatException>(() => Launcher.CanOpenAsync(new Uri(uri))).ConfigureAwait(false);
+            Assert.False(await Launcher.CanOpenAsync(new Uri(uri)));
+        }
+
+        [Theory]
+        [InlineData("ms-invalidurifortest:abc")]
+        public async Task Can_Not_Open_Uri_As_string_No_Target_Found(string uri)
+        {
+            Assert.False(await Launcher.CanOpenAsync(uri));
         }
     }
 }

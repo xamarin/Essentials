@@ -11,7 +11,7 @@ namespace Xamarin.Essentials
     {
         public static Task<bool> PlatformCanOpenAsync(string uri)
         {
-            var intent = CreateIntent(uri.ToString());
+            var intent = CreateIntent(uri);
             var manager = Platform.AppContext.PackageManager;
             var supportedResolvedInfos = manager.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly);
             return Task.FromResult(supportedResolvedInfos.Any());
@@ -24,7 +24,7 @@ namespace Xamarin.Essentials
 
         public static Task PlatformOpenAsync(string uri)
         {
-            var intent = CreateIntent(uri.ToString());
+            var intent = CreateIntent(uri);
             Platform.AppContext.StartActivity(intent);
             return Task.CompletedTask;
         }
@@ -36,7 +36,7 @@ namespace Xamarin.Essentials
 
         static Intent CreateIntent(string uri)
         {
-            var androidUri = AndroidUri.Parse(uri.ToString());
+            var androidUri = AndroidUri.Parse(uri);
             var intent = new Intent(Intent.ActionView, androidUri);
             return intent;
         }
