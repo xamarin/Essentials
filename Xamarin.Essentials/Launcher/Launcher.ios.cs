@@ -9,22 +9,36 @@ namespace Xamarin.Essentials
     {
         public static Task<bool> PlatformCanOpenAsync(string uri)
         {
-            return Task.FromResult(UIApplication.SharedApplication.CanOpenUrl(new NSUrl(uri)));
+            try
+            {
+                return Task.FromResult(UIApplication.SharedApplication.CanOpenUrl(new NSUrl(uri)));
+            }
+            catch(Exception innerException)
+            {
+                throw new UriFormatException(nameof(uri), innerException);
+            }
         }
 
         public static Task<bool> PlatformCanOpenAsync(Uri uri)
         {
-            return Task.FromResult(UIApplication.SharedApplication.CanOpenUrl(new NSUrl(uri.ToString())));
+            return PlatformCanOpenAsync(uri.ToString());
         }
 
         public static async Task PlatformOpenAsync(string uri)
         {
-            await UIApplication.SharedApplication.OpenUrlAsync(new NSUrl(uri), new UIApplicationOpenUrlOptions());
+            try
+            {
+                await UIApplication.SharedApplication.OpenUrlAsync(new NSUrl(uri), new UIApplicationOpenUrlOptions());
+            }
+            catch(Exception innerException)
+            {
+                throw new UriFormatException(nameof(uri), innerException);
+            }
         }
 
-        public static async Task PlatformOpenAsync(Uri uri)
+        public static Task PlatformOpenAsync(Uri uri)
         {
-            await UIApplication.SharedApplication.OpenUrlAsync(new NSUrl(uri.ToString()), new UIApplicationOpenUrlOptions());
+            return PlatformOpenAsync(uri);
         }
     }
 }
