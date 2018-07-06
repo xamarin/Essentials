@@ -38,7 +38,7 @@ namespace Xamarin.Essentials
 
         public static Task PlatformOpenAsync(Uri uri)
         {
-            return PlatformOpenAsync(uri);
+            return PlatformOpenAsync(uri.ToString());
         }
     }
 }

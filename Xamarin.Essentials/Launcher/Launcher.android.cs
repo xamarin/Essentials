@@ -9,7 +9,7 @@ namespace Xamarin.Essentials
 {
     public static partial class Launcher
     {
-        public static Task<bool> PlatformCanOpenAsync(string uri)
+        static Task<bool> PlatformCanOpenAsync(string uri)
         {
             var intent = CreateIntent(uri);
             var manager = Platform.AppContext.PackageManager;
@@ -17,19 +17,19 @@ namespace Xamarin.Essentials
             return Task.FromResult(supportedResolvedInfos.Any());
         }
 
-        public static Task<bool> PlatformCanOpenAsync(Uri uri)
+        static Task<bool> PlatformCanOpenAsync(Uri uri)
         {
             return PlatformCanOpenAsync(uri.ToString());
         }
 
-        public static Task PlatformOpenAsync(string uri)
+        static Task PlatformOpenAsync(string uri)
         {
             var intent = CreateIntent(uri);
             Platform.AppContext.StartActivity(intent);
             return Task.CompletedTask;
         }
 
-        public static Task PlatformOpenAsync(Uri uri)
+        static Task PlatformOpenAsync(Uri uri)
         {
             return PlatformOpenAsync(uri.ToString());
         }
