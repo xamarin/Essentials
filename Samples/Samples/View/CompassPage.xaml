@@ -11,6 +11,8 @@
     <StackLayout>
         <Label Text="Monitor compass for changes." FontAttributes="Bold" Margin="12" />
 
+        <Switch IsToggled="{Binding CompassApplyLowPassFilter}" />
+        
         <ScrollView>
             <Grid Padding="12,0,12,12">
                 <Grid.RowDefinitions>
