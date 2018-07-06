@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Android.Hardware;
 using Android.Runtime;
 
@@ -52,8 +53,43 @@ namespace Xamarin.Essentials
         }
     }
 
+    class LowPassFilter
+    {
+        const int length = 10;
+
+        float sin;
+        float cos;
+        Queue<float> history = new Queue<float>(length);
+
+        public void Add(float radians)
+        {
+            sin += (float)Math.Sin(radians);
+
+            cos += (float)Math.Cos(radians);
+
+            history.Enqueue(radians);
+
+            if (history.Count > length)
+            {
+                var old = history.Dequeue();
+
+                sin -= (float)Math.Sin(old);
+
+                cos -= (float)Math.Cos(old);
+            }
+        }
+
+        public float Average()
+        {
+            var size = history.Count;
+
+            return (float)Math.Atan2(sin / size, cos / size);
+        }
+    }
+
     class SensorListener : Java.Lang.Object, ISensorEventListener, IDisposable
     {
+        LowPassFilter filter = new LowPassFilter();
         float[] lastAccelerometer = new float[3];
         float[] lastMagnetometer = new float[3];
         bool lastAccelerometerSet;
@@ -92,6 +128,11 @@ namespace Xamarin.Essentials
                 SensorManager.GetRotationMatrix(r, null, lastAccelerometer, lastMagnetometer);
                 SensorManager.GetOrientation(r, orientation);
                 var azimuthInRadians = orientation[0];
+                if (Compass.ApplyLowPassFilter)
+                {
+                    filter.Add(azimuthInRadians);
+                    azimuthInRadians = filter.Average();
+                }
                 var azimuthInDegress = (Java.Lang.Math.ToDegrees(azimuthInRadians) + 360.0) % 360.0;
 
                 var data = new CompassData(azimuthInDegress);
