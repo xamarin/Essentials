@@ -9,6 +9,7 @@
     <Import_RootNamespace>DeviceTests</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Barometer_Shared.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Gyroscope_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Accelerometer_Tests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HardwareSupport.cs" />
