@@ -65,6 +65,10 @@
       <Type Name="AccelerometerChangedEventHandler" Kind="Delegate" />
       <Type Name="AccelerometerData" Kind="Structure" />
       <Type Name="AppInfo" Kind="Class" />
+      <Type Name="Barometer" Kind="Class" />
+      <Type Name="BarometerChangedEventArgs" Kind="Class" />
+      <Type Name="BarometerChangedEventHandler" Kind="Delegate" />
+      <Type Name="BarometerData" Kind="Structure" />
       <Type Name="Battery" Kind="Class" />
       <Type Name="BatteryChangedEventArgs" Kind="Class" />
       <Type Name="BatteryChangedEventHandler" Kind="Delegate" />
