@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Android.Hardware;
 using Android.Runtime;
 
@@ -50,40 +49,6 @@ namespace Xamarin.Essentials
             Platform.SensorManager.UnregisterListener(listener, magnetometer);
             listener.Dispose();
             listener = null;
-        }
-    }
-
-    class LowPassFilter
-    {
-        const int length = 10;
-
-        float sin;
-        float cos;
-        Queue<float> history = new Queue<float>(length);
-
-        public void Add(float radians)
-        {
-            sin += (float)Math.Sin(radians);
-
-            cos += (float)Math.Cos(radians);
-
-            history.Enqueue(radians);
-
-            if (history.Count > length)
-            {
-                var old = history.Dequeue();
-
-                sin -= (float)Math.Sin(old);
-
-                cos -= (float)Math.Cos(old);
-            }
-        }
-
-        public float Average()
-        {
-            var size = history.Count;
-
-            return (float)Math.Atan2(sin / size, cos / size);
         }
     }
 
