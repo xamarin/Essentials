@@ -5,13 +5,6 @@ namespace Xamarin.Essentials
 {
     public static partial class Barometer
     {
-        internal const double FastestFilter = .01;
-        internal const double GameFilter = .5;
-        internal const double NormalFilter = 1;
-        internal const double UiFilter = 2;
-
-        public static bool ShouldDisplayHeadingCalibration { get; set; } = false;
-
         internal static bool IsSupported =>
             CMAltimeter.IsRelativeAltitudeAvailable;
 
