@@ -28,7 +28,7 @@
       </ReturnValue>
       <MemberValue>0</MemberValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>The default MapNavigation on your platform.</summary>
       </Docs>
     </Member>
     <Member MemberName="Driving">
@@ -45,7 +45,7 @@
       </ReturnValue>
       <MemberValue>1</MemberValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Car route mode.</summary>
       </Docs>
     </Member>
     <Member MemberName="Walking">
@@ -60,7 +60,7 @@
       <ReturnValue>
         <ReturnType>Xamarin.Essentials.MapNavigation</ReturnType>
       </ReturnValue>
-      <MemberValue>2</MemberValue>
+      <MemberValue>Walking route mode.</MemberValue>
       <Docs>
         <summary>To be added.</summary>
       </Docs>

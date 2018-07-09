@@ -26,8 +26,8 @@
       </AssemblyInfo>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <summary>Default constructor for MapLaunchOptions.</summary>
+        <remarks><para/></remarks>
       </Docs>
     </Member>
     <Member MemberName="MapNavigation">
@@ -43,9 +43,9 @@
         <ReturnType>Xamarin.Essentials.MapNavigation</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>MapNavigation enum to select route transportation mode.</summary>
+        <value>MapNavigation.Default is the default value.</value>
+        <remarks><para/></remarks>
       </Docs>
     </Member>
     <Member MemberName="Name">
@@ -61,9 +61,9 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Name of the route.</summary>
+        <value>The name.</value>
+        <remarks></para></remarks>
       </Docs>
     </Member>
   </Members>
