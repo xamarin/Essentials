@@ -6,9 +6,6 @@ namespace Xamarin.Essentials
 {
     public static partial class Map
     {
-        internal static Task PlatformOpenMapsAsync(Location location, MapLaunchOptions options)
-            => PlatformOpenMapsAsync(location.Latitude, location.Longitude, options);
-
         internal static Task PlatformOpenMapsAsync(double latitude, double longitude, MapLaunchOptions options)
         {
             var uri = CreatePointUri(latitude, longitude, ref options);
