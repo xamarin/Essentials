@@ -25,20 +25,7 @@ namespace Xamarin.Essentials
 
         static Uri CreatePlacemarkUri(Placemark placemark, ref MapLaunchOptions options)
         {
-            if (string.IsNullOrWhiteSpace(options.Name))
-                options.Name = string.Empty;
-
-            if (string.IsNullOrWhiteSpace(placemark.Thoroughfare))
-                placemark.Thoroughfare = string.Empty;
-
-            if (string.IsNullOrWhiteSpace(placemark.Locality))
-                placemark.Locality = string.Empty;
-
-            if (string.IsNullOrWhiteSpace(placemark.AdminArea))
-                placemark.AdminArea = string.Empty;
-
-            if (string.IsNullOrWhiteSpace(placemark.CountryName))
-                placemark.CountryName = string.Empty;
+            placemark = placemark.Escape();
             var uri = new Uri(
                 $"bingmaps:?where=" +
                 $"{placemark.Thoroughfare}" +
