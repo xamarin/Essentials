@@ -13,9 +13,9 @@ namespace Xamarin.Essentials
             return supported == LaunchQuerySupportStatus.Available;
         }
 
-        static async Task PlatformOpenAsync(Uri uri)
+        static Task PlatformOpenAsync(Uri uri)
         {
-            await WinLauncher.LaunchUriAsync(uri);
+            return WinLauncher.LaunchUriAsync(uri).AsTask();
         }
     }
 }

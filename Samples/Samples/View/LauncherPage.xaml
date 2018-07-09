@@ -15,14 +15,16 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Entry Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding LaunchUri}" />
-                <Button Grid.Row="1" Grid.Column="0" Text="Check Launch" Command="{Binding CanLaunchCommand}"/>
-                <Button Grid.Row="1" Grid.Column="1" Text="Launch" Command="{Binding LaunchCommand}"/>
+                <Button Grid.Row="1" Grid.ColumnSpan="2"  Text="Check Launch" Command="{Binding CanLaunchCommand}"/>
+                <Button Grid.Row="2" Grid.Column="0" Text="Launch Browser" Command="{Binding LaunchBrowserCommand}"/>
+                <Button Grid.Row="2" Grid.Column="1" Text="Launch Mail" Command="{Binding LaunchMailCommand}"/>
             </Grid>
         </ScrollView>
     </StackLayout>

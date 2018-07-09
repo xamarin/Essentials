@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -13,15 +12,31 @@ namespace Samples.ViewModel
 
         public ICommand CanLaunchCommand { get; }
 
+        public ICommand LaunchMailCommand { get; }
+
+        public ICommand LaunchBrowserCommand { get; }
+
         public LauncherViewModel()
         {
             LaunchCommand = new Command(OnLaunch);
+            LaunchMailCommand = new Command(OnLaunchMail);
+            LaunchBrowserCommand = new Command(OnLaunchBrowser);
             CanLaunchCommand = new Command(CanLaunch);
+        }
+
+        async void OnLaunchBrowser()
+        {
+            await Launcher.OpenAsync("https://github.com/xamarin/Essentials");
         }
 
         async void OnLaunch()
         {
             await Launcher.OpenAsync(LaunchUri);
+        }
+
+        async void OnLaunchMail()
+        {
+            await Launcher.OpenAsync("mailto:");
         }
 
         async void CanLaunch()
