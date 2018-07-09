@@ -6,8 +6,8 @@ namespace Tests
 {
     public class Maps_Tests
     {
-        const double testLatitude = 13.5;
-        const double testLongitude = 45;
+        const double testLatitude = 52.51852;
+        const double testLongitude = 13.37621;
         const string mapName = "Bundestag";
 
         [Fact]

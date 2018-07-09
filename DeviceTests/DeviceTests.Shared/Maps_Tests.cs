@@ -6,8 +6,8 @@ namespace DeviceTests
 {
     public class Maps_Tests
     {
-        const double testLatitude = 13.5;
-        const double testLongitude = 45;
+        const double testLatitude = 52.51852;
+        const double testLongitude = 13.37621;
         const string mapName = "Bundestag";
 
         [Fact]
@@ -15,13 +15,6 @@ namespace DeviceTests
         public async Task LaunchMap_CoordinatesDisplayCorrectPlace()
         {
             await Map.OpenMapsAsync(testLatitude, testLongitude, new MapLaunchOptions { Name = mapName });
-        }
-
-        [Fact]
-        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
-        public async Task LaunchMap_LocationDisplayCorrectPlace()
-        {
-            await Map.OpenMapsAsync(new Location(testLatitude, testLongitude), new MapLaunchOptions { Name = mapName });
         }
 
         [Fact]
