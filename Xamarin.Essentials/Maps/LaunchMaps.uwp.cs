@@ -7,16 +7,13 @@ namespace Xamarin.Essentials
     public static partial class LaunchMaps
     {
         internal static Task PlatformOpenMapsAsync(double latitude, double longitude, MapLaunchOptions options)
-        {
-            var uri = new Uri(
+        => LaunchUri(new Uri(
                 $"bingmaps:?collection=point." +
                 $"{latitude.ToString(CultureInfo.InvariantCulture)}" +
                 $"_" +
                 $"{longitude.ToString(CultureInfo.InvariantCulture)}" +
                 $"_" +
-                $"{options.Name}");
-            return LaunchUri(uri);
-        }
+                $"{options.Name}"));
 
         internal static Task PlatformOpenMapsAsync(Placemark placemark, MapLaunchOptions options)
         {
