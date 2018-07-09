@@ -30,7 +30,6 @@ namespace Xamarin.Essentials
         static void StartIntent(string uri)
         {
             var intent = new Intent(Intent.ActionView, AndroidUri.Parse(uri));
-            intent.SetFlags(ActivityFlags.ClearTop);
             intent.SetFlags(ActivityFlags.NewTask);
             Platform.AppContext.StartActivity(intent);
         }

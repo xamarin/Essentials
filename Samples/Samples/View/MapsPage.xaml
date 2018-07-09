@@ -15,6 +15,7 @@
         <Label Text="Longitude" />
         <Entry Keyboard="Numeric" Text="{Binding Longitude}" />
         <Button Text="Open coordinates" Command="{Binding LaunchMapsCommand}"/>
+        <Button Text="Open adress" Command="{Binding LaunchPlacemarkCommand}"/>
     </StackLayout>
 
 </views:BasePage>
