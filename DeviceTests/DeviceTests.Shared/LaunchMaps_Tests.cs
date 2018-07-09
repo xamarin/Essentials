@@ -4,7 +4,7 @@ using Xunit;
 
 namespace DeviceTests
 {
-    public class Maps_Tests
+    public class LaunchMaps_Tests
     {
         const double testLatitude = 52.51852;
         const double testLongitude = 13.37621;
@@ -14,7 +14,7 @@ namespace DeviceTests
         [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
         public async Task LaunchMap_CoordinatesDisplayCorrectPlace()
         {
-            await Map.OpenMapsAsync(testLatitude, testLongitude, new MapLaunchOptions { Name = mapName });
+            await LaunchMaps.OpenAsync(testLatitude, testLongitude, new MapLaunchOptions { Name = mapName });
         }
 
         [Fact]
@@ -28,7 +28,7 @@ namespace DeviceTests
                 Thoroughfare = "Platz der Republik 1",
                 Locality = "Berlin"
             };
-            await Map.OpenMapsAsync(placemark, new MapLaunchOptions { Name = mapName });
+            await LaunchMaps.OpenAsync(placemark, new MapLaunchOptions { Name = mapName });
         }
     }
 }

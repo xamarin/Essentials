@@ -5,7 +5,7 @@ using AndroidUri = Android.Net.Uri;
 
 namespace Xamarin.Essentials
 {
-    public static partial class Map
+    public static partial class LaunchMaps
     {
         internal static Task PlatformOpenMapsAsync(double latitude, double longitude, MapLaunchOptions options)
         {
@@ -21,7 +21,8 @@ namespace Xamarin.Essentials
         internal static Task PlatformOpenMapsAsync(Placemark placemark, MapLaunchOptions options)
         {
             placemark = placemark.Escape();
-            var uri = $"http://maps.google.com/maps?q={placemark.Thoroughfare} {placemark.Locality}, {placemark.AdminArea} {placemark.CountryName}";
+            var uri2 = String.Format("geo:0,0?q={placemark.Thoroughfare} {placemark.Locality} {placemark.AdminArea} {placemark.CountryName}", street, city, state, zip, country);
+            var uri = $"http://maps.google.com/maps?q={} {}, {} {}";
             StartIntent(uri);
             return Task.CompletedTask;
         }

@@ -5,7 +5,7 @@
                 x:Class="Samples.View.MapsPage"
                 Title="Maps">
     <views:BasePage.BindingContext>
-        <viewmodels:MapsViewModel />
+        <viewmodels:LaunchMapsViewModel />
     </views:BasePage.BindingContext>
 
     <StackLayout>

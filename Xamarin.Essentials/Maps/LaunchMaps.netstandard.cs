@@ -2,7 +2,7 @@
 
 namespace Xamarin.Essentials
 {
-    public static partial class Map
+    public static partial class LaunchMaps
     {
         internal static Task PlatformOpenMapsAsync(double latitude, double longitude, MapLaunchOptions options)
             => throw new NotImplementedInReferenceAssemblyException();

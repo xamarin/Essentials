@@ -122,7 +122,7 @@ namespace Samples.ViewModel
                     new[] { "compass", "magnetometer", "sensors", "hardware", "device" }),
                 new SampleItem(
                     "📍",
-                    "Maps",
+                    "Launch Maps",
                     typeof(MapsPage),
                     "Easily launch maps with coordinates.",
                     new[] { "geocoding", "geolocation", "position", "address", "mapping", "maps", "route", "navigation" }),

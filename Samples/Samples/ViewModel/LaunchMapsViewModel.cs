@@ -4,7 +4,7 @@ using Xamarin.Forms;
 
 namespace Samples.ViewModel
 {
-    public class MapsViewModel : BaseViewModel
+    public class LaunchMapsViewModel : BaseViewModel
     {
         string longitude;
 
@@ -16,14 +16,14 @@ namespace Samples.ViewModel
 
         public ICommand LaunchMapsCommand { get; }
 
-        public MapsViewModel()
+        public LaunchMapsViewModel()
         {
             LaunchMapsCommand = new Command(OpenLocation);
         }
 
         async void OpenLocation()
         {
-            await Map.OpenMapsAsync(double.Parse(Latitude), double.Parse(Longitude), new MapLaunchOptions());
+            await LaunchMaps.OpenAsync(double.Parse(Latitude), double.Parse(Longitude), new MapLaunchOptions() { Name = "Bundestag" });
         }
     }
 }

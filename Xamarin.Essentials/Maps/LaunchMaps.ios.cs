@@ -5,7 +5,7 @@ using MapKit;
 
 namespace Xamarin.Essentials
 {
-    public static partial class Map
+    public static partial class LaunchMaps
     {
         internal static Task PlatformOpenMapsAsync(double latitude, double longitude, MapLaunchOptions options)
         {
@@ -28,7 +28,7 @@ namespace Xamarin.Essentials
                 City = placemark.Locality
             };
             var coder = new CLGeocoder();
-            var placemarks = await coder.GeocodeAddressAsync(adress.Dictionary).ConfigureAwait(false);
+            var placemarks = await coder.GeocodeAddressAsync(adress.Dictionary);
             var mkPlacemark = new MKPlacemark(placemarks[0].Location.Coordinate, adress);
             await OpenPlacemark(mkPlacemark, options);
         }
