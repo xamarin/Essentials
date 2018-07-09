@@ -10,10 +10,9 @@ namespace Xamarin.Essentials
         internal static Task PlatformOpenMapsAsync(double latitude, double longitude, MapLaunchOptions options)
         {
             var uri = string.Empty;
-            if (string.IsNullOrWhiteSpace(options.Name))
-                uri = $"geo:{latitude.ToString(CultureInfo.InvariantCulture)},{longitude.ToString(CultureInfo.InvariantCulture)}?q={latitude.ToString(CultureInfo.InvariantCulture)},{longitude.ToString(CultureInfo.InvariantCulture)}";
-            else
-                uri = $"geo:{latitude.ToString(CultureInfo.InvariantCulture)},{longitude.ToString(CultureInfo.InvariantCulture)}?q={latitude.ToString(CultureInfo.InvariantCulture)},{longitude.ToString(CultureInfo.InvariantCulture)}({options.Name})";
+            uri = $"geo:{latitude.ToString(CultureInfo.InvariantCulture)},{longitude.ToString(CultureInfo.InvariantCulture)}?q={latitude.ToString(CultureInfo.InvariantCulture)},{longitude.ToString(CultureInfo.InvariantCulture)}";
+            if (!string.IsNullOrWhiteSpace(options.Name))
+                uri += $"({options.Name})";
             StartIntent(uri);
             return Task.CompletedTask;
         }
@@ -21,8 +20,9 @@ namespace Xamarin.Essentials
         internal static Task PlatformOpenMapsAsync(Placemark placemark, MapLaunchOptions options)
         {
             placemark = placemark.Escape();
-            var uri2 = String.Format("geo:0,0?q={placemark.Thoroughfare} {placemark.Locality} {placemark.AdminArea} {placemark.CountryName}", street, city, state, zip, country);
-            var uri = $"http://maps.google.com/maps?q={} {}, {} {}";
+            var uri = $"geo:0,0?q={placemark.Thoroughfare} {placemark.Locality} {placemark.AdminArea} {placemark.CountryName}";
+            if (!string.IsNullOrWhiteSpace(options.Name))
+                uri += $"({options.Name})";
             StartIntent(uri);
             return Task.CompletedTask;
         }
