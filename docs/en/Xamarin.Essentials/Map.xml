@@ -12,7 +12,9 @@
   <Interfaces />
   <Docs>
     <summary>Map helpers to open a route to specified places via default platforms maps implementation.</summary>
-    <remarks><para /></remarks>
+    <remarks>
+      <para />
+    </remarks>
   </Docs>
   <Members>
     <Member MemberName="OpenMapsAsync">
@@ -35,7 +37,9 @@
         <param name="location">Location containing latitude and longitude.</param>
         <param name="options">Map launching options.</param>
         <summary>Opens the location as specified by its longitude and latitude.</summary>
-        <returns><para/></returns>
+        <returns>
+          <para />
+        </returns>
         <remarks>
           <para></para>
         </remarks>
@@ -61,8 +65,12 @@
         <param name="placemark">Placemark containing country, state, city, and street.</param>
         <param name="options">Map launching options.</param>
         <summary>Opens the location as specified by its country, state, city, and street.</summary>
-        <returns><para/></returns>
-        <remarks><para /></remarks>
+        <returns>
+          <para />
+        </returns>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="OpenMapsAsync">
@@ -87,8 +95,12 @@
         <param name="longitude">Longitude</param>
         <param name="options">Map launching options.</param>
         <summary>Opens the location as specified by its longitude and latitude.</summary>
-        <returns><para/></returns>
-        <remarks><para/></remarks>
+        <returns>
+          <para />
+        </returns>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
   </Members>

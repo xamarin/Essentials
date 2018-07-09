@@ -27,7 +27,9 @@
       <Parameters />
       <Docs>
         <summary>Default constructor for MapLaunchOptions.</summary>
-        <remarks><para/></remarks>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="MapNavigation">
@@ -45,7 +47,9 @@
       <Docs>
         <summary>MapNavigation enum to select route transportation mode.</summary>
         <value>MapNavigation.Default is the default value.</value>
-        <remarks><para/></remarks>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="Name">
@@ -63,7 +67,9 @@
       <Docs>
         <summary>Name of the route.</summary>
         <value>The name.</value>
-        <remarks></para></remarks>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
   </Members>

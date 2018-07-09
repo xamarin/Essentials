@@ -60,9 +60,9 @@
       <ReturnValue>
         <ReturnType>Xamarin.Essentials.MapNavigation</ReturnType>
       </ReturnValue>
-      <MemberValue>Walking route mode.</MemberValue>
+      <MemberValue>2</MemberValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Walking route mode.</summary>
       </Docs>
     </Member>
   </Members>
