@@ -113,6 +113,9 @@
       <Type Name="MagnetometerChangedEventHandler" Kind="Delegate" />
       <Type Name="MagnetometerData" Kind="Structure" />
       <Type Name="MainThread" Kind="Class" />
+      <Type Name="Map" Kind="Class" />
+      <Type Name="MapLaunchOptions" Kind="Class" />
+      <Type Name="MapNavigation" Kind="Enumeration" />
       <Type Name="NetworkAccess" Kind="Enumeration" />
       <Type Name="NotImplementedInReferenceAssemblyException" Kind="Class" />
       <Type Name="OrientationSensor" Kind="Class" />

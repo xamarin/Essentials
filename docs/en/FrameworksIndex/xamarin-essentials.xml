@@ -256,6 +256,21 @@
       <Member Id="M:Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(System.Action)" />
       <Member Id="P:Xamarin.Essentials.MainThread.IsMainThread" />
     </Type>
+    <Type Name="Xamarin.Essentials.Map" Id="T:Xamarin.Essentials.Map">
+      <Member Id="M:Xamarin.Essentials.Map.OpenMapsAsync(System.Double,System.Double,Xamarin.Essentials.MapLaunchOptions)" />
+      <Member Id="M:Xamarin.Essentials.Map.OpenMapsAsync(Xamarin.Essentials.Location,Xamarin.Essentials.MapLaunchOptions)" />
+      <Member Id="M:Xamarin.Essentials.Map.OpenMapsAsync(Xamarin.Essentials.Placemark,Xamarin.Essentials.MapLaunchOptions)" />
+    </Type>
+    <Type Name="Xamarin.Essentials.MapLaunchOptions" Id="T:Xamarin.Essentials.MapLaunchOptions">
+      <Member Id="M:Xamarin.Essentials.MapLaunchOptions.#ctor" />
+      <Member Id="P:Xamarin.Essentials.MapLaunchOptions.MapNavigation" />
+      <Member Id="P:Xamarin.Essentials.MapLaunchOptions.Name" />
+    </Type>
+    <Type Name="Xamarin.Essentials.MapNavigation" Id="T:Xamarin.Essentials.MapNavigation">
+      <Member Id="F:Xamarin.Essentials.MapNavigation.Default" />
+      <Member Id="F:Xamarin.Essentials.MapNavigation.Driving" />
+      <Member Id="F:Xamarin.Essentials.MapNavigation.Walking" />
+    </Type>
     <Type Name="Xamarin.Essentials.NetworkAccess" Id="T:Xamarin.Essentials.NetworkAccess">
       <Member Id="F:Xamarin.Essentials.NetworkAccess.ConstrainedInternet" />
       <Member Id="F:Xamarin.Essentials.NetworkAccess.Internet" />
