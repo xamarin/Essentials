@@ -8,13 +8,13 @@ namespace Xamarin.Essentials
     {
         internal static Task PlatformOpenMapsAsync(double latitude, double longitude, MapLaunchOptions options)
         {
-            var uri = CreatePointUri(latitude, longitude, ref options);
+            var uri = CreatePointUri(latitude, longitude, options);
             return LaunchUri(uri);
         }
 
         internal static Task PlatformOpenMapsAsync(Placemark placemark, MapLaunchOptions options)
         {
-            var uri = CreatePlacemarkUri(placemark, ref options);
+            var uri = CreatePlacemarkUri(placemark, options);
             return LaunchUri(uri);
         }
 
@@ -23,7 +23,7 @@ namespace Xamarin.Essentials
             await Windows.System.Launcher.LaunchUriAsync(mapsUri);
         }
 
-        static Uri CreatePlacemarkUri(Placemark placemark, ref MapLaunchOptions options)
+        static Uri CreatePlacemarkUri(Placemark placemark, MapLaunchOptions options)
         {
             placemark = placemark.Escape();
             var uri = new Uri(
@@ -35,7 +35,7 @@ namespace Xamarin.Essentials
             return uri;
         }
 
-        static Uri CreatePointUri(double latitude, double longitude, ref MapLaunchOptions options)
+        static Uri CreatePointUri(double latitude, double longitude, MapLaunchOptions options)
         {
             var uri = new Uri(
                 $"bingmaps:?collection=point." +
