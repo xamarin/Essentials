@@ -379,7 +379,7 @@
       <Member Id="F:Xamarin.Essentials.SensorSpeed.Fastest" />
       <Member Id="F:Xamarin.Essentials.SensorSpeed.Game" />
       <Member Id="F:Xamarin.Essentials.SensorSpeed.Normal" />
-      <Member Id="F:Xamarin.Essentials.SensorSpeed.Ui" />
+      <Member Id="F:Xamarin.Essentials.SensorSpeed.UI" />
     </Type>
     <Type Name="Xamarin.Essentials.ShareTextRequest" Id="T:Xamarin.Essentials.ShareTextRequest">
       <Member Id="M:Xamarin.Essentials.ShareTextRequest.#ctor" />
