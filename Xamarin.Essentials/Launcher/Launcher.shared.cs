@@ -15,7 +15,10 @@ namespace Xamarin.Essentials
         }
 
         public static Task<bool> CanOpenAsync(Uri uri)
-            => uri != null ? PlatformCanOpenAsync(uri) : throw new ArgumentNullException(nameof(uri));
+        {
+            return uri != null ? PlatformCanOpenAsync(uri)
+                : throw new ArgumentNullException(nameof(uri), $"Uri cannot be empty.");
+        }
 
         public static Task OpenAsync(string uri)
         {
@@ -27,6 +30,12 @@ namespace Xamarin.Essentials
         }
 
         public static Task OpenAsync(Uri uri)
-            => uri != null ? PlatformOpenAsync(uri) : throw new ArgumentNullException(nameof(uri));
+        {
+            if (uri == null)
+            {
+                throw new ArgumentNullException(nameof(uri), $"Uri cannot be empty.");
+            }
+            return PlatformOpenAsync(uri);
+        }
     }
 }
