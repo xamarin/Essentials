@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 
 namespace Xamarin.Essentials
 {
@@ -11,6 +10,8 @@ namespace Xamarin.Essentials
 
         public static bool IsMonitoring { get; private set; }
 
+        public static bool ApplyLowPassFilter { get; set; }
+
         public static void Start(SensorSpeed sensorSpeed)
         {
             if (!IsSupported)
@@ -20,7 +21,7 @@ namespace Xamarin.Essentials
                 return;
 
             IsMonitoring = true;
-            useSyncContext = sensorSpeed == SensorSpeed.Normal || sensorSpeed == SensorSpeed.Ui;
+            useSyncContext = sensorSpeed == SensorSpeed.Normal || sensorSpeed == SensorSpeed.UI;
 
             try
             {
