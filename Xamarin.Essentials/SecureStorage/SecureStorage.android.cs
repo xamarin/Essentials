@@ -91,10 +91,10 @@ namespace Xamarin.Essentials
         ISecretKey GetKey()
         {
             // check to see if we need to get our key from past-versions or newer versions.
-            isPreM = Preferences.Get(isPreMKey, Platform.HasApiLevel(BuildVersionCodes.M), SecureStorage.Alias);
+            isPreM = Preferences.Get(isPreMKey, !Platform.HasApiLevel(BuildVersionCodes.M), SecureStorage.Alias);
 
             // If >= API 23 we can use the KeyStore's symmetric key
-            if (isPreM && !alwaysUseAsymmetricKey)
+            if (!isPreM && !alwaysUseAsymmetricKey)
                 return GetSymmetricKey();
 
             // NOTE: KeyStore in < API 23 can only store asymmetric keys
