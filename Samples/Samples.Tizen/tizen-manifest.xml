@@ -8,6 +8,7 @@
     </ui-application>
     <privileges>
         <privilege>http://tizen.org/privilege/appmanager.launch</privilege>
+        <privilege>http://tizen.org/privilege/haptic</privilege>
         <privilege>http://tizen.org/privilege/led</privilege>
     </privileges>
     <provides-appdefined-privileges />
