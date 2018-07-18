@@ -21,13 +21,16 @@ namespace Xamarin.Essentials
         public static Task OpenAsync(Uri uri) =>
           OpenAsync(uri, BrowserLaunchType.SystemPreferred);
 
-        public static Task OpenAsync(Uri uri, BrowserLaunchType launchType)
+        public static Task OpenAsync(Uri uri, BrowserLaunchType launchType) =>
+            PlatformOpenAsync(EscapeUri(uri), launchType);
+
+        internal static Uri EscapeUri(Uri uri)
         {
 #if NETSTANDARD1_0
-            return PlatformOpenAsync(uri, launchType);
+            return uri;
 #else
             var idn = new System.Globalization.IdnMapping();
-            return PlatformOpenAsync(new Uri(uri.Scheme + "://" + idn.GetAscii(uri.DnsSafeHost) + uri.PathAndQuery), launchType);
+            return new Uri(uri.Scheme + "://" + idn.GetAscii(uri.DnsSafeHost) + uri.PathAndQuery);
 #endif
         }
     }
