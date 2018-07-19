@@ -38,8 +38,6 @@ namespace Xamarin.Essentials
         static void PlatformOpenSettings()
         {
             var context = Platform.CurrentActivity ?? Platform.AppContext;
-            if (context == null)
-                return;
 
             var settingsIntent = new Intent();
             settingsIntent.SetAction(global::Android.Provider.Settings.ActionApplicationDetailsSettings);

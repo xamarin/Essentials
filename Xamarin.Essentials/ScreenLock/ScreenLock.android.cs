@@ -8,22 +8,22 @@ namespace Xamarin.Essentials
         {
             get
             {
-                var activity = Platform.CurrentActivity;
-                var flags = activity?.Window?.Attributes?.Flags ?? 0;
+                var activity = Platform.GetActivity(true);
+                var flags = activity.Window?.Attributes?.Flags ?? 0;
                 return flags.HasFlag(WindowManagerFlags.KeepScreenOn);
             }
         }
 
         static void PlatformRequestActive()
         {
-            var activity = Platform.CurrentActivity;
-            activity?.Window?.AddFlags(WindowManagerFlags.KeepScreenOn);
+            var activity = Platform.GetActivity(true);
+            activity.Window?.AddFlags(WindowManagerFlags.KeepScreenOn);
         }
 
         static void PlatformRequestRelease()
         {
-            var activity = Platform.CurrentActivity;
-            activity?.Window?.ClearFlags(WindowManagerFlags.KeepScreenOn);
+            var activity = Platform.GetActivity(true);
+            activity.Window?.ClearFlags(WindowManagerFlags.KeepScreenOn);
         }
     }
 }
