@@ -85,16 +85,18 @@ namespace Xamarin.Essentials
         KeyStore keyStore;
         bool alwaysUseAsymmetricKey;
 
-        bool isPreM = false;
-        string isPreMKey = "is_pre_m";
+        bool useSymmetric = false;
+        string useSymmetricPreferenceKey = "essentials_use_symmetric";
 
         ISecretKey GetKey()
         {
             // check to see if we need to get our key from past-versions or newer versions.
-            isPreM = Preferences.Get(isPreMKey, !Platform.HasApiLevel(BuildVersionCodes.M), SecureStorage.Alias);
+            // we want to use symmetric if we are >= 23 or we didn't set it previously.
+
+            useSymmetric = Preferences.Get(useSymmetricPreferenceKey, Platform.HasApiLevel(BuildVersionCodes.M), SecureStorage.Alias);
 
             // If >= API 23 we can use the KeyStore's symmetric key
-            if (!isPreM && !alwaysUseAsymmetricKey)
+            if (useSymmetric && !alwaysUseAsymmetricKey)
                 return GetSymmetricKey();
 
             // NOTE: KeyStore in < API 23 can only store asymmetric keys
@@ -151,6 +153,8 @@ namespace Xamarin.Essentials
 
             keyGenerator.Init(builder.Build());
 
+            Preferences.Set(useSymmetricPreferenceKey, true, SecureStorage.Alias);
+
             return keyGenerator.GenerateKey();
         }
 
@@ -184,7 +188,7 @@ namespace Xamarin.Essentials
 #pragma warning restore CS0618
 
             // set that we generated keys on pre-m device.
-            Preferences.Set(isPreMKey, true, SecureStorage.Alias);
+            Preferences.Set(useSymmetricPreferenceKey, false, SecureStorage.Alias);
 
             return generator.GenerateKeyPair();
         }
