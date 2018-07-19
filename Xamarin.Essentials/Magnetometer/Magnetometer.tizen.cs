@@ -26,7 +26,7 @@ namespace Xamarin.Essentials
                 case SensorSpeed.Game:
                     interval = GameInterval;
                     break;
-                case SensorSpeed.Ui:
+                case SensorSpeed.UI:
                     interval = UiInterval;
                     break;
             }

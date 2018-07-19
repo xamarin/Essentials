@@ -23,15 +23,6 @@ namespace Xamarin.Essentials
         {
             try
             {
-                DataManager.RemoveAlias(key);
-            }
-            catch
-            {
-                Tizen.Log.Info(Platform.CurrentPackage.Label, "No save data.");
-            }
-
-            try
-            {
                 DataManager.Save(key, Encoding.UTF8.GetBytes(data), new Policy());
             }
             catch
@@ -41,6 +32,35 @@ namespace Xamarin.Essentials
             }
 
             return Task.CompletedTask;
+        }
+
+        static void PlatformRemoveAll()
+        {
+            try
+            {
+                foreach (var key in DataManager.GetAliases())
+                {
+                    DataManager.RemoveAlias(key);
+                }
+            }
+            catch
+            {
+                Tizen.Log.Info(Platform.CurrentPackage.Label, "No save data.");
+            }
+        }
+
+        static bool PlatformRemove(string key)
+        {
+            try
+            {
+                DataManager.RemoveAlias(key);
+                return true;
+            }
+            catch
+            {
+                Tizen.Log.Info(Platform.CurrentPackage.Label, "Failed to remove data.");
+                return false;
+            }
         }
     }
 }
