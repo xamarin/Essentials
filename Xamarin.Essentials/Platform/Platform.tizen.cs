@@ -1,6 +1,4 @@
-﻿using System;
-using ElmSharp;
-using Tizen.Applications;
+﻿using Tizen.Applications;
 using Tizen.Sensor;
 using Tizen.System;
 using TizenAccelerometer = Tizen.Sensor.Accelerometer;
@@ -24,14 +22,6 @@ namespace Xamarin.Essentials
                 var packageId = Application.Current.ApplicationInfo.PackageId;
                 return PackageManager.GetPackage(packageId);
             }
-        }
-
-        static void PlatformBeginInvokeOnMainThread(Action action)
-        {
-            if (EcoreMainloop.IsMainThread)
-                action();
-            else
-                EcoreMainloop.PostAndWakeUp(action);
         }
 
         internal static string GetSystemInfo(string item) => GetSystemInfo<string>(item);
