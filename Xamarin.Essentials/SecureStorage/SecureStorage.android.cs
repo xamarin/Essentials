@@ -137,6 +137,8 @@ namespace Xamarin.Essentials
         // API 23+ Only
         ISecretKey GetSymmetricKey()
         {
+            Preferences.Set(useSymmetricPreferenceKey, true, SecureStorage.Alias);
+
             var existingKey = keyStore.GetKey(alias, null);
 
             if (existingKey != null)
@@ -153,13 +155,14 @@ namespace Xamarin.Essentials
 
             keyGenerator.Init(builder.Build());
 
-            Preferences.Set(useSymmetricPreferenceKey, true, SecureStorage.Alias);
-
             return keyGenerator.GenerateKey();
         }
 
         KeyPair GetAsymmetricKeyPair()
         {
+            // set that we generated keys on pre-m device.
+            Preferences.Set(useSymmetricPreferenceKey, false, SecureStorage.Alias);
+
             var asymmetricAlias = $"{alias}.asymmetric";
 
             var privateKey = keyStore.GetKey(asymmetricAlias, null)?.JavaCast<IPrivateKey>();
@@ -186,9 +189,6 @@ namespace Xamarin.Essentials
 
             generator.Initialize(builder.Build());
 #pragma warning restore CS0618
-
-            // set that we generated keys on pre-m device.
-            Preferences.Set(useSymmetricPreferenceKey, false, SecureStorage.Alias);
 
             return generator.GenerateKeyPair();
         }
