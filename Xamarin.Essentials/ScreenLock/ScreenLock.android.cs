@@ -8,7 +8,7 @@ namespace Xamarin.Essentials
         {
             get
             {
-                var activity = Platform.GetActivity(true);
+                var activity = Platform.GetCurrentActivity(true);
                 var flags = activity.Window?.Attributes?.Flags ?? 0;
                 return flags.HasFlag(WindowManagerFlags.KeepScreenOn);
             }
@@ -16,13 +16,13 @@ namespace Xamarin.Essentials
 
         static void PlatformRequestActive()
         {
-            var activity = Platform.GetActivity(true);
+            var activity = Platform.GetCurrentActivity(true);
             activity.Window?.AddFlags(WindowManagerFlags.KeepScreenOn);
         }
 
         static void PlatformRequestRelease()
         {
-            var activity = Platform.GetActivity(true);
+            var activity = Platform.GetCurrentActivity(true);
             activity.Window?.ClearFlags(WindowManagerFlags.KeepScreenOn);
         }
     }

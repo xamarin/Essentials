@@ -19,14 +19,11 @@ namespace Xamarin.Essentials
         internal static Context AppContext =>
             Application.Context;
 
-        internal static Activity CurrentActivity =>
-            GetActivity(false);
-
-        internal static Activity GetActivity(bool throwOnNull)
+        internal static Activity GetCurrentActivity(bool throwOnNull)
         {
             var activity = lifecycleListener?.Activity;
             if (throwOnNull && activity == null)
-                throw new NullReferenceException("The current activity is not set. Ensure that you have called Init in your Activity.");
+                throw new NullReferenceException("The current Activity can not be detected. Ensure that you have called Init in your Activity or Application class.");
 
             return activity;
         }
