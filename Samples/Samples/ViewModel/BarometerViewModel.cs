@@ -13,12 +13,12 @@ namespace Samples.ViewModel
         public BarometerViewModel()
         {
             StartBarometerComand = new Command(OnStartBarometer);
-            StopBaromterCommand = new Command(OnStopBarometer);
+            StopBarometerCommand = new Command(OnStopBarometer);
         }
 
         public ICommand StartBarometerComand { get; }
 
-        public ICommand StopBaromterCommand { get; }
+        public ICommand StopBarometerCommand { get; }
 
         public bool BarometerIsActive
         {
@@ -50,7 +50,7 @@ namespace Samples.ViewModel
             }
             catch (Exception ex)
             {
-                await DisplayAlertAsync($"Unable to start compass: {ex.Message}");
+                await DisplayAlertAsync($"Unable to start barometer: {ex.Message}");
             }
         }
 
