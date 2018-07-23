@@ -32,17 +32,17 @@ namespace Xamarin.Essentials
         }
 
         static void OnScreenMetricsChanaged(ScreenMetrics metrics)
-            => OnScreenMetricsChanaged(new ScreenMetricsChanagedEventArgs(metrics));
+            => OnScreenMetricsChanaged(new ScreenMetricsChangedEventArgs(metrics));
 
-        static void OnScreenMetricsChanaged(ScreenMetricsChanagedEventArgs e)
+        static void OnScreenMetricsChanaged(ScreenMetricsChangedEventArgs e)
             => ScreenMetricsChanagedInternal?.Invoke(e);
     }
 
-    public delegate void ScreenMetricsChanagedEventHandler(ScreenMetricsChanagedEventArgs e);
+    public delegate void ScreenMetricsChanagedEventHandler(ScreenMetricsChangedEventArgs e);
 
-    public class ScreenMetricsChanagedEventArgs : EventArgs
+    public class ScreenMetricsChangedEventArgs : EventArgs
     {
-        public ScreenMetricsChanagedEventArgs(ScreenMetrics metrics)
+        public ScreenMetricsChangedEventArgs(ScreenMetrics metrics)
         {
             Metrics = metrics;
         }

@@ -354,9 +354,9 @@
       <Member Id="P:Xamarin.Essentials.ScreenMetrics.Rotation" />
       <Member Id="P:Xamarin.Essentials.ScreenMetrics.Width" />
     </Type>
-    <Type Name="Xamarin.Essentials.ScreenMetricsChanagedEventArgs" Id="T:Xamarin.Essentials.ScreenMetricsChanagedEventArgs">
-      <Member Id="M:Xamarin.Essentials.ScreenMetricsChanagedEventArgs.#ctor(Xamarin.Essentials.ScreenMetrics)" />
-      <Member Id="P:Xamarin.Essentials.ScreenMetricsChanagedEventArgs.Metrics" />
+    <Type Name="Xamarin.Essentials.ScreenMetricsChangedEventArgs" Id="T:Xamarin.Essentials.ScreenMetricsChangedEventArgs">
+      <Member Id="M:Xamarin.Essentials.ScreenMetricsChangedEventArgs.#ctor(Xamarin.Essentials.ScreenMetrics)" />
+      <Member Id="P:Xamarin.Essentials.ScreenMetricsChangedEventArgs.Metrics" />
     </Type>
     <Type Name="Xamarin.Essentials.ScreenMetricsChanagedEventHandler" Id="T:Xamarin.Essentials.ScreenMetricsChanagedEventHandler" />
     <Type Name="Xamarin.Essentials.ScreenOrientation" Id="T:Xamarin.Essentials.ScreenOrientation">
