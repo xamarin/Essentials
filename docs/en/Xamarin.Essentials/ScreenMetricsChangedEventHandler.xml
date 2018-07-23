@@ -1,5 +1,5 @@
 <Type Name="ScreenMetricsChanagedEventHandler" FullName="Xamarin.Essentials.ScreenMetricsChanagedEventHandler">
-  <TypeSignature Language="C#" Value="public delegate void ScreenMetricsChanagedEventHandler(ScreenMetricsChanagedEventArgs e);" />
+  <TypeSignature Language="C#" Value="public delegate void ScreenMetricsChanagedEventHandler(ScreenMetricsChangedEventArgs e);" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed ScreenMetricsChanagedEventHandler extends System.MulticastDelegate" />
   <TypeSignature Language="DocId" Value="T:Xamarin.Essentials.ScreenMetricsChanagedEventHandler" />
   <AssemblyInfo>
@@ -10,7 +10,7 @@
     <BaseTypeName>System.Delegate</BaseTypeName>
   </Base>
   <Parameters>
-    <Parameter Name="e" Type="Xamarin.Essentials.ScreenMetricsChanagedEventArgs" />
+    <Parameter Name="e" Type="Xamarin.Essentials.ScreenMetricsChangedEventArgs" />
   </Parameters>
   <ReturnValue>
     <ReturnType>System.Void</ReturnType>

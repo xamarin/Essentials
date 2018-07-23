@@ -127,7 +127,7 @@
       <Type Name="Preferences" Kind="Class" />
       <Type Name="ScreenLock" Kind="Class" />
       <Type Name="ScreenMetrics" Kind="Structure" />
-      <Type Name="ScreenMetricsChanagedEventArgs" Kind="Class" />
+      <Type Name="ScreenMetricsChangedEventArgs" Kind="Class" />
       <Type Name="ScreenMetricsChanagedEventHandler" Kind="Delegate" />
       <Type Name="ScreenOrientation" Kind="Enumeration" />
       <Type Name="ScreenRotation" Kind="Enumeration" />
