@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Xamarin.Essentials
 {
-#pragma warning disable SA1205 // Partial elements should declare access
-    static partial class PlacemarkExtensions
-#pragma warning restore SA1205 // Partial elements should declare access
+    public static partial class PlacemarkExtensions
     {
+        public static Task OpenMapsAsync(this Placemark placemark, MapsLaunchOptions options) =>
+            Maps.OpenAsync(placemark, options);
+
+        public static Task OpenMapsAsync(this Placemark placemark) =>
+            Maps.OpenAsync(placemark);
+
         internal static Placemark Escape(this Placemark placemark)
         {
             if (placemark == null)

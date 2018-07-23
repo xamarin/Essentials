@@ -16,20 +16,20 @@ namespace Tests
               () => Map.OpenMapsAsync(
                   testLatitude,
                   testLongitude,
-                  new MapLaunchOptions { Name = mapName }));
+                  new MapsOpenOptions { Name = mapName }));
 
         [Fact]
         public async Task Open_Map_Location_NetStandard() =>
           await Assert.ThrowsAsync<NotImplementedInReferenceAssemblyException>(
               () => Map.OpenMapsAsync(
                   new Location(testLatitude, testLongitude),
-                  new MapLaunchOptions { Name = mapName }));
+                  new MapsOpenOptions { Name = mapName }));
 
         [Fact]
         public async Task Open_Map_Placemark_NetStandard() =>
           await Assert.ThrowsAsync<NotImplementedInReferenceAssemblyException>(
               () => Map.OpenMapsAsync(
                   new Placemark(),
-                  new MapLaunchOptions { Name = mapName }));
+                  new MapsOpenOptions { Name = mapName }));
     }
 }

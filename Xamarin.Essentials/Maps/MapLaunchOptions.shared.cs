@@ -1,9 +1,9 @@
 ﻿namespace Xamarin.Essentials
 {
-    public class MapLaunchOptions
+    public class MapsLaunchOptions
     {
-        public MapNavigation MapNavigation { get; set; }
+        public MapDirectionsMode MapDirectionsMode { get; set; } = MapDirectionsMode.Default;
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 }

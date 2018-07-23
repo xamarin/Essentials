@@ -1,9 +1,10 @@
 ﻿namespace Xamarin.Essentials
 {
-    public enum MapNavigation
+    public enum MapDirectionsMode
     {
         Default,
         Driving,
+        Transit,
         Walking
     }
 }
