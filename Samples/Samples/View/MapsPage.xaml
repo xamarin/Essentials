@@ -1,0 +1,21 @@
+﻿<views:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:views="clr-namespace:Samples.View"
+                xmlns:viewmodels="clr-namespace:Samples.ViewModel"
+                x:Class="Samples.View.MapsPage"
+                Title="Maps">
+    <views:BasePage.BindingContext>
+        <viewmodels:LaunchMapsViewModel />
+    </views:BasePage.BindingContext>
+
+    <StackLayout>
+        <Label Text="Open location in maps." FontAttributes="Bold" Margin="12" />
+        <Label Text="Latitude" />
+        <Entry Keyboard="Numeric" Text="{Binding Latitude}" />
+        <Label Text="Longitude" />
+        <Entry Keyboard="Numeric" Text="{Binding Longitude}" />
+        <Button Text="Open coordinates" Command="{Binding LaunchMapsCommand}"/>
+        <Button Text="Open adress" Command="{Binding LaunchPlacemarkCommand}"/>
+    </StackLayout>
+
+</views:BasePage>

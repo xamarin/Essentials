@@ -210,6 +210,11 @@
     <Type Name="Xamarin.Essentials.GyroscopeData" Id="T:Xamarin.Essentials.GyroscopeData">
       <Member Id="P:Xamarin.Essentials.GyroscopeData.AngularVelocity" />
     </Type>
+    <Type Name="Xamarin.Essentials.LaunchMaps" Id="T:Xamarin.Essentials.LaunchMaps">
+      <Member Id="M:Xamarin.Essentials.LaunchMaps.OpenAsync(System.Double,System.Double,Xamarin.Essentials.MapLaunchOptions)" />
+      <Member Id="M:Xamarin.Essentials.LaunchMaps.OpenAsync(Xamarin.Essentials.Location,Xamarin.Essentials.MapLaunchOptions)" />
+      <Member Id="M:Xamarin.Essentials.LaunchMaps.OpenAsync(Xamarin.Essentials.Placemark,Xamarin.Essentials.MapLaunchOptions)" />
+    </Type>
     <Type Name="Xamarin.Essentials.Locale" Id="T:Xamarin.Essentials.Locale">
       <Member Id="P:Xamarin.Essentials.Locale.Country" />
       <Member Id="P:Xamarin.Essentials.Locale.Id" />
@@ -249,6 +254,16 @@
     <Type Name="Xamarin.Essentials.MainThread" Id="T:Xamarin.Essentials.MainThread">
       <Member Id="M:Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(System.Action)" />
       <Member Id="P:Xamarin.Essentials.MainThread.IsMainThread" />
+    </Type>
+    <Type Name="Xamarin.Essentials.MapLaunchOptions" Id="T:Xamarin.Essentials.MapLaunchOptions">
+      <Member Id="M:Xamarin.Essentials.MapLaunchOptions.#ctor" />
+      <Member Id="P:Xamarin.Essentials.MapLaunchOptions.MapNavigation" />
+      <Member Id="P:Xamarin.Essentials.MapLaunchOptions.Name" />
+    </Type>
+    <Type Name="Xamarin.Essentials.MapNavigation" Id="T:Xamarin.Essentials.MapNavigation">
+      <Member Id="F:Xamarin.Essentials.MapNavigation.Default" />
+      <Member Id="F:Xamarin.Essentials.MapNavigation.Driving" />
+      <Member Id="F:Xamarin.Essentials.MapNavigation.Walking" />
     </Type>
     <Type Name="Xamarin.Essentials.NetworkAccess" Id="T:Xamarin.Essentials.NetworkAccess">
       <Member Id="F:Xamarin.Essentials.NetworkAccess.ConstrainedInternet" />
