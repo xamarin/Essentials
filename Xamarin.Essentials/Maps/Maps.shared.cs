@@ -19,6 +19,9 @@ namespace Xamarin.Essentials
             return PlatformOpenMapsAsync(location.Latitude, location.Longitude, options);
         }
 
+        public static Task OpenAsync(double latitude, double longitude) =>
+            OpenAsync(latitude, longitude, new MapsLaunchOptions());
+
         public static Task OpenAsync(double latitude, double longitude, MapsLaunchOptions options)
         {
             if (options == null)
