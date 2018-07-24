@@ -17,6 +17,25 @@
     </remarks>
   </Docs>
   <Members>
+    <Member MemberName="AppStateChanged">
+      <MemberSignature Language="C#" Value="public static event EventHandler&lt;Xamarin.Essentials.AppStateChangedEventArgs&gt; AppStateChanged;" />
+      <MemberSignature Language="ILAsm" Value=".event class System.EventHandler`1&lt;class Xamarin.Essentials.AppStateChangedEventArgs&gt; AppStateChanged" />
+      <MemberSignature Language="DocId" Value="E:Xamarin.Essentials.AppInfo.AppStateChanged" />
+      <MemberType>Event</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.EventHandler&lt;Xamarin.Essentials.AppStateChangedEventArgs&gt;</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>&gt;Event triggered when app state changes</summary>
+        <remarks>
+          <para />
+        </remarks>
+      </Docs>
+    </Member>
     <Member MemberName="BuildString">
       <MemberSignature Language="C#" Value="public static string BuildString { get; }" />
       <MemberSignature Language="ILAsm" Value=".property string BuildString" />
@@ -89,6 +108,24 @@
         <summary>Gets the application package name or identifier.</summary>
         <value>The package name or identifier.</value>
         <remarks>On android and iOS, this is the application package name. On UWP, this is the application GUID.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="State">
+      <MemberSignature Language="C#" Value="public static Xamarin.Essentials.AppState State { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property valuetype Xamarin.Essentials.AppState State" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.AppInfo.State" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Xamarin.Essentials.AppState</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Gets the current application state.</summary>
+        <value>Foreground if app is visible, otherwise Background.</value>
+        <remarks>On iOS this fires before the app is visible (ObserveWillEnterForeground). On all other platforms the event is fired after the change.</remarks>
       </Docs>
     </Member>
     <Member MemberName="Version">

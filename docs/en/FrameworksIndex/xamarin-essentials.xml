@@ -13,12 +13,21 @@
       <Member Id="P:Xamarin.Essentials.AccelerometerData.Acceleration" />
     </Type>
     <Type Name="Xamarin.Essentials.AppInfo" Id="T:Xamarin.Essentials.AppInfo">
+      <Member Id="E:Xamarin.Essentials.AppInfo.AppStateChanged" />
       <Member Id="M:Xamarin.Essentials.AppInfo.OpenSettings" />
       <Member Id="P:Xamarin.Essentials.AppInfo.BuildString" />
       <Member Id="P:Xamarin.Essentials.AppInfo.Name" />
       <Member Id="P:Xamarin.Essentials.AppInfo.PackageName" />
+      <Member Id="P:Xamarin.Essentials.AppInfo.State" />
       <Member Id="P:Xamarin.Essentials.AppInfo.Version" />
       <Member Id="P:Xamarin.Essentials.AppInfo.VersionString" />
+    </Type>
+    <Type Name="Xamarin.Essentials.AppState" Id="T:Xamarin.Essentials.AppState">
+      <Member Id="F:Xamarin.Essentials.AppState.Background" />
+      <Member Id="F:Xamarin.Essentials.AppState.Foreground" />
+    </Type>
+    <Type Name="Xamarin.Essentials.AppStateChangedEventArgs" Id="T:Xamarin.Essentials.AppStateChangedEventArgs">
+      <Member Id="P:Xamarin.Essentials.AppStateChangedEventArgs.State" />
     </Type>
     <Type Name="Xamarin.Essentials.Battery" Id="T:Xamarin.Essentials.Battery">
       <Member Id="E:Xamarin.Essentials.Battery.BatteryChanged" />
