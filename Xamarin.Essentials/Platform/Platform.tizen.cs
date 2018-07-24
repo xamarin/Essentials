@@ -5,6 +5,7 @@ using TizenAccelerometer = Tizen.Sensor.Accelerometer;
 using TizenGyroscope = Tizen.Sensor.Gyroscope;
 using TizenMagnetometer = Tizen.Sensor.Magnetometer;
 using TizenOrientationSensor = Tizen.Sensor.OrientationSensor;
+using TizenRotationVectorSensor = Tizen.Sensor.RotationVectorSensor;
 
 namespace Xamarin.Essentials
 {
@@ -14,6 +15,7 @@ namespace Xamarin.Essentials
         static TizenGyroscope gyroscope = null;
         static TizenMagnetometer magnetometer = null;
         static TizenOrientationSensor orientationSensor = null;
+        static TizenRotationVectorSensor rotationVectorSensor = null;
 
         internal static Package CurrentPackage
         {
@@ -68,6 +70,12 @@ namespace Xamarin.Essentials
                         Platform.orientationSensor = new TizenOrientationSensor();
                     }
                     return Platform.orientationSensor;
+                case SensorType.RotationVectorSensor:
+                    if (Platform.rotationVectorSensor == null)
+                    {
+                        Platform.rotationVectorSensor = new TizenRotationVectorSensor();
+                    }
+                    return Platform.rotationVectorSensor;
                 default:
                     return null;
             }
@@ -79,6 +87,7 @@ namespace Xamarin.Essentials
         Accelerometer,
         Gyroscope,
         Magnetometer,
-        OrientationSensor
+        OrientationSensor,
+        RotationVectorSensor,
     }
 }
