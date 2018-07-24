@@ -19,8 +19,6 @@ namespace Samples.ViewModel
 
         public Command OpenSettingsCommand { get; }
 
-        public string IsVisible => $"State change - Visible: {AppInfo.State == AppState.Foreground}";
-
         public IList<AppStateChange> History { get; } = new ObservableCollection<AppStateChange>();
 
         public AppInfoViewModel()
@@ -42,11 +40,10 @@ namespace Samples.ViewModel
         {
             History.Add(new AppStateChange(args.State, DateTimeOffset.UtcNow));
             OnPropertyChanged(nameof(History));
-            OnPropertyChanged(nameof(IsVisible));
         }
     }
 
-    public class AppStateChange
+    public readonly struct AppStateChange
     {
         public AppStateChange(AppState state, DateTimeOffset changeTime)
         {
