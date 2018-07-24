@@ -35,6 +35,9 @@ namespace Xamarin.Essentials
             if (placemark == null)
                 throw new ArgumentNullException(nameof(placemark));
 
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
+
             return PlatformOpenMapsAsync(placemark, options);
         }
     }
