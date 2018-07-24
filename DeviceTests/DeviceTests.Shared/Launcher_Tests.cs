@@ -13,43 +13,61 @@ namespace DeviceTests
     {
         [Theory]
         [InlineData("http://www.example.com")]
+        [InlineData("http://example.com/?query=blah")]
+        [InlineData("https://example.com/?query=blah")]
+        [InlineData("mailto://someone@microsoft.com")]
+        [InlineData("mailto://someone@microsoft.com?subject=test")]
+        [InlineData("tel:+1 555 010 9999")]
+        [InlineData("sms:5550109999")]
         [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
-        public Task Open_Run_On_UiThread(string uri)
+        public Task Open(string uri)
         {
             return Utils.OnMainThread(() => Launcher.OpenAsync(uri));
         }
 
         [Theory]
         [InlineData("http://www.example.com")]
-        public async Task Can_Open_Browser_Uri_As_String(string uri)
+        [InlineData("http://example.com/?query=blah")]
+        [InlineData("https://example.com/?query=blah")]
+        [InlineData("mailto://someone@microsoft.com")]
+        [InlineData("mailto://someone@microsoft.com?subject=test")]
+        [InlineData("tel:+1 555 010 9999")]
+        [InlineData("sms:5550109999")]
+        public async Task CanOpen(string uri)
         {
             Assert.True(await Launcher.CanOpenAsync(uri));
         }
 
         [Theory]
         [InlineData("http://www.example.com")]
-        public async Task Can_Open_Browser_Uri_As_Uri(string uri)
+        [InlineData("http://example.com/?query=blah")]
+        [InlineData("https://example.com/?query=blah")]
+        [InlineData("mailto://someone@microsoft.com")]
+        [InlineData("mailto://someone@microsoft.com?subject=test")]
+        [InlineData("tel:+1 555 010 9999")]
+        [InlineData("sms:5550109999")]
+        public async Task CanOpenUri(string uri)
         {
             Assert.True(await Launcher.CanOpenAsync(new Uri(uri)));
         }
 
         [Theory]
-        [InlineData("LITERAL GARBAGE")]
-        public async Task Can_Not_Open_Uri_As_String_Throws_InvalidUriException(string uri)
+        [InlineData("Not Valid Uri")]
+        public async Task InvalidUri(string uri)
         {
             await Assert.ThrowsAsync<UriFormatException>(() => Launcher.CanOpenAsync(uri));
         }
 
         [Theory]
         [InlineData("ms-invalidurifortest:abc")]
-        public async Task Can_Not_Open_Uri_As_Uri_No_Target_Found(string uri)
+        public async Task CanNotOpenUri(string uri)
         {
             Assert.False(await Launcher.CanOpenAsync(new Uri(uri)));
         }
 
         [Theory]
         [InlineData("ms-invalidurifortest:abc")]
-        public async Task Can_Not_Open_Uri_As_string_No_Target_Found(string uri)
+        public async Task CanNotOpen(string uri)
         {
             Assert.False(await Launcher.CanOpenAsync(uri));
         }
