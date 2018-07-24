@@ -6,9 +6,9 @@ namespace Xamarin.Essentials
     public static partial class Browser
     {
         public static Task OpenAsync(string uri) =>
-            OpenAsync(uri, BrowserLaunchType.SystemPreferred);
+            OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
 
-        public static Task OpenAsync(string uri, BrowserLaunchType launchType)
+        public static Task OpenAsync(string uri, BrowserLaunchMode launchType)
         {
             if (string.IsNullOrWhiteSpace(uri))
             {
@@ -19,9 +19,9 @@ namespace Xamarin.Essentials
         }
 
         public static Task OpenAsync(Uri uri) =>
-          OpenAsync(uri, BrowserLaunchType.SystemPreferred);
+          OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
 
-        public static Task OpenAsync(Uri uri, BrowserLaunchType launchType) =>
+        public static Task OpenAsync(Uri uri, BrowserLaunchMode launchType) =>
             PlatformOpenAsync(EscapeUri(uri), launchType);
 
         internal static Uri EscapeUri(Uri uri)
@@ -35,7 +35,7 @@ namespace Xamarin.Essentials
         }
     }
 
-    public enum BrowserLaunchType
+    public enum BrowserLaunchMode
     {
         External,
         SystemPreferred
