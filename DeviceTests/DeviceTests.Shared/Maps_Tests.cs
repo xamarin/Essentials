@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xunit;
 
@@ -6,15 +7,15 @@ namespace DeviceTests
 {
     public class Maps_Tests
     {
-        const double testLatitude = 52.51852;
-        const double testLongitude = 13.37621;
-        const string mapName = "Bundestag";
+        const double testLatitude = 47.645160;
+        const double testLongitude = -122.1306032;
+        const string mapName = "Microsoft Building 25";
 
         [Fact]
         [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
         public async Task LaunchMap_CoordinatesDisplayCorrectPlace()
         {
-            await Maps.OpenAsync(testLatitude, testLongitude, new MapsOpenOptions { Name = mapName });
+            await Maps.OpenAsync(testLatitude, testLongitude, new MapsLaunchOptions { Name = mapName });
         }
 
         [Fact]
@@ -23,12 +24,46 @@ namespace DeviceTests
         {
             var placemark = new Placemark
             {
-                CountryName = "Deutschland",
-                AdminArea = "Berlin",
-                Thoroughfare = "Platz der Republik 1",
-                Locality = "Berlin"
+                CountryName = "United States",
+                AdminArea = "WA",
+                Thoroughfare = "Microsoft Building 25",
+                Locality = "Redmond"
             };
-            await Maps.OpenAsync(placemark, new MapsOpenOptions { Name = mapName });
+            await Maps.OpenAsync(placemark, new MapsLaunchOptions { Name = mapName });
+        }
+
+        [Fact]
+        public async Task LaunchMap_NullLocation()
+        {
+            Location location = null;
+            await Assert.ThrowsAsync<ArgumentNullException>(() => Maps.OpenAsync(location));
+        }
+
+        [Fact]
+        public async Task LaunchMap_NullOptionsLocation()
+        {
+            var location = new Location(testLatitude, testLongitude);
+            await Assert.ThrowsAsync<ArgumentNullException>(() => Maps.OpenAsync(location, null));
+        }
+
+        [Fact]
+        public async Task LaunchMap_NullPlacemark()
+        {
+            Placemark location = null;
+            await Assert.ThrowsAsync<ArgumentNullException>(() => Maps.OpenAsync(location));
+        }
+
+        [Fact]
+        public async Task LaunchMap_NullOptionsPlacemark()
+        {
+            var placemark = new Placemark
+            {
+                CountryName = "United States",
+                AdminArea = "WA",
+                Thoroughfare = "Microsoft Building 25",
+                Locality = "Redmond"
+            };
+            await Assert.ThrowsAsync<ArgumentNullException>(() => Maps.OpenAsync(placemark, null));
         }
     }
 }
