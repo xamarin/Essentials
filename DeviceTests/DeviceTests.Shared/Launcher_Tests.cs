@@ -35,11 +35,13 @@ namespace DeviceTests
         [InlineData("sms:5550109999")]
         public async Task CanOpen(string uri)
         {
+#if __IOS__
             if (DeviceInfo.DeviceType == DeviceType.Virtual && (uri.Contains("tel:") || uri.Contains("mailto:")))
             {
                 Assert.False(await Launcher.CanOpenAsync(uri));
                 return;
             }
+#endif
 
             Assert.True(await Launcher.CanOpenAsync(uri));
         }
