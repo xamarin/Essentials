@@ -74,20 +74,14 @@ namespace Xamarin.Essentials
             app.UnregisterComponentCallbacks(appState.Value);
         }
 
-        static void UpdateStateCallback(AppState state)
-        {
-            PlatformState = state;
-        }
+        static void UpdateStateCallback(AppState state) => PlatformState = state;
     }
 
     sealed class AppStateLifecycleListener : Java.Lang.Object, IActivityLifecycleCallbacks, IComponentCallbacks2
     {
         readonly Action<AppState> callback;
 
-        public AppStateLifecycleListener(Action<AppState> callback)
-        {
-            this.callback = callback;
-        }
+        public AppStateLifecycleListener(Action<AppState> callback) => this.callback = callback;
 
         public void OnActivityResumed(Activity activity)
         {
