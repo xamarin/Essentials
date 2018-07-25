@@ -30,7 +30,7 @@ namespace Xamarin.Essentials
         static void VisibilityChanged(object sender, VisibilityChangedEventArgs e)
         {
             var state = e.Visible ? AppState.Foreground : AppState.Background;
-            MainThread.BeginInvokeOnMainThread(() => OnStateChanged(state));
+            OnStateChanged(state);
             e.Handled = true;
         }
 

@@ -39,7 +39,6 @@ namespace Samples.ViewModel
         void UpdateState(object sender, AppStateChangedEventArgs args)
         {
             History.Add(new AppStateChange(args.State, DateTimeOffset.UtcNow));
-            OnPropertyChanged(nameof(History));
         }
     }
 

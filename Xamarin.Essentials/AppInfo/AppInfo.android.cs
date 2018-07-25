@@ -13,7 +13,7 @@ namespace Xamarin.Essentials
     public static partial class AppInfo
     {
         static readonly Lazy<AppStateLifecycleListener> appState = new Lazy<AppStateLifecycleListener>(
-            () => new AppStateLifecycleListener((targ) => UpdateStateCallback(targ)));
+            () => new AppStateLifecycleListener((newState) => UpdateStateCallback(newState)));
 
         static AppState PlatformState { get; set; }
 
@@ -48,9 +48,7 @@ namespace Xamarin.Essentials
 
         static void PlatformOpenSettings()
         {
-            var context = Platform.CurrentActivity ?? Platform.AppContext;
-            if (context == null)
-                return;
+            var context = Platform.GetCurrentActivity(false) ?? Platform.AppContext;
 
             var settingsIntent = new Intent();
             settingsIntent.SetAction(global::Android.Provider.Settings.ActionApplicationDetailsSettings);

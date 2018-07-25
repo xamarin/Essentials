@@ -22,7 +22,6 @@
                 <Label Text="{Binding AppBuild, StringFormat='Build: {0}'}" />
 
                 <Button Text="Open Settings" Command="{Binding OpenSettingsCommand}"/>
-                <Label Text="{Binding IsVisible}" />
                 <ListView ItemsSource="{Binding History}" >
                     <ListView.ItemTemplate>
                         <DataTemplate>
