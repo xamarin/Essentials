@@ -11,7 +11,7 @@
   </Base>
   <Interfaces />
   <Docs>
-     <summary>The current pressure information from the change event.</summary>
+    <summary>The current pressure information from the change event.</summary>
     <remarks>
       <para />
     </remarks>
@@ -32,6 +32,7 @@
       <Docs>
         <summary>Gets the current barometer pressure data</summary>
         <value>Pressure in hPA</value>
+        <remarks><para /></remarks>
       </Docs>
     </Member>
   </Members>
