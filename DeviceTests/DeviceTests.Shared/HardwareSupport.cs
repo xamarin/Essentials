@@ -77,7 +77,6 @@
 
         public static bool HasBarometer =>
 #if __ANDROID__
-      // TODO: No clue, testing.
       true;
 #elif __IOS__
             // iphone 6 and never have a barometer. looking in how to test this.
