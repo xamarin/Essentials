@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Xamarin.Essentials
+﻿namespace Xamarin.Essentials
 {
     public static partial class Barometer
     {
-        internal static bool IsSupported =>
+        internal static bool PlatformIsSupported =>
             throw new NotImplementedInReferenceAssemblyException();
 
         internal static void PlatformStart() =>

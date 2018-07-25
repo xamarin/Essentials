@@ -1,34 +1,23 @@
-﻿using Windows.Devices.Sensors;
+﻿using System;
+using Windows.Devices.Sensors;
 using WinBarometer = Windows.Devices.Sensors.Barometer;
 
 namespace Xamarin.Essentials
 {
     public static partial class Barometer
     {
-        static WinBarometer sensor;
+        static readonly Lazy<WinBarometer> sensor = new Lazy<WinBarometer>(() => WinBarometer.GetDefault());
 
-        internal static WinBarometer DefaultBarometer =>
-            WinBarometer.GetDefault();
+        static bool PlatformIsSupported =>
+            sensor.Value != null;
 
-        internal static bool IsSupported =>
-            DefaultBarometer != null;
-
-        internal static void PlatformStart()
-        {
-            sensor = DefaultBarometer;
-
-            sensor.ReadingChanged += BarometerReportedInterval;
-        }
+        static void PlatformStart()
+            => sensor.Value.ReadingChanged += BarometerReportedInterval;
 
         static void BarometerReportedInterval(object sender, BarometerReadingChangedEventArgs e)
-        {
-            var data = new BarometerData(e.Reading.StationPressureInHectopascals);
-            OnChanged(data);
-        }
+            => OnChanged(new BarometerData(e.Reading.StationPressureInHectopascals));
 
-        internal static void PlatformStop()
-        {
-            sensor.ReadingChanged -= BarometerReportedInterval;
-        }
+        static void PlatformStop()
+            => sensor.Value.ReadingChanged -= BarometerReportedInterval;
     }
 }

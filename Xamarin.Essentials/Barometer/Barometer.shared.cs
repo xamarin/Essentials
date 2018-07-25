@@ -8,10 +8,12 @@ namespace Xamarin.Essentials
 
         public static bool IsMonitoring { get; private set; }
 
+        public static bool IsSupported => PlatformIsSupported;
+
         public static void Start()
         {
-            // if (!IsSupported)
-            //   throw new FeatureNotSupportedException();
+            if (!IsSupported)
+               throw new FeatureNotSupportedException();
 
             if (IsMonitoring)
                 return;
@@ -52,10 +54,8 @@ namespace Xamarin.Essentials
         internal static void OnChanged(BarometerData reading)
                 => OnChanged(new BarometerChangedEventArgs(reading));
 
-        internal static void OnChanged(BarometerChangedEventArgs e)
-        {
-            ReadingChanged?.Invoke(e);
-        }
+        static void OnChanged(BarometerChangedEventArgs e)
+            => ReadingChanged?.Invoke(e);
     }
 
     public delegate void BarometerChangedEventHandler(BarometerChangedEventArgs e);
@@ -70,8 +70,9 @@ namespace Xamarin.Essentials
 
     public class BarometerChangedEventArgs : EventArgs
     {
-        internal BarometerChangedEventArgs(BarometerData pressureData) => BarometerData = pressureData;
+        internal BarometerChangedEventArgs(BarometerData pressureData)
+            => BarometerData = pressureData;
 
-        public BarometerData BarometerData { get; private set; } // In Hectopascals (hPA)
+        public BarometerData BarometerData { get; } // In Hectopascals (hPA)
     }
 }

@@ -8,9 +8,7 @@ namespace DeviceTests
     {
         [Fact]
         public void IsSupported()
-        {
-            Assert.Equal(HardwareSupport.HasBarometer, Barometer.IsSupported);
-        }
+            => Assert.Equal(HardwareSupport.HasBarometer, Barometer.IsSupported);
 
         [Fact]
         [Trait(Traits.Hardware.Barometer, Traits.FeatureSupport.Supported)]
