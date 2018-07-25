@@ -40,7 +40,9 @@ namespace Xamarin.Essentials
                  Longitude = coordinate.Point.Position.Longitude,
                  TimestampUtc = coordinate.Timestamp,
                  Altitude = coordinate.Point.Position.Altitude,
-                 Accuracy = coordinate.Accuracy
+                 Accuracy = coordinate.Accuracy,
+                 Speed = coordinate.Speed,
+                 Bearing = coordinate.Heading
              };
     }
 }

@@ -38,6 +38,8 @@ namespace Xamarin.Essentials
             Latitude = point.Latitude;
             Longitude = point.Longitude;
             TimestampUtc = DateTimeOffset.UtcNow;
+            Speed = point.Speed;
+            Bearing = point.Bearing;
         }
 
         public DateTimeOffset TimestampUtc { get; set; }
@@ -49,6 +51,10 @@ namespace Xamarin.Essentials
         public double? Altitude { get; set; }
 
         public double? Accuracy { get; set; }
+
+        public double? Speed { get; set; }
+
+        public double? Bearing { get; set; }
 
         public static double CalculateDistance(Location locationStart, Location locationEnd, DistanceUnits units) =>
             CalculateDistance(locationStart.Latitude, locationEnd.Latitude, locationStart.Longitude, locationEnd.Longitude, units);

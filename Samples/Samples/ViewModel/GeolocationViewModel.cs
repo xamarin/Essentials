@@ -99,6 +99,8 @@ namespace Samples.ViewModel
                 $"Longitude: {location.Longitude}\n" +
                 $"Accuracy: {location.Accuracy}\n" +
                 $"Altitude: {location.Altitude}\n" +
+                $"Bearing: {location.Bearing}\n" +
+                $"Speed: {location.Speed}\n" +
                 $"Date (UTC): {location.TimestampUtc:d}\n" +
                 $"Time (UTC): {location.TimestampUtc:T}";
         }
