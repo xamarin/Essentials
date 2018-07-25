@@ -8,21 +8,21 @@ namespace Xamarin.Essentials
         public static Task OpenAsync(string uri) =>
             OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
 
-        public static Task OpenAsync(string uri, BrowserLaunchMode launchType)
+        public static Task OpenAsync(string uri, BrowserLaunchMode launchMode)
         {
             if (string.IsNullOrWhiteSpace(uri))
             {
                 throw new ArgumentNullException(nameof(uri), $"Uri cannot be empty.");
             }
 
-            return OpenAsync(new Uri(uri), launchType);
+            return OpenAsync(new Uri(uri), launchMode);
         }
 
         public static Task OpenAsync(Uri uri) =>
           OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
 
-        public static Task OpenAsync(Uri uri, BrowserLaunchMode launchType) =>
-            PlatformOpenAsync(EscapeUri(uri), launchType);
+        public static Task OpenAsync(Uri uri, BrowserLaunchMode launchMode) =>
+            PlatformOpenAsync(EscapeUri(uri), launchMode);
 
         internal static Uri EscapeUri(Uri uri)
         {

@@ -7,14 +7,14 @@ namespace Xamarin.Essentials
 {
     public static partial class Browser
     {
-        static Task PlatformOpenAsync(Uri uri, BrowserLaunchMode launchType)
+        static Task PlatformOpenAsync(Uri uri, BrowserLaunchMode launchMode)
         {
             if (uri == null)
                 throw new ArgumentNullException(nameof(uri));
 
             var nativeUrl = new NSUrl(uri.AbsoluteUri);
 
-            switch (launchType)
+            switch (launchMode)
             {
                 case BrowserLaunchMode.SystemPreferred:
                     var sfViewController = new SFSafariViewController(nativeUrl, false);
