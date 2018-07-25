@@ -30,7 +30,7 @@ namespace Samples.View
             TearDownBinding(GridGyro.BindingContext);
             TearDownBinding(GridMagnetometer.BindingContext);
             TearDownBinding(GridOrientation.BindingContext);
-            SetupBinding(GridBarometer.BindingContext);
+            TearDownBinding(GridBarometer.BindingContext);
             base.OnDisappearing();
         }
     }
