@@ -106,9 +106,9 @@ namespace Xamarin.Essentials
 
             var criteria = new Criteria
             {
-                BearingRequired = true,
+                BearingRequired = false,
                 AltitudeRequired = false,
-                SpeedRequired = true
+                SpeedRequired = false
             };
 
             var accuracyDistance = 100;
