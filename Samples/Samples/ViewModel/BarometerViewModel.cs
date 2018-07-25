@@ -54,7 +54,7 @@ namespace Samples.ViewModel
             }
         }
 
-        void OnBarometerReadingChanged(BarometerChangedEventArgs e)
+        void OnBarometerReadingChanged(object sender, BarometerChangedEventArgs e)
         {
             BaromterValue = e.BarometerData.Pressure;
         }

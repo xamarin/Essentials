@@ -21,7 +21,7 @@ namespace DeviceTests
             var tcs = new TaskCompletionSource<BarometerData>();
 
             Barometer.ReadingChanged += Barometer_ReadingChanged;
-            void Barometer_ReadingChanged(BarometerChangedEventArgs e)
+            void Barometer_ReadingChanged(object sender, BarometerChangedEventArgs e)
             {
                 tcs.TrySetResult(e.BarometerData);
             }
@@ -44,7 +44,7 @@ namespace DeviceTests
 
             var tcs = new TaskCompletionSource<BarometerData>();
             Barometer.ReadingChanged += Barometer_ReadingChanged;
-            void Barometer_ReadingChanged(BarometerChangedEventArgs e)
+            void Barometer_ReadingChanged(object sender, BarometerChangedEventArgs e)
             {
                 tcs.TrySetResult(e.BarometerData);
             }
@@ -67,7 +67,7 @@ namespace DeviceTests
 
             var tcs = new TaskCompletionSource<BarometerData>();
             Barometer.ReadingChanged += Barometer_ReadingChanged;
-            void Barometer_ReadingChanged(BarometerChangedEventArgs e)
+            void Barometer_ReadingChanged(object sender, BarometerChangedEventArgs e)
             {
                 tcs.TrySetResult(e.BarometerData);
             }

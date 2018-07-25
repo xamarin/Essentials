@@ -177,7 +177,10 @@
                             IsEnabled="{Binding IsActive}" />
                 </Grid>
                 <Label Text="Monitor barometer for changes." FontAttributes="Bold" Margin="12" />
-                <Grid Padding="12,0,12,12">
+                <Grid  x:Name="GridBarometer">
+                    <Grid.BindingContext>
+                        <viewmodels:BarometerViewModel />
+                    </Grid.BindingContext>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />

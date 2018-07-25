@@ -4,7 +4,7 @@ namespace Xamarin.Essentials
 {
     public static partial class Barometer
     {
-        public static event BarometerChangedEventHandler ReadingChanged;
+        public static event EventHandler<BarometerChangedEventArgs> ReadingChanged;
 
         public static bool IsMonitoring { get; private set; }
 
@@ -55,10 +55,8 @@ namespace Xamarin.Essentials
                 => OnChanged(new BarometerChangedEventArgs(reading));
 
         static void OnChanged(BarometerChangedEventArgs e)
-            => ReadingChanged?.Invoke(e);
+            => ReadingChanged?.Invoke(null, e);
     }
-
-    public delegate void BarometerChangedEventHandler(BarometerChangedEventArgs e);
 
     public struct BarometerData
     {

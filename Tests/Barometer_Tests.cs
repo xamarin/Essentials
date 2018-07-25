@@ -15,6 +15,10 @@ namespace Tests
             Assert.Throws<NotImplementedInReferenceAssemblyException>(() => Barometer.Start());
 
         [Fact]
+        public void Monitor_Off_NetStandard() =>
+            Assert.Throws<NotImplementedInReferenceAssemblyException>(() => Barometer.Stop());
+
+        [Fact]
         public void IsMonitoring_Default_On_NetStandard() =>
             Assert.False(Barometer.IsMonitoring);
     }
