@@ -12,7 +12,7 @@
   <Interfaces />
   <Docs>
     <summary>Monitor changes to the atmospheric pressure.</summary>
-     <remarks>
+    <remarks>
       <para></para>
     </remarks>
   </Docs>
@@ -32,14 +32,32 @@
       <Docs>
         <summary>Gets if barometer is actively being monitored.</summary>
         <value>If barometer is being monitored.</value>
-         <remarks>
+        <remarks>
           <para></para>
         </remarks>
       </Docs>
     </Member>
+    <Member MemberName="IsSupported">
+      <MemberSignature Language="C#" Value="public static bool IsSupported { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property bool IsSupported" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.Barometer.IsSupported" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Gets if the barometer is supported.</summary>
+        <value>If barometer is supported.</value>
+        <remarks><para></para></remarks>
+      </Docs>
+    </Member>
     <Member MemberName="ReadingChanged">
-      <MemberSignature Language="C#" Value="public static event Xamarin.Essentials.BarometerChangedEventHandler ReadingChanged;" />
-      <MemberSignature Language="ILAsm" Value=".event class Xamarin.Essentials.BarometerChangedEventHandler ReadingChanged" />
+      <MemberSignature Language="C#" Value="public static event EventHandler&lt;Xamarin.Essentials.BarometerChangedEventArgs&gt; ReadingChanged;" />
+      <MemberSignature Language="ILAsm" Value=".event class System.EventHandler`1&lt;class Xamarin.Essentials.BarometerChangedEventArgs&gt; ReadingChanged" />
       <MemberSignature Language="DocId" Value="E:Xamarin.Essentials.Barometer.ReadingChanged" />
       <MemberType>Event</MemberType>
       <AssemblyInfo>
@@ -47,7 +65,7 @@
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
-        <ReturnType>Xamarin.Essentials.BarometerChangedEventHandler</ReturnType>
+        <ReturnType>System.EventHandler&lt;Xamarin.Essentials.BarometerChangedEventArgs&gt;</ReturnType>
       </ReturnValue>
       <Docs>
         <summary>Event triggered when barometer reading changes.</summary>
