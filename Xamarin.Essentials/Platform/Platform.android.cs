@@ -9,6 +9,8 @@ using Android.Locations;
 using Android.Net;
 using Android.Net.Wifi;
 using Android.OS;
+using Android.Support.V4.Content;
+using AndroidUri = Android.Net.Uri;
 
 namespace Xamarin.Essentials
 {
@@ -59,6 +61,23 @@ namespace Xamarin.Essentials
             var manager = AppContext.PackageManager;
             var activities = manager.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly);
             return activities.Any();
+        }
+
+        internal static AndroidUri GetShareableFileUri(string filename)
+        {
+            var javaFile = new Java.IO.File(filename);
+
+            if (HasApiLevel(BuildVersionCodes.N))
+            {
+                return FileProvider.GetUriForFile(
+                    AppContext.ApplicationContext,
+                    Types.FileProvider.FileProviderJavaName,
+                    javaFile);
+            }
+            else
+            {
+                return AndroidUri.FromFile(new Java.IO.File(filename));
+            }
         }
 
         internal static bool HasApiLevel(BuildVersionCodes versionCode) =>
