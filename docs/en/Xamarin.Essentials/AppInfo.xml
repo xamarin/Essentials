@@ -30,7 +30,7 @@
         <ReturnType>System.EventHandler&lt;Xamarin.Essentials.AppStateChangedEventArgs&gt;</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>&gt;Event triggered when app state changes</summary>
+        <summary>Event triggered when app state changes</summary>
         <remarks>
           <para />
         </remarks>
