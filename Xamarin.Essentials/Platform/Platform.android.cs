@@ -67,11 +67,13 @@ namespace Xamarin.Essentials
         {
             var javaFile = new Java.IO.File(filename);
 
+            var providerAuthority = AppContext.PackageName + ".fileProvider";
+
             if (HasApiLevel(BuildVersionCodes.N))
             {
                 return FileProvider.GetUriForFile(
                     AppContext.ApplicationContext,
-                    Types.FileProvider.FileProviderJavaName,
+                    providerAuthority,
                     javaFile);
             }
             else

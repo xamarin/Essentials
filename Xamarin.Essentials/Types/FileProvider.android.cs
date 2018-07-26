@@ -8,7 +8,7 @@ namespace Xamarin.Essentials.Types
 {
     [ContentProvider(
         new[] { "${applicationId}.fileProvider" },
-        Name = FileProviderJavaName,
+        Name = "xamarin.essentials.fileProvider",
         Exported = false,
         GrantUriPermissions = true)]
     [MetaData(
@@ -16,6 +16,5 @@ namespace Xamarin.Essentials.Types
         Resource = "@xml/xamarin_essentials_fileprovider_file_paths")]
     public class FileProvider : global::Android.Support.V4.Content.FileProvider
     {
-        internal const string FileProviderJavaName = "xamarin.essentials.fileProvider";
     }
 }
