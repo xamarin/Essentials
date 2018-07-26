@@ -10,6 +10,7 @@ namespace DeviceTests.Shared
 #if __ANDROID__
     public class Android_FileProvider_Tests
     {
+        [Fact]
         [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
         public void Share_Simple_Text_File_Test()
         {
