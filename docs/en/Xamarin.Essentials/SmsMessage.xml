@@ -31,8 +31,8 @@
       <Docs>
         <param name="body">To be added.</param>
         <param name="recipients">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <summary>Creates a new instance of SmsMessage.</summary>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="Body">
@@ -66,9 +66,9 @@
         <ReturnType>System.String[]</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets the recipient of the message.</summary>
+        <value></value>
+        <remarks></remarks>
       </Docs>
     </Member>
   </Members>

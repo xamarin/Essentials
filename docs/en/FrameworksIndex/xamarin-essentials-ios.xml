@@ -266,7 +266,6 @@
       <Member Id="F:Xamarin.Essentials.MapDirectionsMode.Walking" />
     </Type>
     <Type Name="Xamarin.Essentials.Maps" Id="T:Xamarin.Essentials.Maps">
-      <Member Id="M:Xamarin.Essentials.Maps.OpenAsync(System.Double,System.Double)" />
       <Member Id="M:Xamarin.Essentials.Maps.OpenAsync(System.Double,System.Double,Xamarin.Essentials.MapsLaunchOptions)" />
       <Member Id="M:Xamarin.Essentials.Maps.OpenAsync(Xamarin.Essentials.Location)" />
       <Member Id="M:Xamarin.Essentials.Maps.OpenAsync(Xamarin.Essentials.Location,Xamarin.Essentials.MapsLaunchOptions)" />
