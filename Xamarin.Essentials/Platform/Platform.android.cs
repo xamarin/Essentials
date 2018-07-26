@@ -65,7 +65,27 @@ namespace Xamarin.Essentials
 
         internal static AndroidUri GetShareableFileUri(string filename)
         {
-            var javaFile = new Java.IO.File(filename);
+            // We require external storage permissions for this API
+            Permissions.EnsureDeclared(PermissionType.ExternalStorage);
+
+            var extDir = AppContext.GetExternalFilesDir("2203693cc04e0be7f4f024d5f9499e13");
+            var fileInfo = new System.IO.FileInfo(filename);
+            var tmpDir = System.IO.Path.Combine(extDir.AbsolutePath, Guid.NewGuid().ToString("N"));
+            var tmpFile = System.IO.Path.Combine(tmpDir, fileInfo.Name);
+
+            // Create inner temp dir if we need to
+            // We create a subdirectory so we can still have a unique path
+            // but keep the original filename the same
+            System.IO.Directory.CreateDirectory(tmpDir);
+
+            // Copy the original file to a known externals dir that we can share
+            System.IO.File.Copy(filename, tmpFile);
+
+            // Mark the file and directory for deletion on exit
+            var javaFile = new Java.IO.File(tmpFile);
+            javaFile.DeleteOnExit();
+            var javaDir = new Java.IO.File(tmpDir);
+            javaDir.DeleteOnExit();
 
             var providerAuthority = AppContext.PackageName + ".fileProvider";
 
