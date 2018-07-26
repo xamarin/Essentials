@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Xamarin.Essentials
 {
@@ -18,18 +19,14 @@ namespace Xamarin.Essentials
 
     public class SmsMessage
     {
-        public SmsMessage()
-        {
-        }
-
-        public SmsMessage(string body, string recipient)
+        public SmsMessage(string body, string[] recipients)
         {
             Body = body;
-            Recipient = recipient;
+            Recipients = recipients;
         }
 
         public string Body { get; set; }
 
-        public string Recipient { get; set; }
+        public string[] Recipients { get; }
     }
 }

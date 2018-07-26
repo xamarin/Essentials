@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Android.Content;
 using Android.OS;
 using Android.Provider;
@@ -10,7 +11,7 @@ namespace Xamarin.Essentials
     public static partial class Sms
     {
         internal static bool IsComposeSupported
-            => Platform.IsIntentSupported(CreateIntent("0000000000"));
+            => Platform.IsIntentSupported(CreateIntent(new[] { "0000000000" }));
 
         static Task PlatformComposeAsync(SmsMessage message)
         {
@@ -24,16 +25,15 @@ namespace Xamarin.Essentials
         }
 
         static Intent CreateIntent(SmsMessage message)
-            => CreateIntent(message?.Recipient, message?.Body);
+            => CreateIntent(message?.Recipients, message?.Body);
 
-        static Intent CreateIntent(string recipient, string body = null)
+        static Intent CreateIntent(string[] recipients, string body = null)
         {
             Intent intent = null;
 
             body = body ?? string.Empty;
-            recipient = recipient ?? string.Empty;
 
-            if (string.IsNullOrWhiteSpace(recipient) && Platform.HasApiLevel(BuildVersionCodes.Kitkat))
+            if (recipients.All(x => string.IsNullOrWhiteSpace(x)) && Platform.HasApiLevel(BuildVersionCodes.Kitkat))
             {
                 var packageName = Telephony.Sms.GetDefaultSmsPackage(Platform.AppContext);
                 if (!string.IsNullOrWhiteSpace(packageName))
@@ -53,9 +53,9 @@ namespace Xamarin.Essentials
             if (!string.IsNullOrWhiteSpace(body))
                 intent.PutExtra("sms_body", body);
 
-            intent.PutExtra("address", recipient);
+            var recipienturi = string.Join(";", recipients.Select(r => AndroidUri.Encode(r)));
 
-            var uri = AndroidUri.Parse("smsto:" + AndroidUri.Encode(recipient));
+            var uri = AndroidUri.Parse($"smsto:{recipienturi}");
             intent.SetData(uri);
 
             return intent;
