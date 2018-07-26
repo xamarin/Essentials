@@ -14,7 +14,7 @@ namespace Xamarin.Essentials.Types
     [MetaData(
         "android.support.FILE_PROVIDER_PATHS",
         Resource = "@xml/xamarin_essentials_fileprovider_file_paths")]
-    public class FileProvider : Android.Support.V4.Content.FileProvider
+    public class FileProvider : global::Android.Support.V4.Content.FileProvider
     {
         internal const string FileProviderJavaName = "xamarin.essentials.fileProvider";
     }
