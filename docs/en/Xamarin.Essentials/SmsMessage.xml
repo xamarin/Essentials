@@ -16,38 +16,23 @@
   </Docs>
   <Members>
     <Member MemberName=".ctor">
-      <MemberSignature Language="C#" Value="public SmsMessage ();" />
-      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SmsMessage.#ctor" />
+      <MemberSignature Language="C#" Value="public SmsMessage (string body, string[] recipients);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(string body, string[] recipients) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SmsMessage.#ctor(System.String,System.String[])" />
       <MemberType>Constructor</MemberType>
       <AssemblyInfo>
-        <AssemblyVersion>1.0.0.0</AssemblyVersion>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
-      </AssemblyInfo>
-      <Parameters />
-      <Docs>
-        <summary>Creates a new instance of SmsMessage.</summary>
-        <remarks></remarks>
-      </Docs>
-    </Member>
-    <Member MemberName=".ctor">
-      <MemberSignature Language="C#" Value="public SmsMessage (string body, string recipient);" />
-      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(string body, string recipient) cil managed" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SmsMessage.#ctor(System.String,System.String)" />
-      <MemberType>Constructor</MemberType>
-      <AssemblyInfo>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
-        <AssemblyName>Xamarin.Essentials</AssemblyName>
       </AssemblyInfo>
       <Parameters>
         <Parameter Name="body" Type="System.String" />
-        <Parameter Name="recipient" Type="System.String" />
+        <Parameter Name="recipients" Type="System.String[]" />
       </Parameters>
       <Docs>
-        <param name="body">The body of the message.</param>
-        <param name="recipient">The recipient of the message.</param>
-        <summary>Creates a new instance of SmsMessage with the specified body and recipient.</summary>
-        <remarks></remarks>
+        <param name="body">To be added.</param>
+        <param name="recipients">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
       </Docs>
     </Member>
     <Member MemberName="Body">
@@ -68,22 +53,22 @@
         <remarks></remarks>
       </Docs>
     </Member>
-    <Member MemberName="Recipient">
-      <MemberSignature Language="C#" Value="public string Recipient { get; set; }" />
-      <MemberSignature Language="ILAsm" Value=".property instance string Recipient" />
-      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.SmsMessage.Recipient" />
+    <Member MemberName="Recipients">
+      <MemberSignature Language="C#" Value="public string[] Recipients { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string[] Recipients" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.SmsMessage.Recipients" />
       <MemberType>Property</MemberType>
       <AssemblyInfo>
-        <AssemblyVersion>1.0.0.0</AssemblyVersion>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
-        <ReturnType>System.String</ReturnType>
+        <ReturnType>System.String[]</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gets or sets the recipient of the message.</summary>
-        <value></value>
-        <remarks></remarks>
+        <summary>To be added.</summary>
+        <value>To be added.</value>
+        <remarks>To be added.</remarks>
       </Docs>
     </Member>
   </Members>
