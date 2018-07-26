@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Xunit;
-using Xamarin.Essentials;
 using System.IO;
+using System.Text;
+using Xamarin.Essentials;
+using Xunit;
 
 namespace DeviceTests.Shared
 {
