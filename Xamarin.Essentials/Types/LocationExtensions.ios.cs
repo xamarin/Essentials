@@ -28,7 +28,7 @@ namespace Xamarin.Essentials
                 Altitude = location.VerticalAccuracy < 0 ? (double?)null : location.Altitude,
                 Accuracy = location.HorizontalAccuracy,
                 TimestampUtc = location.Timestamp.ToDateTime(),
-                Bearing = location.Course < 0 ? default(double?) : location.Course,
+                Heading = location.Course < 0 ? default(double?) : location.Course,
                 Speed = location.Speed < 0 ? default(double?) : location.Speed
             };
 

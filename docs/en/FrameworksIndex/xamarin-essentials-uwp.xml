@@ -233,7 +233,7 @@
       <Member Id="M:Xamarin.Essentials.Location.MilesToKilometers(System.Double)" />
       <Member Id="P:Xamarin.Essentials.Location.Accuracy" />
       <Member Id="P:Xamarin.Essentials.Location.Altitude" />
-      <Member Id="P:Xamarin.Essentials.Location.Bearing" />
+      <Member Id="P:Xamarin.Essentials.Location.Heading" />
       <Member Id="P:Xamarin.Essentials.Location.Latitude" />
       <Member Id="P:Xamarin.Essentials.Location.Longitude" />
       <Member Id="P:Xamarin.Essentials.Location.Speed" />

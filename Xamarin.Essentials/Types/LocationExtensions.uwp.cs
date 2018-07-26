@@ -42,7 +42,7 @@ namespace Xamarin.Essentials
                  Altitude = coordinate.Point.Position.Altitude,
                  Accuracy = coordinate.Accuracy,
                  Speed = coordinate.Speed,
-                 Bearing = coordinate.Heading
+                 Heading = coordinate.Heading
              };
     }
 }
