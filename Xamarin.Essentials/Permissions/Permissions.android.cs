@@ -161,6 +161,9 @@ namespace Xamarin.Essentials
                 case PermissionType.Vibrate:
                     permissions.Add((Manifest.Permission.Vibrate, true));
                     break;
+                case PermissionType.ExternalStorage:
+                    permissions.Add((Manifest.Permission.WriteExternalStorage, false));
+                    break;
             }
 
             if (onlyRuntimePermissions)
