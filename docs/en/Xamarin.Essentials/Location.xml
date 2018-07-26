@@ -138,10 +138,10 @@
         <remarks>Returns 0 or no value if not available.</remarks>
       </Docs>
     </Member>
-    <Member MemberName="Bearing">
-      <MemberSignature Language="C#" Value="public Nullable&lt;double&gt; Bearing { get; set; }" />
-      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Nullable`1&lt;float64&gt; Bearing" />
-      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.Location.Bearing" />
+    <Member MemberName="Heading">
+      <MemberSignature Language="C#" Value="public Nullable&lt;double&gt; Heading { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Nullable`1&lt;float64&gt; Heading" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.Location.Heading" />
       <MemberType>Property</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
