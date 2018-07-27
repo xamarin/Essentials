@@ -9,7 +9,7 @@ namespace Xamarin.Essentials
 
         static CMAltimeter altitudeManager;
 
-        static void PlatformStart()
+        static void PlatformStart(SensorSpeed sensorSpeed)
         {
             altitudeManager = new CMAltimeter();
             altitudeManager.StartRelativeAltitudeUpdates(Platform.GetCurrentQueue(), LocationManagerUpdatedHeading);

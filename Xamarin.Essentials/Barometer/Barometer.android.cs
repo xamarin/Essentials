@@ -1,6 +1,7 @@
 ﻿using System;
 using Android.Hardware;
 using Android.Runtime;
+using Xamarin.Essentials.Types;
 
 namespace Xamarin.Essentials
 {
@@ -15,11 +16,11 @@ namespace Xamarin.Essentials
 
         static BarometerListener listener;
 
-        static void PlatformStart()
+        static void PlatformStart(SensorSpeed sensorSpeed)
         {
             listener = new BarometerListener();
             barometer = DefaultBarometer;
-            Platform.SensorManager.RegisterListener(listener, barometer, SensorDelay.Normal);
+            Platform.SensorManager.RegisterListener(listener, barometer, sensorSpeed.ToNative());
         }
 
         static void PlatformStop()

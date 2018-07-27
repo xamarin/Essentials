@@ -10,7 +10,7 @@ namespace Xamarin.Essentials
 
         public static bool IsSupported => PlatformIsSupported;
 
-        public static void Start()
+        public static void Start(SensorSpeed sensorSpeed)
         {
             if (!IsSupported)
                throw new FeatureNotSupportedException();
@@ -21,7 +21,7 @@ namespace Xamarin.Essentials
             IsMonitoring = true;
             try
             {
-                PlatformStart();
+                PlatformStart(sensorSpeed);
             }
             catch
             {

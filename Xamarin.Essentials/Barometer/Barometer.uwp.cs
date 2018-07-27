@@ -13,7 +13,7 @@ namespace Xamarin.Essentials
         static bool PlatformIsSupported =>
             DefaultBarometer != null;
 
-        static void PlatformStart()
+        static void PlatformStart(SensorSpeed sensorSpeed)
         {
             sensor = DefaultBarometer;
             sensor.ReadingChanged += BarometerReportedInterval;

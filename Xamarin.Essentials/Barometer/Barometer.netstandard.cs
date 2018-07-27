@@ -5,7 +5,7 @@
         internal static bool PlatformIsSupported =>
             throw new NotImplementedInReferenceAssemblyException();
 
-        internal static void PlatformStart() =>
+        internal static void PlatformStart(SensorSpeed sensorSpeed) =>
             throw new NotImplementedInReferenceAssemblyException();
 
         internal static void PlatformStop() =>
