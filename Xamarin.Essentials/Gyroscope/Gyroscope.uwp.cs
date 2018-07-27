@@ -49,6 +49,7 @@ namespace Xamarin.Essentials
         internal static void PlatformStop()
         {
             sensor.ReadingChanged -= DataUpdated;
+            sensor.ReportInterval = 0;
         }
     }
 }
