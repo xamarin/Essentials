@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Xamarin.Essentials
@@ -12,8 +13,10 @@ namespace Xamarin.Essentials
         {
             if (!IsComposeSupported)
                 throw new FeatureNotSupportedException();
-
-            return PlatformComposeAsync(message);
+            var filteredMessage = new SmsMessage(
+                message.Body,
+                message.Recipients.Where(x => !string.IsNullOrEmpty(x)).ToArray());
+            return PlatformComposeAsync(filteredMessage);
         }
     }
 
