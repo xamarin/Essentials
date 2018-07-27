@@ -31,7 +31,7 @@
       <Docs>
         <param name="body">To be added.</param>
         <param name="recipients">To be added.</param>
-        <summary>Creates a new instance of SmsMessage.</summary>
+        <summary>Creates a new instance of SmsMessage. All recipients for which string.IsNullOrWhiteSpace returns true will be removed.</summary>
         <remarks></remarks>
       </Docs>
     </Member>
@@ -48,7 +48,7 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gets or sets the body of the message.</summary>
+        <summary>Gets the body of the message.</summary>
         <value></value>
         <remarks></remarks>
       </Docs>
@@ -66,7 +66,7 @@
         <ReturnType>System.String[]</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gets or sets the recipient of the message.</summary>
+        <summary>Gets the recipient of the message.</summary>
         <value></value>
         <remarks></remarks>
       </Docs>

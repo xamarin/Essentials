@@ -13,10 +13,8 @@ namespace Xamarin.Essentials
         {
             if (!IsComposeSupported)
                 throw new FeatureNotSupportedException();
-            var filteredMessage = new SmsMessage(
-                message.Body,
-                message.Recipients.Where(x => !string.IsNullOrEmpty(x)).ToArray());
-            return PlatformComposeAsync(filteredMessage);
+
+            return PlatformComposeAsync(message);
         }
     }
 
@@ -25,7 +23,7 @@ namespace Xamarin.Essentials
         public SmsMessage(string body, string[] recipients)
         {
             Body = body;
-            Recipients = recipients;
+            Recipients = recipients.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
         }
 
         public string Body { get; set; }
