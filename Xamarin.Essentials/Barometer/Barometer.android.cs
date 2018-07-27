@@ -6,18 +6,20 @@ namespace Xamarin.Essentials
 {
     public static partial class Barometer
     {
-        internal static bool PlatformIsSupported =>
-               barometer.Value != null;
+        static bool PlatformIsSupported =>
+               DefaultBarometer != null;
 
-        static readonly Lazy<Sensor> barometer = new Lazy<Sensor>(
-            () => Platform.SensorManager.GetDefaultSensor(SensorType.Pressure));
+        static Sensor DefaultBarometer => Platform.SensorManager?.GetDefaultSensor(SensorType.Pressure);
+
+        static Sensor barometer;
 
         static BarometerListener listener;
 
         static void PlatformStart()
         {
             listener = new BarometerListener();
-            Platform.SensorManager.RegisterListener(listener, barometer.Value, SensorDelay.Normal);
+            barometer = DefaultBarometer;
+            Platform.SensorManager.RegisterListener(listener, barometer, SensorDelay.Normal);
         }
 
         static void PlatformStop()
@@ -25,7 +27,7 @@ namespace Xamarin.Essentials
             if (listener == null)
                 return;
 
-            Platform.SensorManager.UnregisterListener(listener, barometer.Value);
+            Platform.SensorManager.UnregisterListener(listener, barometer);
             listener.Dispose();
             listener = null;
         }
