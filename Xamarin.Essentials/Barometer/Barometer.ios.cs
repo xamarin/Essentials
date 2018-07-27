@@ -12,7 +12,7 @@ namespace Xamarin.Essentials
         static void PlatformStart()
         {
             altitudeManager = new CMAltimeter();
-            altitudeManager.StartRelativeAltitudeUpdates(NSOperationQueue.CurrentQueue, LocationManagerUpdatedHeading);
+            altitudeManager.StartRelativeAltitudeUpdates(Platform.GetCurrentQueue(), LocationManagerUpdatedHeading);
         }
 
         static void LocationManagerUpdatedHeading(CMAltitudeData e, NSError error)
