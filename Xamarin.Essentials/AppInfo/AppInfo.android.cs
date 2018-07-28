@@ -4,16 +4,13 @@ using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.Content.Res;
-using Android.OS;
 using Android.Runtime;
-using static Android.App.Application;
 
 namespace Xamarin.Essentials
 {
     public static partial class AppInfo
     {
-        static readonly Lazy<AppStateLifecycleListener> appState = new Lazy<AppStateLifecycleListener>(
-            () => new AppStateLifecycleListener((newState) => UpdateStateCallback(newState)));
+        static AppStateLifecycleListener appState;
 
         static AppState PlatformState { get; set; }
 
@@ -62,66 +59,31 @@ namespace Xamarin.Essentials
 
         static void StartStateListeners()
         {
+            appState = new AppStateLifecycleListener(UpdateStateCallback);
             var app = Application.Context.ApplicationContext as Application;
-            app.RegisterActivityLifecycleCallbacks(appState.Value);
-            app.RegisterComponentCallbacks(appState.Value);
+            app.RegisterComponentCallbacks(appState);
         }
 
         static void StopStateListeners()
         {
             var app = Application.Context.ApplicationContext as Application;
-            app.UnregisterActivityLifecycleCallbacks(appState.Value);
-            app.UnregisterComponentCallbacks(appState.Value);
+            app.UnregisterComponentCallbacks(appState);
+            appState.Dispose();
+            appState = null;
         }
 
-        static void UpdateStateCallback(AppState state) => PlatformState = state;
+        internal static void UpdateStateCallback(AppState state)
+        {
+            PlatformState = state;
+            AppInfo.OnStateChanged(PlatformState);
+        }
     }
 
-    sealed class AppStateLifecycleListener : Java.Lang.Object, IActivityLifecycleCallbacks, IComponentCallbacks2
+    sealed class AppStateLifecycleListener : Java.Lang.Object, IComponentCallbacks2
     {
         readonly Action<AppState> callback;
 
         public AppStateLifecycleListener(Action<AppState> callback) => this.callback = callback;
-
-        public void OnActivityResumed(Activity activity)
-        {
-            callback(AppState.Foreground);
-            AppInfo.OnStateChanged(AppState.Foreground);
-        }
-
-        public void OnTrimMemory([GeneratedEnum] TrimMemory level)
-        {
-            if (level == TrimMemory.UiHidden)
-            {
-                callback(AppState.Background);
-                AppInfo.OnStateChanged(AppState.Background);
-            }
-        }
-
-        // Unused from here on
-        public void OnActivityCreated(Activity activity, Bundle savedInstanceState)
-        {
-        }
-
-        public void OnActivityDestroyed(Activity activity)
-        {
-        }
-
-        public void OnActivityPaused(Activity activity)
-        {
-        }
-
-        public void OnActivitySaveInstanceState(Activity activity, Bundle outState)
-        {
-        }
-
-        public void OnActivityStarted(Activity activity)
-        {
-        }
-
-        public void OnActivityStopped(Activity activity)
-        {
-        }
 
         public void OnConfigurationChanged(Configuration newConfig)
         {
@@ -129,6 +91,14 @@ namespace Xamarin.Essentials
 
         public void OnLowMemory()
         {
+        }
+
+        public void OnTrimMemory([GeneratedEnum] TrimMemory level)
+        {
+            if (level == TrimMemory.UiHidden)
+            {
+                callback(AppState.Background);
+            }
         }
     }
 }

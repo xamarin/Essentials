@@ -112,8 +112,11 @@ namespace Xamarin.Essentials
         void Application.IActivityLifecycleCallbacks.OnActivityPaused(Activity activity) =>
             Activity = activity;
 
-        void Application.IActivityLifecycleCallbacks.OnActivityResumed(Activity activity) =>
+        void Application.IActivityLifecycleCallbacks.OnActivityResumed(Activity activity)
+        {
             Activity = activity;
+            AppInfo.UpdateStateCallback(AppState.Foreground);
+        }
 
         void Application.IActivityLifecycleCallbacks.OnActivitySaveInstanceState(Activity activity, Bundle outState)
         {
