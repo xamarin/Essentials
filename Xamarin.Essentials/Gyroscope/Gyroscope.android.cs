@@ -14,7 +14,7 @@ namespace Xamarin.Essentials
 
         internal static void PlatformStart(SensorSpeed sensorSpeed)
         {
-            var delay = sensorSpeed.ToNative();
+            var delay = sensorSpeed.ToPlatform();
 
             listener = new GyroscopeListener();
             gyroscope = Platform.SensorManager.GetDefaultSensor(SensorType.Gyroscope);

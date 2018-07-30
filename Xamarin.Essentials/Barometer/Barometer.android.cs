@@ -20,7 +20,7 @@ namespace Xamarin.Essentials
         {
             listener = new BarometerListener();
             barometer = DefaultBarometer;
-            Platform.SensorManager.RegisterListener(listener, barometer, sensorSpeed.ToNative());
+            Platform.SensorManager.RegisterListener(listener, barometer, sensorSpeed.ToPlatform());
         }
 
         static void PlatformStop()

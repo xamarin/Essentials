@@ -16,6 +16,9 @@ namespace Xamarin.Essentials
         static void PlatformStart(SensorSpeed sensorSpeed)
         {
             sensor = DefaultBarometer;
+            var nativeSpeed = sensorSpeed.ToPlatform();
+            sensor.ReportInterval = sensor.MinimumReportInterval < nativeSpeed
+                ? sensor.MinimumReportInterval : nativeSpeed;
             sensor.ReadingChanged += BarometerReportedInterval;
         }
 
