@@ -28,6 +28,7 @@ namespace Xamarin.Essentials
         static void PlatformStop()
         {
             sensor.ReadingChanged -= BarometerReportedInterval;
+            sensor.ReportInterval = 0;
             sensor = null;
         }
     }
