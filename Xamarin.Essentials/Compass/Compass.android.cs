@@ -16,23 +16,7 @@ namespace Xamarin.Essentials
 
         internal static void PlatformStart(SensorSpeed sensorSpeed)
         {
-            var delay = SensorDelay.Normal;
-            switch (sensorSpeed)
-            {
-                case SensorSpeed.Normal:
-                    delay = SensorDelay.Normal;
-                    break;
-                case SensorSpeed.Fastest:
-                    delay = SensorDelay.Fastest;
-                    break;
-                case SensorSpeed.Game:
-                    delay = SensorDelay.Game;
-                    break;
-                case SensorSpeed.Ui:
-                    delay = SensorDelay.Ui;
-                    break;
-            }
-
+            var delay = sensorSpeed.ToPlatform();
             accelerometer = Platform.SensorManager.GetDefaultSensor(SensorType.Accelerometer);
             magnetometer = Platform.SensorManager.GetDefaultSensor(SensorType.MagneticField);
             listener = new SensorListener(accelerometer.Name, magnetometer.Name, delay);
@@ -54,6 +38,7 @@ namespace Xamarin.Essentials
 
     class SensorListener : Java.Lang.Object, ISensorEventListener, IDisposable
     {
+        LowPassFilter filter = new LowPassFilter();
         float[] lastAccelerometer = new float[3];
         float[] lastMagnetometer = new float[3];
         bool lastAccelerometerSet;
@@ -92,6 +77,11 @@ namespace Xamarin.Essentials
                 SensorManager.GetRotationMatrix(r, null, lastAccelerometer, lastMagnetometer);
                 SensorManager.GetOrientation(r, orientation);
                 var azimuthInRadians = orientation[0];
+                if (Compass.ApplyLowPassFilter)
+                {
+                    filter.Add(azimuthInRadians);
+                    azimuthInRadians = filter.Average();
+                }
                 var azimuthInDegress = (Java.Lang.Math.ToDegrees(azimuthInRadians) + 360.0) % 360.0;
 
                 var data = new CompassData(azimuthInDegress);
