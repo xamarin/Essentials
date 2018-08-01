@@ -1,17 +1,11 @@
-﻿using System;
-using System.Globalization;
-using Android.App;
+﻿using System.Globalization;
 using Android.Content;
 using Android.Content.PM;
-using Android.Content.Res;
-using Android.Runtime;
 
 namespace Xamarin.Essentials
 {
     public static partial class AppInfo
     {
-        static AppStateLifecycleListener appState;
-
         static AppState PlatformState { get; set; }
 
         static string PlatformGetPackageName() => Platform.AppContext.PackageName;
@@ -59,46 +53,16 @@ namespace Xamarin.Essentials
 
         static void StartStateListeners()
         {
-            appState = new AppStateLifecycleListener(UpdateStateCallback);
-            var app = Application.Context.ApplicationContext as Application;
-            app.RegisterComponentCallbacks(appState);
         }
 
         static void StopStateListeners()
         {
-            var app = Application.Context.ApplicationContext as Application;
-            app.UnregisterComponentCallbacks(appState);
-            appState.Dispose();
-            appState = null;
         }
 
-        internal static void UpdateStateCallback(AppState state)
+        internal static void UpdateState(AppState state)
         {
             PlatformState = state;
-            AppInfo.OnStateChanged(PlatformState);
-        }
-    }
-
-    sealed class AppStateLifecycleListener : Java.Lang.Object, IComponentCallbacks2
-    {
-        readonly Action<AppState> callback;
-
-        public AppStateLifecycleListener(Action<AppState> callback) => this.callback = callback;
-
-        public void OnConfigurationChanged(Configuration newConfig)
-        {
-        }
-
-        public void OnLowMemory()
-        {
-        }
-
-        public void OnTrimMemory([GeneratedEnum] TrimMemory level)
-        {
-            if (level == TrimMemory.UiHidden)
-            {
-                callback(AppState.Background);
-            }
+            OnStateChanged(PlatformState);
         }
     }
 }
