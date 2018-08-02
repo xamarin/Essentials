@@ -57,7 +57,7 @@ namespace Xamarin.Essentials
                 Name = options.Name ?? string.Empty
             };
 
-            var mode = MKDirectionsMode.Default;
+            MKDirectionsMode? mode = null;
 
             switch (options.MapDirectionsMode)
             {
