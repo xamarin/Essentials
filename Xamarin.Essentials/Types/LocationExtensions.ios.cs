@@ -27,7 +27,9 @@ namespace Xamarin.Essentials
                 Longitude = location.Coordinate.Longitude,
                 Altitude = location.VerticalAccuracy < 0 ? (double?)null : location.Altitude,
                 Accuracy = location.HorizontalAccuracy,
-                TimestampUtc = location.Timestamp.ToDateTime()
+                TimestampUtc = location.Timestamp.ToDateTime(),
+                Heading = location.Course < 0 ? default(double?) : location.Course,
+                Speed = location.Speed < 0 ? default(double?) : location.Speed
             };
 
         internal static DateTimeOffset ToDateTime(this NSDate timestamp)
