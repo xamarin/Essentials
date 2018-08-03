@@ -25,10 +25,10 @@ namespace Xamarin.Essentials
             {
                 Latitude = location.Coordinate.Latitude,
                 Longitude = location.Coordinate.Longitude,
-                Altitude = location.VerticalAccuracy < 0 ? (double?)null : location.Altitude,
+                Altitude = location.VerticalAccuracy < 0 ? default(double?) : location.Altitude,
                 Accuracy = location.HorizontalAccuracy,
                 TimestampUtc = location.Timestamp.ToDateTime(),
-                Heading = location.Course < 0 ? default(double?) : location.Course,
+                Course = location.Course < 0 ? default(double?) : location.Course,
                 Speed = location.Speed < 0 ? default(double?) : location.Speed
             };
 

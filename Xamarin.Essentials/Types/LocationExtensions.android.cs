@@ -28,8 +28,8 @@ namespace Xamarin.Essentials
                 Altitude = location.HasAltitude ? location.Altitude : default(double?),
                 TimestampUtc = location.GetTimestamp().ToUniversalTime(),
                 Accuracy = location.HasAccuracy ? location.Accuracy : default(float?),
-                Heading = (location.HasBearing && location.Bearing != 0.0d) ? location.Bearing : default(double?),
-                Speed = (location.HasSpeed && location.Speed != 0.0d) ? location.Speed : default(double?)
+                Course = location.HasBearing ? location.Bearing : default(double?),
+                Speed = location.HasSpeed ? location.Speed : default(double?)
             };
 
         static readonly DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);

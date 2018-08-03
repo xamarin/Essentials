@@ -138,10 +138,10 @@
         <remarks>Returns 0 or no value if not available.</remarks>
       </Docs>
     </Member>
-    <Member MemberName="Heading">
-      <MemberSignature Language="C#" Value="public Nullable&lt;double&gt; Heading { get; set; }" />
-      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Nullable`1&lt;float64&gt; Heading" />
-      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.Location.Heading" />
+    <Member MemberName="Course">
+      <MemberSignature Language="C#" Value="public Nullable&lt;double&gt; Course { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Nullable`1&lt;float64&gt; Course" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.Location.Course" />
       <MemberType>Property</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -153,7 +153,9 @@
       <Docs>
         <summary>Degrees relative to true north.</summary>
         <value>0..360 in degrees relative to true north. null if unavailable.</value>
-        <remarks><para /></remarks>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="CalculateDistance">
@@ -321,7 +323,9 @@
       <Docs>
         <summary>Speed in meters per second.</summary>
         <value>Speed measured by the device..</value>
-        <remarks><para></para></remarks>
+        <remarks>
+          <para></para>
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="TimestampUtc">
