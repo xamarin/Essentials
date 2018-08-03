@@ -75,6 +75,7 @@ namespace Samples.ViewModel
            new List<string>
            {
                 "None",
+                "Bicycling",
                 "Default",
                 "Driving",
                 "Transit",
