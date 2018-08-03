@@ -63,9 +63,18 @@ namespace Samples.ViewModel
             set => SetProperty(ref country, value);
         }
 
+        string zipCode = "98052";
+
+        public string ZipCode
+        {
+            get => zipCode;
+            set => SetProperty(ref zipCode, value);
+        }
+
         public List<string> DirectionModes { get; } =
            new List<string>
            {
+                "None",
                 "Default",
                 "Driving",
                 "Transit",
@@ -102,7 +111,8 @@ namespace Samples.ViewModel
                 Locality = Locality,
                 AdminArea = AdminArea,
                 CountryName = Country,
-                Thoroughfare = Thoroughfare
+                Thoroughfare = Thoroughfare,
+                PostalCode = ZipCode
             };
             await Maps.OpenAsync(placemark, new MapsLaunchOptions() { Name = Name, MapDirectionsMode = (MapDirectionsMode)DirectionMode });
         }
