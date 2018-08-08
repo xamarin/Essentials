@@ -6,7 +6,15 @@ namespace Xamarin.Essentials
     {
         static event EventHandler<ScreenMetricsChangedEventArgs> ScreenMetricsChangedInternal;
 
+        static ScreenMetrics currentMetrics;
+
         public static ScreenMetrics ScreenMetrics => GetScreenMetrics();
+
+        static void SetCurrent()
+        {
+            var metrics = GetScreenMetrics();
+            currentMetrics = new ScreenMetrics(metrics.Width, metrics.Height, metrics.Density, metrics.Orientation, metrics.Rotation);
+        }
 
         public static event EventHandler<ScreenMetricsChangedEventArgs> ScreenMetricsChanged
         {
@@ -17,7 +25,10 @@ namespace Xamarin.Essentials
                 ScreenMetricsChangedInternal += value;
 
                 if (!wasRunning && ScreenMetricsChangedInternal != null)
+                {
+                    SetCurrent();
                     StartScreenMetricsListeners();
+                }
             }
 
             remove
@@ -35,7 +46,17 @@ namespace Xamarin.Essentials
             => OnScreenMetricsChanged(new ScreenMetricsChangedEventArgs(metrics));
 
         static void OnScreenMetricsChanged(ScreenMetricsChangedEventArgs e)
-            => ScreenMetricsChangedInternal?.Invoke(null, e);
+        {
+            if (e.Metrics.Width != currentMetrics.Width ||
+                e.Metrics.Height != currentMetrics.Height ||
+                e.Metrics.Density != currentMetrics.Density ||
+                e.Metrics.Orientation != currentMetrics.Orientation ||
+                e.Metrics.Rotation != currentMetrics.Rotation)
+            {
+                SetCurrent();
+                ScreenMetricsChangedInternal?.Invoke(null, e);
+            }
+        }
     }
 
     public class ScreenMetricsChangedEventArgs : EventArgs
