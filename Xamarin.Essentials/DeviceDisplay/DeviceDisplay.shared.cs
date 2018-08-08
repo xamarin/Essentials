@@ -47,11 +47,7 @@ namespace Xamarin.Essentials
 
         static void OnScreenMetricsChanged(ScreenMetricsChangedEventArgs e)
         {
-            if (e.Metrics.Width != currentMetrics.Width ||
-                e.Metrics.Height != currentMetrics.Height ||
-                e.Metrics.Density != currentMetrics.Density ||
-                e.Metrics.Orientation != currentMetrics.Orientation ||
-                e.Metrics.Rotation != currentMetrics.Rotation)
+            if (!currentMetrics.Equals(e.Metrics))
             {
                 SetCurrent();
                 ScreenMetricsChangedInternal?.Invoke(null, e);
@@ -90,6 +86,33 @@ namespace Xamarin.Essentials
         public ScreenOrientation Orientation { get; set; }
 
         public ScreenRotation Rotation { get; set; }
+
+        public static bool operator ==(ScreenMetrics left, ScreenMetrics right) =>
+            Equals(left, right);
+
+        public static bool operator !=(ScreenMetrics left, ScreenMetrics right) =>
+            !Equals(left, right);
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+
+            if (!(obj is ScreenMetrics metrics))
+                return false;
+
+            return Equals(metrics);
+        }
+
+        public bool Equals(ScreenMetrics other) =>
+            Width.Equals(other.Width) &&
+            Height.Equals(other.Height) &&
+            Density.Equals(other.Density) &&
+            Orientation.Equals(other.Orientation) &&
+            Rotation.Equals(other.Rotation);
+
+        public override int GetHashCode() =>
+            (Height, Width, Density, Orientation, Rotation).GetHashCode();
     }
 
     public enum ScreenOrientation
