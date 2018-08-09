@@ -10,9 +10,15 @@ namespace Xamarin.Essentials
             => Vibrator.NumberOfVibrators > 0;
 
         static void PlatformVibrate(TimeSpan duration)
-            => Vibrator.Vibrators.FirstOrDefault()?.Vibrate((int)duration.TotalMilliseconds, 100);
+        {
+            Permissions.EnsureDeclared(PermissionType.Vibrate);
+            Vibrator.Vibrators.FirstOrDefault()?.Vibrate((int)duration.TotalMilliseconds, 100);
+        }
 
         static void PlatformCancel()
-            => Vibrator.Vibrators.FirstOrDefault()?.Stop();
+        {
+            Permissions.EnsureDeclared(PermissionType.Vibrate);
+            Vibrator.Vibrators.FirstOrDefault()?.Stop();
+        }
     }
 }

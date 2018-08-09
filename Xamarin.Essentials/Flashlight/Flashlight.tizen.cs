@@ -10,6 +10,7 @@ namespace Xamarin.Essentials
 
         internal static Task SwitchFlashlight(bool switchOn)
         {
+            Permissions.EnsureDeclared(PermissionType.Flashlight);
             return Task.Run(() =>
             {
                 if (!IsSupported)
