@@ -13,6 +13,12 @@ namespace Xamarin.Essentials
 
         internal static Task InvokeOnMainThread(Action action)
         {
+            if (IsMainThread)
+            {
+                action();
+                return Task.FromResult(true); // Can not use CompletedTask as .net Standard 1.0 does not support it
+            }
+
             var tcs = new TaskCompletionSource<bool>();
 
             BeginInvokeOnMainThread(() =>
@@ -33,6 +39,11 @@ namespace Xamarin.Essentials
 
         internal static Task<T> InvokeOnMainThread<T>(Func<T> action)
         {
+            if (IsMainThread)
+            {
+                return Task.FromResult(action());
+            }
+
             var tcs = new TaskCompletionSource<T>();
 
             BeginInvokeOnMainThread(() =>
