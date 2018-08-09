@@ -66,7 +66,7 @@ namespace Xamarin.Essentials
     }
 
     [Preserve(AllMembers = true)]
-    public struct ScreenMetrics
+    public struct ScreenMetrics : IEquatable<ScreenMetrics>
     {
         internal ScreenMetrics(double width, double height, double density, ScreenOrientation orientation, ScreenRotation rotation)
         {
