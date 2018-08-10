@@ -66,7 +66,7 @@ namespace Xamarin.Essentials
     }
 
     [Preserve(AllMembers = true)]
-    public struct ScreenMetrics : IEquatable<ScreenMetrics>
+    public readonly struct ScreenMetrics : IEquatable<ScreenMetrics>
     {
         internal ScreenMetrics(double width, double height, double density, ScreenOrientation orientation, ScreenRotation rotation)
         {
@@ -77,15 +77,15 @@ namespace Xamarin.Essentials
             Rotation = rotation;
         }
 
-        public double Width { get; set; }
+        public double Width { get; }
 
-        public double Height { get; set; }
+        public double Height { get; }
 
-        public double Density { get; set; }
+        public double Density { get; }
 
-        public ScreenOrientation Orientation { get; set; }
+        public ScreenOrientation Orientation { get; }
 
-        public ScreenRotation Rotation { get; set; }
+        public ScreenRotation Rotation { get; }
 
         public static bool operator ==(ScreenMetrics left, ScreenMetrics right) =>
             Equals(left, right);
