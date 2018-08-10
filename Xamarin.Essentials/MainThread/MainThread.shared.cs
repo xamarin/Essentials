@@ -8,15 +8,28 @@ namespace Xamarin.Essentials
         public static bool IsMainThread =>
             PlatformIsMainThread;
 
-        public static void BeginInvokeOnMainThread(Action action) =>
-            PlatformBeginInvokeOnMainThread(action);
+        public static void BeginInvokeOnMainThread(Action action)
+        {
+            if (IsMainThread)
+            {
+                action();
+            }
+            else
+            {
+                PlatformBeginInvokeOnMainThread(action);
+            }
+        }
 
         internal static Task InvokeOnMainThread(Action action)
         {
             if (IsMainThread)
             {
                 action();
-                return Task.FromResult(true); // Can not use CompletedTask as .net Standard 1.0 does not support it
+#if NETSTANDARD1_0
+                return Task.FromResult(null);
+#else
+                return Task.CompletedTask;
+#endif
             }
 
             var tcs = new TaskCompletionSource<bool>();
