@@ -265,6 +265,7 @@
       <Member Id="F:Xamarin.Essentials.MapDirectionsMode.Walking" />
     </Type>
     <Type Name="Xamarin.Essentials.Maps" Id="T:Xamarin.Essentials.Maps">
+      <Member Id="M:Xamarin.Essentials.Maps.OpenAsync(System.Double,System.Double)" />
       <Member Id="M:Xamarin.Essentials.Maps.OpenAsync(System.Double,System.Double,Xamarin.Essentials.MapsLaunchOptions)" />
       <Member Id="M:Xamarin.Essentials.Maps.OpenAsync(Xamarin.Essentials.Location)" />
       <Member Id="M:Xamarin.Essentials.Maps.OpenAsync(Xamarin.Essentials.Location,Xamarin.Essentials.MapsLaunchOptions)" />
@@ -374,6 +375,11 @@
       <Member Id="P:Xamarin.Essentials.ScreenLock.IsActive" />
     </Type>
     <Type Name="Xamarin.Essentials.ScreenMetrics" Id="T:Xamarin.Essentials.ScreenMetrics">
+      <Member Id="M:Xamarin.Essentials.ScreenMetrics.Equals(System.Object)" />
+      <Member Id="M:Xamarin.Essentials.ScreenMetrics.Equals(Xamarin.Essentials.ScreenMetrics)" />
+      <Member Id="M:Xamarin.Essentials.ScreenMetrics.GetHashCode" />
+      <Member Id="M:Xamarin.Essentials.ScreenMetrics.op_Equality(Xamarin.Essentials.ScreenMetrics,Xamarin.Essentials.ScreenMetrics)" />
+      <Member Id="M:Xamarin.Essentials.ScreenMetrics.op_Inequality(Xamarin.Essentials.ScreenMetrics,Xamarin.Essentials.ScreenMetrics)" />
       <Member Id="P:Xamarin.Essentials.ScreenMetrics.Density" />
       <Member Id="P:Xamarin.Essentials.ScreenMetrics.Height" />
       <Member Id="P:Xamarin.Essentials.ScreenMetrics.Orientation" />
