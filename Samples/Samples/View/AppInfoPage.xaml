@@ -22,6 +22,13 @@
                 <Label Text="{Binding AppBuild, StringFormat='Build: {0}'}" />
 
                 <Button Text="Open Settings" Command="{Binding OpenSettingsCommand}"/>
+                <ListView ItemsSource="{Binding History}" >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextCell Text="{Binding AppState, StringFormat='App changed state - new state: {0}'}" Detail="{Binding ChangeTime}" />
+                    </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </StackLayout>
         </ScrollView>
     </StackLayout>

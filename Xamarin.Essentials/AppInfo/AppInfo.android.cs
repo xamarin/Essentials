@@ -6,6 +6,8 @@ namespace Xamarin.Essentials
 {
     public static partial class AppInfo
     {
+        static AppState PlatformState { get; set; }
+
         static string PlatformGetPackageName() => Platform.AppContext.PackageName;
 
         static string PlatformGetName()
@@ -47,6 +49,20 @@ namespace Xamarin.Essentials
             settingsIntent.AddFlags(ActivityFlags.NoHistory);
             settingsIntent.AddFlags(ActivityFlags.ExcludeFromRecents);
             context.StartActivity(settingsIntent);
+        }
+
+        static void StartStateListeners()
+        {
+        }
+
+        static void StopStateListeners()
+        {
+        }
+
+        internal static void UpdateState(AppState state)
+        {
+            PlatformState = state;
+            OnStateChanged(PlatformState);
         }
     }
 }

@@ -1,0 +1,37 @@
+<Type Name="AppStateChangedEventArgs" FullName="Xamarin.Essentials.AppStateChangedEventArgs">
+  <TypeSignature Language="C#" Value="public class AppStateChangedEventArgs : EventArgs" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit AppStateChangedEventArgs extends System.EventArgs" />
+  <TypeSignature Language="DocId" Value="T:Xamarin.Essentials.AppStateChangedEventArgs" />
+  <AssemblyInfo>
+    <AssemblyName>Xamarin.Essentials</AssemblyName>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.EventArgs</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>App state information.</summary>
+    <remarks>Returns the state of the current app.</remarks>
+  </Docs>
+  <Members>
+    <Member MemberName="State">
+      <MemberSignature Language="C#" Value="public Xamarin.Essentials.AppState State { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype Xamarin.Essentials.AppState State" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.AppStateChangedEventArgs.State" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Xamarin.Essentials.AppState</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Gets the current app state.</summary>
+        <value>Foreground if app is visible, otherwise Background.</value>
+        <remarks><para /></remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

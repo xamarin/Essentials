@@ -11,5 +11,11 @@
         static string PlatformGetBuild() => throw new NotImplementedInReferenceAssemblyException();
 
         static void PlatformOpenSettings() => throw new NotImplementedInReferenceAssemblyException();
+
+        static AppState PlatformState => throw new NotImplementedInReferenceAssemblyException();
+
+        static void StartStateListeners() => throw new NotImplementedInReferenceAssemblyException();
+
+        static void StopStateListeners() => throw new NotImplementedInReferenceAssemblyException();
     }
 }

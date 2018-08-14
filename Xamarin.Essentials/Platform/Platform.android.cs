@@ -3,18 +3,21 @@ using System.Linq;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.Content.Res;
 using Android.Hardware;
 using Android.Hardware.Camera2;
 using Android.Locations;
 using Android.Net;
 using Android.Net.Wifi;
 using Android.OS;
+using Android.Runtime;
 
 namespace Xamarin.Essentials
 {
     public static partial class Platform
     {
         static ActivityLifecycleContextListener lifecycleListener;
+        static AppStateLifecycleListener componentCallbackListener;
 
         internal static Context AppContext =>
             Application.Context;
@@ -30,7 +33,9 @@ namespace Xamarin.Essentials
 
         public static void Init(Application application)
         {
+            componentCallbackListener = new AppStateLifecycleListener();
             lifecycleListener = new ActivityLifecycleContextListener();
+            application.RegisterComponentCallbacks(componentCallbackListener);
             application.RegisterActivityLifecycleCallbacks(lifecycleListener);
         }
 
@@ -89,7 +94,24 @@ namespace Xamarin.Essentials
             AppContext.GetSystemService(Context.PowerService) as PowerManager;
     }
 
-    class ActivityLifecycleContextListener : Java.Lang.Object, Application.IActivityLifecycleCallbacks
+    sealed class AppStateLifecycleListener : Java.Lang.Object, IComponentCallbacks2
+    {
+        public void OnConfigurationChanged(Configuration newConfig)
+        {
+        }
+
+        public void OnLowMemory()
+        {
+        }
+
+        public void OnTrimMemory([GeneratedEnum] TrimMemory level)
+        {
+            if (level == TrimMemory.UiHidden)
+                AppInfo.UpdateState(AppState.Background);
+        }
+    }
+
+    sealed class ActivityLifecycleContextListener : Java.Lang.Object, Application.IActivityLifecycleCallbacks
     {
         WeakReference<Activity> currentActivity = new WeakReference<Activity>(null);
 
@@ -98,8 +120,8 @@ namespace Xamarin.Essentials
 
         internal Activity Activity
         {
-           get => currentActivity.TryGetTarget(out var a) ? a : null;
-           set => currentActivity.SetTarget(value);
+            get => currentActivity.TryGetTarget(out var a) ? a : null;
+            set => currentActivity.SetTarget(value);
         }
 
         void Application.IActivityLifecycleCallbacks.OnActivityCreated(Activity activity, Bundle savedInstanceState) =>
@@ -112,8 +134,11 @@ namespace Xamarin.Essentials
         void Application.IActivityLifecycleCallbacks.OnActivityPaused(Activity activity) =>
             Activity = activity;
 
-        void Application.IActivityLifecycleCallbacks.OnActivityResumed(Activity activity) =>
+        void Application.IActivityLifecycleCallbacks.OnActivityResumed(Activity activity)
+        {
             Activity = activity;
+            AppInfo.UpdateState(AppState.Foreground);
+        }
 
         void Application.IActivityLifecycleCallbacks.OnActivitySaveInstanceState(Activity activity, Bundle outState)
         {
