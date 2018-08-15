@@ -5,104 +5,55 @@ namespace Tests
 {
     public class DeviceDisplay_Tests
     {
-        [Fact]
-        public void DeviceDisplay_Comparison_Equal()
+        [Theory]
+        [InlineData(0.0, 0.0, 0.0, ScreenOrientation.Landscape, ScreenRotation.Rotation0, 0.0, 0.0, 0.0, ScreenOrientation.Landscape, ScreenRotation.Rotation0, true)]
+        [InlineData(1.1, 0.0, 0.0, ScreenOrientation.Landscape, ScreenRotation.Rotation0, 1.1, 0.0, 0.0, ScreenOrientation.Landscape, ScreenRotation.Rotation0, true)]
+        [InlineData(0.0, 0.0, 0.0, ScreenOrientation.Portrait, ScreenRotation.Rotation0, 0.0, 0.0, 0.0, ScreenOrientation.Portrait, ScreenRotation.Rotation0, true)]
+        [InlineData(1.1, 0.0, 2.2, ScreenOrientation.Landscape, ScreenRotation.Rotation180, 1.1, 0.0, 2.2, ScreenOrientation.Landscape, ScreenRotation.Rotation180, true)]
+        [InlineData(1.0, 0.0, 0.0, ScreenOrientation.Landscape, ScreenRotation.Rotation0, 0.0, 0.0, 0.0, ScreenOrientation.Landscape, ScreenRotation.Rotation0, false)]
+        [InlineData(0.0, 1.0, 0.0, ScreenOrientation.Landscape, ScreenRotation.Rotation0, 0.0, 0.0, 0.0, ScreenOrientation.Landscape, ScreenRotation.Rotation0, false)]
+        [InlineData(0.0, 0.0, 1.0, ScreenOrientation.Landscape, ScreenRotation.Rotation0, 0.0, 0.0, 0.0, ScreenOrientation.Landscape, ScreenRotation.Rotation0, false)]
+        [InlineData(0.0, 0.0, 0.0, ScreenOrientation.Portrait, ScreenRotation.Rotation0, 0.0, 0.0, 0.0, ScreenOrientation.Landscape, ScreenRotation.Rotation0, false)]
+        [InlineData(1.0, 0.0, 0.0, ScreenOrientation.Landscape, ScreenRotation.Rotation180, 0.0, 0.0, 0.0, ScreenOrientation.Landscape, ScreenRotation.Rotation0, false)]
+        public void DeviceDisplay_Comparison(
+            double width1,
+            double height1,
+            double density1,
+            ScreenOrientation orientation1,
+            ScreenRotation rotation1,
+            double width2,
+            double height2,
+            double density2,
+            ScreenOrientation orientation2,
+            ScreenRotation rotation2,
+            bool equals)
         {
             var device1 = new ScreenMetrics(
-                width: 0,
-                height: 0,
-                density: 0,
-                orientation: ScreenOrientation.Landscape,
-                rotation: ScreenRotation.Rotation0);
+                width: width1,
+                height: height1,
+                density: density1,
+                orientation: orientation1,
+                rotation: rotation1);
 
             var device2 = new ScreenMetrics(
-                width: 0,
-                height: 0,
-                density: 0,
-                orientation: ScreenOrientation.Landscape,
-                rotation: ScreenRotation.Rotation0);
+                width: width2,
+                height: height2,
+                density: density2,
+                orientation: orientation2,
+                rotation: rotation2);
 
-            Assert.True(device1.Equals(device2));
-            Assert.True(device1 == device2);
-            Assert.False(device1 != device2);
-            Assert.Equal(device1, device2);
-            Assert.Equal(device1.GetHashCode(), device2.GetHashCode());
-        }
-
-        [Fact]
-        public void DeviceDisplay_Comparison_NotEqual()
-        {
-            var device1 = new ScreenMetrics(
-                width: 0,
-                height: 0,
-                density: 0,
-                orientation: ScreenOrientation.Landscape,
-                rotation: ScreenRotation.Rotation0);
-
-            var device2 = new ScreenMetrics(
-                width: 1,
-                height: 0,
-                density: 0,
-                orientation: ScreenOrientation.Landscape,
-                rotation: ScreenRotation.Rotation0);
-
-            Assert.False(device1.Equals(device2));
-            Assert.True(device1 != device2);
-            Assert.False(device1 == device2);
-            Assert.NotEqual(device1, device2);
-            Assert.NotEqual(device1.GetHashCode(), device2.GetHashCode());
-
-            var device3 = new ScreenMetrics(
-                width: 0,
-                height: 1,
-                density: 0,
-                orientation: ScreenOrientation.Landscape,
-                rotation: ScreenRotation.Rotation0);
-
-            Assert.False(device1.Equals(device3));
-            Assert.True(device1 != device3);
-            Assert.False(device1 == device3);
-            Assert.NotEqual(device1, device3);
-            Assert.NotEqual(device1.GetHashCode(), device3.GetHashCode());
-
-            var device4 = new ScreenMetrics(
-                width: 0,
-                height: 0,
-                density: 1,
-                orientation: ScreenOrientation.Landscape,
-                rotation: ScreenRotation.Rotation0);
-
-            Assert.False(device1.Equals(device4));
-            Assert.True(device1 != device4);
-            Assert.False(device1 == device4);
-            Assert.NotEqual(device1, device4);
-            Assert.NotEqual(device1.GetHashCode(), device4.GetHashCode());
-
-            var device5 = new ScreenMetrics(
-                width: 0,
-                height: 0,
-                density: 0,
-                orientation: ScreenOrientation.Portrait,
-                rotation: ScreenRotation.Rotation0);
-
-            Assert.False(device1.Equals(device5));
-            Assert.True(device1 != device5);
-            Assert.False(device1 == device5);
-            Assert.NotEqual(device1, device5);
-            Assert.NotEqual(device1.GetHashCode(), device5.GetHashCode());
-
-            var device6 = new ScreenMetrics(
-                width: 0,
-                height: 0,
-                density: 0,
-                orientation: ScreenOrientation.Landscape,
-                rotation: ScreenRotation.Rotation90);
-
-            Assert.False(device1.Equals(device6));
-            Assert.True(device1 != device6);
-            Assert.False(device1 == device6);
-            Assert.NotEqual(device1, device6);
-            Assert.NotEqual(device1.GetHashCode(), device6.GetHashCode());
+            if (equals)
+            {
+                Assert.True(device1.Equals(device2));
+                Assert.True(device1 == device2);
+                Assert.False(device1 != device2);
+            }
+            else
+            {
+                Assert.False(device1.Equals(device2));
+                Assert.True(device1 != device2);
+                Assert.False(device1 == device2);
+            }
         }
     }
 }
