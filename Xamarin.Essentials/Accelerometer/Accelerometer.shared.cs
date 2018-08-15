@@ -54,19 +54,15 @@ namespace Xamarin.Essentials
             }
         }
 
-        internal static void OnChanged(AccelerometerData reading)
-            => OnChanged(new AccelerometerChangedEventArgs(reading));
+        internal static void OnChanged(AccelerometerData reading) =>
+            OnChanged(new AccelerometerChangedEventArgs(reading));
 
         internal static void OnChanged(AccelerometerChangedEventArgs e)
         {
-            var handler = ReadingChanged;
-            if (handler == null)
-                return;
-
             if (useSyncContext)
-                MainThread.BeginInvokeOnMainThread(() => handler?.Invoke(null, e));
+                MainThread.BeginInvokeOnMainThread(() => ReadingChanged?.Invoke(null, e));
             else
-                handler?.Invoke(null, e);
+                ReadingChanged?.Invoke(null, e);
         }
     }
 
@@ -77,7 +73,7 @@ namespace Xamarin.Essentials
         public AccelerometerData Reading { get; }
     }
 
-    public struct AccelerometerData
+    public readonly struct AccelerometerData : IEquatable<AccelerometerData>
     {
         internal AccelerometerData(double x, double y, double z)
             : this((float)x, (float)y, (float)z)
@@ -88,5 +84,24 @@ namespace Xamarin.Essentials
             Acceleration = new Vector3(x, y, z);
 
         public Vector3 Acceleration { get; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            if (!(obj is AccelerometerData compassData))
+                return false;
+            return Equals(compassData);
+        }
+
+        public bool Equals(AccelerometerData other) => Acceleration.Equals(other.Acceleration);
+
+        public static bool operator ==(AccelerometerData left, AccelerometerData right) =>
+            Equals(left, right);
+
+        public static bool operator !=(AccelerometerData left, AccelerometerData right) =>
+           !Equals(left, right);
+
+        public override int GetHashCode() => Acceleration.GetHashCode();
     }
 }
