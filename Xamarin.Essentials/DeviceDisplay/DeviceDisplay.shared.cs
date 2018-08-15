@@ -88,16 +88,8 @@ namespace Xamarin.Essentials
         public static bool operator !=(ScreenMetrics left, ScreenMetrics right) =>
             !Equals(left, right);
 
-        public override bool Equals(object obj)
-        {
-            if (obj == null)
-                return false;
-
-            if (!(obj is ScreenMetrics metrics))
-                return false;
-
-            return Equals(metrics);
-        }
+        public override bool Equals(object obj) =>
+            (obj is ScreenMetrics metrics) && Equals(metrics);
 
         public bool Equals(ScreenMetrics other) =>
             Width.Equals(other.Width) &&
