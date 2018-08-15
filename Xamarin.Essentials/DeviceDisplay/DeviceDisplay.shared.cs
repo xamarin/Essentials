@@ -10,11 +10,8 @@ namespace Xamarin.Essentials
 
         public static ScreenMetrics ScreenMetrics => GetScreenMetrics();
 
-        static void SetCurrent()
-        {
-            var metrics = GetScreenMetrics();
+        static void SetCurrent(ScreenMetrics metrics) =>
             currentMetrics = new ScreenMetrics(metrics.Width, metrics.Height, metrics.Density, metrics.Orientation, metrics.Rotation);
-        }
 
         public static event EventHandler<ScreenMetricsChangedEventArgs> ScreenMetricsChanged
         {
@@ -26,7 +23,7 @@ namespace Xamarin.Essentials
 
                 if (!wasRunning && ScreenMetricsChangedInternal != null)
                 {
-                    SetCurrent();
+                    SetCurrent(GetScreenMetrics());
                     StartScreenMetricsListeners();
                 }
             }
@@ -49,7 +46,7 @@ namespace Xamarin.Essentials
         {
             if (!currentMetrics.Equals(e.Metrics))
             {
-                SetCurrent();
+                SetCurrent(e.Metrics);
                 ScreenMetricsChangedInternal?.Invoke(null, e);
             }
         }
@@ -57,10 +54,8 @@ namespace Xamarin.Essentials
 
     public class ScreenMetricsChangedEventArgs : EventArgs
     {
-        public ScreenMetricsChangedEventArgs(ScreenMetrics metrics)
-        {
+        public ScreenMetricsChangedEventArgs(ScreenMetrics metrics) =>
             Metrics = metrics;
-        }
 
         public ScreenMetrics Metrics { get; }
     }
@@ -118,7 +113,6 @@ namespace Xamarin.Essentials
     public enum ScreenOrientation
     {
         Unknown,
-
         Portrait,
         Landscape
     }

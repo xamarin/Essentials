@@ -25,6 +25,8 @@ namespace Tests
             Assert.True(device1.Equals(device2));
             Assert.True(device1 == device2);
             Assert.False(device1 != device2);
+            Assert.Equal(device1, device2);
+            Assert.Equal(device1.GetHashCode(), device2.GetHashCode());
         }
 
         [Fact]
@@ -47,6 +49,8 @@ namespace Tests
             Assert.False(device1.Equals(device2));
             Assert.True(device1 != device2);
             Assert.False(device1 == device2);
+            Assert.NotEqual(device1, device2);
+            Assert.NotEqual(device1.GetHashCode(), device2.GetHashCode());
 
             var device3 = new ScreenMetrics(
                 width: 0,
@@ -58,6 +62,8 @@ namespace Tests
             Assert.False(device1.Equals(device3));
             Assert.True(device1 != device3);
             Assert.False(device1 == device3);
+            Assert.NotEqual(device1, device3);
+            Assert.NotEqual(device1.GetHashCode(), device3.GetHashCode());
 
             var device4 = new ScreenMetrics(
                 width: 0,
@@ -69,6 +75,8 @@ namespace Tests
             Assert.False(device1.Equals(device4));
             Assert.True(device1 != device4);
             Assert.False(device1 == device4);
+            Assert.NotEqual(device1, device4);
+            Assert.NotEqual(device1.GetHashCode(), device4.GetHashCode());
 
             var device5 = new ScreenMetrics(
                 width: 0,
@@ -80,6 +88,8 @@ namespace Tests
             Assert.False(device1.Equals(device5));
             Assert.True(device1 != device5);
             Assert.False(device1 == device5);
+            Assert.NotEqual(device1, device5);
+            Assert.NotEqual(device1.GetHashCode(), device5.GetHashCode());
 
             var device6 = new ScreenMetrics(
                 width: 0,
@@ -91,6 +101,8 @@ namespace Tests
             Assert.False(device1.Equals(device6));
             Assert.True(device1 != device6);
             Assert.False(device1 == device6);
+            Assert.NotEqual(device1, device6);
+            Assert.NotEqual(device1.GetHashCode(), device6.GetHashCode());
         }
     }
 }
