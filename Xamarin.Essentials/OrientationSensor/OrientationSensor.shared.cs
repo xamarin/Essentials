@@ -54,41 +54,55 @@ namespace Xamarin.Essentials
             }
         }
 
-        internal static void OnChanged(OrientationSensorData reading)
-            => OnChanged(new OrientationSensorChangedEventArgs(reading));
+        internal static void OnChanged(OrientationSensorData reading) =>
+            OnChanged(new OrientationSensorChangedEventArgs(reading));
 
         internal static void OnChanged(OrientationSensorChangedEventArgs e)
         {
-            var handler = ReadingChanged;
-            if (handler == null)
-                return;
-
             if (useSyncContext)
-                MainThread.BeginInvokeOnMainThread(() => handler?.Invoke(null, e));
+                MainThread.BeginInvokeOnMainThread(() => ReadingChanged?.Invoke(null, e));
             else
-                handler?.Invoke(null, e);
+                ReadingChanged?.Invoke(null, e);
         }
     }
 
     public class OrientationSensorChangedEventArgs : EventArgs
     {
-        internal OrientationSensorChangedEventArgs(OrientationSensorData reading) => Reading = reading;
+        internal OrientationSensorChangedEventArgs(OrientationSensorData reading) =>
+            Reading = reading;
 
         public OrientationSensorData Reading { get; }
     }
 
-    public struct OrientationSensorData
+    public readonly struct OrientationSensorData : IEquatable<OrientationSensorData>
     {
         internal OrientationSensorData(double x, double y, double z, double w)
             : this((float)x, (float)y, (float)z, (float)w)
         {
         }
 
-        internal OrientationSensorData(float x, float y, float z, float w)
-        {
+        internal OrientationSensorData(float x, float y, float z, float w) =>
             Orientation = new Quaternion(x, y, z, w);
-        }
 
         public Quaternion Orientation { get; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            if (!(obj is OrientationSensorData compassData))
+                return false;
+            return Equals(compassData);
+        }
+
+        public bool Equals(OrientationSensorData other) => Orientation.Equals(other.Orientation);
+
+        public static bool operator ==(OrientationSensorData left, OrientationSensorData right) =>
+         Equals(left, right);
+
+        public static bool operator !=(OrientationSensorData left, OrientationSensorData right) =>
+           !Equals(left, right);
+
+        public override int GetHashCode() => Orientation.GetHashCode();
     }
 }
