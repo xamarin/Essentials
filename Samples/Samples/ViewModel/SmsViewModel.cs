@@ -37,7 +37,7 @@ namespace Samples.ViewModel
 
             try
             {
-                var message = new SmsMessage(MessageText, Recipient.Split('.'));
+                var message = new SmsMessage(MessageText, Recipient.Split(','));
                 await Sms.ComposeAsync(message);
             }
             catch (FeatureNotSupportedException)
