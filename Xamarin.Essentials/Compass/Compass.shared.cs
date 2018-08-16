@@ -55,34 +55,46 @@ namespace Xamarin.Essentials
             }
         }
 
-        internal static void OnChanged(CompassData reading)
-            => OnChanged(new CompassChangedEventArgs(reading));
+        internal static void OnChanged(CompassData reading) =>
+            OnChanged(new CompassChangedEventArgs(reading));
 
         internal static void OnChanged(CompassChangedEventArgs e)
         {
-            var handler = ReadingChanged;
-            if (handler == null)
-                return;
-
             if (useSyncContext)
-                MainThread.BeginInvokeOnMainThread(() => handler?.Invoke(null, e));
+                MainThread.BeginInvokeOnMainThread(() => ReadingChanged?.Invoke(null, e));
             else
-                handler?.Invoke(null, e);
+                ReadingChanged?.Invoke(null, e);
         }
     }
 
     public class CompassChangedEventArgs : EventArgs
     {
-        internal CompassChangedEventArgs(CompassData reading) => Reading = reading;
+        internal CompassChangedEventArgs(CompassData reading) =>
+            Reading = reading;
 
         public CompassData Reading { get; }
     }
 
-    public struct CompassData
+    public readonly struct CompassData : IEquatable<CompassData>
     {
         internal CompassData(double headingMagneticNorth) =>
             HeadingMagneticNorth = headingMagneticNorth;
 
         public double HeadingMagneticNorth { get; }
+
+        public override bool Equals(object obj) =>
+            (obj is CompassData data) && Equals(data);
+
+        public bool Equals(CompassData other) =>
+            HeadingMagneticNorth.Equals(other.HeadingMagneticNorth);
+
+        public static bool operator ==(CompassData left, CompassData right) =>
+            Equals(left, right);
+
+        public static bool operator !=(CompassData left, CompassData right) =>
+           !Equals(left, right);
+
+        public override int GetHashCode() =>
+            HeadingMagneticNorth.GetHashCode();
     }
 }
