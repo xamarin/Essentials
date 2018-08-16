@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Android.Content;
 using Android.OS;
@@ -13,7 +14,7 @@ namespace Xamarin.Essentials
         static readonly string smsRecipientSeparator = ";";
 
         internal static bool IsComposeSupported
-            => Platform.IsIntentSupported(CreateIntent(null, new[] { "0000000000" }));
+            => Platform.IsIntentSupported(CreateIntent(null, new List<string> { "0000000000" }));
 
         static Task PlatformComposeAsync(SmsMessage message)
         {
@@ -29,7 +30,7 @@ namespace Xamarin.Essentials
         static Intent CreateIntent(SmsMessage message)
             => CreateIntent(message?.Body, message?.Recipients);
 
-        static Intent CreateIntent(string body, params string[] recipients)
+        static Intent CreateIntent(string body, List<string> recipients)
         {
             Intent intent = null;
 
