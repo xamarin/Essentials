@@ -7,7 +7,7 @@ namespace Xamarin.Essentials
     {
         static bool useSyncContext;
 
-        public static event MagnetometerChangedEventHandler ReadingChanged;
+        public static event EventHandler<MagnetometerChangedEventArgs> ReadingChanged;
 
         public static bool IsMonitoring { get; private set; }
 
@@ -20,7 +20,7 @@ namespace Xamarin.Essentials
                 return;
 
             IsMonitoring = true;
-            useSyncContext = sensorSpeed == SensorSpeed.Normal || sensorSpeed == SensorSpeed.Ui;
+            useSyncContext = sensorSpeed == SensorSpeed.Normal || sensorSpeed == SensorSpeed.UI;
 
             try
             {
@@ -54,32 +54,27 @@ namespace Xamarin.Essentials
             }
         }
 
-        internal static void OnChanged(MagnetometerData reading)
-            => OnChanged(new MagnetometerChangedEventArgs(reading));
+        internal static void OnChanged(MagnetometerData reading) =>
+            OnChanged(new MagnetometerChangedEventArgs(reading));
 
         internal static void OnChanged(MagnetometerChangedEventArgs e)
         {
-            var handler = ReadingChanged;
-            if (handler == null)
-                return;
-
             if (useSyncContext)
-                Platform.BeginInvokeOnMainThread(() => handler?.Invoke(e));
+                MainThread.BeginInvokeOnMainThread(() => ReadingChanged?.Invoke(null, e));
             else
-                handler?.Invoke(e);
+                ReadingChanged?.Invoke(null, e);
         }
     }
 
-    public delegate void MagnetometerChangedEventHandler(MagnetometerChangedEventArgs e);
-
     public class MagnetometerChangedEventArgs : EventArgs
     {
-        internal MagnetometerChangedEventArgs(MagnetometerData reading) => Reading = reading;
+        internal MagnetometerChangedEventArgs(MagnetometerData reading) =>
+            Reading = reading;
 
         public MagnetometerData Reading { get; }
     }
 
-    public struct MagnetometerData
+    public readonly struct MagnetometerData : IEquatable<MagnetometerData>
     {
         internal MagnetometerData(double x, double y, double z)
             : this((float)x, (float)y, (float)z)
@@ -90,5 +85,20 @@ namespace Xamarin.Essentials
             MagneticField = new Vector3(x, y, z);
 
         public Vector3 MagneticField { get; }
+
+        public override bool Equals(object obj) =>
+            (obj is MagnetometerData data) && Equals(data);
+
+        public bool Equals(MagnetometerData other) =>
+            MagneticField.Equals(other.MagneticField);
+
+        public static bool operator ==(MagnetometerData left, MagnetometerData right) =>
+            Equals(left, right);
+
+        public static bool operator !=(MagnetometerData left, MagnetometerData right) =>
+           !Equals(left, right);
+
+        public override int GetHashCode() =>
+            MagneticField.GetHashCode();
     }
 }

@@ -13,21 +13,19 @@ namespace Xamarin.Essentials
             var bounds = UIScreen.MainScreen.Bounds;
             var scale = UIScreen.MainScreen.Scale;
 
-            return new ScreenMetrics
-            {
-                Width = bounds.Width * scale,
-                Height = bounds.Height * scale,
-                Density = scale,
-                Orientation = CalculateOrientation(),
-                Rotation = CalculateRotation()
-            };
+            return new ScreenMetrics(
+                width: bounds.Width * scale,
+                height: bounds.Height * scale,
+                density: scale,
+                orientation: CalculateOrientation(),
+                rotation: CalculateRotation());
         }
 
         static void StartScreenMetricsListeners()
         {
             var notificationCenter = NSNotificationCenter.DefaultCenter;
             var notification = UIApplication.DidChangeStatusBarOrientationNotification;
-            observer = notificationCenter.AddObserver(notification, OnScreenMetricsChanaged);
+            observer = notificationCenter.AddObserver(notification, OnScreenMetricsChanged);
         }
 
         static void StopScreenMetricsListeners()
@@ -36,10 +34,10 @@ namespace Xamarin.Essentials
             observer = null;
         }
 
-        static void OnScreenMetricsChanaged(NSNotification obj)
+        static void OnScreenMetricsChanged(NSNotification obj)
         {
             var metrics = GetScreenMetrics();
-            OnScreenMetricsChanaged(metrics);
+            OnScreenMetricsChanged(metrics);
         }
 
         static ScreenOrientation CalculateOrientation()

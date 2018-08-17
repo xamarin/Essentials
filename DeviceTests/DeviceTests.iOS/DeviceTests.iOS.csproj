@@ -10,9 +10,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>DeviceTests.iOS</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>Xamarin.EssentialsDeviceTestsiOS</AssemblyName>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <AssemblyName>XamarinEssentialsDeviceTestsiOS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,6 +27,10 @@
     <CodesignKey>iPhone Developer</CodesignKey>
     <CodesignKey />
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <CodesignProvision>
+    </CodesignProvision>
+    <CodesignExtraArgs />
+    <CodesignResourceRules />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -71,6 +73,36 @@
     <CodesignKey>iPhone Developer</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Samples|iPhoneSimulator'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Samples</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchArch>x86_64</MtouchArch>
+    <ConsolePause>false</ConsolePause>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey />
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchExtraArgs>--linkskip=Xamarin.Forms.Platform.iOS --linkskip=Xamarin.Forms.Platform --linkskip=Xamarin.Forms.Core --linkskip=Xamarin.Forms.Xaml</MtouchExtraArgs>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Samples|iPhone'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhone\Samples</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <MtouchArch>ARM64</MtouchArch>
+    <ConsolePause>false</ConsolePause>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
+    <AppExtensionDebugBundleId />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -78,15 +110,20 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="2.5.1.444934" />
-    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="Xamarin.Forms" Version="3.1.0.637273" />
+    <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.runner.devices" Version="2.3.3" />
     <PackageReference Include="UnitTests.HeadlessRunner" Version="2.0.0" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Xamarin.Essentials\Xamarin.Essentials.csproj">
       <Project>{63a4f6a1-48bf-4d32-aed7-82f605edb042}</Project>
       <Name>Xamarin.Essentials</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DeviceTests.Shared\DeviceTests.Shared.csproj">
+      <Project>{be0de9a3-d92c-47c5-9ec4-dfb546bbdf77}</Project>
+      <Name>DeviceTests.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -111,20 +148,15 @@
     <BundleResource Include="Resources\AppBundleFile.txt" />
     <BundleResource Include="Resources\AppBundleFile_NoExtension" />
     <BundleResource Include="Resources\Folder\AppBundleFile_Nested.txt" />
+    <BundleResource Include="Resources\Icon-60.png" />
+    <BundleResource Include="Resources\Icon-76%403x.png" />
+    <BundleResource Include="tests.cfg" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
-    <BundleResource Include="tests.cfg" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Icon-60.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Icon-76%403x.png" />
-  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
-  <Import Project="..\DeviceTests.Shared\DeviceTests.Shared.projitems" Label="Shared" />
 </Project>

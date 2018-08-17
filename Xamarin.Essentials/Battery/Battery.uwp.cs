@@ -9,7 +9,7 @@
             DefaultBattery.ReportUpdated -= ReportUpdated;
 
         static void ReportUpdated(object sender, object e)
-            => Platform.BeginInvokeOnMainThread(OnBatteryChanged);
+            => MainThread.BeginInvokeOnMainThread(OnBatteryChanged);
 
         static Windows.Devices.Power.Battery DefaultBattery =>
             Windows.Devices.Power.Battery.AggregateBattery;
@@ -67,7 +67,7 @@
                     case BatteryState.Full:
                     case BatteryState.Charging:
                     case BatteryState.NotPresent:
-                        return BatteryPowerSource.Ac;
+                        return BatteryPowerSource.AC;
                     case BatteryState.Unknown:
                         return BatteryPowerSource.Unknown;
                     default:

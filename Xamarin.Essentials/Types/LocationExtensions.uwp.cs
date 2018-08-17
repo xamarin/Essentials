@@ -13,6 +13,7 @@ namespace Xamarin.Essentials
             {
                 Latitude = mapLocation.Point.Position.Latitude,
                 Longitude = mapLocation.Point.Position.Longitude,
+                Altitude = mapLocation.Point.Position.Altitude,
                 TimestampUtc = DateTimeOffset.UtcNow
             };
 
@@ -28,7 +29,10 @@ namespace Xamarin.Essentials
                 Latitude = location.Coordinate.Point.Position.Latitude,
                 Longitude = location.Coordinate.Point.Position.Longitude,
                 TimestampUtc = location.Coordinate.Timestamp,
-                Accuracy = location.Coordinate.Accuracy
+                Altitude = location.Coordinate.Point.Position.Altitude,
+                Accuracy = location.Coordinate.Accuracy,
+                Speed = (!location.Coordinate.Speed.HasValue || double.IsNaN(location.Coordinate.Speed.Value)) ? default : location.Coordinate.Speed,
+                Course = (!location.Coordinate.Heading.HasValue || double.IsNaN(location.Coordinate.Heading.Value)) ? default : location.Coordinate.Heading
             };
 
         internal static Location ToLocation(this Geocoordinate coordinate) =>
@@ -37,7 +41,10 @@ namespace Xamarin.Essentials
                  Latitude = coordinate.Point.Position.Latitude,
                  Longitude = coordinate.Point.Position.Longitude,
                  TimestampUtc = coordinate.Timestamp,
-                 Accuracy = coordinate.Accuracy
+                 Altitude = coordinate.Point.Position.Altitude,
+                 Accuracy = coordinate.Accuracy,
+                 Speed = (!coordinate.Speed.HasValue || double.IsNaN(coordinate.Speed.Value)) ? default : coordinate.Speed,
+                 Course = (!coordinate.Heading.HasValue || double.IsNaN(coordinate.Heading.Value)) ? default : coordinate.Heading
              };
     }
 }

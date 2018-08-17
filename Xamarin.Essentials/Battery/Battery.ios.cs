@@ -25,7 +25,7 @@ namespace Xamarin.Essentials
         }
 
         static void BatteryChangedNotification(object sender, NSNotificationEventArgs args)
-            => Platform.BeginInvokeOnMainThread(OnBatteryChanged);
+            => MainThread.BeginInvokeOnMainThread(OnBatteryChanged);
 
         static double PlatformChargeLevel
         {
@@ -85,7 +85,7 @@ namespace Xamarin.Essentials
                     {
                         case UIDeviceBatteryState.Full:
                         case UIDeviceBatteryState.Charging:
-                            return BatteryPowerSource.Ac;
+                            return BatteryPowerSource.AC;
                         case UIDeviceBatteryState.Unplugged:
                             return BatteryPowerSource.Battery;
                         default:

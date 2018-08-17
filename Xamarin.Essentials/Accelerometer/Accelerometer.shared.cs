@@ -7,7 +7,7 @@ namespace Xamarin.Essentials
     {
         static bool useSyncContext;
 
-        public static event AccelerometerChangedEventHandler ReadingChanged;
+        public static event EventHandler<AccelerometerChangedEventArgs> ReadingChanged;
 
         public static bool IsMonitoring { get; private set; }
 
@@ -20,7 +20,7 @@ namespace Xamarin.Essentials
                 return;
 
             IsMonitoring = true;
-            useSyncContext = sensorSpeed == SensorSpeed.Normal || sensorSpeed == SensorSpeed.Ui;
+            useSyncContext = sensorSpeed == SensorSpeed.Normal || sensorSpeed == SensorSpeed.UI;
 
             try
             {
@@ -54,23 +54,17 @@ namespace Xamarin.Essentials
             }
         }
 
-        internal static void OnChanged(AccelerometerData reading)
-            => OnChanged(new AccelerometerChangedEventArgs(reading));
+        internal static void OnChanged(AccelerometerData reading) =>
+            OnChanged(new AccelerometerChangedEventArgs(reading));
 
         internal static void OnChanged(AccelerometerChangedEventArgs e)
         {
-            var handler = ReadingChanged;
-            if (handler == null)
-                return;
-
             if (useSyncContext)
-                Platform.BeginInvokeOnMainThread(() => handler?.Invoke(e));
+                MainThread.BeginInvokeOnMainThread(() => ReadingChanged?.Invoke(null, e));
             else
-                handler?.Invoke(e);
+                ReadingChanged?.Invoke(null, e);
         }
     }
-
-    public delegate void AccelerometerChangedEventHandler(AccelerometerChangedEventArgs e);
 
     public class AccelerometerChangedEventArgs : EventArgs
     {
@@ -79,7 +73,7 @@ namespace Xamarin.Essentials
         public AccelerometerData Reading { get; }
     }
 
-    public struct AccelerometerData
+    public readonly struct AccelerometerData : IEquatable<AccelerometerData>
     {
         internal AccelerometerData(double x, double y, double z)
             : this((float)x, (float)y, (float)z)
@@ -90,5 +84,20 @@ namespace Xamarin.Essentials
             Acceleration = new Vector3(x, y, z);
 
         public Vector3 Acceleration { get; }
+
+        public override bool Equals(object obj) =>
+            (obj is AccelerometerData data) && Equals(data);
+
+        public bool Equals(AccelerometerData other) =>
+            Acceleration.Equals(other.Acceleration);
+
+        public static bool operator ==(AccelerometerData left, AccelerometerData right) =>
+            Equals(left, right);
+
+        public static bool operator !=(AccelerometerData left, AccelerometerData right) =>
+           !Equals(left, right);
+
+        public override int GetHashCode() =>
+            Acceleration.GetHashCode();
     }
 }

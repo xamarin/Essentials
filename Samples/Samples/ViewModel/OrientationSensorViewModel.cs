@@ -100,17 +100,17 @@ namespace Samples.ViewModel
         void OnStop()
         {
             IsActive = false;
-            Accelerometer.Stop();
+            OrientationSensor.Stop();
         }
 
-        void OnReadingChanged(OrientationSensorChangedEventArgs e)
+        void OnReadingChanged(object sender, OrientationSensorChangedEventArgs e)
         {
             var data = e.Reading;
             switch ((SensorSpeed)Speed)
             {
                 case SensorSpeed.Fastest:
                 case SensorSpeed.Game:
-                    Platform.BeginInvokeOnMainThread(() =>
+                    MainThread.BeginInvokeOnMainThread(() =>
                     {
                         X = data.Orientation.X;
                         Y = data.Orientation.Y;

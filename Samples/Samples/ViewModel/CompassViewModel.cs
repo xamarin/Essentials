@@ -10,6 +10,7 @@ namespace Samples.ViewModel
     {
         bool compass1IsActive;
         bool compass2IsActive;
+        bool compassApplyLowPassFilter;
         double compass1;
         double compass2;
         int speed1 = 2;
@@ -41,6 +42,16 @@ namespace Samples.ViewModel
         {
             get => compass2IsActive;
             set => SetProperty(ref compass2IsActive, value);
+        }
+
+        public bool CompassApplyLowPassFilter
+        {
+            get => compassApplyLowPassFilter;
+            set
+            {
+                SetProperty(ref compassApplyLowPassFilter, value);
+                Compass.ApplyLowPassFilter = value;
+            }
         }
 
         public double Compass1
@@ -91,9 +102,8 @@ namespace Samples.ViewModel
                 if (Compass.IsMonitoring)
                     OnStopCompass2();
 
-                Compass.ReadingChanged += OnCompass1ReadingChanged;
-
                 Compass.Start((SensorSpeed)Speed1);
+                Compass.ReadingChanged += OnCompass1ReadingChanged;
                 Compass1IsActive = true;
             }
             catch (Exception ex)
@@ -102,13 +112,13 @@ namespace Samples.ViewModel
             }
         }
 
-        void OnCompass1ReadingChanged(CompassChangedEventArgs e)
+        void OnCompass1ReadingChanged(object sender, CompassChangedEventArgs e)
         {
             switch ((SensorSpeed)Speed1)
             {
                 case SensorSpeed.Fastest:
                 case SensorSpeed.Game:
-                    Platform.BeginInvokeOnMainThread(() => { Compass1 = e.Reading.HeadingMagneticNorth; });
+                    MainThread.BeginInvokeOnMainThread(() => { Compass1 = e.Reading.HeadingMagneticNorth; });
                     break;
                 default:
                     Compass1 = e.Reading.HeadingMagneticNorth;
@@ -130,8 +140,8 @@ namespace Samples.ViewModel
                 if (Compass.IsMonitoring)
                     OnStopCompass1();
 
-                Compass.ReadingChanged += OnCompass2ReadingChanged;
                 Compass.Start((SensorSpeed)Speed2);
+                Compass.ReadingChanged += OnCompass2ReadingChanged;
                 Compass2IsActive = true;
             }
             catch (Exception ex)
@@ -140,14 +150,14 @@ namespace Samples.ViewModel
             }
         }
 
-        void OnCompass2ReadingChanged(CompassChangedEventArgs e)
+        void OnCompass2ReadingChanged(object sender, CompassChangedEventArgs e)
         {
             var data = e.Reading;
             switch ((SensorSpeed)Speed2)
             {
                 case SensorSpeed.Fastest:
                 case SensorSpeed.Game:
-                    Platform.BeginInvokeOnMainThread(() => { Compass2 = data.HeadingMagneticNorth; });
+                    MainThread.BeginInvokeOnMainThread(() => { Compass2 = data.HeadingMagneticNorth; });
                     break;
                 default:
                     Compass2 = data.HeadingMagneticNorth;

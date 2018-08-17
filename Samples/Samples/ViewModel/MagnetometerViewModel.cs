@@ -77,14 +77,14 @@ namespace Samples.ViewModel
             base.OnDisappearing();
         }
 
-        void OnReadingChanged(MagnetometerChangedEventArgs e)
+        void OnReadingChanged(object sender, MagnetometerChangedEventArgs e)
         {
             var data = e.Reading;
             switch ((SensorSpeed)Speed)
             {
                 case SensorSpeed.Fastest:
                 case SensorSpeed.Game:
-                    Platform.BeginInvokeOnMainThread(() =>
+                    MainThread.BeginInvokeOnMainThread(() =>
                     {
                         X = data.MagneticField.X;
                         Y = data.MagneticField.Y;

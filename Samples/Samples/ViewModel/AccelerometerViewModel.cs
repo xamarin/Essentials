@@ -96,14 +96,14 @@ namespace Samples.ViewModel
             Accelerometer.Stop();
         }
 
-        void OnReadingChanged(AccelerometerChangedEventArgs e)
+        void OnReadingChanged(object sender, AccelerometerChangedEventArgs e)
         {
             var data = e.Reading;
             switch ((SensorSpeed)Speed)
             {
                 case SensorSpeed.Fastest:
                 case SensorSpeed.Game:
-                    Platform.BeginInvokeOnMainThread(() =>
+                    MainThread.BeginInvokeOnMainThread(() =>
                     {
                         X = data.Acceleration.X;
                         Y = data.Acceleration.Y;

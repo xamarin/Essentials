@@ -77,14 +77,14 @@ namespace Samples.ViewModel
             base.OnDisappearing();
         }
 
-        void OnReadingChanged(GyroscopeChangedEventArgs e)
+        void OnReadingChanged(object sender, GyroscopeChangedEventArgs e)
         {
             var data = e.Reading;
             switch ((SensorSpeed)Speed)
             {
                 case SensorSpeed.Fastest:
                 case SensorSpeed.Game:
-                    Platform.BeginInvokeOnMainThread(() =>
+                    MainThread.BeginInvokeOnMainThread(() =>
                     {
                         X = data.AngularVelocity.X;
                         Y = data.AngularVelocity.Y;

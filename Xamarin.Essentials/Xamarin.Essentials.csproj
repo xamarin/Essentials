@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
     <!--Work around so the conditions work below-->
     <TargetFrameworks></TargetFrameworks>
-    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">netstandard1.0;netstandard2.0;Xamarin.iOS10;MonoAndroid71;uap10.0.16299</TargetFrameworks>
-    <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">netstandard1.0;netstandard2.0;Xamarin.iOS10;MonoAndroid71;</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">netstandard1.0;netstandard2.0;Xamarin.iOS10;MonoAndroid71;MonoAndroid80;MonoAndroid81;uap10.0.16299</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">netstandard1.0;netstandard2.0;Xamarin.iOS10;MonoAndroid71;MonoAndroid80;MonoAndroid81;</TargetFrameworks>
     <AssemblyName>Xamarin.Essentials</AssemblyName>
     <RootNamespace>Xamarin.Essentials</RootNamespace>
     <PackageId>Xamarin.Essentials</PackageId>
@@ -22,8 +22,8 @@
     <NeutralLanguage>en</NeutralLanguage>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
     <RepositoryUrl>https://github.com/xamarin/Essentials</RepositoryUrl>
-    <PackageReleaseNotes>See: https://github.com/xamarin/Essentials </PackageReleaseNotes>
-    <LangVersion>7.1</LangVersion>
+    <PackageReleaseNotes>See: https://github.com/xamarin/Essentials</PackageReleaseNotes>
+    <LangVersion>7.2</LangVersion>
     <DefineConstants>$(DefineConstants);</DefineConstants>
     <UseFullSemVerForNuGet>false</UseFullSemVerForNuGet>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
@@ -31,11 +31,7 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://go.microsoft.com/fwlink/?linkid=868960</PackageProjectUrl>
     <MDocDocumentationDirectory>$(MSBuildThisFileDirectory)..\docs\en</MDocDocumentationDirectory>
-  
-    <!--sourcelink: https://github.com/dotnet/sourcelink -->
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <Configurations>Debug;Release;Samples</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
     <DebugType>full</DebugType>
@@ -44,20 +40,26 @@
   <PropertyGroup Condition=" '$(Configuration)'=='Release' ">
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Samples'">
+    <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="mdoc" Version="5.6.4" PrivateAssets="All" />
-    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.4.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-62925-02" PrivateAssets="All"/>
-    <PackageReference Include="System.Numerics.Vectors" Version="4.4.0" />
+    <None Include="..\nugetreadme.txt" PackagePath="readme.txt" Pack="true" />
+    <PackageReference Include="mdoc" Version="5.7.2" PrivateAssets="All" />
+    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.6.46" PrivateAssets="All" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
     <Compile Include="**\*.shared.cs" />
     <Compile Include="**\*.shared.*.cs" />
+  </ItemGroup>
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard1.')) ">
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard')) ">
     <Compile Include="**\*.netstandard.cs" />
     <Compile Include="**\*.netstandard.*.cs" />
   </ItemGroup>
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.0.6" />
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.1.5" />
     <SDKReference Include="WindowsMobile, Version=10.0.16299.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
@@ -65,18 +67,31 @@
     <Compile Include="**\*.uwp.*.cs" />
   </ItemGroup>
   <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
-    <PackageReference Include="Xamarin.Android.Support.CustomTabs" Version="25.4.0.2" />
-    <PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="25.4.0.2" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors" />
     <Compile Include="**\*.android.cs" />
     <Compile Include="**\*.android.*.cs" />
-  </ItemGroup>
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors" />
+  </ItemGroup>
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid81')) ">
+    <PackageReference Include="Xamarin.Android.Support.CustomTabs" Version="27.0.2.1" />
+    <PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="27.0.2.1" />
+  </ItemGroup>
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid80')) ">
+    <PackageReference Include="Xamarin.Android.Support.CustomTabs" Version="26.1.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="26.1.0.1" />
+  </ItemGroup>
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid71')) ">
+    <PackageReference Include="Xamarin.Android.Support.CustomTabs" Version="25.4.0.2" />
+    <PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="25.4.0.2" />
+  </ItemGroup>
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
     <Compile Include="**\*.ios.cs" />
     <Compile Include="**\*.ios.*.cs" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="**\*.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
   </ItemGroup>
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
   <Import Project="$(MSBuildThisFileDirectory)mdoc.targets" />

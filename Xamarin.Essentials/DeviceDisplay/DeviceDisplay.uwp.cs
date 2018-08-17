@@ -1,7 +1,4 @@
 ﻿using Windows.Graphics.Display;
-using Windows.Security.ExchangeActiveSyncProvisioning;
-using Windows.System.Profile;
-using Windows.UI.ViewManagement;
 
 namespace Xamarin.Essentials
 {
@@ -19,19 +16,17 @@ namespace Xamarin.Essentials
             var w = di.ScreenWidthInRawPixels;
             var h = di.ScreenHeightInRawPixels;
 
-            return new ScreenMetrics
-            {
-                Width = perpendicular ? h : w,
-                Height = perpendicular ? w : h,
-                Density = di.LogicalDpi / 96.0,
-                Orientation = CalculateOrientation(di),
-                Rotation = rotation
-            };
+            return new ScreenMetrics(
+                width: perpendicular ? h : w,
+                height: perpendicular ? w : h,
+                density: di.LogicalDpi / 96.0,
+                orientation: CalculateOrientation(di),
+                rotation: rotation);
         }
 
         static void StartScreenMetricsListeners()
         {
-            Xamarin.Essentials.Platform.BeginInvokeOnMainThread(() =>
+            MainThread.BeginInvokeOnMainThread(() =>
             {
                 var di = DisplayInformation.GetForCurrentView();
 
@@ -42,7 +37,7 @@ namespace Xamarin.Essentials
 
         static void StopScreenMetricsListeners()
         {
-            Xamarin.Essentials.Platform.BeginInvokeOnMainThread(() =>
+            MainThread.BeginInvokeOnMainThread(() =>
             {
                 var di = DisplayInformation.GetForCurrentView();
 
@@ -54,7 +49,7 @@ namespace Xamarin.Essentials
         static void OnDisplayInformationChanged(DisplayInformation di, object args)
         {
             var metrics = GetScreenMetrics(di);
-            OnScreenMetricsChanaged(metrics);
+            OnScreenMetricsChanged(metrics);
         }
 
         static ScreenOrientation CalculateOrientation(DisplayInformation di)
