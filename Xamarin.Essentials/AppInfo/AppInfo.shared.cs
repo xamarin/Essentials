@@ -20,6 +20,8 @@ namespace Xamarin.Essentials
 
         public static AppState State => PlatformState;
 
+        static AppState currentState = State;
+
         public static event EventHandler<AppStateChangedEventArgs> AppStateChanged
         {
             add
@@ -43,7 +45,13 @@ namespace Xamarin.Essentials
             }
         }
 
-        internal static void OnStateChanged(AppState state) => OnStateChanged(new AppStateChangedEventArgs(state));
+        internal static void OnStateChanged(AppState state)
+        {
+            if (currentState == state)
+                return;
+            currentState = state;
+            OnStateChanged(new AppStateChangedEventArgs(state));
+        }
 
         static void OnStateChanged(AppStateChangedEventArgs e)
             => MainThread.BeginInvokeOnMainThread(() => AppStateChangedInternal?.Invoke(null, e));
