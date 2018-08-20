@@ -96,7 +96,7 @@ Task ("build-ios")
         c.Configuration = "Release";
         c.Properties["Platform"] = new List<string> { "iPhoneSimulator" };
         c.Properties["BuildIpa"] = new List<string> { "true" };
-        c.Properties["ContinuousIntegrationBuild"] = false;
+        c.Properties["ContinuousIntegrationBuild"] = "false";
         c.Targets.Clear();
         c.Targets.Add("Rebuild");
     });
@@ -166,7 +166,7 @@ Task ("build-android")
     // needs to be debug so unit tests get discovered
     MSBuild (ANDROID_PROJ, c => {
         c.Configuration = "Debug";
-        c.Properties["ContinuousIntegrationBuild"] = false;
+        c.Properties["ContinuousIntegrationBuild"] = "false";
         c.Targets.Clear();
         c.Targets.Add("Rebuild");
     });
@@ -239,7 +239,7 @@ Task ("test-android-emu")
     // Use the Install target to push the app onto emulator
     MSBuild (ANDROID_PROJ, c => {
         c.Configuration = "Debug";
-        c.Properties["ContinuousIntegrationBuild"] = false;
+        c.Properties["ContinuousIntegrationBuild"] = "false";
         c.Properties["AdbTarget"] = new List<string> { "-s " + emuSerial };
         c.Targets.Clear();
         c.Targets.Add("Install");
