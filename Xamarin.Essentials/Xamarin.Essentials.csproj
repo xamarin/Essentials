@@ -33,6 +33,9 @@
     <MDocDocumentationDirectory>$(MSBuildThisFileDirectory)..\docs\en</MDocDocumentationDirectory>
     <Configurations>Debug;Release;Samples</Configurations>
  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Samples'">
+    <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
@@ -46,12 +49,12 @@
     <!-- sourcelink: Include PDB in the built .nupkg -->
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)'=='Samples'">
-    <DebugType>pdbonly</DebugType>
-  </PropertyGroup>
+  <ItemGroup Condition=" '$(Configuration)'=='Release' ">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="All"/>    
+  </ItemGroup>
   <ItemGroup>
     <None Include="..\nugetreadme.txt" PackagePath="readme.txt" Pack="true" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="All"/><PackageReference Include="mdoc" Version="5.7.2" PrivateAssets="All" />
+    <PackageReference Include="mdoc" Version="5.7.2" PrivateAssets="All" />
     <PackageReference Include="MSBuild.Sdk.Extras" Version="1.6.46" PrivateAssets="All" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
     <Compile Include="**\*.shared.cs" />
