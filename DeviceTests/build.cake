@@ -96,7 +96,7 @@ Task ("build-ios")
         c.Configuration = "Release";
         c.Properties["Platform"] = new List<string> { "iPhoneSimulator" };
         c.Properties["BuildIpa"] = new List<string> { "true" };
-        c.Properties["ContinuousIntegrationBuild"] = "false";
+        c.Properties["ContinuousIntegrationBuild"] = new List<string> { "false" };
         c.Targets.Clear();
         c.Targets.Add("Rebuild");
     });
@@ -166,7 +166,7 @@ Task ("build-android")
     // needs to be debug so unit tests get discovered
     MSBuild (ANDROID_PROJ, c => {
         c.Configuration = "Debug";
-        c.Properties["ContinuousIntegrationBuild"] = "false";
+        c.Properties["ContinuousIntegrationBuild"]  = new List<string> { "false" };
         c.Targets.Clear();
         c.Targets.Add("Rebuild");
     });
@@ -275,7 +275,7 @@ Task ("build-uwp")
     // Build the project (with ipa)
     MSBuild (UWP_PROJ, c => {
         c.Configuration = "Debug";
-        c.Properties["ContinuousIntegrationBuild"] = false;
+        c.Properties["ContinuousIntegrationBuild"] = new List<string> { "false" };
         c.Properties["AppxBundlePlatforms"] = new List<string> { "x86" };
         c.Properties["AppxBundle"] = new List<string> { "Always" };
         c.Targets.Clear();
