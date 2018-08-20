@@ -239,7 +239,7 @@ Task ("test-android-emu")
     // Use the Install target to push the app onto emulator
     MSBuild (ANDROID_PROJ, c => {
         c.Configuration = "Debug";
-        c.Properties["ContinuousIntegrationBuild"] = "false";
+        c.Properties["ContinuousIntegrationBuild"] = new List<string> { "false" };
         c.Properties["AdbTarget"] = new List<string> { "-s " + emuSerial };
         c.Targets.Clear();
         c.Targets.Add("Install");
