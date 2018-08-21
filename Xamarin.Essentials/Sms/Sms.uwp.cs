@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Chat;
 using Windows.Foundation.Metadata;
@@ -16,6 +15,7 @@ namespace Xamarin.Essentials
             var chat = new ChatMessage();
             if (!string.IsNullOrWhiteSpace(message?.Body))
                 chat.Body = message.Body;
+
             foreach (var recipient in message?.Recipients)
                 chat.Recipients.Add(recipient);
 

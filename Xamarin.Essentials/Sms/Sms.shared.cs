@@ -15,6 +15,12 @@ namespace Xamarin.Essentials
             if (!IsComposeSupported)
                 throw new FeatureNotSupportedException();
 
+            if (message == null)
+                message = new SmsMessage();
+
+            if (message?.Recipients == null)
+                message.Recipients = new List<string>();
+
             return PlatformComposeAsync(message);
         }
     }
@@ -28,7 +34,7 @@ namespace Xamarin.Essentials
         public SmsMessage(string body, IEnumerable<string> recipients)
         {
             Body = body;
-            Recipients = recipients.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+            Recipients = recipients?.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
         }
 
         public string Body { get; set; }

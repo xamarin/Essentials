@@ -18,7 +18,7 @@ namespace Xamarin.Essentials
 
         static Task PlatformComposeAsync(SmsMessage message)
         {
-            var intent = CreateIntent(message)
+            var intent = CreateIntent(message?.Body, message?.Recipients)
                 .SetFlags(ActivityFlags.ClearTop)
                 .SetFlags(ActivityFlags.NewTask);
 
@@ -26,9 +26,6 @@ namespace Xamarin.Essentials
 
             return Task.FromResult(true);
         }
-
-        static Intent CreateIntent(SmsMessage message)
-            => CreateIntent(message?.Body, message?.Recipients);
 
         static Intent CreateIntent(string body, List<string> recipients)
         {
