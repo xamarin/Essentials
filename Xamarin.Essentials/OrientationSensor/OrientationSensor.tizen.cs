@@ -9,7 +9,7 @@ namespace Xamarin.Essentials
         internal const uint UiInterval = 60;
 
         static TizenRotationVectorSensor DefaultSensor
-            => (TizenRotationVectorSensor)Platform.GetDefaultSensor(SensorType.RotationVectorSensor);
+            => (TizenRotationVectorSensor)Platform.GetDefaultSensor(SensorType.OrientationSensor);
 
         internal static bool IsSupported
             => TizenRotationVectorSensor.IsSupported;
