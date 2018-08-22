@@ -26,6 +26,7 @@
         Flashlight,
         LaunchApp,
         LocationWhenInUse,
+        Maps,
         NetworkState,
         Vibrate,
         WriteExternalStorage,

@@ -1,4 +1,6 @@
-﻿using Tizen.Applications;
+﻿using System.Threading.Tasks;
+using Tizen.Applications;
+using Tizen.Maps;
 using Tizen.Sensor;
 using Tizen.System;
 using TizenAccelerometer = Tizen.Sensor.Accelerometer;
@@ -16,6 +18,7 @@ namespace Xamarin.Essentials
         static TizenGyroscope gyroscope = null;
         static TizenMagnetometer magnetometer = null;
         static TizenOrientationSensor orientationSensor = null;
+        static MapService mapService = null;
 
         internal static Package CurrentPackage
         {
@@ -69,6 +72,16 @@ namespace Xamarin.Essentials
                 default:
                     return null;
             }
+        }
+
+        internal static async Task<MapService> GetMapServiceAsync(string key)
+        {
+            if (mapService == null)
+            {
+                mapService = new MapService("HERE", key);
+                await mapService.RequestUserConsent();
+            }
+            return mapService;
         }
     }
 
