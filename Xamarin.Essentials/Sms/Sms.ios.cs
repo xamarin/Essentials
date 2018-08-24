@@ -19,7 +19,7 @@ namespace Xamarin.Essentials
             if (!string.IsNullOrWhiteSpace(message?.Body))
                 messageController.Body = message.Body;
 
-            messageController.Recipients = message.Recipients.ToArray();
+            messageController.Recipients = message?.Recipients?.ToArray() ?? new string[] { };
 
             // show the controller
             var tcs = new TaskCompletionSource<bool>();
