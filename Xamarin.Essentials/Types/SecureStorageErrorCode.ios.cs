@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Security;
+﻿using Security;
 
 namespace Xamarin.Essentials
 {
