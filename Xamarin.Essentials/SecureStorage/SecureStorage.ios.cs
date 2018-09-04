@@ -98,7 +98,7 @@ namespace Xamarin.Essentials
 
             var result = SecKeyChain.Add(CreateRecordForNewKeyValue(key, value, service));
             if (result != SecStatusCode.Success)
-                throw new Exception($"Error adding record: {result}");
+                throw new SecureStorageException($"Error adding record: {result}", result.ToErrorCode());
         }
 
         internal bool Remove(string key, string service)
@@ -141,7 +141,7 @@ namespace Xamarin.Essentials
         {
             var result = SecKeyChain.Remove(record);
             if (result != SecStatusCode.Success)
-                throw new Exception(string.Format($"Error removing record: {result}"));
+                throw new SecureStorageException($"Error removing record: {result}", result.ToErrorCode());
 
             return true;
         }
