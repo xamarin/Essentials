@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 
 namespace Xamarin.Essentials
 {
+#pragma warning disable IDE0040 // Adicionar modificadores de acessibilidade
     internal static partial class Permissions
+#pragma warning restore IDE0040 // Adicionar modificadores de acessibilidade
     {
         internal static void EnsureDeclared(PermissionType permission) =>
             PlatformEnsureDeclared(permission);
