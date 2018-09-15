@@ -4,6 +4,10 @@ namespace Xamarin.Essentials
 {
     public static partial class ScreenShot
     {
-        public static Task<string> PlataformCaptureAsync() => throw new NotImplementedInReferenceAssemblyException();
+        static Task<string> PlataformCaptureAsync(ScreenOutputType type, string fileName = null) =>
+            throw new NotImplementedInReferenceAssemblyException();
+
+        static Task<byte[]> PlataformGetImageBytesAsync(ScreenOutputType type) =>
+            throw new NotImplementedInReferenceAssemblyException();
     }
 }

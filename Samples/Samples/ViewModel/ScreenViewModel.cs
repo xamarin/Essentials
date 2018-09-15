@@ -31,7 +31,14 @@ namespace Samples.ViewModel
                 try
                 {
                     IsBusy = true;
+
                     Uri = await ScreenShot.CaptureAsync();
+                    Uri = await ScreenShot.CaptureAsync(ScreenOutputType.JPEG);
+                    Uri = await ScreenShot.CaptureAsync(ScreenOutputType.PNG, "teste");
+
+                    var stream = await ScreenShot.GetImageBytesAsync();
+                    if (stream is null)
+                        throw new Exception("Stream nula");
                 }
                 catch (Exception ex)
                 {
