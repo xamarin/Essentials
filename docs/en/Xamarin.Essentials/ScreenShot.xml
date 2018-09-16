@@ -51,7 +51,7 @@
       </Parameters>
       <Docs>
         <param name="type">File format to be saved.</param>
-        <param name="fileName"Name of file, with out extention.</param>
+        <param name="fileName">Name of file, with out extention.</param>
         <summary>Capture and save the screenshot into a file.</summary>
         <returns>Path of image.</returns>
         <remarks></remarks>
