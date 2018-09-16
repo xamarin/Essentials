@@ -20,15 +20,15 @@
       <MemberSignature Language="DocId" Value="F:Xamarin.Essentials.ScreenOutputType.JPEG" />
       <MemberType>Field</MemberType>
       <AssemblyInfo>
-        <AssemblyName>Xamarin.Essentials</AssemblyName>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>Xamarin.Essentials.ScreenOutputType</ReturnType>
       </ReturnValue>
       <MemberValue>0</MemberValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Generate a JPEG file.</summary>
       </Docs>
     </Member>
     <Member MemberName="PNG">
@@ -37,15 +37,15 @@
       <MemberSignature Language="DocId" Value="F:Xamarin.Essentials.ScreenOutputType.PNG" />
       <MemberType>Field</MemberType>
       <AssemblyInfo>
-        <AssemblyName>Xamarin.Essentials</AssemblyName>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
       </AssemblyInfo>
       <ReturnValue>
         <ReturnType>Xamarin.Essentials.ScreenOutputType</ReturnType>
       </ReturnValue>
       <MemberValue>1</MemberValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Generate a PNG file.</summary>
       </Docs>
     </Member>
   </Members>
