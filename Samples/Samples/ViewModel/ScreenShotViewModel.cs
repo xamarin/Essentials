@@ -17,10 +17,8 @@ namespace Samples.ViewModel
 
         public Command ScreenCommand { get; }
 
-        public ScreenShotViewModel()
-        {
+        public ScreenShotViewModel() => 
             ScreenCommand = new Command(async () => await ExecuteScreenCommand(), () => !IsBusy);
-        }
 
         async Task ExecuteScreenCommand()
         {

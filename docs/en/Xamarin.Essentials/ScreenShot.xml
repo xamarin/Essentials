@@ -1,0 +1,83 @@
+<Type Name="ScreenShot" FullName="Xamarin.Essentials.ScreenShot">
+  <TypeSignature Language="C#" Value="public static class ScreenShot" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract sealed beforefieldinit ScreenShot extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:Xamarin.Essentials.ScreenShot" />
+  <AssemblyInfo>
+    <AssemblyName>Xamarin.Essentials</AssemblyName>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>Quickly and easily way to take a screenshot.</summary>
+    <remarks></remarks>
+  </Docs>
+  <Members>
+    <Member MemberName="Activity">
+      <MemberSignature Language="C#" Value="public static Android.App.Activity Activity { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property class Android.App.Activity Activity" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.ScreenShot.Activity" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Android.App.Activity</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Gets the Activity to capture screen.</summary>
+        <value></value>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CaptureAsync">
+      <MemberSignature Language="C#" Value="public static System.Threading.Tasks.Task&lt;string&gt; CaptureAsync (Xamarin.Essentials.ScreenOutputType type = Xamarin.Essentials.ScreenOutputType.PNG, string fileName = null);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Tasks.Task`1&lt;string&gt; CaptureAsync(valuetype Xamarin.Essentials.ScreenOutputType type, string fileName) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.ScreenShot.CaptureAsync(Xamarin.Essentials.ScreenOutputType,System.String)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Threading.Tasks.Task&lt;System.String&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="type" Type="Xamarin.Essentials.ScreenOutputType" />
+        <Parameter Name="fileName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="type">File format to be saved.</param>
+        <param name="fileName"Name of file, with out extention.</param>
+        <summary>Capture and save the screenshot into a file.</summary>
+        <returns>Path of image.</returns>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetImageBytesAsync">
+      <MemberSignature Language="C#" Value="public static System.Threading.Tasks.Task&lt;byte[]&gt; GetImageBytesAsync (Xamarin.Essentials.ScreenOutputType type = Xamarin.Essentials.ScreenOutputType.PNG);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Tasks.Task`1&lt;unsigned int8[]&gt; GetImageBytesAsync(valuetype Xamarin.Essentials.ScreenOutputType type) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.ScreenShot.GetImageBytesAsync(Xamarin.Essentials.ScreenOutputType)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Threading.Tasks.Task&lt;System.Byte[]&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="type" Type="Xamarin.Essentials.ScreenOutputType" />
+      </Parameters>
+      <Docs>
+        <param name="type">File format to be saved.</param>
+        <summary>Take screenshot and return the array bytes of image.</summary>
+        <returns>The screen capture in array of bytes.</returns>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
