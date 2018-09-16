@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Samples.ViewModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace Samples.View
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ScreenPage : ContentPage
+    public partial class ScreenShotPage : ContentPage
     {
-        public ScreenPage()
+        public ScreenShotPage()
         {
             InitializeComponent();
-            BindingContext = new ViewModel.ScreenViewModel();
+            BindingContext = new ScreenShotViewModel();
         }
     }
 }

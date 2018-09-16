@@ -15,7 +15,7 @@ namespace Samples
 
             VersionTracking.Track();
 
-            MainPage = new NavigationPage(new ScreenPage());
+            MainPage = new NavigationPage(new HomePage());
         }
 
         protected override void OnStart()
