@@ -15,10 +15,10 @@ namespace Xamarin.Essentials
         {
             if (string.IsNullOrWhiteSpace(key))
                 throw new ArgumentNullException(nameof(key));
-            
+
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
-            
+
             var kc = new KeyChain(accessible);
             kc.SetValueForKey(value, key, Alias);
 
