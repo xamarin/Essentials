@@ -90,7 +90,9 @@
         <param name="other">Other AccelerometerData to compare with.</param>
         <summary>Compares the underlying Vector3 instances.</summary>
         <returns>True if they are equal, otherwise false.</returns>
-        <remarks><para /></remarks>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="GetHashCode">

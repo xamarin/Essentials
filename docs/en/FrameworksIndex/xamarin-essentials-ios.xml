@@ -164,6 +164,15 @@
       <Member Id="M:Xamarin.Essentials.Email.ComposeAsync(System.String,System.String,System.String[])" />
       <Member Id="M:Xamarin.Essentials.Email.ComposeAsync(Xamarin.Essentials.EmailMessage)" />
     </Type>
+    <Type Name="Xamarin.Essentials.EmailAttachment" Id="T:Xamarin.Essentials.EmailAttachment">
+      <Member Id="M:Xamarin.Essentials.EmailAttachment.#ctor(Foundation.NSUrl)" />
+      <Member Id="M:Xamarin.Essentials.EmailAttachment.#ctor(System.String)" />
+      <Member Id="M:Xamarin.Essentials.EmailAttachment.#ctor(System.String,System.String,System.String)" />
+      <Member Id="P:Xamarin.Essentials.EmailAttachment.ContentType" />
+      <Member Id="P:Xamarin.Essentials.EmailAttachment.File" />
+      <Member Id="P:Xamarin.Essentials.EmailAttachment.FileName" />
+      <Member Id="P:Xamarin.Essentials.EmailAttachment.FilePath" />
+    </Type>
     <Type Name="Xamarin.Essentials.EmailBodyFormat" Id="T:Xamarin.Essentials.EmailBodyFormat">
       <Member Id="F:Xamarin.Essentials.EmailBodyFormat.Html" />
       <Member Id="F:Xamarin.Essentials.EmailBodyFormat.PlainText" />
@@ -171,6 +180,7 @@
     <Type Name="Xamarin.Essentials.EmailMessage" Id="T:Xamarin.Essentials.EmailMessage">
       <Member Id="M:Xamarin.Essentials.EmailMessage.#ctor" />
       <Member Id="M:Xamarin.Essentials.EmailMessage.#ctor(System.String,System.String,System.String[])" />
+      <Member Id="P:Xamarin.Essentials.EmailMessage.Attachments" />
       <Member Id="P:Xamarin.Essentials.EmailMessage.Bcc" />
       <Member Id="P:Xamarin.Essentials.EmailMessage.Body" />
       <Member Id="P:Xamarin.Essentials.EmailMessage.BodyFormat" />
@@ -185,6 +195,11 @@
     </Type>
     <Type Name="Xamarin.Essentials.EnergySaverStatusChangedEventArgs" Id="T:Xamarin.Essentials.EnergySaverStatusChangedEventArgs">
       <Member Id="P:Xamarin.Essentials.EnergySaverStatusChangedEventArgs.EnergySaverStatus" />
+    </Type>
+    <Type Name="Xamarin.Essentials.FeatureNotEnabledException" Id="T:Xamarin.Essentials.FeatureNotEnabledException">
+      <Member Id="M:Xamarin.Essentials.FeatureNotEnabledException.#ctor" />
+      <Member Id="M:Xamarin.Essentials.FeatureNotEnabledException.#ctor(System.String)" />
+      <Member Id="M:Xamarin.Essentials.FeatureNotEnabledException.#ctor(System.String,System.Exception)" />
     </Type>
     <Type Name="Xamarin.Essentials.FeatureNotSupportedException" Id="T:Xamarin.Essentials.FeatureNotSupportedException">
       <Member Id="M:Xamarin.Essentials.FeatureNotSupportedException.#ctor" />
@@ -302,10 +317,10 @@
       <Member Id="P:Xamarin.Essentials.MainThread.IsMainThread" />
     </Type>
     <Type Name="Xamarin.Essentials.MapDirectionsMode" Id="T:Xamarin.Essentials.MapDirectionsMode">
-      <Member Id="F:Xamarin.Essentials.MapDirectionsMode.None" />
       <Member Id="F:Xamarin.Essentials.MapDirectionsMode.Bicycling" />
       <Member Id="F:Xamarin.Essentials.MapDirectionsMode.Default" />
       <Member Id="F:Xamarin.Essentials.MapDirectionsMode.Driving" />
+      <Member Id="F:Xamarin.Essentials.MapDirectionsMode.None" />
       <Member Id="F:Xamarin.Essentials.MapDirectionsMode.Transit" />
       <Member Id="F:Xamarin.Essentials.MapDirectionsMode.Walking" />
     </Type>

@@ -137,7 +137,7 @@
         <Parameter Name="right" Type="Xamarin.Essentials.CompassData" />
       </Parameters>
       <Docs>
-       <param name="left">Left to compare</param>
+        <param name="left">Left to compare</param>
         <param name="right">Right to compare</param>
         <summary>Equality operator for equals</summary>
         <returns>If equal</returns>
