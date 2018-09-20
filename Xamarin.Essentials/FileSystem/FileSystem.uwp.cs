@@ -19,8 +19,10 @@ namespace Xamarin.Essentials
             if (filename == null)
                 throw new ArgumentNullException(nameof(filename));
 
-            filename = filename.Replace('/', Path.DirectorySeparatorChar);
-            return Package.Current.InstalledLocation.OpenStreamForReadAsync(filename);
+            return Package.Current.InstalledLocation.OpenStreamForReadAsync(NormalizePath(filename));
         }
+
+        internal static string NormalizePath(string path)
+            => path.Replace('/', Path.DirectorySeparatorChar);
     }
 }

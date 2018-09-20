@@ -65,36 +65,26 @@ namespace Xamarin.Essentials
 
         internal static AndroidUri GetShareableFileUri(string filename)
         {
-            // We require external storage permissions for this API
-            Permissions.EnsureDeclared(PermissionType.ExternalStorage);
+            var rootDir = FileProvider.GetTemporaryDirectory();
 
-            var extDir = AppContext.GetExternalFilesDir("2203693cc04e0be7f4f024d5f9499e13");
-            var fileInfo = new System.IO.FileInfo(filename);
-            var tmpDir = System.IO.Path.Combine(extDir.AbsolutePath, Guid.NewGuid().ToString("N"));
-            var tmpFile = System.IO.Path.Combine(tmpDir, fileInfo.Name);
+            // create a unique directory just in case there are multiple file with the same name
+            var tmpDir = new Java.IO.File(rootDir, Guid.NewGuid().ToString("N"));
+            tmpDir.Mkdirs();
+            tmpDir.DeleteOnExit();
 
-            // Create inner temp dir if we need to
-            // We create a subdirectory so we can still have a unique path
-            // but keep the original filename the same
-            System.IO.Directory.CreateDirectory(tmpDir);
+            // create the new temprary file
+            var tmpFile = new Java.IO.File(tmpDir, System.IO.Path.GetFileName(filename));
+            System.IO.File.Copy(filename, tmpFile.AbsolutePath);
+            tmpFile.DeleteOnExit();
 
-            // Copy the original file to a known externals dir that we can share
-            System.IO.File.Copy(filename, tmpFile);
-
-            // Mark the file and directory for deletion on exit
-            var javaFile = new Java.IO.File(tmpFile);
-            javaFile.DeleteOnExit();
-            var javaDir = new Java.IO.File(tmpDir);
-            javaDir.DeleteOnExit();
-
-            var providerAuthority = AppContext.PackageName + ".fileProvider";
-
+            // create the uri
             if (HasApiLevel(BuildVersionCodes.N))
             {
+                var providerAuthority = AppContext.PackageName + ".fileProvider";
                 return FileProvider.GetUriForFile(
                     AppContext.ApplicationContext,
                     providerAuthority,
-                    javaFile);
+                    tmpFile);
             }
             else
             {
@@ -139,8 +129,8 @@ namespace Xamarin.Essentials
 
         internal Activity Activity
         {
-           get => currentActivity.TryGetTarget(out var a) ? a : null;
-           set => currentActivity.SetTarget(value);
+            get => currentActivity.TryGetTarget(out var a) ? a : null;
+            set => currentActivity.SetTarget(value);
         }
 
         void Application.IActivityLifecycleCallbacks.OnActivityCreated(Activity activity, Bundle savedInstanceState) =>
