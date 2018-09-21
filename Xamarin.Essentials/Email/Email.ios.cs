@@ -42,11 +42,11 @@ namespace Xamarin.Essentials
                 controller.SetMessageBody(message.Body, message.BodyFormat == EmailBodyFormat.Html);
             if (!string.IsNullOrEmpty(message?.Subject))
                 controller.SetSubject(message.Subject);
-            if (message?.To.Count > 0)
+            if (message?.To?.Count > 0)
                 controller.SetToRecipients(message.To.ToArray());
-            if (message?.Cc.Count > 0)
+            if (message?.Cc?.Count > 0)
                 controller.SetCcRecipients(message.Cc.ToArray());
-            if (message?.Bcc.Count > 0)
+            if (message?.Bcc?.Count > 0)
                 controller.SetBccRecipients(message.Bcc.ToArray());
 
             if (message?.Attachments?.Count > 0)
@@ -97,6 +97,10 @@ namespace Xamarin.Essentials
 
         string PlatformGetContentType(string extension)
         {
+            // ios does not like the extensions
+            if (extension[0] == '.')
+                extension = extension.Substring(1);
+
             var id = UTType.CreatePreferredIdentifier(UTType.TagClassFilenameExtension, extension, null);
             var mimeTypes = UTType.CopyAllTags(id, UTType.TagClassMIMEType);
             return mimeTypes.Length > 0 ? mimeTypes[0] : null;
