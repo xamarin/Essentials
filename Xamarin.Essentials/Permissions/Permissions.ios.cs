@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using CoreLocation;
 using Foundation;
+using UserNotifications;
 
 namespace Xamarin.Essentials
 {
@@ -25,6 +26,8 @@ namespace Xamarin.Essentials
             {
                 case PermissionType.LocationWhenInUse:
                     return Task.FromResult(GetLocationStatus());
+                case PermissionType.LocalNotifications:
+                    return GetLocalNotificationsStatus();
             }
 
             return Task.FromResult(PermissionStatus.Granted);
@@ -43,9 +46,35 @@ namespace Xamarin.Essentials
             {
                 case PermissionType.LocationWhenInUse:
                     return await RequestLocationAsync();
+                case PermissionType.LocalNotifications:
+                    return await RequestLocalNotificationsAsync();
                 default:
                     return PermissionStatus.Granted;
             }
+        }
+
+        static async Task<PermissionStatus> GetLocalNotificationsStatus()
+        {
+            if (Platform.HasOSVersion(10, 0))
+            {
+                var settings = await UNUserNotificationCenter.Current.GetNotificationSettingsAsync();
+
+                switch (settings.AuthorizationStatus)
+                {
+                    case UNAuthorizationStatus.NotDetermined:
+                        return PermissionStatus.Unknown;
+                    case UNAuthorizationStatus.Denied:
+                        return PermissionStatus.Denied;
+                    case UNAuthorizationStatus.Authorized:
+                        return PermissionStatus.Granted;
+                    case UNAuthorizationStatus.Provisional:
+                        return PermissionStatus.Restricted;
+                    default:
+                        return PermissionStatus.Unknown;
+                }
+            }
+
+            return PermissionStatus.Granted;
         }
 
         static PermissionStatus GetLocationStatus()
@@ -92,6 +121,22 @@ namespace Xamarin.Essentials
                 locationManager.Dispose();
                 locationManager = null;
             }
+        }
+
+        static Task<PermissionStatus> RequestLocalNotificationsAsync()
+        {
+            var tcs = new TaskCompletionSource<PermissionStatus>();
+
+            const UNAuthorizationOptions options = UNAuthorizationOptions.Alert | UNAuthorizationOptions.Sound;
+            UNUserNotificationCenter.Current.RequestAuthorization(options, (granted, error) =>
+            {
+                if (error != null)
+                    tcs.TrySetException(new NSErrorException(error));
+                else
+                    tcs.TrySetResult(GetLocationStatus());
+            });
+
+            return tcs.Task;
         }
     }
 }
