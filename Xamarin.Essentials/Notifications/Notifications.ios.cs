@@ -9,7 +9,7 @@ namespace Xamarin.Essentials
 
         static void PlatformShow(Notification notification)
         {
-            Permissions.CheckStatusAsync(PermissionType.Notifications);
+            Permissions.CheckStatusAsync(PermissionType.LocalNotifications);
 
             // get the values we can understand
             var title = string.IsNullOrEmpty(notification.Title)
