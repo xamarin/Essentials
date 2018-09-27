@@ -1,15 +1,86 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Tizen.Uix.Tts;
 
 namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
-        internal static Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default) =>
-            throw new NotImplementedInReferenceAssemblyException();
+        static TtsClient tts = null;
+        static TaskCompletionSource<bool> tcsInitialize = null;
+        static TaskCompletionSource<bool> tcsUtterances = null;
 
-        internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
-            throw new NotImplementedInReferenceAssemblyException();
+        internal static async Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
+        {
+            await Initialize();
+
+            if (tcsUtterances?.Task != null)
+                await tcsUtterances.Task;
+
+            tcsUtterances = new TaskCompletionSource<bool>();
+            if (cancelToken != null)
+            {
+                cancelToken.Register(() =>
+                {
+                    tts?.Stop();
+                    tcsUtterances?.TrySetResult(true);
+                });
+            }
+
+            var language = "en_US";
+            var voiceType = Voice.Auto;
+            if (settings?.Locale.Language != null)
+            {
+                foreach (var voice in tts.GetSupportedVoices())
+                {
+                    if (voice.Language == settings.Locale.Language)
+                    {
+                        language = voice.Language;
+                        voiceType = voice.VoiceType;
+                    }
+                }
+            }
+            var speed = 0;
+            if (settings?.Pitch.HasValue ?? false)
+                speed = (int)settings.Pitch.Value;
+            tts.AddText(text, language, (int)voiceType, speed);
+            tts.Play();
+
+            await tcsUtterances.Task;
+        }
+
+        internal static async Task<IEnumerable<Locale>> PlatformGetLocalesAsync()
+        {
+            await Initialize();
+            var list = new List<Locale>();
+            foreach (var voice in tts?.GetSupportedVoices())
+                list.Add(new Locale(voice.Language, null, null, null));
+            return list;
+        }
+
+        static Task<bool> Initialize()
+        {
+            if (tcsInitialize != null && tts != null)
+                return tcsInitialize.Task;
+
+            tcsInitialize = new TaskCompletionSource<bool>();
+            tts = new TtsClient();
+
+            tts.StateChanged += (s, e) =>
+            {
+                if (e.Current == State.Ready)
+                    tcsInitialize?.TrySetResult(true);
+            };
+
+            tts.UtteranceCompleted += (s, e) =>
+            {
+                tts?.Stop();
+                tcsUtterances?.TrySetResult(true);
+            };
+
+            tts.Prepare();
+            return tcsInitialize.Task;
+        }
     }
 }
