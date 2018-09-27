@@ -73,14 +73,12 @@ namespace Xamarin.Essentials
         internal string ValueForKey(string key, string service)
         {
             using (var record = ExistingRecordForKey(key, service))
+            using (var match = SecKeyChain.QueryAsRecord(record, out var resultCode))
             {
-                using (var match = SecKeyChain.QueryAsRecord(record, out var resultCode))
-                {
-                    if (resultCode == SecStatusCode.Success)
-                        return NSString.FromData(match.ValueData, NSStringEncoding.UTF8);
-                    else
-                        return null;
-                }
+                if (resultCode == SecStatusCode.Success)
+                    return NSString.FromData(match.ValueData, NSStringEncoding.UTF8);
+                else
+                    return null;
             }
         }
 
@@ -112,25 +110,20 @@ namespace Xamarin.Essentials
         internal bool Remove(string key, string service)
         {
             using (var record = ExistingRecordForKey(key, service))
+            using (var match = SecKeyChain.QueryAsRecord(record, out var resultCode))
             {
-                using (var match = SecKeyChain.QueryAsRecord(record, out var resultCode))
+                if (resultCode == SecStatusCode.Success)
                 {
-                    if (resultCode == SecStatusCode.Success)
-                    {
-                        RemoveRecord(record);
-                        return true;
-                    }
+                    RemoveRecord(record);
+                    return true;
                 }
-                return false;
             }
+            return false;
         }
 
         internal void RemoveAll(string service)
         {
-            using (var query = new SecRecord(SecKind.GenericPassword)
-            {
-                Service = service
-            })
+            using (var query = new SecRecord(SecKind.GenericPassword) { Service = service })
             {
                 SecKeyChain.Remove(query);
             }
