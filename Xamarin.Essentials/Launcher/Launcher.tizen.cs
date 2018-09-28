@@ -1,12 +1,38 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Tizen.Applications;
 
 namespace Xamarin.Essentials
 {
     public static partial class Launcher
     {
-        static Task<bool> PlatformCanOpenAsync(Uri uri) => throw new NotImplementedInReferenceAssemblyException();
+        static Task<bool> PlatformCanOpenAsync(Uri uri)
+            => Task.FromResult(uri.IsWellFormedOriginalString());
 
-        static Task PlatformOpenAsync(Uri uri) => throw new NotImplementedInReferenceAssemblyException();
+        static Task PlatformOpenAsync(Uri uri)
+        {
+            Permissions.EnsureDeclared(PermissionType.LaunchApp);
+
+            var appControl = new AppControl
+            {
+                Operation = AppControlOperations.ShareText,
+                Uri = uri.AbsoluteUri
+            };
+
+            if (uri.AbsoluteUri.StartsWith("geo:"))
+                appControl.Operation = AppControlOperations.Pick;
+            else if (uri.AbsoluteUri.StartsWith("http"))
+                appControl.Operation = AppControlOperations.View;
+            else if (uri.AbsoluteUri.StartsWith("mailto:"))
+                appControl.Operation = AppControlOperations.Compose;
+            else if (uri.AbsoluteUri.StartsWith("sms:"))
+                appControl.Operation = AppControlOperations.Compose;
+            else if (uri.AbsoluteUri.StartsWith("tel:"))
+                appControl.Operation = AppControlOperations.Dial;
+
+            AppControl.SendLaunchRequest(appControl);
+
+            return Task.CompletedTask;
+        }
     }
 }

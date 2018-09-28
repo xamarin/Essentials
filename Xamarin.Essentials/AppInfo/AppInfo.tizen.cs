@@ -18,6 +18,9 @@ namespace Xamarin.Essentials
             => Version.Build.ToString(CultureInfo.InvariantCulture);
 
         static void PlatformOpenSettings()
-            => throw new NotImplementedInReferenceAssemblyException();
+        {
+            Permissions.EnsureDeclared(PermissionType.LaunchApp);
+            AppControl.SendLaunchRequest(new AppControl() { Operation = AppControlOperations.Setting });
+        }
     }
 }
