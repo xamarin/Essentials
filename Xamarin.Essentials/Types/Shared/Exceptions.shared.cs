@@ -51,4 +51,17 @@ namespace Xamarin.Essentials
         {
         }
     }
+
+    public class SecureStorageException : Exception
+    {
+        public SecureStorageErrorCode ErrorCode { get; }
+
+        public SecureStorageException(SecureStorageErrorCode errorCode) => ErrorCode = errorCode;
+
+        public SecureStorageException(string message, SecureStorageErrorCode errorCode)
+            : base(message) => ErrorCode = errorCode;
+
+        public SecureStorageException(string message, Exception innerException, SecureStorageErrorCode errorCode)
+            : base(message, innerException) => ErrorCode = errorCode;
+    }
 }
