@@ -172,12 +172,12 @@ namespace Xamarin.Essentials
             if (privateKey != null && publicKey != null)
                 return new KeyPair(publicKey, privateKey);
 
-            var originalLocale = GetLocale();
+            var originalLocale = Platform.GetLocale();
             try
             {
                 // Force to english for known bug in date parsing:
                 // https://issuetracker.google.com/issues/37095309
-                SetLocale(Java.Util.Locale.English);
+                Platform.SetLocale(Java.Util.Locale.English);
 
                 // Otherwise we create a new key
                 var generator = KeyPairGenerator.GetInstance(KeyProperties.KeyAlgorithmRsa, androidKeyStore);
@@ -203,9 +203,9 @@ namespace Xamarin.Essentials
             }
             finally
             {
-                SetLocale(originalLocale);
+                Platform.SetLocale(originalLocale);
             }
-        }        
+        }
 
         byte[] WrapKey(IKey keyToWrap, IKey withKey)
         {
