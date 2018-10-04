@@ -26,7 +26,7 @@ namespace Xamarin.Essentials
                 Latitude = location.Latitude,
                 Longitude = location.Longitude,
                 Altitude = location.HasAltitude ? location.Altitude : default(double?),
-                TimestampUtc = location.GetTimestamp().ToUniversalTime(),
+                Timestamp = location.GetTimestamp().ToUniversalTime(),
                 Accuracy = location.HasAccuracy ? location.Accuracy : default(float?),
                 Course = location.HasBearing ? location.Bearing : default(double?),
                 Speed = location.HasSpeed ? location.Speed : default(double?)
