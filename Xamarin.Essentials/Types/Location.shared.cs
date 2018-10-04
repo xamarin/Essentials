@@ -20,7 +20,7 @@ namespace Xamarin.Essentials
         {
             Latitude = latitude;
             Longitude = longitude;
-            TimestampUtc = DateTimeOffset.UtcNow;
+            Timestamp = DateTimeOffset.UtcNow;
         }
 
         public Location(double latitude, double longitude, DateTimeOffset timestamp)

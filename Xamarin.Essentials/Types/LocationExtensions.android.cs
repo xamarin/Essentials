@@ -14,7 +14,7 @@ namespace Xamarin.Essentials
             {
                 Latitude = address.Latitude,
                 Longitude = address.Longitude,
-                TimestampUtc = DateTimeOffset.UtcNow
+                Timestamp = DateTimeOffset.UtcNow
             };
 
         internal static IEnumerable<Location> ToLocations(this IEnumerable<AndroidAddress> addresses) =>
