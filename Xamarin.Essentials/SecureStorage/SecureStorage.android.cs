@@ -32,7 +32,7 @@ namespace Xamarin.Essentials
                 }
                 catch (AEADBadTagException)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Unable to decrpt key {key} likely due to uninstall, removing old key.");
+                    System.Diagnostics.Debug.WriteLine($"Unable to decrypt key, {key}, which is likely due to an app uninstall. Removing old key and returning null.");
                     PlatformRemove(key);
                 }
             }
