@@ -10,7 +10,9 @@ using Android.Support.V4.Content;
 
 namespace Xamarin.Essentials
 {
+#pragma warning disable IDE0040 // Adicionar modificadores de acessibilidade
     internal static partial class Permissions
+#pragma warning restore IDE0040 // Adicionar modificadores de acessibilidade
     {
         static readonly object locker = new object();
         static int requestCode = 0;
