@@ -81,13 +81,13 @@ namespace Xamarin.Essentials
                 case PermissionType.LaunchApp:
                     privileges.Add(("http://tizen.org/privilege/appmanager.launch", false));
                     break;
+                case PermissionType.LocationWhenInUse:
+                    privileges.Add(("http://tizen.org/privilege/location", true));
+                    break;
                 case PermissionType.Maps:
                     privileges.Add(("http://tizen.org/privilege/internet", false));
                     privileges.Add(("http://tizen.org/privilege/mapservice", false));
                     privileges.Add(("http://tizen.org/privilege/network.get", false));
-                    break;
-                case PermissionType.LocationWhenInUse:
-                    privileges.Add(("http://tizen.org/privilege/location", true));
                     break;
                 case PermissionType.NetworkState:
                     privileges.Add(("http://tizen.org/privilege/internet", false));

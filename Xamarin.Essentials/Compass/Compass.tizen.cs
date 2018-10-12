@@ -1,5 +1,5 @@
 ﻿using Tizen.Sensor;
-using TizenOrientationSensor = Tizen.Sensor.OrientationSensor;
+using TizenCompass = Tizen.Sensor.OrientationSensor;
 
 namespace Xamarin.Essentials
 {
@@ -8,11 +8,11 @@ namespace Xamarin.Essentials
         internal const uint GameInterval = 20;
         internal const uint UiInterval = 60;
 
-        internal static TizenOrientationSensor DefaultSensor =>
-            (TizenOrientationSensor)Platform.GetDefaultSensor(SensorType.OrientationSensor);
+        internal static TizenCompass DefaultSensor =>
+            (TizenCompass)Platform.GetDefaultSensor(SensorType.Compass);
 
         internal static bool IsSupported =>
-            TizenOrientationSensor.IsSupported;
+            TizenCompass.IsSupported;
 
         internal static void PlatformStart(SensorSpeed sensorSpeed)
         {

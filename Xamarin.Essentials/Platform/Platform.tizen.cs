@@ -5,9 +5,10 @@ using Tizen.Sensor;
 using Tizen.System;
 using TizenAccelerometer = Tizen.Sensor.Accelerometer;
 using TizenBarometer = Tizen.Sensor.PressureSensor;
+using TizenCompass = Tizen.Sensor.OrientationSensor;
 using TizenGyroscope = Tizen.Sensor.Gyroscope;
 using TizenMagnetometer = Tizen.Sensor.Magnetometer;
-using TizenOrientationSensor = Tizen.Sensor.OrientationSensor;
+using TizenOrientationSensor = Tizen.Sensor.RotationVectorSensor;
 
 namespace Xamarin.Essentials
 {
@@ -15,6 +16,7 @@ namespace Xamarin.Essentials
     {
         static TizenAccelerometer accelerometer = null;
         static TizenBarometer barometer = null;
+        static TizenCompass compass = null;
         static TizenGyroscope gyroscope = null;
         static TizenMagnetometer magnetometer = null;
         static TizenOrientationSensor orientationSensor = null;
@@ -57,6 +59,10 @@ namespace Xamarin.Essentials
                     if (Platform.barometer == null)
                         Platform.barometer = new TizenBarometer();
                     return Platform.barometer;
+                case SensorType.Compass:
+                    if (Platform.compass == null)
+                        Platform.compass = new TizenCompass();
+                    return Platform.compass;
                 case SensorType.Gyroscope:
                     if (Platform.gyroscope == null)
                         Platform.gyroscope = new TizenGyroscope();
@@ -89,6 +95,7 @@ namespace Xamarin.Essentials
     {
         Accelerometer,
         Barometer,
+        Compass,
         Gyroscope,
         Magnetometer,
         OrientationSensor

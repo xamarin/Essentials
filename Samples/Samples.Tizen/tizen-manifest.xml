@@ -20,4 +20,5 @@
     <feature name="http://tizen.org/feature/location.gps">true</feature>
     <feature name="http://tizen.org/feature/location.wps">true</feature>
     <feature name="http://tizen.org/feature/maps">true</feature>
+    <feature name="http://tizen.org/feature/speech.synthesis">true</feature>
 </manifest>
