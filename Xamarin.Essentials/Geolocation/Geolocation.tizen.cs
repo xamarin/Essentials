@@ -56,7 +56,7 @@ namespace Xamarin.Essentials
                     lastKnownLocation.Latitude = e.Location.Latitude;
                     lastKnownLocation.Longitude = e.Location.Longitude;
                     lastKnownLocation.Speed = e.Location.Speed;
-                    lastKnownLocation.TimestampUtc = e.Location.Timestamp;
+                    lastKnownLocation.Timestamp = e.Location.Timestamp;
                 }
                 service?.Stop();
                 tcs.TrySetResult(true);
