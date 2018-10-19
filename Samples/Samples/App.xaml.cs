@@ -2,6 +2,7 @@
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Microsoft.AppCenter.Distribute;
+using Samples.Helpers;
 using Samples.View;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -14,10 +15,6 @@ namespace Samples
 {
     public partial class App : Application
     {
-        const string appCenterAndroid = "AC_ANDROID";
-        const string appCenteriOS = "AC_IOS";
-        const string appCenterUWP = "AC_UWP";
-
         public App()
         {
             InitializeComponent();
@@ -29,14 +26,14 @@ namespace Samples
 
         protected override void OnStart()
         {
-            if ((Device.RuntimePlatform == Device.Android && appCenterAndroid != "AC_ANDROID") ||
-               (Device.RuntimePlatform == Device.iOS && appCenteriOS != "AC_IOS") ||
-               (Device.RuntimePlatform == Device.UWP && appCenterUWP != "AC_UWP"))
+            if ((Device.RuntimePlatform == Device.Android && CommonConstants.AppCenterAndroid != "AC_ANDROID") ||
+               (Device.RuntimePlatform == Device.iOS && CommonConstants.AppCenteriOS != "AC_IOS") ||
+               (Device.RuntimePlatform == Device.UWP && CommonConstants.AppCenterUWP != "AC_UWP"))
             {
                 AppCenter.Start(
-                $"ios={appCenteriOS};" +
-                $"android={appCenterAndroid};" +
-                $"uwp={appCenterUWP}",
+                $"ios={CommonConstants.AppCenteriOS};" +
+                $"android={CommonConstants.AppCenterAndroid};" +
+                $"uwp={CommonConstants.AppCenterUWP}",
                 typeof(Analytics),
                 typeof(Crashes),
                 typeof(Distribute));
