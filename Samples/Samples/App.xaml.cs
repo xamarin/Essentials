@@ -34,8 +34,8 @@ namespace Samples
                (Device.RuntimePlatform == Device.UWP && appCenterUWP != "AC_UWP"))
             {
                 AppCenter.Start(
-                $"ios={appCenterAndroid};" +
-                $"android={appCenteriOS};" +
+                $"ios={appCenteriOS};" +
+                $"android={appCenterAndroid};" +
                 $"uwp={appCenterUWP}",
                 typeof(Analytics),
                 typeof(Crashes),
