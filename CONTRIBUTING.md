@@ -49,7 +49,7 @@ The following topics should generally not be proposed for discussion as they are
 
 #### Guiding Principles for New Features
 
-Any proposals for new feature work and new API's should follow the spirit of these principles:
+Any proposals for new feature work and new APIs should follow the spirit of these principles:
 
  * API's should be simple, direct, and generally implemented with static classes and methods whenever practical
  * Usage of interfaces is to be strictly avoided - API's should be simple and performant
