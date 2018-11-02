@@ -82,7 +82,7 @@ namespace Xamarin.Essentials
                     var scale = battery.GetIntExtra(BatteryManager.ExtraScale, -1);
 
                     if (scale <= 0)
-                        return -1;
+                        return 1.0;
 
                     return (double)level / (double)scale;
                 }

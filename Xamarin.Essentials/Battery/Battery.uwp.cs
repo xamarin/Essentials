@@ -30,7 +30,7 @@ namespace Xamarin.Essentials
             get
             {
                 var finalReport = DefaultBattery.GetReport();
-                var finalPercent = -1.0;
+                var finalPercent = 1.0;
 
                 var remaining = finalReport.RemainingCapacityInMilliwattHours;
                 var full = finalReport.FullChargeCapacityInMilliwattHours;
