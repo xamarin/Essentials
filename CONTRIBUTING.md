@@ -55,6 +55,8 @@ Any proposals for new feature work and new APIs should follow the spirit of thes
  * Usage of interfaces is to be strictly avoided - APIs should be simple and performant
  * Custom UI should be entirely avoided
  * UI code is only allowable in cases where the platform provides an implementation (eg: Browser, Email Composer, Phone Dialer, etc)
+ * New features should have native API's available to allow implementation on a reasonable subset of the supported platforms, especially  (iOS, Android, UWP)
+ * No new external dependencies should generally be added to support implementation of new feature work (there can be exceptions but they must be thoroughly considered for the value being added)
 
 #### Proposal States
 ##### Open
