@@ -26,7 +26,15 @@ namespace Xamarin.Essentials
             {
                 var encData = Convert.FromBase64String(encStr);
                 var ks = new AndroidKeyStore(context, Alias, AlwaysUseAsymmetricKeyStorage);
-                decryptedData = ks.Decrypt(encData);
+                try
+                {
+                    decryptedData = ks.Decrypt(encData);
+                }
+                catch (AEADBadTagException)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Unable to decrypt key, {key}, which is likely due to an app uninstall. Removing old key and returning null.");
+                    PlatformRemove(key);
+                }
             }
 
             return Task.FromResult(decryptedData);
@@ -172,27 +180,39 @@ namespace Xamarin.Essentials
             if (privateKey != null && publicKey != null)
                 return new KeyPair(publicKey, privateKey);
 
-            // Otherwise we create a new key
-            var generator = KeyPairGenerator.GetInstance(KeyProperties.KeyAlgorithmRsa, androidKeyStore);
+            var originalLocale = Platform.GetLocale();
+            try
+            {
+                // Force to english for known bug in date parsing:
+                // https://issuetracker.google.com/issues/37095309
+                Platform.SetLocale(Java.Util.Locale.English);
 
-            var end = DateTime.UtcNow.AddYears(20);
-            var startDate = new Java.Util.Date();
+                // Otherwise we create a new key
+                var generator = KeyPairGenerator.GetInstance(KeyProperties.KeyAlgorithmRsa, androidKeyStore);
+
+                var end = DateTime.UtcNow.AddYears(20);
+                var startDate = new Java.Util.Date();
 #pragma warning disable CS0618 // Type or member is obsolete
-            var endDate = new Java.Util.Date(end.Year, end.Month, end.Day);
+                var endDate = new Java.Util.Date(end.Year, end.Month, end.Day);
 #pragma warning restore CS0618 // Type or member is obsolete
 
 #pragma warning disable CS0618
-            var builder = new KeyPairGeneratorSpec.Builder(Platform.AppContext)
-                .SetAlias(asymmetricAlias)
-                .SetSerialNumber(Java.Math.BigInteger.One)
-                .SetSubject(new Javax.Security.Auth.X500.X500Principal($"CN={asymmetricAlias} CA Certificate"))
-                .SetStartDate(startDate)
-                .SetEndDate(endDate);
+                var builder = new KeyPairGeneratorSpec.Builder(Platform.AppContext)
+                    .SetAlias(asymmetricAlias)
+                    .SetSerialNumber(Java.Math.BigInteger.One)
+                    .SetSubject(new Javax.Security.Auth.X500.X500Principal($"CN={asymmetricAlias} CA Certificate"))
+                    .SetStartDate(startDate)
+                    .SetEndDate(endDate);
 
-            generator.Initialize(builder.Build());
+                generator.Initialize(builder.Build());
 #pragma warning restore CS0618
 
-            return generator.GenerateKeyPair();
+                return generator.GenerateKeyPair();
+            }
+            finally
+            {
+                Platform.SetLocale(originalLocale);
+            }
         }
 
         byte[] WrapKey(IKey keyToWrap, IKey withKey)
