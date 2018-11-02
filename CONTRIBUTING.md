@@ -52,7 +52,7 @@ The following topics should generally not be proposed for discussion as they are
 Any proposals for new feature work and new APIs should follow the spirit of these principles:
 
  * APIs should be simple, direct, and generally implemented with static classes and methods whenever practical
- * Usage of interfaces is to be strictly avoided - API's should be simple and performant
+ * Usage of interfaces is to be strictly avoided - APIs should be simple and performant
  * Custom UI should be entirely avoided
  * UI Code is only allowable in cases where the platform provides an implementation (eg: Browser, Email Composer, Phone Dialer, etc)
 
