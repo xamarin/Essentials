@@ -88,7 +88,7 @@
     </Type>
     <Type Name="Xamarin.Essentials.Clipboard" Id="T:Xamarin.Essentials.Clipboard">
       <Member Id="M:Xamarin.Essentials.Clipboard.GetTextAsync" />
-      <Member Id="M:Xamarin.Essentials.Clipboard.SetText(System.String)" />
+      <Member Id="M:Xamarin.Essentials.Clipboard.SetTextAsync(System.String)" />
       <Member Id="P:Xamarin.Essentials.Clipboard.HasText" />
     </Type>
     <Type Name="Xamarin.Essentials.Compass" Id="T:Xamarin.Essentials.Compass">
@@ -114,19 +114,18 @@
       <Member Id="F:Xamarin.Essentials.ConnectionProfile.Bluetooth" />
       <Member Id="F:Xamarin.Essentials.ConnectionProfile.Cellular" />
       <Member Id="F:Xamarin.Essentials.ConnectionProfile.Ethernet" />
-      <Member Id="F:Xamarin.Essentials.ConnectionProfile.Other" />
+      <Member Id="F:Xamarin.Essentials.ConnectionProfile.Unknown" />
       <Member Id="F:Xamarin.Essentials.ConnectionProfile.WiFi" />
-      <Member Id="F:Xamarin.Essentials.ConnectionProfile.WiMAX" />
     </Type>
     <Type Name="Xamarin.Essentials.Connectivity" Id="T:Xamarin.Essentials.Connectivity">
       <Member Id="E:Xamarin.Essentials.Connectivity.ConnectivityChanged" />
+      <Member Id="P:Xamarin.Essentials.Connectivity.ConnectionProfiles" />
       <Member Id="P:Xamarin.Essentials.Connectivity.NetworkAccess" />
-      <Member Id="P:Xamarin.Essentials.Connectivity.Profiles" />
     </Type>
     <Type Name="Xamarin.Essentials.ConnectivityChangedEventArgs" Id="T:Xamarin.Essentials.ConnectivityChangedEventArgs">
       <Member Id="M:Xamarin.Essentials.ConnectivityChangedEventArgs.ToString" />
+      <Member Id="P:Xamarin.Essentials.ConnectivityChangedEventArgs.ConnectionProfiles" />
       <Member Id="P:Xamarin.Essentials.ConnectivityChangedEventArgs.NetworkAccess" />
-      <Member Id="P:Xamarin.Essentials.ConnectivityChangedEventArgs.Profiles" />
     </Type>
     <Type Name="Xamarin.Essentials.DeviceDisplay" Id="T:Xamarin.Essentials.DeviceDisplay">
       <Member Id="E:Xamarin.Essentials.DeviceDisplay.ScreenMetricsChanged" />
@@ -214,7 +213,6 @@
       <Member Id="M:Xamarin.Essentials.Geocoding.GetLocationsAsync(System.String)" />
       <Member Id="M:Xamarin.Essentials.Geocoding.GetPlacemarksAsync(System.Double,System.Double)" />
       <Member Id="M:Xamarin.Essentials.Geocoding.GetPlacemarksAsync(Xamarin.Essentials.Location)" />
-      <Member Id="P:Xamarin.Essentials.Geocoding.MapKey" />
     </Type>
     <Type Name="Xamarin.Essentials.Geolocation" Id="T:Xamarin.Essentials.Geolocation">
       <Member Id="M:Xamarin.Essentials.Geolocation.GetLastKnownLocationAsync" />
