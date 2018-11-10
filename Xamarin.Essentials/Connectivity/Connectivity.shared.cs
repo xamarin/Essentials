@@ -15,8 +15,6 @@ namespace Xamarin.Essentials
 
         public static NetworkAccess NetworkAccess => PlatformNetworkAccess;
 
-        public static SignalStrength WiFiSignalStrength => PlatformSignalStrength();
-
         public static IEnumerable<ConnectionProfile> Profiles => PlatformProfiles;
 
         public static event EventHandler<ConnectivityChangedEventArgs> ConnectivityChanged
@@ -65,15 +63,6 @@ namespace Xamarin.Essentials
                 MainThread.BeginInvokeOnMainThread(() => ConnectivityChangedInternal?.Invoke(null, e));
             }
         }
-    }
-
-    public enum SignalStrength
-    {
-        Unknown,
-        None,
-        Weak,
-        Fair,
-        Strong
     }
 
     public class ConnectivityChangedEventArgs : EventArgs

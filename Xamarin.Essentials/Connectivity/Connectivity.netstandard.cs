@@ -7,9 +7,6 @@ namespace Xamarin.Essentials
         static NetworkAccess PlatformNetworkAccess =>
             throw new NotImplementedInReferenceAssemblyException();
 
-        static SignalStrength PlatformSignalStrength() =>
-            throw new NotImplementedInReferenceAssemblyException();
-
         static IEnumerable<ConnectionProfile> PlatformProfiles =>
             throw new NotImplementedInReferenceAssemblyException();
 
