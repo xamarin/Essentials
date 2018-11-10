@@ -4,23 +4,13 @@ namespace Samples.ViewModel
 {
     public class ConnectivityViewModel : BaseViewModel
     {
-        public ConnectivityViewModel()
-        {
-        }
-
         public string NetworkAccess =>
             Connectivity.NetworkAccess.ToString();
 
-        public string Profiles
-        {
-            get
-            {
-                var profiles = string.Empty;
-                foreach (var p in Connectivity.Profiles)
-                    profiles += "\n" + p.ToString();
-                return profiles;
-            }
-        }
+        public string SignalStrength => Connectivity.WiFiSignalStrength.ToString();
+
+        public string Profiles =>
+            string.Join("\n", Connectivity.Profiles);
 
         public override void OnAppearing()
         {
@@ -40,6 +30,7 @@ namespace Samples.ViewModel
         {
             OnPropertyChanged(nameof(Profiles));
             OnPropertyChanged(nameof(NetworkAccess));
+            OnPropertyChanged(nameof(SignalStrength));
         }
     }
 }

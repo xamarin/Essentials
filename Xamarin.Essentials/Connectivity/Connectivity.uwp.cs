@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Windows.Devices.WiFi;
 using Windows.Networking.Connectivity;
 
 namespace Xamarin.Essentials
@@ -14,6 +15,18 @@ namespace Xamarin.Essentials
 
         static void StopListeners() =>
              NetworkInformation.NetworkStatusChanged -= NetworkStatusChanged;
+
+        static SignalStrength PlatformSignalStrength()
+        {
+            var signalStrength = NetworkInformation.GetConnectionProfiles()
+                .Where(profile => profile != null && profile.IsWlanConnectionProfile)
+                .Select(profile => profile.GetSignalBars())
+                .Where(signalBar => signalBar.HasValue)
+                .OrderBy(strength => strength).FirstOrDefault();
+
+            // Adding 1 to return value because 0 is Unknown and 1 is None. If we have a connection we receive at least 1 in return value
+            return signalStrength.HasValue ? (SignalStrength)signalStrength.Value + 1 : SignalStrength.Unknown;
+        }
 
         static NetworkAccess PlatformNetworkAccess
         {

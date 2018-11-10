@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Android.Content;
 using Android.Net;
+using Android.Net.Wifi;
 using Android.OS;
 using Debug = System.Diagnostics.Debug;
 
@@ -19,6 +20,20 @@ namespace Xamarin.Essentials
             conectivityReceiver = new ConnectivityBroadcastReceiver(OnConnectivityChanged);
 
             Platform.AppContext.RegisterReceiver(conectivityReceiver, new IntentFilter(ConnectivityManager.ConnectivityAction));
+        }
+
+        static SignalStrength PlatformSignalStrength()
+        {
+            var wifiManager = Platform.WifiManager;
+            if (wifiManager is null)
+                return SignalStrength.Unknown;
+
+            var info = wifiManager?.ConnectionInfo;
+            if (info is null)
+                return SignalStrength.None;
+
+            // if we get here we have a connection, allowing us to cast normalised value to signal strenth
+            return (SignalStrength)WifiManager.CalculateSignalLevel(info.Rssi, 3) + 1;
         }
 
         static void StopListeners()

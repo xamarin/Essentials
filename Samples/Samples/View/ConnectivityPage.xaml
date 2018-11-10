@@ -15,6 +15,7 @@
             <StackLayout Padding="12,6,12,12" Spacing="6">
                 <Label Text="Connectivity State:" FontAttributes="Bold" />
                 <Label Text="{Binding NetworkAccess, StringFormat='NetworkAccess: {0}'}" />
+                <Label Text="{Binding SignalStrength, StringFormat='Signal strength (for wifi): {0}'}" />
                 <Label Text="{Binding Profiles, StringFormat='Profiles: {0}'}" />
             </StackLayout>
         </ScrollView>
