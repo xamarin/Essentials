@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -28,7 +29,7 @@ namespace Xamarin.Essentials
 
                 var speechSynthesizer = new SpeechSynthesizer();
 
-                if (!string.IsNullOrWhiteSpace(settings?.Locale.Id))
+                if (!string.IsNullOrWhiteSpace(settings?.Locale?.Id))
                 {
                     var voiceInfo = SpeechSynthesizer.AllVoices.FirstOrDefault(v => v.Id == settings.Locale.Id) ?? SpeechSynthesizer.DefaultVoice;
                     speechSynthesizer.Voice = voiceInfo;
@@ -73,10 +74,10 @@ namespace Xamarin.Essentials
             var rate = "default";
 
             // Look for the specified language, otherwise the default voice
-            var locale = settings?.Locale.Language ?? SpeechSynthesizer.DefaultVoice.Language;
+            var locale = settings?.Locale?.Language ?? SpeechSynthesizer.DefaultVoice.Language;
 
             if (settings?.Volume.HasValue ?? false)
-                volume = (settings.Volume.Value * 100f).ToString();
+                volume = (settings.Volume.Value * 100f).ToString(CultureInfo.InvariantCulture);
 
             if (settings?.Pitch.HasValue ?? false)
                 pitch = ProsodyPitch(settings.Pitch);

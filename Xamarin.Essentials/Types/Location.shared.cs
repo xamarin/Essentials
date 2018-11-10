@@ -20,14 +20,14 @@ namespace Xamarin.Essentials
         {
             Latitude = latitude;
             Longitude = longitude;
-            TimestampUtc = DateTimeOffset.UtcNow;
+            Timestamp = DateTimeOffset.UtcNow;
         }
 
         public Location(double latitude, double longitude, DateTimeOffset timestamp)
         {
             Latitude = latitude;
             Longitude = longitude;
-            TimestampUtc = timestamp;
+            Timestamp = timestamp;
         }
 
         public Location(Location point)
@@ -37,10 +37,12 @@ namespace Xamarin.Essentials
 
             Latitude = point.Latitude;
             Longitude = point.Longitude;
-            TimestampUtc = DateTimeOffset.UtcNow;
+            Timestamp = DateTime.UtcNow;
+            Speed = point.Speed;
+            Course = point.Course;
         }
 
-        public DateTimeOffset TimestampUtc { get; set; }
+        public DateTimeOffset Timestamp { get; set; }
 
         public double Latitude { get; set; }
 
@@ -49,6 +51,16 @@ namespace Xamarin.Essentials
         public double? Altitude { get; set; }
 
         public double? Accuracy { get; set; }
+
+        public double? Speed { get; set; }
+
+        public double? Course { get; set; }
+
+        public static double CalculateDistance(double latitudeStart, double longitudeStart, Location locationEnd, DistanceUnits units) =>
+            CalculateDistance(latitudeStart, locationEnd.Latitude, longitudeStart, locationEnd.Longitude, units);
+
+        public static double CalculateDistance(Location locationStart, double latitudeEnd, double longitudeEnd, DistanceUnits units) =>
+           CalculateDistance(locationStart.Latitude, latitudeEnd, locationStart.Longitude, longitudeEnd, units);
 
         public static double CalculateDistance(Location locationStart, Location locationEnd, DistanceUnits units) =>
             CalculateDistance(locationStart.Latitude, locationEnd.Latitude, locationStart.Longitude, locationEnd.Longitude, units);
@@ -84,5 +96,11 @@ namespace Xamarin.Essentials
         public static double MilesToKilometers(double miles) => miles * 1.609344;
 
         public static double KilometersToMiles(double kilometers) => kilometers * .62137119;
+
+        public override string ToString() =>
+            $"{nameof(Latitude)}: {Latitude}, {nameof(Longitude)}: {Longitude}, " +
+            $"{nameof(Altitude)}: {Altitude ?? 0}, {nameof(Accuracy)}: {Accuracy ?? 0}, " +
+            $"{nameof(Speed)}: {Speed ?? 0}, {nameof(Course)}: {Course ?? 0}, " +
+            $"{nameof(Timestamp)}: {Timestamp}";
     }
 }

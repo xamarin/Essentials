@@ -17,7 +17,7 @@
   <Members>
     <Member MemberName="GetLocalesAsync">
       <MemberSignature Language="C#" Value="public static System.Threading.Tasks.Task&lt;System.Collections.Generic.IEnumerable&lt;Xamarin.Essentials.Locale&gt;&gt; GetLocalesAsync ();" />
-      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Tasks.Task`1&lt;class System.Collections.Generic.IEnumerable`1&lt;valuetype Xamarin.Essentials.Locale&gt;&gt; GetLocalesAsync() cil managed" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Tasks.Task`1&lt;class System.Collections.Generic.IEnumerable`1&lt;class Xamarin.Essentials.Locale&gt;&gt; GetLocalesAsync() cil managed" />
       <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.TextToSpeech.GetLocalesAsync" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
@@ -67,14 +67,6 @@
         <AssemblyName>Xamarin.Essentials</AssemblyName>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
       </AssemblyInfo>
-      <Attributes>
-        <Attribute>
-          <AttributeName>System.Diagnostics.DebuggerStepThrough</AttributeName>
-        </Attribute>
-        <Attribute>
-          <AttributeName>System.Runtime.CompilerServices.AsyncStateMachine(typeof(Xamarin.Essentials.TextToSpeech/&lt;SpeakAsync&gt;d__9))</AttributeName>
-        </Attribute>
-      </Attributes>
       <ReturnValue>
         <ReturnType>System.Threading.Tasks.Task</ReturnType>
       </ReturnValue>

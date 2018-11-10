@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -124,7 +125,7 @@ namespace Xamarin.Essentials
                 });
             }
 
-            if (settings?.Locale.Language != null)
+            if (settings?.Locale?.Language != null)
             {
                 JavaLocale locale = null;
                 if (!string.IsNullOrWhiteSpace(settings?.Locale.Country))
@@ -160,7 +161,7 @@ namespace Xamarin.Essentials
                 };
 
                 if (settings != null && settings.Volume.HasValue)
-                    map.Add(AndroidTextToSpeech.Engine.KeyParamVolume, settings.Volume.Value.ToString());
+                    map.Add(AndroidTextToSpeech.Engine.KeyParamVolume, settings.Volume.Value.ToString(CultureInfo.InvariantCulture));
 
                 // We use an obsolete overload here so it works on older API levels at runtime
                 // Flush on first entry and add (to not flush our own previous) subsequent entries
