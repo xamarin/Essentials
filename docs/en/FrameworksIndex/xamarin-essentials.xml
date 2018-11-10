@@ -1,7 +1,4 @@
 <Framework Name="xamarin-essentials">
-  <Assemblies>
-    <Assembly Name="Xamarin.Essentials" Version="1.0.0.0" />
-  </Assemblies>
   <Namespace Name="Xamarin.Essentials">
     <Type Name="Xamarin.Essentials.Accelerometer" Id="T:Xamarin.Essentials.Accelerometer">
       <Member Id="E:Xamarin.Essentials.Accelerometer.ReadingChanged" />
@@ -120,12 +117,16 @@
       <Member Id="E:Xamarin.Essentials.Connectivity.ConnectivityChanged" />
       <Member Id="P:Xamarin.Essentials.Connectivity.NetworkAccess" />
       <Member Id="P:Xamarin.Essentials.Connectivity.Profiles" />
-      <Member Id="P:Xamarin.Essentials.Connectivity.WiFiSignalStrength" />
     </Type>
     <Type Name="Xamarin.Essentials.ConnectivityChangedEventArgs" Id="T:Xamarin.Essentials.ConnectivityChangedEventArgs">
       <Member Id="M:Xamarin.Essentials.ConnectivityChangedEventArgs.ToString" />
       <Member Id="P:Xamarin.Essentials.ConnectivityChangedEventArgs.NetworkAccess" />
       <Member Id="P:Xamarin.Essentials.ConnectivityChangedEventArgs.Profiles" />
+    </Type>
+    <Type Name="Xamarin.Essentials.Share" Id="T:Xamarin.Essentials.Share">
+      <Member Id="M:Xamarin.Essentials.Share.RequestAsync(System.String)" />
+      <Member Id="M:Xamarin.Essentials.Share.RequestAsync(System.String,System.String)" />
+      <Member Id="M:Xamarin.Essentials.Share.RequestAsync(Xamarin.Essentials.ShareTextRequest)" />
     </Type>
     <Type Name="Xamarin.Essentials.DeviceDisplay" Id="T:Xamarin.Essentials.DeviceDisplay">
       <Member Id="E:Xamarin.Essentials.DeviceDisplay.ScreenMetricsChanged" />
@@ -474,11 +475,6 @@
       <Member Id="F:Xamarin.Essentials.SensorSpeed.Normal" />
       <Member Id="F:Xamarin.Essentials.SensorSpeed.UI" />
     </Type>
-    <Type Name="Xamarin.Essentials.Share" Id="T:Xamarin.Essentials.Share">
-      <Member Id="M:Xamarin.Essentials.Share.RequestAsync(System.String)" />
-      <Member Id="M:Xamarin.Essentials.Share.RequestAsync(System.String,System.String)" />
-      <Member Id="M:Xamarin.Essentials.Share.RequestAsync(Xamarin.Essentials.ShareTextRequest)" />
-    </Type>
     <Type Name="Xamarin.Essentials.ShareTextRequest" Id="T:Xamarin.Essentials.ShareTextRequest">
       <Member Id="M:Xamarin.Essentials.ShareTextRequest.#ctor" />
       <Member Id="M:Xamarin.Essentials.ShareTextRequest.#ctor(System.String)" />
@@ -487,13 +483,6 @@
       <Member Id="P:Xamarin.Essentials.ShareTextRequest.Text" />
       <Member Id="P:Xamarin.Essentials.ShareTextRequest.Title" />
       <Member Id="P:Xamarin.Essentials.ShareTextRequest.Uri" />
-    </Type>
-    <Type Name="Xamarin.Essentials.SignalStrength" Id="T:Xamarin.Essentials.SignalStrength">
-      <Member Id="F:Xamarin.Essentials.SignalStrength.Fair" />
-      <Member Id="F:Xamarin.Essentials.SignalStrength.None" />
-      <Member Id="F:Xamarin.Essentials.SignalStrength.Strong" />
-      <Member Id="F:Xamarin.Essentials.SignalStrength.Unknown" />
-      <Member Id="F:Xamarin.Essentials.SignalStrength.Weak" />
     </Type>
     <Type Name="Xamarin.Essentials.Sms" Id="T:Xamarin.Essentials.Sms">
       <Member Id="M:Xamarin.Essentials.Sms.ComposeAsync" />

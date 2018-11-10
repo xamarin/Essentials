@@ -79,23 +79,5 @@
         </remarks>
       </Docs>
     </Member>
-    <Member MemberName="WiFiSignalStrength">
-      <MemberSignature Language="C#" Value="public static Xamarin.Essentials.SignalStrength WiFiSignalStrength { get; }" />
-      <MemberSignature Language="ILAsm" Value=".property valuetype Xamarin.Essentials.SignalStrength WiFiSignalStrength" />
-      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.Connectivity.WiFiSignalStrength" />
-      <MemberType>Property</MemberType>
-      <AssemblyInfo>
-        <AssemblyName>Xamarin.Essentials</AssemblyName>
-        <AssemblyVersion>1.0.0.0</AssemblyVersion>
-      </AssemblyInfo>
-      <ReturnValue>
-        <ReturnType>Xamarin.Essentials.SignalStrength</ReturnType>
-      </ReturnValue>
-      <Docs>
-        <summary>Gets the signal strength for wifi network if it is available.</summary>
-        <value>Unknown if connectivity can not be determined, None if no connection is present. Otherwise a value between Fair and High.</value>
-        <remarks>Unknown and None have different causes. Remember to test against both in conditions where you want to display a signal strength.</remarks>
-      </Docs>
-    </Member>
   </Members>
 </Type>
