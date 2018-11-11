@@ -69,11 +69,11 @@ namespace Xamarin.Essentials
 
     public enum SignalStrength
     {
-        Unknown,
-        None,
-        Weak,
-        Fair,
-        Strong
+        Unknown = 0,
+        None = 1,
+        Weak = 2,
+        Fair = 3,
+        Strong = 4
     }
 
     public class ConnectivityChangedEventArgs : EventArgs

@@ -24,16 +24,34 @@ namespace Xamarin.Essentials
 
         static SignalStrength PlatformSignalStrength()
         {
-            var wifiManager = Platform.WifiManager;
-            if (wifiManager is null)
+            Permissions.EnsureDeclared(PermissionType.WifiState);
+            try
+            {
+                var wifiManager = Platform.WifiManager;
+                if (wifiManager == null)
+                    return SignalStrength.Unknown;
+
+                var info = wifiManager.ConnectionInfo;
+                if (info == null)
+                    return SignalStrength.None;
+
+                switch (WifiManager.CalculateSignalLevel(info.Rssi, 3))
+                {
+                    case 1:
+                        return SignalStrength.Weak;
+                    case 2:
+                        return SignalStrength.Fair;
+                    case 3:
+                        return SignalStrength.Strong;
+                    default:
+                        throw new InvalidOperationException("Exhaustive switch statement hit default value.");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Unable to get signal strength - do you have ACCESS_WIFI_STATE permission? - error: {0}", e);
                 return SignalStrength.Unknown;
-
-            var info = wifiManager?.ConnectionInfo;
-            if (info is null)
-                return SignalStrength.None;
-
-            // if we get here we have a connection, allowing us to cast normalised value to signal strenth
-            return (SignalStrength)WifiManager.CalculateSignalLevel(info.Rssi, 3) + 1;
+            }
         }
 
         static void StopListeners()

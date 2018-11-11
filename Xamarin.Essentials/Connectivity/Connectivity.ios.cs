@@ -16,7 +16,18 @@ namespace Xamarin.Essentials
 
         static SignalStrength PlatformSignalStrength()
         {
-            return (SignalStrength)(int)(new NEHotspotNetwork().SignalStrength * 3) + 1;
+            var signalstrength = (int)new NEHotspotNetwork().SignalStrength * 3;
+            switch (signalstrength)
+            {
+                case 1:
+                    return SignalStrength.Weak;
+                case 2:
+                    return SignalStrength.Fair;
+                case 3:
+                    return SignalStrength.Strong;
+                default:
+                    throw new InvalidOperationException("Exhaustive switch statement hit default value.");
+            }
         }
 
         static void StopListeners()

@@ -158,6 +158,9 @@ namespace Xamarin.Essentials
                 case PermissionType.NetworkState:
                     permissions.Add((Manifest.Permission.AccessNetworkState, false));
                     break;
+                case PermissionType.WifiState:
+                    permissions.Add((Manifest.Permission.AccessWifiState, false));
+                    break;
                 case PermissionType.Vibrate:
                     permissions.Add((Manifest.Permission.Vibrate, true));
                     break;
