@@ -16,9 +16,13 @@ namespace Xamarin.Essentials
 
         static SignalStrength PlatformSignalStrength()
         {
-            var signalstrength = (int)new NEHotspotNetwork().SignalStrength * 3;
+            var doubleSignalStrength = new NEHotspotNetwork().SignalStrength;
+            if (doubleSignalStrength < 0.01d)
+                return SignalStrength.None;
+            var signalstrength = (int)Math.Round(doubleSignalStrength * 3);
             switch (signalstrength)
             {
+                case 0:
                 case 1:
                     return SignalStrength.Weak;
                 case 2:

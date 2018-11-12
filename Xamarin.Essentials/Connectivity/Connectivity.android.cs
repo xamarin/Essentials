@@ -35,16 +35,21 @@ namespace Xamarin.Essentials
                 if (info == null)
                     return SignalStrength.None;
 
-                switch (WifiManager.CalculateSignalLevel(info.Rssi, 3))
+                var signalLevel = WifiManager.CalculateSignalLevel(info.Rssi, 5); // range 0 -> n-1
+                switch (signalLevel)
                 {
+                    case 0:
+                        return SignalStrength.None;
                     case 1:
                         return SignalStrength.Weak;
                     case 2:
-                        return SignalStrength.Fair;
                     case 3:
+                        return SignalStrength.Fair;
+                    case 4:
                         return SignalStrength.Strong;
                     default:
-                        throw new InvalidOperationException("Exhaustive switch statement hit default value.");
+                        Debug.WriteLine($"Invalid signal strength encountered: {signalLevel}");
+                        return SignalStrength.Unknown;
                 }
             }
             catch (Exception e)

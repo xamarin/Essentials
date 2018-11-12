@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Windows.Devices.WiFi;
 using Windows.Networking.Connectivity;
@@ -22,10 +23,28 @@ namespace Xamarin.Essentials
                 .Where(profile => profile != null && profile.IsWlanConnectionProfile)
                 .Select(profile => profile.GetSignalBars())
                 .Where(signalBar => signalBar.HasValue)
-                .OrderBy(strength => strength).FirstOrDefault();
+                .OrderBy(strength => strength)
+                .FirstOrDefault();
 
             // Adding 1 to return value because 0 is Unknown and 1 is None. If we have a connection we receive at least 1 in return value
-            return signalStrength.HasValue ? (SignalStrength)signalStrength.Value + 1 : SignalStrength.Unknown;
+            if (!signalStrength.HasValue)
+                return SignalStrength.Unknown;
+            switch (signalStrength.Value)
+            {
+                case 0:
+                    return SignalStrength.None;
+                case 1:
+                    return SignalStrength.Weak;
+                case 2:
+                case 3:
+                    return SignalStrength.Fair;
+                case 4:
+                case 5:
+                    return SignalStrength.Strong;
+                default:
+                    Debug.WriteLine($"Invalid signal strength encountered: {signalStrength.Value}");
+                    return SignalStrength.Unknown;
+            }
         }
 
         static NetworkAccess PlatformNetworkAccess
