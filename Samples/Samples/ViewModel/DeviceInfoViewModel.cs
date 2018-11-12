@@ -20,6 +20,8 @@ namespace Samples.ViewModel
 
         public string Idiom => DeviceInfo.Idiom;
 
+        public string StorageInformation { get; private set; }
+
         public DeviceType DeviceType => DeviceInfo.DeviceType;
 
         public ScreenMetrics ScreenMetrics
@@ -28,12 +30,13 @@ namespace Samples.ViewModel
             set => SetProperty(ref screenMetrics, value);
         }
 
-        public override void OnAppearing()
+        public async override void OnAppearing()
         {
             base.OnAppearing();
 
             DeviceDisplay.ScreenMetricsChanged += OnScreenMetricsChanged;
             ScreenMetrics = DeviceDisplay.ScreenMetrics;
+            StorageInformation = string.Join("\n", await DeviceInfo.GetStorageInformationAsync());
         }
 
         public override void OnDisappearing()
