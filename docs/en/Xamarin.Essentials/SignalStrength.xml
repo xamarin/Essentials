@@ -10,8 +10,7 @@
     <BaseTypeName>System.Enum</BaseTypeName>
   </Base>
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Represents a signal strength if available or otherwise Unknown.</summary>
   </Docs>
   <Members>
     <Member MemberName="Fair">
@@ -96,7 +95,7 @@
       </ReturnValue>
       <MemberValue>2</MemberValue>
       <Docs>
-        <summary>Bad signal strength.</summary>
+        <summary>Weak signal strength.</summary>
       </Docs>
     </Member>
   </Members>
