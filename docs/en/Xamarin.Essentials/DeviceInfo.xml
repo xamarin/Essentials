@@ -37,6 +37,25 @@
         </remarks>
       </Docs>
     </Member>
+    <Member MemberName="GetStorageInformationAsync">
+      <MemberSignature Language="C#" Value="public static System.Threading.Tasks.Task&lt;System.Collections.Generic.List&lt;Xamarin.Essentials.StorageInfo&gt;&gt; GetStorageInformationAsync ();" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Tasks.Task`1&lt;class System.Collections.Generic.List`1&lt;valuetype Xamarin.Essentials.StorageInfo&gt;&gt; GetStorageInformationAsync() cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.DeviceInfo.GetStorageInformationAsync" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Threading.Tasks.Task&lt;System.Collections.Generic.List&lt;Xamarin.Essentials.StorageInfo&gt;&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added.</summary>
+        <returns>To be added.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
     <Member MemberName="Idiom">
       <MemberSignature Language="C#" Value="public static string Idiom { get; }" />
       <MemberSignature Language="ILAsm" Value=".property string Idiom" />

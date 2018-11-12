@@ -1,4 +1,7 @@
 <Framework Name="xamarin-essentials">
+  <Assemblies>
+    <Assembly Name="Xamarin.Essentials" Version="1.0.0.0" />
+  </Assemblies>
   <Namespace Name="Xamarin.Essentials">
     <Type Name="Xamarin.Essentials.Accelerometer" Id="T:Xamarin.Essentials.Accelerometer">
       <Member Id="E:Xamarin.Essentials.Accelerometer.ReadingChanged" />
@@ -123,16 +126,12 @@
       <Member Id="P:Xamarin.Essentials.ConnectivityChangedEventArgs.NetworkAccess" />
       <Member Id="P:Xamarin.Essentials.ConnectivityChangedEventArgs.Profiles" />
     </Type>
-    <Type Name="Xamarin.Essentials.Share" Id="T:Xamarin.Essentials.Share">
-      <Member Id="M:Xamarin.Essentials.Share.RequestAsync(System.String)" />
-      <Member Id="M:Xamarin.Essentials.Share.RequestAsync(System.String,System.String)" />
-      <Member Id="M:Xamarin.Essentials.Share.RequestAsync(Xamarin.Essentials.ShareTextRequest)" />
-    </Type>
     <Type Name="Xamarin.Essentials.DeviceDisplay" Id="T:Xamarin.Essentials.DeviceDisplay">
       <Member Id="E:Xamarin.Essentials.DeviceDisplay.ScreenMetricsChanged" />
       <Member Id="P:Xamarin.Essentials.DeviceDisplay.ScreenMetrics" />
     </Type>
     <Type Name="Xamarin.Essentials.DeviceInfo" Id="T:Xamarin.Essentials.DeviceInfo">
+      <Member Id="M:Xamarin.Essentials.DeviceInfo.GetStorageInformationAsync" />
       <Member Id="P:Xamarin.Essentials.DeviceInfo.DeviceType" />
       <Member Id="P:Xamarin.Essentials.DeviceInfo.Idiom" />
       <Member Id="P:Xamarin.Essentials.DeviceInfo.Manufacturer" />
@@ -475,6 +474,11 @@
       <Member Id="F:Xamarin.Essentials.SensorSpeed.Normal" />
       <Member Id="F:Xamarin.Essentials.SensorSpeed.UI" />
     </Type>
+    <Type Name="Xamarin.Essentials.Share" Id="T:Xamarin.Essentials.Share">
+      <Member Id="M:Xamarin.Essentials.Share.RequestAsync(System.String)" />
+      <Member Id="M:Xamarin.Essentials.Share.RequestAsync(System.String,System.String)" />
+      <Member Id="M:Xamarin.Essentials.Share.RequestAsync(Xamarin.Essentials.ShareTextRequest)" />
+    </Type>
     <Type Name="Xamarin.Essentials.ShareTextRequest" Id="T:Xamarin.Essentials.ShareTextRequest">
       <Member Id="M:Xamarin.Essentials.ShareTextRequest.#ctor" />
       <Member Id="M:Xamarin.Essentials.ShareTextRequest.#ctor(System.String)" />
@@ -499,6 +503,24 @@
       <Member Id="P:Xamarin.Essentials.SpeakSettings.Locale" />
       <Member Id="P:Xamarin.Essentials.SpeakSettings.Pitch" />
       <Member Id="P:Xamarin.Essentials.SpeakSettings.Volume" />
+    </Type>
+    <Type Name="Xamarin.Essentials.StorageInfo" Id="T:Xamarin.Essentials.StorageInfo">
+      <Member Id="M:Xamarin.Essentials.StorageInfo.#ctor(System.UInt64,System.UInt64,System.UInt64,Xamarin.Essentials.StorageType)" />
+      <Member Id="M:Xamarin.Essentials.StorageInfo.Equals(System.Object)" />
+      <Member Id="M:Xamarin.Essentials.StorageInfo.Equals(Xamarin.Essentials.StorageInfo)" />
+      <Member Id="M:Xamarin.Essentials.StorageInfo.GetHashCode" />
+      <Member Id="M:Xamarin.Essentials.StorageInfo.op_Equality(Xamarin.Essentials.StorageInfo,Xamarin.Essentials.StorageInfo)" />
+      <Member Id="M:Xamarin.Essentials.StorageInfo.op_Inequality(Xamarin.Essentials.StorageInfo,Xamarin.Essentials.StorageInfo)" />
+      <Member Id="M:Xamarin.Essentials.StorageInfo.ToString" />
+      <Member Id="P:Xamarin.Essentials.StorageInfo.Capacity" />
+      <Member Id="P:Xamarin.Essentials.StorageInfo.FreeBytes" />
+      <Member Id="P:Xamarin.Essentials.StorageInfo.Type" />
+      <Member Id="P:Xamarin.Essentials.StorageInfo.UsedBytes" />
+    </Type>
+    <Type Name="Xamarin.Essentials.StorageType" Id="T:Xamarin.Essentials.StorageType">
+      <Member Id="F:Xamarin.Essentials.StorageType.External" />
+      <Member Id="F:Xamarin.Essentials.StorageType.Internal" />
+      <Member Id="F:Xamarin.Essentials.StorageType.Unknown" />
     </Type>
     <Type Name="Xamarin.Essentials.TextToSpeech" Id="T:Xamarin.Essentials.TextToSpeech">
       <Member Id="M:Xamarin.Essentials.TextToSpeech.GetLocalesAsync" />
