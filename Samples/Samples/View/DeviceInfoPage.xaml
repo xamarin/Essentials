@@ -23,7 +23,6 @@
                 <Label Text="{Binding Idiom, StringFormat='Idiom: {0}'}" />
                 <Label Text="{Binding DeviceType, StringFormat='Device Type: {0}'}" />
                 <Label Text="{Binding DeviceType, StringFormat='Device Type: {0}'}" />
-                <Label Text="{Binding StorageInformation, StringFormat='Storage Information:\n {0}'}" />
 
                 <Label Text="Screen Metrics:" FontAttributes="Bold" Margin="0,6,0,0" />
                 <Label Text="{Binding ScreenMetrics.Width, StringFormat='Width: {0}'}" />
@@ -31,6 +30,20 @@
                 <Label Text="{Binding ScreenMetrics.Density, StringFormat='Density: {0}'}" />
                 <Label Text="{Binding ScreenMetrics.Orientation, StringFormat='Orientation: {0}'}" />
                 <Label Text="{Binding ScreenMetrics.Rotation, StringFormat='Rotation: {0}'}" />
+                <ListView ItemsSource="{Binding StorageInformation}" HasUnevenRows="False">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Orientation="Vertical" Margin="5" HeightRequest="100">
+                                    <Label Text="{Binding Capacity, StringFormat='Capacity: {0}'}" />
+                                    <Label Text="{Binding FreeBytes, StringFormat='Free bytes: {0}'}" />
+                                    <Label Text="{Binding UsedBytes, StringFormat='Used bytes: {0}'}" />
+                                    <Label Text="{Binding Type, StringFormat='Storage type: {0}'}" />
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </StackLayout>
         </ScrollView>
     </StackLayout>

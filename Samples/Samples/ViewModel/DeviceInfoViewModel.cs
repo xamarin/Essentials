@@ -1,10 +1,12 @@
-﻿using Xamarin.Essentials;
+﻿using System.Collections.Generic;
+using Xamarin.Essentials;
 
 namespace Samples.ViewModel
 {
     public class DeviceInfoViewModel : BaseViewModel
     {
         ScreenMetrics screenMetrics;
+        List<StorageInfo> storageInfo;
 
         public string Model => DeviceInfo.Model;
 
@@ -20,7 +22,11 @@ namespace Samples.ViewModel
 
         public string Idiom => DeviceInfo.Idiom;
 
-        public string StorageInformation { get; private set; }
+        public List<StorageInfo> StorageInformation
+        {
+            get => storageInfo;
+            set => SetProperty(ref storageInfo, value);
+        }
 
         public DeviceType DeviceType => DeviceInfo.DeviceType;
 
@@ -36,7 +42,8 @@ namespace Samples.ViewModel
 
             DeviceDisplay.ScreenMetricsChanged += OnScreenMetricsChanged;
             ScreenMetrics = DeviceDisplay.ScreenMetrics;
-            StorageInformation = string.Join("\n", await DeviceInfo.GetStorageInformationAsync());
+            StorageInformation = await DeviceInfo.GetStorageInformationAsync();
+            OnPropertyChanged(nameof(StorageInformation));
         }
 
         public override void OnDisappearing()
