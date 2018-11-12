@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content.Res;
 using Android.OS;
 using Android.Provider;
+using Environment = Android.OS.Environment;
 
 namespace Xamarin.Essentials
 {
@@ -104,5 +107,28 @@ namespace Xamarin.Essentials
 
         static string GetSystemSetting(string name)
            => Settings.System.GetString(Essentials.Platform.AppContext.ContentResolver, name);
+
+        static Task<List<StorageInfo>> PlatformGetStorageInformation()
+        {
+            var storages = new List<StorageInfo>();
+            if (Environment.IsExternalStorageEmulated)
+            {
+                var directoy = Environment.ExternalStorageDirectory;
+                storages.Add(
+                    new StorageInfo(
+                        (ulong)directoy.TotalSpace,
+                        (ulong)directoy.FreeSpace,
+                        (ulong)(directoy.TotalSpace - directoy.FreeSpace),
+                        StorageType.Internal));
+            }
+            var internalDirectory = Environment.RootDirectory;
+            storages.Add(
+                new StorageInfo(
+                    (ulong)internalDirectory.TotalSpace,
+                    (ulong)internalDirectory.FreeSpace,
+                    (ulong)(internalDirectory.TotalSpace - internalDirectory.FreeSpace),
+                    StorageType.Internal));
+            return Task.FromResult(storages);
+        }
     }
 }

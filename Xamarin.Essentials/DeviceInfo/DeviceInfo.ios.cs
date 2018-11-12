@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using Foundation;
 using ObjCRuntime;
 using UIKit;
 
@@ -47,5 +50,15 @@ namespace Xamarin.Essentials
 
         static DeviceType GetDeviceType()
             => Runtime.Arch == Arch.DEVICE ? DeviceType.Physical : DeviceType.Virtual;
+
+        static Task<List<StorageInfo>> PlatformGetStorageInformation()
+        {
+            var attributes = NSFileManager.DefaultManager.GetFileSystemAttributes(Environment.GetFolderPath(Environment.SpecialFolder.Personal));
+            return Task.FromResult(
+                new List<StorageInfo>
+                {
+                    new StorageInfo(attributes.Size, attributes.FreeSize, attributes.Size - attributes.FreeSize, StorageType.Internal)
+                });
+        }
     }
 }

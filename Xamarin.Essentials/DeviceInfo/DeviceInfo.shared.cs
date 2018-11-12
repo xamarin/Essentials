@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Xamarin.Essentials
 {
@@ -7,6 +9,8 @@ namespace Xamarin.Essentials
         public static string Model => GetModel();
 
         public static string Manufacturer => GetManufacturer();
+
+        public static Task<List<StorageInfo>> GetStorageInformationAsync() => PlatformGetStorageInformation();
 
         public static string Name => GetDeviceName();
 
@@ -44,6 +48,53 @@ namespace Xamarin.Essentials
 
             public const string Unsupported = "Unsupported";
         }
+    }
+
+    public readonly struct StorageInfo : IEquatable<StorageInfo>
+    {
+        public StorageInfo(ulong capapcity, ulong freeBytes, ulong usedBytes, StorageType type)
+        {
+            Capacity = capapcity;
+            FreeBytes = freeBytes;
+            UsedBytes = usedBytes;
+            Type = type;
+        }
+
+        public ulong Capacity { get; }
+
+        public ulong FreeBytes { get; }
+
+        public ulong UsedBytes { get; }
+
+        public StorageType Type { get; }
+
+        public bool Equals(StorageInfo other) =>
+            FreeBytes == other.FreeBytes &&
+            Capacity == other.Capacity &&
+            UsedBytes == other.UsedBytes &&
+            Type == other.Type;
+
+        public static bool operator ==(StorageInfo lhs, StorageInfo rhs) => lhs.Equals(rhs);
+
+        public static bool operator !=(StorageInfo lhs, StorageInfo rhs) => !(lhs == rhs);
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+                return false;
+            return obj is StorageInfo info && Equals(info);
+        }
+
+        public override int GetHashCode() => (Capacity, UsedBytes, FreeBytes).GetHashCode();
+
+        public override string ToString() => $"Capacity: {Capacity}\nFreeBytes: {FreeBytes}\nUsedBytes: {UsedBytes}\nType: {Type}";
+    }
+
+    public enum StorageType
+    {
+        Unknown = 0,
+        Internal = 1,
+        External = 2
     }
 
     public enum DeviceType

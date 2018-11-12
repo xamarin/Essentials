@@ -1,5 +1,10 @@
-﻿using Windows.Graphics.Display;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Windows.Graphics.Display;
 using Windows.Security.ExchangeActiveSyncProvisioning;
+using Windows.Storage;
 using Windows.System.Profile;
 using Windows.UI.ViewManagement;
 
@@ -8,6 +13,9 @@ namespace Xamarin.Essentials
     public static partial class DeviceInfo
     {
         static readonly EasClientDeviceInformation deviceInfo;
+        static readonly string freeSpace = "System.FreeSpace";
+        static readonly string capacity = "System.Capacity";
+        static readonly string[] properties = new string[] { freeSpace, capacity };
 
         static DeviceInfo()
         {
@@ -68,6 +76,24 @@ namespace Xamarin.Essentials
                 return DeviceType.Virtual;
 
             return DeviceType.Physical;
+        }
+
+        static async Task<List<StorageInfo>> PlatformGetStorageInformation()
+        {
+            var storageInfos = new List<StorageInfo>();
+            var folders = await KnownFolders.RemovableDevices.GetFoldersAsync();
+            foreach (var folder in folders)
+            {
+                var folderProps = await folder.Properties.RetrievePropertiesAsync(properties);
+                var fCapacity = (ulong)folderProps[capacity];
+                var fFree = (ulong)folderProps[freeSpace];
+                storageInfos.Add(new StorageInfo(fCapacity, fFree, fCapacity - fFree, StorageType.External));
+            }
+            var localProps = await ApplicationData.Current.LocalFolder.Properties.RetrievePropertiesAsync(properties);
+            var localCapacity = (ulong)localProps[capacity];
+            var localFree = (ulong)localProps[freeSpace];
+            storageInfos.Add(new StorageInfo(localCapacity, localFree, localCapacity - localFree, StorageType.External));
+            return storageInfos;
         }
     }
 }

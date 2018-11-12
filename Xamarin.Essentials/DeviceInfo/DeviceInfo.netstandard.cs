@@ -1,4 +1,7 @@
-﻿namespace Xamarin.Essentials
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace Xamarin.Essentials
 {
     public static partial class DeviceInfo
     {
@@ -15,5 +18,7 @@
         static string GetIdiom() => throw new NotImplementedInReferenceAssemblyException();
 
         static DeviceType GetDeviceType() => throw new NotImplementedInReferenceAssemblyException();
+
+        static Task<List<StorageInfo>> PlatformGetStorageInformation() => throw new NotImplementedInReferenceAssemblyException();
     }
 }
