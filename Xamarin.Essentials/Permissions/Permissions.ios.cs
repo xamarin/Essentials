@@ -19,8 +19,6 @@ namespace Xamarin.Essentials
 
         static Task<PermissionStatus> PlatformCheckStatusAsync(PermissionType permission)
         {
-            EnsureDeclared(permission);
-
             switch (permission)
             {
                 case PermissionType.LocationWhenInUse:
@@ -73,6 +71,9 @@ namespace Xamarin.Essentials
 
         static Task<PermissionStatus> RequestLocationAsync()
         {
+            if (!MainThread.IsMainThread)
+                throw new PermissionException("Permission request must be invoked on main thread.");
+
             locationManager = new CLLocationManager();
 
             var tcs = new TaskCompletionSource<PermissionStatus>(locationManager);

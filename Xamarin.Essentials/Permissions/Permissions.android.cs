@@ -41,8 +41,6 @@ namespace Xamarin.Essentials
 
         static Task<PermissionStatus> PlatformCheckStatusAsync(PermissionType permission)
         {
-            EnsureDeclared(permission);
-
             // If there are no android permissions for the given permission type
             // just return granted since we have none to ask for
             var androidPermissions = permission.ToAndroidPermissions(onlyRuntimePermissions: true);
@@ -72,10 +70,6 @@ namespace Xamarin.Essentials
 
         static async Task<PermissionStatus> PlatformRequestAsync(PermissionType permission)
         {
-            // Check status before requesting first
-            if (await PlatformCheckStatusAsync(permission) == PermissionStatus.Granted)
-                return PermissionStatus.Granted;
-
             TaskCompletionSource<PermissionStatus> tcs;
             var doRequest = true;
 
@@ -100,6 +94,9 @@ namespace Xamarin.Essentials
 
             if (!doRequest)
                 return await tcs.Task;
+
+            if (!MainThread.IsMainThread)
+                throw new PermissionException("Permission request must be invoked on main thread.");
 
             var androidPermissions = permission.ToAndroidPermissions(onlyRuntimePermissions: true).ToArray();
 
