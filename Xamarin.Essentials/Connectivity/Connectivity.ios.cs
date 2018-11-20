@@ -30,7 +30,7 @@ namespace Xamarin.Essentials
                 case 3:
                     return SignalStrength.Strong;
                 default:
-                    throw new InvalidOperationException("Exhaustive switch statement hit default value.");
+                    return SignalStrength.Unknown;
             }
         }
 
