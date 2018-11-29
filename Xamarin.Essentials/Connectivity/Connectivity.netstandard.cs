@@ -10,7 +10,8 @@ namespace Xamarin.Essentials
         static SignalStrength PlatformSignalStrength() =>
             throw new NotImplementedInReferenceAssemblyException();
 
-        static IEnumerable<ConnectionProfile> PlatformProfiles =>
+        static IEnumerable<ConnectionProfile> PlatformConnectionProfiles =>
+
             throw new NotImplementedInReferenceAssemblyException();
 
         static void StartListeners() =>

@@ -6,11 +6,11 @@ namespace Samples.ViewModel
     {
         public string NetworkAccess =>
             Connectivity.NetworkAccess.ToString();
-
+            
         public string SignalStrength => Connectivity.WifiSignalStrength.ToString();
 
         public string Profiles =>
-            string.Join("\n", Connectivity.Profiles);
+            string.Join("\n", Connectivity.ConnectionProfiles);
 
         public override void OnAppearing()
         {
@@ -28,7 +28,7 @@ namespace Samples.ViewModel
 
         void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
-            OnPropertyChanged(nameof(Profiles));
+            OnPropertyChanged(nameof(ConnectionProfiles));
             OnPropertyChanged(nameof(NetworkAccess));
             OnPropertyChanged(nameof(SignalStrength));
         }

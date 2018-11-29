@@ -60,7 +60,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static IEnumerable<ConnectionProfile> PlatformProfiles
+        static IEnumerable<ConnectionProfile> PlatformConnectionProfiles
         {
             get
             {
@@ -76,7 +76,7 @@ namespace Xamarin.Essentials
                             yield return ConnectionProfile.WiFi;
                             break;
                         default:
-                            yield return ConnectionProfile.Other;
+                            yield return ConnectionProfile.Unknown;
                             break;
                     }
                 }
