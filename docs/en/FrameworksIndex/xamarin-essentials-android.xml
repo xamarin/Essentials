@@ -117,7 +117,7 @@
       <Member Id="E:Xamarin.Essentials.Connectivity.ConnectivityChanged" />
       <Member Id="P:Xamarin.Essentials.Connectivity.NetworkAccess" />
       <Member Id="P:Xamarin.Essentials.Connectivity.Profiles" />
-      <Member Id="P:Xamarin.Essentials.Connectivity.WiFiSignalStrength" />
+      <Member Id="P:Xamarin.Essentials.Connectivity.WifiSignalStrength" />
     </Type>
     <Type Name="Xamarin.Essentials.ConnectivityChangedEventArgs" Id="T:Xamarin.Essentials.ConnectivityChangedEventArgs">
       <Member Id="M:Xamarin.Essentials.ConnectivityChangedEventArgs.ToString" />

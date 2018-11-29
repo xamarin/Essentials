@@ -79,10 +79,10 @@
         </remarks>
       </Docs>
     </Member>
-    <Member MemberName="WiFiSignalStrength">
-      <MemberSignature Language="C#" Value="public static Xamarin.Essentials.SignalStrength WiFiSignalStrength { get; }" />
-      <MemberSignature Language="ILAsm" Value=".property valuetype Xamarin.Essentials.SignalStrength WiFiSignalStrength" />
-      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.Connectivity.WiFiSignalStrength" />
+    <Member MemberName="WifiSignalStrength">
+      <MemberSignature Language="C#" Value="public static Xamarin.Essentials.SignalStrength WifiSignalStrength { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property valuetype Xamarin.Essentials.SignalStrength WifiSignalStrength" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.Connectivity.WifiSignalStrength" />
       <MemberType>Property</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
