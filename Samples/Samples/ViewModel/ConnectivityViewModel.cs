@@ -7,7 +7,7 @@ namespace Samples.ViewModel
         public string NetworkAccess =>
             Connectivity.NetworkAccess.ToString();
 
-        public string SignalStrength => Connectivity.WiFiSignalStrength.ToString();
+        public string SignalStrength => Connectivity.WifiSignalStrength.ToString();
 
         public string Profiles =>
             string.Join("\n", Connectivity.Profiles);
