@@ -11,7 +11,7 @@ namespace Xamarin.Essentials
         static TaskCompletionSource<bool> tcsInitialize = null;
         static TaskCompletionSource<bool> tcsUtterances = null;
 
-        internal static async Task PlatformSpeakAsync(string text, SpeakSettings settings, CancellationToken cancelToken = default)
+        internal static async Task PlatformSpeakAsync(string text, SpeechOptions settings, CancellationToken cancelToken = default)
         {
             await Initialize();
 

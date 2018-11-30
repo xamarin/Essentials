@@ -16,27 +16,24 @@ namespace Xamarin.Essentials
         static string GetVersionString()
             => Plat.GetFeatureInfo("platform.version");
 
-        static string GetPlatform()
-            => Platforms.Tizen;
+        static DevicePlatform GetPlatform()
+            => DevicePlatform.Tizen;
 
-        static string GetIdiom()
+        static DeviceIdiom GetIdiom()
         {
             var profile = Plat.GetFeatureInfo("profile")?.ToUpperInvariant();
 
             if (profile == null)
-                return Idioms.Unsupported;
+                return DeviceIdiom.Unknown;
 
             if (profile.StartsWith("M"))
-                return Idioms.Phone;
+                return DeviceIdiom.Phone;
             else if (profile.StartsWith("W"))
-                return Idioms.Watch;
+                return DeviceIdiom.Watch;
             else if (profile.StartsWith("T"))
-                return Idioms.TV;
+                return DeviceIdiom.TV;
             else
-                return Idioms.Unsupported;
-
-            // if (profile.StartsWith("I"))
-            //     return Idioms.Car;
+                return DeviceIdiom.Unknown;
         }
 
         static DeviceType GetDeviceType()
@@ -50,7 +47,7 @@ namespace Xamarin.Essentials
             else if (arch != null && arch.Equals("x86") && !armv7 && x86)
                 return DeviceType.Virtual;
             else
-                return DeviceType.Virtual;
+                return DeviceType.Unknown;
         }
     }
 }

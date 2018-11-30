@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Xamarin.Essentials
@@ -8,7 +9,9 @@ namespace Xamarin.Essentials
         static async Task<IEnumerable<Placemark>> PlatformGetPlacemarksAsync(double latitude, double longitude)
         {
             Permissions.EnsureDeclared(PermissionType.Maps);
-            var map = await Platform.GetMapServiceAsync(MapKey);
+            if (string.IsNullOrWhiteSpace(Platform.MapServiceToken))
+                throw new ArgumentNullException(nameof(Platform.MapServiceToken));
+            var map = await Platform.GetMapServiceAsync(Platform.MapServiceToken);
             var request = map.CreateReverseGeocodeRequest(latitude, longitude);
 
             var list = new List<Placemark>();
@@ -35,7 +38,9 @@ namespace Xamarin.Essentials
         static async Task<IEnumerable<Location>> PlatformGetLocationsAsync(string address)
         {
             Permissions.EnsureDeclared(PermissionType.Maps);
-            var map = await Platform.GetMapServiceAsync(MapKey);
+            if (string.IsNullOrWhiteSpace(Platform.MapServiceToken))
+                throw new ArgumentNullException(nameof(Platform.MapServiceToken));
+            var map = await Platform.GetMapServiceAsync(Platform.MapServiceToken);
             var request = map.CreateGeocodeRequest(address);
             var list = new List<Location>();
             foreach (var position in await request.GetResponseAsync())

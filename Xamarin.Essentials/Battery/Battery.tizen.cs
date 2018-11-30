@@ -5,7 +5,7 @@ namespace Xamarin.Essentials
     public static partial class Battery
     {
         static void OnChanged(object sender, object e)
-            => MainThread.BeginInvokeOnMainThread(OnBatteryChanged);
+            => MainThread.BeginInvokeOnMainThread(OnBatteryInfoChanged);
 
         static void StartBatteryListeners()
         {
@@ -48,5 +48,14 @@ namespace Xamarin.Essentials
                 return BatteryPowerSource.Battery;
             }
         }
+
+        static void StartEnergySaverListeners() =>
+            throw new NotImplementedInReferenceAssemblyException();
+
+        static void StopEnergySaverListeners() =>
+            throw new NotImplementedInReferenceAssemblyException();
+
+        static EnergySaverStatus PlatformEnergySaverStatus =>
+            throw new NotImplementedInReferenceAssemblyException();
     }
 }

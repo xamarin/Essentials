@@ -15,6 +15,7 @@ namespace Samples.Tizen
         {
             var app = new Program();
             Forms.Init(app);
+            Xamarin.Essentials.Platform.MapServiceToken = "MAP_SERVICE_KEY";
             app.Run(args);
         }
     }

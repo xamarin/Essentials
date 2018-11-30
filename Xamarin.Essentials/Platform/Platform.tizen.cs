@@ -89,6 +89,8 @@ namespace Xamarin.Essentials
             }
             return mapService;
         }
+
+        public static string MapServiceToken { get; set; }
     }
 
     public enum SensorType

@@ -14,7 +14,7 @@ namespace Xamarin.Essentials
         internal static bool IsSupported =>
             TizenCompass.IsSupported;
 
-        internal static void PlatformStart(SensorSpeed sensorSpeed)
+        internal static void PlatformStart(SensorSpeed sensorSpeed, bool applyLowPassFilter)
         {
             uint interval = 0;
 

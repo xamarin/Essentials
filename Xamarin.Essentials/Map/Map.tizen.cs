@@ -4,9 +4,9 @@ using Tizen.Applications;
 
 namespace Xamarin.Essentials
 {
-    public static partial class Maps
+    public static partial class Map
     {
-        internal static Task PlatformOpenMapsAsync(double latitude, double longitude, MapsLaunchOptions options)
+        internal static Task PlatformOpenMapsAsync(double latitude, double longitude, MapLaunchOptions options)
         {
             Permissions.EnsureDeclared(PermissionType.LaunchApp);
 
@@ -23,7 +23,7 @@ namespace Xamarin.Essentials
             return Task.CompletedTask;
         }
 
-        internal static Task PlatformOpenMapsAsync(Placemark placemark, MapsLaunchOptions options)
+        internal static Task PlatformOpenMapsAsync(Placemark placemark, MapLaunchOptions options)
         {
             Permissions.EnsureDeclared(PermissionType.LaunchApp);
 

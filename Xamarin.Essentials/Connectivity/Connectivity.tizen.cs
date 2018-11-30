@@ -58,7 +58,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static IEnumerable<ConnectionProfile> PlatformProfiles
+        static IEnumerable<ConnectionProfile> PlatformConnectionProfiles
         {
             get
             {

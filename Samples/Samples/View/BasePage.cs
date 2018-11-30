@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Samples.ViewModel;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Samples.View
@@ -10,12 +9,6 @@ namespace Samples.View
         public BasePage()
         {
             NavigationPage.SetBackButtonTitle(this, "Back");
-
-            // Tizen defaults to a transparent background
-            if (DeviceInfo.Platform == DeviceInfo.Platforms.Tizen)
-            {
-                BackgroundColor = Color.White;
-            }
         }
 
         protected override void OnAppearing()

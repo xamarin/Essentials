@@ -17,7 +17,7 @@ namespace Xamarin.Essentials
         static string PlatformGetBuild()
             => Version.Build.ToString(CultureInfo.InvariantCulture);
 
-        static void PlatformOpenSettings()
+        static void PlatformShowSettingsUI()
         {
             Permissions.EnsureDeclared(PermissionType.LaunchApp);
             AppControl.SendLaunchRequest(new AppControl() { Operation = AppControlOperations.Setting });
