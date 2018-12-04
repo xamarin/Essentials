@@ -1,4 +1,5 @@
-﻿using TizenBattery = Tizen.System.Battery;
+﻿using System;
+using TizenBattery = Tizen.System.Battery;
 
 namespace Xamarin.Essentials
 {
@@ -49,13 +50,13 @@ namespace Xamarin.Essentials
             }
         }
 
-        static void StartEnergySaverListeners() =>
-            throw new NotImplementedInReferenceAssemblyException();
+        static void StartEnergySaverListeners()
+            => throw new PlatformNotSupportedException("This API is not currently supported on Tizen.");
 
-        static void StopEnergySaverListeners() =>
-            throw new NotImplementedInReferenceAssemblyException();
+        static void StopEnergySaverListeners()
+            => throw new PlatformNotSupportedException("This API is not currently supported on Tizen.");
 
-        static EnergySaverStatus PlatformEnergySaverStatus =>
-            throw new NotImplementedInReferenceAssemblyException();
+        static EnergySaverStatus PlatformEnergySaverStatus
+            => throw new PlatformNotSupportedException("This API is not currently supported on Tizen.");
     }
 }

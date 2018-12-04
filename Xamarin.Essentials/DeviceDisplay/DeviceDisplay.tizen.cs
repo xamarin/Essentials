@@ -1,17 +1,22 @@
-﻿namespace Xamarin.Essentials
+﻿using System;
+
+namespace Xamarin.Essentials
 {
     public static partial class DeviceDisplay
     {
         static bool PlatformKeepScreenOn
         {
-            get => throw new NotImplementedInReferenceAssemblyException();
-            set => throw new NotImplementedInReferenceAssemblyException();
+            get => throw new PlatformNotSupportedException("This API is not currently supported on Tizen.");
+            set => throw new PlatformNotSupportedException("This API is not currently supported on Tizen.");
         }
 
-        static DisplayInfo GetMainDisplayInfo() => throw new NotImplementedInReferenceAssemblyException();
+        static DisplayInfo GetMainDisplayInfo()
+            => throw new PlatformNotSupportedException("This API is not currently supported on Tizen.");
 
-        static void StartScreenMetricsListeners() => throw new NotImplementedInReferenceAssemblyException();
+        static void StartScreenMetricsListeners()
+            => throw new PlatformNotSupportedException("This API is not currently supported on Tizen.");
 
-        static void StopScreenMetricsListeners() => throw new NotImplementedInReferenceAssemblyException();
+        static void StopScreenMetricsListeners()
+            => throw new PlatformNotSupportedException("This API is not currently supported on Tizen.");
     }
 }
