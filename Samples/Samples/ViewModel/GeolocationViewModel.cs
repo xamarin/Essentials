@@ -11,7 +11,7 @@ namespace Samples.ViewModel
         string notAvailable = "not available";
         string lastLocation;
         string currentLocation;
-        int accuracy = (int)GeolocationAccuracy.Medium;
+        int accuracy = (int)GeolocationAccuracy.Default;
         CancellationTokenSource cts;
 
         public GeolocationViewModel()
@@ -102,8 +102,8 @@ namespace Samples.ViewModel
                 $"Altitude: {(location.Altitude.HasValue ? location.Altitude.Value.ToString() : notAvailable)}\n" +
                 $"Heading: {(location.Course.HasValue ? location.Course.Value.ToString() : notAvailable)}\n" +
                 $"Speed: {(location.Speed.HasValue ? location.Speed.Value.ToString() : notAvailable)}\n" +
-                $"Date (UTC): {location.TimestampUtc:d}\n" +
-                $"Time (UTC): {location.TimestampUtc:T}";
+                $"Date (UTC): {location.Timestamp:d}\n" +
+                $"Time (UTC): {location.Timestamp:T}";
         }
 
         public override void OnDisappearing()

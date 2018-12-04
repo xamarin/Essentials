@@ -73,12 +73,6 @@ namespace Samples.ViewModel
                     "Check connectivity state and detect changes.",
                     new[] { "connectivity", "internet", "wifi" }),
                 new SampleItem(
-                    "📲",
-                    "Data Transfer",
-                    typeof(DataTransferPage),
-                    "Send text and website uris to other apps.",
-                    new[] { "data", "transfer", "share", "communication" }),
-                new SampleItem(
                     "📱",
                     "Device Info",
                     typeof(DeviceInfoPage),
@@ -114,6 +108,12 @@ namespace Samples.ViewModel
                     typeof(GeolocationPage),
                     "Quickly get the current location.",
                     new[] { "geolocation", "position", "address", "mapping" }),
+                new SampleItem(
+                    "💤",
+                    "Keep Screen On",
+                    typeof(KeepScreenOnPage),
+                    "Keep the device screen awake.",
+                    new[] { "screen", "awake", "sleep" }),
                 new SampleItem(
                     "📏",
                     "Launcher",
@@ -157,17 +157,17 @@ namespace Samples.ViewModel
                     "Quickly and easily add persistent preferences.",
                     new[] { "settings", "preferences", "prefs", "storage" }),
                 new SampleItem(
-                    "💤",
-                    "Screen Lock",
-                    typeof(ScreenLockPage),
-                    "Keep the device screen awake.",
-                    new[] { "screen", "awake", "sleep" }),
-                new SampleItem(
                     "🔒",
                     "Secure Storage",
                     typeof(SecureStoragePage),
                     "Securely store data.",
                     new[] { "settings", "preferences", "prefs", "security", "storage" }),
+                new SampleItem(
+                    "📲",
+                    "Share",
+                    typeof(SharePage),
+                    "Send text and website uris to other apps.",
+                    new[] { "data", "transfer", "share", "communication" }),
                 new SampleItem(
                     "💬",
                     "SMS",

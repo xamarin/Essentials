@@ -10,7 +10,7 @@ namespace Samples.ViewModel
     {
         bool isActive;
         double pressure;
-        int speed = 2;
+        int speed = 0;
 
         public BarometerViewModel()
         {
@@ -34,14 +34,8 @@ namespace Samples.ViewModel
             set => SetProperty(ref pressure, value);
         }
 
-        public List<string> Speeds { get; } =
-           new List<string>
-           {
-                        "Fastest",
-                        "Game",
-                        "Normal",
-                        "User Interface"
-           };
+        public string[] Speeds { get; } =
+           Enum.GetNames(typeof(SensorSpeed));
 
         public int Speed
         {
@@ -78,14 +72,21 @@ namespace Samples.ViewModel
 
         void OnBarometerReadingChanged(object sender, BarometerChangedEventArgs e)
         {
-            Pressure = e.Reading.Pressure;
+            Pressure = e.Reading.PressureInHectopascals;
         }
 
         void OnStop()
         {
-            IsActive = false;
-            Barometer.Stop();
-            Barometer.ReadingChanged -= OnBarometerReadingChanged;
+            try
+            {
+                IsActive = false;
+                Barometer.Stop();
+                Barometer.ReadingChanged -= OnBarometerReadingChanged;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"An exception occured: {ex.Message}");
+            }
         }
     }
 }
