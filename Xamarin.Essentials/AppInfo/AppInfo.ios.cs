@@ -9,9 +9,9 @@ namespace Xamarin.Essentials
 
         static string PlatformGetName() => GetBundleValue("CFBundleDisplayName") ?? GetBundleValue("CFBundleName");
 
-        static string PlatformGetVersionString() => GetBundleValue("CFBundleVersion");
+        static string PlatformGetVersionString() => GetBundleValue("CFBundleShortVersionString");
 
-        static string PlatformGetBuild() => GetBundleValue("CFBundleShortVersionString");
+        static string PlatformGetBuild() => GetBundleValue("CFBundleVersion");
 
         static string GetBundleValue(string key)
            => NSBundle.MainBundle.ObjectForInfoDictionary(key)?.ToString();
