@@ -6,7 +6,7 @@ namespace DeviceTests
 {
     public class Vibration_Tests
     {
-        [Theory]
+        [Fact]
         public void Vibrate()
         {
 #if __ANDROID__
@@ -17,14 +17,14 @@ namespace DeviceTests
 #elif __IOS__
             // TODO: remove this as soon as the test harness can filter
             // the iOS simulator does not emulate a flashlight
-            if (DeviceInfo.DeviceType == DeviceType.Virtual && DeviceInfo.Platform == DeviceInfo.Platforms.iOS)
+            if (DeviceInfo.DeviceType == DeviceType.Virtual && DeviceInfo.Platform == DevicePlatform.iOS)
                 return;
 #endif
 
             Vibration.Vibrate();
         }
 
-        [Theory]
+        [Fact]
         public void Vibrate_Cancel()
         {
 #if __ANDROID__
@@ -35,7 +35,7 @@ namespace DeviceTests
 #elif __IOS__
             // TODO: remove this as soon as the test harness can filter
             // the iOS simulator does not emulate a flashlight
-            if (DeviceInfo.DeviceType == DeviceType.Virtual && DeviceInfo.Platform == DeviceInfo.Platforms.iOS)
+            if (DeviceInfo.DeviceType == DeviceType.Virtual && DeviceInfo.Platform == DevicePlatform.iOS)
                 return;
 #endif
 

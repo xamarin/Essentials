@@ -18,16 +18,23 @@ namespace Xamarin.Essentials
         {
             var context = Platform.AppContext;
 
-            string encStr;
-            using (var prefs = context.GetSharedPreferences(Alias, FileCreationMode.Private))
-                encStr = prefs.GetString(Utils.Md5Hash(key), null);
+            string defaultEncStr = null;
+            var encStr = Preferences.Get(Utils.Md5Hash(key), defaultEncStr, Alias);
 
             string decryptedData = null;
             if (!string.IsNullOrEmpty(encStr))
             {
                 var encData = Convert.FromBase64String(encStr);
                 var ks = new AndroidKeyStore(context, Alias, AlwaysUseAsymmetricKeyStorage);
-                decryptedData = ks.Decrypt(encData);
+                try
+                {
+                    decryptedData = ks.Decrypt(encData);
+                }
+                catch (AEADBadTagException)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Unable to decrypt key, {key}, which is likely due to an app uninstall. Removing old key and returning null.");
+                    Remove(key);
+                }
             }
 
             return Task.FromResult(decryptedData);
@@ -40,13 +47,8 @@ namespace Xamarin.Essentials
             var ks = new AndroidKeyStore(context, Alias, AlwaysUseAsymmetricKeyStorage);
             var encryptedData = ks.Encrypt(data);
 
-            using (var prefs = context.GetSharedPreferences(Alias, FileCreationMode.Private))
-            using (var prefsEditor = prefs.Edit())
-            {
-                var encStr = Convert.ToBase64String(encryptedData);
-                prefsEditor.PutString(Utils.Md5Hash(key), encStr);
-                prefsEditor.Commit();
-            }
+            var encStr = Convert.ToBase64String(encryptedData);
+            Preferences.Set(Utils.Md5Hash(key), encStr, Alias);
 
             return Task.CompletedTask;
         }
@@ -56,36 +58,13 @@ namespace Xamarin.Essentials
             var context = Platform.AppContext;
 
             key = Utils.Md5Hash(key);
-
-            using (var prefs = context.GetSharedPreferences(Alias, FileCreationMode.Private))
-            {
-                if (prefs.Contains(key))
-                {
-                    using (var prefsEditor = prefs.Edit())
-                    {
-                        prefsEditor.Remove(key);
-                        prefsEditor.Commit();
-                        return true;
-                    }
-                }
-            }
+            Preferences.Remove(key, Alias);
 
             return false;
         }
 
-        static void PlatformRemoveAll()
-        {
-            var context = Platform.AppContext;
-
-            using (var prefs = context.GetSharedPreferences(Alias, FileCreationMode.Private))
-            using (var prefsEditor = prefs.Edit())
-            {
-                foreach (var key in prefs.All.Keys)
-                    prefsEditor.Remove(key);
-
-                prefsEditor.Commit();
-            }
-        }
+        static void PlatformRemoveAll() =>
+            Preferences.Clear(Alias);
 
         internal static bool AlwaysUseAsymmetricKeyStorage { get; set; } = false;
     }
@@ -109,15 +88,23 @@ namespace Xamarin.Essentials
             keyStore.Load(null);
         }
 
-        Context appContext;
-        string alias;
+        readonly Context appContext;
+        readonly string alias;
+        readonly bool alwaysUseAsymmetricKey;
+        readonly string useSymmetricPreferenceKey = "essentials_use_symmetric";
+
         KeyStore keyStore;
-        bool alwaysUseAsymmetricKey;
+        bool useSymmetric = false;
 
         ISecretKey GetKey()
         {
+            // check to see if we need to get our key from past-versions or newer versions.
+            // we want to use symmetric if we are >= 23 or we didn't set it previously.
+
+            useSymmetric = Preferences.Get(useSymmetricPreferenceKey, Platform.HasApiLevel(BuildVersionCodes.M), SecureStorage.Alias);
+
             // If >= API 23 we can use the KeyStore's symmetric key
-            if (Platform.HasApiLevel(BuildVersionCodes.M) && !alwaysUseAsymmetricKey)
+            if (useSymmetric && !alwaysUseAsymmetricKey)
                 return GetSymmetricKey();
 
             // NOTE: KeyStore in < API 23 can only store asymmetric keys
@@ -131,11 +118,11 @@ namespace Xamarin.Essentials
             // Get the asymmetric key pair
             var keyPair = GetAsymmetricKeyPair();
 
-            using (var prefs = appContext.GetSharedPreferences(alias, FileCreationMode.Private))
-            {
-                var existingKeyStr = prefs.GetString(prefsMasterKey, null);
+            var existingKeyStr = Preferences.Get(prefsMasterKey, null, alias);
 
-                if (!string.IsNullOrEmpty(existingKeyStr))
+            if (!string.IsNullOrEmpty(existingKeyStr))
+            {
+                try
                 {
                     var wrappedKey = Convert.FromBase64String(existingKeyStr);
 
@@ -144,27 +131,36 @@ namespace Xamarin.Essentials
 
                     return kp;
                 }
-                else
+                catch (InvalidKeyException ikEx)
                 {
-                    var keyGenerator = KeyGenerator.GetInstance(aesAlgorithm);
-                    var defSymmetricKey = keyGenerator.GenerateKey();
-
-                    var wrappedKey = WrapKey(defSymmetricKey, keyPair.Public);
-
-                    using (var prefsEditor = prefs.Edit())
-                    {
-                        prefsEditor.PutString(prefsMasterKey, Convert.ToBase64String(wrappedKey));
-                        prefsEditor.Commit();
-                    }
-
-                    return defSymmetricKey;
+                    System.Diagnostics.Debug.WriteLine($"Unable to unwrap key: Invalid Key. This may be caused by system backup or upgrades. All secure storage items will now be removed. {ikEx.Message}");
                 }
+                catch (IllegalBlockSizeException ibsEx)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Unable to unwrap key: Illegal Block Size. This may be caused by system backup or upgrades. All secure storage items will now be removed. {ibsEx.Message}");
+                }
+                catch (BadPaddingException paddingEx)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Unable to unwrap key: Bad Padding. This may be caused by system backup or upgrades. All secure storage items will now be removed. {paddingEx.Message}");
+                }
+                SecureStorage.RemoveAll();
             }
+
+            var keyGenerator = KeyGenerator.GetInstance(aesAlgorithm);
+            var defSymmetricKey = keyGenerator.GenerateKey();
+
+            var newWrappedKey = WrapKey(defSymmetricKey, keyPair.Public);
+
+            Preferences.Set(prefsMasterKey, Convert.ToBase64String(newWrappedKey), alias);
+
+            return defSymmetricKey;
         }
 
         // API 23+ Only
         ISecretKey GetSymmetricKey()
         {
+            Preferences.Set(useSymmetricPreferenceKey, true, SecureStorage.Alias);
+
             var existingKey = keyStore.GetKey(alias, null);
 
             if (existingKey != null)
@@ -186,6 +182,9 @@ namespace Xamarin.Essentials
 
         KeyPair GetAsymmetricKeyPair()
         {
+            // set that we generated keys on pre-m device.
+            Preferences.Set(useSymmetricPreferenceKey, false, SecureStorage.Alias);
+
             var asymmetricAlias = $"{alias}.asymmetric";
 
             var privateKey = keyStore.GetKey(asymmetricAlias, null)?.JavaCast<IPrivateKey>();
@@ -195,25 +194,39 @@ namespace Xamarin.Essentials
             if (privateKey != null && publicKey != null)
                 return new KeyPair(publicKey, privateKey);
 
-            // Otherwise we create a new key
-            var generator = KeyPairGenerator.GetInstance(KeyProperties.KeyAlgorithmRsa, androidKeyStore);
+            var originalLocale = Platform.GetLocale();
+            try
+            {
+                // Force to english for known bug in date parsing:
+                // https://issuetracker.google.com/issues/37095309
+                Platform.SetLocale(Java.Util.Locale.English);
 
-            var end = DateTime.UtcNow.AddYears(20);
-            var startDate = new Java.Util.Date();
-            var endDate = new Java.Util.Date(end.Year, end.Month, end.Day);
+                // Otherwise we create a new key
+                var generator = KeyPairGenerator.GetInstance(KeyProperties.KeyAlgorithmRsa, androidKeyStore);
+
+                var end = DateTime.UtcNow.AddYears(20);
+                var startDate = new Java.Util.Date();
+#pragma warning disable CS0618 // Type or member is obsolete
+                var endDate = new Java.Util.Date(end.Year, end.Month, end.Day);
+#pragma warning restore CS0618 // Type or member is obsolete
 
 #pragma warning disable CS0618
-            var builder = new KeyPairGeneratorSpec.Builder(Platform.AppContext)
-                .SetAlias(asymmetricAlias)
-                .SetSerialNumber(Java.Math.BigInteger.One)
-                .SetSubject(new Javax.Security.Auth.X500.X500Principal($"CN={asymmetricAlias} CA Certificate"))
-                .SetStartDate(startDate)
-                .SetEndDate(endDate);
+                var builder = new KeyPairGeneratorSpec.Builder(Platform.AppContext)
+                    .SetAlias(asymmetricAlias)
+                    .SetSerialNumber(Java.Math.BigInteger.One)
+                    .SetSubject(new Javax.Security.Auth.X500.X500Principal($"CN={asymmetricAlias} CA Certificate"))
+                    .SetStartDate(startDate)
+                    .SetEndDate(endDate);
 
-            generator.Initialize(builder.Build());
+                generator.Initialize(builder.Build());
 #pragma warning restore CS0618
 
-            return generator.GenerateKeyPair();
+                return generator.GenerateKeyPair();
+            }
+            finally
+            {
+                Platform.SetLocale(originalLocale);
+            }
         }
 
         byte[] WrapKey(IKey keyToWrap, IKey withKey)
@@ -237,6 +250,7 @@ namespace Xamarin.Essentials
 
             // Generate initialization vector
             var iv = new byte[initializationVectorLen];
+
             var sr = new SecureRandom();
             sr.NextBytes(iv);
 
@@ -248,7 +262,7 @@ namespace Xamarin.Essentials
                 cipher = Cipher.GetInstance(cipherTransformationSymmetric);
                 cipher.Init(CipherMode.EncryptMode, key, new GCMParameterSpec(128, iv));
             }
-            catch (Java.Security.InvalidAlgorithmParameterException)
+            catch (InvalidAlgorithmParameterException)
             {
                 // If we encounter this error, it's likely an old bouncycastle provider version
                 // is being used which does not recognize GCMParameterSpec, but should work
@@ -289,7 +303,7 @@ namespace Xamarin.Essentials
                 cipher = Cipher.GetInstance(cipherTransformationSymmetric);
                 cipher.Init(CipherMode.DecryptMode, key, new GCMParameterSpec(128, iv));
             }
-            catch (Java.Security.InvalidAlgorithmParameterException)
+            catch (InvalidAlgorithmParameterException)
             {
                 // If we encounter this error, it's likely an old bouncycastle provider version
                 // is being used which does not recognize GCMParameterSpec, but should work

@@ -19,8 +19,14 @@ namespace Xamarin.Essentials
         internal static Context AppContext =>
             Application.Context;
 
-        internal static Activity CurrentActivity =>
-            lifecycleListener?.Activity;
+        internal static Activity GetCurrentActivity(bool throwOnNull)
+        {
+            var activity = lifecycleListener?.Activity;
+            if (throwOnNull && activity == null)
+                throw new NullReferenceException("The current Activity can not be detected. Ensure that you have called Init in your Activity or Application class.");
+
+            return activity;
+        }
 
         public static void Init(Application application)
         {
@@ -81,6 +87,31 @@ namespace Xamarin.Essentials
 
         internal static PowerManager PowerManager =>
             AppContext.GetSystemService(Context.PowerService) as PowerManager;
+
+        internal static Java.Util.Locale GetLocale()
+        {
+            var resources = AppContext.Resources;
+            var config = resources.Configuration;
+            if (HasApiLevel(BuildVersionCodes.N))
+                return config.Locales.Get(0);
+
+            return config.Locale;
+        }
+
+        internal static void SetLocale(Java.Util.Locale locale)
+        {
+            Java.Util.Locale.Default = locale;
+            var resources = AppContext.Resources;
+            var config = resources.Configuration;
+            if (HasApiLevel(BuildVersionCodes.N))
+                config.SetLocale(locale);
+            else
+                config.Locale = locale;
+
+#pragma warning disable CS0618 // Type or member is obsolete
+            resources.UpdateConfiguration(config, resources.DisplayMetrics);
+#pragma warning restore CS0618 // Type or member is obsolete
+        }
     }
 
     class ActivityLifecycleContextListener : Java.Lang.Object, Application.IActivityLifecycleCallbacks

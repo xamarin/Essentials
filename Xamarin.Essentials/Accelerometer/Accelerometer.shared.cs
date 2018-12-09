@@ -7,7 +7,7 @@ namespace Xamarin.Essentials
     {
         static bool useSyncContext;
 
-        public static event AccelerometerChangedEventHandler ReadingChanged;
+        public static event EventHandler<AccelerometerChangedEventArgs> ReadingChanged;
 
         public static bool IsMonitoring { get; private set; }
 
@@ -17,10 +17,10 @@ namespace Xamarin.Essentials
                 throw new FeatureNotSupportedException();
 
             if (IsMonitoring)
-                return;
+                throw new InvalidOperationException("Accelerometer has already been started.");
 
             IsMonitoring = true;
-            useSyncContext = sensorSpeed == SensorSpeed.Normal || sensorSpeed == SensorSpeed.Ui;
+            useSyncContext = sensorSpeed == SensorSpeed.Default || sensorSpeed == SensorSpeed.UI;
 
             try
             {
@@ -54,41 +54,55 @@ namespace Xamarin.Essentials
             }
         }
 
-        internal static void OnChanged(AccelerometerData reading)
-            => OnChanged(new AccelerometerChangedEventArgs(reading));
+        internal static void OnChanged(AccelerometerData reading) =>
+            OnChanged(new AccelerometerChangedEventArgs(reading));
 
         internal static void OnChanged(AccelerometerChangedEventArgs e)
         {
-            var handler = ReadingChanged;
-            if (handler == null)
-                return;
-
             if (useSyncContext)
-                MainThread.BeginInvokeOnMainThread(() => handler?.Invoke(e));
+                MainThread.BeginInvokeOnMainThread(() => ReadingChanged?.Invoke(null, e));
             else
-                handler?.Invoke(e);
+                ReadingChanged?.Invoke(null, e);
         }
     }
 
-    public delegate void AccelerometerChangedEventHandler(AccelerometerChangedEventArgs e);
-
     public class AccelerometerChangedEventArgs : EventArgs
     {
-        internal AccelerometerChangedEventArgs(AccelerometerData reading) => Reading = reading;
+        public AccelerometerChangedEventArgs(AccelerometerData reading) => Reading = reading;
 
         public AccelerometerData Reading { get; }
     }
 
-    public struct AccelerometerData
+    public readonly struct AccelerometerData : IEquatable<AccelerometerData>
     {
-        internal AccelerometerData(double x, double y, double z)
+        public AccelerometerData(double x, double y, double z)
             : this((float)x, (float)y, (float)z)
         {
         }
 
-        internal AccelerometerData(float x, float y, float z) =>
+        public AccelerometerData(float x, float y, float z) =>
             Acceleration = new Vector3(x, y, z);
 
         public Vector3 Acceleration { get; }
+
+        public override bool Equals(object obj) =>
+            (obj is AccelerometerData data) && Equals(data);
+
+        public bool Equals(AccelerometerData other) =>
+            Acceleration.Equals(other.Acceleration);
+
+        public static bool operator ==(AccelerometerData left, AccelerometerData right) =>
+            Equals(left, right);
+
+        public static bool operator !=(AccelerometerData left, AccelerometerData right) =>
+           !Equals(left, right);
+
+        public override int GetHashCode() =>
+            Acceleration.GetHashCode();
+
+        public override string ToString() =>
+            $"{nameof(Acceleration.X)}: {Acceleration.X}, " +
+            $"{nameof(Acceleration.Y)}: {Acceleration.Y}, " +
+            $"{nameof(Acceleration.Z)}: {Acceleration.Z}";
     }
 }

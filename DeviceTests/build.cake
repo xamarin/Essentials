@@ -6,10 +6,10 @@
 var TARGET = Argument("target", "Default");
 
 var IOS_SIM_NAME = EnvironmentVariable("IOS_SIM_NAME") ?? "iPhone X";
-var IOS_SIM_RUNTIME = EnvironmentVariable("IOS_SIM_RUNTIME") ?? "iOS 11.3";
+var IOS_SIM_RUNTIME = EnvironmentVariable("IOS_SIM_RUNTIME") ?? "iOS 12.0";
 var IOS_PROJ = "./DeviceTests.iOS/DeviceTests.iOS.csproj";
 var IOS_BUNDLE_ID = "com.xamarin.essentials.devicetests";
-var IOS_IPA_PATH = "./DeviceTests.iOS/bin/iPhoneSimulator/Release/Xamarin.EssentialsDeviceTestsiOS.app";
+var IOS_IPA_PATH = "./DeviceTests.iOS/bin/iPhoneSimulator/Release/XamarinEssentialsDeviceTestsiOS.app";
 var IOS_TEST_RESULTS_PATH = "./xunit-ios.xml";
 
 var ANDROID_PROJ = "./DeviceTests.Android/DeviceTests.Android.csproj";
@@ -24,7 +24,7 @@ var UWP_PROJ = "./DeviceTests.UWP/DeviceTests.UWP.csproj";
 var UWP_TEST_RESULTS_PATH = "./xunit-uwp.xml";
 var UWP_PACKAGE_ID = "ec0cc741-fd3e-485c-81be-68815c480690";
 
-var TCP_LISTEN_TIMEOUT = 60;
+var TCP_LISTEN_TIMEOUT = 120;
 var TCP_LISTEN_PORT = 10578;
 var TCP_LISTEN_HOST = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName())
         .AddressList.First(f => f.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).ToString();
@@ -96,6 +96,7 @@ Task ("build-ios")
         c.Configuration = "Release";
         c.Properties["Platform"] = new List<string> { "iPhoneSimulator" };
         c.Properties["BuildIpa"] = new List<string> { "true" };
+        c.Properties["ContinuousIntegrationBuild"] = new List<string> { "false" };
         c.Targets.Clear();
         c.Targets.Add("Rebuild");
     });
@@ -108,6 +109,7 @@ Task ("test-ios-emu")
     // Look for a matching simulator on the system
     var sim = ListAppleSimulators ()
         .First (s => (s.Availability.Contains("available") || s.Availability.Contains("booted"))
+                && !s.Availability.Contains("unavailable")
                 && s.Name == IOS_SIM_NAME && s.Runtime == IOS_SIM_RUNTIME);
 
     // Boot the simulator
@@ -164,6 +166,7 @@ Task ("build-android")
     // needs to be debug so unit tests get discovered
     MSBuild (ANDROID_PROJ, c => {
         c.Configuration = "Debug";
+        c.Properties["ContinuousIntegrationBuild"]  = new List<string> { "false" };
         c.Targets.Clear();
         c.Targets.Add("Rebuild");
     });
@@ -236,6 +239,7 @@ Task ("test-android-emu")
     // Use the Install target to push the app onto emulator
     MSBuild (ANDROID_PROJ, c => {
         c.Configuration = "Debug";
+        c.Properties["ContinuousIntegrationBuild"] = new List<string> { "false" };
         c.Properties["AdbTarget"] = new List<string> { "-s " + emuSerial };
         c.Targets.Clear();
         c.Targets.Add("Install");
@@ -271,6 +275,7 @@ Task ("build-uwp")
     // Build the project (with ipa)
     MSBuild (UWP_PROJ, c => {
         c.Configuration = "Debug";
+        c.Properties["ContinuousIntegrationBuild"] = new List<string> { "false" };
         c.Properties["AppxBundlePlatforms"] = new List<string> { "x86" };
         c.Properties["AppxBundle"] = new List<string> { "Always" };
         c.Targets.Clear();
@@ -295,6 +300,11 @@ Task ("test-uwp-emu")
     uninstallPS();
     
     // Install the appx
+    var dependencies = GetFiles("./**/AppPackages/**/Dependencies/x86/*.appx");
+    foreach (var dep in dependencies) {
+        Information("Installing Dependency appx: {0}", dep);
+        StartProcess("powershell", "Add-AppxPackage -Path \"" + MakeAbsolute(dep).FullPath + "\"");
+    }
     var appxBundlePath = GetFiles("./**/AppPackages/**/*.appxbundle").First ();
     Information("Installing appx: {0}", appxBundlePath);
     StartProcess ("powershell", "Add-AppxPackage -Path \"" + MakeAbsolute(appxBundlePath).FullPath + "\"");

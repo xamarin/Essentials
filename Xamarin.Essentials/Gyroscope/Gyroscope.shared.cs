@@ -7,7 +7,7 @@ namespace Xamarin.Essentials
     {
         static bool useSyncContext;
 
-        public static event GyroscopeChangedEventHandler ReadingChanged;
+        public static event EventHandler<GyroscopeChangedEventArgs> ReadingChanged;
 
         public static bool IsMonitoring { get; private set; }
 
@@ -17,10 +17,10 @@ namespace Xamarin.Essentials
                 throw new FeatureNotSupportedException();
 
             if (IsMonitoring)
-                return;
+                throw new InvalidOperationException("Gyroscope has already been started.");
 
             IsMonitoring = true;
-            useSyncContext = sensorSpeed == SensorSpeed.Normal || sensorSpeed == SensorSpeed.Ui;
+            useSyncContext = sensorSpeed == SensorSpeed.Default || sensorSpeed == SensorSpeed.UI;
 
             try
             {
@@ -54,41 +54,56 @@ namespace Xamarin.Essentials
             }
         }
 
-        internal static void OnChanged(GyroscopeData reading)
-            => OnChanged(new GyroscopeChangedEventArgs(reading));
+        internal static void OnChanged(GyroscopeData reading) =>
+            OnChanged(new GyroscopeChangedEventArgs(reading));
 
         internal static void OnChanged(GyroscopeChangedEventArgs e)
         {
-            var handler = ReadingChanged;
-            if (handler == null)
-                return;
-
             if (useSyncContext)
-                MainThread.BeginInvokeOnMainThread(() => handler?.Invoke(e));
+                MainThread.BeginInvokeOnMainThread(() => ReadingChanged?.Invoke(null, e));
             else
-                handler?.Invoke(e);
+                ReadingChanged?.Invoke(null, e);
         }
     }
 
-    public delegate void GyroscopeChangedEventHandler(GyroscopeChangedEventArgs e);
-
     public class GyroscopeChangedEventArgs : EventArgs
     {
-        internal GyroscopeChangedEventArgs(GyroscopeData reading) => Reading = reading;
+        public GyroscopeChangedEventArgs(GyroscopeData reading) =>
+            Reading = reading;
 
         public GyroscopeData Reading { get; }
     }
 
-    public struct GyroscopeData
+    public readonly struct GyroscopeData : IEquatable<GyroscopeData>
     {
-        internal GyroscopeData(double x, double y, double z)
+        public GyroscopeData(double x, double y, double z)
             : this((float)x, (float)y, (float)z)
         {
         }
 
-        internal GyroscopeData(float x, float y, float z) =>
+        public GyroscopeData(float x, float y, float z) =>
             AngularVelocity = new Vector3(x, y, z);
 
         public Vector3 AngularVelocity { get; }
+
+        public override bool Equals(object obj) =>
+            (obj is GyroscopeData data) && Equals(data);
+
+        public bool Equals(GyroscopeData other) =>
+            AngularVelocity.Equals(other.AngularVelocity);
+
+        public static bool operator ==(GyroscopeData left, GyroscopeData right) =>
+          Equals(left, right);
+
+        public static bool operator !=(GyroscopeData left, GyroscopeData right) =>
+           !Equals(left, right);
+
+        public override int GetHashCode() =>
+            AngularVelocity.GetHashCode();
+
+        public override string ToString() =>
+            $"{nameof(AngularVelocity.X)}: {AngularVelocity.X}, " +
+            $"{nameof(AngularVelocity.Y)}: {AngularVelocity.Y}, " +
+            $"{nameof(AngularVelocity.Z)}: {AngularVelocity.Z}";
     }
 }

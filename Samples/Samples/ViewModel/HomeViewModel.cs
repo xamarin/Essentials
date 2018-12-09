@@ -28,14 +28,20 @@ namespace Samples.ViewModel
                     "📏",
                     "All Sensors",
                     typeof(AllSensorsPage),
-                    "Have a look at the accelerometer, compass, gyroscope, magnetometer, and orientation sensors.",
-                    new[] { "accelerometer", "compass", "gyroscope", "magnetometer", "orientation", "sensors", "hardware", "device" }),
+                    "Have a look at the accelerometer, barometer, compass, gyroscope, magnetometer, and orientation sensors.",
+                    new[] { "accelerometer", "barometer", "compass", "gyroscope", "magnetometer", "orientation", "sensors", "hardware", "device" }),
                 new SampleItem(
                     "📦",
                     "App Info",
                     typeof(AppInfoPage),
                     "Find out about the app with ease.",
                     new[] { "app", "info" }),
+                new SampleItem(
+                    "📏",
+                    "Barometer",
+                    typeof(BarometerPage),
+                    "Easily detect pressure level, via the device barometer.",
+                    new[] { "barometer", "hardware", "device", "sensor" }),
                 new SampleItem(
                     "🔋",
                     "Battery",
@@ -66,12 +72,6 @@ namespace Samples.ViewModel
                     typeof(ConnectivityPage),
                     "Check connectivity state and detect changes.",
                     new[] { "connectivity", "internet", "wifi" }),
-                new SampleItem(
-                    "📲",
-                    "Data Transfer",
-                    typeof(DataTransferPage),
-                    "Send text and website uris to other apps.",
-                    new[] { "data", "transfer", "share", "communication" }),
                 new SampleItem(
                     "📱",
                     "Device Info",
@@ -109,6 +109,18 @@ namespace Samples.ViewModel
                     "Quickly get the current location.",
                     new[] { "geolocation", "position", "address", "mapping" }),
                 new SampleItem(
+                    "💤",
+                    "Keep Screen On",
+                    typeof(KeepScreenOnPage),
+                    "Keep the device screen awake.",
+                    new[] { "screen", "awake", "sleep" }),
+                new SampleItem(
+                    "📏",
+                    "Launcher",
+                    typeof(LauncherPage),
+                    "Launch other apps via Uri",
+                    new[] { "launcher", "app", "run" }),
+                new SampleItem(
                     "📏",
                     "Gyroscope",
                     typeof(GyroscopePage),
@@ -120,6 +132,12 @@ namespace Samples.ViewModel
                     typeof(MagnetometerPage),
                     "Detect device's orientation relative to Earth's magnetic field.",
                     new[] { "compass", "magnetometer", "sensors", "hardware", "device" }),
+                new SampleItem(
+                    "📍",
+                    "Launch Maps",
+                    typeof(MapsPage),
+                    "Easily launch maps with coordinates.",
+                    new[] { "geocoding", "geolocation", "position", "address", "mapping", "maps", "route", "navigation" }),
                 new SampleItem(
                     "📏",
                     "Orientation Sensor",
@@ -139,17 +157,17 @@ namespace Samples.ViewModel
                     "Quickly and easily add persistent preferences.",
                     new[] { "settings", "preferences", "prefs", "storage" }),
                 new SampleItem(
-                    "💤",
-                    "Screen Lock",
-                    typeof(ScreenLockPage),
-                    "Keep the device screen awake.",
-                    new[] { "screen", "awake", "sleep" }),
-                new SampleItem(
                     "🔒",
                     "Secure Storage",
                     typeof(SecureStoragePage),
                     "Securely store data.",
                     new[] { "settings", "preferences", "prefs", "security", "storage" }),
+                new SampleItem(
+                    "📲",
+                    "Share",
+                    typeof(SharePage),
+                    "Send text and website uris to other apps.",
+                    new[] { "data", "transfer", "share", "communication" }),
                 new SampleItem(
                     "💬",
                     "SMS",

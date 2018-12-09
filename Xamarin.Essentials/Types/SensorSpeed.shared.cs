@@ -2,9 +2,9 @@
 {
     public enum SensorSpeed
     {
-        Fastest,
-        Game,
-        Ui,
-        Normal,
+        Default = 0,
+        UI = 1,
+        Game = 2,
+        Fastest = 3,
     }
 }

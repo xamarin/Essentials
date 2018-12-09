@@ -12,7 +12,7 @@ namespace Samples.ViewModel
         double y;
         double z;
         bool isActive;
-        int speed = 2;
+        int speed = 0;
 
         public MagnetometerViewModel()
         {
@@ -48,14 +48,8 @@ namespace Samples.ViewModel
             set => SetProperty(ref isActive, value);
         }
 
-        public List<string> Speeds { get; } =
-           new List<string>
-           {
-                "Fastest",
-                "Game",
-                "Normal",
-                "User Interface"
-           };
+        public string[] Speeds { get; } =
+           Enum.GetNames(typeof(SensorSpeed));
 
         public int Speed
         {
@@ -77,7 +71,7 @@ namespace Samples.ViewModel
             base.OnDisappearing();
         }
 
-        void OnReadingChanged(MagnetometerChangedEventArgs e)
+        void OnReadingChanged(object sender, MagnetometerChangedEventArgs e)
         {
             var data = e.Reading;
             switch ((SensorSpeed)Speed)

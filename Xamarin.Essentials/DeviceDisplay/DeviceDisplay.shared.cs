@@ -4,88 +4,65 @@ namespace Xamarin.Essentials
 {
     public static partial class DeviceDisplay
     {
-        static event ScreenMetricsChanagedEventHandler ScreenMetricsChanagedInternal;
+        static event EventHandler<DisplayInfoChangedEventArgs> MainDisplayInfoChangedInternal;
 
-        public static ScreenMetrics ScreenMetrics => GetScreenMetrics();
+        static DisplayInfo currentMetrics;
 
-        public static event ScreenMetricsChanagedEventHandler ScreenMetricsChanaged
+        public static bool KeepScreenOn
+        {
+            get => PlatformKeepScreenOn;
+            set => PlatformKeepScreenOn = value;
+        }
+
+        public static DisplayInfo MainDisplayInfo => GetMainDisplayInfo();
+
+        static void SetCurrent(DisplayInfo metrics) =>
+            currentMetrics = new DisplayInfo(metrics.Width, metrics.Height, metrics.Density, metrics.Orientation, metrics.Rotation);
+
+        public static event EventHandler<DisplayInfoChangedEventArgs> MainDisplayInfoChanged
         {
             add
             {
-                var wasRunning = ScreenMetricsChanagedInternal != null;
+                var wasRunning = MainDisplayInfoChangedInternal != null;
 
-                ScreenMetricsChanagedInternal += value;
+                MainDisplayInfoChangedInternal += value;
 
-                if (!wasRunning && ScreenMetricsChanagedInternal != null)
+                if (!wasRunning && MainDisplayInfoChangedInternal != null)
+                {
+                    SetCurrent(GetMainDisplayInfo());
                     StartScreenMetricsListeners();
+                }
             }
 
             remove
             {
-                var wasRunning = ScreenMetricsChanagedInternal != null;
+                var wasRunning = MainDisplayInfoChangedInternal != null;
 
-                ScreenMetricsChanagedInternal -= value;
+                MainDisplayInfoChangedInternal -= value;
 
-                if (wasRunning && ScreenMetricsChanagedInternal == null)
+                if (wasRunning && MainDisplayInfoChangedInternal == null)
                     StopScreenMetricsListeners();
             }
         }
 
-        static void OnScreenMetricsChanaged(ScreenMetrics metrics)
-            => OnScreenMetricsChanaged(new ScreenMetricsChanagedEventArgs(metrics));
+        static void OnMainDisplayInfoChanged(DisplayInfo metrics)
+            => OnMainDisplayInfoChanged(new DisplayInfoChangedEventArgs(metrics));
 
-        static void OnScreenMetricsChanaged(ScreenMetricsChanagedEventArgs e)
-            => ScreenMetricsChanagedInternal?.Invoke(e);
-    }
-
-    public delegate void ScreenMetricsChanagedEventHandler(ScreenMetricsChanagedEventArgs e);
-
-    public class ScreenMetricsChanagedEventArgs : EventArgs
-    {
-        public ScreenMetricsChanagedEventArgs(ScreenMetrics metrics)
+        static void OnMainDisplayInfoChanged(DisplayInfoChangedEventArgs e)
         {
-            Metrics = metrics;
+            if (!currentMetrics.Equals(e.DisplayInfo))
+            {
+                SetCurrent(e.DisplayInfo);
+                MainDisplayInfoChangedInternal?.Invoke(null, e);
+            }
         }
-
-        public ScreenMetrics Metrics { get; }
     }
 
-    [Preserve(AllMembers = true)]
-    public struct ScreenMetrics
+    public class DisplayInfoChangedEventArgs : EventArgs
     {
-        internal ScreenMetrics(double width, double height, double density, ScreenOrientation orientation, ScreenRotation rotation)
-        {
-            Width = width;
-            Height = height;
-            Density = density;
-            Orientation = orientation;
-            Rotation = rotation;
-        }
+        public DisplayInfoChangedEventArgs(DisplayInfo displayInfo) =>
+            DisplayInfo = displayInfo;
 
-        public double Width { get; set; }
-
-        public double Height { get; set; }
-
-        public double Density { get; set; }
-
-        public ScreenOrientation Orientation { get; set; }
-
-        public ScreenRotation Rotation { get; set; }
-    }
-
-    public enum ScreenOrientation
-    {
-        Unknown,
-
-        Portrait,
-        Landscape
-    }
-
-    public enum ScreenRotation
-    {
-        Rotation0,
-        Rotation90,
-        Rotation180,
-        Rotation270
+        public DisplayInfo DisplayInfo { get; }
     }
 }

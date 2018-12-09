@@ -2,21 +2,19 @@
 using System.Threading.Tasks;
 using Foundation;
 using SafariServices;
+using UIKit;
 
 namespace Xamarin.Essentials
 {
     public static partial class Browser
     {
-        static Task PlatformOpenAsync(Uri uri, BrowserLaunchType launchType)
+        static async Task<bool> PlatformOpenAsync(Uri uri, BrowserLaunchMode launchMode)
         {
-            if (uri == null)
-                throw new ArgumentNullException(nameof(uri));
+            var nativeUrl = new NSUrl(uri.AbsoluteUri);
 
-            var nativeUrl = new NSUrl(uri.OriginalString);
-
-            switch (launchType)
+            switch (launchMode)
             {
-                case BrowserLaunchType.SystemPreferred:
+                case BrowserLaunchMode.SystemPreferred:
                     var sfViewController = new SFSafariViewController(nativeUrl, false);
                     var vc = Platform.GetCurrentViewController();
 
@@ -24,14 +22,13 @@ namespace Xamarin.Essentials
                     {
                         sfViewController.PopoverPresentationController.SourceView = vc.View;
                     }
-                    vc.PresentViewController(sfViewController, true, null);
+                    await vc.PresentViewControllerAsync(sfViewController, true);
                     break;
-                case BrowserLaunchType.External:
-                    UIKit.UIApplication.SharedApplication.OpenUrl(nativeUrl);
-                    break;
+                case BrowserLaunchMode.External:
+                    return await UIApplication.SharedApplication.OpenUrlAsync(nativeUrl, new UIApplicationOpenUrlOptions());
             }
 
-            return Task.CompletedTask;
+            return true;
         }
     }
 }

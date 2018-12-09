@@ -1,7 +1,7 @@
 ﻿<views:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:views="clr-namespace:Samples.View"
              xmlns:viewmodels="clr-namespace:Samples.ViewModel"
+             xmlns:views="clr-namespace:Samples.View"
              x:Class="Samples.View.AllSensorsPage"
              Title="All Sensors">
 
@@ -12,7 +12,7 @@
             <StackLayout Padding="12,0,12,12" Spacing="6">
 
                 <Label Text="Accelerometer" FontAttributes="Bold" Margin="0,6,0,0" />
-                <Grid>
+                <Grid x:Name="GridAccelerometer">
                     <Grid.BindingContext>
                         <viewmodels:AccelerometerViewModel />
                     </Grid.BindingContext>
@@ -46,7 +46,7 @@
                 </Grid>
 
                 <Label Text="Compass" FontAttributes="Bold" Margin="0,6,0,0" />
-                <Grid>
+                <Grid x:Name="GridCompass">
                     <Grid.BindingContext>
                         <viewmodels:CompassViewModel />
                     </Grid.BindingContext>
@@ -63,7 +63,7 @@
                     <Label Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding Compass1, StringFormat='Compass 1 Degrees: {0:N}'}" />
 
                     <Picker Grid.Row="1" Grid.ColumnSpan="2" HorizontalOptions="FillAndExpand"
-                            ItemsSource="{Binding CompassSpeeds}"
+                            ItemsSource="{Binding Speeds}"
                             SelectedIndex="{Binding Speed1, Mode=TwoWay}"
                             IsEnabled="{Binding Compass1IsActive, Converter={StaticResource NegativeConverter}}" />
 
@@ -75,7 +75,7 @@
                 </Grid>
 
                 <Label Text="Gyroscope" FontAttributes="Bold" Margin="0,6,0,0" />
-                <Grid>
+                <Grid x:Name="GridGyro">
                     <Grid.BindingContext>
                         <viewmodels:GyroscopeViewModel />
                     </Grid.BindingContext>
@@ -109,7 +109,7 @@
                 </Grid>
 
                 <Label Text="Magnetometer" FontAttributes="Bold" Margin="0,6,0,0" />
-                <Grid>
+                <Grid x:Name="GridMagnetometer">
                     <Grid.BindingContext>
                         <viewmodels:MagnetometerViewModel />
                     </Grid.BindingContext>
@@ -141,9 +141,9 @@
                     <Button Grid.Row="5" Grid.Column="1" Text="Stop" Command="{Binding StopCommand}"
                             IsEnabled="{Binding IsActive}" />
                 </Grid>
-                
+
                 <Label Text="Orientation Sensor" FontAttributes="Bold" Margin="0,6,0,0" />
-                <Grid>
+                <Grid x:Name="GridOrientation">
                     <Grid.BindingContext>
                         <viewmodels:OrientationSensorViewModel />
                     </Grid.BindingContext>
@@ -175,6 +175,29 @@
 
                     <Button Grid.Row="5" Grid.Column="1" Text="Stop" Command="{Binding StopCommand}"
                             IsEnabled="{Binding IsActive}" />
+                </Grid>
+                <Label Text="Monitor barometer for changes." FontAttributes="Bold" Margin="12" />
+                <Grid  x:Name="GridBarometer">
+                    <Grid.BindingContext>
+                        <viewmodels:BarometerViewModel />
+                    </Grid.BindingContext>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Row="0" Grid.ColumnSpan="2"
+                       Text="{Binding BaromterValue, StringFormat='Barometer pressure (hPA): {0:N}'}" />
+
+                    <Button Grid.Row="1" Grid.Column="0" Text="Start" Command="{Binding StartBarometerComand}"
+                        IsEnabled="{Binding BarometerIsActive, Converter={StaticResource NegativeConverter}}" />
+
+                    <Button Grid.Row="1"  Grid.Column="1" Text="Stop" Command="{Binding StopBarometerCommand}"
+                        IsEnabled="{Binding BarometerIsActive}" />
                 </Grid>
             </StackLayout>
         </ScrollView>

@@ -35,11 +35,9 @@ namespace Xamarin.Essentials
             }
         }
 
-        static void PlatformOpenSettings()
+        static void PlatformShowSettingsUI()
         {
-            var context = Platform.CurrentActivity ?? Platform.AppContext;
-            if (context == null)
-                return;
+            var context = Platform.GetCurrentActivity(false) ?? Platform.AppContext;
 
             var settingsIntent = new Intent();
             settingsIntent.SetAction(global::Android.Provider.Settings.ActionApplicationDetailsSettings);

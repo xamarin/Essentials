@@ -14,9 +14,7 @@
     <summary>
       <para>Accelerometer data of the acceleration of the device in three dimensional space.</para>
     </summary>
-    <remarks>
-      <para></para>
-    </remarks>
+    <remarks></remarks>
   </Docs>
   <Members>
     <Member MemberName="IsMonitoring">
@@ -34,14 +32,12 @@
       <Docs>
         <summary>Gets if acceleromter is being monitored.</summary>
         <value>If monitoring.</value>
-        <remarks>
-          <para></para>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ReadingChanged">
-      <MemberSignature Language="C#" Value="public static event Xamarin.Essentials.AccelerometerChangedEventHandler ReadingChanged;" />
-      <MemberSignature Language="ILAsm" Value=".event class Xamarin.Essentials.AccelerometerChangedEventHandler ReadingChanged" />
+      <MemberSignature Language="C#" Value="public static event EventHandler&lt;Xamarin.Essentials.AccelerometerChangedEventArgs&gt; ReadingChanged;" />
+      <MemberSignature Language="ILAsm" Value=".event class System.EventHandler`1&lt;class Xamarin.Essentials.AccelerometerChangedEventArgs&gt; ReadingChanged" />
       <MemberSignature Language="DocId" Value="E:Xamarin.Essentials.Accelerometer.ReadingChanged" />
       <MemberType>Event</MemberType>
       <AssemblyInfo>
@@ -49,7 +45,7 @@
         <AssemblyName>Xamarin.Essentials</AssemblyName>
       </AssemblyInfo>
       <ReturnValue>
-        <ReturnType>Xamarin.Essentials.AccelerometerChangedEventHandler</ReturnType>
+        <ReturnType>System.EventHandler&lt;Xamarin.Essentials.AccelerometerChangedEventArgs&gt;</ReturnType>
       </ReturnValue>
       <Docs>
         <summary>Event triggered when reading of sensor changes.</summary>

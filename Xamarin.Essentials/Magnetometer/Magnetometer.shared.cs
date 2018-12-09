@@ -7,7 +7,7 @@ namespace Xamarin.Essentials
     {
         static bool useSyncContext;
 
-        public static event MagnetometerChangedEventHandler ReadingChanged;
+        public static event EventHandler<MagnetometerChangedEventArgs> ReadingChanged;
 
         public static bool IsMonitoring { get; private set; }
 
@@ -17,10 +17,10 @@ namespace Xamarin.Essentials
                 throw new FeatureNotSupportedException();
 
             if (IsMonitoring)
-                return;
+                throw new InvalidOperationException("Magnetometer has already been started.");
 
             IsMonitoring = true;
-            useSyncContext = sensorSpeed == SensorSpeed.Normal || sensorSpeed == SensorSpeed.Ui;
+            useSyncContext = sensorSpeed == SensorSpeed.Default || sensorSpeed == SensorSpeed.UI;
 
             try
             {
@@ -54,41 +54,56 @@ namespace Xamarin.Essentials
             }
         }
 
-        internal static void OnChanged(MagnetometerData reading)
-            => OnChanged(new MagnetometerChangedEventArgs(reading));
+        internal static void OnChanged(MagnetometerData reading) =>
+            OnChanged(new MagnetometerChangedEventArgs(reading));
 
         internal static void OnChanged(MagnetometerChangedEventArgs e)
         {
-            var handler = ReadingChanged;
-            if (handler == null)
-                return;
-
             if (useSyncContext)
-                MainThread.BeginInvokeOnMainThread(() => handler?.Invoke(e));
+                MainThread.BeginInvokeOnMainThread(() => ReadingChanged?.Invoke(null, e));
             else
-                handler?.Invoke(e);
+                ReadingChanged?.Invoke(null, e);
         }
     }
 
-    public delegate void MagnetometerChangedEventHandler(MagnetometerChangedEventArgs e);
-
     public class MagnetometerChangedEventArgs : EventArgs
     {
-        internal MagnetometerChangedEventArgs(MagnetometerData reading) => Reading = reading;
+        public MagnetometerChangedEventArgs(MagnetometerData reading) =>
+            Reading = reading;
 
         public MagnetometerData Reading { get; }
     }
 
-    public struct MagnetometerData
+    public readonly struct MagnetometerData : IEquatable<MagnetometerData>
     {
-        internal MagnetometerData(double x, double y, double z)
+        public MagnetometerData(double x, double y, double z)
             : this((float)x, (float)y, (float)z)
         {
         }
 
-        internal MagnetometerData(float x, float y, float z) =>
+        public MagnetometerData(float x, float y, float z) =>
             MagneticField = new Vector3(x, y, z);
 
         public Vector3 MagneticField { get; }
+
+        public override bool Equals(object obj) =>
+            (obj is MagnetometerData data) && Equals(data);
+
+        public bool Equals(MagnetometerData other) =>
+            MagneticField.Equals(other.MagneticField);
+
+        public static bool operator ==(MagnetometerData left, MagnetometerData right) =>
+            Equals(left, right);
+
+        public static bool operator !=(MagnetometerData left, MagnetometerData right) =>
+           !Equals(left, right);
+
+        public override int GetHashCode() =>
+            MagneticField.GetHashCode();
+
+        public override string ToString() =>
+            $"{nameof(MagneticField.X)}: {MagneticField.X}, " +
+            $"{nameof(MagneticField.Y)}: {MagneticField.Y}, " +
+            $"{nameof(MagneticField.Z)}: {MagneticField.Z}";
     }
 }

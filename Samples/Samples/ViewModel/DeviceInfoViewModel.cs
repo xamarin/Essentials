@@ -4,7 +4,7 @@ namespace Samples.ViewModel
 {
     public class DeviceInfoViewModel : BaseViewModel
     {
-        ScreenMetrics screenMetrics;
+        DisplayInfo screenMetrics;
 
         public string Model => DeviceInfo.Model;
 
@@ -12,15 +12,17 @@ namespace Samples.ViewModel
 
         public string Name => DeviceInfo.Name;
 
-        public string Version => DeviceInfo.VersionString;
+        public string VersionString => DeviceInfo.VersionString;
 
-        public string Platform => DeviceInfo.Platform;
+        public string Version => DeviceInfo.Version.ToString();
 
-        public string Idiom => DeviceInfo.Idiom;
+        public DevicePlatform Platform => DeviceInfo.Platform;
+
+        public DeviceIdiom Idiom => DeviceInfo.Idiom;
 
         public DeviceType DeviceType => DeviceInfo.DeviceType;
 
-        public ScreenMetrics ScreenMetrics
+        public DisplayInfo ScreenMetrics
         {
             get => screenMetrics;
             set => SetProperty(ref screenMetrics, value);
@@ -30,20 +32,20 @@ namespace Samples.ViewModel
         {
             base.OnAppearing();
 
-            DeviceDisplay.ScreenMetricsChanaged += OnScreenMetricsChanged;
-            ScreenMetrics = DeviceDisplay.ScreenMetrics;
+            DeviceDisplay.MainDisplayInfoChanged += OnScreenMetricsChanged;
+            ScreenMetrics = DeviceDisplay.MainDisplayInfo;
         }
 
         public override void OnDisappearing()
         {
-            DeviceDisplay.ScreenMetricsChanaged -= OnScreenMetricsChanged;
+            DeviceDisplay.MainDisplayInfoChanged -= OnScreenMetricsChanged;
 
             base.OnDisappearing();
         }
 
-        void OnScreenMetricsChanged(ScreenMetricsChanagedEventArgs e)
+        void OnScreenMetricsChanged(object sender, DisplayInfoChangedEventArgs e)
         {
-            ScreenMetrics = e.Metrics;
+            ScreenMetrics = e.DisplayInfo;
         }
     }
 }

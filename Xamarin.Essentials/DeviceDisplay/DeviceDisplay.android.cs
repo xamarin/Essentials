@@ -1,8 +1,6 @@
 ﻿using System;
-using Android.App;
 using Android.Content;
 using Android.Content.Res;
-using Android.OS;
 using Android.Provider;
 using Android.Runtime;
 using Android.Views;
@@ -13,23 +11,40 @@ namespace Xamarin.Essentials
     {
         static OrientationEventListener orientationListener;
 
-        static ScreenMetrics GetScreenMetrics()
+        static bool PlatformKeepScreenOn
+        {
+            get
+            {
+                var window = Platform.GetCurrentActivity(true)?.Window;
+                var flags = window?.Attributes?.Flags ?? 0;
+                return flags.HasFlag(WindowManagerFlags.KeepScreenOn);
+            }
+
+            set
+            {
+                var window = Platform.GetCurrentActivity(true)?.Window;
+                if (value)
+                    window?.AddFlags(WindowManagerFlags.KeepScreenOn);
+                else
+                    window?.ClearFlags(WindowManagerFlags.KeepScreenOn);
+            }
+        }
+
+        static DisplayInfo GetMainDisplayInfo()
         {
             var displayMetrics = Platform.AppContext.Resources?.DisplayMetrics;
 
-            return new ScreenMetrics
-            {
-                Orientation = CalculateOrientation(),
-                Rotation = CalculateRotation(),
-                Width = displayMetrics?.WidthPixels ?? 0,
-                Height = displayMetrics?.HeightPixels ?? 0,
-                Density = displayMetrics?.Density ?? 0
-            };
+            return new DisplayInfo(
+                width: displayMetrics?.WidthPixels ?? 0,
+                height: displayMetrics?.HeightPixels ?? 0,
+                density: displayMetrics?.Density ?? 0,
+                orientation: CalculateOrientation(),
+                rotation: CalculateRotation());
         }
 
         static void StartScreenMetricsListeners()
         {
-            orientationListener = new Listener(Platform.AppContext, OnScreenMetricsChanaged);
+            orientationListener = new Listener(Platform.AppContext, OnScreenMetricsChanged);
             orientationListener.Enable();
         }
 
@@ -40,13 +55,13 @@ namespace Xamarin.Essentials
             orientationListener = null;
         }
 
-        static void OnScreenMetricsChanaged()
+        static void OnScreenMetricsChanged()
         {
-            var metrics = GetScreenMetrics();
-            OnScreenMetricsChanaged(metrics);
+            var metrics = GetMainDisplayInfo();
+            OnMainDisplayInfoChanged(metrics);
         }
 
-        static ScreenRotation CalculateRotation()
+        static DisplayRotation CalculateRotation()
         {
             var service = Platform.AppContext.GetSystemService(Context.WindowService);
             var display = service?.JavaCast<IWindowManager>()?.DefaultDisplay;
@@ -56,20 +71,20 @@ namespace Xamarin.Essentials
                 switch (display.Rotation)
                 {
                     case SurfaceOrientation.Rotation270:
-                        return ScreenRotation.Rotation270;
+                        return DisplayRotation.Rotation270;
                     case SurfaceOrientation.Rotation180:
-                        return ScreenRotation.Rotation180;
+                        return DisplayRotation.Rotation180;
                     case SurfaceOrientation.Rotation90:
-                        return ScreenRotation.Rotation90;
+                        return DisplayRotation.Rotation90;
                     case SurfaceOrientation.Rotation0:
-                        return ScreenRotation.Rotation0;
+                        return DisplayRotation.Rotation0;
                 }
             }
 
-            return ScreenRotation.Rotation0;
+            return DisplayRotation.Unknown;
         }
 
-        static ScreenOrientation CalculateOrientation()
+        static DisplayOrientation CalculateOrientation()
         {
             var config = Platform.AppContext.Resources?.Configuration;
 
@@ -78,14 +93,14 @@ namespace Xamarin.Essentials
                 switch (config.Orientation)
                 {
                     case Orientation.Landscape:
-                        return ScreenOrientation.Landscape;
+                        return DisplayOrientation.Landscape;
                     case Orientation.Portrait:
                     case Orientation.Square:
-                        return ScreenOrientation.Portrait;
+                        return DisplayOrientation.Portrait;
                 }
             }
 
-            return ScreenOrientation.Unknown;
+            return DisplayOrientation.Unknown;
         }
 
         static string GetSystemSetting(string name)
@@ -94,13 +109,10 @@ namespace Xamarin.Essentials
 
     class Listener : OrientationEventListener
     {
-        Action onChanged;
+        readonly Action onChanged;
 
         internal Listener(Context context, Action handler)
-            : base(context)
-        {
-            onChanged = handler;
-        }
+            : base(context) => onChanged = handler;
 
         public override void OnOrientationChanged(int orientation) => onChanged();
     }

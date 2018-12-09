@@ -11,12 +11,12 @@ namespace Samples.ViewModel
         public string NetworkAccess =>
             Connectivity.NetworkAccess.ToString();
 
-        public string Profiles
+        public string ConnectionProfiles
         {
             get
             {
                 var profiles = string.Empty;
-                foreach (var p in Connectivity.Profiles)
+                foreach (var p in Connectivity.ConnectionProfiles)
                     profiles += "\n" + p.ToString();
                 return profiles;
             }
@@ -36,9 +36,9 @@ namespace Samples.ViewModel
             base.OnDisappearing();
         }
 
-        void OnConnectivityChanged(ConnectivityChangedEventArgs e)
+        void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
-            OnPropertyChanged(nameof(Profiles));
+            OnPropertyChanged(nameof(ConnectionProfiles));
             OnPropertyChanged(nameof(NetworkAccess));
         }
     }

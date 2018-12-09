@@ -15,16 +15,17 @@ namespace Xamarin.Essentials
             Permissions.EnsureDeclared(PermissionType.Vibrate);
 
             var time = (long)duration.TotalMilliseconds;
+#if __ANDROID_26__
             if (Platform.HasApiLevel(BuildVersionCodes.O))
             {
                 Platform.Vibrator.Vibrate(VibrationEffect.CreateOneShot(time, VibrationEffect.DefaultAmplitude));
+                return;
             }
-            else
-            {
+#endif
+
 #pragma warning disable CS0618 // Type or member is obsolete
-                Platform.Vibrator.Vibrate(time);
+            Platform.Vibrator.Vibrate(time);
 #pragma warning restore CS0618 // Type or member is obsolete
-            }
         }
 
         static void PlatformCancel()

@@ -6,14 +6,19 @@ namespace DeviceTests
 {
     public class SecureStorage_Tests
     {
+        public SecureStorage_Tests()
+        {
+            SecureStorage.RemoveAll();
+        }
+
         [Theory]
-        [InlineData("test.txt", "data", true)]
-        [InlineData("noextension", "data2", true)]
-        [InlineData("funny*&$%@!._/\\chars", "data3", true)]
-        [InlineData("test.txt2", "data2", false)]
-        [InlineData("noextension2", "data22", false)]
-        [InlineData("funny*&$%@!._/\\chars2", "data32", false)]
-        public async Task Saves_And_Loads(string key, string data, bool emulatePreApi23)
+        [InlineData("test.txt", "data", true, true)]
+        [InlineData("noextension", "data2", true, false)]
+        [InlineData("funny*&$%@!._/\\chars", "data3", true, false)]
+        [InlineData("test.txt2", "data2", false, true)]
+        [InlineData("noextension2", "data22", false, false)]
+        [InlineData("funny*&$%@!._/\\chars2", "data32", false, false)]
+        public async Task Saves_And_Loads(string key, string data, bool emulatePreApi23, bool emulateNonEnglishLocale)
         {
 #if __IOS__
             // Try the new platform specific api
@@ -26,6 +31,11 @@ namespace DeviceTests
 
 #if __ANDROID__
             SecureStorage.AlwaysUseAsymmetricKeyStorage = emulatePreApi23;
+
+            if (emulateNonEnglishLocale)
+            {
+                Platform.SetLocale(new Java.Util.Locale("ar"));
+            }
 #endif
 
             await SecureStorage.SetAsync(key, data);
@@ -34,6 +44,32 @@ namespace DeviceTests
 
             Assert.Equal(data, c);
         }
+
+#if __ANDROID__
+        [Theory]
+        [InlineData("test.txt", "data")]
+        public async Task Fix_Corrupt_Key(string key, string data)
+        {
+            // set a valid key
+            SecureStorage.AlwaysUseAsymmetricKeyStorage = true;
+            await SecureStorage.SetAsync(key, data);
+
+            // simulate corrupt the key
+            var prefKey = "SecureStorageKey";
+            var mainKey = "A2PfJSNdEDjM+422tpu7FqFcVQQbO3ti/DvnDnIqrq9CFwaBi6NdXYcicjvMW6nF7X/Clpto5xerM41U1H4qtWJDO0Ijc5QNTHGZl9tDSbXJ6yDCDDnEDryj2uTa8DiHoNcNX68QtcV3at4kkJKXXAwZXSC88a73/xDdh1u5gUdCeXJzVc5vOY6QpAGUH0bjR5NHrqEQNNGDdquFGN9n2ZJPsEK6C9fx0QwCIL+uldpAYSWrpmUIr+/0X7Y0mJpN84ldygEVxHLBuVrzB4Bbu5XGLUN/0Sr2plWcKm7XhM6wp3JRW6Eae2ozys42p1YLeM0HXWrhTqP6FRPkS6mOtw==";
+
+            Preferences.Set(prefKey, mainKey, SecureStorage.Alias);
+
+            var c = await SecureStorage.GetAsync(key);
+            Assert.Null(c);
+
+            // try to reset and get again
+            await SecureStorage.SetAsync(key, data);
+            c = await SecureStorage.GetAsync(key);
+
+            Assert.Equal(data, c);
+        }
+#endif
 
         [Theory]
         [InlineData(true)]
@@ -85,5 +121,30 @@ namespace DeviceTests
             foreach (var key in keys)
                 Assert.Null(await SecureStorage.GetAsync(key));
         }
+
+#if __ANDROID__
+        [Fact]
+        public async Task Asymmetric_to_Symmetric_API_Upgrade()
+        {
+            var key = "asym_to_sym_upgrade";
+            var expected = "this is the value";
+
+            SecureStorage.RemoveAll();
+
+            // Emulate pre api 23
+            SecureStorage.AlwaysUseAsymmetricKeyStorage = true;
+
+            await SecureStorage.SetAsync(key, expected);
+
+            // Simulate Upgrading to API23+
+            SecureStorage.AlwaysUseAsymmetricKeyStorage = false;
+
+            var v = await SecureStorage.GetAsync(key);
+
+            SecureStorage.RemoveAll();
+
+            Assert.Equal(expected, v);
+        }
+#endif
     }
 }

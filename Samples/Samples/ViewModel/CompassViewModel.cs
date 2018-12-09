@@ -10,10 +10,11 @@ namespace Samples.ViewModel
     {
         bool compass1IsActive;
         bool compass2IsActive;
+        bool applyLowPassFilter;
         double compass1;
         double compass2;
-        int speed1 = 2;
-        int speed2 = 2;
+        int speed1 = 0;
+        int speed2 = 0;
 
         public CompassViewModel()
         {
@@ -43,6 +44,15 @@ namespace Samples.ViewModel
             set => SetProperty(ref compass2IsActive, value);
         }
 
+        public bool ApplyLowPassFilter
+        {
+            get => applyLowPassFilter;
+            set
+            {
+                SetProperty(ref applyLowPassFilter, value);
+            }
+        }
+
         public double Compass1
         {
             get => compass1;
@@ -67,14 +77,8 @@ namespace Samples.ViewModel
             set => SetProperty(ref speed2, value);
         }
 
-        public List<string> CompassSpeeds { get; } =
-            new List<string>
-            {
-                "Fastest",
-                "Game",
-                "Normal",
-                "User Interface"
-            };
+        public string[] Speeds { get; } =
+           Enum.GetNames(typeof(SensorSpeed));
 
         public override void OnDisappearing()
         {
@@ -91,9 +95,8 @@ namespace Samples.ViewModel
                 if (Compass.IsMonitoring)
                     OnStopCompass2();
 
+                Compass.Start((SensorSpeed)Speed1, ApplyLowPassFilter);
                 Compass.ReadingChanged += OnCompass1ReadingChanged;
-
-                Compass.Start((SensorSpeed)Speed1);
                 Compass1IsActive = true;
             }
             catch (Exception ex)
@@ -102,7 +105,7 @@ namespace Samples.ViewModel
             }
         }
 
-        void OnCompass1ReadingChanged(CompassChangedEventArgs e)
+        void OnCompass1ReadingChanged(object sender, CompassChangedEventArgs e)
         {
             switch ((SensorSpeed)Speed1)
             {
@@ -130,8 +133,8 @@ namespace Samples.ViewModel
                 if (Compass.IsMonitoring)
                     OnStopCompass1();
 
+                Compass.Start((SensorSpeed)Speed2, ApplyLowPassFilter);
                 Compass.ReadingChanged += OnCompass2ReadingChanged;
-                Compass.Start((SensorSpeed)Speed2);
                 Compass2IsActive = true;
             }
             catch (Exception ex)
@@ -140,7 +143,7 @@ namespace Samples.ViewModel
             }
         }
 
-        void OnCompass2ReadingChanged(CompassChangedEventArgs e)
+        void OnCompass2ReadingChanged(object sender, CompassChangedEventArgs e)
         {
             var data = e.Reading;
             switch ((SensorSpeed)Speed2)

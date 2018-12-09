@@ -13,7 +13,7 @@ namespace Samples.ViewModel
         double z;
         double w;
         bool isActive;
-        int speed = 2;
+        int speed = 0;
 
         public OrientationSensorViewModel()
         {
@@ -55,14 +55,8 @@ namespace Samples.ViewModel
             set => SetProperty(ref isActive, value);
         }
 
-        public List<string> Speeds { get; } =
-           new List<string>
-           {
-                "Fastest",
-                "Game",
-                "Normal",
-                "User Interface"
-           };
+        public string[] Speeds { get; } =
+           Enum.GetNames(typeof(SensorSpeed));
 
         public int Speed
         {
@@ -100,10 +94,10 @@ namespace Samples.ViewModel
         void OnStop()
         {
             IsActive = false;
-            Accelerometer.Stop();
+            OrientationSensor.Stop();
         }
 
-        void OnReadingChanged(OrientationSensorChangedEventArgs e)
+        void OnReadingChanged(object sender, OrientationSensorChangedEventArgs e)
         {
             var data = e.Reading;
             switch ((SensorSpeed)Speed)

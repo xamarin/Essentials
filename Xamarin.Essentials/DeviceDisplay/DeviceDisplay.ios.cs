@@ -1,5 +1,4 @@
 ﻿using Foundation;
-using ObjCRuntime;
 using UIKit;
 
 namespace Xamarin.Essentials
@@ -8,26 +7,30 @@ namespace Xamarin.Essentials
     {
         static NSObject observer;
 
-        static ScreenMetrics GetScreenMetrics()
+        static bool PlatformKeepScreenOn
+        {
+            get => UIApplication.SharedApplication.IdleTimerDisabled;
+            set => UIApplication.SharedApplication.IdleTimerDisabled = value;
+        }
+
+        static DisplayInfo GetMainDisplayInfo()
         {
             var bounds = UIScreen.MainScreen.Bounds;
             var scale = UIScreen.MainScreen.Scale;
 
-            return new ScreenMetrics
-            {
-                Width = bounds.Width * scale,
-                Height = bounds.Height * scale,
-                Density = scale,
-                Orientation = CalculateOrientation(),
-                Rotation = CalculateRotation()
-            };
+            return new DisplayInfo(
+                width: bounds.Width * scale,
+                height: bounds.Height * scale,
+                density: scale,
+                orientation: CalculateOrientation(),
+                rotation: CalculateRotation());
         }
 
         static void StartScreenMetricsListeners()
         {
             var notificationCenter = NSNotificationCenter.DefaultCenter;
             var notification = UIApplication.DidChangeStatusBarOrientationNotification;
-            observer = notificationCenter.AddObserver(notification, OnScreenMetricsChanaged);
+            observer = notificationCenter.AddObserver(notification, OnScreenMetricsChanged);
         }
 
         static void StopScreenMetricsListeners()
@@ -36,39 +39,39 @@ namespace Xamarin.Essentials
             observer = null;
         }
 
-        static void OnScreenMetricsChanaged(NSNotification obj)
+        static void OnScreenMetricsChanged(NSNotification obj)
         {
-            var metrics = GetScreenMetrics();
-            OnScreenMetricsChanaged(metrics);
+            var metrics = GetMainDisplayInfo();
+            OnMainDisplayInfoChanged(metrics);
         }
 
-        static ScreenOrientation CalculateOrientation()
+        static DisplayOrientation CalculateOrientation()
         {
             var orientation = UIApplication.SharedApplication.StatusBarOrientation;
 
             if (orientation.IsLandscape())
-                return ScreenOrientation.Landscape;
+                return DisplayOrientation.Landscape;
 
-            return ScreenOrientation.Portrait;
+            return DisplayOrientation.Portrait;
         }
 
-        static ScreenRotation CalculateRotation()
+        static DisplayRotation CalculateRotation()
         {
             var orientation = UIApplication.SharedApplication.StatusBarOrientation;
 
             switch (orientation)
             {
                 case UIInterfaceOrientation.Portrait:
-                    return ScreenRotation.Rotation0;
+                    return DisplayRotation.Rotation0;
                 case UIInterfaceOrientation.PortraitUpsideDown:
-                    return ScreenRotation.Rotation180;
+                    return DisplayRotation.Rotation180;
                 case UIInterfaceOrientation.LandscapeLeft:
-                    return ScreenRotation.Rotation270;
+                    return DisplayRotation.Rotation270;
                 case UIInterfaceOrientation.LandscapeRight:
-                    return ScreenRotation.Rotation90;
+                    return DisplayRotation.Rotation90;
             }
 
-            return ScreenRotation.Rotation0;
+            return DisplayRotation.Unknown;
         }
     }
 }

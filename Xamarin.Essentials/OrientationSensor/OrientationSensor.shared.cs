@@ -7,7 +7,7 @@ namespace Xamarin.Essentials
     {
         static bool useSyncContext;
 
-        public static event OrientationSensorChangedEventHandler ReadingChanged;
+        public static event EventHandler<OrientationSensorChangedEventArgs> ReadingChanged;
 
         public static bool IsMonitoring { get; private set; }
 
@@ -17,10 +17,10 @@ namespace Xamarin.Essentials
                 throw new FeatureNotSupportedException();
 
             if (IsMonitoring)
-                return;
+                throw new InvalidOperationException("Orientation sensor has already been started.");
 
             IsMonitoring = true;
-            useSyncContext = sensorSpeed == SensorSpeed.Normal || sensorSpeed == SensorSpeed.Ui;
+            useSyncContext = sensorSpeed == SensorSpeed.Default || sensorSpeed == SensorSpeed.UI;
 
             try
             {
@@ -54,43 +54,57 @@ namespace Xamarin.Essentials
             }
         }
 
-        internal static void OnChanged(OrientationSensorData reading)
-            => OnChanged(new OrientationSensorChangedEventArgs(reading));
+        internal static void OnChanged(OrientationSensorData reading) =>
+            OnChanged(new OrientationSensorChangedEventArgs(reading));
 
         internal static void OnChanged(OrientationSensorChangedEventArgs e)
         {
-            var handler = ReadingChanged;
-            if (handler == null)
-                return;
-
             if (useSyncContext)
-                MainThread.BeginInvokeOnMainThread(() => handler?.Invoke(e));
+                MainThread.BeginInvokeOnMainThread(() => ReadingChanged?.Invoke(null, e));
             else
-                handler?.Invoke(e);
+                ReadingChanged?.Invoke(null, e);
         }
     }
 
-    public delegate void OrientationSensorChangedEventHandler(OrientationSensorChangedEventArgs e);
-
     public class OrientationSensorChangedEventArgs : EventArgs
     {
-        internal OrientationSensorChangedEventArgs(OrientationSensorData reading) => Reading = reading;
+        public OrientationSensorChangedEventArgs(OrientationSensorData reading) =>
+            Reading = reading;
 
         public OrientationSensorData Reading { get; }
     }
 
-    public struct OrientationSensorData
+    public readonly struct OrientationSensorData : IEquatable<OrientationSensorData>
     {
-        internal OrientationSensorData(double x, double y, double z, double w)
+        public OrientationSensorData(double x, double y, double z, double w)
             : this((float)x, (float)y, (float)z, (float)w)
         {
         }
 
-        internal OrientationSensorData(float x, float y, float z, float w)
-        {
+        public OrientationSensorData(float x, float y, float z, float w) =>
             Orientation = new Quaternion(x, y, z, w);
-        }
 
         public Quaternion Orientation { get; }
+
+        public override bool Equals(object obj) =>
+            (obj is OrientationSensorData data) && Equals(data);
+
+        public bool Equals(OrientationSensorData other) =>
+            Orientation.Equals(other.Orientation);
+
+        public static bool operator ==(OrientationSensorData left, OrientationSensorData right) =>
+            Equals(left, right);
+
+        public static bool operator !=(OrientationSensorData left, OrientationSensorData right) =>
+           !Equals(left, right);
+
+        public override int GetHashCode() =>
+            Orientation.GetHashCode();
+
+        public override string ToString() =>
+            $"{nameof(Orientation.X)}: {Orientation.X}, " +
+            $"{nameof(Orientation.Y)}: {Orientation.Y}, " +
+            $"{nameof(Orientation.Z)}: {Orientation.Z}, " +
+            $"{nameof(Orientation.W)}: {Orientation.W}";
     }
 }
