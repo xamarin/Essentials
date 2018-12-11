@@ -10,7 +10,7 @@ namespace Xamarin.Essentials
 {
     public static partial class Browser
     {
-        static Task<bool> PlatformOpenAsync(Uri uri, BrowserLaunchMode launchMode)
+        static Task<bool> PlatformOpenAsync(Uri uri, BrowserLaunchMode launchMode, BrowserLaunchOptions options)
         {
             var nativeUri = AndroidUri.Parse(uri.AbsoluteUri);
 
@@ -19,6 +19,12 @@ namespace Xamarin.Essentials
                 case BrowserLaunchMode.SystemPreferred:
                     var tabsBuilder = new CustomTabsIntent.Builder();
                     tabsBuilder.SetShowTitle(true);
+                    if (options.PreferredTitleColor.HasValue)
+                        tabsBuilder.SetToolbarColor((int)options.PreferredTitleColor.Value);
+                    if (options.PrefferedControlColor.HasValue)
+                        tabsBuilder.SetSecondaryToolbarColor((int)options.PrefferedControlColor.Value);
+                    if (options.ShouldShowTitle.HasValue)
+                        tabsBuilder.SetShowTitle(options.ShouldShowTitle.Value);
                     var tabsIntent = tabsBuilder.Build();
                     tabsIntent.Intent.SetFlags(ActivityFlags.ClearTop);
                     tabsIntent.Intent.SetFlags(ActivityFlags.NewTask);
@@ -38,5 +44,10 @@ namespace Xamarin.Essentials
 
             return Task.FromResult(true);
         }
+    }
+
+    public readonly partial struct EssentialsColor
+    {
+        public static explicit operator int(EssentialsColor x) => x.A | x.R << 8 | x.G << 16 | x.B << 24;
     }
 }
