@@ -159,6 +159,7 @@
       <Type Name="SensorSpeed" Kind="Enumeration" />
       <Type Name="Share" Kind="Class" />
       <Type Name="ShareTextRequest" Kind="Class" />
+      <Type Name="SignalStrength" Kind="Enumeration" />
       <Type Name="Sms" Kind="Class" />
       <Type Name="SmsMessage" Kind="Class" />
       <Type Name="SpeechOptions" Kind="Class" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Android.Content;
 using Android.Net;
+using Android.Net.Wifi;
 using Android.OS;
 using Debug = System.Diagnostics.Debug;
 
@@ -19,6 +20,43 @@ namespace Xamarin.Essentials
             conectivityReceiver = new ConnectivityBroadcastReceiver(OnConnectivityChanged);
 
             Platform.AppContext.RegisterReceiver(conectivityReceiver, new IntentFilter(ConnectivityManager.ConnectivityAction));
+        }
+
+        static SignalStrength PlatformSignalStrength()
+        {
+            Permissions.EnsureDeclared(PermissionType.WifiState);
+            try
+            {
+                var wifiManager = Platform.WifiManager;
+                if (wifiManager == null)
+                    return SignalStrength.Unknown;
+
+                var info = wifiManager.ConnectionInfo;
+                if (info == null)
+                    return SignalStrength.None;
+
+                var signalLevel = WifiManager.CalculateSignalLevel(info.Rssi, 5); // range 0 -> n-1
+                switch (signalLevel)
+                {
+                    case 0:
+                        return SignalStrength.None;
+                    case 1:
+                        return SignalStrength.Weak;
+                    case 2:
+                    case 3:
+                        return SignalStrength.Fair;
+                    case 4:
+                        return SignalStrength.Strong;
+                    default:
+                        Debug.WriteLine($"Invalid signal strength encountered: {signalLevel}");
+                        return SignalStrength.Unknown;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Unable to get signal strength - do you have ACCESS_WIFI_STATE permission? - error: {0}", e);
+                return SignalStrength.Unknown;
+            }
         }
 
         static void StopListeners()

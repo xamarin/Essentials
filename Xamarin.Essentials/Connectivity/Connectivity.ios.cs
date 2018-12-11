@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NetworkExtension;
 
 namespace Xamarin.Essentials
 {
@@ -11,6 +12,26 @@ namespace Xamarin.Essentials
         {
             listener = new ReachabilityListener();
             listener.ReachabilityChanged += OnConnectivityChanged;
+        }
+
+        static SignalStrength PlatformSignalStrength()
+        {
+            var doubleSignalStrength = new NEHotspotNetwork().SignalStrength;
+            if (doubleSignalStrength < 0.01d)
+                return SignalStrength.None;
+            var signalstrength = (int)Math.Round(doubleSignalStrength * 3);
+            switch (signalstrength)
+            {
+                case 0:
+                case 1:
+                    return SignalStrength.Weak;
+                case 2:
+                    return SignalStrength.Fair;
+                case 3:
+                    return SignalStrength.Strong;
+                default:
+                    return SignalStrength.Unknown;
+            }
         }
 
         static void StopListeners()

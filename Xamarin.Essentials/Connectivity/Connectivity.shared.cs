@@ -9,12 +9,14 @@ namespace Xamarin.Essentials
         static event EventHandler<ConnectivityChangedEventArgs> ConnectivityChangedInternal;
 
         // a cache so that events aren't fired unnecessarily
-        // this is mainly an issue on Android, but we can stiil do this everywhere
+        // this is mainly an issue on Android, but we can still do this everywhere
         static NetworkAccess currentAccess;
         static List<ConnectionProfile> currentProfiles;
 
         public static NetworkAccess NetworkAccess => PlatformNetworkAccess;
 
+        public static SignalStrength WifiSignalStrength => PlatformSignalStrength();
+      
         public static IEnumerable<ConnectionProfile> ConnectionProfiles => PlatformConnectionProfiles;
 
         public static event EventHandler<ConnectivityChangedEventArgs> ConnectivityChanged
@@ -63,6 +65,15 @@ namespace Xamarin.Essentials
                 MainThread.BeginInvokeOnMainThread(() => ConnectivityChangedInternal?.Invoke(null, e));
             }
         }
+    }
+
+    public enum SignalStrength
+    {
+        Unknown = 0,
+        None = 1,
+        Weak = 2,
+        Fair = 3,
+        Strong = 4
     }
 
     public class ConnectivityChangedEventArgs : EventArgs
