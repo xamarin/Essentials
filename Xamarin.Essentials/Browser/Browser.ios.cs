@@ -21,8 +21,8 @@ namespace Xamarin.Essentials
                     if (options.PreferredTitleColor.HasValue)
                         sfViewController.PreferredBarTintColor = (UIColor)options.PreferredTitleColor;
 
-                    if (options.PrefferedControlColor.HasValue)
-                        sfViewController.PreferredControlTintColor = (UIColor)options.PrefferedControlColor;
+                    if (options.PreferredControlColor.HasValue)
+                        sfViewController.PreferredControlTintColor = (UIColor)options.PreferredControlColor;
 
                     if (sfViewController.PopoverPresentationController != null)
                     {

@@ -37,9 +37,9 @@ namespace Xamarin.Essentials
 
     public readonly partial struct BrowserLaunchOptions : IEquatable<BrowserLaunchOptions>
     {
-        public BrowserLaunchOptions(EssentialsColor? prefferedControlColor, EssentialsColor? preferredBackgroundColor, EssentialsColor? preferredTitleColor, bool? shouldShowTitle)
+        public BrowserLaunchOptions(EssentialsColor? preferredControlColor, EssentialsColor? preferredBackgroundColor, EssentialsColor? preferredTitleColor, bool? shouldShowTitle)
         {
-            PrefferedControlColor = prefferedControlColor;
+            PreferredControlColor = preferredControlColor;
             PreferredBackgroundColor = preferredBackgroundColor;
             PreferredTitleColor = preferredTitleColor;
             ShouldShowTitle = shouldShowTitle;
@@ -49,7 +49,7 @@ namespace Xamarin.Essentials
 
         public EssentialsColor? PreferredBackgroundColor { get; }
 
-        public EssentialsColor? PrefferedControlColor { get; }
+        public EssentialsColor? PreferredControlColor { get; }
 
         public bool? ShouldShowTitle { get; }
 

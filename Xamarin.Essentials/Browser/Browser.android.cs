@@ -21,7 +21,7 @@ namespace Xamarin.Essentials
                     tabsBuilder.SetShowTitle(true);
                     if (options.PreferredTitleColor.HasValue)
                         tabsBuilder.SetToolbarColor((int)options.PreferredTitleColor.Value);
-                    if (options.PrefferedControlColor.HasValue)
+                    if (options.PreferredControlColor.HasValue)
                         tabsBuilder.SetSecondaryToolbarColor((int)options.PrefferedControlColor.Value);
                     if (options.ShouldShowTitle.HasValue)
                         tabsBuilder.SetShowTitle(options.ShouldShowTitle.Value);
