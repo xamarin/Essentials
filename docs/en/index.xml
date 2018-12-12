@@ -78,7 +78,7 @@
           <AttributeName>System.Runtime.Versioning.TargetFramework(".NETCore,Version=v5.0", FrameworkDisplayName=".NET for Windows Universal")</AttributeName>
         </Attribute>
         <Attribute>
-          <AttributeName>System.Reflection.AssemblyInformationalVersion("1.0.0+f86f55df68f22837a757fbe3042c854816b1ea0d")</AttributeName>
+          <AttributeName>System.Reflection.AssemblyInformationalVersion("1.0.0+689991bc97bffdfd556692cb52574a204fd5b2a5")</AttributeName>
         </Attribute>
       </Attributes>
     </Assembly>

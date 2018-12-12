@@ -11,6 +11,7 @@
   </Base>
   <Docs>
     <summary>Represents a signal strength if available or otherwise Unknown.</summary>
+    <remarks></remarks>
   </Docs>
   <Members>
     <Member MemberName="Good">
@@ -31,7 +32,7 @@
       </Docs>
     </Member>
     <Member MemberName="Great">
-      <MemberSignature Language="C#" Value="Treat" />
+      <MemberSignature Language="C#" Value="Great" />
       <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Xamarin.Essentials.SignalStrength Great = int32(5)" />
       <MemberSignature Language="DocId" Value="F:Xamarin.Essentials.SignalStrength.Great" />
       <MemberType>Field</MemberType>
