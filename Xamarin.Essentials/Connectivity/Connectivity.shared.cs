@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
         public static NetworkAccess NetworkAccess => PlatformNetworkAccess;
 
         public static SignalStrength WiFiSignalStrength => PlatformWiFiSignalStrength();
-      
+
         public static IEnumerable<ConnectionProfile> ConnectionProfiles => PlatformConnectionProfiles;
 
         public static event EventHandler<ConnectivityChangedEventArgs> ConnectivityChanged
