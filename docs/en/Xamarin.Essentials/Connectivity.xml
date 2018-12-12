@@ -91,6 +91,7 @@
       <Docs>
         <summary>Strength of the WiFi signal.</summary>
         <value>Unknown if signal strength was unable to be determined, None if no WiFi signal is available. Otherwise a representation of signal strength.</value>
+        <remarks></remarks>
       </Docs>
     </Member>
   </Members>
