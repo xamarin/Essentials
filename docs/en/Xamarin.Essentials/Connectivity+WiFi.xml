@@ -1,0 +1,41 @@
+<Type Name="Connectivity+WiFi" FullName="Xamarin.Essentials.Connectivity+WiFi">
+  <TypeSignature Language="C#" Value="public static class Connectivity.WiFi" />
+  <TypeSignature Language="ILAsm" Value=".class nested public auto ansi abstract sealed beforefieldinit Connectivity/WiFi extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:Xamarin.Essentials.Connectivity.WiFi" />
+  <AssemblyInfo>
+    <AssemblyName>Xamarin.Essentials</AssemblyName>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>WiFi specific connectivity information.</summary>
+    <remarks>
+      <para />
+    </remarks>
+  </Docs>
+  <Members>
+    <Member MemberName="SignalStrength">
+      <MemberSignature Language="C#" Value="public static Xamarin.Essentials.SignalStrength SignalStrength { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property valuetype Xamarin.Essentials.SignalStrength SignalStrength" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.Connectivity.WiFi.SignalStrength" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Xamarin.Essentials.SignalStrength</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>The WiFi signal strength if available.</summary>
+        <value>Gets the signal strength.</value>
+        <remarks>
+          <para />
+        </remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

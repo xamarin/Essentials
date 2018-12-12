@@ -7,11 +7,7 @@ namespace Xamarin.Essentials
         static NetworkAccess PlatformNetworkAccess =>
             throw new NotImplementedInReferenceAssemblyException();
 
-        static SignalStrength PlatformWiFiSignalStrength() =>
-            throw new NotImplementedInReferenceAssemblyException();
-
         static IEnumerable<ConnectionProfile> PlatformConnectionProfiles =>
-
             throw new NotImplementedInReferenceAssemblyException();
 
         static void StartListeners() =>
@@ -19,5 +15,11 @@ namespace Xamarin.Essentials
 
         static void StopListeners() =>
             throw new NotImplementedInReferenceAssemblyException();
+
+        public static partial class WiFi
+        {
+            static SignalStrength PlatformSignalStrength() =>
+                throw new NotImplementedInReferenceAssemblyException();
+        }
     }
 }

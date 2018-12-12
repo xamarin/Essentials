@@ -1,4 +1,6 @@
-﻿using Xamarin.Essentials;
+﻿using System.Windows.Input;
+using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace Samples.ViewModel
 {
@@ -6,8 +8,12 @@ namespace Samples.ViewModel
     {
         public string NetworkAccess =>
             Connectivity.NetworkAccess.ToString();
-            
-        public string SignalStrength => Connectivity.WiFiSignalStrength.ToString();
+
+        ICommand refreshCommand;
+
+        public ICommand RefreshCommand => refreshCommand ?? (refreshCommand = new Command(() => OnConnectivityChanged(null, null)));
+
+        public string SignalStrength => Connectivity.WiFi.SignalStrength.ToString();
 
         public string ConnectionProfiles =>
             string.Join("\n", Connectivity.ConnectionProfiles);

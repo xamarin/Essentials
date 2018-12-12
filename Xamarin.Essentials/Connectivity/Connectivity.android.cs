@@ -22,44 +22,6 @@ namespace Xamarin.Essentials
             Platform.AppContext.RegisterReceiver(conectivityReceiver, new IntentFilter(ConnectivityManager.ConnectivityAction));
         }
 
-        static SignalStrength PlatformWiFiSignalStrength()
-        {
-            Permissions.EnsureDeclared(PermissionType.WifiState);
-            try
-            {
-                var wifiManager = Platform.WifiManager;
-                if (wifiManager == null)
-                    return SignalStrength.Unknown;
-
-                var info = wifiManager.ConnectionInfo;
-                if (info == null)
-                    return SignalStrength.None;
-
-                var signalLevel = WifiManager.CalculateSignalLevel(info.Rssi, 5); // range 0 -> n-1
-                switch (signalLevel)
-                {
-                    case 0:
-                        return SignalStrength.None;
-                    case 1:
-                        return SignalStrength.Poor;
-                    case 2:
-                        return SignalStrength.Moderate;
-                    case 3:
-                        return SignalStrength.Good;
-                    case 4:
-                        return SignalStrength.Great;
-                    default:
-                        Debug.WriteLine($"Invalid signal strength encountered: {signalLevel}");
-                        return SignalStrength.Unknown;
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Unable to get signal strength - do you have ACCESS_WIFI_STATE permission? - error: {0}", e);
-                return SignalStrength.Unknown;
-            }
-        }
-
         static void StopListeners()
         {
             if (conectivityReceiver == null)
@@ -237,6 +199,47 @@ namespace Xamarin.Essentials
                         return ConnectionProfile.Bluetooth;
 
                     return ConnectionProfile.Unknown;
+            }
+        }
+
+        public static partial class WiFi
+        {
+            static SignalStrength PlatformSignalStrength()
+            {
+                Permissions.EnsureDeclared(PermissionType.WifiState);
+                try
+                {
+                    var wifiManager = Platform.WifiManager;
+                    if (wifiManager == null)
+                        return SignalStrength.Unknown;
+
+                    var info = wifiManager.ConnectionInfo;
+                    if (info == null)
+                        return SignalStrength.None;
+
+                    var signalLevel = WifiManager.CalculateSignalLevel(info.Rssi, 5); // range 0 -> n-1
+                    switch (signalLevel)
+                    {
+                        case 0:
+                            return SignalStrength.None;
+                        case 1:
+                            return SignalStrength.Poor;
+                        case 2:
+                            return SignalStrength.Moderate;
+                        case 3:
+                            return SignalStrength.Good;
+                        case 4:
+                            return SignalStrength.Great;
+                        default:
+                            Debug.WriteLine($"Invalid signal strength encountered: {signalLevel}");
+                            return SignalStrength.Unknown;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("Unable to get signal strength - do you have ACCESS_WIFI_STATE permission? - error: {0}", e);
+                    return SignalStrength.Unknown;
+                }
             }
         }
     }

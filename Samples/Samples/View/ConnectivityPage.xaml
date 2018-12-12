@@ -17,6 +17,8 @@
                 <Label Text="{Binding NetworkAccess, StringFormat='NetworkAccess: {0}'}" />
                 <Label Text="{Binding SignalStrength, StringFormat='Signal strength (for wifi): {0}'}" />
                 <Label Text="{Binding ConnectionProfiles, StringFormat='ConnectionProfiles: {0}'}" />
+
+                <Button Text="Refresh" Command="{Binding RefreshCommand}"/>
             </StackLayout>
         </ScrollView>
     </StackLayout>

@@ -14,25 +14,6 @@ namespace Xamarin.Essentials
             listener.ReachabilityChanged += OnConnectivityChanged;
         }
 
-        static SignalStrength PlatformWiFiSignalStrength()
-        {
-            var signalStrength = new NEHotspotNetwork().SignalStrength;
-
-            if (signalStrength > .75d)
-                return SignalStrength.Great;
-
-            if (signalStrength > .5d)
-                return SignalStrength.Good;
-
-            if (signalStrength > .25d)
-                return SignalStrength.Moderate;
-
-            if (signalStrength > 0.01d)
-                return SignalStrength.Poor;
-
-            return SignalStrength.None;
-        }
-
         static void StopListeners()
         {
             if (listener == null)
@@ -79,6 +60,28 @@ namespace Xamarin.Essentials
                             break;
                     }
                 }
+            }
+        }
+
+        public static partial class WiFi
+        {
+            static SignalStrength PlatformSignalStrength()
+            {
+                var signalStrength = new NEHotspotNetwork().SignalStrength;
+
+                if (signalStrength > .75d)
+                    return SignalStrength.Great;
+
+                if (signalStrength > .5d)
+                    return SignalStrength.Good;
+
+                if (signalStrength > .25d)
+                    return SignalStrength.Moderate;
+
+                if (signalStrength > 0.01d)
+                    return SignalStrength.Poor;
+
+                return SignalStrength.None;
             }
         }
     }
