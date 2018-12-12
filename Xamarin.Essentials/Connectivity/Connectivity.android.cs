@@ -22,7 +22,7 @@ namespace Xamarin.Essentials
             Platform.AppContext.RegisterReceiver(conectivityReceiver, new IntentFilter(ConnectivityManager.ConnectivityAction));
         }
 
-        static SignalStrength PlatformSignalStrength()
+        static SignalStrength PlatformWiFiSignalStrength()
         {
             Permissions.EnsureDeclared(PermissionType.WifiState);
             try
@@ -41,12 +41,13 @@ namespace Xamarin.Essentials
                     case 0:
                         return SignalStrength.None;
                     case 1:
-                        return SignalStrength.Weak;
+                        return SignalStrength.Poor;
                     case 2:
+                        return SignalStrength.Moderate;
                     case 3:
-                        return SignalStrength.Fair;
+                        return SignalStrength.Good;
                     case 4:
-                        return SignalStrength.Strong;
+                        return SignalStrength.Great;
                     default:
                         Debug.WriteLine($"Invalid signal strength encountered: {signalLevel}");
                         return SignalStrength.Unknown;

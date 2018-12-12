@@ -17,4 +17,14 @@
         ConstrainedInternet = 3,
         Internet = 4
     }
+
+    public enum SignalStrength
+    {
+        Unknown = 0,
+        None = 1,
+        Poor = 2,
+        Moderate = 3,
+        Good = 4,
+        Great = 5
+    }
 }

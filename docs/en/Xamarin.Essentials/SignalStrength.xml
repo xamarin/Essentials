@@ -13,10 +13,44 @@
     <summary>Represents a signal strength if available or otherwise Unknown.</summary>
   </Docs>
   <Members>
-    <Member MemberName="Fair">
-      <MemberSignature Language="C#" Value="Fair" />
-      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Xamarin.Essentials.SignalStrength Fair = int32(3)" />
-      <MemberSignature Language="DocId" Value="F:Xamarin.Essentials.SignalStrength.Fair" />
+    <Member MemberName="Good">
+      <MemberSignature Language="C#" Value="Good" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Xamarin.Essentials.SignalStrength Good = int32(4)" />
+      <MemberSignature Language="DocId" Value="F:Xamarin.Essentials.SignalStrength.Good" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Xamarin.Essentials.SignalStrength</ReturnType>
+      </ReturnValue>
+      <MemberValue>4</MemberValue>
+      <Docs>
+        <summary>Good signal strength.</summary>
+      </Docs>
+    </Member>
+    <Member MemberName="Great">
+      <MemberSignature Language="C#" Value="Treat" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Xamarin.Essentials.SignalStrength Great = int32(5)" />
+      <MemberSignature Language="DocId" Value="F:Xamarin.Essentials.SignalStrength.Great" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Xamarin.Essentials.SignalStrength</ReturnType>
+      </ReturnValue>
+      <MemberValue>5</MemberValue>
+      <Docs>
+        <summary>Great signal strength.</summary>
+      </Docs>
+    </Member>
+    <Member MemberName="Moderate">
+      <MemberSignature Language="C#" Value="Moderate" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Xamarin.Essentials.SignalStrength Moderate = int32(3)" />
+      <MemberSignature Language="DocId" Value="F:Xamarin.Essentials.SignalStrength.Moderate" />
       <MemberType>Field</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -47,10 +81,10 @@
         <summary>No signal present or available.</summary>
       </Docs>
     </Member>
-    <Member MemberName="Strong">
-      <MemberSignature Language="C#" Value="Strong" />
-      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Xamarin.Essentials.SignalStrength Strong = int32(4)" />
-      <MemberSignature Language="DocId" Value="F:Xamarin.Essentials.SignalStrength.Strong" />
+    <Member MemberName="Poor">
+      <MemberSignature Language="C#" Value="Poor" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Xamarin.Essentials.SignalStrength Poor = int32(2)" />
+      <MemberSignature Language="DocId" Value="F:Xamarin.Essentials.SignalStrength.Poor" />
       <MemberType>Field</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -59,9 +93,9 @@
       <ReturnValue>
         <ReturnType>Xamarin.Essentials.SignalStrength</ReturnType>
       </ReturnValue>
-      <MemberValue>4</MemberValue>
+      <MemberValue>2</MemberValue>
       <Docs>
-        <summary>Good signal strength.</summary>
+        <summary>Poor signal present.</summary>
       </Docs>
     </Member>
     <Member MemberName="Unknown">
@@ -78,24 +112,7 @@
       </ReturnValue>
       <MemberValue>0</MemberValue>
       <Docs>
-        <summary>No information about wifi present or available.</summary>
-      </Docs>
-    </Member>
-    <Member MemberName="Weak">
-      <MemberSignature Language="C#" Value="Weak" />
-      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Xamarin.Essentials.SignalStrength Weak = int32(2)" />
-      <MemberSignature Language="DocId" Value="F:Xamarin.Essentials.SignalStrength.Weak" />
-      <MemberType>Field</MemberType>
-      <AssemblyInfo>
-        <AssemblyName>Xamarin.Essentials</AssemblyName>
-        <AssemblyVersion>1.0.0.0</AssemblyVersion>
-      </AssemblyInfo>
-      <ReturnValue>
-        <ReturnType>Xamarin.Essentials.SignalStrength</ReturnType>
-      </ReturnValue>
-      <MemberValue>2</MemberValue>
-      <Docs>
-        <summary>Weak signal strength.</summary>
+        <summary>No information about signal present or available.</summary>
       </Docs>
     </Member>
   </Members>

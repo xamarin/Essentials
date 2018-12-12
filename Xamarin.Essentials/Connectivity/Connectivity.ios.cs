@@ -14,24 +14,23 @@ namespace Xamarin.Essentials
             listener.ReachabilityChanged += OnConnectivityChanged;
         }
 
-        static SignalStrength PlatformSignalStrength()
+        static SignalStrength PlatformWiFiSignalStrength()
         {
-            var doubleSignalStrength = new NEHotspotNetwork().SignalStrength;
-            if (doubleSignalStrength < 0.01d)
-                return SignalStrength.None;
-            var signalstrength = (int)Math.Round(doubleSignalStrength * 3);
-            switch (signalstrength)
-            {
-                case 0:
-                case 1:
-                    return SignalStrength.Weak;
-                case 2:
-                    return SignalStrength.Fair;
-                case 3:
-                    return SignalStrength.Strong;
-                default:
-                    return SignalStrength.Unknown;
-            }
+            var signalStrength = new NEHotspotNetwork().SignalStrength;
+
+            if (signalStrength > .75d)
+                return SignalStrength.Great;
+
+            if (signalStrength > .5d)
+                return SignalStrength.Good;
+
+            if (signalStrength > .25d)
+                return SignalStrength.Moderate;
+
+            if (signalStrength > 0.01d)
+                return SignalStrength.Poor;
+
+            return SignalStrength.None;
         }
 
         static void StopListeners()

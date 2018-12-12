@@ -17,30 +17,34 @@ namespace Xamarin.Essentials
         static void StopListeners() =>
              NetworkInformation.NetworkStatusChanged -= NetworkStatusChanged;
 
-        static SignalStrength PlatformSignalStrength()
+        static SignalStrength PlatformWiFiSignalStrength()
         {
             var signalStrength = NetworkInformation.GetConnectionProfiles()
-                .Where(profile => profile != null && profile.IsWlanConnectionProfile)
+                .Where(profile => profile?.IsWlanConnectionProfile ?? false)
                 .Select(profile => profile.GetSignalBars())
                 .Where(signalBar => signalBar.HasValue)
                 .OrderBy(strength => strength)
                 .FirstOrDefault();
 
-            // Adding 1 to return value because 0 is Unknown and 1 is None. If we have a connection we receive at least 1 in return value
             if (!signalStrength.HasValue)
                 return SignalStrength.Unknown;
+
+            // An integer value within a range of 0-5 that corresponds to the number of signal bars displayed by the UI.
+            // https://docs.microsoft.com/en-us/uwp/api/windows.networking.connectivity.connectionprofile.getsignalbars#Windows_Networking_Connectivity_ConnectionProfile_GetSignalBars
+
             switch (signalStrength.Value)
             {
                 case 0:
                     return SignalStrength.None;
                 case 1:
-                    return SignalStrength.Weak;
+                    return SignalStrength.Poor;
                 case 2:
+                    return SignalStrength.Moderate;
                 case 3:
-                    return SignalStrength.Fair;
+                    return SignalStrength.Good;
                 case 4:
                 case 5:
-                    return SignalStrength.Strong;
+                    return SignalStrength.Great;
                 default:
                     Debug.WriteLine($"Invalid signal strength encountered: {signalStrength.Value}");
                     return SignalStrength.Unknown;

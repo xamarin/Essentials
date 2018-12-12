@@ -7,9 +7,9 @@ namespace Samples.ViewModel
         public string NetworkAccess =>
             Connectivity.NetworkAccess.ToString();
             
-        public string SignalStrength => Connectivity.WifiSignalStrength.ToString();
+        public string SignalStrength => Connectivity.WiFiSignalStrength.ToString();
 
-        public string Profiles =>
+        public string ConnectionProfiles =>
             string.Join("\n", Connectivity.ConnectionProfiles);
 
         public override void OnAppearing()
