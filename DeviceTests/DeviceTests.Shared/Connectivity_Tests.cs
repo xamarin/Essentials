@@ -13,5 +13,15 @@ namespace DeviceTests
         [Fact]
         public void ConnectionProfiles() =>
             Assert.True(Connectivity.ConnectionProfiles.Count() > 0);
+
+        [Fact]
+        public void WiFiSignale()
+        {
+            var strength = Connectivity.WiFi.SignalStrength;
+            if (Connectivity.ConnectionProfiles.Contains(ConnectionProfile.WiFi))
+                Assert.True(strength != SignalStrength.None && strength != SignalStrength.Unknown);
+            else
+                Assert.True(strength == SignalStrength.None || strength == SignalStrength.Unknown);
+        }
     }
 }
