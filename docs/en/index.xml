@@ -78,7 +78,7 @@
           <AttributeName>System.Runtime.Versioning.TargetFramework(".NETCore,Version=v5.0", FrameworkDisplayName=".NET for Windows Universal")</AttributeName>
         </Attribute>
         <Attribute>
-          <AttributeName>System.Reflection.AssemblyInformationalVersion("1.0.0+689991bc97bffdfd556692cb52574a204fd5b2a5")</AttributeName>
+          <AttributeName>System.Reflection.AssemblyInformationalVersion("1.0.0+3d8604958a17d93a1ea55d6a28378973952a2674")</AttributeName>
         </Attribute>
       </Attributes>
     </Assembly>
@@ -106,6 +106,7 @@
       <Type Name="CompassData" Kind="Structure" />
       <Type Name="ConnectionProfile" Kind="Enumeration" />
       <Type Name="Connectivity" Kind="Class" />
+      <Type Name="Connectivity+WiFi" Kind="Class" />
       <Type Name="ConnectivityChangedEventArgs" Kind="Class" />
       <Type Name="DeviceDisplay" Kind="Class" />
       <Type Name="DeviceIdiom" Kind="Structure" />

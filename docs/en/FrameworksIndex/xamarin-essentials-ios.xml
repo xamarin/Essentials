@@ -130,7 +130,9 @@
       <Member Id="E:Xamarin.Essentials.Connectivity.ConnectivityChanged" />
       <Member Id="P:Xamarin.Essentials.Connectivity.ConnectionProfiles" />
       <Member Id="P:Xamarin.Essentials.Connectivity.NetworkAccess" />
-      <Member Id="P:Xamarin.Essentials.Connectivity.WiFiSignalStrength" />
+    </Type>
+    <Type Name="Xamarin.Essentials.Connectivity/WiFi" Id="T:Xamarin.Essentials.Connectivity.WiFi">
+      <Member Id="P:Xamarin.Essentials.Connectivity.WiFi.SignalStrength" />
     </Type>
     <Type Name="Xamarin.Essentials.ConnectivityChangedEventArgs" Id="T:Xamarin.Essentials.ConnectivityChangedEventArgs">
       <Member Id="M:Xamarin.Essentials.ConnectivityChangedEventArgs.#ctor(Xamarin.Essentials.NetworkAccess,System.Collections.Generic.IEnumerable{Xamarin.Essentials.ConnectionProfile})" />
