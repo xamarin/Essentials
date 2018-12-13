@@ -15,7 +15,7 @@ namespace DeviceTests
             Assert.True(Connectivity.ConnectionProfiles.Count() > 0);
 
         [Fact]
-        public void WiFiSignale()
+        public void WiFiSignal()
         {
             var strength = Connectivity.WiFi.SignalStrength;
             if (Connectivity.ConnectionProfiles.Contains(ConnectionProfile.WiFi))
