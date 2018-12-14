@@ -5,10 +5,10 @@ namespace Xamarin.Essentials
 {
     public static class ColorExtensions
     {
-        public static WindowsColor ToWindowsColor(this Color color) =>
+        public static WindowsColor ToPlatformColor(this Color color) =>
                WindowsColor.FromArgb(color.A, color.R, color.G, color.B);
 
-        public static Color ToColor(this WindowsColor color) =>
+        public static Color ToSystemColor(this WindowsColor color) =>
             Color.FromArgb(color.A, color.R, color.G, color.B);
     }
 }

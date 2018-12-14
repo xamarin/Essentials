@@ -1,14 +1,21 @@
 ﻿using System.Drawing;
-using APoint = Android.Graphics.Point;
+using AndroidPoint = Android.Graphics.Point;
+using AndroidPointF = Android.Graphics.PointF;
 
 namespace Xamarin.Essentials
 {
     public static class PointExtensions
     {
-        public static Point ToPoint(this APoint point) =>
+        public static Point ToSystemPoint(this AndroidPoint point) =>
             new Point(point.X, point.Y);
 
-        public static APoint ToAndroidPoint(this Point point) =>
-            new APoint(point.X, point.Y);
+        public static AndroidPoint ToPlatformPoint(this Point point) =>
+            new AndroidPoint(point.X, point.Y);
+
+        public static PointF ToSystemPointF(this AndroidPointF point) =>
+            new PointF(point.X, point.Y);
+
+        public static AndroidPointF ToPlatformPointF(this Point point) =>
+            new AndroidPointF(point.X, point.Y);
     }
 }
