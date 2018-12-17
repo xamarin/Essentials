@@ -51,12 +51,12 @@ namespace Xamarin.Essentials
         }
 
         static void StartEnergySaverListeners()
-            => throw new PlatformNotSupportedException("This API is not currently supported on Tizen.");
+            => throw new FeatureNotSupportedException("This API is not currently supported on Tizen.");
 
         static void StopEnergySaverListeners()
-            => throw new PlatformNotSupportedException("This API is not currently supported on Tizen.");
+            => throw new FeatureNotSupportedException("This API is not currently supported on Tizen.");
 
         static EnergySaverStatus PlatformEnergySaverStatus
-            => throw new PlatformNotSupportedException("This API is not currently supported on Tizen.");
+            => throw new FeatureNotSupportedException("This API is not currently supported on Tizen.");
     }
 }
