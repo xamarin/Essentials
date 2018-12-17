@@ -80,12 +80,16 @@ namespace Xamarin.Essentials
         {
             static SignalStrength PlatformSignalStrength()
             {
-                var signalStrength = NetworkInformation.GetConnectionProfiles()
-                    .Where(profile => profile?.IsWlanConnectionProfile ?? false)
+                var wifiConnections = NetworkInformation.GetConnectionProfiles()
+                    .Where(profile => (profile?.IsWlanConnectionProfile ?? false) &&
+                    profile.GetNetworkConnectivityLevel() != NetworkConnectivityLevel.None);
+
+                var signalStrengths = wifiConnections
                     .Select(profile => profile.GetSignalBars())
                     .Where(signalBar => signalBar.HasValue)
-                    .OrderBy(strength => strength)
-                    .FirstOrDefault();
+                    .OrderByDescending(strength => strength);
+
+                var signalStrength = signalStrengths.FirstOrDefault();
 
                 if (!signalStrength.HasValue)
                     return SignalStrength.Unknown;
