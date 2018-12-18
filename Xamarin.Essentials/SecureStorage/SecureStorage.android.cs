@@ -26,7 +26,15 @@ namespace Xamarin.Essentials
             {
                 var encData = Convert.FromBase64String(encStr);
                 var ks = new AndroidKeyStore(context, Alias, AlwaysUseAsymmetricKeyStorage);
-                decryptedData = ks.Decrypt(encData);
+                try
+                {
+                    decryptedData = ks.Decrypt(encData);
+                }
+                catch (AEADBadTagException)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Unable to decrypt key, {key}, which is likely due to an app uninstall. Removing old key and returning null.");
+                    Remove(key);
+                }
             }
 
             return Task.FromResult(decryptedData);
@@ -80,13 +88,13 @@ namespace Xamarin.Essentials
             keyStore.Load(null);
         }
 
-        Context appContext;
-        string alias;
-        KeyStore keyStore;
-        bool alwaysUseAsymmetricKey;
+        readonly Context appContext;
+        readonly string alias;
+        readonly bool alwaysUseAsymmetricKey;
+        readonly string useSymmetricPreferenceKey = "essentials_use_symmetric";
 
+        KeyStore keyStore;
         bool useSymmetric = false;
-        string useSymmetricPreferenceKey = "essentials_use_symmetric";
 
         ISecretKey GetKey()
         {
@@ -114,24 +122,38 @@ namespace Xamarin.Essentials
 
             if (!string.IsNullOrEmpty(existingKeyStr))
             {
-                var wrappedKey = Convert.FromBase64String(existingKeyStr);
+                try
+                {
+                    var wrappedKey = Convert.FromBase64String(existingKeyStr);
 
-                var unwrappedKey = UnwrapKey(wrappedKey, keyPair.Private);
-                var kp = unwrappedKey.JavaCast<ISecretKey>();
+                    var unwrappedKey = UnwrapKey(wrappedKey, keyPair.Private);
+                    var kp = unwrappedKey.JavaCast<ISecretKey>();
 
-                return kp;
+                    return kp;
+                }
+                catch (InvalidKeyException ikEx)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Unable to unwrap key: Invalid Key. This may be caused by system backup or upgrades. All secure storage items will now be removed. {ikEx.Message}");
+                }
+                catch (IllegalBlockSizeException ibsEx)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Unable to unwrap key: Illegal Block Size. This may be caused by system backup or upgrades. All secure storage items will now be removed. {ibsEx.Message}");
+                }
+                catch (BadPaddingException paddingEx)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Unable to unwrap key: Bad Padding. This may be caused by system backup or upgrades. All secure storage items will now be removed. {paddingEx.Message}");
+                }
+                SecureStorage.RemoveAll();
             }
-            else
-            {
-                var keyGenerator = KeyGenerator.GetInstance(aesAlgorithm);
-                var defSymmetricKey = keyGenerator.GenerateKey();
 
-                var wrappedKey = WrapKey(defSymmetricKey, keyPair.Public);
+            var keyGenerator = KeyGenerator.GetInstance(aesAlgorithm);
+            var defSymmetricKey = keyGenerator.GenerateKey();
 
-                Preferences.Set(prefsMasterKey, Convert.ToBase64String(wrappedKey), alias);
+            var newWrappedKey = WrapKey(defSymmetricKey, keyPair.Public);
 
-                return defSymmetricKey;
-            }
+            Preferences.Set(prefsMasterKey, Convert.ToBase64String(newWrappedKey), alias);
+
+            return defSymmetricKey;
         }
 
         // API 23+ Only
@@ -172,27 +194,39 @@ namespace Xamarin.Essentials
             if (privateKey != null && publicKey != null)
                 return new KeyPair(publicKey, privateKey);
 
-            // Otherwise we create a new key
-            var generator = KeyPairGenerator.GetInstance(KeyProperties.KeyAlgorithmRsa, androidKeyStore);
+            var originalLocale = Platform.GetLocale();
+            try
+            {
+                // Force to english for known bug in date parsing:
+                // https://issuetracker.google.com/issues/37095309
+                Platform.SetLocale(Java.Util.Locale.English);
 
-            var end = DateTime.UtcNow.AddYears(20);
-            var startDate = new Java.Util.Date();
+                // Otherwise we create a new key
+                var generator = KeyPairGenerator.GetInstance(KeyProperties.KeyAlgorithmRsa, androidKeyStore);
+
+                var end = DateTime.UtcNow.AddYears(20);
+                var startDate = new Java.Util.Date();
 #pragma warning disable CS0618 // Type or member is obsolete
-            var endDate = new Java.Util.Date(end.Year, end.Month, end.Day);
+                var endDate = new Java.Util.Date(end.Year, end.Month, end.Day);
 #pragma warning restore CS0618 // Type or member is obsolete
 
 #pragma warning disable CS0618
-            var builder = new KeyPairGeneratorSpec.Builder(Platform.AppContext)
-                .SetAlias(asymmetricAlias)
-                .SetSerialNumber(Java.Math.BigInteger.One)
-                .SetSubject(new Javax.Security.Auth.X500.X500Principal($"CN={asymmetricAlias} CA Certificate"))
-                .SetStartDate(startDate)
-                .SetEndDate(endDate);
+                var builder = new KeyPairGeneratorSpec.Builder(Platform.AppContext)
+                    .SetAlias(asymmetricAlias)
+                    .SetSerialNumber(Java.Math.BigInteger.One)
+                    .SetSubject(new Javax.Security.Auth.X500.X500Principal($"CN={asymmetricAlias} CA Certificate"))
+                    .SetStartDate(startDate)
+                    .SetEndDate(endDate);
 
-            generator.Initialize(builder.Build());
+                generator.Initialize(builder.Build());
 #pragma warning restore CS0618
 
-            return generator.GenerateKeyPair();
+                return generator.GenerateKeyPair();
+            }
+            finally
+            {
+                Platform.SetLocale(originalLocale);
+            }
         }
 
         byte[] WrapKey(IKey keyToWrap, IKey withKey)
@@ -216,6 +250,7 @@ namespace Xamarin.Essentials
 
             // Generate initialization vector
             var iv = new byte[initializationVectorLen];
+
             var sr = new SecureRandom();
             sr.NextBytes(iv);
 
@@ -227,7 +262,7 @@ namespace Xamarin.Essentials
                 cipher = Cipher.GetInstance(cipherTransformationSymmetric);
                 cipher.Init(CipherMode.EncryptMode, key, new GCMParameterSpec(128, iv));
             }
-            catch (Java.Security.InvalidAlgorithmParameterException)
+            catch (InvalidAlgorithmParameterException)
             {
                 // If we encounter this error, it's likely an old bouncycastle provider version
                 // is being used which does not recognize GCMParameterSpec, but should work
@@ -268,7 +303,7 @@ namespace Xamarin.Essentials
                 cipher = Cipher.GetInstance(cipherTransformationSymmetric);
                 cipher.Init(CipherMode.DecryptMode, key, new GCMParameterSpec(128, iv));
             }
-            catch (Java.Security.InvalidAlgorithmParameterException)
+            catch (InvalidAlgorithmParameterException)
             {
                 // If we encounter this error, it's likely an old bouncycastle provider version
                 // is being used which does not recognize GCMParameterSpec, but should work

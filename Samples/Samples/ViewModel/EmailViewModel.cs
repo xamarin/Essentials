@@ -17,6 +17,7 @@ namespace Samples.ViewModel
         string recipientsBcc;
         string attachmentContents;
         string attachmentName;
+        bool isHtml;
 
         public EmailViewModel()
         {
@@ -67,6 +68,12 @@ namespace Samples.ViewModel
             set => SetProperty(ref attachmentName, value);
         }
 
+        public bool IsHtml
+        {
+            get => isHtml;
+            set => SetProperty(ref isHtml, value);
+        }
+
         async void OnSendEmail()
         {
             if (IsBusy)
@@ -79,6 +86,7 @@ namespace Samples.ViewModel
                 {
                     Subject = Subject,
                     Body = Body,
+                    BodyFormat = isHtml ? EmailBodyFormat.Html : EmailBodyFormat.PlainText,
                     To = Split(RecipientsTo),
                     Cc = Split(RecipientsCc),
                     Bcc = Split(RecipientsBcc),
