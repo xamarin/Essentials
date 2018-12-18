@@ -9,13 +9,13 @@ namespace Xamarin.Essentials
         public static Point ToSystemPoint(this AndroidPoint point) =>
             new Point(point.X, point.Y);
 
-        public static AndroidPoint ToPlatformPoint(this Point point) =>
-            new AndroidPoint(point.X, point.Y);
-
         public static PointF ToSystemPointF(this AndroidPointF point) =>
             new PointF(point.X, point.Y);
 
-        public static AndroidPointF ToPlatformPointF(this Point point) =>
+        public static AndroidPoint ToPlatformPoint(this Point point) =>
+            new AndroidPoint(point.X, point.Y);
+
+        public static AndroidPointF ToPlatformPointF(this PointF point) =>
             new AndroidPointF(point.X, point.Y);
     }
 }
