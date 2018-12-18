@@ -45,7 +45,7 @@
       <ReturnValue>
         <ReturnType>Xamarin.Essentials.NavigationMode</ReturnType>
       </ReturnValue>
-      <MemberValue>2</MemberValue>
+      <MemberValue>1</MemberValue>
       <Docs>
         <summary>The default navigation mode on the platform.</summary>
       </Docs>

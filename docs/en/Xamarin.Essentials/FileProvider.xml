@@ -15,7 +15,7 @@
       <AttributeName>Android.App.MetaData("android.support.FILE_PROVIDER_PATHS", Resource="@xml/xamarin_essentials_fileprovider_file_paths")</AttributeName>
     </Attribute>
     <Attribute FrameworkAlternate="xamarin-essentials-android">
-      <AttributeName>Android.Content.ContentProvider(Mono.Cecil.CustomAttributeArgument[], Exported=false, GrantUriPermissions=true, Name="xamarin.essentials.fileProvider")</AttributeName>
+      <AttributeName>Android.Content.ContentProvider(new System.String[] { "${applicationId}.fileProvider" }, Exported=false, GrantUriPermissions=true, Name="xamarin.essentials.fileProvider")</AttributeName>
     </Attribute>
   </Attributes>
   <Docs>
