@@ -4,7 +4,7 @@ using System.Text;
 using Xamarin.Essentials;
 using Xunit;
 
-namespace Tests
+namespace DeviceTests
 {
     public class Color_Tests
     {

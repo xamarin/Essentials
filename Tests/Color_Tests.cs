@@ -94,6 +94,17 @@ namespace Tests
         }
 
         [Fact]
+        public void WithAlpha()
+        {
+            var color = Color.FromArgb(r, g, b);
+            color = color.WithAlpha(10);
+            Assert.Equal(10, color.A);
+            Assert.Equal(r, color.R);
+            Assert.Equal(g, color.G);
+            Assert.Equal(b, color.B);
+        }
+
+        [Fact]
         public void WithSaturation()
         {
             var color = Color.FromArgb(r, g, b);

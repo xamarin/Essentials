@@ -33,6 +33,9 @@ namespace Xamarin.Essentials
             return Color.FromArgb(color.A, r, g, b);
         }
 
+        public static Color WithAlpha(this Color color, int alpha) =>
+            Color.FromArgb(alpha, color.R, color.G, color.B);
+
         public static Color WithLuminosity(this Color color, float luminosity)
         {
             ColorConverters.ConvertToHsl(color.R / 255f, color.G / 255f, color.B / 255f, out var h, out var s, out var l);
