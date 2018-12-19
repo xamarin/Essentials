@@ -19,9 +19,16 @@ namespace DeviceTests
         {
             var strength = Connectivity.WiFi.SignalStrength;
             if (Connectivity.ConnectionProfiles.Contains(ConnectionProfile.WiFi))
-                Assert.True(strength != SignalStrength.None && strength != SignalStrength.Unknown);
+            {
+                if (DeviceInfo.Platform == DevicePlatform.iOS)
+                    Assert.True(strength == SignalStrength.Unknown);
+                else
+                    Assert.True(strength != SignalStrength.None && strength != SignalStrength.Unknown);
+            }
             else
-                Assert.True(strength == SignalStrength.None || strength == SignalStrength.Unknown);
+            {
+                Assert.True(strength == SignalStrength.None);
+            }
         }
     }
 }

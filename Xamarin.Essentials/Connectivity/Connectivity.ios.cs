@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NetworkExtension;
 
 namespace Xamarin.Essentials
@@ -67,19 +68,8 @@ namespace Xamarin.Essentials
         {
             static SignalStrength PlatformSignalStrength()
             {
-                var signalStrength = new NEHotspotNetwork().SignalStrength;
-
-                if (signalStrength > .75d)
-                    return SignalStrength.Great;
-
-                if (signalStrength > .5d)
-                    return SignalStrength.Good;
-
-                if (signalStrength > .25d)
-                    return SignalStrength.Moderate;
-
-                if (signalStrength > 0.01d)
-                    return SignalStrength.Poor;
+                if (PlatformConnectionProfiles.Contains(ConnectionProfile.WiFi))
+                    return SignalStrength.Unknown;
 
                 return SignalStrength.None;
             }
