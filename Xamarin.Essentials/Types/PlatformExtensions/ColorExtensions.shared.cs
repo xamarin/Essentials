@@ -6,16 +6,16 @@ namespace Xamarin.Essentials
 {
     public static partial class ColorExtensions
     {
-        public static Color MultiplyAlpha(this Color color, float alpha)
+        public static Color MultiplyAlpha(this Color color, float percentage)
         {
-            return Color.FromArgb((int)(color.A * alpha), color.R, color.G, color.B);
+            return Color.FromArgb((int)(color.A * percentage), color.R, color.G, color.B);
         }
 
         public static Color AddLuminosity(this Color color, float delta)
         {
             ColorConverters.ConvertToHsl(color.R / 255f, color.G / 255f, color.B / 255f, out var h, out var s, out var l);
             var newL = l + delta;
-            ColorConverters.ConvertToRgb(h, s, (float)newL, out var r, out var g, out var b);
+            ColorConverters.ConvertToRgb(h, s, newL, out var r, out var g, out var b);
             return Color.FromArgb(color.A, r, g, b);
         }
 
