@@ -21,10 +21,10 @@ namespace DeviceTests
 
 #if __IOS__
             platform.GetRGBA(out var red, out var green, out var blue, out var alpha);
-            Assert.Equal(a, (byte)alpha);
-            Assert.Equal(r, (byte)red);
-            Assert.Equal(g, (byte)green);
-            Assert.Equal(b, (byte)blue);
+            Assert.Equal(a, (byte)(alpha * 255));
+            Assert.Equal(r, (byte)(red * 255));
+            Assert.Equal(g, (byte)(green * 255));
+            Assert.Equal(b, (byte)(blue * 255));
 #else
             Assert.Equal(a, platform.A);
             Assert.Equal(r, platform.R);
