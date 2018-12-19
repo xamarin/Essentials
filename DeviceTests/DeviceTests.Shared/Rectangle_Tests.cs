@@ -39,7 +39,7 @@ namespace DeviceTests
 #if __IOS__
             var platform = new CoreGraphics.CGRect(x, y, width, height);
 #elif __ANDROID__
-            var platform = new Android.Graphics.Rect(x, y, width, height);
+            var platform = new Android.Graphics.Rect(x, y, x + width, y + height);
 #else
             var platform = new Windows.Foundation.Rect(x, y, width, height);
 #endif
@@ -47,8 +47,8 @@ namespace DeviceTests
 
             Assert.Equal(x, system.X);
             Assert.Equal(y, system.Y);
-            Assert.Equal(width, system.X);
-            Assert.Equal(height, system.Y);
+            Assert.Equal(width, system.Width);
+            Assert.Equal(height, system.Height);
         }
 
         [Theory]
@@ -92,7 +92,7 @@ namespace DeviceTests
 #if __IOS__
             var platform = new CoreGraphics.CGRect(x, y, width, height);
 #elif __ANDROID__
-            var platform = new Android.Graphics.RectF(x, y, width, height);
+            var platform = new Android.Graphics.RectF(x, y, x + width, y + height);
 #else
             var platform = new Windows.Foundation.Rect(x, y, width, height);
 #endif
@@ -100,8 +100,8 @@ namespace DeviceTests
             var system = platform.ToSystemRectangleF();
             Assert.Equal(x, system.X);
             Assert.Equal(y, system.Y);
-            Assert.Equal(width, system.X);
-            Assert.Equal(height, system.Y);
+            Assert.Equal(width, system.Width);
+            Assert.Equal(height, system.Height);
         }
     }
 }
