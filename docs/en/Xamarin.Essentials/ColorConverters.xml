@@ -13,8 +13,7 @@
   <Docs>
     <summary>Contains several helper methods to convert System.Drawing.Color</summary>
     <remarks>
-      <para>
-      </para>
+      <para></para>
     </remarks>
   </Docs>
   <Members>
@@ -38,8 +37,7 @@
         <summary>Creates a new Color from a Hex string.</summary>
         <returns>A color from the Hex string.</returns>
         <remarks>
-          <para>
-          </para>
+          <para></para>
         </remarks>
       </Docs>
     </Member>

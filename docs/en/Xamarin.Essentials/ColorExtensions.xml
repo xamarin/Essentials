@@ -38,7 +38,7 @@
         <param name="delta">The delta to add to the current luminosity.</param>
         <summary>Adds luminosity to the existing color</summary>
         <returns>The new color.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="MultiplyAlpha">
@@ -62,7 +62,7 @@
         <param name="percentage">The percentage from 0-1f</param>
         <summary>Multiplies the current alpha by a percentage (0-1f)</summary>
         <returns>The new color.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ToPlatformColor">
@@ -84,7 +84,7 @@
         <param name="color">The color to use as a base.</param>
         <summary>Converts the color to the platform specific color.</summary>
         <returns>The platform color.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ToPlatformColor">
@@ -106,7 +106,29 @@
         <param name="color">The color to use as a base.</param>
         <summary>Converts the color to the platform specific color.</summary>
         <returns>The platform color.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToPlatformColor">
+      <MemberSignature Language="C#" Value="public static Windows.UI.Color ToPlatformColor (this System.Drawing.Color color);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype Windows.UI.Color ToPlatformColor(valuetype System.Drawing.Color color) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.ColorExtensions.ToPlatformColor(System.Drawing.Color)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Windows.UI.Color</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="color" Type="System.Drawing.Color" RefType="this" />
+      </Parameters>
+      <Docs>
+        <param name="color">The color to use as a base.</param>
+        <summary>Converts the color to the platform specific color.</summary>
+        <returns>The platform color.</returns>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ToSystemColor">
@@ -128,7 +150,7 @@
         <param name="color">The color to use as a base.</param>
         <summary>Converts the color to the system specific color.</summary>
         <returns>The system color.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ToSystemColor">
@@ -150,7 +172,29 @@
         <param name="color">The color to use as a base.</param>
         <summary>Converts the color to the system specific color.</summary>
         <returns>The system color.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToSystemColor">
+      <MemberSignature Language="C#" Value="public static System.Drawing.Color ToSystemColor (this Windows.UI.Color color);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.Drawing.Color ToSystemColor(valuetype Windows.UI.Color color) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.ColorExtensions.ToSystemColor(Windows.UI.Color)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Drawing.Color</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="color" Type="Windows.UI.Color" RefType="this" />
+      </Parameters>
+      <Docs>
+        <param name="color">The color to use as a base.</param>
+        <summary>Converts the color to the system specific color.</summary>
+        <returns>The system color.</returns>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ToUInt">
@@ -172,7 +216,7 @@
         <param name="color">The color to use as a base.</param>
         <summary>Converts the color to a UInt representation.</summary>
         <returns>The UInt representation.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="WithAlpha">
@@ -196,7 +240,7 @@
         <param name="alpha">The alpha to set 0-255.</param>
         <summary>Creates a new color based on this color, but with a new alpha (0-255).</summary>
         <returns>The new color.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="WithHue">
@@ -220,7 +264,7 @@
         <param name="hue">The hue to set 0-360.</param>
         <summary>Creates a new color based on this color, but with a new hue (0-360).</summary>
         <returns>The new color.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="WithLuminosity">
@@ -244,7 +288,7 @@
         <param name="luminosity">The luminosity to set 0-100.</param>
         <summary>Creates a new color based on this color, but with a new luminosity (0-100).</summary>
         <returns>The new color.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="WithSaturation">
@@ -268,7 +312,7 @@
         <param name="saturation">The saturation to set 0-100.</param>
         <summary>Creates a new color based on this color, but with a new saturation (0-100).</summary>
         <returns>The new color.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
   </Members>

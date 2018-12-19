@@ -36,7 +36,7 @@
         <param name="size">Base size to convert.</param>
         <summary>Convert to platform Size.</summary>
         <returns>Converted size.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ToPlatformSize">
@@ -58,7 +58,29 @@
         <param name="size">Base size to convert.</param>
         <summary>Convert to platform Size.</summary>
         <returns>Converted size.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToPlatformSize">
+      <MemberSignature Language="C#" Value="public static Windows.Foundation.Size ToPlatformSize (this System.Drawing.Size size);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype Windows.Foundation.Size ToPlatformSize(valuetype System.Drawing.Size size) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SizeExtensions.ToPlatformSize(System.Drawing.Size)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Windows.Foundation.Size</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="size" Type="System.Drawing.Size" RefType="this" />
+      </Parameters>
+      <Docs>
+        <param name="size">Base size to convert.</param>
+        <summary>Convert to platform Size.</summary>
+        <returns>Converted size.</returns>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ToPlatformSize">
@@ -80,7 +102,29 @@
         <param name="size">Base size to convert.</param>
         <summary>Convert to platform Size.</summary>
         <returns>Converted size.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToPlatformSize">
+      <MemberSignature Language="C#" Value="public static Windows.Foundation.Size ToPlatformSize (this System.Drawing.SizeF size);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype Windows.Foundation.Size ToPlatformSize(valuetype System.Drawing.SizeF size) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SizeExtensions.ToPlatformSize(System.Drawing.SizeF)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Windows.Foundation.Size</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="size" Type="System.Drawing.SizeF" RefType="this" />
+      </Parameters>
+      <Docs>
+        <param name="size">Base size to convert.</param>
+        <summary>Convert to platform Size.</summary>
+        <returns>Converted size.</returns>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ToPlatformSizeF">
@@ -102,7 +146,7 @@
         <param name="size">Base size to convert.</param>
         <summary>Convert to platform SizeF.</summary>
         <returns>Converted size.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ToSystemSize">
@@ -124,7 +168,7 @@
         <param name="size">Base size to convert.</param>
         <summary>Convert to system Size.</summary>
         <returns>Converted size.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ToSystemSize">
@@ -146,7 +190,29 @@
         <param name="size">Base size to convert.</param>
         <summary>Convert to system Size.</summary>
         <returns>Converted size.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToSystemSize">
+      <MemberSignature Language="C#" Value="public static System.Drawing.Size ToSystemSize (this Windows.Foundation.Size size);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.Drawing.Size ToSystemSize(valuetype Windows.Foundation.Size size) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SizeExtensions.ToSystemSize(Windows.Foundation.Size)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Drawing.Size</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="size" Type="Windows.Foundation.Size" RefType="this" />
+      </Parameters>
+      <Docs>
+        <param name="size">Base size to convert.</param>
+        <summary>Convert to system Size.</summary>
+        <returns>Converted size.</returns>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ToSystemSizeF">
@@ -168,7 +234,7 @@
         <param name="size">Base size to convert.</param>
         <summary>Convert to system SizeF.</summary>
         <returns>Converted size.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ToSystemSizeF">
@@ -190,7 +256,29 @@
         <param name="size">Base size to convert.</param>
         <summary>Convert to system SizeF.</summary>
         <returns>Converted size.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToSystemSizFe">
+      <MemberSignature Language="C#" Value="public static System.Drawing.SizeF ToSystemSizFe (this Windows.Foundation.Size size);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.Drawing.SizeF ToSystemSizFe(valuetype Windows.Foundation.Size size) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SizeExtensions.ToSystemSizFe(Windows.Foundation.Size)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Drawing.SizeF</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="size" Type="Windows.Foundation.Size" RefType="this" />
+      </Parameters>
+      <Docs>
+        <param name="size">Base size to convert.</param>
+        <summary>Convert to system SizeF.</summary>
+        <returns>Converted size.</returns>
+        <remarks></remarks>
       </Docs>
     </Member>
   </Members>

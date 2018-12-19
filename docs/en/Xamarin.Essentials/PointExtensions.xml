@@ -37,8 +37,7 @@
         <summary>Converts the point ot the platform representation.</summary>
         <returns>The converted point.</returns>
         <remarks>
-          <para>
-          </para>
+          <para></para>
         </remarks>
       </Docs>
     </Member>
@@ -61,7 +60,29 @@
         <param name="point">The point to convert.</param>
         <summary>Converts the point ot the platform representation.</summary>
         <returns>The converted point.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToPlatformPoint">
+      <MemberSignature Language="C#" Value="public static Windows.Foundation.Point ToPlatformPoint (this System.Drawing.Point point);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype Windows.Foundation.Point ToPlatformPoint(valuetype System.Drawing.Point point) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.PointExtensions.ToPlatformPoint(System.Drawing.Point)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Windows.Foundation.Point</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="point" Type="System.Drawing.Point" RefType="this" />
+      </Parameters>
+      <Docs>
+        <param name="point">The point to convert.</param>
+        <summary>Converts the point ot the platform representation.</summary>
+        <returns>The converted point.</returns>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ToPlatformPoint">
@@ -83,7 +104,29 @@
         <param name="point">The point to convert.</param>
         <summary>Converts the point ot the platform representation.</summary>
         <returns>The converted point.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToPlatformPoint">
+      <MemberSignature Language="C#" Value="public static Windows.Foundation.Point ToPlatformPoint (this System.Drawing.PointF point);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype Windows.Foundation.Point ToPlatformPoint(valuetype System.Drawing.PointF point) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.PointExtensions.ToPlatformPoint(System.Drawing.PointF)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Windows.Foundation.Point</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="point" Type="System.Drawing.PointF" RefType="this" />
+      </Parameters>
+      <Docs>
+        <param name="point">The point to convert.</param>
+        <summary>Converts the point ot the platform representation.</summary>
+        <returns>The converted point.</returns>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ToPlatformPointF">
@@ -105,7 +148,7 @@
         <param name="point">The point to convert.</param>
         <summary>Converts the point ot the platform representation.</summary>
         <returns>The converted point.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ToSystemPoint">
@@ -127,7 +170,7 @@
         <param name="point">The point to convert.</param>
         <summary>Converts the point ot the system representation.</summary>
         <returns>The converted point.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ToSystemPoint">
@@ -149,7 +192,29 @@
         <param name="point">The point to convert.</param>
         <summary>Converts the point ot the system representation.</summary>
         <returns>The converted point.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToSystemPoint">
+      <MemberSignature Language="C#" Value="public static System.Drawing.Point ToSystemPoint (this Windows.Foundation.Point point);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.Drawing.Point ToSystemPoint(valuetype Windows.Foundation.Point point) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.PointExtensions.ToSystemPoint(Windows.Foundation.Point)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Drawing.Point</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="point" Type="Windows.Foundation.Point" RefType="this" />
+      </Parameters>
+      <Docs>
+        <param name="point">The point to convert.</param>
+        <summary>Converts the point ot the system representation.</summary>
+        <returns>The converted point.</returns>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ToSystemPointF">
@@ -171,7 +236,7 @@
         <param name="point">The point to convert.</param>
         <summary>Converts the point ot the system representation.</summary>
         <returns>The converted point.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ToSystemPointF">
@@ -193,7 +258,29 @@
         <param name="point">The point to convert.</param>
         <summary>Converts the point ot the system representation.</summary>
         <returns>The converted point.</returns>
-        <remarks>To be added.</remarks>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToSystemPointF">
+      <MemberSignature Language="C#" Value="public static System.Drawing.PointF ToSystemPointF (this Windows.Foundation.Point point);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype System.Drawing.PointF ToSystemPointF(valuetype Windows.Foundation.Point point) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.PointExtensions.ToSystemPointF(Windows.Foundation.Point)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Drawing.PointF</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="point" Type="Windows.Foundation.Point" RefType="this" />
+      </Parameters>
+      <Docs>
+        <param name="point">The point to convert.</param>
+        <summary>Converts the point ot the system representation.</summary>
+        <returns>The converted point.</returns>
+        <remarks></remarks>
       </Docs>
     </Member>
   </Members>
