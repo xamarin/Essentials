@@ -38,7 +38,7 @@ namespace Xamarin.Essentials
             // if we need permission, then check
             // if we can fall back, then don't throw
             var externalOnly = TemporaryLocation == FileProviderLocation.External;
-            var hasPermission = Platform.HasApiLevel(BuildVersionCodes.Kitkat) || Permissions.EnsureDeclared(PermissionType.ExternalStorage, externalOnly);
+            var hasPermission = Platform.HasApiLevel(BuildVersionCodes.Kitkat) || Permissions.EnsureDeclared(PermissionType.WriteExternalStorage, externalOnly);
 
             // make sure the external storage is available
             var hasExternalMedia = Platform.HasApiLevel(BuildVersionCodes.Lollipop)
