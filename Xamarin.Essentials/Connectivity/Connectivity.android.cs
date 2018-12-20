@@ -63,10 +63,10 @@ namespace Xamarin.Essentials
                                     continue;
 
                                 var info = manager.GetNetworkInfo(network);
-                                
+
                                 if (info == null || !info.IsAvailable)
                                     continue;
-                                
+
                                 // Check to see if it has the internet capability
                                 if (!capabilities.HasCapability(NetCapability.Internet))
                                 {
@@ -74,7 +74,7 @@ namespace Xamarin.Essentials
                                     currentAccess = IsBetterAccess(currentAccess, NetworkAccess.Local);
                                     continue;
                                 }
-                                
+
                                 ProcessNetworkInfo(info);
                             }
                             catch
