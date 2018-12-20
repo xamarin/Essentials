@@ -65,17 +65,28 @@ namespace Xamarin.Essentials
 
         internal static AndroidUri GetShareableFileUri(string filename)
         {
-            var rootDir = FileProvider.GetTemporaryDirectory();
+            Java.IO.File sharedFile;
+            if (FileProvider.IsFileInPublicLocation(filename))
+            {
+                // we are sharing a file in a "shared/public" location
+                sharedFile = new Java.IO.File(filename);
+            }
+            else
+            {
+                var rootDir = FileProvider.GetTemporaryDirectory();
 
-            // create a unique directory just in case there are multiple file with the same name
-            var tmpDir = new Java.IO.File(rootDir, Guid.NewGuid().ToString("N"));
-            tmpDir.Mkdirs();
-            tmpDir.DeleteOnExit();
+                // create a unique directory just in case there are multiple file with the same name
+                var tmpDir = new Java.IO.File(rootDir, Guid.NewGuid().ToString("N"));
+                tmpDir.Mkdirs();
+                tmpDir.DeleteOnExit();
 
-            // create the new temprary file
-            var tmpFile = new Java.IO.File(tmpDir, System.IO.Path.GetFileName(filename));
-            System.IO.File.Copy(filename, tmpFile.AbsolutePath);
-            tmpFile.DeleteOnExit();
+                // create the new temprary file
+                var tmpFile = new Java.IO.File(tmpDir, System.IO.Path.GetFileName(filename));
+                System.IO.File.Copy(filename, tmpFile.CanonicalPath);
+                tmpFile.DeleteOnExit();
+
+                sharedFile = tmpFile;
+            }
 
             // create the uri
             if (HasApiLevel(BuildVersionCodes.N))
@@ -84,7 +95,7 @@ namespace Xamarin.Essentials
                 return FileProvider.GetUriForFile(
                     AppContext.ApplicationContext,
                     providerAuthority,
-                    tmpFile);
+                    sharedFile);
             }
             else
             {

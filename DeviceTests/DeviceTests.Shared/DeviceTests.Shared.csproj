@@ -51,6 +51,7 @@
     <PackageReference Include="Xamarin.Android.Support.v7.CardView" Version="27.0.2.1" />
     <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="27.0.2.1" />
     <PackageReference Include="Xamarin.Android.Support.CustomTabs" Version="27.0.2.1" />
+    <PackageReference Include="Xamarin.Android.Support.Compat" Version="27.0.2.1" />
     <PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="27.0.2.1" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors" />
