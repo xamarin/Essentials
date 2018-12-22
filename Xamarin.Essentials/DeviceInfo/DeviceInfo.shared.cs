@@ -19,6 +19,50 @@ namespace Xamarin.Essentials
         public static DeviceIdiom Idiom => GetIdiom();
 
         public static DeviceType DeviceType => GetDeviceType();
+
+        const double accelerationThreshold = 2;
+
+        const int shakenInterval = 500;
+
+        static bool shakenLister;
+
+        static DateTime shakenTimeSpan = DateTime.Now;
+
+        public static bool ShakenLister
+        {
+            get => shakenLister;
+            set
+            {
+                if (shakenLister != value)
+                {
+                    if (value)
+                    {
+                        Accelerometer.Start(SensorSpeed.Default);
+                        Accelerometer.ReadingChanged += Accelerometer_ReadingChanged;
+                    }
+                    else
+                    {
+                        Accelerometer.ReadingChanged -= Accelerometer_ReadingChanged;
+                        Accelerometer.Stop();
+                    }
+                }
+                shakenLister = value;
+            }
+        }
+
+        static void Accelerometer_ReadingChanged(object sender, AccelerometerChangedEventArgs e)
+        {
+            var g = Math.Round(e.Reading.Acceleration.X.Square() + e.Reading.Acceleration.Y.Square() + e.Reading.Acceleration.Z.Square());
+            if (g > accelerationThreshold && DateTime.Now.Subtract(shakenTimeSpan).Milliseconds > shakenInterval)
+            {
+                shakenTimeSpan = DateTime.Now;
+                Shaken?.Invoke(null, EventArgs.Empty);
+            }
+        }
+
+        static double Square(this float q) => q * q;
+
+        public static event EventHandler Shaken;
     }
 
     public enum DeviceType
