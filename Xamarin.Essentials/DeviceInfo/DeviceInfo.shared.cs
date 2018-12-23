@@ -56,13 +56,13 @@ namespace Xamarin.Essentials
             if (g > accelerationThreshold && DateTime.Now.Subtract(shakenTimeSpan).Milliseconds > shakenInterval)
             {
                 shakenTimeSpan = DateTime.Now;
-                Shaken?.Invoke(null, EventArgs.Empty);
+                OnShaked?.Invoke(null, EventArgs.Empty);
             }
         }
 
         static double Square(this float q) => q * q;
 
-        public static event EventHandler Shaken;
+        public static event EventHandler OnShaked;
     }
 
     public enum DeviceType

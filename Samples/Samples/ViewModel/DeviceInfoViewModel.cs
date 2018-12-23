@@ -35,7 +35,7 @@ namespace Samples.ViewModel
             DeviceDisplay.MainDisplayInfoChanged += OnScreenMetricsChanged;
             ScreenMetrics = DeviceDisplay.MainDisplayInfo;
             DeviceInfo.ShakenLister = true;
-            DeviceInfo.Shaken += DeviceInfo_Shaken;
+            DeviceInfo.OnShaked += DeviceInfo_Shaken;
             await DisplayAlertAsync("This page detect when device shaked!");
         }
 
@@ -48,7 +48,7 @@ namespace Samples.ViewModel
         {
             DeviceDisplay.MainDisplayInfoChanged -= OnScreenMetricsChanged;
             DeviceInfo.ShakenLister = true;
-            DeviceInfo.Shaken -= DeviceInfo_Shaken;
+            DeviceInfo.OnShaked -= DeviceInfo_Shaken;
 
             base.OnDisappearing();
         }
