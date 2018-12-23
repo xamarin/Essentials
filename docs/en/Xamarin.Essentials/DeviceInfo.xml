@@ -1,6 +1,6 @@
 <Type Name="DeviceInfo" FullName="Xamarin.Essentials.DeviceInfo">
   <TypeSignature Language="C#" Value="public static class DeviceInfo" />
-  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract sealed DeviceInfo extends System.Object" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract sealed beforefieldinit DeviceInfo extends System.Object" />
   <TypeSignature Language="DocId" Value="T:Xamarin.Essentials.DeviceInfo" />
   <AssemblyInfo>
     <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -13,7 +13,8 @@
   <Docs>
     <summary>Represents information about the device.</summary>
     <remarks>
-      <para></para>
+      <para>
+      </para>
     </remarks>
   </Docs>
   <Members>
@@ -117,6 +118,25 @@
         </remarks>
       </Docs>
     </Member>
+    <Member MemberName="OnShaked">
+      <MemberSignature Language="C#" Value="public static event EventHandler OnShaked;" />
+      <MemberSignature Language="ILAsm" Value=".event class System.EventHandler OnShaked" />
+      <MemberSignature Language="DocId" Value="E:Xamarin.Essentials.DeviceInfo.OnShaked" />
+      <MemberType>Event</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.EventHandler</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Event triggered when reading of sensor changes.</summary>
+        <remarks>
+           <para />
+        </remarks>
+      </Docs>
+    </Member>
     <Member MemberName="Platform">
       <MemberSignature Language="C#" Value="public static Xamarin.Essentials.DevicePlatform Platform { get; }" />
       <MemberSignature Language="ILAsm" Value=".property valuetype Xamarin.Essentials.DevicePlatform Platform" />
@@ -135,6 +155,24 @@
         <remarks>
           <para />
         </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ShakenLister">
+      <MemberSignature Language="C#" Value="public static bool ShakenLister { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property bool ShakenLister" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.DeviceInfo.ShakenLister" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Gets if shake event is being monitored.</summary>
+        <value>If listening.</value>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="Version">
@@ -173,7 +211,8 @@
         <summary>Gets the version of the operating system.</summary>
         <value>The version of the operating system.</value>
         <remarks>
-          <para></para>
+          <para>
+          </para>
         </remarks>
       </Docs>
     </Member>
