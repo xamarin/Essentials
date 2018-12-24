@@ -28,15 +28,12 @@ namespace Samples.ViewModel
             set => SetProperty(ref screenMetrics, value);
         }
 
-        public async override void OnAppearing()
+        public override void OnAppearing()
         {
             base.OnAppearing();
 
             DeviceDisplay.MainDisplayInfoChanged += OnScreenMetricsChanged;
             ScreenMetrics = DeviceDisplay.MainDisplayInfo;
-            DeviceInfo.ShakenLister = true;
-            DeviceInfo.OnShaked += DeviceInfo_Shaken;
-            await DisplayAlertAsync("This page detect when device shaked!");
         }
 
         async void DeviceInfo_Shaken(object sender, System.EventArgs e)
@@ -47,8 +44,6 @@ namespace Samples.ViewModel
         public override void OnDisappearing()
         {
             DeviceDisplay.MainDisplayInfoChanged -= OnScreenMetricsChanged;
-            DeviceInfo.ShakenLister = true;
-            DeviceInfo.OnShaked -= DeviceInfo_Shaken;
 
             base.OnDisappearing();
         }

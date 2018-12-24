@@ -60,14 +60,20 @@ namespace Samples.ViewModel
         public override void OnAppearing()
         {
             Accelerometer.ReadingChanged += OnReadingChanged;
+            Accelerometer.OnShaked += Accelerometer_OnShaked;
             base.OnAppearing();
+        }
+
+        async void Accelerometer_OnShaked(object sender, EventArgs e)
+        {
+            await DisplayAlertAsync("Device shaked!");
         }
 
         public override void OnDisappearing()
         {
             OnStop();
             Accelerometer.ReadingChanged -= OnReadingChanged;
-
+            Accelerometer.OnShaked -= Accelerometer_OnShaked;
             base.OnDisappearing();
         }
 
