@@ -57,10 +57,13 @@ namespace Samples.ViewModel
             set => SetProperty(ref speed, value);
         }
 
-        public override void OnAppearing()
+        public async override void OnAppearing()
         {
+            await DisplayAlertAsync("This page detect when you shake the cellPhone.");
+
             Accelerometer.ReadingChanged += OnReadingChanged;
             Accelerometer.OnShaked += Accelerometer_OnShaked;
+
             base.OnAppearing();
         }
 

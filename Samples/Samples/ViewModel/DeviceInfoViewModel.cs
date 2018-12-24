@@ -31,14 +31,8 @@ namespace Samples.ViewModel
         public override void OnAppearing()
         {
             base.OnAppearing();
-
             DeviceDisplay.MainDisplayInfoChanged += OnScreenMetricsChanged;
             ScreenMetrics = DeviceDisplay.MainDisplayInfo;
-        }
-
-        async void DeviceInfo_Shaken(object sender, System.EventArgs e)
-        {
-            await DisplayAlertAsync("Shaked");
         }
 
         public override void OnDisappearing()
