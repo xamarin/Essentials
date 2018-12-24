@@ -14,7 +14,8 @@
     <summary>
       <para>Accelerometer data of the acceleration of the device in three dimensional space.</para>
     </summary>
-    <remarks></remarks>
+    <remarks>
+    </remarks>
   </Docs>
   <Members>
     <Member MemberName="IsMonitoring">
@@ -32,7 +33,27 @@
       <Docs>
         <summary>Gets if acceleromter is being monitored.</summary>
         <value>If monitoring.</value>
-        <remarks></remarks>
+        <remarks>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnShaked">
+      <MemberSignature Language="C#" Value="public static event EventHandler OnShaked;" />
+      <MemberSignature Language="ILAsm" Value=".event class System.EventHandler OnShaked" />
+      <MemberSignature Language="DocId" Value="E:Xamarin.Essentials.Accelerometer.OnShaked" />
+      <MemberType>Event</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.EventHandler</ReturnType>
+      </ReturnValue>
+      <Docs>
+         <summary>Event triggered when reading of sensor changes.</summary>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="ReadingChanged">
