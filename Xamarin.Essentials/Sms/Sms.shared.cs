@@ -31,6 +31,11 @@ namespace Xamarin.Essentials
         {
         }
 
+        public SmsMessage(string body, string recipient)
+            : this(body, new string[] { recipient })
+        {
+        }
+
         public SmsMessage(string body, IEnumerable<string> recipients)
         {
             Body = body;
