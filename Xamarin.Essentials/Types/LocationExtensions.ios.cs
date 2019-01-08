@@ -29,8 +29,7 @@ namespace Xamarin.Essentials
                 Accuracy = location.HorizontalAccuracy,
                 Timestamp = location.Timestamp.ToDateTime(),
                 Course = location.Course < 0 ? default(double?) : location.Course,
-                Speed = location.Speed < 0 ? default(double?) : location.Speed,
-                IsFromMockProvider = DeviceInfo.DeviceType == DeviceType.Virtual
+                Speed = location.Speed < 0 ? default(double?) : location.Speed
             };
 
         internal static DateTimeOffset ToDateTime(this NSDate timestamp)
