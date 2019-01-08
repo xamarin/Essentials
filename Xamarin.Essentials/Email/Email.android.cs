@@ -34,7 +34,12 @@ namespace Xamarin.Essentials
                 if (message?.BodyFormat == EmailBodyFormat.Html)
                 {
                     ISpanned html;
-                    if (Platform.HasApiLevel(BuildVersionCodes.N))
+#if __ANDROID_24__
+                    var hasN = Platform.HasApiLevel(BuildVersionCodes.N);
+#else
+                    var hasN = false;
+#endif
+                    if (hasN)
                     {
                         html = Html.FromHtml(message.Body, FromHtmlOptions.ModeLegacy);
                     }

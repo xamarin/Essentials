@@ -92,8 +92,10 @@ namespace Xamarin.Essentials
         {
             var resources = AppContext.Resources;
             var config = resources.Configuration;
+#if __ANDROID_24__
             if (HasApiLevel(BuildVersionCodes.N))
                 return config.Locales.Get(0);
+#endif
 
             return config.Locale;
         }
@@ -103,7 +105,13 @@ namespace Xamarin.Essentials
             Java.Util.Locale.Default = locale;
             var resources = AppContext.Resources;
             var config = resources.Configuration;
-            if (HasApiLevel(BuildVersionCodes.N))
+#if __ANDROID_24__
+            var hasN = HasApiLevel(BuildVersionCodes.N);
+#else
+            var hasN = false;
+#endif
+
+            if (hasN)
                 config.SetLocale(locale);
             else
                 config.Locale = locale;
