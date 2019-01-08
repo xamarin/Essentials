@@ -2,7 +2,7 @@
   <PropertyGroup>
     <!--Work around so the conditions work below-->
     <TargetFrameworks></TargetFrameworks>
-    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">netstandard1.0;netstandard2.0;Xamarin.iOS10;MonoAndroid71;uap10.0.16299</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">netstandard1.0;netstandard2.0;Xamarin.iOS10;MonoAndroid71;MonoAndroid80;MonoAndroid81;uap10.0.16299</TargetFrameworks>
     <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">netstandard1.0;netstandard2.0;Xamarin.iOS10;MonoAndroid71;MonoAndroid80;MonoAndroid81;</TargetFrameworks>
     <AssemblyName>Xamarin.Essentials</AssemblyName>
     <RootNamespace>Xamarin.Essentials</RootNamespace>
@@ -32,9 +32,6 @@
     <PackageProjectUrl>https://go.microsoft.com/fwlink/?linkid=868960</PackageProjectUrl>
     <MDocDocumentationDirectory>$(MSBuildThisFileDirectory)..\docs\en</MDocDocumentationDirectory>
     <Configurations>Debug;Release;Samples</Configurations>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <UseShortFileNames>True</UseShortFileNames>
-    <IntermediateOutputPath>C:\temp</IntermediateOutputPath>
  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Samples'">
     <DebugType>pdbonly</DebugType>
@@ -46,15 +43,15 @@
   <PropertyGroup Condition=" '$(Configuration)'=='Release' And '$(OS)' == 'Windows_NT' ">
     <DebugType>pdbonly</DebugType>
     <!-- sourcelink: Declare that the Repository URL can be published to NuSpec -->
-    <!--<PublishRepositoryUrl>true</PublishRepositoryUrl>-->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <!-- sourcelink: Embed source files that are not tracked by the source control manager to the PDB -->
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <!-- sourcelink: Include PDB in the built .nupkg -->
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
-  <!--<ItemGroup Condition=" '$(Configuration)'=='Release' And '$(OS)' == 'Windows_NT' ">
+  <ItemGroup Condition=" '$(Configuration)'=='Release' And '$(OS)' == 'Windows_NT' ">
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="All" />    
-  </ItemGroup>-->
+  </ItemGroup>
   <ItemGroup>
     <None Include="..\nugetreadme.txt" PackagePath="readme.txt" Pack="true" />
     <PackageReference Include="mdoc" Version="5.7.4" PrivateAssets="All" />
@@ -76,7 +73,7 @@
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
     <Compile Include="**\*.uwp.cs" />
-    <!--<Compile Include="**\*.uwp.*.cs" />-->
+    <Compile Include="**\*.uwp.*.cs" />
   </ItemGroup>
   <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
     <Compile Include="**\*.android.cs" />
