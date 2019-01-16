@@ -7,9 +7,11 @@ namespace Xamarin.Essentials
 {
     public static partial class Contact
     {
-        static Task<PhoneContact> PlataformPickContact()
+        static Task<PhoneContact> PlataformPickContactAsync()
         {
             return null;
         }
+
+        static Task PlataformSaveContactAsync(string name, string phone, string email) => throw new NotImplementedException();
     }
 }

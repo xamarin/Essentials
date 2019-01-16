@@ -19,8 +19,7 @@ namespace Samples.View
 
         async void ContatoBtn_Clicked(object sender, EventArgs e)
         {
-            var contact = await Contact.PickContact();
-            ContatoResult.Text = contact.Name + contact.Emails.FirstOrDefault();
+            await Contact.SaveContactAsync();
         }
     }
 }
