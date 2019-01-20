@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Provider;
-using static Android.Provider.ContactsContract.CommonDataKinds;
 using Net = Android.Net;
 
 namespace Xamarin.Essentials
@@ -51,18 +50,20 @@ namespace Xamarin.Essentials
         internal static PhoneContact GetContactFromUri(Net.Uri contactUri)
         {
             var context = Activity.ContentResolver;
-
             var cur = context.Query(contactUri, null, null, null, null);
+            var emails = new List<string>();
+            var phones = new List<string>();
+            var name = string.Empty;
 
-            cur.MoveToFirst();
-
-            var id = cur.GetString(cur.GetColumnIndex(ContactsContract.Contacts.InterfaceConsts.Id));
-            var name = cur.GetString(cur.GetColumnIndex(ContactsContract.Contacts.InterfaceConsts.DisplayName));
-            try
+            // cur.MoveToFirst();
+            var p = cur.Position;
+            while (cur.MoveToNext())
             {
-                var idContato = cur.GetString(cur.GetColumnIndex(ContactsContract.CommonDataKinds.Email.InterfaceConsts.ContactId));
+                name = cur.GetString(cur.GetColumnIndex(ContactsContract.Contacts.InterfaceConsts.DisplayName));
 
-                var idQ = new string[] { idContato };
+                var id = cur.GetString(cur.GetColumnIndex(ContactsContract.CommonDataKinds.Email.InterfaceConsts.ContactId));
+
+                var idQ = new string[] { id };
 
                 var ecur = context.Query(
                     ContactsContract.CommonDataKinds.Email.ContentUri,
@@ -71,32 +72,28 @@ namespace Xamarin.Essentials
                     idQ,
                     null);
 
-                if (ecur.MoveToFirst())
+                while (ecur.MoveToNext())
                 {
                     var endereco = ecur.GetString(cur.GetColumnIndex(ContactsContract.CommonDataKinds.Email.Address));
+                    emails.Add(endereco);
                 }
                 ecur.Close();
 
-                var pCur = context.Query(
+                ecur = context.Query(
                     ContactsContract.CommonDataKinds.Phone.ContentUri,
                     null,
                     ContactsContract.CommonDataKinds.Phone.InterfaceConsts.ContactId + " = ?",
                     idQ,
                     null);
 
-                if (pCur.MoveToFirst())
+                while (ecur.MoveToNext())
                 {
-                    var phone = pCur.GetString(pCur.GetColumnIndex(ContactsContract.CommonDataKinds.Phone.Number));
+                    var phone = ecur.GetString(ecur.GetColumnIndex(ContactsContract.CommonDataKinds.Phone.Number));
+                    phones.Add(phone);
                 }
-
-                var contact = PlataformGetContacts(contactUri);
-                return contact.Result.First();
+                ecur.Close();
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                return default;
-            }
+            return new PhoneContact(name, phones, emails, string.Empty);
         }
 
         static Task<IEnumerable<PhoneContact>> PlataformGetContacts(Net.Uri contactUri = null)
@@ -125,10 +122,10 @@ namespace Xamarin.Essentials
                     var idQ = new string[] { id };
                     if (ContactsContract.Contacts.InterfaceConsts.HasPhoneNumber.Length > 0)
                     {
-                        var pCur = context.Query(ContactsContract.CommonDataKinds.Phone.ContentUri, null, Phone.InterfaceConsts.ContactId + " = ?", idQ, null);
+                        var pCur = context.Query(ContactsContract.CommonDataKinds.Phone.ContentUri, null, ContactsContract.CommonDataKinds.Phone.InterfaceConsts.ContactId + " = ?", idQ, null);
                         while (pCur.MoveToNext())
                         {
-                            var phone = pCur.GetString(pCur.GetColumnIndex(Phone.Number));
+                            var phone = pCur.GetString(pCur.GetColumnIndex(ContactsContract.CommonDataKinds.Phone.Number));
                             phoneNumbers.Add(phone);
                         }
                         pCur.Close();
@@ -147,13 +144,13 @@ namespace Xamarin.Essentials
                     var b = string.Empty;
                     if (name.Contains("EuMesmo"))
                     {
-                        var query = CommonColumns.Type + " = " + 3
-                      + " AND " + Event.InterfaceConsts.ContactId + " = ?";
+                        var query = ContactsContract.CommonDataKinds.CommonColumns.Type + " = " + 3
+                      + " AND " + ContactsContract.CommonDataKinds.Event.InterfaceConsts.ContactId + " = ?";
 
                         var bCur = context.Query(ContactsContract.Data.ContentUri, null, query, idQ, null);
                         while (bCur.MoveToNext())
                         {
-                            b = bCur.GetString(bCur.GetColumnIndex(Event.StartDate));
+                            b = bCur.GetString(bCur.GetColumnIndex(ContactsContract.CommonDataKinds.Event.StartDate));
 
                             // bool t = false;
                         }
@@ -162,13 +159,13 @@ namespace Xamarin.Essentials
 
                     if (name.Contains("EuMesmo"))
                     {
-                        var projectionS = new[] { StructuredPostal.Street, StructuredPostal.City, StructuredPostal.Postcode };
+                        var projectionS = new[] { ContactsContract.CommonDataKinds.StructuredPostal.Street, ContactsContract.CommonDataKinds.StructuredPostal.City, ContactsContract.CommonDataKinds.StructuredPostal.Postcode };
                         var aCur = context.Query(ContactsContract.Data.ContentUri, projectionS, ContactsContract.Data.InterfaceConsts.ContactId + " = ?", idQ, null);
                         while (aCur.MoveToNext())
                         {
-                            var street = aCur.GetString(aCur.GetColumnIndex(StructuredPostal.Street));
-                            var city = aCur.GetString(aCur.GetColumnIndex(StructuredPostal.City));
-                            var postCode = aCur.GetString(aCur.GetColumnIndex(StructuredPostal.Postcode));
+                            var street = aCur.GetString(aCur.GetColumnIndex(projectionS[0]));
+                            var city = aCur.GetString(aCur.GetColumnIndex(projectionS[1]));
+                            var postCode = aCur.GetString(aCur.GetColumnIndex(projectionS[2]));
                         }
 
                         aCur.Close();
