@@ -39,6 +39,8 @@ namespace Xamarin.Essentials
             {
                 if (requestCode != 101)
                     return;
+
+                Contact.CallBack(Contact.GetContactFromUri(data.Data));
             }
             catch (Exception ex)
             {
