@@ -50,13 +50,16 @@ namespace Xamarin.Essentials
         internal static PhoneContact GetContactFromUri(Net.Uri contactUri)
         {
             var context = Activity.ContentResolver;
+
+            if (contactUri == null)
+                contactUri = ContactsContract.Contacts.ContentUri;
+
             var cur = context.Query(contactUri, null, null, null, null);
             var emails = new List<string>();
             var phones = new List<string>();
             var name = string.Empty;
+            var birthday = string.Empty;
 
-            // cur.MoveToFirst();
-            var p = cur.Position;
             while (cur.MoveToNext())
             {
                 name = cur.GetString(cur.GetColumnIndex(ContactsContract.Contacts.InterfaceConsts.DisplayName));
@@ -65,35 +68,66 @@ namespace Xamarin.Essentials
 
                 var idQ = new string[] { id };
 
-                var ecur = context.Query(
+                var cursor = context.Query(
                     ContactsContract.CommonDataKinds.Email.ContentUri,
                     null,
                     ContactsContract.CommonDataKinds.Phone.InterfaceConsts.ContactId + "= ?",
                     idQ,
                     null);
 
-                while (ecur.MoveToNext())
+                while (cursor.MoveToNext())
                 {
-                    var endereco = ecur.GetString(cur.GetColumnIndex(ContactsContract.CommonDataKinds.Email.Address));
+                    var endereco = cursor.GetString(cur.GetColumnIndex(ContactsContract.CommonDataKinds.Email.Address));
                     emails.Add(endereco);
                 }
-                ecur.Close();
+                cursor.Close();
 
-                ecur = context.Query(
+                cursor = context.Query(
                     ContactsContract.CommonDataKinds.Phone.ContentUri,
                     null,
                     ContactsContract.CommonDataKinds.Phone.InterfaceConsts.ContactId + " = ?",
                     idQ,
                     null);
 
-                while (ecur.MoveToNext())
+                while (cursor.MoveToNext())
                 {
-                    var phone = ecur.GetString(ecur.GetColumnIndex(ContactsContract.CommonDataKinds.Phone.Number));
+                    var phone = cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.Phone.Number));
                     phones.Add(phone);
                 }
-                ecur.Close();
+                cursor.Close();
+
+                var projection = new string[]
+                {
+                    ContactsContract.CommonDataKinds.StructuredPostal.Street,
+                    ContactsContract.CommonDataKinds.StructuredPostal.City,
+                    ContactsContract.CommonDataKinds.StructuredPostal.Postcode
+                };
+                cursor = null;
+
+                cursor = context.Query(ContactsContract.Data.ContentUri, projection, ContactsContract.Data.InterfaceConsts.ContactId + " = ?", idQ, null);
+                while (cursor.MoveToNext())
+                {
+                    // Add street in PhoneContact struct
+
+                    var street = cursor.GetString(cursor.GetColumnIndex(projection[0]));
+                    var city = cursor.GetString(cursor.GetColumnIndex(projection[1]));
+                    var postCode = cursor.GetString(cursor.GetColumnIndex(projection[2]));
+                }
+
+                cursor.Close();
+
+                var query = ContactsContract.CommonDataKinds.CommonColumns.Type + " = " + 3
+                     + " AND " + ContactsContract.CommonDataKinds.Event.InterfaceConsts.ContactId + " = ?";
+
+                cursor = context.Query(ContactsContract.Data.ContentUri, null, query, idQ, null);
+                while (cursor.MoveToNext())
+                {
+                    birthday = cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.Event.StartDate));
+                }
+                cursor.Close();
             }
-            return new PhoneContact(name, phones, emails, string.Empty);
+
+            return new PhoneContact(name, phones, emails, birthday);
         }
 
         static Task<IEnumerable<PhoneContact>> PlataformGetContacts(Net.Uri contactUri = null)
