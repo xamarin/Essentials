@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 #if NETSTANDARD1_0
@@ -16,6 +17,7 @@ public struct Color
 }
 #else
 using System.Drawing;
+[assembly: TypeForwardedTo(typeof(Color))]
 #endif
 
 namespace Xamarin.Essentials
@@ -55,7 +57,7 @@ namespace Xamarin.Essentials
         }
     }
 
-    public readonly struct BrowserLaunchOptions : IEquatable<BrowserLaunchOptions>
+    public class BrowserLaunchOptions : IEquatable<BrowserLaunchOptions>
     {
         public BrowserLaunchOptions(Color? prefferedControlColor, Color? preferredBackgroundColor, Color? preferredTitleColor, BrowserLaunchMode launchMode, BrowserTitleMode shouldShowTitle)
         {
@@ -75,23 +77,23 @@ namespace Xamarin.Essentials
             PrefferedControlColor = null;
         }
 
-        public Color? PreferredTitleColor { get; }
+        public Color? PreferredTitleColor { get; set; }
 
-        public Color? PreferredBackgroundColor { get; }
+        public Color? PreferredBackgroundColor { get; set; }
 
-        public Color? PrefferedControlColor { get; }
+        public Color? PrefferedControlColor { get; set; }
 
-        public BrowserLaunchMode LaunchMode { get; }
+        public BrowserLaunchMode LaunchMode { get; set; }
 
-        public BrowserTitleMode TitleMode { get; }
+        public BrowserTitleMode TitleMode { get; set; }
 
         public static bool operator ==(BrowserLaunchOptions lhs, BrowserLaunchOptions rhs) => lhs.Equals(rhs);
 
         public static bool operator !=(BrowserLaunchOptions lhs, BrowserLaunchOptions rhs) => lhs.Equals(rhs);
 
-        public override bool Equals(object other) => other is BrowserLaunchOptions options && Equals(options);
+        public override bool Equals(object other) => other is BrowserLaunchOptions options && other != null && Equals(options);
 
-        public bool Equals(BrowserLaunchOptions other) => PreferredTitleColor.Equals(other.PreferredTitleColor)
+        public bool Equals(BrowserLaunchOptions other) => other != null && PreferredTitleColor.Equals(other.PreferredTitleColor)
                                                           && PreferredBackgroundColor.Equals(
                                                               other.PreferredBackgroundColor)
                                                           && PrefferedControlColor.Equals(other.PrefferedControlColor)
