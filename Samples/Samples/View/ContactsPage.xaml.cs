@@ -19,7 +19,7 @@ namespace Samples.View
 
         async void ContatoBtn_Clicked(object sender, EventArgs e)
         {
-            await Contact.PickContactAsync();
+            await Contact.SaveContactAsync("PedroTeste", "36819999");
         }
     }
 }

@@ -138,6 +138,15 @@ namespace Xamarin.Essentials
             }
         }
 
-        static Task PlataformSaveContactAsync(string name, string phone, string email) => throw new NotImplementedException();
+        static Task PlataformSaveContactAsync(string name, string phone, string email)
+        {
+            var intent = new Intent(Intent.ActionInsert);
+            intent.SetType(ContactsContract.Contacts.ContentType);
+            intent.PutExtra(ContactsContract.Intents.Insert.Name, name);
+            intent.PutExtra(ContactsContract.Intents.Insert.Phone, phone);
+            Activity.StartActivity(intent);
+
+            return Task.CompletedTask;
+        }
     }
 }
