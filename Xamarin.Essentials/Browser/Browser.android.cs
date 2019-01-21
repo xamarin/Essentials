@@ -10,21 +10,21 @@ namespace Xamarin.Essentials
 {
     public static partial class Browser
     {
-        static Task<bool> PlatformOpenAsync(Uri uri, BrowserLaunchMode launchMode, BrowserLaunchOptions options)
+        static Task<bool> PlatformOpenAsync(Uri uri, BrowserLaunchOptions options)
         {
             var nativeUri = AndroidUri.Parse(uri.AbsoluteUri);
 
-            switch (launchMode)
+            switch (options.LaunchMode)
             {
                 case BrowserLaunchMode.SystemPreferred:
                     var tabsBuilder = new CustomTabsIntent.Builder();
                     tabsBuilder.SetShowTitle(true);
                     if (options.PreferredTitleColor.HasValue)
-                        tabsBuilder.SetToolbarColor((int)options.PreferredTitleColor.Value);
+                        tabsBuilder.SetToolbarColor((int)options.PreferredTitleColor.Value.ToInt());
                     if (options.PrefferedControlColor.HasValue)
-                        tabsBuilder.SetSecondaryToolbarColor((int)options.PrefferedControlColor.Value);
-                    if (options.ShouldShowTitle.HasValue)
-                        tabsBuilder.SetShowTitle(options.ShouldShowTitle.Value);
+                        tabsBuilder.SetSecondaryToolbarColor((int)options.PrefferedControlColor.Value.ToInt());
+                    if (options.TitleMode != BrowserTitleMode.Default)
+                        tabsBuilder.SetShowTitle(options.TitleMode == BrowserTitleMode.Show);
                     var tabsIntent = tabsBuilder.Build();
                     tabsIntent.Intent.SetFlags(ActivityFlags.ClearTop);
                     tabsIntent.Intent.SetFlags(ActivityFlags.NewTask);
@@ -44,10 +44,5 @@ namespace Xamarin.Essentials
 
             return Task.FromResult(true);
         }
-    }
-
-    public readonly partial struct EssentialsColor
-    {
-        public static explicit operator int(EssentialsColor x) => x.A | x.R << 8 | x.G << 16 | x.B << 24;
     }
 }

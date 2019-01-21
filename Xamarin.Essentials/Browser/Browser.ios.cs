@@ -8,21 +8,21 @@ namespace Xamarin.Essentials
 {
     public static partial class Browser
     {
-        static async Task<bool> PlatformOpenAsync(Uri uri, BrowserLaunchMode launchMode, BrowserLaunchOptions options)
+        static async Task<bool> PlatformOpenAsync(Uri uri, BrowserLaunchOptions options)
         {
             var nativeUrl = new NSUrl(uri.AbsoluteUri);
 
-            switch (launchMode)
+            switch (options.LaunchMode)
             {
                 case BrowserLaunchMode.SystemPreferred:
                     var sfViewController = new SFSafariViewController(nativeUrl, false);
                     var vc = Platform.GetCurrentViewController();
 
                     if (options.PreferredTitleColor.HasValue)
-                        sfViewController.PreferredBarTintColor = (UIColor)options.PreferredTitleColor;
+                        sfViewController.PreferredBarTintColor = options.PreferredTitleColor.Value.ToPlatformColor();
 
                     if (options.PrefferedControlColor.HasValue)
-                        sfViewController.PreferredControlTintColor = (UIColor)options.PrefferedControlColor;
+                        sfViewController.PreferredControlTintColor = options.PrefferedControlColor.Value.ToPlatformColor();
 
                     if (sfViewController.PopoverPresentationController != null)
                     {
@@ -36,10 +36,5 @@ namespace Xamarin.Essentials
 
             return true;
         }
-    }
-
-    public readonly partial struct EssentialsColor
-    {
-        public static explicit operator UIColor(EssentialsColor x) => new UIColor(x.R, x.G, x.B, x.A);
     }
 }

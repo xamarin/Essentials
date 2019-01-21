@@ -1,28 +1,48 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+#if NETSTANDARD1_0
+public struct Color
+{
+    public int Value { get; set; }
+
+    public byte A => (byte)(Value >> 24);
+
+    public byte R => (byte)(Value >> 16);
+
+    public byte G => (byte)(Value >> 8);
+
+    public byte B => (byte)Value;
+}
+#else
+using System.Drawing;
+#endif
+
 namespace Xamarin.Essentials
 {
     public static partial class Browser
     {
-        public static Task OpenAsync(string uri, BrowserLaunchOptions options = default) =>
-            OpenAsync(uri, BrowserLaunchMode.SystemPreferred, options);
+        public static Task OpenAsync(string uri) =>
+            OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
 
-        public static Task OpenAsync(string uri, BrowserLaunchMode launchMode, BrowserLaunchOptions options = default)
+        public static Task OpenAsync(string uri, BrowserLaunchOptions options) =>
+            OpenAsync(new Uri(uri), options);
+
+        public static Task OpenAsync(string uri, BrowserLaunchMode launchMode)
         {
             if (string.IsNullOrWhiteSpace(uri))
             {
                 throw new ArgumentNullException(nameof(uri), $"Uri cannot be empty.");
             }
 
-            return OpenAsync(new Uri(uri), launchMode);
+            return OpenAsync(new Uri(uri), new BrowserLaunchOptions(launchMode));
         }
 
-        public static Task OpenAsync(Uri uri, BrowserLaunchOptions options = default) =>
-          OpenAsync(uri, BrowserLaunchMode.SystemPreferred, options);
+        public static Task OpenAsync(Uri uri) =>
+            OpenAsync(uri, new BrowserLaunchOptions(BrowserLaunchMode.SystemPreferred));
 
-        public static Task<bool> OpenAsync(Uri uri, BrowserLaunchMode launchMode, BrowserLaunchOptions options = default) =>
-            PlatformOpenAsync(EscapeUri(uri), launchMode, options);
+        public static Task<bool> OpenAsync(Uri uri, BrowserLaunchOptions options = default) =>
+            PlatformOpenAsync(EscapeUri(uri), options);
 
         internal static Uri EscapeUri(Uri uri)
         {
@@ -35,23 +55,35 @@ namespace Xamarin.Essentials
         }
     }
 
-    public readonly partial struct BrowserLaunchOptions : IEquatable<BrowserLaunchOptions>
+    public readonly struct BrowserLaunchOptions : IEquatable<BrowserLaunchOptions>
     {
-        public BrowserLaunchOptions(EssentialsColor? prefferedControlColor, EssentialsColor? preferredBackgroundColor, EssentialsColor? preferredTitleColor, bool? shouldShowTitle)
+        public BrowserLaunchOptions(Color? prefferedControlColor, Color? preferredBackgroundColor, Color? preferredTitleColor, BrowserLaunchMode launchMode, BrowserTitleMode shouldShowTitle)
         {
             PrefferedControlColor = prefferedControlColor;
             PreferredBackgroundColor = preferredBackgroundColor;
             PreferredTitleColor = preferredTitleColor;
-            ShouldShowTitle = shouldShowTitle;
+            LaunchMode = launchMode;
+            TitleMode = shouldShowTitle;
         }
 
-        public EssentialsColor? PreferredTitleColor { get; }
+        public BrowserLaunchOptions(BrowserLaunchMode mode)
+        {
+            LaunchMode = mode;
+            TitleMode = BrowserTitleMode.Default;
+            PreferredTitleColor = null;
+            PreferredBackgroundColor = null;
+            PrefferedControlColor = null;
+        }
 
-        public EssentialsColor? PreferredBackgroundColor { get; }
+        public Color? PreferredTitleColor { get; }
 
-        public EssentialsColor? PrefferedControlColor { get; }
+        public Color? PreferredBackgroundColor { get; }
 
-        public bool? ShouldShowTitle { get; }
+        public Color? PrefferedControlColor { get; }
+
+        public BrowserLaunchMode LaunchMode { get; }
+
+        public BrowserTitleMode TitleMode { get; }
 
         public static bool operator ==(BrowserLaunchOptions lhs, BrowserLaunchOptions rhs) => lhs.Equals(rhs);
 
@@ -60,38 +92,27 @@ namespace Xamarin.Essentials
         public override bool Equals(object other) => other is BrowserLaunchOptions options && Equals(options);
 
         public bool Equals(BrowserLaunchOptions other) => PreferredTitleColor.Equals(other.PreferredTitleColor)
-                                                          && PreferredBackgroundColor.Equals(other.PreferredBackgroundColor)
+                                                          && PreferredBackgroundColor.Equals(
+                                                              other.PreferredBackgroundColor)
                                                           && PrefferedControlColor.Equals(other.PrefferedControlColor)
-                                                          && ShouldShowTitle.Equals(other.ShouldShowTitle);
+                                                          && LaunchMode.Equals(other.LaunchMode)
+                                                          && TitleMode.Equals(other.TitleMode);
 
-        public override int GetHashCode() => (PreferredBackgroundColor, PreferredBackgroundColor, PrefferedControlColor, ShouldShowTitle).GetHashCode();
+        public override int GetHashCode() => (PreferredBackgroundColor, PreferredBackgroundColor, PrefferedControlColor,
+            TitleMode, LaunchMode).GetHashCode();
     }
 
-    public readonly partial struct EssentialsColor : IEquatable<EssentialsColor>
+    public enum BrowserTitleMode
     {
-        public byte R { get; }
-
-        public byte G { get; }
-
-        public byte B { get; }
-
-        public byte A { get; }
-
-        public static bool operator ==(EssentialsColor lhs, EssentialsColor rhs) => lhs.Equals(rhs);
-
-        public static bool operator !=(EssentialsColor lhs, EssentialsColor rhs) => lhs.Equals(rhs);
-
-        public override bool Equals(object other) => other is EssentialsColor color && Equals(color);
-
-        public bool Equals(EssentialsColor other) =>
-            A.Equals(other.A) && R.Equals(other.R) && G.Equals(other.G) && B.Equals(other.B);
-
-        public override int GetHashCode() => (A, R, G, B).GetHashCode();
+        Default = 0,
+        Show = 1,
+        Hide = 2
     }
 
     public enum BrowserLaunchMode
     {
-        SystemPreferred = 0,
-        External = 1,
+        Default = 0,
+        SystemPreferred = 1,
+        External = 2
     }
 }
