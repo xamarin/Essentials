@@ -25,23 +25,20 @@ namespace Xamarin.Essentials
     public static partial class Browser
     {
         public static Task OpenAsync(string uri) =>
-            OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
+            OpenAsync(uri, default(BrowserLaunchOptions));
 
-        public static Task OpenAsync(string uri, BrowserLaunchOptions options) =>
-            OpenAsync(new Uri(uri), options);
+        public static Task OpenAsync(string uri, BrowserLaunchMode launchMode) =>
+            OpenAsync(uri, new BrowserLaunchOptions(launchMode));
 
-        public static Task OpenAsync(string uri, BrowserLaunchMode launchMode)
+        public static Task OpenAsync(string uri, BrowserLaunchOptions options = default)
         {
             if (string.IsNullOrWhiteSpace(uri))
             {
                 throw new ArgumentNullException(nameof(uri), $"Uri cannot be empty.");
             }
 
-            return OpenAsync(new Uri(uri), new BrowserLaunchOptions(launchMode));
+            return OpenAsync(new Uri(uri), options);
         }
-
-        public static Task OpenAsync(Uri uri) =>
-            OpenAsync(uri, new BrowserLaunchOptions(BrowserLaunchMode.SystemPreferred));
 
         public static Task<bool> OpenAsync(Uri uri, BrowserLaunchOptions options = default) =>
             PlatformOpenAsync(EscapeUri(uri), options);
@@ -68,13 +65,14 @@ namespace Xamarin.Essentials
             TitleMode = shouldShowTitle;
         }
 
+        public BrowserLaunchOptions()
+        {
+            LaunchMode = BrowserLaunchMode.Default;
+        }
+
         public BrowserLaunchOptions(BrowserLaunchMode mode)
         {
             LaunchMode = mode;
-            TitleMode = BrowserTitleMode.Default;
-            PreferredTitleColor = null;
-            PreferredBackgroundColor = null;
-            PrefferedControlColor = null;
         }
 
         public Color? PreferredTitleColor { get; set; }
