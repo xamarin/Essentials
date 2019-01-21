@@ -25,12 +25,12 @@ namespace Xamarin.Essentials
     public static partial class Browser
     {
         public static Task OpenAsync(string uri) =>
-            OpenAsync(uri, default(BrowserLaunchOptions));
+            OpenAsync(uri, new BrowserLaunchOptions());
 
         public static Task OpenAsync(string uri, BrowserLaunchMode launchMode) =>
-            OpenAsync(uri, new BrowserLaunchOptions(launchMode));
+            OpenAsync(uri, new BrowserLaunchOptions());
 
-        public static Task OpenAsync(string uri, BrowserLaunchOptions options = default)
+        public static Task OpenAsync(string uri, BrowserLaunchOptions options)
         {
             if (string.IsNullOrWhiteSpace(uri))
             {
@@ -40,7 +40,13 @@ namespace Xamarin.Essentials
             return OpenAsync(new Uri(uri), options);
         }
 
-        public static Task<bool> OpenAsync(Uri uri, BrowserLaunchOptions options = default) =>
+        public static Task OpenAsync(Uri uri) =>
+            OpenAsync(uri, new BrowserLaunchOptions());
+
+        public static Task OpenAsync(Uri uri, BrowserLaunchMode launchMode) =>
+            OpenAsync(uri, new BrowserLaunchOptions(launchMode));
+
+        public static Task<bool> OpenAsync(Uri uri, BrowserLaunchOptions options) =>
             PlatformOpenAsync(EscapeUri(uri), options);
 
         internal static Uri EscapeUri(Uri uri)
