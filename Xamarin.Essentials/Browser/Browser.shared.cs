@@ -62,15 +62,6 @@ namespace Xamarin.Essentials
 
     public class BrowserLaunchOptions : IEquatable<BrowserLaunchOptions>
     {
-        public BrowserLaunchOptions(Color? prefferedControlColor, Color? preferredBackgroundColor, Color? preferredTitleColor, BrowserLaunchMode launchMode, BrowserTitleMode shouldShowTitle)
-        {
-            PrefferedControlColor = prefferedControlColor;
-            PreferredBackgroundColor = preferredBackgroundColor;
-            PreferredTitleColor = preferredTitleColor;
-            LaunchMode = launchMode;
-            TitleMode = shouldShowTitle;
-        }
-
         public BrowserLaunchOptions()
         {
             LaunchMode = BrowserLaunchMode.Default;
@@ -91,11 +82,11 @@ namespace Xamarin.Essentials
 
         public BrowserTitleMode TitleMode { get; set; }
 
-        public static bool operator ==(BrowserLaunchOptions lhs, BrowserLaunchOptions rhs) => lhs.Equals(rhs);
+        public static bool operator ==(BrowserLaunchOptions lhs, BrowserLaunchOptions rhs) => (lhs == null && rhs == null) || (lhs != null && lhs.Equals(rhs));
 
-        public static bool operator !=(BrowserLaunchOptions lhs, BrowserLaunchOptions rhs) => lhs.Equals(rhs);
+        public static bool operator !=(BrowserLaunchOptions lhs, BrowserLaunchOptions rhs) => !(lhs == rhs);
 
-        public override bool Equals(object other) => other is BrowserLaunchOptions options && other != null && Equals(options);
+        public override bool Equals(object other) => other is BrowserLaunchOptions options && Equals(options);
 
         public bool Equals(BrowserLaunchOptions other) => other != null && PreferredTitleColor.Equals(other.PreferredTitleColor)
                                                           && PreferredBackgroundColor.Equals(
