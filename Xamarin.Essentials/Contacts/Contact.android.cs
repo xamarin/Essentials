@@ -113,7 +113,7 @@ namespace Xamarin.Essentials
                 cursor = null;
 
                 cursor = context.Query(ContactsContract.Data.ContentUri, projection, ContactsContract.Data.InterfaceConsts.ContactId + " = ?", idQ, null);
-                while (cursor.MoveToNext())
+                while (cursor.MoveToLast())
                 {
                     // Add street in PhoneContact struct
 
@@ -144,6 +144,7 @@ namespace Xamarin.Essentials
             intent.SetType(ContactsContract.Contacts.ContentType);
             intent.PutExtra(ContactsContract.Intents.Insert.Name, name);
             intent.PutExtra(ContactsContract.Intents.Insert.Phone, phone);
+            intent.PutExtra(ContactsContract.Intents.Insert.Email, email);
             Activity.StartActivity(intent);
 
             return Task.CompletedTask;

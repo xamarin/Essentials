@@ -10,6 +10,7 @@
             <Button x:Name="ContatoBtn"
                     Text="Obter Contato"
                     Clicked="ContatoBtn_Clicked"/>
+            
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
