@@ -8,15 +8,21 @@ namespace Xamarin.Essentials
 {
     public static partial class Browser
     {
-        static async Task<bool> PlatformOpenAsync(Uri uri, BrowserLaunchMode launchMode)
+        static async Task<bool> PlatformOpenAsync(Uri uri, BrowserLaunchOptions options)
         {
             var nativeUrl = new NSUrl(uri.AbsoluteUri);
 
-            switch (launchMode)
+            switch (options.LaunchMode)
             {
                 case BrowserLaunchMode.SystemPreferred:
                     var sfViewController = new SFSafariViewController(nativeUrl, false);
                     var vc = Platform.GetCurrentViewController();
+
+                    if (options.PreferredTitleColor.HasValue)
+                        sfViewController.PreferredBarTintColor = options.PreferredTitleColor.Value.ToPlatformColor();
+
+                    if (options.PrefferedControlColor.HasValue)
+                        sfViewController.PreferredControlTintColor = options.PrefferedControlColor.Value.ToPlatformColor();
 
                     if (sfViewController.PopoverPresentationController != null)
                     {
