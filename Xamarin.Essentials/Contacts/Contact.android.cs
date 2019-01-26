@@ -19,9 +19,6 @@ namespace Xamarin.Essentials
 
         static Task<PhoneContact> PlataformPickContactAsync()
         {
-            // var phoneContact = await GetContactFromActivity();
-            // return phoneContact;
-
             var source = new TaskCompletionSource<PhoneContact>();
             try
             {
@@ -43,13 +40,7 @@ namespace Xamarin.Essentials
             return source.Task;
         }
 
-        internal static PhoneContact GetContactFromUri(Net.Uri contactUri)
-        {
-            var contact = PlataformGetContacts(contactUri);
-            return contact.FirstOrDefault();
-        }
-
-        static IEnumerable<PhoneContact> PlataformGetContacts(Net.Uri contactUri = null)
+        internal static IEnumerable<PhoneContact> PlataformGetContacts(Net.Uri contactUri = null)
         {
             var context = Activity.ContentResolver;
             var myList = new List<PhoneContact>();
@@ -62,16 +53,21 @@ namespace Xamarin.Essentials
             // var cur = context.Query(contactUri, null, null, null, null);
             var emails = new List<string>();
             var phones = new List<string>();
-            var name = string.Empty;
             var birthday = string.Empty;
 
+            // var task = Task.Run(() =>
+            // {
+            //     Thread.Sleep(1000);
+            //     myList.Add(default);
+            //     return Task.FromResult<IEnumerable<PhoneContact>>(myList);
+            // });
             try
             {
                 if (cur.MoveToFirst())
                 {
                     do
                     {
-                        name = cur.GetString(cur.GetColumnIndex(ContactsContract.Contacts.InterfaceConsts.DisplayName));
+                        var name = cur.GetString(cur.GetColumnIndex(ContactsContract.Contacts.InterfaceConsts.DisplayName));
 
                         var id = cur.GetString(cur.GetColumnIndex(ContactsContract.CommonDataKinds.Email.InterfaceConsts.ContactId));
 
@@ -113,14 +109,15 @@ namespace Xamarin.Essentials
                         };
                         cursor = null;
 
-                        cursor = context.Query(ContactsContract.Data.ContentUri, projection, ContactsContract.Data.InterfaceConsts.ContactId + " = ?", idQ, null);
-                        cursor.MoveToLast();
+                        cursor = context.Query(ContactsContract.CommonDataKinds.StructuredPostal.ContentUri, projection, ContactsContract.Data.InterfaceConsts.ContactId + " = ?", idQ, null);
+                        if (cursor.MoveToLast())
+                        {
+                            // Add street in PhoneContact struct
 
-                        // Add street in PhoneContact struct
-
-                        var street = cursor.GetString(cursor.GetColumnIndex(projection[0]));
-                        var city = cursor.GetString(cursor.GetColumnIndex(projection[1]));
-                        var postCode = cursor.GetString(cursor.GetColumnIndex(projection[2]));
+                            var street = cursor.GetString(cursor.GetColumnIndex(projection[0]));
+                            var city = cursor.GetString(cursor.GetColumnIndex(projection[1]));
+                            var postCode = cursor.GetString(cursor.GetColumnIndex(projection[2]));
+                        }
                         cursor.Close();
 
                         var query = ContactsContract.CommonDataKinds.CommonColumns.Type + " = " + 3
