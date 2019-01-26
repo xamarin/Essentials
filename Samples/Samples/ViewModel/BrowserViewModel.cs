@@ -101,7 +101,7 @@ namespace Samples.ViewModel
                 {
                     LaunchMode = (BrowserLaunchMode)BrowserType,
                     TitleMode = (BrowserTitleMode)BrowserTitleType,
-                    PreferredToolbarColor = TitleColor == 0 ? (Color?)null : (System.Drawing.Color)colorDictionary[AllColors[TitleColor]],
+                    PreferredToolbarColor = ToolbarColor == 0 ? (Color?)null : (System.Drawing.Color)colorDictionary[AllColors[TitleColor]],
                     PreferredControlColor = ControlColor == 0 ? (Color?)null : (System.Drawing.Color)colorDictionary[AllColors[ControlColor]]
                 });
             }
