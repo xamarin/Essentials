@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AddressBook;
@@ -59,6 +60,15 @@ namespace Xamarin.Essentials
             view.Delegate = new ContactSaveDelegate();
             parent.PresentViewController(view, true, null);
             return Task.CompletedTask;
+        }
+
+        static Task<IEnumerable<PhoneContact>> PlataformGetAllContactsAsync()
+        {
+            var t = Task.Run(() =>
+            {
+                return Task.FromResult<IEnumerable<PhoneContact>>(new List<PhoneContact>());
+            });
+            return t;
         }
     }
 }
