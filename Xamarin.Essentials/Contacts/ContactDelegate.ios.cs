@@ -31,11 +31,13 @@ namespace Xamarin.Essentials
         public override void ContactPickerDidCancel(CNContactPickerViewController picker)
         {
             Console.WriteLine("User canceled picker");
+            Contact.CallBack(Contact.GetContact(null));
         }
 
         public override void DidSelectContact(CNContactPickerViewController picker, CNContact contact)
         {
             Console.WriteLine("Selected: {0}", contact);
+            Contact.CallBack(Contact.GetContact(contact));
         }
 
         public override void DidSelectContactProperty(CNContactPickerViewController picker, CNContactProperty contactProperty)
