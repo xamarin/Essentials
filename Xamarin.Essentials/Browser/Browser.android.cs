@@ -19,12 +19,11 @@ namespace Xamarin.Essentials
                 case BrowserLaunchMode.SystemPreferred:
                     var tabsBuilder = new CustomTabsIntent.Builder();
                     tabsBuilder.SetShowTitle(true);
-                    if (options.PreferredTitleColor.HasValue)
-                        tabsBuilder.SetToolbarColor((int)options.PreferredTitleColor.Value.ToInt());
-                    if (options.PrefferedControlColor.HasValue)
-                        tabsBuilder.SetSecondaryToolbarColor((int)options.PrefferedControlColor.Value.ToInt());
+                    if (options.PreferredToolbarColor.HasValue)
+                        tabsBuilder.SetToolbarColor(options.PreferredToolbarColor.Value.ToInt());
                     if (options.TitleMode != BrowserTitleMode.Default)
                         tabsBuilder.SetShowTitle(options.TitleMode == BrowserTitleMode.Show);
+
                     var tabsIntent = tabsBuilder.Build();
                     tabsIntent.Intent.SetFlags(ActivityFlags.ClearTop);
                     tabsIntent.Intent.SetFlags(ActivityFlags.NewTask);

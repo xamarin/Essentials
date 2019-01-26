@@ -18,11 +18,11 @@ namespace Xamarin.Essentials
                     var sfViewController = new SFSafariViewController(nativeUrl, false);
                     var vc = Platform.GetCurrentViewController();
 
-                    if (options.PreferredTitleColor.HasValue)
-                        sfViewController.PreferredBarTintColor = options.PreferredTitleColor.Value.ToPlatformColor();
+                    if (options.PreferredToolbarColor.HasValue)
+                        sfViewController.PreferredBarTintColor = options.PreferredToolbarColor.Value.ToPlatformColor();
 
-                    if (options.PrefferedControlColor.HasValue)
-                        sfViewController.PreferredControlTintColor = options.PrefferedControlColor.Value.ToPlatformColor();
+                    if (options.PreferredControlColor.HasValue)
+                        sfViewController.PreferredControlTintColor = options.PreferredControlColor.Value.ToPlatformColor();
 
                     if (sfViewController.PopoverPresentationController != null)
                     {
