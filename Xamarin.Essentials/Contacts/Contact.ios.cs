@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using AddressBook;
 using Contacts;
 using ContactsUI;
@@ -8,9 +10,32 @@ namespace Xamarin.Essentials
 {
     public static partial class Contact
     {
+        internal static Action<PhoneContact> CallBack { get; set; }
+
         static Task<PhoneContact> PlataformPickContactAsync()
         {
-            return null;
+            var source = new TaskCompletionSource<PhoneContact>();
+            try
+            {
+                CallBack = (phoneContact) =>
+                {
+                    var tcs = Interlocked.Exchange(ref source, null);
+                    tcs?.SetResult(phoneContact);
+                };
+            }
+            catch (Exception ex)
+            {
+                source.SetException(ex);
+            }
+            return source.Task;
+        }
+
+        internal static PhoneContact GetContact(CNContact contact)
+        {
+            if (contact == null)
+                return default;
+
+            return default;
         }
 
         static Task PlataformSaveContactAsync(string name, string phone, string email)
