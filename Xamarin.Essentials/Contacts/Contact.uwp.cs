@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Contacts;
@@ -40,6 +41,15 @@ namespace Xamarin.Essentials
             var uriPeople = new Uri($"ms-people:savetocontact?PhoneNumber={phone}&ContactName={name}&Email={email}");
 
             var success = await Windows.System.Launcher.LaunchUriAsync(uriPeople);
+        }
+
+        static Task<IEnumerable<PhoneContact>> PlataformGetAllContactsAsync()
+        {
+            var t = Task.Run(() =>
+            {
+                return Task.FromResult<IEnumerable<PhoneContact>>(new List<PhoneContact>());
+            });
+            return t;
         }
     }
 }
