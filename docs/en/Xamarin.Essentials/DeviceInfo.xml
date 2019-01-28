@@ -1,6 +1,6 @@
 <Type Name="DeviceInfo" FullName="Xamarin.Essentials.DeviceInfo">
   <TypeSignature Language="C#" Value="public static class DeviceInfo" />
-  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract sealed DeviceInfo extends System.Object" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract sealed beforefieldinit DeviceInfo extends System.Object" />
   <TypeSignature Language="DocId" Value="T:Xamarin.Essentials.DeviceInfo" />
   <AssemblyInfo>
     <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -13,7 +13,8 @@
   <Docs>
     <summary>Represents information about the device.</summary>
     <remarks>
-      <para></para>
+      <para>
+      </para>
     </remarks>
   </Docs>
   <Members>
@@ -116,7 +117,7 @@
           <para />
         </remarks>
       </Docs>
-    </Member>
+    </Member>    
     <Member MemberName="Platform">
       <MemberSignature Language="C#" Value="public static Xamarin.Essentials.DevicePlatform Platform { get; }" />
       <MemberSignature Language="ILAsm" Value=".property valuetype Xamarin.Essentials.DevicePlatform Platform" />
@@ -136,7 +137,7 @@
           <para />
         </remarks>
       </Docs>
-    </Member>
+    </Member>    
     <Member MemberName="Version">
       <MemberSignature Language="C#" Value="public static Version Version { get; }" />
       <MemberSignature Language="ILAsm" Value=".property class System.Version Version" />
@@ -173,7 +174,8 @@
         <summary>Gets the version of the operating system.</summary>
         <value>The version of the operating system.</value>
         <remarks>
-          <para></para>
+          <para>
+          </para>
         </remarks>
       </Docs>
     </Member>

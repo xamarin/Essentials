@@ -5,9 +5,17 @@ namespace Xamarin.Essentials
 {
     public static partial class Accelerometer
     {
+        const double accelerationThreshold = 2;
+
+        const int shakenInterval = 500;
+
+        static DateTime shakenTimeSpan = DateTime.Now;
+
         static bool useSyncContext;
 
         public static event EventHandler<AccelerometerChangedEventArgs> ReadingChanged;
+
+        public static event EventHandler OnShaked;
 
         public static bool IsMonitoring { get; private set; }
 
@@ -63,7 +71,22 @@ namespace Xamarin.Essentials
                 MainThread.BeginInvokeOnMainThread(() => ReadingChanged?.Invoke(null, e));
             else
                 ReadingChanged?.Invoke(null, e);
+
+            if (OnShaked != null)
+                ProcessShakenEvents(e);
         }
+
+        static void ProcessShakenEvents(AccelerometerChangedEventArgs e)
+        {
+            var g = Math.Round(e.Reading.Acceleration.X.Square() + e.Reading.Acceleration.Y.Square() + e.Reading.Acceleration.Z.Square());
+            if (g > accelerationThreshold && DateTime.Now.Subtract(shakenTimeSpan).Milliseconds > shakenInterval)
+            {
+                shakenTimeSpan = DateTime.Now;
+                OnShaked?.Invoke(null, EventArgs.Empty);
+            }
+        }
+
+        static double Square(this float q) => q * q;
     }
 
     public class AccelerometerChangedEventArgs : EventArgs
