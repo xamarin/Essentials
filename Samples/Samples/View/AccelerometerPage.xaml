@@ -9,7 +9,7 @@
     </views:BasePage.BindingContext>
 
     <StackLayout>
-        <Label Text="Retrieve acceleration data of the device in 3D space." FontAttributes="Bold" Margin="12" />
+        <Label Text="Retrieve acceleration data of the device in 3D space. Additionally, this page will detect if you shake your device." FontAttributes="Bold" Margin="12" />
 
         <ScrollView>
             <Grid Padding="12,0,12,12">

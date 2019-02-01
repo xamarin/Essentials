@@ -57,26 +57,24 @@ namespace Samples.ViewModel
             set => SetProperty(ref speed, value);
         }
 
-        public async override void OnAppearing()
+        public override void OnAppearing()
         {
-            await DisplayAlertAsync("This page detect when you shake the cellPhone.");
-
             Accelerometer.ReadingChanged += OnReadingChanged;
-            Accelerometer.OnShaked += Accelerometer_OnShaked;
+            Accelerometer.ShakeDetected += Accelerometer_OnShaked;
 
             base.OnAppearing();
         }
 
-        async void Accelerometer_OnShaked(object sender, EventArgs e)
+        void Accelerometer_OnShaked(object sender, EventArgs e)
         {
-            await DisplayAlertAsync("Device shaked!");
+            System.Diagnostics.Debug.WriteLine("Shaken!");
         }
 
         public override void OnDisappearing()
         {
             OnStop();
             Accelerometer.ReadingChanged -= OnReadingChanged;
-            Accelerometer.OnShaked -= Accelerometer_OnShaked;
+            Accelerometer.ShakeDetected -= Accelerometer_OnShaked;
             base.OnDisappearing();
         }
 

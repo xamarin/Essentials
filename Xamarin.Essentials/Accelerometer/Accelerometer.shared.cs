@@ -5,17 +5,17 @@ namespace Xamarin.Essentials
 {
     public static partial class Accelerometer
     {
-        const double accelerationThreshold = 2;
+        const int accelerationThreshold = 2;
 
-        const int shakenInterval = 500;
+        const double gravity = 9.81;
 
-        static DateTime shakenTimeSpan = DateTime.Now;
+        static readonly AccelerometerQueue queue = new AccelerometerQueue();
 
         static bool useSyncContext;
 
         public static event EventHandler<AccelerometerChangedEventArgs> ReadingChanged;
 
-        public static event EventHandler OnShaked;
+        public static event EventHandler ShakeDetected;
 
         public static bool IsMonitoring { get; private set; }
 
@@ -72,17 +72,33 @@ namespace Xamarin.Essentials
             else
                 ReadingChanged?.Invoke(null, e);
 
-            if (OnShaked != null)
-                ProcessShakenEvents(e);
+            if (ShakeDetected != null)
+                ProcessShakeEvent(e.Reading.Acceleration);
         }
 
-        static void ProcessShakenEvents(AccelerometerChangedEventArgs e)
+        static void ProcessShakeEvent(Vector3 acceleration)
         {
-            var g = Math.Round(e.Reading.Acceleration.X.Square() + e.Reading.Acceleration.Y.Square() + e.Reading.Acceleration.Z.Square());
-            if (g > accelerationThreshold && DateTime.Now.Subtract(shakenTimeSpan).Milliseconds > shakenInterval)
+            var x = acceleration.X * -1;
+            var y = acceleration.Y * -1;
+            var z = acceleration.Z * -1;
+
+            var g = Math.Round(x.Square() + y.Square() + z.Square());
+            System.Diagnostics.Debug.WriteLine($"g: {g}");
+
+            var isAccelerating = g > accelerationThreshold;
+            System.Diagnostics.Debug.WriteLine($"isAccelerating: {isAccelerating}");
+            queue.Add(DateTime.UtcNow.Ticks * 100, isAccelerating);
+
+            if (queue.IsShaking)
             {
-                shakenTimeSpan = DateTime.Now;
-                OnShaked?.Invoke(null, EventArgs.Empty);
+                System.Diagnostics.Debug.WriteLine($"IsShaking");
+                queue.Clear();
+                var args = new EventArgs();
+
+                if (useSyncContext)
+                    MainThread.BeginInvokeOnMainThread(() => ShakeDetected?.Invoke(null, args));
+                else
+                    ShakeDetected?.Invoke(null, args);
             }
         }
 

@@ -54,5 +54,50 @@ namespace Tests
                 Assert.NotEqual(data1.GetHashCode(), data2.GetHashCode());
             }
         }
+
+        [Fact]
+        public void InitialShaking()
+        {
+            var q = new AccelerometerQueue();
+            Assert.False(q.IsShaking);
+        }
+
+        [Fact]
+        public void ShakingTests()
+        {
+            var q = new AccelerometerQueue();
+            q.Add(1000000000L, false);
+            q.Add(1300000000L, false);
+            q.Add(1600000000L, false);
+            q.Add(1900000000L, false);
+            Assert.False(q.IsShaking);
+
+            // The oldest two entries will be removed.
+            q.Add(2200000000L, true);
+            q.Add(2500000000L, true);
+            Assert.False(q.IsShaking);
+
+            // Another entry should be removed, now 3 out of 4 are true.
+            q.Add(2800000000L, true);
+            Assert.True(q.IsShaking);
+
+            q.Add(3100000000L, false);
+            Assert.True(q.IsShaking);
+
+            q.Add(3400000000L, false);
+            Assert.False(q.IsShaking);
+        }
+
+        [Fact]
+        public void ClearQueue()
+        {
+            var q = new AccelerometerQueue();
+            q.Add(1000000000L, true);
+            q.Add(1200000000L, true);
+            q.Add(1400000000L, true);
+            Assert.True(q.IsShaking);
+            q.Clear();
+            Assert.False(q.IsShaking);
+        }
     }
 }
