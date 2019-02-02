@@ -52,10 +52,10 @@ namespace Xamarin.Essentials
                 contactUri = ContactsContract.Contacts.ContentUri;
             }
 
-            // var loader = new CursorLoader(Activity, contactUri, null, null, null, null);
-            // var cur = (ICursor)loader.LoadInBackground();
+            var loader = new CursorLoader(Activity, contactUri, null, null, null, null);
+            var cur = (ICursor)loader.LoadInBackground();
 
-            var cur = context.Query(contactUri, null, null, null, null);
+            // var cur = context.Query(contactUri, null, null, null, null);
             var emails = new List<string>();
             var phones = new List<string>();
             var birthday = string.Empty;
