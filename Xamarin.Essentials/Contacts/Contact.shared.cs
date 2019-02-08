@@ -15,4 +15,11 @@ namespace Xamarin.Essentials
 
         public static Task SaveContactAsync(string name = null, string phone = null, string email = null) => PlataformSaveContactAsync(name, phone, email);
     }
+
+    public enum ContactType
+    {
+        Unknow = 0,
+        Personal = 1,
+        Work = 2
+    }
 }

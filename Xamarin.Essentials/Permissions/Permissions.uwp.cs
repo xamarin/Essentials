@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Windows.ApplicationModel.Contacts;
 using Windows.Devices.Geolocation;
 
 namespace Xamarin.Essentials
@@ -48,6 +49,8 @@ namespace Xamarin.Essentials
             {
                 case PermissionType.LocationWhenInUse:
                     return CheckLocationAsync();
+                case PermissionType.Contacts:
+                    return CheckContactAsync();
                 default:
                     return Task.FromResult(PermissionStatus.Granted);
             }
@@ -72,6 +75,16 @@ namespace Xamarin.Essentials
                     return PermissionStatus.Denied;
             }
         }
+
+        static async Task<PermissionStatus> CheckContactAsync()
+        {
+            var accessStatus = await ContactManager.RequestStoreAsync();
+
+            if (accessStatus == null)
+                return PermissionStatus.Denied;
+
+            return PermissionStatus.Granted;
+        }
     }
 
     static class PermissionTypeExtensions
@@ -82,6 +95,8 @@ namespace Xamarin.Essentials
             {
                 case PermissionType.LocationWhenInUse:
                     return new[] { "location" };
+                case PermissionType.Contacts:
+                    return new[] { "contacts" };
                 default:
                     return null;
             }

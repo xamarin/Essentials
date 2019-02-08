@@ -10,6 +10,7 @@ namespace Xamarin.Essentials
     {
         static async Task<PhoneContact> PlataformPickContactAsync()
         {
+            await Permissions.RequestAsync(PermissionType.Contacts);
             var contactPicker = new ContactPicker();
 
             try
@@ -21,13 +22,35 @@ namespace Xamarin.Essentials
 
                 var contactManager = await ContactManager.RequestStoreAsync();
                 var contact = await contactManager.FindContactsAsync(contactSelected.Name);
-
                 var phoneContact = contact[0];
+                var phones = new Dictionary<string, ContactType>();
+                var emails = new Dictionary<string, ContactType>();
+                foreach (var item in phoneContact.Phones)
+                {
+                    if (item.Kind == ContactPhoneKind.Home || item.Kind == ContactPhoneKind.HomeFax)
+                        phones.Add(item.Number, ContactType.Personal);
+                    else if (item.Kind == ContactPhoneKind.Company || item.Kind == ContactPhoneKind.BusinessFax)
+                        phones.Add(item.Number, ContactType.Work);
+                    else
+                        phones.Add(item.Number, ContactType.Unknow);
+                }
+
+                foreach (var item in phoneContact.Emails)
+                {
+                    if (item.Kind == ContactEmailKind.Personal)
+                        emails.Add(item.Address, ContactType.Personal);
+                    else if (item.Kind == ContactEmailKind.Work)
+                        emails.Add(item.Address, ContactType.Work);
+                    else
+                        phones.Add(item.Address, ContactType.Unknow);
+                }
+
+                var birthday = phoneContact.ImportantDates.First(x => x.Kind == ContactDateKind.Birthday).ToString();
 
                 return new PhoneContact(
                                         phoneContact.Name,
-                                        phoneContact.Phones.Select(p => p.Number),
-                                        phoneContact.Emails.Select(e => e.Address),
+                                        phones,
+                                        emails,
                                         string.Empty);
             }
             catch (Exception ex)
@@ -38,9 +61,16 @@ namespace Xamarin.Essentials
 
         static async Task PlataformSaveContactAsync(string name, string phone, string email)
         {
-            var uriPeople = new Uri($"ms-people:savetocontact?PhoneNumber={phone}&ContactName={name}&Email={email}");
+            try
+            {
+                var uriPeople = new Uri($"ms-people:savetocontact?PhoneNumber={phone}&ContactName={name}&Email={email}");
 
-            var success = await Windows.System.Launcher.LaunchUriAsync(uriPeople);
+                await Windows.System.Launcher.LaunchUriAsync(uriPeople);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         static Task<IEnumerable<PhoneContact>> PlataformGetAllContactsAsync()
