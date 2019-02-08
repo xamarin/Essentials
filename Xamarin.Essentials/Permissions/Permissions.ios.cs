@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using AddressBook;
 using CoreLocation;
 using Foundation;
 
@@ -23,6 +24,8 @@ namespace Xamarin.Essentials
 
             switch (permission)
             {
+                case PermissionType.Contacts:
+                    return Task.FromResult(GetContactsStatus());
                 case PermissionType.LocationWhenInUse:
                     return Task.FromResult(GetLocationStatus());
             }
@@ -39,16 +42,34 @@ namespace Xamarin.Essentials
 
             EnsureDeclared(permission);
 
+            if (!MainThread.IsMainThread)
+                throw new PermissionException("Permission request must be invoked on main thread.");
+
             switch (permission)
             {
+                case PermissionType.Contacts:
+                    return await RequestContactAsync();
                 case PermissionType.LocationWhenInUse:
-
-                    if (!MainThread.IsMainThread)
-                        throw new PermissionException("Permission request must be invoked on main thread.");
-
                     return await RequestLocationAsync();
                 default:
                     return PermissionStatus.Granted;
+            }
+        }
+
+        static PermissionStatus GetContactsStatus()
+        {
+            var status = ABAddressBook.GetAuthorizationStatus();
+
+            switch (status)
+            {
+                case ABAuthorizationStatus.Restricted:
+                    return PermissionStatus.Restricted;
+                case ABAuthorizationStatus.Denied:
+                    return PermissionStatus.Denied;
+                case ABAuthorizationStatus.Authorized:
+                    return PermissionStatus.Granted;
+                default:
+                    return PermissionStatus.Unknown;
             }
         }
 
@@ -71,6 +92,24 @@ namespace Xamarin.Essentials
                 default:
                     return PermissionStatus.Unknown;
             }
+        }
+
+        static Task<PermissionStatus> RequestContactAsync()
+        {
+            var status = GetContactsStatus();
+            if (status != PermissionStatus.Unknown)
+                return Task.FromResult(status);
+
+            var book = new ABAddressBook();
+
+            var tcs = new TaskCompletionSource<PermissionStatus>();
+
+            book.RequestAccess((success, error) =>
+            {
+                tcs.TrySetResult(success ? PermissionStatus.Granted : PermissionStatus.Denied);
+            });
+
+            return tcs.Task;
         }
 
         static CLLocationManager locationManager;

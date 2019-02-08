@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,6 +22,7 @@ namespace Xamarin.Essentials
             var source = new TaskCompletionSource<PhoneContact>();
             try
             {
+                Task.WaitAll(Permissions.RequestAsync(PermissionType.Contacts));
                 var contactPicker = new Intent(Activity, typeof(ContactActivity));
                 contactPicker.SetFlags(ActivityFlags.NewTask);
                 Activity.StartActivity(contactPicker);
@@ -43,12 +43,13 @@ namespace Xamarin.Essentials
 
         internal static IEnumerable<PhoneContact> PlataformGetContacts(Net.Uri contactUri = null)
         {
-            var veioNulo = false;
+            var comeNull = false;
             var context = Activity.ContentResolver;
-            var myList = new List<PhoneContact>();
+
+            // var myList = new List<PhoneContact>();
             if (contactUri == null)
             {
-                veioNulo = true;
+                comeNull = true;
                 contactUri = ContactsContract.Contacts.ContentUri;
             }
 
@@ -56,8 +57,8 @@ namespace Xamarin.Essentials
             var cur = (ICursor)loader.LoadInBackground();
 
             // var cur = context.Query(contactUri, null, null, null, null);
-            var emails = new List<string>();
-            var phones = new List<string>();
+            var emails = new Dictionary<string, ContactType>();
+            var phones = new Dictionary<string, ContactType>();
             var birthday = string.Empty;
 
             if (cur.MoveToFirst())
@@ -67,12 +68,18 @@ namespace Xamarin.Essentials
                     var name = cur.GetString(cur.GetColumnIndex(ContactsContract.Contacts.InterfaceConsts.DisplayName));
                     string id;
 
-                    if (veioNulo)
+                    if (comeNull)
                         id = cur.GetString(cur.GetColumnIndexOrThrow(ContactsContract.Contacts.InterfaceConsts.Id));
                     else
                         id = cur.GetString(cur.GetColumnIndex(ContactsContract.CommonDataKinds.Email.InterfaceConsts.ContactId));
 
                     var idQ = new string[] { id };
+
+                    var projection = new string[]
+                    {
+                        ContactsContract.CommonDataKinds.Phone.Number,
+                        ContactsContract.CommonDataKinds.Phone.InterfaceConsts.Type,
+                    };
 
                     var cursor = context.Query(
                         ContactsContract.CommonDataKinds.Phone.ContentUri,
@@ -85,24 +92,37 @@ namespace Xamarin.Essentials
                     {
                         do
                         {
-                            var phone = cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.Phone.Number));
-                            phones.Add(phone);
+                            var phone = cursor.GetString(cursor.GetColumnIndex(projection[0]));
+                            var phoneType = cursor.GetString(cursor.GetColumnIndex(projection[1]));
+
+                            var contactType = GetContactType(phoneType);
+                            phones.Add(phone, contactType);
                         }
                         while (cursor.MoveToNext());
                     }
                     cursor.Close();
 
+                    projection = new string[]
+                    {
+                        ContactsContract.CommonDataKinds.Email.Address,
+                        ContactsContract.CommonDataKinds.Email.InterfaceConsts.Type
+                    };
+
                     cursor = context.Query(ContactsContract.CommonDataKinds.Email.ContentUri, null, ContactsContract.CommonDataKinds.Email.InterfaceConsts.ContactId + " = ?", idQ, null);
 
                     while (cursor.MoveToNext())
                     {
-                        var email = cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.Email.Address));
-                        emails.Add(email);
+                        var email = cursor.GetString(cursor.GetColumnIndex(projection[0]));
+                        var emailType = cursor.GetString(cursor.GetColumnIndex(projection[1]));
+
+                        var contactType = GetContactType(emailType);
+
+                        emails.Add(email, contactType);
                     }
 
                     cursor.Close();
 
-                    var projection = new string[]
+                    projection = new string[]
                     {
                             ContactsContract.CommonDataKinds.StructuredPostal.Street,
                             ContactsContract.CommonDataKinds.StructuredPostal.City,
@@ -150,10 +170,38 @@ namespace Xamarin.Essentials
             return Task.CompletedTask;
         }
 
+        // TODO: TEst this
         static Task<IEnumerable<PhoneContact>> PlataformGetAllContactsAsync()
         {
-            var result = PlataformGetContacts();
-            return Task.FromResult(result);
+            // var contacts = default(IEnumerable<PhoneContact>);
+            // var task = Task.Run(() =>
+            // {
+            //     contacts = PlataformGetContacts();
+            // }).ContinueWith(t =>
+            // {
+            //     return contacts;
+            // });
+            // return Task.FromResult(task.Result);
+
+            // Try this one too
+
+            return Task.Run(() =>
+            {
+                var task = new TaskCompletionSource<IEnumerable<PhoneContact>>();
+                task.TrySetResult(PlataformGetContacts());
+
+                return task.Task;
+            });
+        }
+
+        static ContactType GetContactType(string type)
+        {
+            if (type == "1" || type == "2" || type == "5")
+                return ContactType.Personal;
+            else if (type == "3" || type == "17" || type == "18")
+                return ContactType.Work;
+            else
+                return ContactType.Unknow;
         }
     }
 }

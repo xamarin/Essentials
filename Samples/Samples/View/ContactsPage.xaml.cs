@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,14 +22,16 @@ namespace Samples.View
         {
             try
             {
-                var p = await Contact.GetAllContactsAsync();
-                var t = p.ToList();
-                await DisplayAlert("Aviso", t.Count.ToString(), "Ok");
+                var p = await Contact.PickContactAsync();
 
-                var euMesmo = await Contact.PickContactAsync();
+                // var t = p.ToList();
+                // await DisplayAlert("Aviso", t.Count.ToString(), "Ok");
+
+                // var euMesmo = await Contact.PickContactAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Debug.WriteLine(ex.Message);
                 return;
             }
 
