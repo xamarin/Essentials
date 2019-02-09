@@ -20,6 +20,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -40,6 +41,8 @@
 
                 <Button Grid.Row="5" Grid.Column="1" Text="Stop" Command="{Binding StopCommand}"
                     IsEnabled="{Binding IsActive}" />
+
+                <Label Grid.Row="6" Grid.ColumnSpan="2" Text="{Binding ShakeTime}"/>
             </Grid>
         </ScrollView>
     </StackLayout>

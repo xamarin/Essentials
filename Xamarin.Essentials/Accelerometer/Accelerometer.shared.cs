@@ -5,7 +5,7 @@ namespace Xamarin.Essentials
 {
     public static partial class Accelerometer
     {
-        const int accelerationThreshold = 2;
+        const double accelerationThreshold = 169;
 
         const double gravity = 9.81;
 
@@ -78,20 +78,17 @@ namespace Xamarin.Essentials
 
         static void ProcessShakeEvent(Vector3 acceleration)
         {
-            var x = acceleration.X * -1;
-            var y = acceleration.Y * -1;
-            var z = acceleration.Z * -1;
+            var now = DateTime.UtcNow.Nanoseconds();
 
-            var g = Math.Round(x.Square() + y.Square() + z.Square());
-            System.Diagnostics.Debug.WriteLine($"g: {g}");
+            var x = acceleration.X * gravity;
+            var y = acceleration.Y * gravity;
+            var z = acceleration.Z * gravity;
 
-            var isAccelerating = g > accelerationThreshold;
-            System.Diagnostics.Debug.WriteLine($"isAccelerating: {isAccelerating}");
-            queue.Add(DateTime.UtcNow.Ticks * 100, isAccelerating);
+            var g = x.Square() + y.Square() + z.Square();
+            queue.Add(now, g > accelerationThreshold);
 
             if (queue.IsShaking)
             {
-                System.Diagnostics.Debug.WriteLine($"IsShaking");
                 queue.Clear();
                 var args = new EventArgs();
 
@@ -102,7 +99,10 @@ namespace Xamarin.Essentials
             }
         }
 
-        static double Square(this float q) => q * q;
+        static double Square(this double q) => q * q;
+
+        internal static long Nanoseconds(this DateTime time) =>
+            (time.Ticks / TimeSpan.TicksPerMillisecond) * 1_000_000;
     }
 
     public class AccelerometerChangedEventArgs : EventArgs

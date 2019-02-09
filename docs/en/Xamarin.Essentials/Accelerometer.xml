@@ -37,10 +37,10 @@
         </remarks>
       </Docs>
     </Member>
-    <Member MemberName="OnShaked">
-      <MemberSignature Language="C#" Value="public static event EventHandler OnShaked;" />
-      <MemberSignature Language="ILAsm" Value=".event class System.EventHandler OnShaked" />
-      <MemberSignature Language="DocId" Value="E:Xamarin.Essentials.Accelerometer.OnShaked" />
+    <Member MemberName="ShakeDetected">
+      <MemberSignature Language="C#" Value="public static event EventHandler ShakeDetected;" />
+      <MemberSignature Language="ILAsm" Value=".event class System.EventHandler ShakeDetected" />
+      <MemberSignature Language="DocId" Value="E:Xamarin.Essentials.Accelerometer.ShakeDetected" />
       <MemberType>Event</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -50,7 +50,7 @@
         <ReturnType>System.EventHandler</ReturnType>
       </ReturnValue>
       <Docs>
-         <summary>Event triggered when reading of sensor changes.</summary>
+         <summary>Event triggered when a shake has been detected on the device.</summary>
         <remarks>
           <para />
         </remarks>

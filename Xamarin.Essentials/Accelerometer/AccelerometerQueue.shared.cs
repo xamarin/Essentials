@@ -12,8 +12,8 @@
 
         readonly int minQueueSize = 4;
 
-        AccelerometerSample oldestSample;
-        AccelerometerSample newestSample;
+        AccelerometerSample oldest;
+        AccelerometerSample newest;
         int sampleCount;
         int acceleratingCount;
 
@@ -25,13 +25,13 @@
             added.IsAccelerating = accelerating;
             added.Next = null;
 
-            if (newestSample != null)
-                newestSample.Next = added;
+            if (newest != null)
+                newest.Next = added;
 
-            newestSample = added;
+            newest = added;
 
-            if (oldestSample == null)
-                oldestSample = added;
+            if (oldest == null)
+                oldest = added;
 
             sampleCount++;
 
@@ -41,13 +41,13 @@
 
         internal void Clear()
         {
-            while (oldestSample != null)
+            while (oldest != null)
             {
-                var removed = oldestSample;
-                oldestSample = removed.Next;
+                var removed = oldest;
+                oldest = removed.Next;
                 pool.Release(removed);
             }
-            newestSample = null;
+            newest = null;
             sampleCount = 0;
             acceleratingCount = 0;
         }
@@ -55,27 +55,27 @@
         void Purge(long cutoff)
         {
             while (sampleCount >= minQueueSize &&
-                   oldestSample != null &&
-                   cutoff - oldestSample.Timestamp > 0)
+                   oldest != null &&
+                   cutoff - oldest.Timestamp > 0)
             {
-                var removed = oldestSample;
+                var removed = oldest;
                 if (removed.IsAccelerating)
                     acceleratingCount--;
 
                 sampleCount--;
-                oldestSample = removed.Next;
+                oldest = removed.Next;
 
-                if (oldestSample == null)
-                    newestSample = null;
+                if (oldest == null)
+                    newest = null;
 
                 pool.Release(removed);
             }
         }
 
         // Returns true if we have enough samples to detect if we are shaking the device and that more than 3/4th of them are accelerating
-        internal bool IsShaking => newestSample != null &&
-                          oldestSample != null &&
-                          newestSample.Timestamp - oldestSample.Timestamp >= minWindowSize &&
+        internal bool IsShaking => newest != null &&
+                          oldest != null &&
+                          newest.Timestamp - oldest.Timestamp >= minWindowSize &&
                           acceleratingCount >= (sampleCount >> 1) + (sampleCount >> 2);
 
         internal class AccelerometerSample
@@ -91,8 +91,16 @@
         {
             AccelerometerSample head;
 
-            internal AccelerometerSample Acquire() =>
-                head?.Next ?? new AccelerometerSample();
+            internal AccelerometerSample Acquire()
+            {
+                var aquired = head;
+                if (aquired == null)
+                    aquired = new AccelerometerSample();
+                else
+                    head = aquired.Next;
+
+                return aquired;
+            }
 
             internal void Release(AccelerometerSample sample)
             {

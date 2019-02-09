@@ -5,6 +5,7 @@
   <Namespace Name="Xamarin.Essentials">
     <Type Name="Xamarin.Essentials.Accelerometer" Id="T:Xamarin.Essentials.Accelerometer">
       <Member Id="E:Xamarin.Essentials.Accelerometer.ReadingChanged" />
+      <Member Id="E:Xamarin.Essentials.Accelerometer.ShakeDetected" />
       <Member Id="M:Xamarin.Essentials.Accelerometer.Start(Xamarin.Essentials.SensorSpeed)" />
       <Member Id="M:Xamarin.Essentials.Accelerometer.Stop" />
       <Member Id="P:Xamarin.Essentials.Accelerometer.IsMonitoring" />
