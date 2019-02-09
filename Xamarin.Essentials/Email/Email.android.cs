@@ -35,15 +35,12 @@ namespace Xamarin.Essentials
                 {
                     ISpanned html;
 #if __ANDROID_24__
-                    var hasN = Platform.HasApiLevel(BuildVersionCodes.N);
-#else
-                    var hasN = false;
-#endif
-                    if (hasN)
+                    if (Platform.HasApiLevelN)
                     {
                         html = Html.FromHtml(message.Body, FromHtmlOptions.ModeLegacy);
                     }
                     else
+#endif
                     {
 #pragma warning disable CS0618 // Type or member is obsolete
                         html = Html.FromHtml(message.Body);

@@ -27,13 +27,13 @@ namespace Xamarin.Essentials
 
             var phoneNumber = string.Empty;
 #if __ANDROID_24__
-            var hasN = Platform.HasApiLevel(BuildVersionCodes.N);
-#else
-            var hasN = false;
-#endif
-            if (hasN)
+            if (Platform.HasApiLevelN)
                 phoneNumber = PhoneNumberUtils.FormatNumber(number, Java.Util.Locale.GetDefault(Java.Util.Locale.Category.Format).Country);
             else if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
+#else
+            if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
+#endif
+
                 phoneNumber = PhoneNumberUtils.FormatNumber(number, Java.Util.Locale.Default.Country);
             else
 #pragma warning disable CS0618
