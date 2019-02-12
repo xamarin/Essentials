@@ -72,14 +72,5 @@ namespace Xamarin.Essentials
                 throw ex;
             }
         }
-
-        static Task<IEnumerable<PhoneContact>> PlataformGetAllContactsAsync()
-        {
-            var t = Task.Run(() =>
-            {
-                return Task.FromResult<IEnumerable<PhoneContact>>(new List<PhoneContact>());
-            });
-            return t;
-        }
     }
 }

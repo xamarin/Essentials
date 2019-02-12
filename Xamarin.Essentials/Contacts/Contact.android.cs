@@ -170,30 +170,6 @@ namespace Xamarin.Essentials
             return Task.CompletedTask;
         }
 
-        // TODO: TEst this
-        static Task<IEnumerable<PhoneContact>> PlataformGetAllContactsAsync()
-        {
-            // var contacts = default(IEnumerable<PhoneContact>);
-            // var task = Task.Run(() =>
-            // {
-            //     contacts = PlataformGetContacts();
-            // }).ContinueWith(t =>
-            // {
-            //     return contacts;
-            // });
-            // return Task.FromResult(task.Result);
-
-            // Try this one too
-
-            return Task.Run(() =>
-            {
-                var task = new TaskCompletionSource<IEnumerable<PhoneContact>>();
-                task.TrySetResult(PlataformGetContacts());
-
-                return task.Task;
-            });
-        }
-
         static ContactType GetContactType(string type)
         {
             if (type == "1" || type == "2" || type == "5")

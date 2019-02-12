@@ -11,8 +11,6 @@ namespace Xamarin.Essentials
 
         public static Task<PhoneContact> PickContactAsync() => PlataformPickContactAsync();
 
-        public static Task<IEnumerable<PhoneContact>> GetAllContactsAsync() => PlataformGetAllContactsAsync();
-
         public static Task SaveContactAsync(string name = null, string phone = null, string email = null) => PlataformSaveContactAsync(name, phone, email);
     }
 
