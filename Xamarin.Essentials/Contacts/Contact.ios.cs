@@ -14,6 +14,8 @@ namespace Xamarin.Essentials
 
         static Task<PhoneContact> PlataformPickContactAsync()
         {
+            Task.WaitAll(Permissions.RequestAsync(PermissionType.Contacts));
+
             var source = new TaskCompletionSource<PhoneContact>();
             try
             {

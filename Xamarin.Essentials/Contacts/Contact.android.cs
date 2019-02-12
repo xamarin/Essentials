@@ -46,7 +46,6 @@ namespace Xamarin.Essentials
             var comeNull = false;
             var context = Activity.ContentResolver;
 
-            // var myList = new List<PhoneContact>();
             if (contactUri == null)
             {
                 comeNull = true;
