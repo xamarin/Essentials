@@ -39,10 +39,5 @@ namespace Xamarin.Essentials
             Console.WriteLine("Selected: {0}", contact);
             Contact.CallBack(Contact.GetContact(contact));
         }
-
-        public override void DidSelectContactProperty(CNContactPickerViewController picker, CNContactProperty contactProperty)
-        {
-            Console.WriteLine("Selected Property: {0}", contactProperty);
-        }
     }
 }
