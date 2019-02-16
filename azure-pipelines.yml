@@ -12,6 +12,7 @@ resources:
       type: github
       name: xamarin/yaml-templates
       ref: refs/heads/sign-artifacts
+      endpoint: xamarin
 
 jobs:
 
