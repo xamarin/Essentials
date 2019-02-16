@@ -7,6 +7,7 @@ variables:
   XCODE_VERSION: 10.1
 
 jobs:
+
   - job: build
     displayName: Build
     strategy:
@@ -52,22 +53,24 @@ jobs:
         displayName: Component Detection
         inputs:
           scanType: LogOnly
-  - job: signing
-    displayName: Signing NuGets
-    dependsOn: build
-    pool:
-      name: VSEng-XamarinCustom
-    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'],'refs/tags/'))
-    steps:
-      - checkout: none
-      - template: azure-templates-sign.yml
-        parameters:
-          sourceRepo: xamarin/Essentials
-          targetFolder: '$(Build.ArtifactStagingDirectory)/signed'
-      - task: PublishBuildArtifacts@1
-        displayName: 'Publish Signed NuGets'
-        inputs:
-          artifactName: nuget-signed
-          pathToPublish: '$(Build.ArtifactStagingDirectory)/signed'
-      - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
-        displayName: 'Component Detection'
+
+  - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
+    - job: signing
+      displayName: Signing NuGets
+      dependsOn: build
+      pool:
+        name: VSEng-XamarinCustom
+      condition: and(succeeded(), startsWith(variables['Build.SourceBranch'],'refs/tags/'))
+      steps:
+        - checkout: none
+        - template: azure-templates-sign.yml
+          parameters:
+            sourceRepo: xamarin/Essentials
+            targetFolder: '$(Build.ArtifactStagingDirectory)/signed'
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish Signed NuGets'
+          inputs:
+            artifactName: nuget-signed
+            pathToPublish: '$(Build.ArtifactStagingDirectory)/signed'
+        - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
+          displayName: 'Component Detection'
