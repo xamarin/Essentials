@@ -13,11 +13,13 @@ jobs:
     strategy:
       matrix:
         Windows:
-          VM_IMAGE: vs2017-win2016
+          vmImage: vs2017-win2016
+          SolutionName: Xamarin.Essentials.sln
         Mac:
-          VM_IMAGE: macos-10.13
+          vmImage: macos-10.13
+          SolutionName: Xamarin.Essentials/Xamarin.Essentials.csproj
     pool:
-      vmImage: $(VM_IMAGE)
+      vmImage: $(vmImage)
     steps:
       - powershell: |
           $buildSourceBranch = "$(Build.SourceBranch)"
@@ -26,23 +28,17 @@ jobs:
           Write-Host ("##vso[task.setvariable variable=NugetPackageVersion;]$tagVersion")
         displayName: Set NuGet Version to Tag Number
         condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
-      - ${{ if eq(variables['VM_IMAGE'], 'macos-10.13') }}:
+      - ${{ if eq(variables['vmImage'], 'macos-10.13') }}:
         - bash: sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh $(MONO_VERSION)
           displayName: Switch to the latest Xamarin SDK
         - bash: echo '##vso[task.setvariable variable=MD_APPLE_SDK_ROOT;]'/Applications/Xcode_$(XCODE_VERSION).app;sudo xcode-select --switch /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer
           displayName: Switch to the latest Xcode
       - task: MSBuild@1
-        displayName: Restore NuGet Packages
-        inputs:
-          solution: Xamarin.Essentials.sln
-          configuration: Release
-          msbuildArguments: '/t:Restore'
-      - task: MSBuild@1
         displayName: Build Solution
         inputs:
-          solution: Xamarin.Essentials.sln
+          solution: $(SolutionName)
           configuration: Release
-          msbuildArguments: '/t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false'
+          msbuildArguments: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false'
       - task: MSBuild@1
         displayName: Pack NuGets
         inputs:
