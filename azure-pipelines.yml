@@ -17,7 +17,7 @@ jobs:
         Mac:
           VM_IMAGE: macos-10.13
     pool:
-      name: $(VM_IMAGE)
+      vmImage: $(VM_IMAGE)
     steps:
       - powershell: |
           $buildSourceBranch = "$(Build.SourceBranch)"
