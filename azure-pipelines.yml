@@ -1,6 +1,6 @@
 
 variables:
-  CurrentSemanticVersionBase: '0.0.0'
+  CurrentSemanticVersionBase: '1.0.0'
   CurrentSemanticVersion: '$(CurrentSemanticVersionBase)-preview$(Build.BuildNumber)'
   NugetPackageVersion: '$(CurrentSemanticVersion)'
   MONO_VERSION: 5_16_0
