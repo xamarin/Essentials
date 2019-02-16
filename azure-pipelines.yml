@@ -23,7 +23,10 @@ jobs:
         Windows:
           vmImage: vs2017-win2016
           SolutionName: Xamarin.Essentials.sln
-        Mac:
+        WindowsLibrary:
+          vmImage: vs2017-win2016
+          SolutionName: Xamarin.Essentials/Xamarin.Essentials.csproj
+        MacLibrary:
           vmImage: macos-10.13
           SolutionName: Xamarin.Essentials/Xamarin.Essentials.csproj
     pool:
@@ -56,8 +59,8 @@ jobs:
           solution: Xamarin.Essentials/Xamarin.Essentials.csproj
           configuration: Release
           msbuildArguments: '/t:Pack /p:PackageVersion=$(NugetPackageVersion) /p:PackageOutputPath="$(Build.ArtifactStagingDirectory)/nuget"'
-      # only publish the packages on Windows
-      - ${{ if eq(variables['vmImage'], 'vs2017-win2016') }}:
+      # only publish the packages on Windows when building the library
+      - ${{ if eq(variables['Agent.JobName'], 'WindowsLibrary') }}:
         - task: PublishBuildArtifacts@1
           displayName: 'Publish Unsigned NuGets'
           inputs:
@@ -70,7 +73,7 @@ jobs:
           scanType: LogOnly
 
   # only sign the packages when running on Windows, and using the private server which has the certificates
-  - ${{ if and(eq(variables['vmImage'], 'vs2017-win2016'), eq(variables['System.TeamProject'], 'devdiv')) }}:
+  - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
     - job: signing
       displayName: Signing NuGets
       dependsOn: build
