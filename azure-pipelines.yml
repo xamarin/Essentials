@@ -24,9 +24,9 @@ jobs:
           $tagVersion = $buildSourceBranch.Substring($buildSourceBranch.LastIndexOf("/") + 1)
           Write-Host("Branch = $buildSourceBranch, Version = $tagVersion");
           Write-Host ("##vso[task.setvariable variable=NugetPackageVersion;]$tagVersion")
-        displayName: Set NuGet Version
+        displayName: Set NuGet Version to Tag Number
         condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
-      - ${{ if eq(variables['System.VM_IMAGE'], 'macos-10.13') }}:
+      - ${{ if eq(variables['VM_IMAGE'], 'macos-10.13') }}:
         - bash: sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh $(MONO_VERSION)
           displayName: Switch to the latest Xamarin SDK
         - bash: echo '##vso[task.setvariable variable=MD_APPLE_SDK_ROOT;]'/Applications/Xcode_$(XCODE_VERSION).app;sudo xcode-select --switch /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer
@@ -35,9 +35,8 @@ jobs:
         displayName: Build Solution
         inputs:
           solution: Xamarin.Essentials.sln
-          restoreNugetPackages: true
           configuration: Release
-          msbuildArguments: '/p:ContinuousIntegrationBuild=true /p:Deterministic=false'
+          msbuildArguments: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false'
       - task: MSBuild@1
         displayName: Pack NuGets
         inputs:
