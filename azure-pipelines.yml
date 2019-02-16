@@ -21,6 +21,7 @@ jobs:
     pool:
       vmImage: $(vmImage)
     steps:
+      # if this is a tagged build, then update the version number
       - powershell: |
           $buildSourceBranch = "$(Build.SourceBranch)"
           $tagVersion = $buildSourceBranch.Substring($buildSourceBranch.LastIndexOf("/") + 1)
@@ -28,11 +29,13 @@ jobs:
           Write-Host ("##vso[task.setvariable variable=NugetPackageVersion;]$tagVersion")
         displayName: Set NuGet Version to Tag Number
         condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
+      # make sure to select the correct Xamarin and mono for macOS
       - ${{ if eq(variables['vmImage'], 'macos-10.13') }}:
         - bash: sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh $(MONO_VERSION)
           displayName: Switch to the latest Xamarin SDK
         - bash: echo '##vso[task.setvariable variable=MD_APPLE_SDK_ROOT;]'/Applications/Xcode_$(XCODE_VERSION).app;sudo xcode-select --switch /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer
           displayName: Switch to the latest Xcode
+      # restore, build and pack the packages
       - task: MSBuild@1
         displayName: Build Solution
         inputs:
@@ -45,17 +48,21 @@ jobs:
           solution: Xamarin.Essentials/Xamarin.Essentials.csproj
           configuration: Release
           msbuildArguments: '/t:Pack /p:PackageVersion=$(NugetPackageVersion) /p:PackageOutputPath="$(Build.ArtifactStagingDirectory)/nuget"'
-      - task: PublishBuildArtifacts@1
-        displayName: 'Publish Unsigned NuGets'
-        inputs:
-          artifactName: nuget
-          pathToPublish: '$(Build.ArtifactStagingDirectory)/nuget'
+      # only publish the packages on Windows
+      - ${{ if eq(variables['vmImage'], 'vs2017-win2016') }}:
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish Unsigned NuGets'
+          inputs:
+            artifactName: nuget
+            pathToPublish: '$(Build.ArtifactStagingDirectory)/nuget'
+      # make sure we are following the rules
       - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
         displayName: Component Detection
         inputs:
           scanType: LogOnly
 
-  - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
+  # only sign the packages when running on Windows, and using the private server which has the certificates
+  - ${{ if and(eq(variables['vmImage'], 'vs2017-win2016'), eq(variables['System.TeamProject'], 'devdiv')) }}:
     - job: signing
       displayName: Signing NuGets
       dependsOn: build
@@ -63,15 +70,18 @@ jobs:
         name: VSEng-XamarinCustom
       condition: and(succeeded(), startsWith(variables['Build.SourceBranch'],'refs/tags/'))
       steps:
+        # don't checkout code and sign the packages
         - checkout: none
         - template: azure-templates-sign.yml
           parameters:
             sourceRepo: xamarin/Essentials
             targetFolder: '$(Build.ArtifactStagingDirectory)/signed'
+        # publish the signed packages
         - task: PublishBuildArtifacts@1
           displayName: 'Publish Signed NuGets'
           inputs:
             artifactName: nuget-signed
             pathToPublish: '$(Build.ArtifactStagingDirectory)/signed'
+        # make sure we are following the rules
         - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
           displayName: 'Component Detection'
