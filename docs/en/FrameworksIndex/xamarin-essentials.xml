@@ -370,6 +370,7 @@
       <Member Id="P:Xamarin.Essentials.Location.Accuracy" />
       <Member Id="P:Xamarin.Essentials.Location.Altitude" />
       <Member Id="P:Xamarin.Essentials.Location.Course" />
+      <Member Id="P:Xamarin.Essentials.Location.IsFromMockProvider" />
       <Member Id="P:Xamarin.Essentials.Location.Latitude" />
       <Member Id="P:Xamarin.Essentials.Location.Longitude" />
       <Member Id="P:Xamarin.Essentials.Location.Speed" />

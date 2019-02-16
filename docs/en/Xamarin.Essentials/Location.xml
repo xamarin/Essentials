@@ -12,8 +12,7 @@
   <Interfaces />
   <Docs>
     <summary>The latitude, longitude, and time information reported by the device.</summary>
-    <remarks>
-    </remarks>
+    <remarks></remarks>
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -28,8 +27,7 @@
       <Parameters />
       <Docs>
         <summary>Constructor for a location.</summary>
-        <remarks>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -47,8 +45,7 @@
       <Docs>
         <param name="point">Location to copy values from.</param>
         <summary>Constructor for a location.</summary>
-        <remarks>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -68,8 +65,7 @@
         <param name="latitude">Default latitude for location.</param>
         <param name="longitude">Default longitude for location.</param>
         <summary>Constructor for a location.</summary>
-        <remarks>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -91,8 +87,7 @@
         <param name="longitude">Default longitude for location.</param>
         <param name="timestamp">Timestamp for the location (Utc based).</param>
         <summary>Constructor for a location.</summary>
-        <remarks>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="Accuracy">
@@ -110,8 +105,7 @@
       <Docs>
         <summary>Gets or sets the accuracy (in meters) of the location.</summary>
         <value>The location accuracy.</value>
-        <remarks>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="Altitude">
@@ -155,8 +149,7 @@
         <param name="units">Units to return.</param>
         <summary>Calculate distance between two locations.</summary>
         <returns>Distance between two locations in the unit selected.</returns>
-        <remarks>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="CalculateDistance">
@@ -184,8 +177,7 @@
         <param name="units">Unit to return.</param>
         <summary>Calculate distance between two locations.</summary>
         <returns>Distance calculated.</returns>
-        <remarks>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="CalculateDistance">
@@ -213,8 +205,7 @@
         <param name="units">Unit to use.</param>
         <summary>Calculate distance between two locations.</summary>
         <returns>Distance calculated.</returns>
-        <remarks>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="CalculateDistance">
@@ -244,8 +235,7 @@
         <param name="units">Units to return.</param>
         <summary>Calculate distance between two locations.</summary>
         <returns>Distance between two locations in the unit selected.</returns>
-        <remarks>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="Course">
@@ -284,7 +274,7 @@
         <summary>Inform if location is from GPS or from Mock.</summary>
         <value>True if is from Mock and False if from GPS.</value>
         <remarks>
-        <para />
+          <para />
         </remarks>
       </Docs>
     </Member>
@@ -303,8 +293,7 @@
       <Docs>
         <summary>Gets or sets the latitude of location.</summary>
         <value>Latitude of the location.</value>
-        <remarks>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="Longitude">
@@ -322,8 +311,7 @@
       <Docs>
         <summary>Gets or sets the longitude of location.</summary>
         <value>Longitude of the location.</value>
-        <remarks>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="Speed">
@@ -341,8 +329,7 @@
       <Docs>
         <summary>Speed in meters per second.</summary>
         <value>Speed measured by the device..</value>
-        <remarks>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="Timestamp">
@@ -360,8 +347,7 @@
       <Docs>
         <summary>Gets or sets the timestamp of the location.</summary>
         <value>UTC timestamp.</value>
-        <remarks>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ToString">
