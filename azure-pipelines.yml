@@ -1,19 +1,73 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
 
-trigger:
-- master
+variables:
+  CurrentSemanticVersionBase: '0.0.0'
+  CurrentSemanticVersion: '$(CurrentSemanticVersionBase)-preview$(Build.BuildNumber)'
+  NugetPackageVersion: '$(CurrentSemanticVersion)'
+  MONO_VERSION: 5_16_0
+  XCODE_VERSION: 10.1
 
-pool:
-  vmImage: 'Ubuntu-16.04'
-
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+jobs:
+  - job: build
+    displayName: Build
+    strategy:
+      matrix:
+        Windows:
+          VM_IMAGE: vs2017-win2016
+        Mac:
+          VM_IMAGE: macos-10.13
+    pool:
+      name: $(VM_IMAGE)
+    steps:
+      - powersehll: |
+          $buildSourceBranch = "$(Build.SourceBranch)"
+          $tagVersion = $buildSourceBranch.Substring($buildSourceBranch.LastIndexOf("/") + 1)
+          Write-Host("Branch = $buildSourceBranch, Version = $tagVersion");
+          Write-Host ("##vso[task.setvariable variable=NugetPackageVersion;]$tagVersion")
+        displayName: Set NuGet Version
+        condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
+      - ${{ if eq(variables['System.VM_IMAGE'], 'macos-10.13') }}:
+        - bash: sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh $(MONO_VERSION)
+          displayName: Switch to the latest Xamarin SDK
+        - bash: echo '##vso[task.setvariable variable=MD_APPLE_SDK_ROOT;]'/Applications/Xcode_$(XCODE_VERSION).app;sudo xcode-select --switch /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer
+          displayName: Switch to the latest Xcode
+      - task: MSBuild@1
+        displayName: Build Solution
+        inputs:
+          solution: Xamarin.Essentials.sln
+          restoreNugetPackages: true
+          configuration: Release
+          msbuildArguments: '/p:ContinuousIntegrationBuild=true /p:Deterministic=false'
+      - task: MSBuild@1
+        displayName: Pack NuGets
+        inputs:
+          solution: Xamarin.Essentials/Xamarin.Essentials.csproj
+          configuration: Release
+          msbuildArguments: '/t:Pack /p:PackageVersion=$(NugetPackageVersion) /p:PackageOutputPath="$(Build.ArtifactStagingDirectory)/nuget"'
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Unsigned NuGets'
+        inputs:
+          artifactName: nuget
+          pathToPublish: '$(Build.ArtifactStagingDirectory)/nuget'
+      - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
+        displayName: Component Detection
+        inputs:
+          scanType: LogOnly
+  - job: signing
+    displayName: Signing NuGets
+    dependsOn: build
+    pool:
+      name: VSEng-XamarinCustom
+    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'],'refs/tags/'))
+    steps:
+      - checkout: none
+      - template: azure-templates-sign.yml
+        parameters:
+          sourceRepo: xamarin/Essentials
+          targetFolder: '$(Build.ArtifactStagingDirectory)/signed'
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Signed NuGets'
+        inputs:
+          artifactName: nuget-signed
+          pathToPublish: '$(Build.ArtifactStagingDirectory)/signed'
+      - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
+        displayName: 'Component Detection'
