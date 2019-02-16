@@ -18,7 +18,7 @@ jobs:
     pool:
       name: $(VM_IMAGE)
     steps:
-      - powersehll: |
+      - powershell: |
           $buildSourceBranch = "$(Build.SourceBranch)"
           $tagVersion = $buildSourceBranch.Substring($buildSourceBranch.LastIndexOf("/") + 1)
           Write-Host("Branch = $buildSourceBranch, Version = $tagVersion");
