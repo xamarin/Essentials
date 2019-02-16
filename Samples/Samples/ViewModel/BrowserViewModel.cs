@@ -101,8 +101,8 @@ namespace Samples.ViewModel
                 {
                     LaunchMode = (BrowserLaunchMode)BrowserType,
                     TitleMode = (BrowserTitleMode)BrowserTitleType,
-                    PreferredToolbarColor = ToolbarColor == 0 ? (Color?)null : (System.Drawing.Color)colorDictionary[AllColors[TitleColor]],
-                    PreferredControlColor = ControlColor == 0 ? (Color?)null : (System.Drawing.Color)colorDictionary[AllColors[ControlColor]]
+                    PreferredToolbarColor = GetColor(ToolbarColor),
+                    PreferredControlColor = GetColor(ControlColor)
                 });
             }
             catch (Exception e)
@@ -113,6 +113,13 @@ namespace Samples.ViewModel
             finally
             {
                 IsBusy = false;
+            }
+
+            Color? GetColor(int index)
+            {
+                return index <= 0
+                    ? (Color?)null
+                    : (System.Drawing.Color)colorDictionary[AllColors[index]];
             }
         }
     }
