@@ -6,6 +6,13 @@ variables:
   MONO_VERSION: 5_16_0
   XCODE_VERSION: 10.1
 
+resources:
+  repositories:
+    - repository: xamarin-templates
+      type: github
+      name: xamarin/yaml-templates
+      ref: refs/heads/sign-artifacts
+
 jobs:
 
   - job: build
@@ -72,7 +79,7 @@ jobs:
       steps:
         # don't checkout code and sign the packages
         - checkout: none
-        - template: azure-templates-sign.yml
+        - template: sign-artifacts.yml@xamarin-templates
           parameters:
             sourceRepo: xamarin/Essentials
             targetFolder: '$(Build.ArtifactStagingDirectory)/signed'
