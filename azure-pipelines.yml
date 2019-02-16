@@ -30,6 +30,7 @@ jobs:
       vmImage: $(vmImage)
     steps:
       # if this is a tagged build, then update the version number
+      - powershell: 'Get-ChildItem Env:'
       - powershell: |
           $buildSourceBranch = "$(Build.SourceBranch)"
           $tagVersion = $buildSourceBranch.Substring($buildSourceBranch.LastIndexOf("/") + 1)
