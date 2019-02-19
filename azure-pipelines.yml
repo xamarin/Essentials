@@ -96,3 +96,25 @@ jobs:
         # make sure we are following the rules
         - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
           displayName: 'Component Detection'
+
+  - job: uwp_tests
+    pool:
+      vmImage: vs2017-win2016
+    steps:
+      - task: MSBuild@1
+        displayName: Build Solution
+        inputs:
+          solution: Xamarin.Essentials.sln
+          configuration: Debug
+          msbuildArguments: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false'
+      - powershell: certutil -importpfx "DeviceTests\DeviceTests.UWP\DeviceTests.UWP_TemporaryKey.pfx"
+        displayName: Install Certificates
+      - powershell: DeviceTests\build.ps1 --target=test-uwp-emu --settings_skipverification=true --verbosity=diagnostic
+        displayName: Run Device Tests
+      - task: PublishTestResults@2
+        displayName: 'Publish Test Results'
+        inputs:
+          testResultsFormat: XUnit
+          testResultsFiles: '**\xunit-*.xml'
+          mergeTestResults: true
+          testRunTitle: 'Device Tests'
