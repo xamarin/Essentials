@@ -110,7 +110,7 @@ jobs:
           msbuildArguments: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false'
       - powershell: certutil -importpfx "DeviceTests\DeviceTests.UWP\DeviceTests.UWP_TemporaryKey.pfx"
         displayName: Install Certificates
-      - powershell: build.ps1 --target=test-uwp-emu --settings_skipverification=true --verbosity=diagnostic
+      - powershell: DeviceTests\build.ps1 --target=test-uwp-emu --settings_skipverification=true --verbosity=diagnostic
         displayName: Run Device Tests
         workingDirectory: DeviceTests
       - task: PublishTestResults@2
