@@ -98,6 +98,7 @@ jobs:
           displayName: 'Component Detection'
 
   - job: uwp_tests
+    displayName: Run UWP Device Tests
     pool:
       vmImage: vs2017-win2016
     steps:
@@ -109,8 +110,9 @@ jobs:
           msbuildArguments: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false'
       - powershell: certutil -importpfx "DeviceTests\DeviceTests.UWP\DeviceTests.UWP_TemporaryKey.pfx"
         displayName: Install Certificates
-      - powershell: DeviceTests\build.ps1 --target=test-uwp-emu --settings_skipverification=true --verbosity=diagnostic
+      - powershell: build.ps1 --target=test-uwp-emu --settings_skipverification=true --verbosity=diagnostic
         displayName: Run Device Tests
+        workingDirectory: DeviceTests
       - task: PublishTestResults@2
         displayName: 'Publish Test Results'
         inputs:
