@@ -5,6 +5,7 @@
   <Namespace Name="Xamarin.Essentials">
     <Type Name="Xamarin.Essentials.Accelerometer" Id="T:Xamarin.Essentials.Accelerometer">
       <Member Id="E:Xamarin.Essentials.Accelerometer.ReadingChanged" />
+      <Member Id="E:Xamarin.Essentials.Accelerometer.ShakeDetected" />
       <Member Id="M:Xamarin.Essentials.Accelerometer.Start(Xamarin.Essentials.SensorSpeed)" />
       <Member Id="M:Xamarin.Essentials.Accelerometer.Stop" />
       <Member Id="P:Xamarin.Essentials.Accelerometer.IsMonitoring" />
@@ -372,6 +373,7 @@
       <Member Id="P:Xamarin.Essentials.Location.Accuracy" />
       <Member Id="P:Xamarin.Essentials.Location.Altitude" />
       <Member Id="P:Xamarin.Essentials.Location.Course" />
+      <Member Id="P:Xamarin.Essentials.Location.IsFromMockProvider" />
       <Member Id="P:Xamarin.Essentials.Location.Latitude" />
       <Member Id="P:Xamarin.Essentials.Location.Longitude" />
       <Member Id="P:Xamarin.Essentials.Location.Speed" />
