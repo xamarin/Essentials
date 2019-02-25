@@ -12,5 +12,11 @@ namespace Xamarin.Essentials
 
         static Task<string> PlatformGetTextAsync()
             => throw new NotImplementedInReferenceAssemblyException();
+
+        static void StartClipboardListeners()
+            => throw new NotImplementedInReferenceAssemblyException();
+
+        static void StopClipboardListeners()
+            => throw new NotImplementedInReferenceAssemblyException();
     }
 }

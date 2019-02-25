@@ -12,5 +12,37 @@ namespace Xamarin.Essentials
 
         public static Task<string> GetTextAsync()
             => PlatformGetTextAsync();
+
+        public static event EventHandler<EventArgs> ClipboardContentChanged
+        {
+            add
+            {
+                var wasRunning = ClipboardContentChangedInternal != null;
+
+                ClipboardContentChangedInternal += value;
+
+                if (!wasRunning && ClipboardContentChangedInternal != null)
+                {
+                    StartClipboardListeners();
+                }
+            }
+
+            remove
+            {
+                var wasRunning = ClipboardContentChangedInternal != null;
+
+                ClipboardContentChangedInternal -= value;
+
+                if (wasRunning && ClipboardContentChangedInternal == null)
+                    StopClipboardListeners();
+            }
+        }
+
+        static event EventHandler<EventArgs> ClipboardContentChangedInternal;
+
+        internal static void ClipboardChangedInternal()
+        {
+            ClipboardContentChanged?.Invoke(null, EventArgs.Empty); 
+        }
     }
 }
