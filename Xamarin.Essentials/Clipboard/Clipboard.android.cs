@@ -6,9 +6,9 @@ namespace Xamarin.Essentials
 {
     public static partial class Clipboard
     {
-        static Lazy<ClipboardChangeListener> ClipboardListener
+        static readonly Lazy<ClipboardChangeListener> clipboardListener
             = new Lazy<ClipboardChangeListener>(() => new ClipboardChangeListener());
-        
+
         static Task PlatformSetTextAsync(string text)
         {
             Platform.ClipboardManager.PrimaryClip = ClipData.NewPlainText("Text", text);
@@ -22,16 +22,15 @@ namespace Xamarin.Essentials
             => Task.FromResult(Platform.ClipboardManager.PrimaryClip?.GetItemAt(0)?.Text);
 
         static void StartClipboardListeners()
-Platform.ClipboardManager.PrimaryClip.AddPrimaryClipChangedListener(ClipboardListener.Value);
+            => Platform.ClipboardManager.AddPrimaryClipChangedListener(clipboardListener.Value);
 
         static void StopClipboardListeners()
-            => Platform.ClipboardManager.PrimaryClip.RemovePrimaryClipChangedListener(ClipboardListener.Value);
+            => Platform.ClipboardManager.RemovePrimaryClipChangedListener(clipboardListener.Value);
     }
 
-
-    public class ClipboardChangeListener : IOnPrimaryClipChangedListener 
+    public class ClipboardChangeListener : Java.Lang.Object, ClipboardManager.IOnPrimaryClipChangedListener
     {
-        override void OnPrimaryClipChanged()
+        public void OnPrimaryClipChanged()
         {
             Clipboard.ClipboardChangedInternal();
         }

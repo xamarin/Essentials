@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -22,6 +23,21 @@ namespace Samples.ViewModel
         {
             get => fieldValue;
             set => SetProperty(ref fieldValue, value);
+        }
+
+        public override void OnAppearing()
+        {
+            Clipboard.ClipboardContentChanged += OnClipboardContentChanged;
+        }
+
+        public override void OnDisappearing()
+        {
+            Clipboard.ClipboardContentChanged -= OnClipboardContentChanged;
+        }
+
+        async void OnClipboardContentChanged(object sender, EventArgs args)
+        {
+            await DisplayAlertAsync("Clipoard content changed!");
         }
 
         async void OnCopy() => await Clipboard.SetTextAsync(FieldValue);
