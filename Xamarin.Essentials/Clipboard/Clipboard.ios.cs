@@ -13,7 +13,7 @@ namespace Xamarin.Essentials
             return Task.CompletedTask;
         }
 
-        static NSObject _observer;
+        static NSObject observer;
 
         static bool PlatformHasText
             => UIPasteboard.General.HasStrings;
@@ -23,13 +23,13 @@ namespace Xamarin.Essentials
 
         static void StartClipboardListeners()
         {
-            _observer = NSNotificationCenter.DefaultCenter.AddObserver(
+            observer = NSNotificationCenter.DefaultCenter.AddObserver(
                 UIPasteboard.ChangedNotification,
                 ClipboardChangedObserver);
         }
 
         static void StopClipboardListeners()
-            => NSNotificationCenter.DefaultCenter.RemoveObserver(_observer);
+            => NSNotificationCenter.DefaultCenter.RemoveObserver(observer);
 
         static void ClipboardChangedObserver(NSNotification notification)
             => ClipboardChangedInternal();
