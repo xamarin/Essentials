@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Foundation;
 using UIKit;
 
 namespace Xamarin.Essentials
@@ -11,6 +13,8 @@ namespace Xamarin.Essentials
             return Task.CompletedTask;
         }
 
+        static NSObject _observer;
+
         static bool PlatformHasText
             => UIPasteboard.General.HasStrings;
 
@@ -18,9 +22,16 @@ namespace Xamarin.Essentials
             => Task.FromResult(UIPasteboard.General.String);
 
         static void StartClipboardListeners()
-            => throw new NotImplementedInReferenceAssemblyException();
+        {
+            _observer = NSNotificationCenter.DefaultCenter.AddObserver(
+                UIPasteboard.ChangedNotification,
+                ClipboardChangedObserver);
+        }
 
         static void StopClipboardListeners()
-            => throw new NotImplementedInReferenceAssemblyException();
+            => NSNotificationCenter.DefaultCenter.RemoveObserver(_observer);
+
+        static void ClipboardChangedObserver(NSNotification notification)
+            => ClipboardChangedInternal();
     }
 }

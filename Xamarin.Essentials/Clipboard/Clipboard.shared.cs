@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Xamarin.Essentials
 {
@@ -40,9 +41,6 @@ namespace Xamarin.Essentials
 
         static event EventHandler<EventArgs> ClipboardContentChangedInternal;
 
-        internal static void ClipboardChangedInternal()
-        {
-            ClipboardContentChanged?.Invoke(null, EventArgs.Empty); 
-        }
+        internal static void ClipboardChangedInternal() => ClipboardContentChangedInternal?.Invoke(null, EventArgs.Empty);
     }
 }

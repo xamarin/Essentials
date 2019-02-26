@@ -33,9 +33,6 @@ namespace Xamarin.Essentials
         static void StopClipboardListeners()
             => WindowsClipboard.ContentChanged -= ClipboardChangedEventListener;
 
-        static void ClipboardChangedEventListener(EventArgs val)
-        {
-            ClipboardChangedInternal();
-        }
+        static void ClipboardChangedEventListener(object sender, object val) => ClipboardChangedInternal();
     }
 }
