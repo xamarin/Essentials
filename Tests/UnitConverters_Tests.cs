@@ -156,15 +156,15 @@ namespace Tests
         public void CoordinatesToMiles(double lat1, double lon1, double lat2, double lon2, double distance)
         {
             distance = UnitConverters.KilometersToMiles(distance);
-            Assert.Equal(distance, UnitConverters.CoordinatesToMiles(lat1, lon1, lat2, lon2), 4);
+            Assert.Equal(distance, UnitConverters.CoordinatesToMiles(lat1, lon1, lat2, lon2), 3);
             var location1 = new Location(lat1, lon1);
             var location2 = new Location(lat2, lon2);
-            Assert.Equal(distance, Location.CalculateDistance(location1, location2, DistanceUnits.Miles), 4);
-            Assert.Equal(distance, Location.CalculateDistance(location2, location1, DistanceUnits.Miles), 4);
-            Assert.Equal(distance, location1.CalculateDistance(location2, DistanceUnits.Miles), 4);
-            Assert.Equal(distance, location2.CalculateDistance(location1, DistanceUnits.Miles), 4);
-            Assert.Equal(distance, LocationExtensions.CalculateDistance(location1, location2, DistanceUnits.Miles), 4);
-            Assert.Equal(distance, LocationExtensions.CalculateDistance(location2, location1, DistanceUnits.Miles), 4);
+            Assert.Equal(distance, Location.CalculateDistance(location1, location2, DistanceUnits.Miles), 3);
+            Assert.Equal(distance, Location.CalculateDistance(location2, location1, DistanceUnits.Miles), 3);
+            Assert.Equal(distance, location1.CalculateDistance(location2, DistanceUnits.Miles), 3);
+            Assert.Equal(distance, location2.CalculateDistance(location1, DistanceUnits.Miles), 3);
+            Assert.Equal(distance, LocationExtensions.CalculateDistance(location1, location2, DistanceUnits.Miles), 3);
+            Assert.Equal(distance, LocationExtensions.CalculateDistance(location2, location1, DistanceUnits.Miles), 3);
         }
     }
 }
