@@ -143,7 +143,7 @@ namespace Tests
             Assert.Equal(distance, LocationExtensions.CalculateDistance(location1, location2, DistanceUnits.Kilometers), 4);
             Assert.Equal(distance, LocationExtensions.CalculateDistance(location2, location1, DistanceUnits.Kilometers), 4);
         }
-        
+
         [Theory]
         [InlineData(55.85781, -4.24253, 51.509865, -0.118092, 554.3128)] // glasgow -> london
         [InlineData(36.12, -86.67, 33.94, -118.40, 2886.4444)] // nashville, tn -> los angeles, ca
