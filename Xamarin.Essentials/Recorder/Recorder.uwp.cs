@@ -10,7 +10,7 @@ namespace Xamarin.Essentials
 {
     public static partial class Recorder
     {
-        internal static bool PlatformCanRecord => true;
+        internal static Task<bool> PlatformCanRecordAudio => Task.FromResult(true);
 
         static MediaCapture mediaCapture;
 
@@ -35,9 +35,9 @@ namespace Xamarin.Essentials
                     throw new Exception($"Audio recording failed: {errorEventArgs.Code}. {errorEventArgs.Message}");
                 };
 
-                var fileOnDisk = await ApplicationData.Current.LocalFolder.CreateFileAsync(Path.GetRandomFileName());
+                var fileOnDisk = await ApplicationData.Current.LocalFolder.CreateFileAsync(Path.ChangeExtension(Path.GetRandomFileName(), ".wav"));
                 audioFilePath = fileOnDisk.Path;
-                await mediaCapture.StartRecordToStorageFileAsync(MediaEncodingProfile.CreateWav(AudioEncodingQuality.Auto), fileOnDisk);
+                await mediaCapture.StartRecordToStorageFileAsync(MediaEncodingProfile.CreateWav(AudioEncodingQuality.High), fileOnDisk);
             }
             catch
             {
@@ -46,30 +46,19 @@ namespace Xamarin.Essentials
             }
         }
 
-        internal static async Task<AudioRecording> StopAsync()
+        internal static async Task<RecordedAudio> PlatformStopAsync()
         {
-            if (mediaCapture == null)
-                throw new InvalidOperationException("No recording in progress");
-
             await mediaCapture.StopRecordAsync();
-
+            var capture = new RecordedAudio(audioFilePath);
             mediaCapture.Dispose();
             mediaCapture = null;
 
-            return GetRecording();
+            return capture;
         }
 
         static void DeleteMediaCapture()
         {
-            try
-            {
-                mediaCapture?.Dispose();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error disposing audio capture: {ex}");
-            }
-
+            mediaCapture?.Dispose();
             try
             {
                 if (!string.IsNullOrWhiteSpace(audioFilePath) && File.Exists(audioFilePath))
