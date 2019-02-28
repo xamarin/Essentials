@@ -8,6 +8,7 @@ namespace Samples.ViewModel
     class ClipboardViewModel : BaseViewModel
     {
         string fieldValue;
+        string lastCopied;
 
         public ClipboardViewModel()
         {
@@ -25,6 +26,12 @@ namespace Samples.ViewModel
             set => SetProperty(ref fieldValue, value);
         }
 
+        public string LastCopied
+        {
+            get => lastCopied;
+            set => SetProperty(ref lastCopied, value);
+        }
+
         public override void OnAppearing()
         {
             Clipboard.ClipboardContentChanged += OnClipboardContentChanged;
@@ -35,9 +42,9 @@ namespace Samples.ViewModel
             Clipboard.ClipboardContentChanged -= OnClipboardContentChanged;
         }
 
-        async void OnClipboardContentChanged(object sender, EventArgs args)
+        void OnClipboardContentChanged(object sender, EventArgs args)
         {
-            await DisplayAlertAsync("Clipoard content changed!");
+            LastCopied = $"Last copied text at {DateTime.UtcNow:T}";
         }
 
         async void OnCopy() => await Clipboard.SetTextAsync(FieldValue);
