@@ -1,11 +1,15 @@
-﻿namespace Xamarin.Essentials
-{
-    public static partial class PhoneDialer
-    {
-        internal static bool IsSupported =>
-            throw new NotImplementedInReferenceAssemblyException();
+﻿using System;
+using System.Threading.Tasks;
 
-        static void PlatformOpen(string number) =>
-            throw new NotImplementedInReferenceAssemblyException();
+namespace Xamarin.Essentials
+{
+    public static partial class Recorder
+    {
+        public static Task<bool> PlatformCanRecordAudio
+        => throw new NotImplementedInReferenceAssemblyException();
+
+        static Task PlatformRecordAsync() => throw new NotImplementedInReferenceAssemblyException();
+
+        static Task<RecordedAudio> PlatformStopAsync() => throw new NotImplementedInReferenceAssemblyException();
     }
 }
