@@ -34,11 +34,13 @@ namespace Xamarin.Essentials
                 if (message?.BodyFormat == EmailBodyFormat.Html)
                 {
                     ISpanned html;
-                    if (Platform.HasApiLevel(BuildVersionCodes.N))
+#if __ANDROID_24__
+                    if (Platform.HasApiLevelN)
                     {
                         html = Html.FromHtml(message.Body, FromHtmlOptions.ModeLegacy);
                     }
                     else
+#endif
                     {
 #pragma warning disable CS0618 // Type or member is obsolete
                         html = Html.FromHtml(message.Body);

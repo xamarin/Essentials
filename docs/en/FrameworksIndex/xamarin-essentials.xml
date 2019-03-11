@@ -5,6 +5,7 @@
   <Namespace Name="Xamarin.Essentials">
     <Type Name="Xamarin.Essentials.Accelerometer" Id="T:Xamarin.Essentials.Accelerometer">
       <Member Id="E:Xamarin.Essentials.Accelerometer.ReadingChanged" />
+      <Member Id="E:Xamarin.Essentials.Accelerometer.ShakeDetected" />
       <Member Id="M:Xamarin.Essentials.Accelerometer.Start(Xamarin.Essentials.SensorSpeed)" />
       <Member Id="M:Xamarin.Essentials.Accelerometer.Stop" />
       <Member Id="P:Xamarin.Essentials.Accelerometer.IsMonitoring" />
@@ -85,12 +86,26 @@
     <Type Name="Xamarin.Essentials.Browser" Id="T:Xamarin.Essentials.Browser">
       <Member Id="M:Xamarin.Essentials.Browser.OpenAsync(System.String)" />
       <Member Id="M:Xamarin.Essentials.Browser.OpenAsync(System.String,Xamarin.Essentials.BrowserLaunchMode)" />
+      <Member Id="M:Xamarin.Essentials.Browser.OpenAsync(System.String,Xamarin.Essentials.BrowserLaunchOptions)" />
       <Member Id="M:Xamarin.Essentials.Browser.OpenAsync(System.Uri)" />
       <Member Id="M:Xamarin.Essentials.Browser.OpenAsync(System.Uri,Xamarin.Essentials.BrowserLaunchMode)" />
+      <Member Id="M:Xamarin.Essentials.Browser.OpenAsync(System.Uri,Xamarin.Essentials.BrowserLaunchOptions)" />
     </Type>
     <Type Name="Xamarin.Essentials.BrowserLaunchMode" Id="T:Xamarin.Essentials.BrowserLaunchMode">
       <Member Id="F:Xamarin.Essentials.BrowserLaunchMode.External" />
       <Member Id="F:Xamarin.Essentials.BrowserLaunchMode.SystemPreferred" />
+    </Type>
+    <Type Name="Xamarin.Essentials.BrowserLaunchOptions" Id="T:Xamarin.Essentials.BrowserLaunchOptions">
+      <Member Id="M:Xamarin.Essentials.BrowserLaunchOptions.#ctor" />
+      <Member Id="P:Xamarin.Essentials.BrowserLaunchOptions.LaunchMode" />
+      <Member Id="P:Xamarin.Essentials.BrowserLaunchOptions.PreferredControlColor" />
+      <Member Id="P:Xamarin.Essentials.BrowserLaunchOptions.PreferredToolbarColor" />
+      <Member Id="P:Xamarin.Essentials.BrowserLaunchOptions.TitleMode" />
+    </Type>
+    <Type Name="Xamarin.Essentials.BrowserTitleMode" Id="T:Xamarin.Essentials.BrowserTitleMode">
+      <Member Id="F:Xamarin.Essentials.BrowserTitleMode.Default" />
+      <Member Id="F:Xamarin.Essentials.BrowserTitleMode.Hide" />
+      <Member Id="F:Xamarin.Essentials.BrowserTitleMode.Show" />
     </Type>
     <Type Name="Xamarin.Essentials.Clipboard" Id="T:Xamarin.Essentials.Clipboard">
       <Member Id="M:Xamarin.Essentials.Clipboard.GetTextAsync" />
@@ -106,6 +121,7 @@
     <Type Name="Xamarin.Essentials.ColorExtensions" Id="T:Xamarin.Essentials.ColorExtensions">
       <Member Id="M:Xamarin.Essentials.ColorExtensions.AddLuminosity(System.Drawing.Color,System.Single)" />
       <Member Id="M:Xamarin.Essentials.ColorExtensions.MultiplyAlpha(System.Drawing.Color,System.Single)" />
+      <Member Id="M:Xamarin.Essentials.ColorExtensions.ToInt(System.Drawing.Color)" />
       <Member Id="M:Xamarin.Essentials.ColorExtensions.ToUInt(System.Drawing.Color)" />
       <Member Id="M:Xamarin.Essentials.ColorExtensions.WithAlpha(System.Drawing.Color,System.Int32)" />
       <Member Id="M:Xamarin.Essentials.ColorExtensions.WithHue(System.Drawing.Color,System.Single)" />
@@ -354,6 +370,7 @@
       <Member Id="P:Xamarin.Essentials.Location.Accuracy" />
       <Member Id="P:Xamarin.Essentials.Location.Altitude" />
       <Member Id="P:Xamarin.Essentials.Location.Course" />
+      <Member Id="P:Xamarin.Essentials.Location.IsFromMockProvider" />
       <Member Id="P:Xamarin.Essentials.Location.Latitude" />
       <Member Id="P:Xamarin.Essentials.Location.Longitude" />
       <Member Id="P:Xamarin.Essentials.Location.Speed" />
