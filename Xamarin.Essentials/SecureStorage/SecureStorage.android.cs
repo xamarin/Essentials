@@ -28,9 +28,9 @@ namespace Xamarin.Essentials
             {
                 try
                 {
+                    var encData = Convert.FromBase64String(encStr);
                     lock (locker)
                     {
-                        var encData = Convert.FromBase64String(encStr);
                         var ks = new AndroidKeyStore(context, Alias, AlwaysUseAsymmetricKeyStorage);
                         decryptedData = ks.Decrypt(encData);
                     }
