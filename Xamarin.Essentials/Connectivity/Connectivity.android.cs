@@ -222,8 +222,8 @@ namespace Xamarin.Essentials
             if (intent.Action != ConnectivityManager.ConnectivityAction)
                 return;
 
-            // await 500ms to ensure that the the connection manager updates
-            await Task.Delay(500);
+            // await 1500ms to ensure that the the connection manager updates
+            await Task.Delay(1500);
             onChanged?.Invoke();
         }
     }
