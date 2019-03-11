@@ -244,7 +244,7 @@ namespace Xamarin.Essentials
             return unwrapped;
         }
 
-        internal byte[] Encrypt(string data)
+        internal byte[] Encrypt(string data, bool retry = true)
         {
             var key = GetKey();
 
@@ -259,20 +259,34 @@ namespace Xamarin.Essentials
             // Attempt to use GCMParameterSpec by default
             try
             {
-                cipher = Cipher.GetInstance(cipherTransformationSymmetric);
-                cipher.Init(CipherMode.EncryptMode, key, new GCMParameterSpec(128, iv));
+                try
+                {
+                    cipher = Cipher.GetInstance(cipherTransformationSymmetric);
+                    cipher.Init(CipherMode.EncryptMode, key, new GCMParameterSpec(128, iv));
+                }
+                catch (InvalidAlgorithmParameterException)
+                {
+                    // If we encounter this error, it's likely an old bouncycastle provider version
+                    // is being used which does not recognize GCMParameterSpec, but should work
+                    // with IvParameterSpec, however we only do this as a last effort since other
+                    // implementations will error if you use IvParameterSpec when GCMParameterSpec
+                    // is recognized and expected.
+                    cipher = Cipher.GetInstance(cipherTransformationSymmetric);
+                    cipher.Init(CipherMode.EncryptMode, key, new IvParameterSpec(iv));
+                }
             }
-            catch (InvalidAlgorithmParameterException)
+            catch (InvalidKeyException ike)
             {
-                // If we encounter this error, it's likely an old bouncycastle provider version
-                // is being used which does not recognize GCMParameterSpec, but should work
-                // with IvParameterSpec, however we only do this as a last effort since other
-                // implementations will error if you use IvParameterSpec when GCMParameterSpec
-                // is recognized and expected.
-                cipher = Cipher.GetInstance(cipherTransformationSymmetric);
-                cipher.Init(CipherMode.EncryptMode, key, new IvParameterSpec(iv));
+                if (retry)
+                {
+                    keyStore.DeleteEntry(alias);
+                    return Encrypt(data, false);
+                }
+                else
+                {
+                    throw ike;
+                }
             }
-
             var decryptedData = Encoding.UTF8.GetBytes(data);
             var encryptedBytes = cipher.DoFinal(decryptedData);
 
@@ -284,7 +298,7 @@ namespace Xamarin.Essentials
             return r;
         }
 
-        internal string Decrypt(byte[] data)
+        internal string Decrypt(byte[] data, bool retry = true)
         {
             if (data.Length < initializationVectorLen)
                 return null;
@@ -300,18 +314,33 @@ namespace Xamarin.Essentials
             // Attempt to use GCMParameterSpec by default
             try
             {
-                cipher = Cipher.GetInstance(cipherTransformationSymmetric);
-                cipher.Init(CipherMode.DecryptMode, key, new GCMParameterSpec(128, iv));
+                try
+                {
+                    cipher = Cipher.GetInstance(cipherTransformationSymmetric);
+                    cipher.Init(CipherMode.DecryptMode, key, new GCMParameterSpec(128, iv));
+                }
+                catch (InvalidAlgorithmParameterException)
+                {
+                    // If we encounter this error, it's likely an old bouncycastle provider version
+                    // is being used which does not recognize GCMParameterSpec, but should work
+                    // with IvParameterSpec, however we only do this as a last effort since other
+                    // implementations will error if you use IvParameterSpec when GCMParameterSpec
+                    // is recognized and expected.
+                    cipher = Cipher.GetInstance(cipherTransformationSymmetric);
+                    cipher.Init(CipherMode.DecryptMode, key, new IvParameterSpec(iv));
+                }
             }
-            catch (InvalidAlgorithmParameterException)
+            catch (InvalidKeyException ike)
             {
-                // If we encounter this error, it's likely an old bouncycastle provider version
-                // is being used which does not recognize GCMParameterSpec, but should work
-                // with IvParameterSpec, however we only do this as a last effort since other
-                // implementations will error if you use IvParameterSpec when GCMParameterSpec
-                // is recognized and expected.
-                cipher = Cipher.GetInstance(cipherTransformationSymmetric);
-                cipher.Init(CipherMode.DecryptMode, key, new IvParameterSpec(iv));
+                if (retry)
+                {
+                    keyStore.DeleteEntry(alias);
+                    return Decrypt(data, false);
+                }
+                else
+                {
+                    throw ike;
+                }
             }
 
             // Decrypt starting after the first 16 bytes from the IV
