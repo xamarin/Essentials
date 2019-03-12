@@ -68,7 +68,7 @@ namespace Xamarin.Essentials
                 var uris = new List<IParcelable>();
                 foreach (var attachment in message.Attachments)
                 {
-                    uris.Add(Platform.GetShareableFileUri(attachment.FilePath));
+                    uris.Add(Platform.GetShareableFileUri(attachment.FullPath));
                 }
 
                 if (uris.Count > 1)
@@ -81,21 +81,5 @@ namespace Xamarin.Essentials
 
             return intent;
         }
-    }
-
-    public partial class EmailAttachment
-    {
-        public EmailAttachment(Java.IO.File file)
-        {
-            File = file ?? throw new ArgumentNullException(nameof(file));
-
-            FilePath = file.Path;
-            FileName = file.Name;
-        }
-
-        public Java.IO.File File { get; }
-
-        string PlatformGetContentType(string extension) =>
-            MimeTypeMap.Singleton.GetMimeTypeFromExtension(extension);
     }
 }

@@ -53,10 +53,8 @@ namespace Xamarin.Essentials
             {
                 foreach (var attachment in message.Attachments)
                 {
-                    var data = attachment.File != null
-                        ? NSData.FromUrl(attachment.File)
-                        : NSData.FromFile(attachment.FilePath);
-                    controller.AddAttachmentData(data, attachment.ContentType, attachment.FileName);
+                    var data = NSData.FromFile(attachment.FullPath);
+                    controller.AddAttachmentData(data, attachment.ContentType, attachment.AttachmentName);
                 }
             }
 
@@ -80,30 +78,6 @@ namespace Xamarin.Essentials
             var nsurl = NSUrl.FromString(url);
             UIApplication.SharedApplication.OpenUrl(nsurl, new UIApplicationOpenUrlOptions(), r => tcs.TrySetResult(r));
             return tcs.Task;
-        }
-    }
-
-    public partial class EmailAttachment
-    {
-        public EmailAttachment(NSUrl file)
-        {
-            File = file ?? throw new ArgumentNullException(nameof(file));
-
-            FilePath = file.Path;
-            FileName = NSFileManager.DefaultManager.DisplayName(file.Path);
-        }
-
-        public NSUrl File { get; }
-
-        string PlatformGetContentType(string extension)
-        {
-            // ios does not like the extensions
-            if (extension[0] == '.')
-                extension = extension.Substring(1);
-
-            var id = UTType.CreatePreferredIdentifier(UTType.TagClassFilenameExtension, extension, null);
-            var mimeTypes = UTType.CopyAllTags(id, UTType.TagClassMIMEType);
-            return mimeTypes.Length > 0 ? mimeTypes[0] : null;
         }
     }
 }

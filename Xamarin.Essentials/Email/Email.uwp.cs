@@ -34,11 +34,11 @@ namespace Xamarin.Essentials
             {
                 foreach (var attachment in message.Attachments)
                 {
-                    var path = FileSystem.NormalizePath(attachment.FilePath);
-                    var file = attachment.File ?? await StorageFile.GetFileFromPathAsync(path);
+                    var path = FileSystem.NormalizePath(attachment.FullPath);
+                    var file = await StorageFile.GetFileFromPathAsync(path);
 
                     var stream = RandomAccessStreamReference.CreateFromFile(file);
-                    var nativeAttachment = new NativeEmailAttachment(attachment.FileName, stream);
+                    var nativeAttachment = new NativeEmailAttachment(attachment.FullPath, stream);
 
                     if (!string.IsNullOrEmpty(attachment.ContentType))
                         nativeAttachment.MimeType = attachment.ContentType;
@@ -59,22 +59,5 @@ namespace Xamarin.Essentials
                 nativeRecipients.Add(new EmailRecipient(recipient));
             }
         }
-    }
-
-    public partial class EmailAttachment
-    {
-        public EmailAttachment(IStorageFile file)
-        {
-            File = file ?? throw new ArgumentNullException(nameof(file));
-
-            FilePath = file.Path;
-            FileName = file.Name;
-            ContentType = file.ContentType;
-        }
-
-        public IStorageFile File { get; }
-
-        // we can't do anything here, but Windows will take care of it
-        string PlatformGetContentType(string extension) => null;
     }
 }
