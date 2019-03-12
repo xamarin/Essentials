@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Xamarin.Essentials
 {
@@ -11,6 +13,9 @@ namespace Xamarin.Essentials
             RequestAsync(new ShareTextRequest(text, title));
 
         public static Task RequestAsync(ShareTextRequest request) =>
+            PlatformRequestAsync(request);
+
+        public static Task RequestAsync(ShareFileRequest request) =>
             PlatformRequestAsync(request);
     }
 
@@ -32,5 +37,42 @@ namespace Xamarin.Essentials
         public string Text { get; set; }
 
         public string Uri { get; set; }
+    }
+
+    public class ShareFileRequest
+    {
+        public string Title { get; set; }
+
+        public ShareFile File { get; set; }
+    }
+
+    public class ShareFile : FileBase
+    {
+        public ShareFile(string fullPath)
+            : base(fullPath)
+        {
+        }
+
+        string attachmentName;
+
+        public string AttachmentName
+        {
+            get => GetAttachmentName();
+            set => attachmentName = value;
+        }
+
+        internal string GetAttachmentName()
+        {
+            // try the provided file name
+            if (!string.IsNullOrWhiteSpace(attachmentName))
+                return attachmentName;
+
+            // try get from the path
+            if (!string.IsNullOrWhiteSpace(FullPath))
+                return Path.GetFileName(FullPath);
+
+            // this should never happen as the path is validated in the constructor
+            throw new InvalidOperationException($"Unable to determine the attachment file name from '{FullPath}'.");
+        }
     }
 }
