@@ -89,7 +89,7 @@ namespace Xamarin.Essentials
             }
 
             // create the uri
-            if (HasApiLevel(BuildVersionCodes.N))
+            if (HasApiLevelN)
             {
                 var providerAuthority = AppContext.PackageName + ".fileProvider";
                 return FileProvider.GetUriForFile(
