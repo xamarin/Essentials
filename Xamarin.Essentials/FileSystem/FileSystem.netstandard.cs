@@ -14,4 +14,10 @@ namespace Xamarin.Essentials
         static Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
              => throw new NotImplementedInReferenceAssemblyException();
     }
+
+    public partial class FileBase
+    {
+        static string PlatformGetContentType(string extension) =>
+            throw new NotImplementedInReferenceAssemblyException();
+    }
 }
