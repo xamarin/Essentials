@@ -18,7 +18,9 @@ namespace Xamarin.Essentials
     {
         internal static bool AlwaysFailExternalMediaAccess { get; set; } = false;
 
-        public static FileProviderLocation TemporaryLocation { get; set; }
+        // This allows us to override the default temporary file location of Preferring external but falling back to internal
+        // We can choose external only, or internal only as alternative options
+        public static FileProviderLocation TemporaryLocation { get; set; } = FileProviderLocation.PreferExternal;
 
         internal static Java.IO.File GetTemporaryDirectory()
         {
@@ -31,13 +33,16 @@ namespace Xamarin.Essentials
 
         internal static Java.IO.File GetTemporaryRootDirectory()
         {
-            // we want the internal storage
+            // If we specifically want the internal storage, no extra checks are needed, we have permission
             if (TemporaryLocation == FileProviderLocation.Internal)
                 return Platform.AppContext.CacheDir;
 
-            // if we need permission, then check
-            // if we can fall back, then don't throw
+            // If we explicitly want only external locations we need to do some permissions checking
             var externalOnly = TemporaryLocation == FileProviderLocation.External;
+
+            // Check to see if we are >= API Level 19 (KitKat) since we don't need to declare the permission on these API levels to save to the external cache/storage
+            // If we're not on 19 or higher we do need to check for permissions, but if we aren't limiting to external only, don't throw an exception if the
+            // permission wasn't declared because we can always fall back to internal cache
             var hasPermission = Platform.HasApiLevel(BuildVersionCodes.Kitkat) || Permissions.EnsureDeclared(PermissionType.WriteExternalStorage, externalOnly);
 
             // make sure the external storage is available
