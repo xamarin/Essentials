@@ -97,10 +97,8 @@ namespace Xamarin.Essentials
                     providerAuthority,
                     sharedFile);
             }
-            else
-            {
-                return AndroidUri.FromFile(new Java.IO.File(filename));
-            }
+
+            return AndroidUri.FromFile(new Java.IO.File(filename));
         }
 
         internal static bool HasApiLevel(BuildVersionCodes versionCode) =>
