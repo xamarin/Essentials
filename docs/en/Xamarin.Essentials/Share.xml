@@ -57,10 +57,10 @@
         <Parameter Name="request" Type="Xamarin.Essentials.ShareFileRequest" />
       </Parameters>
       <Docs>
-        <param name="request">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="request">File request to share.</param>
+        <summary>Show the user interface to share a file.</summary>
+        <returns>Task when completed.</returns>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="RequestAsync">

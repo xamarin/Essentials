@@ -12,8 +12,8 @@
   </Base>
   <Interfaces />
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Email file attachment.</summary>
+    <remarks></remarks>
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -29,9 +29,9 @@
         <Parameter Name="fullPath" Type="System.String" Index="0" FrameworkAlternate="xamarin-essentials;xamarin-essentials-android;xamarin-essentials-ios;xamarin-essentials-uwp" />
       </Parameters>
       <Docs>
-        <param name="fullPath">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="fullPath">Full path and filename to file.</param>
+        <summary>Email attachment from filename.</summary>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -47,9 +47,9 @@
         <Parameter Name="file" Type="Xamarin.Essentials.FileBase" />
       </Parameters>
       <Docs>
-        <param name="file">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="file">Existing file.</param>
+        <summary>Email attachment from existing file.</summary>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -66,10 +66,10 @@
         <Parameter Name="contentType" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="fullPath">To be added.</param>
-        <param name="contentType">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="fullPath">Full path and filename to file.</param>
+        <param name="contentType"></param>
+        <summary>Explicit content type of file.</summary>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="AttachmentName">
@@ -85,9 +85,9 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets the intended name of the file to be shared.</summary>
+        <value></value>
+        <remarks></remarks>
       </Docs>
     </Member>
   </Members>

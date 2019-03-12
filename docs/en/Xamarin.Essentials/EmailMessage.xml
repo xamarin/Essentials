@@ -71,9 +71,9 @@
         <ReturnType>System.Collections.Generic.List&lt;Xamarin.Essentials.EmailAttachment&gt;</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets a list of file attachments.</summary>
+        <value></value>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="Bcc">

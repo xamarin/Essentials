@@ -10,8 +10,8 @@
     <BaseTypeName>System.Enum</BaseTypeName>
   </Base>
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Location to save temporary files to for sharing.</summary>
+    <remarks></remarks>
   </Docs>
   <Members>
     <Member MemberName="External">
@@ -28,7 +28,7 @@
       </ReturnValue>
       <MemberValue>2</MemberValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>External storage or cache only.</summary>
       </Docs>
     </Member>
     <Member MemberName="Internal">
@@ -45,7 +45,7 @@
       </ReturnValue>
       <MemberValue>1</MemberValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Internal cache only,</summary>
       </Docs>
     </Member>
     <Member MemberName="PreferExternal">
@@ -62,7 +62,7 @@
       </ReturnValue>
       <MemberValue>0</MemberValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Prefer external and fall back to internal if unavailable.</summary>
       </Docs>
     </Member>
   </Members>

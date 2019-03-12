@@ -19,8 +19,8 @@
     </Attribute>
   </Attributes>
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Android FileProvider implementation for creating Content URIs to share files with other applications.</summary>
+    <remarks></remarks>
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -34,8 +34,8 @@
       </AssemblyInfo>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <summary>Default constructor.</summary>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="TemporaryLocation">
@@ -51,9 +51,9 @@
         <ReturnType>Xamarin.Essentials.FileProviderLocation</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets the temporary location for file sharing.</summary>
+        <value></value>
+        <remarks>The default is to prefer external and fallback to internal.</remarks>
       </Docs>
     </Member>
   </Members>

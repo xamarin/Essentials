@@ -11,8 +11,8 @@
   </Base>
   <Interfaces />
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Standard request for sharing a file to another application.</summary>
+    <remarks></remarks>
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -26,8 +26,8 @@
       </AssemblyInfo>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <summary>Default constructor.</summary>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -43,9 +43,9 @@
         <Parameter Name="file" Type="Xamarin.Essentials.FileBase" />
       </Parameters>
       <Docs>
-        <param name="file">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="file">Existing file.</param>
+        <summary>Share request with an existing file.</summary>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -61,9 +61,9 @@
         <Parameter Name="file" Type="Xamarin.Essentials.ShareFile" />
       </Parameters>
       <Docs>
-        <param name="file">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="file">Existing file.</param>
+        <summary>Share request with an existing file.</summary>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -80,10 +80,10 @@
         <Parameter Name="file" Type="Xamarin.Essentials.FileBase" />
       </Parameters>
       <Docs>
-        <param name="title">To be added.</param>
-        <param name="file">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="title">Title to use on the share user interface.</param>
+        <param name="file">Existing file.</param>
+        <summary>Share request with an existing file.</summary>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -100,10 +100,10 @@
         <Parameter Name="file" Type="Xamarin.Essentials.ShareFile" />
       </Parameters>
       <Docs>
-        <param name="title">To be added.</param>
-        <param name="file">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="title">Title to use on the share user interface.</param>
+        <param name="file">Existing file.</param>
+        <summary>Share requerst with an existing file.</summary>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="File">
@@ -119,9 +119,9 @@
         <ReturnType>Xamarin.Essentials.ShareFile</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets the file to share.</summary>
+        <value></value>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="Title">
@@ -137,9 +137,9 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Gets or sets the title to use on the share user interface</summary>
+        <value></value>
+        <remarks></remarks>
       </Docs>
     </Member>
   </Members>
