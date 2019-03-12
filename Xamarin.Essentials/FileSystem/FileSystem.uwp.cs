@@ -29,7 +29,13 @@ namespace Xamarin.Essentials
     public partial class FileBase
     {
         internal FileBase(IStorageFile file)
-            : this(file?.Path) => ContentType = file?.ContentType;
+            : this(file?.Path)
+        {
+            File = file;
+            ContentType = file?.ContentType;
+        }
+
+        internal IStorageFile File { get; }
 
         // we can't do anything here, but Windows will take care of it
         internal static string PlatformGetContentType(string extension) => null;
