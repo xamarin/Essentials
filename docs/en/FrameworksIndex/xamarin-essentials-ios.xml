@@ -258,13 +258,10 @@
       <Member Id="M:Xamarin.Essentials.Email.ComposeAsync(Xamarin.Essentials.EmailMessage)" />
     </Type>
     <Type Name="Xamarin.Essentials.EmailAttachment" Id="T:Xamarin.Essentials.EmailAttachment">
-      <Member Id="M:Xamarin.Essentials.EmailAttachment.#ctor(Foundation.NSUrl)" />
       <Member Id="M:Xamarin.Essentials.EmailAttachment.#ctor(System.String)" />
-      <Member Id="M:Xamarin.Essentials.EmailAttachment.#ctor(System.String,System.String,System.String)" />
-      <Member Id="P:Xamarin.Essentials.EmailAttachment.ContentType" />
-      <Member Id="P:Xamarin.Essentials.EmailAttachment.File" />
-      <Member Id="P:Xamarin.Essentials.EmailAttachment.FileName" />
-      <Member Id="P:Xamarin.Essentials.EmailAttachment.FilePath" />
+      <Member Id="M:Xamarin.Essentials.EmailAttachment.#ctor(System.String,System.String)" />
+      <Member Id="M:Xamarin.Essentials.EmailAttachment.#ctor(Xamarin.Essentials.FileBase)" />
+      <Member Id="P:Xamarin.Essentials.EmailAttachment.AttachmentName" />
     </Type>
     <Type Name="Xamarin.Essentials.EmailBodyFormat" Id="T:Xamarin.Essentials.EmailBodyFormat">
       <Member Id="F:Xamarin.Essentials.EmailBodyFormat.Html" />
@@ -300,6 +297,11 @@
       <Member Id="M:Xamarin.Essentials.FeatureNotSupportedException.#ctor" />
       <Member Id="M:Xamarin.Essentials.FeatureNotSupportedException.#ctor(System.String)" />
       <Member Id="M:Xamarin.Essentials.FeatureNotSupportedException.#ctor(System.String,System.Exception)" />
+    </Type>
+    <Type Name="Xamarin.Essentials.FileBase" Id="T:Xamarin.Essentials.FileBase">
+      <Member Id="M:Xamarin.Essentials.FileBase.#ctor(Xamarin.Essentials.FileBase)" />
+      <Member Id="P:Xamarin.Essentials.FileBase.ContentType" />
+      <Member Id="P:Xamarin.Essentials.FileBase.FullPath" />
     </Type>
     <Type Name="Xamarin.Essentials.FileSystem" Id="T:Xamarin.Essentials.FileSystem">
       <Member Id="M:Xamarin.Essentials.FileSystem.OpenAppPackageFileAsync(System.String)" />
@@ -564,7 +566,23 @@
     <Type Name="Xamarin.Essentials.Share" Id="T:Xamarin.Essentials.Share">
       <Member Id="M:Xamarin.Essentials.Share.RequestAsync(System.String)" />
       <Member Id="M:Xamarin.Essentials.Share.RequestAsync(System.String,System.String)" />
+      <Member Id="M:Xamarin.Essentials.Share.RequestAsync(Xamarin.Essentials.ShareFileRequest)" />
       <Member Id="M:Xamarin.Essentials.Share.RequestAsync(Xamarin.Essentials.ShareTextRequest)" />
+    </Type>
+    <Type Name="Xamarin.Essentials.ShareFile" Id="T:Xamarin.Essentials.ShareFile">
+      <Member Id="M:Xamarin.Essentials.ShareFile.#ctor(System.String)" />
+      <Member Id="M:Xamarin.Essentials.ShareFile.#ctor(System.String,System.String)" />
+      <Member Id="M:Xamarin.Essentials.ShareFile.#ctor(Xamarin.Essentials.FileBase)" />
+      <Member Id="P:Xamarin.Essentials.ShareFile.AttachmentName" />
+    </Type>
+    <Type Name="Xamarin.Essentials.ShareFileRequest" Id="T:Xamarin.Essentials.ShareFileRequest">
+      <Member Id="M:Xamarin.Essentials.ShareFileRequest.#ctor" />
+      <Member Id="M:Xamarin.Essentials.ShareFileRequest.#ctor(System.String,Xamarin.Essentials.FileBase)" />
+      <Member Id="M:Xamarin.Essentials.ShareFileRequest.#ctor(System.String,Xamarin.Essentials.ShareFile)" />
+      <Member Id="M:Xamarin.Essentials.ShareFileRequest.#ctor(Xamarin.Essentials.FileBase)" />
+      <Member Id="M:Xamarin.Essentials.ShareFileRequest.#ctor(Xamarin.Essentials.ShareFile)" />
+      <Member Id="P:Xamarin.Essentials.ShareFileRequest.File" />
+      <Member Id="P:Xamarin.Essentials.ShareFileRequest.Title" />
     </Type>
     <Type Name="Xamarin.Essentials.ShareTextRequest" Id="T:Xamarin.Essentials.ShareTextRequest">
       <Member Id="M:Xamarin.Essentials.ShareTextRequest.#ctor" />

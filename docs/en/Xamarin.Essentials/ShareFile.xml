@@ -1,14 +1,13 @@
-<Type Name="EmailAttachment" FullName="Xamarin.Essentials.EmailAttachment">
-  <TypeSignature Language="C#" Value="public class EmailAttachment : Xamarin.Essentials.FileBase" />
-  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit EmailAttachment extends Xamarin.Essentials.FileBase" />
-  <TypeSignature Language="DocId" Value="T:Xamarin.Essentials.EmailAttachment" />
+<Type Name="ShareFile" FullName="Xamarin.Essentials.ShareFile">
+  <TypeSignature Language="C#" Value="public class ShareFile : Xamarin.Essentials.FileBase" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi beforefieldinit ShareFile extends Xamarin.Essentials.FileBase" />
+  <TypeSignature Language="DocId" Value="T:Xamarin.Essentials.ShareFile" />
   <AssemblyInfo>
     <AssemblyName>Xamarin.Essentials</AssemblyName>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
   </AssemblyInfo>
   <Base>
-    <BaseTypeName>System.Object</BaseTypeName>
-    <BaseTypeName FrameworkAlternate="xamarin-essentials">Xamarin.Essentials.FileBase</BaseTypeName>
+    <BaseTypeName>Xamarin.Essentials.FileBase</BaseTypeName>
   </Base>
   <Interfaces />
   <Docs>
@@ -17,16 +16,16 @@
   </Docs>
   <Members>
     <Member MemberName=".ctor">
-      <MemberSignature Language="C#" Value="public EmailAttachment (string fullPath);" />
+      <MemberSignature Language="C#" Value="public ShareFile (string fullPath);" />
       <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(string fullPath) cil managed" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.EmailAttachment.#ctor(System.String)" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.ShareFile.#ctor(System.String)" />
       <MemberType>Constructor</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <Parameters>
-        <Parameter Name="fullPath" Type="System.String" Index="0" FrameworkAlternate="xamarin-essentials;xamarin-essentials-android;xamarin-essentials-ios;xamarin-essentials-uwp" />
+        <Parameter Name="fullPath" Type="System.String" />
       </Parameters>
       <Docs>
         <param name="fullPath">To be added.</param>
@@ -35,9 +34,9 @@
       </Docs>
     </Member>
     <Member MemberName=".ctor">
-      <MemberSignature Language="C#" Value="public EmailAttachment (Xamarin.Essentials.FileBase file);" />
+      <MemberSignature Language="C#" Value="public ShareFile (Xamarin.Essentials.FileBase file);" />
       <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(class Xamarin.Essentials.FileBase file) cil managed" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.EmailAttachment.#ctor(Xamarin.Essentials.FileBase)" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.ShareFile.#ctor(Xamarin.Essentials.FileBase)" />
       <MemberType>Constructor</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -53,9 +52,9 @@
       </Docs>
     </Member>
     <Member MemberName=".ctor">
-      <MemberSignature Language="C#" Value="public EmailAttachment (string fullPath, string contentType);" />
+      <MemberSignature Language="C#" Value="public ShareFile (string fullPath, string contentType);" />
       <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(string fullPath, string contentType) cil managed" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.EmailAttachment.#ctor(System.String,System.String)" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.ShareFile.#ctor(System.String,System.String)" />
       <MemberType>Constructor</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -75,7 +74,7 @@
     <Member MemberName="AttachmentName">
       <MemberSignature Language="C#" Value="public string AttachmentName { get; set; }" />
       <MemberSignature Language="ILAsm" Value=".property instance string AttachmentName" />
-      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.EmailAttachment.AttachmentName" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.ShareFile.AttachmentName" />
       <MemberType>Property</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
