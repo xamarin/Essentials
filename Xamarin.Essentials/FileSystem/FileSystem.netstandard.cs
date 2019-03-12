@@ -19,5 +19,8 @@ namespace Xamarin.Essentials
     {
         static string PlatformGetContentType(string extension) =>
             throw new NotImplementedInReferenceAssemblyException();
+
+        internal void PlatformInit(FileBase file) =>
+            throw new NotImplementedInReferenceAssemblyException();
     }
 }

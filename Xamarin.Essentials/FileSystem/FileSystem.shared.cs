@@ -34,6 +34,13 @@ namespace Xamarin.Essentials
             FullPath = fullPath;
         }
 
+        public FileBase(FileBase file)
+        {
+            FullPath = file.FullPath;
+            ContentType = file.ContentType;
+            PlatformInit(file);
+        }
+
         internal FileBase(string fullPath, string contentType)
             : this(fullPath)
         {

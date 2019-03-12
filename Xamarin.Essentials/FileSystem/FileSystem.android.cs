@@ -40,5 +40,9 @@ namespace Xamarin.Essentials
 
         internal static string PlatformGetContentType(string extension) =>
             MimeTypeMap.Singleton.GetMimeTypeFromExtension(extension);
+
+        internal void PlatformInit(FileBase file)
+        {
+        }
     }
 }
