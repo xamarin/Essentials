@@ -92,6 +92,11 @@ namespace Xamarin.Essentials
         {
         }
 
+        public EmailAttachment(FileBase file)
+            : base(file)
+        {
+        }
+
         string attachmentName;
 
         public string AttachmentName

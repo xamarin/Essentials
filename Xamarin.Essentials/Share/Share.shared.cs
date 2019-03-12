@@ -53,6 +53,16 @@ namespace Xamarin.Essentials
         {
         }
 
+        public ShareFile(string fullPath, string contentType)
+            : base(fullPath, contentType)
+        {
+        }
+
+        public ShareFile(FileBase file)
+            : base(file)
+        {
+        }
+
         string attachmentName;
 
         public string AttachmentName
