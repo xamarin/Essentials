@@ -109,12 +109,11 @@ jobs:
 
   - job: devicetests_uwp
     displayName: Run UWP Device Tests
-    # dependsOn:
-    #   - build_windows
-    #   - build_macos
-    #   - build_samples
-    # # skip for now
-    # condition: and(succeeded(), not(succeeded()))
+    dependsOn:
+      - build_windows
+      - build_macos
+    # skip for now
+    condition: and(succeeded(), not(succeeded()))
     pool:
       vmImage: vs2017-win2016
     steps:
@@ -133,10 +132,9 @@ jobs:
 
   - job: devicetests_ios
     displayName: Run iOS Device Tests
-    # dependsOn:
-    #   - build_windows
-    #   - build_macos
-    #   - build_samples
+    dependsOn:
+      - build_windows
+      - build_macos
     pool:
       vmImage: macos-10.13
     steps:
@@ -165,10 +163,9 @@ jobs:
 
   - job: devicetests_android
     displayName: Run Android Device Tests
-    # dependsOn:
-    #   - build_windows
-    #   - build_macos
-    #   - build_samples
+    dependsOn:
+      - build_windows
+      - build_macos
     pool:
       vmImage: macos-10.13
     steps:
