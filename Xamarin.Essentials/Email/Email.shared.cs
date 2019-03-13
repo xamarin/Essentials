@@ -85,16 +85,19 @@ namespace Xamarin.Essentials
         public EmailAttachment(string fullPath)
             : base(fullPath)
         {
+            ExperimentalFeatures.VerifyEnabled(ExperimentalFeatures.EmailAttachments);
         }
 
         public EmailAttachment(string fullPath, string contentType)
             : base(fullPath, contentType)
         {
+            ExperimentalFeatures.VerifyEnabled(ExperimentalFeatures.EmailAttachments);
         }
 
         public EmailAttachment(FileBase file)
             : base(file)
         {
+            ExperimentalFeatures.VerifyEnabled(ExperimentalFeatures.EmailAttachments);
         }
 
         string attachmentName;
