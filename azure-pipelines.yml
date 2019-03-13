@@ -45,6 +45,11 @@ jobs:
           solution: Xamarin.Essentials/Xamarin.Essentials.csproj
           configuration: Release
           msbuildArguments: '/t:Pack /p:PackageVersion=$(NugetPackageVersion) /p:PackageOutputPath="$(Build.ArtifactStagingDirectory)/nuget"'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: test
+          projects: 'Tests/Tests.csproj'
+          arguments: '--configuration Release'
       # publish the packages
       - task: PublishBuildArtifacts@1
         displayName: 'Publish Unsigned NuGets'
@@ -88,6 +93,11 @@ jobs:
           solution: Xamarin.Essentials/Xamarin.Essentials.csproj
           configuration: Release
           msbuildArguments: '/t:Pack /p:PackageVersion=$(NugetPackageVersion) /p:PackageOutputPath="$(Build.ArtifactStagingDirectory)/nuget"'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: test
+          projects: 'Tests/Tests.csproj'
+          arguments: '--configuration Release'
       # make sure we are following the rules
       - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
         displayName: Component Detection
