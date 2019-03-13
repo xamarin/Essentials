@@ -5,6 +5,8 @@ variables:
   NugetPackageVersion: '$(CurrentSemanticVersion)'
   MONO_VERSION: 5_16_0
   XCODE_VERSION: 10.1
+  IOS_SIM_NAME: iPhone X
+  IOS_SIM_RUNTIME: iOS 12.1
 
 resources:
   repositories:
