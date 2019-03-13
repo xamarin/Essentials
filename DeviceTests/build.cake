@@ -176,15 +176,14 @@ Task ("test-android-emu")
     .IsDependentOn ("build-android")
     .Does (() =>
 {
+    var avdSettings = new AndroidAvdManagerToolSettings  { SdkRoot = ANDROID_HOME };
     Information ("Available AVDs:");
     foreach (var avd in AndroidAvdListAvds (avdSettings)) {
         Information (" - " + avd);
     }
 
+    // Create the AVD if necessary
     if (EnvironmentVariable("ANDROID_SKIP_AVD_CREATE") == null) {
-        var avdSettings = new AndroidAvdManagerToolSettings  { SdkRoot = ANDROID_HOME };
-
-        // Create the AVD if necessary
         Information ("Creating AVD if necessary: {0}...", ANDROID_AVD);
         if (!AndroidAvdListAvds (avdSettings).Any (a => a.Name == ANDROID_AVD))
             AndroidAvdCreate (ANDROID_AVD, ANDROID_EMU_TARGET, ANDROID_EMU_DEVICE, force: true, settings: avdSettings);
