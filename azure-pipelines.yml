@@ -5,8 +5,10 @@ variables:
   NugetPackageVersion: '$(CurrentSemanticVersion)'
   MONO_VERSION: 5_16_0
   XCODE_VERSION: 10.1
-  IOS_SIM_NAME: iPhone X
-  IOS_SIM_RUNTIME: iOS 12.1
+  IOS_SIM_NAME: 'iPhone X'
+  IOS_SIM_RUNTIME: 'iOS 12.1'
+  ANDROID_EMU_TARGET: 'system-images;android-26;google_apis;x86'
+  ANDROID_EMU_DEVICE: 'Nexus 5X'
 
 resources:
   repositories:
@@ -223,6 +225,8 @@ jobs:
           displayName: Switch to the latest Xamarin SDK
         - bash: echo '##vso[task.setvariable variable=MD_APPLE_SDK_ROOT;]'/Applications/Xcode_$(XCODE_VERSION).app;sudo xcode-select --switch /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer
           displayName: Switch to the latest Xcode
+        - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"$ANDROID_EMU_TARGET\""
+          displayName: Install the Android emulators
         - bash: |
             PATH="$ANDROID_HOME/tools/bin:$PATH"
             PATH="$ANDROID_HOME/emulator:$PATH"
