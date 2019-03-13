@@ -17,5 +17,9 @@ namespace Tests
         [Fact]
         public async Task Request_Text_Request_NetStandard() =>
             await Assert.ThrowsAsync<NotImplementedInReferenceAssemblyException>(() => Share.RequestAsync(new ShareTextRequest()));
+
+        [Fact]
+        public async Task Request_File_Request_NetStandard() =>
+            await Assert.ThrowsAsync<NotImplementedInReferenceAssemblyException>(() => Share.RequestAsync(new ShareFileRequest()));
     }
 }

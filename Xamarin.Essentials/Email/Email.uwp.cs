@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Email;
 using Windows.Foundation.Metadata;
-
+using Windows.Storage;
+using Windows.Storage.Streams;
+using NativeEmailAttachment = Windows.ApplicationModel.Email.EmailAttachment;
 using NativeEmailMessage = Windows.ApplicationModel.Email.EmailMessage;
 
 namespace Xamarin.Essentials
@@ -26,6 +29,22 @@ namespace Xamarin.Essentials
             Sync(message?.To, nativeMessage.To);
             Sync(message?.Cc, nativeMessage.CC);
             Sync(message?.Bcc, nativeMessage.Bcc);
+
+            if (message?.Attachments?.Count > 0)
+            {
+                foreach (var attachment in message.Attachments)
+                {
+                    var path = FileSystem.NormalizePath(attachment.FullPath);
+                    var file = attachment.File ?? await StorageFile.GetFileFromPathAsync(path);
+
+                    var stream = RandomAccessStreamReference.CreateFromFile(file);
+                    var nativeAttachment = new NativeEmailAttachment(attachment.AttachmentName, stream);
+
+                    if (!string.IsNullOrEmpty(attachment.ContentType))
+                        nativeAttachment.MimeType = attachment.ContentType;
+                    nativeMessage.Attachments.Add(nativeAttachment);
+                }
+            }
 
             await EmailManager.ShowComposeNewEmailAsync(nativeMessage);
         }

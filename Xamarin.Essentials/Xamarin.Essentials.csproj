@@ -83,6 +83,8 @@
     <Compile Include="**\*.android.*.cs" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors" />
+    <AndroidResource Include="Resources\xml\*.xml" />
+    <PackageReference Include="Xamarin.Android.Support.Compat" Version="28.0.0.1" />
     <PackageReference Include="Xamarin.Android.Support.CustomTabs" Version="28.0.0.1" />
     <PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="28.0.0.1" />
   </ItemGroup>

@@ -38,7 +38,7 @@
     <WarningLevel>4</WarningLevel>
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
-    <AndroidSupportedAbis>armeabi;armeabi-v7a;x86;x86_64;arm64-v8a</AndroidSupportedAbis>
+    <AndroidSupportedAbis>armeabi-v7a;x86;x86_64;arm64-v8a</AndroidSupportedAbis>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
     <AndroidLinkSkip />
@@ -52,7 +52,7 @@
     <WarningLevel>4</WarningLevel>
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
-    <AndroidSupportedAbis>armeabi;armeabi-v7a;x86;x86_64;arm64-v8a</AndroidSupportedAbis>
+    <AndroidSupportedAbis>armeabi-v7a;x86;x86_64;arm64-v8a</AndroidSupportedAbis>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
     <AndroidLinkSkip />
@@ -102,6 +102,9 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Tests\**\*.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

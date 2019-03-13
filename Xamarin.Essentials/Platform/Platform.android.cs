@@ -9,6 +9,8 @@ using Android.Locations;
 using Android.Net;
 using Android.Net.Wifi;
 using Android.OS;
+using Android.Support.V4.Content;
+using AndroidUri = Android.Net.Uri;
 
 namespace Xamarin.Essentials
 {
@@ -59,6 +61,44 @@ namespace Xamarin.Essentials
             var manager = AppContext.PackageManager;
             var activities = manager.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly);
             return activities.Any();
+        }
+
+        internal static AndroidUri GetShareableFileUri(string filename)
+        {
+            Java.IO.File sharedFile;
+            if (FileProvider.IsFileInPublicLocation(filename))
+            {
+                // we are sharing a file in a "shared/public" location
+                sharedFile = new Java.IO.File(filename);
+            }
+            else
+            {
+                var rootDir = FileProvider.GetTemporaryDirectory();
+
+                // create a unique directory just in case there are multiple file with the same name
+                var tmpDir = new Java.IO.File(rootDir, Guid.NewGuid().ToString("N"));
+                tmpDir.Mkdirs();
+                tmpDir.DeleteOnExit();
+
+                // create the new temprary file
+                var tmpFile = new Java.IO.File(tmpDir, System.IO.Path.GetFileName(filename));
+                System.IO.File.Copy(filename, tmpFile.CanonicalPath);
+                tmpFile.DeleteOnExit();
+
+                sharedFile = tmpFile;
+            }
+
+            // create the uri
+            if (HasApiLevelN)
+            {
+                var providerAuthority = AppContext.PackageName + ".fileProvider";
+                return FileProvider.GetUriForFile(
+                    AppContext.ApplicationContext,
+                    providerAuthority,
+                    sharedFile);
+            }
+
+            return AndroidUri.FromFile(new Java.IO.File(filename));
         }
 
         internal static bool HasApiLevelN =>
@@ -161,8 +201,8 @@ namespace Xamarin.Essentials
 
         internal Activity Activity
         {
-           get => currentActivity.TryGetTarget(out var a) ? a : null;
-           set => currentActivity.SetTarget(value);
+            get => currentActivity.TryGetTarget(out var a) ? a : null;
+            set => currentActivity.SetTarget(value);
         }
 
         void Application.IActivityLifecycleCallbacks.OnActivityCreated(Activity activity, Bundle savedInstanceState) =>
