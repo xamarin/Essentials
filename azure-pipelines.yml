@@ -19,223 +19,200 @@ resources:
 
 jobs:
 
-  # - job: build_windows
-  #   displayName: Build Windows Library
-  #   pool:
-  #     vmImage: vs2017-win2016
-  #   steps:
-  #     # if this is a tagged build, then update the version number
-  #     - powershell: |
-  #         $buildSourceBranch = "$(Build.SourceBranch)"
-  #         $tagVersion = $buildSourceBranch.Substring($buildSourceBranch.LastIndexOf("/") + 1)
-  #         Write-Host("Branch = $buildSourceBranch, Version = $tagVersion");
-  #         Write-Host ("##vso[task.setvariable variable=NugetPackageVersion;]$tagVersion")
-  #       displayName: Set NuGet Version to Tag Number
-  #       condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
-  #     # restore, build and pack the packages
-  #     - task: MSBuild@1
-  #       displayName: Build Solution
-  #       inputs:
-  #         solution: Xamarin.Essentials/Xamarin.Essentials.csproj
-  #         configuration: Release
-  #         msbuildArguments: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false'
-  #     - task: MSBuild@1
-  #       displayName: Pack NuGets
-  #       inputs:
-  #         solution: Xamarin.Essentials/Xamarin.Essentials.csproj
-  #         configuration: Release
-  #         msbuildArguments: '/t:Pack /p:PackageVersion=$(NugetPackageVersion) /p:PackageOutputPath="$(Build.ArtifactStagingDirectory)/nuget"'
-  #     # publish the packages
-  #     - task: PublishBuildArtifacts@1
-  #       displayName: 'Publish Unsigned NuGets'
-  #       inputs:
-  #         artifactName: nuget
-  #         pathToPublish: '$(Build.ArtifactStagingDirectory)/nuget'
-  #     # make sure we are following the rules
-  #     - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
-  #       displayName: Component Detection
-  #       inputs:
-  #         scanType: LogOnly
+  - job: build_windows
+    displayName: Build Windows Library
+    pool:
+      vmImage: vs2017-win2016
+    steps:
+      # if this is a tagged build, then update the version number
+      - powershell: |
+          $buildSourceBranch = "$(Build.SourceBranch)"
+          $tagVersion = $buildSourceBranch.Substring($buildSourceBranch.LastIndexOf("/") + 1)
+          Write-Host("Branch = $buildSourceBranch, Version = $tagVersion");
+          Write-Host ("##vso[task.setvariable variable=NugetPackageVersion;]$tagVersion")
+        displayName: Set NuGet Version to Tag Number
+        condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
+      # restore, build and pack the packages
+      - task: MSBuild@1
+        displayName: Build Solution
+        inputs:
+          solution: Xamarin.Essentials/Xamarin.Essentials.csproj
+          configuration: Release
+          msbuildArguments: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false'
+      - task: MSBuild@1
+        displayName: Pack NuGets
+        inputs:
+          solution: Xamarin.Essentials/Xamarin.Essentials.csproj
+          configuration: Release
+          msbuildArguments: '/t:Pack /p:PackageVersion=$(NugetPackageVersion) /p:PackageOutputPath="$(Build.ArtifactStagingDirectory)/nuget"'
+      # publish the packages
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Unsigned NuGets'
+        inputs:
+          artifactName: nuget
+          pathToPublish: '$(Build.ArtifactStagingDirectory)/nuget'
+      # make sure we are following the rules
+      - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
+        displayName: Component Detection
+        inputs:
+          scanType: LogOnly
 
-  # - job: build_macos
-  #   displayName: Build macOS Library
-  #   pool:
-  #     vmImage: macos-10.13
-  #   steps:
-  #     # if this is a tagged build, then update the version number
-  #     - powershell: |
-  #         $buildSourceBranch = "$(Build.SourceBranch)"
-  #         $tagVersion = $buildSourceBranch.Substring($buildSourceBranch.LastIndexOf("/") + 1)
-  #         Write-Host("Branch = $buildSourceBranch, Version = $tagVersion");
-  #         Write-Host ("##vso[task.setvariable variable=NugetPackageVersion;]$tagVersion")
-  #       displayName: Set NuGet Version to Tag Number
-  #       condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
-  #     # make sure to select the correct Xamarin and mono
-  #     - bash: sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh $(MONO_VERSION)
-  #       displayName: Switch to the latest Xamarin SDK
-  #     - bash: echo '##vso[task.setvariable variable=MD_APPLE_SDK_ROOT;]'/Applications/Xcode_$(XCODE_VERSION).app;sudo xcode-select --switch /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer
-  #       displayName: Switch to the latest Xcode
-  #     # restore, build and pack the packages
-  #     - task: MSBuild@1
-  #       displayName: Build Solution
-  #       inputs:
-  #         solution: Xamarin.Essentials/Xamarin.Essentials.csproj
-  #         configuration: Release
-  #         msbuildArguments: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false'
-  #     - task: MSBuild@1
-  #       displayName: Pack NuGets
-  #       inputs:
-  #         solution: Xamarin.Essentials/Xamarin.Essentials.csproj
-  #         configuration: Release
-  #         msbuildArguments: '/t:Pack /p:PackageVersion=$(NugetPackageVersion) /p:PackageOutputPath="$(Build.ArtifactStagingDirectory)/nuget"'
-  #     # make sure we are following the rules
-  #     - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
-  #       displayName: Component Detection
-  #       inputs:
-  #         scanType: LogOnly
+  - job: build_macos
+    displayName: Build macOS Library
+    pool:
+      vmImage: macos-10.13
+    steps:
+      # if this is a tagged build, then update the version number
+      - powershell: |
+          $buildSourceBranch = "$(Build.SourceBranch)"
+          $tagVersion = $buildSourceBranch.Substring($buildSourceBranch.LastIndexOf("/") + 1)
+          Write-Host("Branch = $buildSourceBranch, Version = $tagVersion");
+          Write-Host ("##vso[task.setvariable variable=NugetPackageVersion;]$tagVersion")
+        displayName: Set NuGet Version to Tag Number
+        condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
+      # make sure to select the correct Xamarin and mono
+      - bash: sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh $(MONO_VERSION)
+        displayName: Switch to the latest Xamarin SDK
+      - bash: echo '##vso[task.setvariable variable=MD_APPLE_SDK_ROOT;]'/Applications/Xcode_$(XCODE_VERSION).app;sudo xcode-select --switch /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer
+        displayName: Switch to the latest Xcode
+      # restore, build and pack the packages
+      - task: MSBuild@1
+        displayName: Build Solution
+        inputs:
+          solution: Xamarin.Essentials/Xamarin.Essentials.csproj
+          configuration: Release
+          msbuildArguments: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false'
+      - task: MSBuild@1
+        displayName: Pack NuGets
+        inputs:
+          solution: Xamarin.Essentials/Xamarin.Essentials.csproj
+          configuration: Release
+          msbuildArguments: '/t:Pack /p:PackageVersion=$(NugetPackageVersion) /p:PackageOutputPath="$(Build.ArtifactStagingDirectory)/nuget"'
+      # make sure we are following the rules
+      - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
+        displayName: Component Detection
+        inputs:
+          scanType: LogOnly
 
-  # - job: build_samples
-  #   displayName: Build Samples
-  #   pool:
-  #     vmImage: vs2017-win2016
-  #   steps:
-  #     # restore, build and pack the packages
-  #     - task: MSBuild@1
-  #       displayName: Build Solution
-  #       inputs:
-  #         solution: Xamarin.Essentials.sln
-  #         configuration: Release
-  #         msbuildArguments: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false'
+  - job: build_samples
+    displayName: Build Samples
+    pool:
+      vmImage: vs2017-win2016
+    steps:
+      # restore, build and pack the packages
+      - task: MSBuild@1
+        displayName: Build Solution
+        inputs:
+          solution: Xamarin.Essentials.sln
+          configuration: Release
+          msbuildArguments: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false'
 
-  # # only sign the packages when running on Windows, and using the private server which has the certificates
-  # - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
-  #   - job: signing
-  #     displayName: Signing NuGets
-  #     dependsOn: build_windows
-  #     pool:
-  #       name: VSEng-XamarinCustom
-  #       demands:
-  #         - corpnet
-  #     condition: and(succeeded(), startsWith(variables['Build.SourceBranch'],'refs/tags/'))
-  #     steps:
-  #       # don't checkout code and sign the packages
-  #       - checkout: none
-  #       - template: sign-artifacts.yml@xamarin-templates
-  #         parameters:
-  #           targetFolder: '$(Build.ArtifactStagingDirectory)/signed'
-  #       # publish the signed packages
-  #       - task: PublishBuildArtifacts@1
-  #         displayName: 'Publish Signed NuGets'
-  #         inputs:
-  #           artifactName: nuget-signed
-  #           pathToPublish: '$(Build.ArtifactStagingDirectory)/signed'
-  #       # make sure we are following the rules
-  #       - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
-  #         displayName: 'Component Detection'
+  - job: devicetests_uwp
+    displayName: Run UWP Device Tests
+    # dependsOn:
+    #   - build_windows
+    #   - build_macos
+    #   - build_samples
+    # # skip for now
+    # condition: and(succeeded(), not(succeeded()))
+    pool:
+      vmImage: vs2017-win2016
+    steps:
+      - script: 'certutil -importpfx $(Build.SourcesDirectory)\DeviceTests\DeviceTests.UWP\DeviceTests.UWP_TemporaryKey.pfx'
+        displayName: 'Run certutil'
+      - powershell: |
+          cd DeviceTests
+          .\build.ps1 --target=test-uwp-emu --settings_skipverification=true --verbosity=diagnostic
+        displayName: 'Run Device Tests - UWP'
+      - task: PublishTestResults@2
+        displayName: 'Publish Test Results'
+        inputs:
+          testResultsFormat: XUnit
+          testResultsFiles: '**/xunit-*.xml'
+          testRunTitle: 'Device Tests - UWP'
 
-  # only run the device tests on the private server
+  - job: devicetests_ios
+    displayName: Run iOS Device Tests
+    # dependsOn:
+    #   - build_windows
+    #   - build_macos
+    #   - build_samples
+    pool:
+      vmImage: macos-10.13
+    steps:
+      - bash: sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh $(MONO_VERSION)
+        displayName: Switch to the latest Xamarin SDK
+      - bash: echo '##vso[task.setvariable variable=MD_APPLE_SDK_ROOT;]'/Applications/Xcode_$(XCODE_VERSION).app;sudo xcode-select --switch /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer
+        displayName: Switch to the latest Xcode
+      - task: InstallAppleCertificate@2
+        displayName: 'Install an Apple certificate'
+        inputs:
+          certSecureFile: '8f7bdd21-577f-493f-9f9f-0b3b9b6d2631'
+      - task: InstallAppleProvisioningProfile@1
+        displayName: 'Install an Apple provisioning profile'
+        inputs:
+          provProfileSecureFile: '83fe0b14-773f-43cc-a13e-aae7cc450054'
+      - bash: |
+          cd DeviceTests
+          sh ./build.sh --target=test-ios-emu --settings_skipverification=true --verbosity=diagnostic
+        displayName: 'Run Device Tests - iOS'
+      - task: PublishTestResults@2
+        displayName: 'Publish Test Results'
+        inputs:
+          testResultsFormat: XUnit
+          testResultsFiles: '**/xunit-*.xml'
+          testRunTitle: 'Device Tests - iOS'
+
+  - job: devicetests_android
+    displayName: Run Android Device Tests
+    # dependsOn:
+    #   - build_windows
+    #   - build_macos
+    #   - build_samples
+    pool:
+      vmImage: macos-10.13
+    steps:
+      - bash: sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh $(MONO_VERSION)
+        displayName: Switch to the latest Xamarin SDK
+      - bash: echo '##vso[task.setvariable variable=MD_APPLE_SDK_ROOT;]'/Applications/Xcode_$(XCODE_VERSION).app;sudo xcode-select --switch /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer
+        displayName: Switch to the latest Xcode
+      - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"$ANDROID_EMU_TARGET\""
+        displayName: Install the Android emulators
+      - bash: |
+          PATH="$ANDROID_HOME/tools/bin:$PATH"
+          PATH="$ANDROID_HOME/emulator:$PATH"
+          cd DeviceTests
+          sh ./build.sh --target=test-android-emu --settings_skipverification=true --verbosity=diagnostic
+        displayName: 'Run Device Tests - Android'
+      - task: PublishTestResults@2
+        displayName: 'Publish Test Results'
+        inputs:
+          testResultsFormat: XUnit
+          testResultsFiles: '**/xunit-*.xml'
+          testRunTitle: 'Device Tests - Android'
+
+  # only sign the packages when running on Windows, and using the private server which has the certificates
   - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
-    - job: devicetests_uwp
-      displayName: Run UWP Device Tests
-      # dependsOn:
-      #   - build_windows
-      #   - build_macos
-      #   - build_samples
-      # skip
-      condition: and(succeeded(), not(succeeded()))
+    - job: signing
+      displayName: Signing NuGets
+      dependsOn: build_windows
       pool:
         name: VSEng-XamarinCustom
         demands:
-        - Agent.Name -equals jodick-essentials
-        - DotNetFramework
+          - corpnet
+      condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
       steps:
-        - task: PowerShell@1
-          displayName: Provision
+        # don't checkout code and sign the packages
+        - checkout: none
+        - template: sign-artifacts.yml@xamarin-templates
+          parameters:
+            targetFolder: '$(Build.ArtifactStagingDirectory)/signed'
+        # publish the signed packages
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish Signed NuGets'
           inputs:
-            scriptType: inlineScript
-            arguments: '-githubToken $(GitHub.Token) -scriptUrl "https://api.github.com/repos/xamarin/components/contents/provisionator/bootstrapinator.ps1"'
-            inlineScript: |
-              Param([string]$githubToken, [string]$scriptUrl)
-              $env:GITHUB_TOKEN = $githubToken
-              [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-              Invoke-WebRequest -Uri $scriptUrl -Headers @{"Authorization"="token $githubToken";"Accept"="application/vnd.github.v3.raw"} -OutFile "bootstrapinator.ps1"
-              & .\bootstrapinator.ps1 -executeScript "provision-essentials.csx"
-              & .\provisionator.ps1 "provision-essentials.csx"
-        - task: CmdLine@1
-          displayName: 'Run certutil'
-          inputs:
-            filename: certutil
-            arguments: '-importpfx $(Build.SourcesDirectory)\DeviceTests\DeviceTests.UWP\DeviceTests.UWP_TemporaryKey.pfx'
-        - task: PowerShell@2
-          displayName: 'Run Device Tests - UWP'
-          inputs:
-            targetType: ./
-            filePath: build.ps1
-            arguments: '--target=test-uwp-emu --settings_skipverification=true --verbosity=diagnostic'
-            workingDirectory: DeviceTests
-        - task: PublishTestResults@2
-          displayName: 'Publish Test Results'
-          inputs:
-            testResultsFormat: XUnit
-            testResultsFiles: '**/xunit-*.xml'
-            testRunTitle: 'Device Tests - UWP'
-
-    - job: devicetests_ios
-      displayName: Run iOS Device Tests
-      # dependsOn:
-      #   - build_windows
-      #   - build_macos
-      #   - build_samples
-      pool:
-        vmImage: macos-10.13
-      steps:
-        - bash: sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh $(MONO_VERSION)
-          displayName: Switch to the latest Xamarin SDK
-        - bash: echo '##vso[task.setvariable variable=MD_APPLE_SDK_ROOT;]'/Applications/Xcode_$(XCODE_VERSION).app;sudo xcode-select --switch /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer
-          displayName: Switch to the latest Xcode
-        - task: InstallAppleCertificate@2
-          displayName: 'Install an Apple certificate'
-          inputs:
-            certSecureFile: '8f7bdd21-577f-493f-9f9f-0b3b9b6d2631'
-        - task: InstallAppleProvisioningProfile@1
-          displayName: 'Install an Apple provisioning profile'
-          inputs:
-            provProfileSecureFile: '83fe0b14-773f-43cc-a13e-aae7cc450054'
-        - bash: |
-            cd DeviceTests
-            sh ./build.sh --target=test-ios-emu --settings_skipverification=true --verbosity=diagnostic
-          displayName: 'Run Device Tests - iOS'
-        - task: PublishTestResults@2
-          displayName: 'Publish Test Results'
-          inputs:
-            testResultsFormat: XUnit
-            testResultsFiles: '**/xunit-*.xml'
-            testRunTitle: 'Device Tests - iOS'
-
-    - job: devicetests_android
-      displayName: Run Android Device Tests
-      # dependsOn:
-      #   - build_windows
-      #   - build_macos
-      #   - build_samples
-      pool:
-        vmImage: macos-10.13
-      steps:
-        - bash: sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh $(MONO_VERSION)
-          displayName: Switch to the latest Xamarin SDK
-        - bash: echo '##vso[task.setvariable variable=MD_APPLE_SDK_ROOT;]'/Applications/Xcode_$(XCODE_VERSION).app;sudo xcode-select --switch /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer
-          displayName: Switch to the latest Xcode
-        - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"$ANDROID_EMU_TARGET\""
-          displayName: Install the Android emulators
-        - bash: |
-            PATH="$ANDROID_HOME/tools/bin:$PATH"
-            PATH="$ANDROID_HOME/emulator:$PATH"
-            cd DeviceTests
-            sh ./build.sh --target=test-android-emu --settings_skipverification=true --verbosity=diagnostic
-          displayName: 'Run Device Tests - Android'
-        - task: PublishTestResults@2
-          displayName: 'Publish Test Results'
-          inputs:
-            testResultsFormat: XUnit
-            testResultsFiles: '**/xunit-*.xml'
-            testRunTitle: 'Device Tests - Android'
+            artifactName: nuget-signed
+            pathToPublish: '$(Build.ArtifactStagingDirectory)/signed'
+        # make sure we are following the rules
+        - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
+          displayName: 'Component Detection'
