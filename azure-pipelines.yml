@@ -56,11 +56,21 @@ jobs:
         inputs:
           artifactName: nuget
           pathToPublish: '$(Build.ArtifactStagingDirectory)/nuget'
-      # make sure we are following the rules
-      - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
-        displayName: Component Detection
-        inputs:
-          scanType: LogOnly
+      # make sure we are following the rules, but only on the main build
+      - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
+        - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
+          condition: not(startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
+          displayName: Component Detection - Log
+          inputs:
+            scanType: LogOnly
+        - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
+          condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
+          displayName: Component Detection - Report
+        - task: securedevelopmentteam.vss-secure-development-tools.build-task-policheck.PoliCheck@1
+          condition: eq(variables['System.TeamProject'], 'devdiv')
+          displayName: 'PoliCheck'
+          inputs:
+            targetType: F
 
   - job: build_macos
     displayName: Build macOS Library
@@ -98,11 +108,6 @@ jobs:
           command: test
           projects: 'Tests/Tests.csproj'
           arguments: '--configuration Release'
-      # make sure we are following the rules
-      - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
-        displayName: Component Detection
-        inputs:
-          scanType: LogOnly
 
   - job: build_samples
     displayName: Build Samples
@@ -220,6 +225,4 @@ jobs:
           inputs:
             artifactName: nuget-signed
             pathToPublish: '$(Build.ArtifactStagingDirectory)/signed'
-        # make sure we are following the rules
-        - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
-          displayName: 'Component Detection'
+
