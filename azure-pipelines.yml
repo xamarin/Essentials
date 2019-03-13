@@ -128,3 +128,133 @@ jobs:
         # make sure we are following the rules
         - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
           displayName: 'Component Detection'
+
+  # only run the device tests on the private server
+  - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
+    - job: devicetests_uwp
+      displayName: Run UWP Device Tests
+      dependsOn:
+        - build_windows
+        - build_macos
+        - build_samples
+      pool:
+        name: VSEng-XamarinCustom
+        demands:
+        - Agent.Name -equals jodick-essentials
+        - DotNetFramework
+      steps:
+        - task: PowerShell@1
+          displayName: Provision
+          inputs:
+            scriptType: inlineScript
+            arguments: '-githubToken $(GitHub.Token) -scriptUrl "https://api.github.com/repos/xamarin/components/contents/provisionator/bootstrapinator.ps1"'
+            inlineScript: |
+              Param([string]$githubToken, [string]$scriptUrl)
+              $env:GITHUB_TOKEN = $githubToken
+              [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+              Invoke-WebRequest -Uri $scriptUrl -Headers @{"Authorization"="token $githubToken";"Accept"="application/vnd.github.v3.raw"} -OutFile "bootstrapinator.ps1"
+              & .\bootstrapinator.ps1 -executeScript "provision-essentials.csx"
+              & .\provisionator.ps1 "provision-essentials.csx"
+        - task: CmdLine@1
+          displayName: 'Run certutil'
+          inputs:
+            filename: certutil
+            arguments: '-importpfx $(Build.SourcesDirectory)\DeviceTests\DeviceTests.UWP\DeviceTests.UWP_TemporaryKey.pfx'
+        - task: PowerShell@2
+          displayName: 'Run Device Tests - UWP'
+          inputs:
+            targetType: ./
+            filePath: build.ps1
+            arguments: '--target=test-uwp-emu --settings_skipverification=true --verbosity=diagnostic'
+            workingDirectory: DeviceTests
+        - task: PublishTestResults@2
+          displayName: 'Publish Test Results'
+          inputs:
+            testResultsFormat: XUnit
+            testResultsFiles: '**/xunit-*.xml'
+            testRunTitle: 'Device Tests - UWP'
+
+    - job: devicetests_ios
+      displayName: Run iOS Device Tests
+      dependsOn:
+        - build_windows
+        - build_macos
+        - build_samples
+      pool:
+        vmImage: macos-10.13
+      steps:
+        - task: CmdLine@1
+          displayName: 'Set Environment Variables'
+          inputs:
+            filename: echo
+            arguments: '##vso[task.setvariable variable=GITHUB_TOKEN]$(GitHub.Token)'
+        - bash: |
+            export XAMARIN_PROVISIONATOR_CHANNEL="Stable"
+            curl -L -o ./bootstrapinator.sh \
+              --header "Authorization: token $GITHUB_TOKEN" \
+              --header "Accept: application/vnd.github.v3.raw" \
+              --remote-name \
+              --location https://api.github.com/repos/xamarin/components/contents/provisionator/bootstrapinator.sh
+            sudo sh ./bootstrapinator.sh "provision-essentials-tests.csx" $GITHUB_TOKEN
+            sudo sh ./provisionator.sh keychain set github.com $GITHUB_TOKEN
+            sudo sh ./provisionator.sh "./provision-essentials-tests.csx" -vvvvv
+            sudo gem install cocoapods
+            sudo gem update cocoapods
+          displayName: Provision
+        - task: InstallAppleCertificate@2
+          displayName: 'Install an Apple certificate'
+          inputs:
+            certSecureFile: '8f7bdd21-577f-493f-9f9f-0b3b9b6d2631'
+        - task: InstallAppleProvisioningProfile@1
+          displayName: 'Install an Apple provisioning profile'
+          inputs:
+            provProfileSecureFile: '83fe0b14-773f-43cc-a13e-aae7cc450054'
+        - bash: |
+            cd DeviceTests
+            sh ./build.sh --target=test-ios-emu --settings_skipverification=true --verbosity=diagnostic
+          displayName: 'Run Device Tests - iOS'
+        - task: PublishTestResults@2
+          displayName: 'Publish Test Results'
+          inputs:
+            testResultsFormat: XUnit
+            testResultsFiles: '**/xunit-*.xml'
+            testRunTitle: 'Device Tests - iOS'
+
+    - job: devicetests_android
+      displayName: Run Android Device Tests
+      dependsOn:
+        - build_windows
+        - build_macos
+        - build_samples
+      pool:
+        vmImage: macos-10.13
+      steps:
+        - task: CmdLine@1
+          displayName: 'Set Environment Variables'
+          inputs:
+            filename: echo
+            arguments: '##vso[task.setvariable variable=GITHUB_TOKEN]$(GitHub.Token)'
+        - bash: |
+            export XAMARIN_PROVISIONATOR_CHANNEL="Stable"
+            sh -c "echo \"y\" | /Users/vsts/Library/Android/sdk/tools/bin/sdkmanager \"system-images;android-26;google_apis;x86\""
+            curl -L -o ./bootstrapinator.sh \
+              --header "Authorization: token $GITHUB_TOKEN" \
+              --header "Accept: application/vnd.github.v3.raw" \
+              --remote-name \
+              --location https://api.github.com/repos/xamarin/components/contents/provisionator/bootstrapinator.sh
+            sudo sh ./bootstrapinator.sh "provision-essentials-tests.csx" $GITHUB_TOKEN
+            sudo sh ./provisionator.sh keychain set github.com $GITHUB_TOKEN
+            sudo sh ./provisionator.sh "./provision-essentials-tests.csx" -vvvvv
+          displayName: Provision
+        - bash: |
+            PATH="$ANDROID_HOME/tools/bin:$PATH"
+            PATH="$ANDROID_HOME/emulator:$PATH"
+            cd DeviceTests
+            sh ./build.sh --target=test-android-emu --settings_skipverification=true --verbosity=diagnostic
+          displayName: 'Run Device Tests - Android'
+        - task: PublishTestResults@2
+          displayName: 'Publish Test Results'
+          inputs:
+            testResultsFormat: XUnit
+            testResultsFiles: '**/xunit-*.xml'
+            testRunTitle: 'Device Tests - Android'
