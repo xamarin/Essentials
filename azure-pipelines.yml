@@ -155,11 +155,11 @@ jobs:
       - task: InstallAppleCertificate@2
         displayName: 'Install an Apple certificate'
         inputs:
-          certSecureFile: '8f7bdd21-577f-493f-9f9f-0b3b9b6d2631'
+          certSecureFile: 'Components iOS Certificate.p12'
       - task: InstallAppleProvisioningProfile@1
         displayName: 'Install an Apple provisioning profile'
         inputs:
-          provProfileSecureFile: '83fe0b14-773f-43cc-a13e-aae7cc450054'
+          provProfileSecureFile: 'Components iOS Provisioning.mobileprovision'
       - bash: |
           cd DeviceTests
           sh ./build.sh --target=test-ios-emu --settings_skipverification=true --verbosity=diagnostic
