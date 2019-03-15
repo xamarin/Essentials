@@ -42,6 +42,9 @@ namespace Xamarin.Essentials
 
                     if (!string.IsNullOrEmpty(attachment.ContentType))
                         nativeAttachment.MimeType = attachment.ContentType;
+                    else if (!string.IsNullOrWhiteSpace(file?.ContentType))
+                        nativeAttachment.MimeType = file.ContentType;
+
                     nativeMessage.Attachments.Add(nativeAttachment);
                 }
             }
