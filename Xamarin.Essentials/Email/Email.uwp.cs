@@ -59,6 +59,9 @@ namespace Xamarin.Essentials
 
             foreach (var recipient in recipients)
             {
+                if (string.IsNullOrWhiteSpace(recipient))
+                    continue;
+
                 nativeRecipients.Add(new EmailRecipient(recipient));
             }
         }

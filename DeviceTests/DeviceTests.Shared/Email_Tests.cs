@@ -36,6 +36,25 @@ namespace DeviceTests
 
         [Fact]
         [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
+        public Task Compose_With_Message_Shows_New_Window_BlankCC()
+        {
+            return Utils.OnMainThread(() =>
+            {
+                var email = new EmailMessage
+                {
+                    Subject = "Hello World!",
+                    Body = "This is a greeting email.",
+                    To = { "everyone@example.org" },
+                    Cc = { string.Empty },
+                    Bcc = { string.Empty },
+                };
+
+                return Email.ComposeAsync(email);
+            });
+        }
+
+        [Fact]
+        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
         public Task Email_Attachments_are_Sent()
         {
             // Save a local cache data directory file
