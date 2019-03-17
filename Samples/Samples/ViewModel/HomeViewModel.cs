@@ -186,6 +186,12 @@ namespace Samples.ViewModel
                     typeof(VibrationPage),
                     "Quickly and easily make the device vibrate.",
                     new[] { "vibration", "vibrate", "hardware", "device" }),
+                new SampleItem(
+                    "👶",
+                    "Contacts",
+                    typeof(ContactPage),
+                    "Get and add contacts in your device.",
+                    new[] { "contacts", "people", "device" }),
             };
             filteredItems = samples;
             filterText = string.Empty;

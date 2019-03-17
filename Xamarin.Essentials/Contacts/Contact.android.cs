@@ -22,7 +22,6 @@ namespace Xamarin.Essentials
             var source = new TaskCompletionSource<PhoneContact>();
             try
             {
-                Task.WaitAll(Permissions.RequestAsync(PermissionType.Contacts));
                 var contactPicker = new Intent(Activity, typeof(ContactActivity));
                 contactPicker.SetFlags(ActivityFlags.NewTask);
                 Activity.StartActivity(contactPicker);

@@ -23,8 +23,9 @@ namespace Samples
 
             VersionTracking.Track();
 
-            // MainPage = new NavigationPage(new HomePage());
-            MainPage = new NavigationPage(new ContactPage());
+            MainPage = new NavigationPage(new HomePage());
+
+            // MainPage = new NavigationPage(new ContactPage());
         }
 
         protected override void OnStart()
