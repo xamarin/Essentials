@@ -10,7 +10,6 @@ namespace Xamarin.Essentials
     {
         static async Task<PhoneContact> PlataformPickContactAsync()
         {
-            await Permissions.RequestAsync(PermissionType.Contacts);
             var contactPicker = new ContactPicker();
 
             try

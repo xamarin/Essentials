@@ -1,17 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Xamarin.Essentials
 {
     public static partial class Contact
     {
-        // TODO: Add permission
+        public static async Task<PhoneContact> PickContactAsync()
+        {
+            await Permissions.RequireAsync(PermissionType.Contacts);
+            return await PlataformPickContactAsync();
+        }
 
-        public static Task<PhoneContact> PickContactAsync() => PlataformPickContactAsync();
-
-        public static Task SaveContactAsync(string name = null, string phone = null, string email = null) => PlataformSaveContactAsync(name, phone, email);
+        public static async Task SaveContactAsync(string name = null, string phone = null, string email = null)
+        {
+            await Permissions.RequireAsync(PermissionType.Contacts);
+            await PlataformSaveContactAsync(name, phone, email);
+        }
     }
 
     public enum ContactType
