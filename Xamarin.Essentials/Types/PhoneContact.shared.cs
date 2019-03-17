@@ -35,7 +35,10 @@ namespace Xamarin.Essentials
             (obj is PhoneContact contact) && Equals(contact);
 
         public bool Equals(PhoneContact other) =>
-            (Name, Numbers, Emails, Birthday) == (other.Name, other.Numbers, other.Emails, other.Birthday);
+            Name.Equals(other.Name) &&
+            Numbers.Equals(other.Numbers) &&
+            Emails.Equals(other.Emails) &&
+            Birthday.Equals(other.Birthday);
 
         public override int GetHashCode() =>
             (Name, Numbers, Emails, Birthday).GetHashCode();
