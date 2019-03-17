@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Android.App;
 using Android.OS;
 using Android.Provider;
@@ -41,7 +38,7 @@ namespace Xamarin.Essentials
                 if (requestCode != 101)
                     return;
 
-                Contact.CallBack(Contact.PlataformGetContacts(data.Data).FirstOrDefault());
+                Contact.CallBack(Contact.PlataformGetContacts(data.Data));
             }
             catch (Exception ex)
             {
