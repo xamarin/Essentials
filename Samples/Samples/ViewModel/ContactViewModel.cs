@@ -56,6 +56,14 @@ namespace Samples.ViewModel
             set => SetProperty(ref contactNumber, value);
         }
 
+        string contactEmail;
+
+        public string ContactEmail
+        {
+            get => contactEmail;
+            set => SetProperty(ref contactEmail, value);
+        }
+
         public ICommand GetContactCommand { get; }
 
         public ICommand SaveContactCommand { get; }
@@ -70,13 +78,14 @@ namespace Samples.ViewModel
         {
             if (IsBusy)
                 return;
+            IsBusy = true;
             try
             {
-                IsBusy = true;
-                await Contact.SaveContactAsync(ContactName, ContactNumber);
+                await Contact.SaveContactAsync(ContactName, ContactNumber, ContactEmail);
 
                 ContactName = string.Empty;
                 ContactNumber = string.Empty;
+                ContactEmail = string.Empty;
             }
             catch (Exception ex)
             {
@@ -92,9 +101,14 @@ namespace Samples.ViewModel
         {
             if (IsBusy)
                 return;
+            IsBusy = true;
             try
             {
-                IsBusy = true;
+                Phones = string.Empty;
+                Emails = string.Empty;
+                Name = string.Empty;
+                Birthday = string.Empty;
+
                 var contact = await Contact.PickContactAsync();
                 contact.Numbers.ForEach(x => Phones += x.Key + Environment.NewLine);
                 contact.Emails.ForEach(x => Emails += x.Key + Environment.NewLine);
