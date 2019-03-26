@@ -3,6 +3,7 @@ using Android.Content;
 using Android.Content.Res;
 using Android.Provider;
 using Android.Runtime;
+using Android.Util;
 using Android.Views;
 
 namespace Xamarin.Essentials
@@ -32,7 +33,10 @@ namespace Xamarin.Essentials
 
         static DisplayInfo GetMainDisplayInfo()
         {
-            var displayMetrics = Platform.AppContext.Resources?.DisplayMetrics;
+            var displayMetrics = new DisplayMetrics();
+
+            var display = GetDefaultDisplay();
+            display?.GetRealMetrics(displayMetrics);
 
             return new DisplayInfo(
                 width: displayMetrics?.WidthPixels ?? 0,
@@ -63,8 +67,7 @@ namespace Xamarin.Essentials
 
         static DisplayRotation CalculateRotation()
         {
-            var service = Platform.AppContext.GetSystemService(Context.WindowService);
-            var display = service?.JavaCast<IWindowManager>()?.DefaultDisplay;
+            var display = GetDefaultDisplay();
 
             if (display != null)
             {
@@ -105,6 +108,12 @@ namespace Xamarin.Essentials
 
         static string GetSystemSetting(string name)
            => Settings.System.GetString(Platform.AppContext.ContentResolver, name);
+
+        static Display GetDefaultDisplay()
+        {
+            var service = Platform.AppContext.GetSystemService(Context.WindowService);
+            return service?.JavaCast<IWindowManager>()?.DefaultDisplay;
+        }
     }
 
     class Listener : OrientationEventListener
