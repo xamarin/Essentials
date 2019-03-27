@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Xamarin.Essentials
 {
-    public struct PhoneContact : IEquatable<PhoneContact>
+    public readonly struct PhoneContact : IEquatable<PhoneContact>
     {
         public string Name { get; }
 
