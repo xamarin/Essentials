@@ -27,6 +27,7 @@
         LocationWhenInUse,
         NetworkState,
         Vibrate,
+        WriteExternalStorage,
         Contacts
     }
 }
