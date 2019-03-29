@@ -44,10 +44,10 @@ namespace Xamarin.Essentials
         {
             var context = Activity.ContentResolver;
 
-            var loader = new CursorLoader(Activity, contactUri, null, null, null, null);
-            var cur = (ICursor)loader.LoadInBackground();
+            // var loader = new CursorLoader(Activity, contactUri, null, null, null, null);
+            // var cur = (ICursor)loader.LoadInBackground();
 
-            // var cur = context.Query(contactUri, null, null, null, null);
+            var cur = context.Query(contactUri, null, null, null, null);
             var emails = new Dictionary<string, ContactType>();
             var phones = new Dictionary<string, ContactType>();
             var birthday = string.Empty;
