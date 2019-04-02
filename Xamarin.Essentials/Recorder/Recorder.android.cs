@@ -42,8 +42,6 @@ namespace Xamarin.Essentials
                 audioRecord.RecordingState == RecordState.Recording ||
                 System.IO.File.Exists(audioFilePath) == false)
                 return null;
-            var downloadmirror = new Java.IO.File(Environment.ExternalStorageDirectory.ToString() + "/MyNewFolder/sample.wav");
-            System.IO.File.Copy(audioFilePath, Environment.ExternalStorageDirectory.ToString() + "/MyNewFolder/sample.wav");
             return new RecordedAudio(audioFilePath);
         }
 
