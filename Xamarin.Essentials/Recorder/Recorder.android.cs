@@ -9,6 +9,7 @@ using Android.Content.PM;
 using Android.Media;
 using Java.IO;
 using Encoding = Android.Media.Encoding;
+using Environment = Android.OS.Environment;
 
 namespace Xamarin.Essentials
 {
@@ -30,7 +31,7 @@ namespace Xamarin.Essentials
             var channelConfig = ChannelIn.Mono;
             var encoding = Encoding.Pcm16bit;
 
-            bufferSize = AudioRecord.GetMinBufferSize(sampleRate, channelConfig, encoding) * 8;
+            bufferSize = AudioRecord.GetMinBufferSize(sampleRate, channelConfig, encoding);
 
             return new AudioRecord(AudioSource.Mic, sampleRate, ChannelIn.Stereo, encoding, bufferSize);
         }
@@ -41,7 +42,8 @@ namespace Xamarin.Essentials
                 audioRecord.RecordingState == RecordState.Recording ||
                 System.IO.File.Exists(audioFilePath) == false)
                 return null;
-
+            var downloadmirror = new Java.IO.File(Environment.ExternalStorageDirectory.ToString() + "/MyNewFolder/sample.wav");
+            System.IO.File.Copy(audioFilePath, Environment.ExternalStorageDirectory.ToString() + "/MyNewFolder/sample.wav");
             return new RecordedAudio(audioFilePath);
         }
 

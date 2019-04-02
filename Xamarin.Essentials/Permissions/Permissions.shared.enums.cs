@@ -28,5 +28,6 @@
         NetworkState,
         Vibrate,
         WriteExternalStorage,
+        RecordAudio
     }
 }

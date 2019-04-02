@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -16,8 +17,9 @@ namespace Xamarin.Essentials
                 throw new InvalidOperationException("Already recording.");
 
             if (!await CanRecordAudio)
-                throw new InvalidOperationException("Can nt record on this device.");
-
+                throw new InvalidOperationException("Can not record on this device.");
+            await Permissions.RequestAsync(PermissionType.RecordAudio);
+            await Permissions.RequestAsync(PermissionType.WriteExternalStorage);
             await PlatformRecordAsync();
 
             IsRecording = true;
@@ -31,19 +33,14 @@ namespace Xamarin.Essentials
         }
     }
 
-    public class RecordedAudio : IDisposable
+    public class RecordedAudio : FileBase, IDisposable
     {
-        public string Filepath { get; }
+        static readonly string wavMimeType = "audio/wav";
 
         public bool Disposed { get; private set; }
 
-        internal RecordedAudio(string filePath)
-        {
-            Filepath = filePath;
-        }
-
 #if !NETSTANDARD1_0
-        public Stream AsStream() => File.Open(Filepath, FileMode.Open, FileAccess.Read);
+        public Stream AsStream() => System.IO.File.Open(FullPath, FileMode.Open, FileAccess.Read);
 #endif
 
         ~RecordedAudio()
@@ -62,10 +59,15 @@ namespace Xamarin.Essentials
             if (Disposed)
                 return;
 #if !NETSTANDARD1_0
-            if (isDisposing)
-                File.Delete(Filepath);
+            if (isDisposing && FullPath != null)
+                System.IO.File.Delete(FullPath);
 #endif
             Disposed = true;
+        }
+
+        internal RecordedAudio(string fullPath)
+            : base(fullPath, wavMimeType)
+        {
         }
     }
 }

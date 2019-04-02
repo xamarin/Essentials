@@ -24,8 +24,8 @@ namespace Samples.ViewModel
         async Task OnRecordingStopped()
         {
             var record = await Recorder.StopAsync();
-            var size = File.ReadAllBytes(record.Filepath).Length;
-            await DisplayAlertAsync($"Recording saved in {record.Filepath}, size is {size}");
+            var size = File.ReadAllBytes(record.FullPath).Length;
+            await DisplayAlertAsync($"Recording saved in {record.FullPath}, size is {size}");
         }
     }
 }
