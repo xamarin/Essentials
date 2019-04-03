@@ -29,3 +29,4 @@ namespace Samples.ViewModel
         }
     }
 }
+

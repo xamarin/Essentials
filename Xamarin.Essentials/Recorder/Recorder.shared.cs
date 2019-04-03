@@ -19,7 +19,6 @@ namespace Xamarin.Essentials
             if (!await CanRecordAudio)
                 throw new InvalidOperationException("Can not record on this device.");
             await Permissions.RequestAsync(PermissionType.RecordAudio);
-            await Permissions.RequestAsync(PermissionType.WriteExternalStorage);
             await PlatformRecordAsync();
 
             IsRecording = true;
