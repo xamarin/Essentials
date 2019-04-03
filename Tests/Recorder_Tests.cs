@@ -46,6 +46,7 @@ namespace Tests
             using (var file = new RecordedAudio(Samplefile))
             {
             }
+
             Assert.False(File.Exists(Samplefile));
         }
 
