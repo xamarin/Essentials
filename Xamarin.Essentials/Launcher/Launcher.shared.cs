@@ -53,17 +53,21 @@ namespace Xamarin.Essentials
             ExperimentalFeatures.VerifyEnabled(ExperimentalFeatures.OpenFileRequest);
         }
 
-        public OpenFileRequest(LauncherFile file)
+        public OpenFileRequest(string title, LauncherFile file)
         {
             ExperimentalFeatures.VerifyEnabled(ExperimentalFeatures.OpenFileRequest);
+            Title = title;
             File = file;
         }
 
-        public OpenFileRequest(FileBase file)
+        public OpenFileRequest(string title, FileBase file)
         {
             ExperimentalFeatures.VerifyEnabled(ExperimentalFeatures.OpenFileRequest);
+            Title = title;
             File = new LauncherFile(file);
         }
+
+        public string Title { get; set; }
 
         public LauncherFile File { get; set; }
     }

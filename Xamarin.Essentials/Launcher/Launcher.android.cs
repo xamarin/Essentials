@@ -38,7 +38,7 @@ namespace Xamarin.Essentials
             intent.SetDataAndType(contentUri, request.File.ContentType);
             intent.SetFlags(ActivityFlags.GrantReadUriPermission);
 
-            var chooserIntent = Intent.CreateChooser(intent, string.Empty);
+            var chooserIntent = Intent.CreateChooser(intent, request.Title ?? string.Empty);
             chooserIntent.SetFlags(ActivityFlags.ClearTop);
             chooserIntent.SetFlags(ActivityFlags.NewTask);
             Platform.AppContext.StartActivity(chooserIntent);
