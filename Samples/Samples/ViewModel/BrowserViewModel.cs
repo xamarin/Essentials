@@ -53,8 +53,8 @@ namespace Samples.ViewModel
         public List<string> BrowserLaunchModes { get; } =
             new List<string>
             {
-                $"Use Default Browser App",
                 $"Use System-Preferred Browser",
+                $"Use Default Browser App"
             };
 
         public int BrowserType

@@ -30,13 +30,13 @@
           <AttributeName>System.Runtime.CompilerServices.InternalsVisibleTo("XamarinEssentialsTests")</AttributeName>
         </Attribute>
         <Attribute>
-          <AttributeName>System.Runtime.CompilerServices.InternalsVisibleTo("XamarinEssentialsDeviceTestsAndroid")</AttributeName>
-        </Attribute>
-        <Attribute>
           <AttributeName>System.Runtime.CompilerServices.InternalsVisibleTo("XamarinEssentialsDeviceTestsUWP")</AttributeName>
         </Attribute>
         <Attribute>
           <AttributeName>System.Runtime.CompilerServices.InternalsVisibleTo("XamarinEssentialsDeviceTestsiOS")</AttributeName>
+        </Attribute>
+        <Attribute>
+          <AttributeName>System.Runtime.CompilerServices.InternalsVisibleTo("XamarinEssentialsDeviceTestsAndroid")</AttributeName>
         </Attribute>
         <Attribute>
           <AttributeName>System.Runtime.CompilerServices.RuntimeCompatibility(WrapNonExceptionThrows=true)</AttributeName>
@@ -49,6 +49,9 @@
         </Attribute>
         <Attribute FrameworkAlternate="xamarin-essentials-android">
           <AttributeName>Android.LinkerSafe</AttributeName>
+        </Attribute>
+        <Attribute FrameworkAlternate="xamarin-essentials-android">
+          <AttributeName>Android.Runtime.ResourceDesigner("Xamarin.Essentials.Resource", IsApplication=false)</AttributeName>
         </Attribute>
         <Attribute FrameworkAlternate="xamarin-essentials-android">
           <AttributeName>System.Reflection.AssemblyProduct("Xamarin.Essentials (MonoAndroid81)")</AttributeName>
@@ -72,13 +75,13 @@
           <AttributeName>System.Runtime.Versioning.TargetFramework(".NETCore,Version=v5.0", FrameworkDisplayName=".NET for Windows Universal")</AttributeName>
         </Attribute>
         <Attribute>
-          <AttributeName>System.Diagnostics.Debuggable(System.Diagnostics.DebuggableAttribute+DebuggingModes.Default | System.Diagnostics.DebuggableAttribute+DebuggingModes.DisableOptimizations | System.Diagnostics.DebuggableAttribute+DebuggingModes.IgnoreSymbolStoreSequencePoints | System.Diagnostics.DebuggableAttribute+DebuggingModes.EnableEditAndContinue)</AttributeName>
+          <AttributeName>System.Diagnostics.Debuggable(System.Diagnostics.DebuggableAttribute+DebuggingModes.IgnoreSymbolStoreSequencePoints)</AttributeName>
         </Attribute>
         <Attribute>
-          <AttributeName>System.Reflection.AssemblyConfiguration("Docs")</AttributeName>
+          <AttributeName>System.Reflection.AssemblyConfiguration("Release")</AttributeName>
         </Attribute>
         <Attribute>
-          <AttributeName>System.Reflection.AssemblyInformationalVersion("1.0.0")</AttributeName>
+          <AttributeName>System.Reflection.AssemblyInformationalVersion("1.0.0+7ceee2ec3cc4caab1bb281521d7e9ecf471edc7a")</AttributeName>
         </Attribute>
       </Attributes>
     </Assembly>
@@ -122,12 +125,16 @@
       <Type Name="DisplayRotation" Kind="Enumeration" />
       <Type Name="DistanceUnits" Kind="Enumeration" />
       <Type Name="Email" Kind="Class" />
+      <Type Name="EmailAttachment" Kind="Class" />
       <Type Name="EmailBodyFormat" Kind="Enumeration" />
       <Type Name="EmailMessage" Kind="Class" />
       <Type Name="EnergySaverStatus" Kind="Enumeration" />
       <Type Name="EnergySaverStatusChangedEventArgs" Kind="Class" />
       <Type Name="FeatureNotEnabledException" Kind="Class" />
       <Type Name="FeatureNotSupportedException" Kind="Class" />
+      <Type Name="FileBase" Kind="Class" />
+      <Type Name="FileProvider" Kind="Class" />
+      <Type Name="FileProviderLocation" Kind="Enumeration" />
       <Type Name="FileSystem" Kind="Class" />
       <Type Name="Flashlight" Kind="Class" />
       <Type Name="Geocoding" Kind="Class" />
@@ -164,6 +171,8 @@
       <Type Name="SecureStorage" Kind="Class" />
       <Type Name="SensorSpeed" Kind="Enumeration" />
       <Type Name="Share" Kind="Class" />
+      <Type Name="ShareFile" Kind="Class" />
+      <Type Name="ShareFileRequest" Kind="Class" />
       <Type Name="ShareTextRequest" Kind="Class" />
       <Type Name="SizeExtensions" Kind="Class" />
       <Type Name="Sms" Kind="Class" />
