@@ -33,17 +33,20 @@ namespace Xamarin.Essentials
 
         static DisplayInfo GetMainDisplayInfo()
         {
-            var displayMetrics = new DisplayMetrics();
+            using (var displayMetrics = new DisplayMetrics())
+            {
+                using (var display = GetDefaultDisplay())
+                {
+                    display?.GetRealMetrics(displayMetrics);
 
-            var display = GetDefaultDisplay();
-            display?.GetRealMetrics(displayMetrics);
-
-            return new DisplayInfo(
-                width: displayMetrics?.WidthPixels ?? 0,
-                height: displayMetrics?.HeightPixels ?? 0,
-                density: displayMetrics?.Density ?? 0,
-                orientation: CalculateOrientation(),
-                rotation: CalculateRotation());
+                    return new DisplayInfo(
+                        width: displayMetrics?.WidthPixels ?? 0,
+                        height: displayMetrics?.HeightPixels ?? 0,
+                        density: displayMetrics?.Density ?? 0,
+                        orientation: CalculateOrientation(),
+                        rotation: CalculateRotation());
+                }
+            }
         }
 
         static void StartScreenMetricsListeners()
@@ -67,10 +70,11 @@ namespace Xamarin.Essentials
 
         static DisplayRotation CalculateRotation()
         {
-            var display = GetDefaultDisplay();
-
-            if (display != null)
+            using (var display = GetDefaultDisplay())
             {
+                if (display == null)
+                    return DisplayRotation.Unknown;
+
                 switch (display.Rotation)
                 {
                     case SurfaceOrientation.Rotation270:
