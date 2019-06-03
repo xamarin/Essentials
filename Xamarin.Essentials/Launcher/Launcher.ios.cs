@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -28,7 +28,7 @@ namespace Xamarin.Essentials
                 return new NSUrl(uri.AbsoluteUri);
             }
         }
-      
+
         static Task PlatformOpenAsync(OpenFileRequest request)
         {
             var fileUrl = NSUrl.FromFilename(request.File.FullPath);
