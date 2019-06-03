@@ -26,7 +26,7 @@ namespace Tests
         [Fact]
         public async Task Open_File_NetStandard()
         {
-            Utils.EnableExperimentalFeatures();
+            TestUtils.EnableExperimentalFeatures();
             await Assert.ThrowsAsync<NotImplementedInReferenceAssemblyException>(() => Launcher.OpenAsync(new OpenFileRequest()));
         }
     }

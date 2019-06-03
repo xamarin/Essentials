@@ -53,7 +53,7 @@ namespace Xamarin.Essentials
             ExperimentalFeatures.VerifyEnabled(ExperimentalFeatures.OpenFileRequest);
         }
 
-        public OpenFileRequest(string title, LauncherFile file)
+        public OpenFileRequest(string title, ReadOnlyFile file)
         {
             ExperimentalFeatures.VerifyEnabled(ExperimentalFeatures.OpenFileRequest);
             Title = title;
@@ -64,54 +64,11 @@ namespace Xamarin.Essentials
         {
             ExperimentalFeatures.VerifyEnabled(ExperimentalFeatures.OpenFileRequest);
             Title = title;
-            File = new LauncherFile(file);
+            File = new ReadOnlyFile(file);
         }
 
         public string Title { get; set; }
 
-        public LauncherFile File { get; set; }
-    }
-
-    public class LauncherFile : FileBase
-    {
-        public LauncherFile(string fullPath)
-            : base(fullPath)
-        {
-            ExperimentalFeatures.VerifyEnabled(ExperimentalFeatures.OpenFileRequest);
-        }
-
-        public LauncherFile(string fullPath, string contentType)
-            : base(fullPath, contentType)
-        {
-            ExperimentalFeatures.VerifyEnabled(ExperimentalFeatures.OpenFileRequest);
-        }
-
-        public LauncherFile(FileBase file)
-            : base(file)
-        {
-            ExperimentalFeatures.VerifyEnabled(ExperimentalFeatures.OpenFileRequest);
-        }
-
-        string attachmentName;
-
-        public string AttachmentName
-        {
-            get => GetAttachmentName();
-            set => attachmentName = value;
-        }
-
-        internal string GetAttachmentName()
-        {
-            // try the provided file name
-            if (!string.IsNullOrWhiteSpace(attachmentName))
-                return attachmentName;
-
-            // try get from the path
-            if (!string.IsNullOrWhiteSpace(FullPath))
-                return Path.GetFileName(FullPath);
-
-            // this should never happen as the path is validated in the constructor
-            throw new InvalidOperationException($"Unable to determine the attachment file name from '{FullPath}'.");
-        }
+        public ReadOnlyFile File { get; set; }
     }
 }

@@ -90,7 +90,7 @@ namespace Samples.ViewModel
 
                 await Launcher.OpenAsync(new OpenFileRequest
                 {
-                    File = new LauncherFile(file)
+                    File = new ReadOnlyFile(file)
                 });
             }
         }

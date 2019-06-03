@@ -22,7 +22,7 @@ namespace Tests
         [Fact]
         public async Task Request_File_Request_NetStandard()
         {
-            Utils.EnableExperimentalFeatures();
+            TestUtils.EnableExperimentalFeatures();
             await Assert.ThrowsAsync<NotImplementedInReferenceAssemblyException>(() => Share.RequestAsync(new ShareFileRequest()));
         }
     }
