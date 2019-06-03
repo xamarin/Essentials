@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using CoreGraphics;
 using Foundation;
@@ -10,11 +11,24 @@ namespace Xamarin.Essentials
     public static partial class Launcher
     {
         static Task<bool> PlatformCanOpenAsync(Uri uri) =>
-            Task.FromResult(UIApplication.SharedApplication.CanOpenUrl(new NSUrl(uri.OriginalString)));
+            Task.FromResult(UIApplication.SharedApplication.CanOpenUrl(GetNativeUrl(uri)));
 
         static Task PlatformOpenAsync(Uri uri) =>
-            UIApplication.SharedApplication.OpenUrlAsync(new NSUrl(uri.OriginalString), new UIApplicationOpenUrlOptions());
+            UIApplication.SharedApplication.OpenUrlAsync(GetNativeUrl(uri), new UIApplicationOpenUrlOptions());
 
+        internal static NSUrl GetNativeUrl(Uri uri)
+        {
+            try
+            {
+                return new NSUrl(uri.OriginalString);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Unable to create Url from Original string, try absolute Uri: " + ex.Message);
+                return new NSUrl(uri.AbsoluteUri);
+            }
+        }
+      
         static Task PlatformOpenAsync(OpenFileRequest request)
         {
             var fileUrl = NSUrl.FromFilename(request.File.FullPath);
