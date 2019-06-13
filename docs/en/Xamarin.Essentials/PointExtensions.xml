@@ -132,7 +132,7 @@
     <Member MemberName="ToPlatformPointF">
       <MemberSignature Language="C#" Value="public static Android.Graphics.PointF ToPlatformPointF (this System.Drawing.PointF point);" />
       <MemberSignature Language="ILAsm" Value=".method public static hidebysig class Android.Graphics.PointF ToPlatformPointF(valuetype System.Drawing.PointF point) cil managed" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.PointExtensions.Androd.ToPlatformPointF(System.Drawing.PointF)" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.PointExtensions.Android.ToPlatformPointF(System.Drawing.PointF)" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
