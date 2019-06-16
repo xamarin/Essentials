@@ -101,13 +101,15 @@ namespace Xamarin.Essentials
             }
         }
 
+        static ABAddressBook book;
+
         static Task<PermissionStatus> RequestContactAsync()
         {
             var status = GetContactsStatus();
             if (status != PermissionStatus.Unknown)
                 return Task.FromResult(status);
 
-            var book = new ABAddressBook();
+            book = new ABAddressBook();
 
             var tcs = new TaskCompletionSource<PermissionStatus>();
 
