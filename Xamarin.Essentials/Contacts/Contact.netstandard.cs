@@ -12,5 +12,7 @@ namespace Xamarin.Essentials
         static Task<IEnumerable<PhoneContact>> PlataformGetAllContactsAsync() => throw new NotImplementedException();
 
         static Task PlataformSaveContactAsync(string name, string phone, string email) => throw new NotImplementedException();
+
+        static Task PlataformSaveContact(PhoneContact contact) => throw new NotImplementedException();
     }
 }

@@ -167,5 +167,7 @@ namespace Xamarin.Essentials
             else
                 return ContactType.Unknow;
         }
+
+        static Task PlataformSaveContact(PhoneContact phoneContact) => Task.CompletedTask;
     }
 }
