@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Contacts;
 using ContactsUI;
 using Foundation;
+using UIKit;
 
 namespace Xamarin.Essentials
 {
@@ -12,8 +13,24 @@ namespace Xamarin.Essentials
     {
         internal static Action<PhoneContact> CallBack { get; set; }
 
+        internal static UIViewController UIView => Platform.GetCurrentViewController();
+
         static Task<PhoneContact> PlataformPickContactAsync()
         {
+            var picker = new CNContactPickerViewController
+            {
+                // Select property to pick
+                // DisplayedPropertyKeys = new NSString[] { CNContactKey.EmailAddresses },
+                // PredicateForEnablingContact = NSPredicate.FromFormat("emailAddresses.@count > 0"),
+                // PredicateForSelectionOfContact = NSPredicate.FromFormat("emailAddresses.@count == 1"),
+
+                // Respond to selection
+                Delegate = new ContactPickerDelegate()
+            };
+
+            // Display picker
+            UIView.PresentViewController(picker, true, null);
+
             var source = new TaskCompletionSource<PhoneContact>();
             try
             {
@@ -41,16 +58,16 @@ namespace Xamarin.Essentials
                 var phones = new Dictionary<string, ContactType>();
 
                 foreach (var item in contact.PhoneNumbers)
-                    phones.Add(item.Value.ToString(), contactType);
+                    phones.Add(item?.Value?.StringValue, contactType);
 
                 var emails = new Dictionary<string, ContactType>();
 
                 foreach (var item in contact.EmailAddresses)
-                    emails.Add(item.Value.ToString(), contactType);
+                    emails.Add(item?.Value?.ToString(), contactType);
 
                 var name = $"{contact.GivenName} {contact.MiddleName} {contact.FamilyName}";
 
-                var birthday = contact.Birthday.Date.ToDateTime().Date.ToShortDateString();
+                var birthday = contact.Birthday?.Date.ToDateTime().Date.ToShortDateString();
 
                 return new PhoneContact(name, phones, emails, birthday);
             }
