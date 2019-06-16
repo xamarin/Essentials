@@ -71,5 +71,7 @@ namespace Xamarin.Essentials
                 throw ex;
             }
         }
+
+        static Task PlataformSaveContact(PhoneContact phoneContact) => Task.CompletedTask;
     }
 }
