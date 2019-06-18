@@ -7,19 +7,26 @@ namespace Xamarin.Essentials
 {
     internal static partial class Permissions
     {
-        static void PlatformEnsureDeclared(PermissionType permission)
+        static bool PlatformEnsureDeclared(PermissionType permission, bool throwIfMissing)
         {
             var tizenPrivileges = permission.ToTizenPrivileges(onlyRuntimePermissions: false);
 
             if (tizenPrivileges == null || !tizenPrivileges.Any())
-                return;
+                return false;
 
             var package = Platform.CurrentPackage;
             foreach (var priv in tizenPrivileges)
             {
                 if (!package.Privileges.Contains(priv))
-                    throw new PermissionException($"You need to declare the privilege: `{priv}` in your tizen-manifest.xml");
+                {
+                    if (throwIfMissing)
+                        throw new PermissionException($"You need to declare the privilege: `{priv}` in your tizen-manifest.xml");
+                    else
+                        return false;
+                }
             }
+
+            return true;
         }
 
         static Task<PermissionStatus> PlatformCheckStatusAsync(PermissionType permission)
@@ -32,7 +39,7 @@ namespace Xamarin.Essentials
             return CheckPrivacyPermission(permission, true);
         }
 
-        static async Task<PermissionStatus> CheckPrivacyPermission(PermissionType permission, bool askUser)
+        internal static async Task<PermissionStatus> CheckPrivacyPermission(PermissionType permission, bool askUser)
         {
             EnsureDeclared(permission);
             var tizenPrivileges = permission.ToTizenPrivileges(onlyRuntimePermissions: true);
