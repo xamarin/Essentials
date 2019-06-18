@@ -23,4 +23,16 @@ namespace Xamarin.Essentials
             return Task.FromResult(fs);
         }
     }
+
+    public partial class FileBase
+    {
+        static string PlatformGetContentType(string extension)
+        {
+            return Tizen.Content.MimeType.MimeUtil.GetMimeType(extension);
+        }
+
+        internal void PlatformInit(FileBase file)
+        {
+        }
+    }
 }
