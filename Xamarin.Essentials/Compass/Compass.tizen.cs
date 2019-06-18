@@ -5,9 +5,6 @@ namespace Xamarin.Essentials
 {
     public static partial class Compass
     {
-        internal const uint GameInterval = 20;
-        internal const uint UiInterval = 60;
-
         internal static TizenCompass DefaultSensor =>
             (TizenCompass)Platform.GetDefaultSensor(SensorType.Compass);
 
@@ -16,22 +13,7 @@ namespace Xamarin.Essentials
 
         internal static void PlatformStart(SensorSpeed sensorSpeed, bool applyLowPassFilter)
         {
-            uint interval = 0;
-
-            switch (sensorSpeed)
-            {
-                case SensorSpeed.Fastest:
-                    interval = (uint)DefaultSensor.MinInterval;
-                    break;
-                case SensorSpeed.Game:
-                    interval = GameInterval;
-                    break;
-                case SensorSpeed.UI:
-                    interval = UiInterval;
-                    break;
-            }
-
-            DefaultSensor.Interval = interval;
+            DefaultSensor.Interval = sensorSpeed.ToPlatform();
             DefaultSensor.DataUpdated += DataUpdated;
             DefaultSensor.Start();
         }
