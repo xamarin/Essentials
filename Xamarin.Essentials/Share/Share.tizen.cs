@@ -31,5 +31,27 @@ namespace Xamarin.Essentials
 
             return Task.CompletedTask;
         }
+
+        static Task PlatformRequestAsync(ShareFileRequest request)
+        {
+            if (string.IsNullOrEmpty(request.File.FullPath))
+                throw new ArgumentNullException(nameof(request.File.FullPath));
+
+            Permissions.EnsureDeclared(PermissionType.LaunchApp);
+
+            var appControl = new AppControl
+            {
+                Operation = AppControlOperations.ShareText,
+            };
+
+            if (!string.IsNullOrEmpty(request.File.FullPath))
+                appControl.ExtraData.Add("http://tizen.org/appcontrol/data/path", request.File.FullPath);
+            if (!string.IsNullOrEmpty(request.Title))
+                appControl.ExtraData.Add("http://tizen.org/appcontrol/data/title", request.Title);
+
+            AppControl.SendLaunchRequest(appControl);
+
+            return Task.CompletedTask;
+        }
     }
 }
