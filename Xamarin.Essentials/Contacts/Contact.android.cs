@@ -44,23 +44,16 @@ namespace Xamarin.Essentials
         {
             var context = Activity.ContentResolver;
 
-            // var loader = new CursorLoader(Activity, contactUri, null, null, null, null);
-            // var cur = (ICursor)loader.LoadInBackground();
-
             var cur = context.Query(contactUri, null, null, null, null);
             var emails = new Dictionary<string, ContactType>();
             var phones = new Dictionary<string, ContactType>();
-            var birthday = string.Empty;
+            var bDate = string.Empty;
 
             if (cur.MoveToFirst())
             {
                 var name = cur.GetString(cur.GetColumnIndex(ContactsContract.Contacts.InterfaceConsts.DisplayName));
                 string id;
 
-                // if (comeNull)
-                //    id = cur.GetString(cur.GetColumnIndexOrThrow(ContactsContract.Contacts.InterfaceConsts.Id));
-
-                // else
                 id = cur.GetString(cur.GetColumnIndex(ContactsContract.CommonDataKinds.Email.InterfaceConsts.ContactId));
 
                 var idQ = new string[] { id };
@@ -86,7 +79,8 @@ namespace Xamarin.Essentials
                         var phoneType = cursor.GetString(cursor.GetColumnIndex(projection[1]));
 
                         var contactType = GetContactType(phoneType);
-                        phones.Add(phone, contactType);
+                        if (!phones.ContainsKey(phone))
+                            phones.Add(phone, contactType);
                     }
                     while (cursor.MoveToNext());
                 }
@@ -106,8 +100,8 @@ namespace Xamarin.Essentials
                     var emailType = cursor.GetString(cursor.GetColumnIndex(projection[1]));
 
                     var contactType = GetContactType(emailType);
-
-                    emails.Add(email, contactType);
+                    if (!emails.ContainsKey(email))
+                        emails.Add(email, contactType);
                 }
 
                 cursor.Close();
@@ -136,11 +130,11 @@ namespace Xamarin.Essentials
                 cursor = context.Query(ContactsContract.Data.ContentUri, null, query, idQ, null);
                 if (cursor.MoveToFirst())
                 {
-                    birthday = cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.Event.StartDate));
+                    bDate = cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.Event.StartDate));
                 }
                 cursor.Close();
-
-                return new PhoneContact(name, phones, emails, DateTime.Parse(birthday));
+                DateTime.TryParse(bDate, out var birthday);
+                return new PhoneContact(name, phones, emails, birthday);
             }
 
             return default;
