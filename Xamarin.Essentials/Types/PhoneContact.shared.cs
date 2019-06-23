@@ -7,22 +7,25 @@ namespace Xamarin.Essentials
     {
         public string Name { get; }
 
-        public Dictionary<string, ContactType> Numbers { get; }
+        readonly Dictionary<string, ContactType> numbers;
+        readonly Dictionary<string, ContactType> emails;
 
-        public Dictionary<string, ContactType> Emails { get; }
+        public IReadOnlyDictionary<string, ContactType> Numbers => numbers;
 
-        public string Birthday { get; }
+        public IReadOnlyDictionary<string, ContactType> Emails => emails;
+
+        public DateTime? Birthday { get; }
 
         internal PhoneContact(
             string name,
             Dictionary<string, ContactType> numbers,
             Dictionary<string, ContactType> emails,
-            string bd)
+            DateTime? bd)
         {
             Name = name;
             Birthday = bd;
-            Numbers = new Dictionary<string, ContactType>(numbers);
-            Emails = new Dictionary<string, ContactType>(emails);
+            this.numbers = new Dictionary<string, ContactType>(numbers);
+            this.emails = new Dictionary<string, ContactType>(emails);
         }
 
         public static bool operator ==(PhoneContact left, PhoneContact right) =>
@@ -38,9 +41,11 @@ namespace Xamarin.Essentials
             Name.Equals(other.Name) &&
             Numbers.Equals(other.Numbers) &&
             Emails.Equals(other.Emails) &&
-            Birthday.Equals(other.Birthday);
+            Birthday.Equals(other.Birthday) &&
+            emails.Equals(other.emails) &&
+            numbers.Equals(other.numbers);
 
         public override int GetHashCode() =>
-            (Name, Numbers, Emails, Birthday).GetHashCode();
+            (Name, Numbers, Emails, Birthday, emails, numbers).GetHashCode();
     }
 }

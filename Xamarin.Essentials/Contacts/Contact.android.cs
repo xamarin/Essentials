@@ -140,7 +140,7 @@ namespace Xamarin.Essentials
                 }
                 cursor.Close();
 
-                return new PhoneContact(name, phones, emails, birthday);
+                return new PhoneContact(name, phones, emails, DateTime.Parse(birthday));
             }
 
             return default;

@@ -68,7 +68,7 @@ namespace Xamarin.Essentials
 
                 var name = $"{contact.GivenName} {contact.MiddleName} {contact.FamilyName}";
 
-                var birthday = contact.Birthday?.Date.ToDateTime().Date.ToShortDateString();
+                var birthday = contact.Birthday?.Date.ToDateTime().Date;
 
                 return new PhoneContact(name, phones, emails, birthday);
             }
@@ -104,12 +104,11 @@ namespace Xamarin.Essentials
                 PostalCode = "95014"
             };
             contact.PostalAddresses = new CNLabeledValue<CNPostalAddress>[] { new CNLabeledValue<CNPostalAddress>(CNLabelKey.Work, workAddress) };
-            var b = DateTime.Parse(phoneContact.Birthday);
 
             // Add birthday
             var birthday = new NSDateComponents()
             {
-                Day = b.Day,
+                Day = 2,
                 Month = 4,
                 Year = 1984
             };
@@ -128,7 +127,7 @@ namespace Xamarin.Essentials
                 return Task.FromException(ex);
             }
 
-            IEnumerable<CNLabeledValue<NSString>> PopulateEmail(Dictionary<string, ContactType> email)
+            IEnumerable<CNLabeledValue<NSString>> PopulateEmail(IReadOnlyDictionary<string, ContactType> email)
             {
                 foreach (var item in email)
                 {
@@ -146,7 +145,7 @@ namespace Xamarin.Essentials
                     }
                 }
             }
-            IEnumerable<CNLabeledValue<CNPhoneNumber>> PopulatePhones(Dictionary<string, ContactType> phone)
+            IEnumerable<CNLabeledValue<CNPhoneNumber>> PopulatePhones(IReadOnlyDictionary<string, ContactType> phone)
             {
                 foreach (var item in phone)
                 {
