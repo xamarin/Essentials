@@ -6,20 +6,26 @@ namespace Xamarin.Essentials
     {
         public static async Task<PhoneContact> PickContactAsync()
         {
-            // await Permissions.RequireAsync(PermissionType.Contacts);
+            await CheckPermissionAsync();
             return await PlataformPickContactAsync();
         }
 
         public static async Task SaveContactAsync(string name = null, string phone = null, string email = null)
         {
-            // await Permissions.RequireAsync(PermissionType.Contacts);
+            await CheckPermissionAsync();
             await PlataformSaveContactAsync(name, phone, email);
         }
 
         public static async Task SaveContact(PhoneContact contact)
         {
-            // await Permissions.RequireAsync(PermissionType.Contacts);
+            await CheckPermissionAsync();
             await PlataformSaveContact(contact);
+        }
+
+        static async Task CheckPermissionAsync()
+        {
+            if (DeviceInfo.Platform != DevicePlatform.iOS)
+                await Permissions.RequireAsync(PermissionType.Contacts);
         }
     }
 

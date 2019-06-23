@@ -16,41 +16,37 @@ namespace Xamarin.Essentials
             {
                 var contactSelected = await contactPicker.PickContactAsync();
 
-                if (contactSelected is null)
+                if (contactSelected == null)
                     throw new Exception("We can't get the contact!");
 
                 var contactManager = await ContactManager.RequestStoreAsync();
                 var contact = await contactManager.FindContactsAsync(contactSelected.Name);
+
                 var phoneContact = contact[0];
                 var phones = new Dictionary<string, ContactType>();
                 var emails = new Dictionary<string, ContactType>();
+
                 foreach (var item in phoneContact.Phones)
                 {
-                    if (item.Kind == ContactPhoneKind.Home || item.Kind == ContactPhoneKind.HomeFax)
-                        phones.Add(item.Number, ContactType.Personal);
-                    else if (item.Kind == ContactPhoneKind.Company || item.Kind == ContactPhoneKind.BusinessFax)
-                        phones.Add(item.Number, ContactType.Work);
-                    else
-                        phones.Add(item.Number, ContactType.Unknow);
+                    if (!phones.ContainsKey(item.Number))
+                        phones.Add(item.Number, GetPhoneContactType(item.Kind));
                 }
 
                 foreach (var item in phoneContact.Emails)
                 {
-                    if (item.Kind == ContactEmailKind.Personal)
-                        emails.Add(item.Address, ContactType.Personal);
-                    else if (item.Kind == ContactEmailKind.Work)
-                        emails.Add(item.Address, ContactType.Work);
-                    else
-                        phones.Add(item.Address, ContactType.Unknow);
+                    if (!emails.ContainsKey(item.Address))
+                        emails.Add(item.Address, GetEmailContactType(item.Kind));
                 }
+                var b = phoneContact.ImportantDates.FirstOrDefault(x => x.Kind == ContactDateKind.Birthday);
 
-                var birthday = phoneContact.ImportantDates.First(x => x.Kind == ContactDateKind.Birthday).ToString();
+                var birthday = (b == null) ? default :
+                    new DateTime((int)b?.Year, (int)b?.Month, (int)b?.Day, 0, 0, 0);
 
                 return new PhoneContact(
                                         phoneContact.Name,
                                         phones,
                                         emails,
-                                        string.Empty);
+                                        birthday);
             }
             catch (Exception ex)
             {
@@ -73,5 +69,36 @@ namespace Xamarin.Essentials
         }
 
         static Task PlataformSaveContact(PhoneContact phoneContact) => Task.CompletedTask;
+
+        static ContactType GetPhoneContactType(ContactPhoneKind type)
+        {
+            switch (type)
+            {
+                case ContactPhoneKind.Home:
+                case ContactPhoneKind.HomeFax:
+                case ContactPhoneKind.Mobile:
+                    return ContactType.Personal;
+                case ContactPhoneKind.Work:
+                case ContactPhoneKind.Pager:
+                case ContactPhoneKind.BusinessFax:
+                case ContactPhoneKind.Company:
+                    return ContactType.Work;
+                default:
+                    return ContactType.Unknow;
+            }
+        }
+
+        static ContactType GetEmailContactType(ContactEmailKind type)
+        {
+            switch (type)
+            {
+                case ContactEmailKind.Personal:
+                    return ContactType.Personal;
+                case ContactEmailKind.Work:
+                    return ContactType.Work;
+                default:
+                    return ContactType.Unknow;
+            }
+        }
     }
 }

@@ -114,7 +114,7 @@ namespace Samples.ViewModel
                 contact.Numbers.ForEach(x => Phones += x.Key + Environment.NewLine);
                 contact.Emails.ForEach(x => Emails += x.Key + Environment.NewLine);
                 Name = contact.Name;
-                Birthday = contact.Birthday;
+                Birthday = contact.Birthday.ToString();
             }
             catch (Exception ex)
             {
