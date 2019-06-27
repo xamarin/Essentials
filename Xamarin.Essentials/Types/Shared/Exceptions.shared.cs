@@ -2,6 +2,18 @@
 
 namespace Xamarin.Essentials
 {
+    static class ExceptionUtils
+    {
+#if NETSTANDARD1_0 || NETSTANDARD2_0
+        internal static NotImplementedInReferenceAssemblyException NotSupportedOrImplementedException =>
+            new NotImplementedInReferenceAssemblyException();
+#else
+        internal static FeatureNotSupportedException NotSupportedOrImplementedException =>
+            new FeatureNotSupportedException();
+#endif
+
+    }
+
     public class NotImplementedInReferenceAssemblyException : NotImplementedException
     {
         public NotImplementedInReferenceAssemblyException()

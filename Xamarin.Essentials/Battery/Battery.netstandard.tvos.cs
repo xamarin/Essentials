@@ -3,27 +3,27 @@
     public static partial class Battery
     {
         static void StartBatteryListeners() =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
 
         static void StopBatteryListeners() =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
 
         static double PlatformChargeLevel =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
 
         static BatteryState PlatformState =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
 
         static BatteryPowerSource PlatformPowerSource =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
 
         static void StartEnergySaverListeners() =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
 
         static void StopEnergySaverListeners() =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
 
         static EnergySaverStatus PlatformEnergySaverStatus =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }

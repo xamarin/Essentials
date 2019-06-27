@@ -3,12 +3,12 @@
     public static partial class Accelerometer
     {
         internal static bool IsSupported =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
 
         static void PlatformStart(SensorSpeed sensorSpeed) =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
 
         static void PlatformStop() =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }

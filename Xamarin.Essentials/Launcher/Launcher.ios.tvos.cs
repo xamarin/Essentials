@@ -42,7 +42,7 @@ namespace Xamarin.Essentials
         }
 #else
         static Task PlatformOpenAsync(OpenFileRequest request) =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw new FeatureNotSupportedException();
 #endif
     }
 }

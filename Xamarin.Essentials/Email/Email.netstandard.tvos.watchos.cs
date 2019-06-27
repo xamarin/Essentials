@@ -5,17 +5,17 @@ namespace Xamarin.Essentials
     public static partial class Email
     {
         internal static bool IsComposeSupported =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
 
         static Task PlatformComposeAsync(EmailMessage message) =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 
 #if NETSTANDARD1_0 || NETSTANDARD2_0
     public partial class EmailAttachment
     {
         string PlatformGetContentType(string extension) =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 #endif
 }

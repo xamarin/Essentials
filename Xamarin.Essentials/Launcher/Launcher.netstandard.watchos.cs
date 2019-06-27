@@ -6,12 +6,12 @@ namespace Xamarin.Essentials
     public static partial class Launcher
     {
         static Task<bool> PlatformCanOpenAsync(Uri uri) =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
 
         static Task PlatformOpenAsync(Uri uri) =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
 
         static Task PlatformOpenAsync(OpenFileRequest request) =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }

@@ -21,7 +21,7 @@ namespace Xamarin.Essentials
             UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString));
 #else
         static void PlatformShowSettingsUI() =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw new FeatureNotSupportedException();
 #endif
     }
 }
