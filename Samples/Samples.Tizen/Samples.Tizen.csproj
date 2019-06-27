@@ -1,8 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Tizen.NET.Sdk/1.0.3">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>tizen40</TargetFramework>
+    <TizenNetPackageVersion>4.0.0</TizenNetPackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -11,11 +12,6 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>None</DebugType>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Tizen.NET" Version="4.0.0" ExcludeAssets="Runtime" />
-    <PackageReference Include="Tizen.NET.Sdk" Version="1.0.1" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Xamarin.Essentials\Xamarin.Essentials.csproj" />
