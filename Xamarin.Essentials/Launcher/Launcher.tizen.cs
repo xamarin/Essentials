@@ -34,5 +34,25 @@ namespace Xamarin.Essentials
 
             return Task.CompletedTask;
         }
+
+        static Task PlatformOpenAsync(OpenFileRequest request)
+        {
+            if (string.IsNullOrEmpty(request.File.FullPath))
+                throw new ArgumentNullException(nameof(request.File.FullPath));
+
+            Permissions.EnsureDeclared(PermissionType.LaunchApp);
+
+            var appControl = new AppControl
+            {
+                Operation = AppControlOperations.View,
+            };
+
+            if (!string.IsNullOrEmpty(request.File.FullPath))
+                appControl.ExtraData.Add("http://tizen.org/appcontrol/data/path", request.File.FullPath);
+
+            AppControl.SendLaunchRequest(appControl);
+
+            return Task.CompletedTask;
+        }
     }
 }
