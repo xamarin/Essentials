@@ -10,8 +10,11 @@ namespace Xamarin.Essentials
 {
     public static partial class Battery
     {
+#if !__WATCHOS__
         static NSObject levelObserver;
         static NSObject stateObserver;
+#endif
+
         static NSObject saverStatusObserver;
 
         static void StartEnergySaverListeners()
