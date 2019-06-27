@@ -11,9 +11,11 @@ namespace Xamarin.Essentials
             throw new NotImplementedInReferenceAssemblyException();
     }
 
+#if NETSTANDARD1_0 || NETSTANDARD2_0
     public partial class EmailAttachment
     {
         string PlatformGetContentType(string extension) =>
             throw new NotImplementedInReferenceAssemblyException();
     }
+#endif
 }

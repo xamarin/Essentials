@@ -21,6 +21,7 @@ namespace Xamarin.Essentials
 
         internal static async Task PlatformOpenMapsAsync(Placemark placemark, MapLaunchOptions options)
         {
+#if __IOS__
             var address = new MKPlacemarkAddress
             {
                 CountryCode = placemark.CountryCode,
@@ -29,13 +30,24 @@ namespace Xamarin.Essentials
                 Street = placemark.Thoroughfare,
                 City = placemark.Locality,
                 Zip = placemark.PostalCode
+            }.Dictionary;
+#else
+            var address = new NSDictionary
+            {
+                [Contacts.CNPostalAddressKey.City] = new NSString(placemark.Locality),
+                [Contacts.CNPostalAddressKey.Country] = new NSString(placemark.CountryName),
+                [Contacts.CNPostalAddressKey.State] = new NSString(placemark.AdminArea),
+                [Contacts.CNPostalAddressKey.Street] = new NSString(placemark.Thoroughfare),
+                [Contacts.CNPostalAddressKey.PostalCode] = new NSString(placemark.PostalCode),
+                [Contacts.CNPostalAddressKey.IsoCountryCode] = new NSString(placemark.CountryCode)
             };
+#endif
 
             var coder = new CLGeocoder();
             CLPlacemark[] placemarks = null;
             try
             {
-                placemarks = await coder.GeocodeAddressAsync(address.Dictionary);
+                placemarks = await coder.GeocodeAddressAsync(address);
             }
             catch
             {

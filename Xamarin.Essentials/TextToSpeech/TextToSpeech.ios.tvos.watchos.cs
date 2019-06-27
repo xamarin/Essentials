@@ -18,7 +18,7 @@ namespace Xamarin.Essentials
             return SpeakUtterance(speechUtterance, cancelToken);
         }
 
-        private static AVSpeechUtterance GetSpeechUtterance(string text, SpeechOptions options)
+        static AVSpeechUtterance GetSpeechUtterance(string text, SpeechOptions options)
         {
             var speechUtterance = new AVSpeechUtterance(text);
 

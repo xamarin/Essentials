@@ -27,6 +27,7 @@ namespace Xamarin.Essentials
             }
         }
 
+#if __IOS__
         static Task PlatformOpenAsync(OpenFileRequest request)
         {
             var fileUrl = NSUrl.FromFilename(request.File.FullPath);
@@ -39,5 +40,9 @@ namespace Xamarin.Essentials
             documentController.PresentOpenInMenu(vc.View.Frame, vc.View, true);
             return Task.CompletedTask;
         }
+#else
+        static Task PlatformOpenAsync(OpenFileRequest request) =>
+            throw new NotImplementedInReferenceAssemblyException();
+#endif
     }
 }

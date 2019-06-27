@@ -1,7 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
-using ObjCRuntime;
+#if __WATCHOS__
+using WatchKit;
+using UIDevice = WatchKit.WKInterfaceDevice;
+#else
 using UIKit;
+#endif
+
+using ObjCRuntime;
 
 namespace Xamarin.Essentials
 {
@@ -26,10 +32,20 @@ namespace Xamarin.Essentials
 
         static string GetVersionString() => UIDevice.CurrentDevice.SystemVersion;
 
-        static DevicePlatform GetPlatform() => DevicePlatform.iOS;
+        static DevicePlatform GetPlatform() =>
+#if __IOS__
+            DevicePlatform.iOS;
+#elif __TVOS__
+            DevicePlatform.tvOS;
+#elif __WATCHOS__
+            DevicePlatform.watchOS;
+#endif
 
         static DeviceIdiom GetIdiom()
         {
+#if __WATCHOS__
+            return DeviceIdiom.Watch;
+#else
             switch (UIDevice.CurrentDevice.UserInterfaceIdiom)
             {
                 case UIUserInterfaceIdiom.Pad:
@@ -43,6 +59,7 @@ namespace Xamarin.Essentials
                 default:
                     return DeviceIdiom.Unknown;
             }
+#endif
         }
 
         static DeviceType GetDeviceType()

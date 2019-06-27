@@ -1,5 +1,10 @@
 ﻿using Foundation;
+#if __IOS__
 using UIKit;
+#elif __WATCHOS__
+using UIDevice = WatchKit.WKInterfaceDevice;
+using UIDeviceBatteryState = WatchKit.WKInterfaceDeviceBatteryState;
+#endif
 
 namespace Xamarin.Essentials
 {
@@ -29,8 +34,10 @@ namespace Xamarin.Essentials
         static void StartBatteryListeners()
         {
             UIDevice.CurrentDevice.BatteryMonitoringEnabled = true;
+#if __IOS__
             levelObserver = UIDevice.Notifications.ObserveBatteryLevelDidChange(BatteryInfoChangedNotification);
             stateObserver = UIDevice.Notifications.ObserveBatteryStateDidChange(BatteryInfoChangedNotification);
+#endif
         }
 
         static void StopBatteryListeners()

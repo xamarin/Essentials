@@ -28,8 +28,10 @@ namespace Xamarin.Essentials
                 Altitude = location.VerticalAccuracy < 0 ? default(double?) : location.Altitude,
                 Accuracy = location.HorizontalAccuracy,
                 Timestamp = location.Timestamp.ToDateTime(),
+#if __iOS__ || __WATCHOS__
                 Course = location.Course < 0 ? default(double?) : location.Course,
                 Speed = location.Speed < 0 ? default(double?) : location.Speed,
+#endif
                 IsFromMockProvider = DeviceInfo.DeviceType == DeviceType.Virtual
             };
 

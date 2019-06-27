@@ -1,4 +1,4 @@
-<Framework Name="xamarin-essentials">
+<Framework Name="xamarin-essentials-watchos">
   <Assemblies>
     <Assembly Name="Xamarin.Essentials" Version="1.0.0.0" />
   </Assemblies>
@@ -122,6 +122,8 @@
       <Member Id="M:Xamarin.Essentials.ColorExtensions.AddLuminosity(System.Drawing.Color,System.Single)" />
       <Member Id="M:Xamarin.Essentials.ColorExtensions.MultiplyAlpha(System.Drawing.Color,System.Single)" />
       <Member Id="M:Xamarin.Essentials.ColorExtensions.ToInt(System.Drawing.Color)" />
+      <Member Id="M:Xamarin.Essentials.ColorExtensions.ToPlatformColor(System.Drawing.Color)" />
+      <Member Id="M:Xamarin.Essentials.ColorExtensions.ToSystemColor(UIKit.UIColor)" />
       <Member Id="M:Xamarin.Essentials.ColorExtensions.ToUInt(System.Drawing.Color)" />
       <Member Id="M:Xamarin.Essentials.ColorExtensions.WithAlpha(System.Drawing.Color,System.Int32)" />
       <Member Id="M:Xamarin.Essentials.ColorExtensions.WithHue(System.Drawing.Color,System.Single)" />
@@ -512,6 +514,13 @@
       <Member Id="M:Xamarin.Essentials.PlacemarkExtensions.OpenMapsAsync(Xamarin.Essentials.Placemark)" />
       <Member Id="M:Xamarin.Essentials.PlacemarkExtensions.OpenMapsAsync(Xamarin.Essentials.Placemark,Xamarin.Essentials.MapLaunchOptions)" />
     </Type>
+    <Type Name="Xamarin.Essentials.Platform" Id="T:Xamarin.Essentials.Platform" />
+    <Type Name="Xamarin.Essentials.PointExtensions" Id="T:Xamarin.Essentials.PointExtensions">
+      <Member Id="M:Xamarin.Essentials.PointExtensions.ToPlatformPoint(System.Drawing.Point)" />
+      <Member Id="M:Xamarin.Essentials.PointExtensions.ToPlatformPoint(System.Drawing.PointF)" />
+      <Member Id="M:Xamarin.Essentials.PointExtensions.ToSystemPoint(CoreGraphics.CGPoint)" />
+      <Member Id="M:Xamarin.Essentials.PointExtensions.ToSystemPointF(CoreGraphics.CGPoint)" />
+    </Type>
     <Type Name="Xamarin.Essentials.Preferences" Id="T:Xamarin.Essentials.Preferences">
       <Member Id="M:Xamarin.Essentials.Preferences.Clear" />
       <Member Id="M:Xamarin.Essentials.Preferences.Clear(System.String)" />
@@ -553,11 +562,19 @@
       <Member Id="M:Xamarin.Essentials.ReadOnlyFile.#ctor(System.String,System.String)" />
       <Member Id="M:Xamarin.Essentials.ReadOnlyFile.#ctor(Xamarin.Essentials.FileBase)" />
     </Type>
+    <Type Name="Xamarin.Essentials.RectangleExtensions" Id="T:Xamarin.Essentials.RectangleExtensions">
+      <Member Id="M:Xamarin.Essentials.RectangleExtensions.ToPlatformRectangle(System.Drawing.Rectangle)" />
+      <Member Id="M:Xamarin.Essentials.RectangleExtensions.ToPlatformRectangle(System.Drawing.RectangleF)" />
+      <Member Id="M:Xamarin.Essentials.RectangleExtensions.ToSystemRectangle(CoreGraphics.CGRect)" />
+      <Member Id="M:Xamarin.Essentials.RectangleExtensions.ToSystemRectangleF(CoreGraphics.CGRect)" />
+    </Type>
     <Type Name="Xamarin.Essentials.SecureStorage" Id="T:Xamarin.Essentials.SecureStorage">
       <Member Id="M:Xamarin.Essentials.SecureStorage.GetAsync(System.String)" />
       <Member Id="M:Xamarin.Essentials.SecureStorage.Remove(System.String)" />
       <Member Id="M:Xamarin.Essentials.SecureStorage.RemoveAll" />
       <Member Id="M:Xamarin.Essentials.SecureStorage.SetAsync(System.String,System.String)" />
+      <Member Id="M:Xamarin.Essentials.SecureStorage.SetAsync(System.String,System.String,Security.SecAccessible)" />
+      <Member Id="P:Xamarin.Essentials.SecureStorage.DefaultAccessible" />
     </Type>
     <Type Name="Xamarin.Essentials.SensorSpeed" Id="T:Xamarin.Essentials.SensorSpeed">
       <Member Id="F:Xamarin.Essentials.SensorSpeed.Default" />
