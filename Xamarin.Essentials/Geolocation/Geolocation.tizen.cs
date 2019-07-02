@@ -46,6 +46,7 @@ namespace Xamarin.Essentials
                 tcs.TrySetResult(false);
             });
 
+            double KmToMetersPerSecond(double km) => km * 0.277778;
             service.LocationChanged += (s, e) =>
             {
                 if (e.Location != null)
@@ -55,7 +56,7 @@ namespace Xamarin.Essentials
                     lastKnownLocation.Course = e.Location.Direction;
                     lastKnownLocation.Latitude = e.Location.Latitude;
                     lastKnownLocation.Longitude = e.Location.Longitude;
-                    lastKnownLocation.Speed = e.Location.Speed;
+                    lastKnownLocation.Speed = KmToMetersPerSecond(e.Location.Speed);
                     lastKnownLocation.Timestamp = e.Location.Timestamp;
                 }
                 service?.Stop();
