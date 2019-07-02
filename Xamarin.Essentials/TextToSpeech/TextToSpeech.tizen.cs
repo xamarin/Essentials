@@ -11,7 +11,7 @@ namespace Xamarin.Essentials
         static TaskCompletionSource<bool> tcsInitialize = null;
         static TaskCompletionSource<bool> tcsUtterances = null;
 
-        internal static async Task PlatformSpeakAsync(string text, SpeechOptions settings, CancellationToken cancelToken = default)
+        internal static async Task PlatformSpeakAsync(string text, SpeechOptions options, CancellationToken cancelToken = default)
         {
             await Initialize();
 
@@ -30,21 +30,23 @@ namespace Xamarin.Essentials
 
             var language = "en_US";
             var voiceType = Voice.Auto;
-            if (settings?.Locale.Language != null)
+            if (options?.Locale.Language != null)
             {
                 foreach (var voice in tts.GetSupportedVoices())
                 {
-                    if (voice.Language == settings.Locale.Language)
+                    if (voice.Language == options.Locale.Language)
                     {
                         language = voice.Language;
                         voiceType = voice.VoiceType;
                     }
                 }
             }
-            var speed = 0;
-            if (settings?.Pitch.HasValue ?? false)
-                speed = (int)settings.Pitch.Value;
-            tts.AddText(text, language, (int)voiceType, speed);
+
+            var pitch = 0;
+            if (options?.Pitch.HasValue ?? false)
+                pitch = (int)Math.Round(options.Pitch.Value / PitchMax * tts.GetSpeedRange().Max, MidpointRounding.AwayFromZero);
+
+            tts.AddText(text, language, (int)voiceType, pitch);
             tts.Play();
 
             await tcsUtterances.Task;
