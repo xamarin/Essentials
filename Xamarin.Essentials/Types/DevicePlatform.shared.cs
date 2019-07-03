@@ -12,6 +12,8 @@ namespace Xamarin.Essentials
 
         public static DevicePlatform tvOS { get; } = new DevicePlatform(nameof(tvOS));
 
+        public static DevicePlatform Tizen { get; } = new DevicePlatform(nameof(Tizen));
+
         public static DevicePlatform UWP { get; } = new DevicePlatform(nameof(UWP));
 
         public static DevicePlatform watchOS { get; } = new DevicePlatform(nameof(watchOS));
