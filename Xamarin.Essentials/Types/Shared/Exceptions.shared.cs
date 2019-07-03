@@ -9,7 +9,7 @@ namespace Xamarin.Essentials
             new NotImplementedInReferenceAssemblyException();
 #else
         internal static FeatureNotSupportedException NotSupportedOrImplementedException =>
-            new FeatureNotSupportedException();
+            new FeatureNotSupportedException($"This API is not supported on {DeviceInfo.Platform}");
 #endif
 
     }
