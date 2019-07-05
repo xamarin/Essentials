@@ -3,9 +3,9 @@
     public static partial class PhoneDialer
     {
         internal static bool IsSupported =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
 
         static void PlatformOpen(string number) =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }

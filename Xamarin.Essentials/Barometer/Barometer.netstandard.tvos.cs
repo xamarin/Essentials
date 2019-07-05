@@ -3,12 +3,12 @@
     public static partial class Barometer
     {
         internal static bool IsSupported =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
 
         internal static void PlatformStart(SensorSpeed sensorSpeed) =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
 
         internal static void PlatformStop() =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }

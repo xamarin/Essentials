@@ -3,12 +3,12 @@
     public static partial class Compass
     {
         internal static bool IsSupported =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
 
         internal static void PlatformStart(SensorSpeed sensorSpeed, bool applyLowPassFilter) =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
 
         internal static void PlatformStop() =>
-            throw new NotImplementedInReferenceAssemblyException();
+            throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }

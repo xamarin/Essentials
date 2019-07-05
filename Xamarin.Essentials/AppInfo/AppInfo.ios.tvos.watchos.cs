@@ -16,7 +16,12 @@ namespace Xamarin.Essentials
         static string GetBundleValue(string key)
            => NSBundle.MainBundle.ObjectForInfoDictionary(key)?.ToString();
 
+#if __IOS__ || __TVOS__
         static void PlatformShowSettingsUI() =>
             UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString));
+#else
+        static void PlatformShowSettingsUI() =>
+            throw new FeatureNotSupportedException();
+#endif
     }
 }
