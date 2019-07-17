@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Xamarin.Essentials
@@ -20,7 +21,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        internal static Task InvokeOnMainThread(Action action)
+        public static Task InvokeOnMainThread(Action action)
         {
             if (IsMainThread)
             {
@@ -50,7 +51,7 @@ namespace Xamarin.Essentials
             return tcs.Task;
         }
 
-        internal static Task<T> InvokeOnMainThread<T>(Func<T> action)
+        public static Task<T> InvokeOnMainThread<T>(Func<T> action)
         {
             if (IsMainThread)
             {
@@ -73,6 +74,53 @@ namespace Xamarin.Essentials
             });
 
             return tcs.Task;
+        }
+
+        public static Task InvokeOnMainThreadAsync(Action action)
+        {
+            Func<object> dummyFunc = () =>
+            {
+                action();
+                return null;
+            };
+            return InvokeOnMainThreadAsync(dummyFunc);
+        }
+
+        public static Task<T> InvokeOnMainThreadAsync<T>(Func<T> func)
+        {
+            var tcs = new TaskCompletionSource<T>();
+            BeginInvokeOnMainThread(() =>
+            {
+                try
+                {
+                    var result = func();
+                    tcs.SetResult(result);
+                }
+                catch (Exception ex)
+                {
+                    tcs.SetException(ex);
+                }
+            });
+            return tcs.Task;
+        }
+
+        public static Task InvokeOnMainThreadAsync(Func<Task> funcTask)
+        {
+            Func<Task<object>> dummyFunc = () =>
+            {
+                funcTask();
+                return null;
+            };
+
+            return InvokeOnMainThreadAsync(dummyFunc);
+        }
+
+        public static async Task<SynchronizationContext> GetMainThreadSynchronizationContextAsync()
+        {
+            SynchronizationContext ret = null;
+            await InvokeOnMainThreadAsync(() =>
+                ret = SynchronizationContext.Current).ConfigureAwait(false);
+            return ret;
         }
     }
 }
