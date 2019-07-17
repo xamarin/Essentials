@@ -111,8 +111,14 @@ namespace Samples.ViewModel
                 Birthday = string.Empty;
 
                 var contact = await Contact.PickContactAsync();
-                contact.Numbers.ForEach(x => Phones += x.Key + Environment.NewLine);
-                contact.Emails.ForEach(x => Emails += x.Key + Environment.NewLine);
+                contact.Numbers.ForEach(item =>
+                {
+                    item.ForEach(v => Phones += v + Environment.NewLine);
+                });
+                contact.Emails.ForEach(item =>
+                {
+                    item.ForEach(v => Emails += v + Environment.NewLine);
+                });
                 Name = contact.Name;
                 Birthday = contact.Birthday.ToString();
             }

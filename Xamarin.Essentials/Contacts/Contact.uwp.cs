@@ -8,7 +8,7 @@ namespace Xamarin.Essentials
 {
     public static partial class Contact
     {
-        static async Task<PhoneContact> PlataformPickContactAsync()
+        static async Task<PhoneContact> PlatformPickContactAsync()
         {
             var contactPicker = new ContactPicker();
 
@@ -41,11 +41,10 @@ namespace Xamarin.Essentials
 
                 var birthday = (b == null) ? default :
                     new DateTime((int)b?.Year, (int)b?.Month, (int)b?.Day, 0, 0, 0);
-
                 return new PhoneContact(
                                         phoneContact.Name,
-                                        phones,
-                                        emails,
+                                        (Lookup<ContactType, string>)phones.ToLookup(k => k.Value, v => v.Key),
+                                        (Lookup<ContactType, string>)emails.ToLookup(k => k.Value, v => v.Key),
                                         birthday);
             }
             catch (Exception ex)
@@ -54,7 +53,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static async Task PlataformSaveContactAsync(string name, string phone, string email)
+        static async Task PlatformSaveContactAsync(string name, string phone, string email)
         {
             try
             {
@@ -67,8 +66,6 @@ namespace Xamarin.Essentials
                 throw ex;
             }
         }
-
-        static Task PlataformSaveContact(PhoneContact phoneContact) => Task.CompletedTask;
 
         static ContactType GetPhoneContactType(ContactPhoneKind type)
         {
