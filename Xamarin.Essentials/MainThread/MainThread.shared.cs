@@ -21,7 +21,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        public static Task InvokeOnMainThread(Action action)
+        public static Task InvokeOnMainThreadAsync(Action action)
         {
             if (IsMainThread)
             {
@@ -51,11 +51,11 @@ namespace Xamarin.Essentials
             return tcs.Task;
         }
 
-        public static Task<T> InvokeOnMainThread<T>(Func<T> action)
+        public static Task<T> InvokeOnMainThreadAsync<T>(Func<T> func)
         {
             if (IsMainThread)
             {
-                return Task.FromResult(action());
+                return Task.FromResult(func());
             }
 
             var tcs = new TaskCompletionSource<T>();
@@ -64,7 +64,7 @@ namespace Xamarin.Essentials
             {
                 try
                 {
-                    var result = action();
+                    var result = func();
                     tcs.TrySetResult(result);
                 }
                 catch (Exception ex)
@@ -73,34 +73,6 @@ namespace Xamarin.Essentials
                 }
             });
 
-            return tcs.Task;
-        }
-
-        public static Task InvokeOnMainThreadAsync(Action action)
-        {
-            Func<object> dummyFunc = () =>
-            {
-                action();
-                return null;
-            };
-            return InvokeOnMainThreadAsync(dummyFunc);
-        }
-
-        public static Task<T> InvokeOnMainThreadAsync<T>(Func<T> func)
-        {
-            var tcs = new TaskCompletionSource<T>();
-            BeginInvokeOnMainThread(() =>
-            {
-                try
-                {
-                    var result = func();
-                    tcs.SetResult(result);
-                }
-                catch (Exception ex)
-                {
-                    tcs.SetException(ex);
-                }
-            });
             return tcs.Task;
         }
 
@@ -113,6 +85,32 @@ namespace Xamarin.Essentials
             };
 
             return InvokeOnMainThreadAsync(dummyFunc);
+        }
+
+        public static Task<T> InvokeOnMainThreadAsync<T>(Func<Task<T>> funcTask)
+        {
+            if (IsMainThread)
+            {
+                return funcTask();
+            }
+
+            var tcs = new TaskCompletionSource<T>();
+
+            BeginInvokeOnMainThread(
+                async () =>
+                {
+                    try
+                    {
+                        var ret = await funcTask().ConfigureAwait(false);
+                        tcs.SetResult(ret);
+                    }
+                    catch (Exception e)
+                    {
+                        tcs.SetException(e);
+                    }
+                });
+
+            return tcs.Task;
         }
 
         public static async Task<SynchronizationContext> GetMainThreadSynchronizationContextAsync()
