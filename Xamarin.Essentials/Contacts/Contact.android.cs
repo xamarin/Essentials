@@ -17,7 +17,7 @@ namespace Xamarin.Essentials
 
         internal static Action<PhoneContact> CallBack { get; set; }
 
-        static Task<PhoneContact> PlataformPickContactAsync()
+        static Task<PhoneContact> PlatformPickContactAsync()
         {
             var source = new TaskCompletionSource<PhoneContact>();
             try
@@ -40,7 +40,7 @@ namespace Xamarin.Essentials
             return source.Task;
         }
 
-        internal static PhoneContact PlataformGetContacts(Net.Uri contactUri)
+        internal static PhoneContact PlatformGetContacts(Net.Uri contactUri)
         {
             var context = Activity.ContentResolver;
 
@@ -134,13 +134,19 @@ namespace Xamarin.Essentials
                 }
                 cursor.Close();
                 DateTime.TryParse(bDate, out var birthday);
-                return new PhoneContact(name, phones, emails, birthday);
+                var p = (Lookup<ContactType, string>)emails.ToLookup(x => x.Value, z => z.Key);
+
+                return new PhoneContact(
+                                        name,
+                                        (Lookup<ContactType, string>)phones.ToLookup(k => k.Value, v => v.Key),
+                                        (Lookup<ContactType, string>)emails.ToLookup(k => k.Value, v => v.Key),
+                                        birthday);
             }
 
             return default;
         }
 
-        static Task PlataformSaveContactAsync(string name, string phone, string email)
+        static Task PlatformSaveContactAsync(string name, string phone, string email)
         {
             var intent = new Intent(Intent.ActionInsert);
             intent.SetType(ContactsContract.Contacts.ContentType);
@@ -161,7 +167,5 @@ namespace Xamarin.Essentials
             else
                 return ContactType.Unknow;
         }
-
-        static Task PlataformSaveContact(PhoneContact phoneContact) => Task.CompletedTask;
     }
 }

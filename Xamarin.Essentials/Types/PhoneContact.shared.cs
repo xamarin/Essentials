@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Xamarin.Essentials
 {
@@ -7,25 +8,22 @@ namespace Xamarin.Essentials
     {
         public string Name { get; }
 
-        readonly Dictionary<string, ContactType> numbers;
-        readonly Dictionary<string, ContactType> emails;
+        public Lookup<ContactType, string> Numbers { get; }
 
-        public IReadOnlyDictionary<string, ContactType> Numbers => numbers;
-
-        public IReadOnlyDictionary<string, ContactType> Emails => emails;
+        public Lookup<ContactType, string> Emails { get; }
 
         public DateTime? Birthday { get; }
 
         internal PhoneContact(
             string name,
-            Dictionary<string, ContactType> numbers,
-            Dictionary<string, ContactType> emails,
+            Lookup<ContactType, string> numbers,
+            Lookup<ContactType, string> email,
             DateTime? bd)
         {
             Name = name;
             Birthday = bd;
-            this.numbers = new Dictionary<string, ContactType>(numbers);
-            this.emails = new Dictionary<string, ContactType>(emails);
+            Emails = email;
+            Numbers = numbers;
         }
 
         public static bool operator ==(PhoneContact left, PhoneContact right) =>
@@ -41,11 +39,9 @@ namespace Xamarin.Essentials
             Name.Equals(other.Name) &&
             Numbers.Equals(other.Numbers) &&
             Emails.Equals(other.Emails) &&
-            Birthday.Equals(other.Birthday) &&
-            emails.Equals(other.emails) &&
-            numbers.Equals(other.numbers);
+            Birthday.Equals(other.Birthday);
 
         public override int GetHashCode() =>
-            (Name, Numbers, Emails, Birthday, emails, numbers).GetHashCode();
+            (Name, Numbers, Emails, Birthday).GetHashCode();
     }
 }

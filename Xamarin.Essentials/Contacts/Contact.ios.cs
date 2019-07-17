@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
 
         internal static UIViewController UIView => Platform.GetCurrentViewController();
 
-        static Task<PhoneContact> PlataformPickContactAsync()
+        static Task<PhoneContact> PlatformPickContactAsync()
         {
             var picker = new CNContactPickerViewController
             {
@@ -69,8 +69,12 @@ namespace Xamarin.Essentials
                 var name = $"{contact.GivenName} {contact.MiddleName} {contact.FamilyName}";
 
                 var birthday = contact.Birthday?.Date.ToDateTime().Date;
-
-                return new PhoneContact(name, phones, emails, birthday);
+                var p = (Lookup<ContactType, string>)emails.ToLookup(k => k.Value, v => v.Key);
+                return new PhoneContact(
+                                       name,
+                                       (Lookup<ContactType, string>)phones.ToLookup(k => k.Value, v => v.Key),
+                                       (Lookup<ContactType, string>)emails.ToLookup(k => k.Value, v => v.Key),
+                                       birthday);
             }
             catch (Exception ex)
             {
@@ -78,92 +82,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static Task PlataformSaveContact(PhoneContact phoneContact)
-        {
-            var contact = new CNMutableContact();
-            var nameSplit = phoneContact.Name.Split(' ');
-
-            // Set standard properties
-            contact.GivenName = nameSplit[0];
-            contact.FamilyName = nameSplit.Length > 1 ? nameSplit[nameSplit.Length] : " ";
-
-            // Add email addresses
-            var emails = PopulateEmail(phoneContact.Emails);
-            contact.EmailAddresses = emails.ToArray();
-
-            // Add phone numbers
-            var phones = PopulatePhones(phoneContact.Numbers);
-            contact.PhoneNumbers = phones.ToArray();
-
-            // Add work address
-            var workAddress = new CNMutablePostalAddress()
-            {
-                Street = "1 Infinite Loop",
-                City = "Cupertino",
-                State = "CA",
-                PostalCode = "95014"
-            };
-            contact.PostalAddresses = new CNLabeledValue<CNPostalAddress>[] { new CNLabeledValue<CNPostalAddress>(CNLabelKey.Work, workAddress) };
-
-            // Add birthday
-            var birthday = new NSDateComponents()
-            {
-                Day = 2,
-                Month = 4,
-                Year = 1984
-            };
-            contact.Birthday = birthday;
-
-            try
-            {
-                var view = CNContactViewController.FromNewContact(contact);
-                view.Delegate = new ContactSaveDelegate();
-                var nav = new UINavigationController(view);
-                UIView.PresentModalViewController(nav, false);
-                return Task.CompletedTask;
-            }
-            catch (Exception ex)
-            {
-                return Task.FromException(ex);
-            }
-
-            IEnumerable<CNLabeledValue<NSString>> PopulateEmail(IReadOnlyDictionary<string, ContactType> email)
-            {
-                foreach (var item in email)
-                {
-                    switch (item.Value)
-                    {
-                        case ContactType.Unknow:
-                        case ContactType.Personal:
-                            yield return new CNLabeledValue<NSString>(CNLabelKey.Home, new NSString(item.Key));
-                            break;
-                        case ContactType.Work:
-                            yield return new CNLabeledValue<NSString>(CNLabelKey.Work, new NSString(item.Key));
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-            IEnumerable<CNLabeledValue<CNPhoneNumber>> PopulatePhones(IReadOnlyDictionary<string, ContactType> phone)
-            {
-                foreach (var item in phone)
-                {
-                    switch (item.Value)
-                    {
-                        case ContactType.Unknow:
-                        case ContactType.Personal:
-                            yield return new CNLabeledValue<CNPhoneNumber>(CNLabelPhoneNumberKey.iPhone, new CNPhoneNumber(item.Key));
-                            break;
-                        case ContactType.Work:
-                            yield return new CNLabeledValue<CNPhoneNumber>("Work", new CNPhoneNumber(item.Key));
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-        }
+        static Task PlatformSaveContactAsync(string name, string phone, string email) => Task.CompletedTask;
 
         static ContactType ToPhoneContact(CNContactType type)
         {
@@ -177,7 +96,5 @@ namespace Xamarin.Essentials
                     return ContactType.Unknow;
             }
         }
-
-        static Task PlataformSaveContactAsync(string name, string phone, string email) => Task.CompletedTask;
     }
 }
