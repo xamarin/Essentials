@@ -16,6 +16,14 @@ namespace Xamarin.Essentials
             return PlatformGetAsync(key);
         }
 
+        public static string Get(string key)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentNullException(nameof(key));
+
+            return PlatformGet(key);
+        }
+
         public static Task SetAsync(string key, string value)
         {
             if (string.IsNullOrWhiteSpace(key))
@@ -25,6 +33,17 @@ namespace Xamarin.Essentials
                 throw new ArgumentNullException(nameof(value));
 
             return PlatformSetAsync(key, value);
+        }
+
+        public static void SetAsync(string key, string value)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentNullException(nameof(key));
+            
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+            
+            return PlatformSet(key, value);
         }
 
         public static bool Remove(string key)

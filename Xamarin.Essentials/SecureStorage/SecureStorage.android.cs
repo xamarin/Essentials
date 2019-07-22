@@ -17,6 +17,9 @@ namespace Xamarin.Essentials
         static readonly object locker = new object();
 
         static Task<string> PlatformGetAsync(string key)
+            => Task.FromResult(PlatformGet(key));
+
+        static string PlatformGet(string key)
         {
             var context = Platform.AppContext;
 
@@ -42,10 +45,17 @@ namespace Xamarin.Essentials
                 }
             }
 
-            return Task.FromResult(decryptedData);
+            return decryptedData;
         }
 
         static Task PlatformSetAsync(string key, string data)
+        {
+            PlatformSet(key, data);
+            
+            return Task.CompletedTask;
+        }
+
+        static Task PlatformSet(string key, string data)
         {
             var context = Platform.AppContext;
 
