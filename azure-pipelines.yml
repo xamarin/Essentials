@@ -161,7 +161,8 @@ jobs:
         displayName: Switch to the latest Xcode
       - task: DotNetCoreCLI@2
         displayName: 'Download .NET Core SDK'
-        version: '$(NET_CORE_VERSION)'
+        inputs:
+          version: '$(NET_CORE_VERSION)'
       - task: InstallAppleCertificate@2
         displayName: 'Install an Apple certificate'
         inputs:
