@@ -158,7 +158,7 @@ jobs:
         displayName: Switch to the latest Xamarin SDK
       - bash: echo '##vso[task.setvariable variable=MD_APPLE_SDK_ROOT;]'/Applications/Xcode_$(XCODE_VERSION).app;sudo xcode-select --switch /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer
         displayName: Switch to the latest Xcode
-      - task: DotNetCoreCLI@2
+      - task: UseDotNet@2
         displayName: 'Download .NET Core SDK'
         inputs:
           version: 3.0.0
