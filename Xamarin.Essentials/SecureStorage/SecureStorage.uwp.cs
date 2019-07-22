@@ -9,6 +9,11 @@ namespace Xamarin.Essentials
 {
     public partial class SecureStorage
     {
+        static string PlatformGet(string key)
+            => throw new NotImplementedException();
+
+        static void PlatformSet(string key, string value)
+            => throw new NotImplementedException();
         static async Task<string> PlatformGetAsync(string key)
         {
             var settings = GetSettings(Alias);
