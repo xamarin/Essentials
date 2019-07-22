@@ -161,7 +161,7 @@ jobs:
       - task: UseDotNet@2
         displayName: 'Download .NET Core SDK'
         inputs:
-          version: 3.0.0
+          version: 3.0.0-preview6
           includePreviewVersions: true
       - task: InstallAppleCertificate@2
         displayName: 'Install an Apple certificate'
