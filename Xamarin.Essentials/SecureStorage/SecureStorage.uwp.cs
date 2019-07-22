@@ -14,6 +14,7 @@ namespace Xamarin.Essentials
 
         static void PlatformSet(string key, string value)
             => throw new NotImplementedException();
+
         static async Task<string> PlatformGetAsync(string key)
         {
             var settings = GetSettings(Alias);

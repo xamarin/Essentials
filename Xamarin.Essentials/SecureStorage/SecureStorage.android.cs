@@ -51,7 +51,7 @@ namespace Xamarin.Essentials
         static Task PlatformSetAsync(string key, string data)
         {
             PlatformSet(key, data);
-            
+
             return Task.CompletedTask;
         }
 
