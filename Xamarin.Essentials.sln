@@ -12,7 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		DeviceTests\build.ps1 = DeviceTests\build.ps1
 		DeviceTests\build.sh = DeviceTests\build.sh
 		LICENSE = LICENSE
-		nuget.config = nuget.config
 		nugetreadme.txt = nugetreadme.txt
 		README.md = README.md
 		stylecop.json = stylecop.json
