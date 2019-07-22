@@ -10,7 +10,6 @@ variables:
   ANDROID_EMU_TARGET: 'system-images;android-26;google_apis;x86'
   ANDROID_EMU_DEVICE: 'Nexus 5X'
   RunPoliCheck: 'false'
-  NET_CORE_VERSION: '3.0.0-preview6'
 
 resources:
   repositories:
@@ -162,7 +161,8 @@ jobs:
       - task: DotNetCoreCLI@2
         displayName: 'Download .NET Core SDK'
         inputs:
-          version: '$(NET_CORE_VERSION)'
+          version: 3.0.0
+          includePreviewVersions: true
       - task: InstallAppleCertificate@2
         displayName: 'Install an Apple certificate'
         inputs:
