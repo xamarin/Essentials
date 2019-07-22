@@ -6,7 +6,7 @@ namespace Xamarin.Essentials
     {
         static Task<string> PlatformGetAsync(string key) =>
             throw new NotImplementedInReferenceAssemblyException();
-        
+
         static string PlatformGet(string key) =>
             throw new NotImplementedInReferenceAssemblyException();
 
@@ -20,6 +20,6 @@ namespace Xamarin.Essentials
             throw new NotImplementedInReferenceAssemblyException();
 
         static void PlatformRemoveAll() =>
-            throw new NotImplementedInReferenceAssemblyException();    
+            throw new NotImplementedInReferenceAssemblyException();
     }
 }

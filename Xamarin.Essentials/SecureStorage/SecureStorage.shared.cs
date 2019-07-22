@@ -28,22 +28,20 @@ namespace Xamarin.Essentials
         {
             if (string.IsNullOrWhiteSpace(key))
                 throw new ArgumentNullException(nameof(key));
-
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
 
             return PlatformSetAsync(key, value);
         }
 
-        public static void SetAsync(string key, string value)
+        public static void Set(string key, string value)
         {
             if (string.IsNullOrWhiteSpace(key))
                 throw new ArgumentNullException(nameof(key));
-            
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
-            
-            return PlatformSet(key, value);
+
+            return;
         }
 
         public static bool Remove(string key)
