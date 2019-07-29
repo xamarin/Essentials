@@ -9,7 +9,7 @@ var TARGET = Argument("target", "Default");
 var ESSENTIALS_PROJ = "../Xamarin.Essentials/Xamarin.Essentials.csproj";
 
 var IOS_SIM_NAME = EnvironmentVariable("IOS_SIM_NAME") ?? "iPhone X";
-var IOS_SIM_RUNTIME = EnvironmentVariable("IOS_SIM_RUNTIME") ?? "iOS 12.0";
+var IOS_SIM_RUNTIME = EnvironmentVariable("IOS_SIM_RUNTIME") ?? "iOS 12.2";
 var IOS_PROJ = "./DeviceTests.iOS/DeviceTests.iOS.csproj";
 var IOS_BUNDLE_ID = "com.xamarin.essentials.devicetests";
 var IOS_IPA_PATH = "./DeviceTests.iOS/bin/iPhoneSimulator/Release/XamarinEssentialsDeviceTestsiOS.app";
@@ -128,8 +128,13 @@ Task ("test-ios-emu")
     .IsDependentOn ("build-ios")
     .Does (() =>
 {
+    var sims = ListAppleSimulators();
+    foreach(var s in sims)
+    {
+       Information("Simulator Info: {0} ({1} - {2})", s.Name, s.Runtime, s.UDID); 
+    }
     // Look for a matching simulator on the system
-    var sim = ListAppleSimulators ()
+    var sim = sims
         .First (s => (s.Availability.Contains("available") || s.Availability.Contains("booted"))
                 && !s.Availability.Contains("unavailable")
                 && s.Name == IOS_SIM_NAME && s.Runtime == IOS_SIM_RUNTIME);
