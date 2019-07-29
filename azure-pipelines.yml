@@ -3,8 +3,8 @@ variables:
   CurrentSemanticVersionBase: '1.0.0'
   CurrentSemanticVersion: '$(CurrentSemanticVersionBase)-preview$(Build.BuildNumber)'
   NugetPackageVersion: '$(CurrentSemanticVersion)'
-  MONO_VERSION: 5_16_0
-  XCODE_VERSION: 10.1
+  MONO_VERSION: 5_18_1
+  XCODE_VERSION: 10.2.1
   IOS_SIM_NAME: 'iPhone X'
   IOS_SIM_RUNTIME: 'iOS 12.1'
   ANDROID_EMU_TARGET: 'system-images;android-26;google_apis;x86'
