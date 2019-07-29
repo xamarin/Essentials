@@ -5,6 +5,9 @@
 
 var TARGET = Argument("target", "Default");
 
+
+var ESSENTIALS_PROJ = "../Xamarin.Essentials/Xamarin.Essentials.csproj";
+
 var IOS_SIM_NAME = EnvironmentVariable("IOS_SIM_NAME") ?? "iPhone X";
 var IOS_SIM_RUNTIME = EnvironmentVariable("IOS_SIM_RUNTIME") ?? "iOS 12.0";
 var IOS_PROJ = "./DeviceTests.iOS/DeviceTests.iOS.csproj";
@@ -78,7 +81,27 @@ Action<FilePath, string> AddPlatformToTestResults = (FilePath testResultsFile, s
     }
 };
 
+Task ("build-essentials")
+    .Does(() =>
+{ 
+    // Nuget restore
+    MSBuild (ESSENTIALS_PROJ, c => {
+        c.Configuration = "Release";
+        c.Targets.Clear();
+        c.Targets.Add("Restore");
+    });
+
+    // Build the project
+    MSBuild (ESSENTIALS_PROJ, c => {
+        c.Configuration = "Release";
+        c.Properties["ContinuousIntegrationBuild"] = new List<string> { "false" };
+        c.Targets.Clear();
+        c.Targets.Add("Rebuild");
+    });
+});
+
 Task ("build-ios")
+    .IsDependentOn ("build-essentials")
     .Does (() =>
 {
     // Setup the test listener config to be built into the app
@@ -153,6 +176,7 @@ Task ("test-ios-emu")
 
 
 Task ("build-android")
+    .IsDependentOn ("build-essentials")
     .Does (() =>
 {
     // Nuget restore
