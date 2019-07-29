@@ -152,7 +152,7 @@ jobs:
       - build_windows
       - build_macos
     pool:
-      vmImage: macos-10.13
+      vmImage: Hosted macOS
     steps:
       - bash: sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh $(MONO_VERSION)
         displayName: Switch to the latest Xamarin SDK
