@@ -76,7 +76,7 @@ jobs:
   - job: build_macos
     displayName: Build macOS Library
     pool:
-      vmImage: macos-10.13
+      vmImage: macos-10.14
     steps:
       # if this is a tagged build, then update the version number
       - powershell: |
@@ -152,16 +152,12 @@ jobs:
       - build_windows
       - build_macos
     pool:
-      vmImage: macos-10.13
+      vmImage: macos-10.14
     steps:
       - bash: sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh $(MONO_VERSION)
         displayName: Switch to the latest Xamarin SDK
       - bash: echo '##vso[task.setvariable variable=MD_APPLE_SDK_ROOT;]'/Applications/Xcode_$(XCODE_VERSION).app;sudo xcode-select --switch /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer
         displayName: Switch to the latest Xcode
-      - task: NuGetToolInstaller@0
-        displayName: 'Use Nuget 4.4.1'
-        inputs:
-          versionSpec: 4.4.1
       - task: InstallAppleCertificate@2
         displayName: 'Install an Apple certificate'
         inputs:
@@ -187,7 +183,7 @@ jobs:
       - build_windows
       - build_macos
     pool:
-      vmImage: macos-10.13
+      vmImage: macos-10.14
     steps:
       - bash: sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh $(MONO_VERSION)
         displayName: Switch to the latest Xamarin SDK

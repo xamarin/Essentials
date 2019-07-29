@@ -85,16 +85,15 @@ Task ("build-essentials")
     .Does(() =>
 { 
     // Nuget restore
-    //MSBuild (ESSENTIALS_PROJ, c => {
-    //    c.Configuration = "Release";
-    //    c.Targets.Clear();
-    //    c.Targets.Add("Restore");
-    //});
+    MSBuild (ESSENTIALS_PROJ, c => {
+        c.Configuration = "Release";
+        c.Targets.Clear();
+        c.Targets.Add("Restore");
+    });
 
     // Build the project
     MSBuild (ESSENTIALS_PROJ, c => {
         c.Configuration = "Release";
-        c.Restore = true;
         c.Properties["ContinuousIntegrationBuild"] = new List<string> { "false" };
         c.Targets.Clear();
         c.Targets.Add("Rebuild");
@@ -102,23 +101,21 @@ Task ("build-essentials")
 });
 
 Task ("build-ios")
-    .IsDependentOn ("build-essentials")
     .Does (() =>
 {
     // Setup the test listener config to be built into the app
     FileWriteText((new FilePath(IOS_PROJ)).GetDirectory().CombineWithFilePath("tests.cfg"), $"{TCP_LISTEN_HOST}:{TCP_LISTEN_PORT}");
 
     // Nuget restore
-    //MSBuild (IOS_PROJ, c => {
-    //    c.Configuration = "Release";
-    //    c.Targets.Clear();
-    //    c.Targets.Add("Restore");
-    //});
+    MSBuild (IOS_PROJ, c => {
+        c.Configuration = "Release";
+        c.Targets.Clear();
+        c.Targets.Add("Restore");
+    });
 
     // Build the project (with ipa)
     MSBuild (IOS_PROJ, c => {
         c.Configuration = "Release";
-        c.Restore = true;
         c.Properties["Platform"] = new List<string> { "iPhoneSimulator" };
         c.Properties["BuildIpa"] = new List<string> { "true" };
         c.Properties["ContinuousIntegrationBuild"] = new List<string> { "false" };
@@ -178,21 +175,19 @@ Task ("test-ios-emu")
 
 
 Task ("build-android")
-    .IsDependentOn ("build-essentials")
     .Does (() =>
 {
     // Nuget restore
-    //MSBuild (ANDROID_PROJ, c => {
-    //    c.Configuration = "Debug";
-    //    c.Targets.Clear();
-    //    c.Targets.Add("Restore");
-    //});
+    MSBuild (ANDROID_PROJ, c => {
+        c.Configuration = "Debug";
+        c.Targets.Clear();
+        c.Targets.Add("Restore");
+    });
 
     // Build the app in debug mode
     // needs to be debug so unit tests get discovered
     MSBuild (ANDROID_PROJ, c => {
         c.Configuration = "Debug";
-        c.Restore = true;
         c.Properties["ContinuousIntegrationBuild"]  = new List<string> { "false" };
         c.Targets.Clear();
         c.Targets.Add("Rebuild");
