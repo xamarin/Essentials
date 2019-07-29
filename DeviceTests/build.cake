@@ -135,8 +135,7 @@ Task ("test-ios-emu")
     }
     // Look for a matching simulator on the system
     var sim = sims
-        .First (s => (s.Availability.Contains("available") || s.State.ToLower().Contains("booted"))
-                && s.Name == IOS_SIM_NAME && s.Runtime == IOS_SIM_RUNTIME);
+        .First (s => s.Name == IOS_SIM_NAME && s.Runtime == IOS_SIM_RUNTIME);
 
     // Boot the simulator
     Information("Booting: {0} ({1} - {2})", sim.Name, sim.Runtime, sim.UDID);
