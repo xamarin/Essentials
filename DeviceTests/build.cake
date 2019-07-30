@@ -109,7 +109,7 @@ Task ("test-ios-emu")
     var sims = ListAppleSimulators ();
     foreach (var s in sims)
     {
-        Information("Info: {0} ({1} - {2} - {3})", sim.Name, sim.Runtime, sim.UDID, s.Availability);
+        Information("Info: {0} ({1} - {2} - {3})", s.Name, s.Runtime, s.UDID, s.Availability);
     }
 
     // Look for a matching simulator on the system
