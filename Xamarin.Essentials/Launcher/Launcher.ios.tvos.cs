@@ -37,7 +37,18 @@ namespace Xamarin.Essentials
 
             var vc = Platform.GetCurrentViewController();
 
-            documentController.PresentOpenInMenu(vc.View.Frame, vc.View, true);
+            CoreGraphics.CGRect? rect = null;
+            if (DeviceInfo.Idiom == DeviceIdiom.Tablet)
+            {
+                rect = new CoreGraphics.CGRect(new CoreGraphics.CGPoint(vc.View.Bounds.Width / 2, vc.View.Bounds.Height), CoreGraphics.CGRect.Empty.Size);
+            }
+            else
+            {
+                rect = vc.View.Bounds;
+            }
+
+            documentController.PresentOpenInMenu(rect.Value, vc.View, true);
+
             return Task.CompletedTask;
         }
 #else
