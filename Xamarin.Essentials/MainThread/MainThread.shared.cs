@@ -78,13 +78,28 @@ namespace Xamarin.Essentials
 
         public static Task InvokeOnMainThreadAsync(Func<Task> funcTask)
         {
-            Func<Task<object>> dummyFunc = () =>
+            if (IsMainThread)
             {
-                funcTask();
-                return null;
-            };
+                return funcTask();
+            }
 
-            return InvokeOnMainThreadAsync(dummyFunc);
+            var tcs = new TaskCompletionSource<object>();
+
+            BeginInvokeOnMainThread(
+                async () =>
+                {
+                    try
+                    {
+                        await funcTask().ConfigureAwait(false);
+                        tcs.SetResult(null);
+                    }
+                    catch (Exception e)
+                    {
+                        tcs.SetException(e);
+                    }
+                });
+
+            return tcs.Task;
         }
 
         public static Task<T> InvokeOnMainThreadAsync<T>(Func<Task<T>> funcTask)
