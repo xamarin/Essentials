@@ -379,6 +379,8 @@
       <Member Id="M:Xamarin.Essentials.Launcher.OpenAsync(System.String)" />
       <Member Id="M:Xamarin.Essentials.Launcher.OpenAsync(System.Uri)" />
       <Member Id="M:Xamarin.Essentials.Launcher.OpenAsync(Xamarin.Essentials.OpenFileRequest)" />
+      <Member Id="M:Xamarin.Essentials.Launcher.TryOpenAsync(System.String)" />
+      <Member Id="M:Xamarin.Essentials.Launcher.TryOpenAsync(System.Uri)" />
     </Type>
     <Type Name="Xamarin.Essentials.Locale" Id="T:Xamarin.Essentials.Locale">
       <Member Id="P:Xamarin.Essentials.Locale.Country" />
