@@ -149,10 +149,12 @@
         <Parameter Name="uri" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="uri">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="uri">string uri scheme</param>
+        <summary>
+          <para>Launches the app specified by the uri scheme and returns if it was supported or not</para>
+        </summary>
+        <returns>True if opening is supported, otherwise false</returns>
+        <remarks>May throw System.UriFormatException if uri is malformed</remarks>
       </Docs>
     </Member>
     <Member MemberName="TryOpenAsync">
@@ -171,10 +173,12 @@
         <Parameter Name="uri" Type="System.Uri" />
       </Parameters>
       <Docs>
-        <param name="uri">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="uri">uri scheme</param>
+        <summary>
+          <para>Launches the app specified by the uri scheme and returns if it was supported or not</para>
+        </summary>
+        <returns>True if opening is supported, otherwise false</returns>
+        <remarks>May throw System.UriFormatException if uri is malformed</remarks>
       </Docs>
     </Member>
   </Members>
