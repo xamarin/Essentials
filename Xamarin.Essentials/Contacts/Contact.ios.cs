@@ -82,7 +82,41 @@ namespace Xamarin.Essentials
             }
         }
 
-        static Task PlatformSaveContactAsync(string name, string phone, string email) => Task.CompletedTask;
+        static Task PlatformSaveContactAsync(string name, string phone, string email)
+        {
+            var contact = new CNMutableContact();
+            var nameSplit = name.Split(' ');
+            contact.GivenName = nameSplit[0];
+            contact.FamilyName = nameSplit.Length > 1 ? nameSplit[nameSplit.Length - 1] : " ";
+
+            contact.EmailAddresses = new CNLabeledValue<NSString>[1]
+            {
+                new CNLabeledValue<NSString>(CNLabelKey.EmailiCloud, new NSString(email))
+            };
+
+            contact.PhoneNumbers = new CNLabeledValue<CNPhoneNumber>[1]
+            {
+                new CNLabeledValue<CNPhoneNumber>(CNLabelPhoneNumberKey.Main, new CNPhoneNumber(phone))
+            };
+
+            try
+            {
+                var view = CNContactViewController.FromNewContact(contact);
+                view.Delegate = new ContactSaveDelegate();
+                var nav = new UINavigationController(view);
+                UIView.PresentModalViewController(nav, true);
+
+                return Task.CompletedTask;
+            }
+            catch (Exception ex)
+            {
+                return Task.FromException(ex);
+            }
+            finally
+            {
+                contact.Dispose();
+            }
+        }
 
         static ContactType ToPhoneContact(CNContactType type)
         {
