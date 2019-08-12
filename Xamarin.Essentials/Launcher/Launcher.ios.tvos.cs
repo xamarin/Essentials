@@ -14,6 +14,17 @@ namespace Xamarin.Essentials
         static Task PlatformOpenAsync(Uri uri) =>
             UIApplication.SharedApplication.OpenUrlAsync(GetNativeUrl(uri), new UIApplicationOpenUrlOptions());
 
+        static Task<bool> PlatformTryOpenAsync(Uri uri)
+        {
+            var nativeUrl = GetNativeUrl(uri);
+            var canOpen = UIApplication.SharedApplication.CanOpenUrl(nativeUrl);
+
+            if (canOpen)
+                return UIApplication.SharedApplication.OpenUrlAsync(nativeUrl, new UIApplicationOpenUrlOptions());
+
+            return Task.FromResult(canOpen);
+        }
+
         internal static NSUrl GetNativeUrl(Uri uri)
         {
             try

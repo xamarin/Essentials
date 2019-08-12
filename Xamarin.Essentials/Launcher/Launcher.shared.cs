@@ -44,6 +44,22 @@ namespace Xamarin.Essentials
 
             return PlatformOpenAsync(request);
         }
+
+        public static Task<bool> TryOpenAsync(string uri)
+        {
+            if (string.IsNullOrWhiteSpace(uri))
+                throw new ArgumentNullException(nameof(uri));
+
+            return PlatformTryOpenAsync(new Uri(uri));
+        }
+
+        public static Task<bool> TryOpenAsync(Uri uri)
+        {
+            if (uri == null)
+                throw new ArgumentNullException(nameof(uri));
+
+            return PlatformCanOpenAsync(uri);
+        }
     }
 
     public class OpenFileRequest
