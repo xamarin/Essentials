@@ -36,7 +36,7 @@ namespace DeviceTests
         public async Task CanOpen(string uri)
         {
 #if __IOS__
-            if (DeviceInfo.DeviceType == DeviceType.Virtual && (uri.Contains("tel:") || uri.Contains("mailto:")))
+            if (DeviceInfo.DeviceType == DeviceType.Virtual && (uri.Contains("tel:") || uri.Contains("mailto:") || uri.Contains("sms:")))
             {
                 Assert.False(await Launcher.CanOpenAsync(uri));
                 return;
