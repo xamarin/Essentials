@@ -100,7 +100,7 @@ namespace DeviceTests
             Assert.False(await Launcher.CanOpenAsync(uri));
         }
 
-        [Theory]
+        /*[Theory]
         [InlineData("http://www.example.com")]
         [InlineData("http://example.com/?query=blah")]
         [InlineData("https://example.com/?query=blah")]
@@ -126,6 +126,6 @@ namespace DeviceTests
         public async Task CanNotTryOpen(string uri)
         {
             Assert.False(await Launcher.TryOpenAsync(new Uri(uri)));
-        }
+        }*/
     }
 }
