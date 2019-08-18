@@ -20,16 +20,9 @@ namespace Xamarin.Essentials
         {
             var picker = new CNContactPickerViewController
             {
-                // Select property to pick
-                // DisplayedPropertyKeys = new NSString[] { CNContactKey.EmailAddresses },
-                // PredicateForEnablingContact = NSPredicate.FromFormat("emailAddresses.@count > 0"),
-                // PredicateForSelectionOfContact = NSPredicate.FromFormat("emailAddresses.@count == 1"),
-
-                // Respond to selection
                 Delegate = new ContactPickerDelegate()
             };
 
-            // Display picker
             UIView.PresentViewController(picker, true, null);
 
             var source = new TaskCompletionSource<PhoneContact>();
@@ -85,19 +78,29 @@ namespace Xamarin.Essentials
         static Task PlatformSaveContactAsync(string name, string phone, string email)
         {
             var contact = new CNMutableContact();
-            var nameSplit = name.Split(' ');
-            contact.GivenName = nameSplit[0];
-            contact.FamilyName = nameSplit.Length > 1 ? nameSplit[nameSplit.Length - 1] : " ";
 
-            contact.EmailAddresses = new CNLabeledValue<NSString>[1]
+            if (!string.IsNullOrEmpty(name))
             {
-                new CNLabeledValue<NSString>(CNLabelKey.EmailiCloud, new NSString(email))
-            };
+                var nameSplit = name.Split(' ');
+                contact.GivenName = nameSplit[0];
+                contact.FamilyName = nameSplit.Length > 1 ? nameSplit[nameSplit.Length - 1] : " ";
+            }
 
-            contact.PhoneNumbers = new CNLabeledValue<CNPhoneNumber>[1]
+            if (!string.IsNullOrEmpty(email))
             {
-                new CNLabeledValue<CNPhoneNumber>(CNLabelPhoneNumberKey.Main, new CNPhoneNumber(phone))
-            };
+                contact.EmailAddresses = new CNLabeledValue<NSString>[1]
+                {
+                   new CNLabeledValue<NSString>(CNLabelKey.EmailiCloud, new NSString(email))
+                };
+            }
+
+            if (!string.IsNullOrEmpty(phone))
+            {
+                contact.PhoneNumbers = new CNLabeledValue<CNPhoneNumber>[1]
+                {
+                    new CNLabeledValue<CNPhoneNumber>(CNLabelPhoneNumberKey.Main, new CNPhoneNumber(phone))
+                };
+            }
 
             try
             {
