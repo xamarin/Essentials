@@ -40,8 +40,6 @@ namespace Xamarin.Essentials
 
         public static Task OpenAsync(OpenFileRequest request)
         {
-            ExperimentalFeatures.VerifyEnabled(ExperimentalFeatures.OpenFileRequest);
-
             return PlatformOpenAsync(request);
         }
 
@@ -66,19 +64,16 @@ namespace Xamarin.Essentials
     {
         public OpenFileRequest()
         {
-            ExperimentalFeatures.VerifyEnabled(ExperimentalFeatures.OpenFileRequest);
         }
 
         public OpenFileRequest(string title, ReadOnlyFile file)
         {
-            ExperimentalFeatures.VerifyEnabled(ExperimentalFeatures.OpenFileRequest);
             Title = title;
             File = file;
         }
 
         public OpenFileRequest(string title, FileBase file)
         {
-            ExperimentalFeatures.VerifyEnabled(ExperimentalFeatures.OpenFileRequest);
             Title = title;
             File = new ReadOnlyFile(file);
         }
