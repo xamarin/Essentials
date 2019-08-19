@@ -107,7 +107,8 @@ namespace DeviceTests
         [InlineData("mailto://someone@microsoft.com")]
         [InlineData("mailto://someone@microsoft.com?subject=test")]
         [InlineData("tel:+1 555 010 9999")]
-        [InlineData("sms:5550109999")]
+        [InlineData("sms:5550109999")]        
+        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
         public async Task TryOpen(string uri)
         {
 #if __IOS__
@@ -123,6 +124,7 @@ namespace DeviceTests
 
         [Theory]
         [InlineData("ms-invalidurifortest:abc")]
+        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
         public async Task CanNotTryOpen(string uri)
         {
             Assert.False(await Launcher.TryOpenAsync(new Uri(uri)));
