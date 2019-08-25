@@ -81,7 +81,6 @@ namespace Samples.ViewModel
             IsBusy = true;
             try
             {
-                // TODO verificar se vale a pena criar um SaveCOntact que leva o phoneContact
                 await Contact.SaveContactAsync(ContactName, ContactNumber, ContactEmail);
 
                 ContactName = string.Empty;
