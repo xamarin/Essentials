@@ -113,17 +113,6 @@ namespace Xamarin.Essentials
                             ContactsContract.CommonDataKinds.StructuredPostal.Postcode
                 };
 
-                cursor = context.Query(ContactsContract.CommonDataKinds.StructuredPostal.ContentUri, projection, ContactsContract.Data.InterfaceConsts.ContactId + " = ?", idQ, null);
-                if (cursor.MoveToLast())
-                {
-                    // Add street in PhoneContact struct
-
-                    var street = cursor.GetString(cursor.GetColumnIndex(projection[0]));
-                    var city = cursor.GetString(cursor.GetColumnIndex(projection[1]));
-                    var postCode = cursor.GetString(cursor.GetColumnIndex(projection[2]));
-                }
-                cursor.Close();
-
                 var query = ContactsContract.CommonDataKinds.CommonColumns.Type + " = " + 3
                      + " AND " + ContactsContract.CommonDataKinds.Event.InterfaceConsts.ContactId + " = ?";
 
