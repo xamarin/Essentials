@@ -16,6 +16,9 @@ namespace Xamarin.Essentials
         static string GetVersionString()
             => Plat.GetFeatureInfo("platform.version");
 
+        static string GetCpuArchitecture() =>
+            Plat.GetFeatureInfo("platform.core.cpu.arch");
+
         static DevicePlatform GetPlatform()
             => DevicePlatform.Tizen;
 

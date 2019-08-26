@@ -1,4 +1,5 @@
-﻿using Windows.Security.ExchangeActiveSyncProvisioning;
+﻿using Windows.ApplicationModel;
+using Windows.Security.ExchangeActiveSyncProvisioning;
 using Windows.System.Profile;
 using Windows.UI.ViewManagement;
 
@@ -12,6 +13,8 @@ namespace Xamarin.Essentials
         {
             deviceInfo = new EasClientDeviceInformation();
         }
+
+        static string GetCpuArchitecture() => Package.Current.Id.Architecture.ToString();
 
         static string GetModel() => deviceInfo.SystemProductName;
 

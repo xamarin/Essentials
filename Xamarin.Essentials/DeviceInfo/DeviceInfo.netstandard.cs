@@ -10,6 +10,8 @@
 
         static string GetVersionString() => throw ExceptionUtils.NotSupportedOrImplementedException;
 
+        static string GetCpuArchitecture() => throw ExceptionUtils.NotSupportedOrImplementedException;
+
         static DevicePlatform GetPlatform() => DevicePlatform.Unknown;
 
         static DeviceIdiom GetIdiom() => DeviceIdiom.Unknown;

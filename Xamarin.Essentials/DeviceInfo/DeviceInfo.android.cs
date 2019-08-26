@@ -22,6 +22,8 @@ namespace Xamarin.Essentials
             return name;
         }
 
+        static string GetCpuArchitecture() => Build.CpuAbi + " " + Build.CpuAbi2;
+
         static string GetVersionString() => Build.VERSION.Release;
 
         static DevicePlatform GetPlatform() => DevicePlatform.Android;

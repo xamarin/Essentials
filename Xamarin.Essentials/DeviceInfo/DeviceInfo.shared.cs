@@ -12,6 +12,8 @@ namespace Xamarin.Essentials
 
         public static string VersionString => GetVersionString();
 
+        public static string CpuArchitecture => GetCpuArchitecture();
+
         public static Version Version => Utils.ParseVersion(VersionString);
 
         public static DevicePlatform Platform => GetPlatform();

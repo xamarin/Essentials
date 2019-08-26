@@ -16,6 +16,8 @@ namespace Samples.ViewModel
 
         public string Version => DeviceInfo.Version.ToString();
 
+        public string CPU => DeviceInfo.CpuArchitecture;
+
         public DevicePlatform Platform => DeviceInfo.Platform;
 
         public DeviceIdiom Idiom => DeviceInfo.Idiom;
