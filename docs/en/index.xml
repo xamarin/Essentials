@@ -106,6 +106,7 @@
       <Type Name="BrowserLaunchOptions" Kind="Class" />
       <Type Name="BrowserTitleMode" Kind="Enumeration" />
       <Type Name="Clipboard" Kind="Class" />
+      <Type Name="ClipboardChangeListener" Kind="Class" />
       <Type Name="ColorConverters" Kind="Class" />
       <Type Name="ColorExtensions" Kind="Class" />
       <Type Name="Compass" Kind="Class" />
