@@ -113,10 +113,6 @@
       <Member Id="M:Xamarin.Essentials.Clipboard.SetTextAsync(System.String)" />
       <Member Id="P:Xamarin.Essentials.Clipboard.HasText" />
     </Type>
-    <Type Name="Xamarin.Essentials.ClipboardChangeListener" Id="T:Xamarin.Essentials.ClipboardChangeListener">
-      <Member Id="M:Xamarin.Essentials.ClipboardChangeListener.#ctor" />
-      <Member Id="M:Xamarin.Essentials.ClipboardChangeListener.OnPrimaryClipChanged" />
-    </Type>
     <Type Name="Xamarin.Essentials.ColorConverters" Id="T:Xamarin.Essentials.ColorConverters">
       <Member Id="M:Xamarin.Essentials.ColorConverters.FromHex(System.String)" />
       <Member Id="M:Xamarin.Essentials.ColorConverters.FromHsl(System.Single,System.Single,System.Single)" />
