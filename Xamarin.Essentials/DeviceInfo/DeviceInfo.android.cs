@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Android.App;
 using Android.Content.Res;
 using Android.OS;
@@ -22,7 +23,13 @@ namespace Xamarin.Essentials
             return name;
         }
 
-        static string GetCpuArchitecture() => Build.CpuAbi + " " + Build.CpuAbi2;
+        static string[] GetArchitectures()
+        {
+            if (Essentials.Platform.HasApiLevel(BuildVersionCodes.Lollipop))
+                return Build.SupportedAbis.ToArray();
+            else
+                return new string[] { Build.CpuAbi, Build.CpuAbi2 };
+        }
 
         static string GetVersionString() => Build.VERSION.Release;
 

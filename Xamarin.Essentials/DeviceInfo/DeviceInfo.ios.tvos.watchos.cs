@@ -32,9 +32,9 @@ namespace Xamarin.Essentials
 
         static string GetVersionString() => UIDevice.CurrentDevice.SystemVersion;
 
-        static string GetCpuArchitecture() =>
+        static string[] GetArchitectures() =>
 #if __IOS__
-            Essentials.Platform.GetSystemLibraryProperty("hw.cputype");
+            new string[] { Essentials.Platform.GetSystemLibraryProperty("hw.cputype") };
 #else
             throw new NotImplementedException();
 #endif

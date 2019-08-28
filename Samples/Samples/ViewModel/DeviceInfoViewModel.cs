@@ -16,7 +16,22 @@ namespace Samples.ViewModel
 
         public string Version => DeviceInfo.Version.ToString();
 
-        public string CPU => DeviceInfo.CpuArchitecture;
+        public string Architectures
+        {
+            get
+            {
+                var info = DeviceInfo.Architectures;
+                if (info.Length <= 1)
+                    return info[0];
+
+                var architectures = string.Empty;
+                foreach (var architecture in info)
+                {
+                    architectures += architecture + ", ";
+                }
+                return architectures.Remove(architectures.Length - 2);
+            }
+        }
 
         public DevicePlatform Platform => DeviceInfo.Platform;
 

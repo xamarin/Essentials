@@ -14,7 +14,7 @@ namespace Xamarin.Essentials
             deviceInfo = new EasClientDeviceInformation();
         }
 
-        static string GetCpuArchitecture() => Package.Current.Id.Architecture.ToString();
+        static string[] GetArchitectures() => new string[] { Package.Current.Id.Architecture.ToString() };
 
         static string GetModel() => deviceInfo.SystemProductName;
 

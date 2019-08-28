@@ -12,7 +12,7 @@ namespace Xamarin.Essentials
 
         public static string VersionString => GetVersionString();
 
-        public static string CpuArchitecture => GetCpuArchitecture();
+        public static string[] Architectures => GetArchitectures();
 
         public static Version Version => Utils.ParseVersion(VersionString);
 
