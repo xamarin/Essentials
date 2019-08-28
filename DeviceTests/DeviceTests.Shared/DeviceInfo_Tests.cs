@@ -152,14 +152,7 @@ namespace DeviceTests
         public void Supported_Architectures()
         {
 #if __IOS__
-            if (DeviceInfo.DeviceType == DeviceType.Virtual)
-            {
-                Assert.True(DeviceInfo.Architectures.Length == 0);
-            }
-            else
-            {
-                Assert.True(DeviceInfo.Architectures.Length > 0);
-            }
+            // Nothing right now.
 #else
             Assert.True(DeviceInfo.Architectures.Length > 0);
 #endif
