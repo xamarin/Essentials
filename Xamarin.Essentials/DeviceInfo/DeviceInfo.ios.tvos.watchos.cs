@@ -36,7 +36,7 @@ namespace Xamarin.Essentials
 #if __IOS__
             new string[] { Essentials.Platform.GetSystemLibraryProperty("hw.cputype") };
 #else
-            throw new NotImplementedException();
+            throw new NotSupportedException();
 #endif
 
         static DevicePlatform GetPlatform() =>
