@@ -177,5 +177,25 @@
         </remarks>
       </Docs>
     </Member>
+	<Member MemberName="DeviceId">
+      <MemberSignature Language="C#" Value="public static string DeviceId { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property string DeviceId" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.DeviceInfo.DeviceId" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Gets the Id of the device.</summary>
+        <value>The Id of the device.</value>
+        <remarks>
+          <para />
+        </remarks>
+      </Docs>
+    </Member>
   </Members>
 </Type>
