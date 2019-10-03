@@ -147,5 +147,12 @@ namespace DeviceTests
                 Assert.False(DeviceDisplay.KeepScreenOn);
             });
         }
+
+
+        [Fact]
+        public void DeviceId_Are_Not_Empty()
+        {
+            Assert.NotEqual("", DeviceInfo.DeviceId);
+        }
     }
 }

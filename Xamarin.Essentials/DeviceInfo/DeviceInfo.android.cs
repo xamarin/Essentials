@@ -114,5 +114,7 @@ namespace Xamarin.Essentials
 
         static string GetSystemSetting(string name)
            => Settings.System.GetString(Essentials.Platform.AppContext.ContentResolver, name);
+
+        static string GetDeviceId() => GetSystemSetting(Android.Provider.Settings.Secure.AndroidId);
     }
 }

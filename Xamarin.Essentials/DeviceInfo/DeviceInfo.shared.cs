@@ -19,6 +19,8 @@ namespace Xamarin.Essentials
         public static DeviceIdiom Idiom => GetIdiom();
 
         public static DeviceType DeviceType => GetDeviceType();
+
+        public static string DeviceId => GetDeviceId();
     }
 
     public enum DeviceType

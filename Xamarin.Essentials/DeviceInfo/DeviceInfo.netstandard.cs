@@ -15,5 +15,7 @@
         static DeviceIdiom GetIdiom() => DeviceIdiom.Unknown;
 
         static DeviceType GetDeviceType() => DeviceType.Unknown;
+
+        static string GetDeviceId() => throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }

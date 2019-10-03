@@ -68,5 +68,7 @@ namespace Xamarin.Essentials
 
             return DeviceType.Physical;
         }
+
+        static string GetDeviceId() => deviceInfo.Id;
     }
 }

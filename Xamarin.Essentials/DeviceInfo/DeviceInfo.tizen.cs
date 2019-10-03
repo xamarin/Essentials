@@ -49,5 +49,7 @@ namespace Xamarin.Essentials
             else
                 return DeviceType.Unknown;
         }
+
+        static string GetDeviceId() => Plat.GetSystemInfo('tizenid');
     }
 }
