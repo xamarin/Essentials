@@ -31,7 +31,7 @@
         <Parameter Name="address" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="address">Address to retrieve the lcoation for.</param>
+        <param name="address">Address to retrieve the location for.</param>
         <summary>Retrieve location for a given address.</summary>
         <returns>
           <para>List of locations that best match the address or null if none found.</para>
