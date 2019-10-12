@@ -116,7 +116,11 @@ namespace Xamarin.Essentials
         static Display GetDefaultDisplay()
         {
             var service = Platform.AppContext.GetSystemService(Context.WindowService);
-            return service?.JavaCast<IWindowManager>()?.DefaultDisplay;
+            var windowManager = service?.JavaCast<IWindowManager>();
+            var display = windowManager?.DefaultDisplay;
+            service?.Dispose();
+            windowManager?.Dispose();
+            return display;
         }
     }
 
