@@ -1,3 +1,10 @@
+##########################################################################
+# This is the Cake bootstrapper script for Linux and OS X.
+# This file was downloaded from https://github.com/cake-build/resources
+# Feel free to change this file to fit your needs.
+##########################################################################
+
+
 ## Xamarin.Essentials
 
 Thank you for installing Xamarin.Essentials, be sure to read through our full documentation at:
