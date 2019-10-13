@@ -8,7 +8,7 @@ variables:
   NETCORE_VERSION: '3.0.x'
   NETCORE_TEST_VERSION: '2.2.x'
   IOS_SIM_NAME: 'iPhone Xs'
-  IOS_SIM_RUNTIME: 'com.apple.CoreSimulator.SimRuntime.iOS-13-1'
+  IOS_SIM_RUNTIME: 'com.apple.CoreSimulator.SimRuntime.iOS-12-4'
   ANDROID_EMU_TARGET: 'system-images;android-26;google_apis;x86'
   ANDROID_EMU_DEVICE: 'Nexus 5X'
   RunPoliCheck: 'false'
