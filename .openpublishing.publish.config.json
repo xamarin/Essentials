@@ -1,5 +1,5 @@
 {
-  "docsets_to_publish": [
+  "docsets_topublish": [
     {
       "docset_name": "XamarinEssentials",
       "build_source_folder": "docs/en",
