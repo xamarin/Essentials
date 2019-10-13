@@ -8,20 +8,20 @@ If you're ready to submit a new issue, taking the following steps helps expedite
 
 * Before compressing the reproduction project, make certain to clean the solution as well as manually delete any bin/obj folders, e.g.:
 
-		[ProjectRoot]/ProjectName/bin
-		[ProjectRoot]/ProjectName/obj
-		[ProjectRoot]/ProjectName.Android/bin
-		[ProjectRoot]/ProjectName.Android/obj
-		[ProjectRoot]/ProjectName.iOS/bin
-		[ProjectRoot]/ProjectName.iOS/obj
-		[ProjectRoot]/ProjectName.UWP/bin
-		[ProjectRoot]/ProjectName.UWP/obj
-		
-	Please make certain to remove the packages folder as well to cut down on size.
+        [ProjectRoot]/ProjectName/bin
+        [ProjectRoot]/ProjectName/obj
+        [ProjectRoot]/ProjectName.Android/bin
+        [ProjectRoot]/ProjectName.Android/obj
+        [ProjectRoot]/ProjectName.iOS/bin
+        [ProjectRoot]/ProjectName.iOS/obj
+        [ProjectRoot]/ProjectName.UWP/bin
+        [ProjectRoot]/ProjectName.UWP/obj
+        
+    Please make certain to remove the packages folder as well to cut down on size.
 
 * Please make note if the issue only occurs on particular platforms, so we can run reproductions on each and compare.
 
-* In the case of a regression, please confirm as such as well as the last working, pre-regression build you may be aware of, if possible. Providing a reproduction with the working package installed to begin with also helps, as we can then simply upgrade it and compare against the latest stable to confirm.
+* In the case of a regression, please confirm as such as well as the last working, pre-regression build you may be aware of, if possible. Providing a reproduction with the working package installed, to begin with also helps, as we can then simply upgrade it and compare against the latest stable to confirm.
 
 * In some cases, issues may only occur on specific devices, with specific versions of the OS, or when targeting specific OS versions within the project itself. Some issues also occur on devices, but not on simulators. This information is incredibly helpful.
 
