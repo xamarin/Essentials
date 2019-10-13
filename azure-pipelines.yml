@@ -49,6 +49,7 @@ jobs:
           configuration: Release
           msbuildArguments: '/t:Pack /p:PackageVersion=$(NugetPackageVersion) /p:PackageOutputPath="$(Build.ArtifactStagingDirectory)/nuget"'
       - task: DotNetCoreCLI@2
+        displayName: Run Tests
         inputs:
           command: test
           projects: 'Tests/Tests.csproj'
@@ -117,6 +118,7 @@ jobs:
           configuration: Release
           msbuildArguments: '/t:Pack /p:PackageVersion=$(NugetPackageVersion) /p:PackageOutputPath="$(Build.ArtifactStagingDirectory)/nuget"'
       - task: DotNetCoreCLI@2
+        displayName: Run Tests
         inputs:
           command: test
           projects: 'Tests/Tests.csproj'
