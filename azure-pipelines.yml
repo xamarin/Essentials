@@ -6,6 +6,7 @@ variables:
   MONO_VERSION: 6_4_0
   XCODE_VERSION: 11.1
   NETCORE_VERSION: '3.0.x'
+  NETCORE_TEST_VERSION: '2.2.x'
   IOS_SIM_NAME: 'iPhone Xs'
   IOS_SIM_RUNTIME: 'com.apple.CoreSimulator.SimRuntime.iOS-13-1'
   ANDROID_EMU_TARGET: 'system-images;android-26;google_apis;x86'
@@ -98,6 +99,11 @@ jobs:
         inputs:
           version: $(NETCORE_VERSION)
           includePreviewVersions: false
+      - task: UseDotNet@2
+        displayName: 'Use .Net Core sdk'
+        inputs:
+          version: $(NETCORE_TEST_VERSION)
+          includePreviewVersions: false
       - task: MSBuild@1
         displayName: Build Solution
         inputs:
@@ -168,6 +174,11 @@ jobs:
         displayName: 'Use .Net Core sdk'
         inputs:
           version: $(NETCORE_VERSION)
+          includePreviewVersions: false
+      - task: UseDotNet@2
+        displayName: 'Use .Net Core sdk'
+        inputs:
+          version: $(NETCORE_TEST_VERSION)
           includePreviewVersions: false
       - task: InstallAppleCertificate@2
         displayName: 'Install an Apple certificate'
