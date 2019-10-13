@@ -58,7 +58,7 @@ namespace Xamarin.Essentials
                         var networks = manager.GetAllNetworks();
 
                         // some devices running 21 and 22 only use the older api.
-                        if (networks.Count() == 0 && (int)Android.OS.Build.VERSION.SdkInt < 23)
+                        if (networks.Length == 0 && (int)Android.OS.Build.VERSION.SdkInt < 23)
                         {
                             ProcessAllNetworkInfo();
                             return currentAccess;
