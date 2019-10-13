@@ -216,6 +216,11 @@ jobs:
         inputs:
           version: $(NETCORE_VERSION)
           includePreviewVersions: false
+      - task: UseDotNet@2
+        displayName: 'Use .Net Core sdk'
+        inputs:
+          version: $(NETCORE_TEST_VERSION)
+          includePreviewVersions: false
       - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"$ANDROID_EMU_TARGET\""
         displayName: Install the Android emulators
       - bash: |
