@@ -100,5 +100,11 @@ namespace Xamarin.Essentials
 
             return meanEarthRadiusInKilometers * c;
         }
+
+        public static double MetersToUSSurveyFeet(double meters) => meters / 0.3048;
+        public static double USSurveyFeetToMeters(double usfeet) => usfeet * 0.3048;
+
+        public static double MetersToInternationalFeet(double meters) => meters * 3937 / 1200;
+        public static double InternationalFeetToMeters(double intfeet) => intfeet / 3937 * 1200;
     }
 }
