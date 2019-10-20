@@ -4,24 +4,32 @@ using System.Threading.Tasks;
 
 namespace Xamarin.Essentials
 {
-    internal static partial class Permissions
+    public static partial class Permissions
     {
-        internal static void EnsureDeclared(PermissionType permission) =>
-            PlatformEnsureDeclared(permission, true);
+        //internal static void EnsureDeclared<TPermission>()
+        //    where TPermission : BasePermission =>
+        //    ;
 
-        internal static bool EnsureDeclared(PermissionType permission, bool throwIfMissing) =>
-            PlatformEnsureDeclared(permission, throwIfMissing);
+        //internal static void EnsureDeclared(PermissionType permission) =>
+        //    PlatformEnsureDeclared(permission, true);
 
-        internal static Task<PermissionStatus> CheckStatusAsync(PermissionType permission) =>
-            PlatformCheckStatusAsync(permission);
+        //internal static bool EnsureDeclared(PermissionType permission, bool throwIfMissing) =>
+        //    PlatformEnsureDeclared(permission, throwIfMissing);
 
-        internal static Task<PermissionStatus> RequestAsync(PermissionType permission) =>
-            PlatformRequestAsync(permission);
+        //internal static Task<PermissionStatus> RequestAsync(PermissionType permission) =>
+        //    PlatformRequestAsync(permission);
 
-        internal static async Task RequireAsync(PermissionType permission)
+        public static void ShowSettingsUI() =>
+            AppInfo.ShowSettingsUI();
+
+        //internal static async Task RequireAsync(PermissionType permission)
+        //{
+        //    if (await RequestAsync(permission) != PermissionStatus.Granted)
+        //        throw new PermissionException($"{permission} was not granted.");
+        //}
+
+        public abstract partial class BasePermission
         {
-            if (await RequestAsync(permission) != PermissionStatus.Granted)
-                throw new PermissionException($"{permission} was not granted.");
         }
     }
 }

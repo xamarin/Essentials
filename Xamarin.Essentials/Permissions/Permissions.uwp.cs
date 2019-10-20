@@ -47,7 +47,10 @@ namespace Xamarin.Essentials
             switch (permission)
             {
                 case PermissionType.LocationWhenInUse:
+                case PermissionType.LocationAlways:
                     return CheckLocationAsync();
+                case PermissionType.Microphone:
+                    return CheckMicrophoneAsync();
                 default:
                     return Task.FromResult(PermissionStatus.Granted);
             }
@@ -72,6 +75,9 @@ namespace Xamarin.Essentials
                     return PermissionStatus.Denied;
             }
         }
+
+        static async Task<PermissionStatus> CheckMicrophoneAsync() =>
+            PlatformEnsureDeclared(PermissionType.Microphone, true);
     }
 
     static class PermissionTypeExtensions
@@ -81,7 +87,10 @@ namespace Xamarin.Essentials
             switch (permissionType)
             {
                 case PermissionType.LocationWhenInUse:
+                case PermissionType.LocationAlways:
                     return new[] { "location" };
+                case PermissionType.Microphone:
+                    return new[] { "microphone" };
                 default:
                     return null;
             }

@@ -2,7 +2,7 @@
 
 namespace Xamarin.Essentials
 {
-    internal static partial class Permissions
+    public static partial class Permissions
     {
         static bool PlatformEnsureDeclared(PermissionType permission, bool throwIfMissing) =>
             throw ExceptionUtils.NotSupportedOrImplementedException;

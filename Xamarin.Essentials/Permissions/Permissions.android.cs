@@ -10,137 +10,19 @@ using Android.Support.V4.Content;
 
 namespace Xamarin.Essentials
 {
-    internal static partial class Permissions
+    public static partial class Permissions
     {
-        static readonly object locker = new object();
-        static int requestCode = 0;
-
-        static Dictionary<PermissionType, (int requestCode, TaskCompletionSource<PermissionStatus> tcs)> requests =
-            new Dictionary<PermissionType, (int, TaskCompletionSource<PermissionStatus>)>();
-
-        static bool PlatformEnsureDeclared(PermissionType permission, bool throwIfMissing)
+        public static bool IsDeclaredInManifest(string permission)
         {
-            var androidPermissions = permission.ToAndroidPermissions(onlyRuntimePermissions: false);
-
-            // No actual android permissions required here, just return
-            if (androidPermissions == null || !androidPermissions.Any())
-                return true;
-
             var context = Platform.AppContext;
+            var packageInfo = context.PackageManager.GetPackageInfo(context.PackageName, PackageInfoFlags.Permissions);
+            var requestedPermissions = packageInfo?.RequestedPermissions;
 
-            foreach (var ap in androidPermissions)
-            {
-                var packageInfo = context.PackageManager.GetPackageInfo(context.PackageName, PackageInfoFlags.Permissions);
-                var requestedPermissions = packageInfo?.RequestedPermissions;
-
-                // If the manifest is missing any of the permissions we need, throw
-                if (!requestedPermissions?.Any(r => r.Equals(ap, StringComparison.OrdinalIgnoreCase)) ?? false)
-                {
-                    if (throwIfMissing)
-                        throw new PermissionException($"You need to declare the permission: `{ap}` in your AndroidManifest.xml");
-                    else
-                        return false;
-                }
-            }
-
-            return true;
-        }
-
-        static Task<PermissionStatus> PlatformCheckStatusAsync(PermissionType permission)
-        {
-            EnsureDeclared(permission);
-
-            // If there are no android permissions for the given permission type
-            // just return granted since we have none to ask for
-            var androidPermissions = permission.ToAndroidPermissions(onlyRuntimePermissions: true);
-
-            if (androidPermissions == null || !androidPermissions.Any())
-                return Task.FromResult(PermissionStatus.Granted);
-
-            var context = Platform.AppContext;
-            var targetsMOrHigher = context.ApplicationInfo.TargetSdkVersion >= BuildVersionCodes.M;
-
-            foreach (var ap in androidPermissions)
-            {
-                if (targetsMOrHigher)
-                {
-                    if (ContextCompat.CheckSelfPermission(context, ap) != Permission.Granted)
-                        return Task.FromResult(PermissionStatus.Denied);
-                }
-                else
-                {
-                    if (PermissionChecker.CheckSelfPermission(context, ap) != PermissionChecker.PermissionGranted)
-                        return Task.FromResult(PermissionStatus.Denied);
-                }
-            }
-
-            return Task.FromResult(PermissionStatus.Granted);
-        }
-
-        static async Task<PermissionStatus> PlatformRequestAsync(PermissionType permission)
-        {
-            // Check status before requesting first
-            if (await PlatformCheckStatusAsync(permission) == PermissionStatus.Granted)
-                return PermissionStatus.Granted;
-
-            TaskCompletionSource<PermissionStatus> tcs;
-            var doRequest = true;
-
-            lock (locker)
-            {
-                if (requests.ContainsKey(permission))
-                {
-                    tcs = requests[permission].tcs;
-                    doRequest = false;
-                }
-                else
-                {
-                    tcs = new TaskCompletionSource<PermissionStatus>();
-
-                    // Get new request code and wrap it around for next use if it's going to reach max
-                    if (++requestCode >= int.MaxValue)
-                        requestCode = 1;
-
-                    requests.Add(permission, (requestCode, tcs));
-                }
-            }
-
-            if (!doRequest)
-                return await tcs.Task;
-
-            if (!MainThread.IsMainThread)
-                throw new PermissionException("Permission request must be invoked on main thread.");
-
-            var androidPermissions = permission.ToAndroidPermissions(onlyRuntimePermissions: true).ToArray();
-
-            ActivityCompat.RequestPermissions(Platform.GetCurrentActivity(true), androidPermissions, requestCode);
-
-            return await tcs.Task;
+            return requestedPermissions?.Any(r => r.Equals(permission, StringComparison.OrdinalIgnoreCase)) ?? false;
         }
 
         internal static void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
-        {
-            lock (locker)
-            {
-                // Check our pending requests for one with a matching request code
-                foreach (var kvp in requests)
-                {
-                    if (kvp.Value.requestCode == requestCode)
-                    {
-                        var tcs = kvp.Value.tcs;
-
-                        // Look for any denied requests, and deny the whole request if so
-                        // Remember, each PermissionType is tied to 1 or more android permissions
-                        // so if any android permissions denied the whole PermissionType is considered denied
-                        if (grantResults.Any(g => g == Permission.Denied))
-                            tcs.TrySetResult(PermissionStatus.Denied);
-                        else
-                            tcs.TrySetResult(PermissionStatus.Granted);
-                        break;
-                    }
-                }
-            }
-        }
+            => AndroidPermission.OnRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     static class PermissionTypeExtensions
@@ -165,14 +47,69 @@ namespace Xamarin.Essentials
                     permissions.Add((Manifest.Permission.AccessFineLocation, true));
                     permissions.Add((Manifest.Permission.AccessCoarseLocation, true));
                     break;
+                case PermissionType.LocationAlways:
+#if __ANDROID_100__
+                    permissions.Add((Manifest.Permission.AccessBackgroundLocation, true));
+#endif
+                    permissions.Add((Manifest.Permission.AccessFineLocation, true));
+                    permissions.Add((Manifest.Permission.AccessCoarseLocation, true));
+                    break;
                 case PermissionType.NetworkState:
                     permissions.Add((Manifest.Permission.AccessNetworkState, false));
                     break;
                 case PermissionType.Vibrate:
-                    permissions.Add((Manifest.Permission.Vibrate, true));
+                    permissions.Add((Manifest.Permission.Vibrate, false));
                     break;
                 case PermissionType.WriteExternalStorage:
-                    permissions.Add((Manifest.Permission.WriteExternalStorage, false));
+                case PermissionType.StorageWrite:
+                    permissions.Add((Manifest.Permission.WriteExternalStorage, true));
+                    break;
+                case PermissionType.StorageRead:
+                    permissions.Add((Manifest.Permission.ReadExternalStorage, true));
+                    break;
+                case PermissionType.CalendarRead:
+                    permissions.Add((Manifest.Permission.ReadCalendar, true));
+                    break;
+                case PermissionType.CalendarWrite:
+                    permissions.Add((Manifest.Permission.WriteCalendar, true));
+                    break;
+                case PermissionType.ContactsRead:
+                    permissions.Add((Manifest.Permission.ReadContacts, true));
+                    break;
+                case PermissionType.ContactsWrite:
+                    permissions.Add((Manifest.Permission.WriteContacts, true));
+                    break;
+                case PermissionType.Microphone:
+                    permissions.Add((Manifest.Permission.RecordAudio, true));
+                    break;
+                case PermissionType.Phone:
+                    permissions.Add((Manifest.Permission.ReadPhoneState, true));
+                    if (Permissions.IsDeclaredInManifest(Manifest.Permission.CallPhone))
+                        permissions.Add((Manifest.Permission.CallPhone, true));
+                    if (Permissions.IsDeclaredInManifest(Manifest.Permission.ReadCallLog))
+                        permissions.Add((Manifest.Permission.ReadCallLog, true));
+                    if (Permissions.IsDeclaredInManifest(Manifest.Permission.WriteCallLog))
+                        permissions.Add((Manifest.Permission.WriteCallLog, true));
+                    if (Permissions.IsDeclaredInManifest(Manifest.Permission.AddVoicemail))
+                        permissions.Add((Manifest.Permission.AddVoicemail, true));
+                    if (Permissions.IsDeclaredInManifest(Manifest.Permission.UseSip))
+                        permissions.Add((Manifest.Permission.UseSip, true));
+                    if (Permissions.IsDeclaredInManifest(Manifest.Permission.ProcessOutgoingCalls))
+                        permissions.Add((Manifest.Permission.ProcessOutgoingCalls, true));
+                    break;
+                case PermissionType.Sensors:
+                    permissions.Add((Manifest.Permission.BodySensors, true));
+                    break;
+                case PermissionType.Sms:
+                    permissions.Add((Manifest.Permission.ReceiveSms, true));
+                    if (Permissions.IsDeclaredInManifest(Manifest.Permission.SendSms))
+                        permissions.Add((Manifest.Permission.SendSms, true));
+                    if (Permissions.IsDeclaredInManifest(Manifest.Permission.ReadSms))
+                        permissions.Add((Manifest.Permission.ReadSms, true));
+                    if (Permissions.IsDeclaredInManifest(Manifest.Permission.ReceiveWapPush))
+                        permissions.Add((Manifest.Permission.ReceiveWapPush, true));
+                    if (Permissions.IsDeclaredInManifest(Manifest.Permission.ReceiveMms))
+                        permissions.Add((Manifest.Permission.ReceiveMms, true));
                     break;
             }
 

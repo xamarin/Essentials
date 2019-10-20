@@ -5,7 +5,7 @@ using Tizen.Security;
 
 namespace Xamarin.Essentials
 {
-    internal static partial class Permissions
+    public static partial class Permissions
     {
         static bool PlatformEnsureDeclared(PermissionType permission, bool throwIfMissing)
         {
@@ -89,6 +89,7 @@ namespace Xamarin.Essentials
                     privileges.Add(("http://tizen.org/privilege/appmanager.launch", false));
                     break;
                 case PermissionType.LocationWhenInUse:
+                case PermissionType.LocationAlways:
                     privileges.Add(("http://tizen.org/privilege/location", true));
                     break;
                 case PermissionType.Maps:
@@ -102,6 +103,12 @@ namespace Xamarin.Essentials
                     break;
                 case PermissionType.Vibrate:
                     privileges.Add(("http://tizen.org/privilege/haptic", false));
+                    break;
+                case PermissionType.Microphone:
+                    privileges.Add(("http://tizen.org/privilege/recorder", false));
+                    break;
+                case PermissionType.Camera:
+                    privileges.Add(("http://tizen.org/privilege/camera", false));
                     break;
             }
 
