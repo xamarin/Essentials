@@ -5,95 +5,189 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Windows.ApplicationModel.Contacts;
+using Windows.Devices.Enumeration;
 using Windows.Devices.Geolocation;
 
 namespace Xamarin.Essentials
 {
-    internal static partial class Permissions
+    public static partial class Permissions
     {
         const string appManifestFilename = "AppxManifest.xml";
         const string appManifestXmlns = "http://schemas.microsoft.com/appx/manifest/foundation/windows10";
 
-        static bool PlatformEnsureDeclared(PermissionType permission, bool throwIfMissing)
+        public static bool IsCapabilityDeclared(string capabilityName)
         {
-            var uwpCapabilities = permission.ToUWPCapabilities();
-
-            // If no actual UWP capabilities are required here, just return
-            if (uwpCapabilities == null || !uwpCapabilities.Any())
-                return true;
-
             var doc = XDocument.Load(appManifestFilename, LoadOptions.None);
             var reader = doc.CreateReader();
             var namespaceManager = new XmlNamespaceManager(reader.NameTable);
             namespaceManager.AddNamespace("x", appManifestXmlns);
-            foreach (var cap in uwpCapabilities)
+
+            // If the manifest doesn't contain a capability we need, throw
+            return (!doc.Root.XPathSelectElements($"//x:DeviceCapability[@Name='{capabilityName}']", namespaceManager)?.Any() ?? false) &&
+                (!doc.Root.XPathSelectElements($"//x:Capability[@Name='{capabilityName}']", namespaceManager)?.Any() ?? false);
+        }
+
+        public abstract partial class UwpPermissionBase : BasePermission
+        {
+            protected virtual Func<IEnumerable<string>> RequiredDeclarations { get; }
+
+            public override Task<PermissionStatus> CheckStatusAsync()
             {
-                // If the manifest doesn't contain a capability we need, throw
-                if ((!doc.Root.XPathSelectElements($"//x:DeviceCapability[@Name='{cap}']", namespaceManager)?.Any() ?? false) &&
-                    (!doc.Root.XPathSelectElements($"//x:Capability[@Name='{cap}']", namespaceManager)?.Any() ?? false))
+                EnsureDeclared();
+                return Task.FromResult(PermissionStatus.Granted);
+            }
+
+            public override Task<PermissionStatus> RequestAsync()
+                => CheckStatusAsync();
+
+            public override void EnsureDeclared()
+            {
+                foreach (var d in RequiredDeclarations())
                 {
-                    if (throwIfMissing)
-                        throw new PermissionException($"You need to declare the capability `{cap}` in your AppxManifest.xml file");
-                    else
-                        return false;
+                    if (!IsCapabilityDeclared(d))
+                        throw new PermissionException($"You need to declare the capability `{d}` in your AppxManifest.xml file");
                 }
             }
-
-            return true;
         }
 
-        static Task<PermissionStatus> PlatformCheckStatusAsync(PermissionType permission)
+        public partial class Battery : UwpPermissionBase
         {
-            switch (permission)
-            {
-                case PermissionType.LocationWhenInUse:
-                case PermissionType.LocationAlways:
-                    return CheckLocationAsync();
-                case PermissionType.Microphone:
-                    return CheckMicrophoneAsync();
-                default:
-                    return Task.FromResult(PermissionStatus.Granted);
-            }
         }
 
-        static Task<PermissionStatus> PlatformRequestAsync(PermissionType permission) =>
-            PlatformCheckStatusAsync(permission);
-
-        static async Task<PermissionStatus> CheckLocationAsync()
+        public partial class CalendarRead : UwpPermissionBase
         {
-            if (!MainThread.IsMainThread)
-                throw new PermissionException("Permission request must be invoked on main thread.");
+        }
 
-            var accessStatus = await Geolocator.RequestAccessAsync();
-            switch (accessStatus)
+        public partial class CalendarWrite : UwpPermissionBase
+        {
+        }
+
+        public partial class Camera : UwpPermissionBase
+        {
+        }
+
+        public partial class ContactsRead : UwpPermissionBase
+        {
+            public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                case GeolocationAccessStatus.Allowed:
-                    return PermissionStatus.Granted;
-                case GeolocationAccessStatus.Unspecified:
-                    return PermissionStatus.Unknown;
-                default:
+                var accessStatus = await ContactManager.RequestStoreAsync(ContactStoreAccessType.AppContactsReadWrite);
+
+                if (accessStatus == null)
                     return PermissionStatus.Denied;
+
+                return PermissionStatus.Granted;
             }
         }
 
-        static async Task<PermissionStatus> CheckMicrophoneAsync() =>
-            PlatformEnsureDeclared(PermissionType.Microphone, true);
-    }
-
-    static class PermissionTypeExtensions
-    {
-        internal static string[] ToUWPCapabilities(this PermissionType permissionType)
+        public partial class ContactsWrite : ContactsRead
         {
-            switch (permissionType)
+        }
+
+        public partial class Flashlight : UwpPermissionBase
+        {
+        }
+
+        public partial class LaunchApp : UwpPermissionBase
+        {
+        }
+
+        public partial class LocationWhenInUse : UwpPermissionBase
+        {
+            protected override Func<IEnumerable<string>> RequiredDeclarations => () =>
+                new[] { "location" };
+
+            public override async Task<PermissionStatus> CheckStatusAsync()
             {
-                case PermissionType.LocationWhenInUse:
-                case PermissionType.LocationAlways:
-                    return new[] { "location" };
-                case PermissionType.Microphone:
-                    return new[] { "microphone" };
-                default:
-                    return null;
+                if (!MainThread.IsMainThread)
+                    throw new PermissionException("Permission request must be invoked on main thread.");
+
+                var accessStatus = await Geolocator.RequestAccessAsync();
+                switch (accessStatus)
+                {
+                    case GeolocationAccessStatus.Allowed:
+                        return PermissionStatus.Granted;
+                    case GeolocationAccessStatus.Unspecified:
+                        return PermissionStatus.Unknown;
+                    default:
+                        return PermissionStatus.Denied;
+                }
             }
+        }
+
+        public partial class LocationAlways : LocationWhenInUse
+        {
+        }
+
+        public partial class Maps : UwpPermissionBase
+        {
+        }
+
+        public partial class Media : UwpPermissionBase
+        {
+        }
+
+        public partial class Microphone : UwpPermissionBase
+        {
+            protected override Func<IEnumerable<string>> RequiredDeclarations => () =>
+                new[] { "microphone" };
+        }
+
+        public partial class NetworkState : UwpPermissionBase
+        {
+        }
+
+        public partial class Phone : UwpPermissionBase
+        {
+        }
+
+        public partial class Photos : UwpPermissionBase
+        {
+        }
+
+        public partial class Reminders : UwpPermissionBase
+        {
+        }
+
+        public partial class Sensors : UwpPermissionBase
+        {
+            static readonly Guid activitySensorClassId = new Guid("9D9E0118-1807-4F2E-96E4-2CE57142E196");
+
+            public override Task<PermissionStatus> CheckStatusAsync()
+            {
+                // Determine if the user has allowed access to activity sensors
+                var deviceAccessInfo = DeviceAccessInformation.CreateFromDeviceClassId(activitySensorClassId);
+                switch (deviceAccessInfo.CurrentStatus)
+                {
+                    case DeviceAccessStatus.Allowed:
+                        return Task.FromResult(PermissionStatus.Granted);
+                    case DeviceAccessStatus.DeniedBySystem:
+                    case DeviceAccessStatus.DeniedByUser:
+                        return Task.FromResult(PermissionStatus.Denied);
+                    default:
+                        return Task.FromResult(PermissionStatus.Unknown);
+                }
+            }
+        }
+
+        public partial class Sms : UwpPermissionBase
+        {
+        }
+
+        public partial class Speech : UwpPermissionBase
+        {
+        }
+
+        public partial class StorageRead : UwpPermissionBase
+        {
+        }
+
+        public partial class StorageWrite : UwpPermissionBase
+        {
+        }
+
+        public partial class Vibrate : UwpPermissionBase
+        {
         }
     }
 }

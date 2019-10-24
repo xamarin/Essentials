@@ -22,71 +22,273 @@ namespace Xamarin.Essentials
         }
 
         internal static void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
-            => AndroidPermission.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
+            => AndroidBasePermission.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
-    static class PermissionTypeExtensions
-    {
-        internal static IEnumerable<string> ToAndroidPermissions(this PermissionType permissionType, bool onlyRuntimePermissions)
+        public abstract partial class AndroidBasePermission : BasePermission
         {
-            var permissions = new List<(string permission, bool runtimePermission)>();
+            static readonly object locker = new object();
+            static int requestCode = 0;
 
-            switch (permissionType)
+            static Dictionary<string, (int requestCode, TaskCompletionSource<PermissionStatus> tcs)> requests =
+                new Dictionary<string, (int, TaskCompletionSource<PermissionStatus>)>();
+
+            public virtual (string androidPermission, bool isRuntime)[] RequiredPermissions { get; }
+
+            public override Task<PermissionStatus> CheckStatusAsync()
             {
-                case PermissionType.Battery:
-                    permissions.Add((Manifest.Permission.BatteryStats, false));
-                    break;
-                case PermissionType.Camera:
-                    permissions.Add((Manifest.Permission.Camera, true));
-                    break;
-                case PermissionType.Flashlight:
-                    permissions.Add((Manifest.Permission.Camera, true));
-                    permissions.Add((Manifest.Permission.Flashlight, false));
-                    break;
-                case PermissionType.LocationWhenInUse:
-                    permissions.Add((Manifest.Permission.AccessFineLocation, true));
-                    permissions.Add((Manifest.Permission.AccessCoarseLocation, true));
-                    break;
-                case PermissionType.LocationAlways:
-#if __ANDROID_100__
-                    permissions.Add((Manifest.Permission.AccessBackgroundLocation, true));
-#endif
-                    permissions.Add((Manifest.Permission.AccessFineLocation, true));
-                    permissions.Add((Manifest.Permission.AccessCoarseLocation, true));
-                    break;
-                case PermissionType.NetworkState:
-                    permissions.Add((Manifest.Permission.AccessNetworkState, false));
-                    break;
-                case PermissionType.Vibrate:
-                    permissions.Add((Manifest.Permission.Vibrate, false));
-                    break;
-                case PermissionType.WriteExternalStorage:
-                case PermissionType.StorageWrite:
-                    permissions.Add((Manifest.Permission.WriteExternalStorage, true));
-                    break;
-                case PermissionType.StorageRead:
-                    permissions.Add((Manifest.Permission.ReadExternalStorage, true));
-                    break;
-                case PermissionType.CalendarRead:
-                    permissions.Add((Manifest.Permission.ReadCalendar, true));
-                    break;
-                case PermissionType.CalendarWrite:
-                    permissions.Add((Manifest.Permission.WriteCalendar, true));
-                    break;
-                case PermissionType.ContactsRead:
-                    permissions.Add((Manifest.Permission.ReadContacts, true));
-                    break;
-                case PermissionType.ContactsWrite:
-                    permissions.Add((Manifest.Permission.WriteContacts, true));
-                    break;
-                case PermissionType.Microphone:
-                    permissions.Add((Manifest.Permission.RecordAudio, true));
-                    break;
-                case PermissionType.Phone:
-                    permissions.Add((Manifest.Permission.ReadPhoneState, true));
-                    if (Permissions.IsDeclaredInManifest(Manifest.Permission.CallPhone))
+                if (RequiredPermissions == null || RequiredPermissions.Length <= 0)
+                    return Task.FromResult(PermissionStatus.Granted);
+
+                var context = Platform.AppContext;
+                var targetsMOrHigher = context.ApplicationInfo.TargetSdkVersion >= BuildVersionCodes.M;
+
+                foreach (var p in RequiredPermissions)
+                {
+                    var ap = p.androidPermission;
+                    if (!Permissions.IsDeclaredInManifest(ap))
+                        throw new PermissionException($"You need to declare using the permission: `{p.androidPermission}` in your AndroidManifest.xml");
+
+                    var status = PermissionStatus.Denied;
+
+                    if (targetsMOrHigher)
+                    {
+                        if (ContextCompat.CheckSelfPermission(context, p.androidPermission) != Permission.Granted)
+                            status = PermissionStatus.Denied;
+                    }
+                    else
+                    {
+                        if (PermissionChecker.CheckSelfPermission(context, p.androidPermission) != PermissionChecker.PermissionGranted)
+                            status = PermissionStatus.Denied;
+                    }
+
+                    if (status != PermissionStatus.Granted)
+                        return Task.FromResult(PermissionStatus.Denied);
+                }
+
+                return Task.FromResult(PermissionStatus.Granted);
+            }
+
+            public override async Task<PermissionStatus> RequestAsync()
+            {
+                // Check status before requesting first
+                if (await CheckStatusAsync() == PermissionStatus.Granted)
+                    return PermissionStatus.Granted;
+
+                TaskCompletionSource<PermissionStatus> tcs;
+                var doRequest = true;
+
+                var runtimePermissions = RequiredPermissions.Where(p => p.isRuntime)
+                    ?.Select(p => p.androidPermission)?.ToArray();
+
+                // We may have no runtime permissions required, in this case
+                // knowing they all exist in the manifest from the Check call above is sufficient
+                if (runtimePermissions == null || !runtimePermissions.Any())
+                    return PermissionStatus.Granted;
+
+                var permissionId = string.Join(';', runtimePermissions);
+
+                lock (locker)
+                {
+                    if (requests.ContainsKey(permissionId))
+                    {
+                        tcs = requests[permissionId].tcs;
+                        doRequest = false;
+                    }
+                    else
+                    {
+                        tcs = new TaskCompletionSource<PermissionStatus>();
+
+                        // Get new request code and wrap it around for next use if it's going to reach max
+                        if (++requestCode >= int.MaxValue)
+                            requestCode = 1;
+
+                        requests.Add(permissionId, (requestCode, tcs));
+                    }
+                }
+
+                if (!doRequest)
+                    return await tcs.Task;
+
+                if (!MainThread.IsMainThread)
+                    throw new PermissionException("Permission request must be invoked on main thread.");
+
+                ActivityCompat.RequestPermissions(Platform.GetCurrentActivity(true), runtimePermissions.ToArray(), requestCode);
+
+                var result = await tcs.Task;
+
+                if (requests.ContainsKey(permissionId))
+                    requests.Remove(permissionId);
+
+                return result;
+            }
+
+            public override void EnsureDeclared()
+            {
+                foreach (var p in RequiredPermissions)
+                {
+                    var ap = p.androidPermission;
+                    if (!Permissions.IsDeclaredInManifest(ap))
+                        throw new PermissionException($"You need to declare using the permission: `{p.androidPermission}` in your AndroidManifest.xml");
+                }
+            }
+
+            internal static void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+            {
+                lock (locker)
+                {
+                    // Check our pending requests for one with a matching request code
+                    foreach (var kvp in requests)
+                    {
+                        if (kvp.Value.requestCode == requestCode)
+                        {
+                            var tcs = kvp.Value.tcs;
+
+                            // Look for any denied requests, and deny the whole request if so
+                            // Remember, each PermissionType is tied to 1 or more android permissions
+                            // so if any android permissions denied the whole PermissionType is considered denied
+                            if (grantResults.Any(g => g == Permission.Denied))
+                                tcs.TrySetResult(PermissionStatus.Denied);
+                            else
+                                tcs.TrySetResult(PermissionStatus.Granted);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        public partial class Battery : AndroidBasePermission
+        {
+            [Preserve]
+            public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
+                new (string, bool)[] { (Manifest.Permission.BatteryStats, false) };
+        }
+
+        public partial class CalendarRead : AndroidBasePermission
+        {
+            [Preserve]
+            public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
+                new (string, bool)[] { (Manifest.Permission.ReadCalendar, true) };
+        }
+
+        public partial class CalendarWrite : AndroidBasePermission
+        {
+            [Preserve]
+            public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
+                new (string, bool)[] { (Manifest.Permission.WriteCalendar, true) };
+        }
+
+        public partial class Camera : AndroidBasePermission
+        {
+            [Preserve]
+            public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
+                new (string, bool)[] { (Manifest.Permission.Camera, true) };
+        }
+
+        public partial class ContactsRead : AndroidBasePermission
+        {
+            [Preserve]
+            public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
+                new (string, bool)[] { (Manifest.Permission.ReadContacts, true) };
+        }
+
+        public partial class ContactsWrite : AndroidBasePermission
+        {
+            [Preserve]
+            public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
+                new (string, bool)[] { (Manifest.Permission.WriteContacts, true) };
+        }
+
+        public partial class Flashlight : AndroidBasePermission
+        {
+            [Preserve]
+            public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
+                new (string, bool)[]
+                {
+                    (Manifest.Permission.Camera, true),
+                    (Manifest.Permission.Flashlight, false)
+                };
+        }
+
+        public partial class LaunchApp
+        {
+        }
+
+        public partial class LocationWhenInUse : AndroidBasePermission
+        {
+            [Preserve]
+            public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
+                new (string, bool)[]
+                {
+                    (Manifest.Permission.AccessCoarseLocation, true),
+                    (Manifest.Permission.AccessFineLocation, true)
+                };
+        }
+
+        public partial class LocationAlways : AndroidBasePermission
+        {
+            [Preserve]
+            public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
+                new (string, bool)[]
+                {
+                    #if __ANDROID_100__
+                    (Manifest.Permission.AccessBackgroundLocation, true),
+                    #endif
+                    (Manifest.Permission.AccessCoarseLocation, true),
+                    (Manifest.Permission.AccessFineLocation, true)
+                };
+        }
+
+        public partial class Maps
+        {
+        }
+
+        public partial class Media
+        {
+        }
+
+        public partial class Microphone : AndroidBasePermission
+        {
+            [Preserve]
+            public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
+                new (string, bool)[] { (Manifest.Permission.RecordAudio, true) };
+        }
+
+        public partial class NetworkState : AndroidBasePermission
+        {
+            [Preserve]
+            public override (string androidPermission, bool isRuntime)[] RequiredPermissions
+            {
+                get
+                {
+                    var permissions = new List<(string, bool)>
+                    {
+                        (Manifest.Permission.AccessNetworkState, false)
+                    };
+
+                    if (IsDeclaredInManifest(Manifest.Permission.ChangeNetworkState))
+                        permissions.Add((Manifest.Permission.ChangeNetworkState, true));
+
+                    return permissions.ToArray();
+                }
+            }
+        }
+
+        public partial class Phone : AndroidBasePermission
+        {
+            [Preserve]
+            public override (string androidPermission, bool isRuntime)[] RequiredPermissions
+            {
+                get
+                {
+                    var permissions = new List<(string, bool)>
+                    {
+                        (Manifest.Permission.ReadPhoneState, true)
+                    };
+
+                    if (IsDeclaredInManifest(Manifest.Permission.CallPhone))
                         permissions.Add((Manifest.Permission.CallPhone, true));
-                    if (Permissions.IsDeclaredInManifest(Manifest.Permission.ReadCallLog))
+                    if (IsDeclaredInManifest(Manifest.Permission.ReadCallLog))
                         permissions.Add((Manifest.Permission.ReadCallLog, true));
                     if (Permissions.IsDeclaredInManifest(Manifest.Permission.WriteCallLog))
                         permissions.Add((Manifest.Permission.WriteCallLog, true));
@@ -94,14 +296,50 @@ namespace Xamarin.Essentials
                         permissions.Add((Manifest.Permission.AddVoicemail, true));
                     if (Permissions.IsDeclaredInManifest(Manifest.Permission.UseSip))
                         permissions.Add((Manifest.Permission.UseSip, true));
+
+#pragma warning disable CS0618 // Type or member is obsolete
                     if (Permissions.IsDeclaredInManifest(Manifest.Permission.ProcessOutgoingCalls))
+                    {
+#if __ANDROID_100__
+                        if (Platform.HasApiLevel(BuildVersionCodes.Q))
+                            Debug.WriteLine($"{Manifest.Permission.ProcessOutgoingCalls} is deprecated in Android 10");
+#endif
                         permissions.Add((Manifest.Permission.ProcessOutgoingCalls, true));
-                    break;
-                case PermissionType.Sensors:
-                    permissions.Add((Manifest.Permission.BodySensors, true));
-                    break;
-                case PermissionType.Sms:
-                    permissions.Add((Manifest.Permission.ReceiveSms, true));
+                    }
+#pragma warning restore CS0618 // Type or member is obsolete
+
+                    return permissions.ToArray();
+                }
+            }
+        }
+
+        public partial class Photos : AndroidBasePermission
+        {
+        }
+
+        public partial class Reminders : AndroidBasePermission
+        {
+        }
+
+        public partial class Sensors : AndroidBasePermission
+        {
+            [Preserve]
+            public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
+                new (string, bool)[] { (Manifest.Permission.BodySensors, true) };
+        }
+
+        public partial class Sms : AndroidBasePermission
+        {
+            [Preserve]
+            public override (string androidPermission, bool isRuntime)[] RequiredPermissions
+            {
+                get
+                {
+                    var permissions = new List<(string, bool)>
+                    {
+                        (Manifest.Permission.ReceiveSms, true)
+                    };
+
                     if (Permissions.IsDeclaredInManifest(Manifest.Permission.SendSms))
                         permissions.Add((Manifest.Permission.SendSms, true));
                     if (Permissions.IsDeclaredInManifest(Manifest.Permission.ReadSms))
@@ -110,17 +348,35 @@ namespace Xamarin.Essentials
                         permissions.Add((Manifest.Permission.ReceiveWapPush, true));
                     if (Permissions.IsDeclaredInManifest(Manifest.Permission.ReceiveMms))
                         permissions.Add((Manifest.Permission.ReceiveMms, true));
-                    break;
-            }
 
-            if (onlyRuntimePermissions)
-            {
-                return permissions
-                    .Where(p => p.runtimePermission)
-                    .Select(p => p.permission);
+                    return permissions.ToArray();
+                }
             }
+        }
 
-            return permissions.Select(p => p.permission);
+        public partial class Speech : Microphone
+        {
+        }
+
+        public partial class StorageRead : AndroidBasePermission
+        {
+            [Preserve]
+            public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
+                new (string, bool)[] { (Manifest.Permission.ReadExternalStorage, true) };
+        }
+
+        public partial class StorageWrite : AndroidBasePermission
+        {
+            [Preserve]
+            public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
+                new (string, bool)[] { (Manifest.Permission.WriteExternalStorage, true) };
+        }
+
+        public partial class Vibrate : AndroidBasePermission
+        {
+            [Preserve]
+            public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
+                new (string, bool)[] { (Manifest.Permission.Vibrate, false) };
         }
     }
 }
