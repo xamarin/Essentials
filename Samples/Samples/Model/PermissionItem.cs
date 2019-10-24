@@ -26,15 +26,29 @@ namespace Samples.Model
         public ICommand CheckStatusCommand =>
             new Command(async () =>
             {
-                Status = await Permission.CheckStatusAsync();
-                NotifyPropertyChanged(nameof(Status));
+                try
+                {
+                    Status = await Permission.CheckStatusAsync();
+                    NotifyPropertyChanged(nameof(Status));
+                }
+                catch (Exception ex)
+                {
+                    MessagingCenter.Send<PermissionItem, Exception>(this, nameof(PermissionException), ex);
+                }
             });
 
         public ICommand RequestCommand =>
             new Command(async () =>
             {
-                Status = await Permission.RequestAsync();
-                NotifyPropertyChanged(nameof(Status));
+                try
+                {
+                    Status = await Permission.RequestAsync();
+                    NotifyPropertyChanged(nameof(Status));
+                }
+                catch (Exception ex)
+                {
+                    MessagingCenter.Send<PermissionItem, Exception>(this, nameof(PermissionException), ex);
+                }
             });
 
         public event PropertyChangedEventHandler PropertyChanged;
