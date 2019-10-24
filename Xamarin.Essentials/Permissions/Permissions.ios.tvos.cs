@@ -19,10 +19,28 @@ namespace Xamarin.Essentials
                 return new string[] { "NSPhotoLibraryUsageDescription" };
             };
 
-            public override async Task<PermissionStatus> CheckStatusAsync()
+            public override Task<PermissionStatus> CheckStatusAsync()
             {
-                await base.CheckStatusAsync();
+                EnsureDeclared();
 
+                return Task.FromResult(GetPhotoPermissionStatus());
+            }
+
+            public override Task<PermissionStatus> RequestAsync()
+            {
+                EnsureDeclared();
+
+                var status = GetPhotoPermissionStatus();
+                if (status == PermissionStatus.Granted)
+                    return Task.FromResult(status);
+
+                EnsureMainThread();
+
+                return RequestPhotoPermission();
+            }
+
+            static PermissionStatus GetPhotoPermissionStatus()
+            {
                 var status = PHPhotoLibrary.AuthorizationStatus;
                 switch (status)
                 {
@@ -37,12 +55,8 @@ namespace Xamarin.Essentials
                 }
             }
 
-            public override async Task<PermissionStatus> RequestAsync()
+            static Task<PermissionStatus> RequestPhotoPermission()
             {
-                var status = await base.RequestAsync();
-                if (status == PermissionStatus.Granted)
-                    return status;
-
                 var tcs = new TaskCompletionSource<PermissionStatus>();
 
                 PHPhotoLibrary.RequestAuthorization(s =>
@@ -64,7 +78,7 @@ namespace Xamarin.Essentials
                     }
                 });
 
-                return await tcs.Task;
+                return tcs.Task;
             }
         }
     }

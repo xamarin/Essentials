@@ -49,18 +49,22 @@ namespace Xamarin.Essentials
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSCameraUsageDescription" };
 
-            public override async Task<PermissionStatus> CheckStatusAsync()
+            public override Task<PermissionStatus> CheckStatusAsync()
             {
-                await base.CheckStatusAsync();
+                EnsureDeclared();
 
-                return AVPermissions.CheckPermissionsStatus(AVAuthorizationMediaType.Video);
+                return Task.FromResult(AVPermissions.CheckPermissionsStatus(AVAuthorizationMediaType.Video));
             }
 
             public override async Task<PermissionStatus> RequestAsync()
             {
-                var status = await base.RequestAsync();
+                EnsureDeclared();
+
+                var status = AVPermissions.CheckPermissionsStatus(AVAuthorizationMediaType.Video);
                 if (status == PermissionStatus.Granted)
                     return status;
+
+                EnsureMainThread();
 
                 return await AVPermissions.RequestPermissionAsync(AVAuthorizationMediaType.Video);
             }
@@ -71,10 +75,28 @@ namespace Xamarin.Essentials
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSContactsUsageDescription" };
 
-            public override async Task<PermissionStatus> CheckStatusAsync()
+            public override Task<PermissionStatus> CheckStatusAsync()
             {
-                await base.CheckStatusAsync();
+                EnsureDeclared();
 
+                return Task.FromResult(GetAddressBookPermissionStatus());
+            }
+
+            public override Task<PermissionStatus> RequestAsync()
+            {
+                EnsureDeclared();
+
+                var status = GetAddressBookPermissionStatus();
+                if (status == PermissionStatus.Granted)
+                    return Task.FromResult(status);
+
+                EnsureMainThread();
+
+                return RequestAddressBookPermission();
+            }
+
+            static PermissionStatus GetAddressBookPermissionStatus()
+            {
                 var status = ABAddressBook.GetAuthorizationStatus();
                 switch (status)
                 {
@@ -89,12 +111,8 @@ namespace Xamarin.Essentials
                 }
             }
 
-            public override async Task<PermissionStatus> RequestAsync()
+            static Task<PermissionStatus> RequestAddressBookPermission()
             {
-                var status = await base.RequestAsync();
-                if (status == PermissionStatus.Granted)
-                    return status;
-
                 var addressBook = new ABAddressBook();
 
                 var tcs = new TaskCompletionSource<PermissionStatus>();
@@ -102,7 +120,7 @@ namespace Xamarin.Essentials
                 addressBook.RequestAccess((success, error) =>
                     tcs.TrySetResult(success ? PermissionStatus.Granted : PermissionStatus.Denied));
 
-                return await tcs.Task;
+                return tcs.Task;
             }
         }
 
@@ -115,10 +133,28 @@ namespace Xamarin.Essentials
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSAppleMusicUsageDescription" };
 
-            public override async Task<PermissionStatus> CheckStatusAsync()
+            public override Task<PermissionStatus> CheckStatusAsync()
             {
-                await base.CheckStatusAsync();
+                EnsureDeclared();
 
+                return Task.FromResult(GetMediaPermissionStatus());
+            }
+
+            public override Task<PermissionStatus> RequestAsync()
+            {
+                EnsureDeclared();
+
+                var status = GetMediaPermissionStatus();
+                if (status == PermissionStatus.Granted)
+                    return Task.FromResult(status);
+
+                EnsureMainThread();
+
+                return RequestMediaPermission();
+            }
+
+            internal static PermissionStatus GetMediaPermissionStatus()
+            {
                 // Only available in 9.3+
                 if (!Platform.HasOSVersion(9, 3))
                     return PermissionStatus.Unknown;
@@ -137,15 +173,11 @@ namespace Xamarin.Essentials
                 }
             }
 
-            public override async Task<PermissionStatus> RequestAsync()
+            internal static Task<PermissionStatus> RequestMediaPermission()
             {
-                var status = await base.RequestAsync();
-                if (status == PermissionStatus.Granted)
-                    return status;
-
                 // Only available in 9.3+
                 if (!Platform.HasOSVersion(9, 3))
-                    return PermissionStatus.Unknown;
+                    return Task.FromResult(PermissionStatus.Unknown);
 
                 var tcs = new TaskCompletionSource<PermissionStatus>();
 
@@ -168,7 +200,7 @@ namespace Xamarin.Essentials
                     }
                 });
 
-                return await tcs.Task;
+                return tcs.Task;
             }
         }
 
@@ -177,20 +209,24 @@ namespace Xamarin.Essentials
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSMicrophoneUsageDescription" };
 
-            public override async Task<PermissionStatus> CheckStatusAsync()
+            public override Task<PermissionStatus> CheckStatusAsync()
             {
-                await base.CheckStatusAsync();
+                EnsureDeclared();
 
-                return AVPermissions.CheckPermissionsStatus(AVAuthorizationMediaType.Audio);
+                return Task.FromResult(AVPermissions.CheckPermissionsStatus(AVAuthorizationMediaType.Audio));
             }
 
-            public override async Task<PermissionStatus> RequestAsync()
+            public override Task<PermissionStatus> RequestAsync()
             {
-                var status = await base.RequestAsync();
-                if (status == PermissionStatus.Granted)
-                    return status;
+                EnsureDeclared();
 
-                return await AVPermissions.RequestPermissionAsync(AVAuthorizationMediaType.Audio);
+                var status = AVPermissions.CheckPermissionsStatus(AVAuthorizationMediaType.Audio);
+                if (status == PermissionStatus.Granted)
+                    return Task.FromResult(status);
+
+                EnsureMainThread();
+
+                return AVPermissions.RequestPermissionAsync(AVAuthorizationMediaType.Audio);
             }
         }
 
@@ -199,10 +235,28 @@ namespace Xamarin.Essentials
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSSpeechRecognitionUsageDescription" };
 
-            public override async Task<PermissionStatus> CheckStatusAsync()
+            public override Task<PermissionStatus> CheckStatusAsync()
             {
-                await base.CheckStatusAsync();
+                EnsureDeclared();
 
+                return Task.FromResult(GetSpeechPermissionStatus());
+            }
+
+            public override Task<PermissionStatus> RequestAsync()
+            {
+                EnsureDeclared();
+
+                var status = GetSpeechPermissionStatus();
+                if (status == PermissionStatus.Granted)
+                    return Task.FromResult(status);
+
+                EnsureMainThread();
+
+                return RequestSpeechPermission();
+            }
+
+            internal static PermissionStatus GetSpeechPermissionStatus()
+            {
                 var status = SFSpeechRecognizer.AuthorizationStatus;
                 switch (status)
                 {
@@ -217,14 +271,10 @@ namespace Xamarin.Essentials
                 }
             }
 
-            public override async Task<PermissionStatus> RequestAsync()
+            internal static Task<PermissionStatus> RequestSpeechPermission()
             {
-                var status = await base.RequestAsync();
-                if (status == PermissionStatus.Granted)
-                    return status;
-
                 if (!Platform.HasOSVersion(10, 0))
-                    return PermissionStatus.Unknown;
+                    return Task.FromResult(PermissionStatus.Unknown);
 
                 var tcs = new TaskCompletionSource<PermissionStatus>();
 
@@ -247,7 +297,7 @@ namespace Xamarin.Essentials
                     }
                 });
 
-                return await tcs.Task;
+                return tcs.Task;
             }
         }
     }

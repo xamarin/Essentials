@@ -18,34 +18,33 @@ namespace Xamarin.Essentials
         {
             protected virtual Func<IEnumerable<string>> RequiredInfoPlistKeys { get; }
 
-            public override Task<PermissionStatus> CheckStatusAsync()
-            {
-                EnsureDeclared();
+            public override Task<PermissionStatus> CheckStatusAsync() =>
+                Task.FromResult(PermissionStatus.Granted);
 
-                return Task.FromResult(PermissionStatus.Granted);
-            }
-
-            public override async Task<PermissionStatus> RequestAsync()
-            {
-                var status = await CheckStatusAsync();
-                if (status == PermissionStatus.Granted)
-                    return PermissionStatus.Granted;
-
-                if (!MainThread.IsMainThread)
-                    throw new PermissionException("Permission request must be invoked on main thread.");
-
-                return PermissionStatus.Granted;
-            }
+            public override Task<PermissionStatus> RequestAsync() =>
+                Task.FromResult(PermissionStatus.Granted);
 
             public override void EnsureDeclared()
             {
-                var plistKeys = RequiredInfoPlistKeys();
+                if (RequiredInfoPlistKeys == null)
+                    return;
+
+                var plistKeys = RequiredInfoPlistKeys?.Invoke();
+
+                if (plistKeys == null)
+                    return;
 
                 foreach (var requiredInfoPlistKey in plistKeys)
                 {
                     if (!Permissions.IsKeyDeclaredInInfoPlist(requiredInfoPlistKey))
                         throw new PermissionException($"You must set `{requiredInfoPlistKey}` in your Info.plist file to use the Permission: {GetType().Name}.");
                 }
+            }
+
+            internal void EnsureMainThread()
+            {
+                if (!MainThread.IsMainThread)
+                    throw new PermissionException("Permission request must be invoked on main thread.");
             }
         }
 
@@ -92,18 +91,22 @@ namespace Xamarin.Essentials
 
             public override Task<PermissionStatus> CheckStatusAsync()
             {
-                base.CheckStatusAsync();
+                EnsureDeclared();
 
                 return Task.FromResult(GetLocationStatus(true));
             }
 
             public override async Task<PermissionStatus> RequestAsync()
             {
-                var status = await base.RequestAsync();
+                EnsureDeclared();
+
+                var status = GetLocationStatus(true);
                 if (status == PermissionStatus.Granted)
                     return status;
 
-                return await RequestLocationAsync(true);
+                EnsureMainThread();
+
+                return await RequestLocationAsync(true, lm => lm.RequestWhenInUseAuthorization());
             }
 
             internal static PermissionStatus GetLocationStatus(bool whenInUse)
@@ -128,13 +131,8 @@ namespace Xamarin.Essentials
                 }
             }
 
-            internal Task<PermissionStatus> RequestLocationAsync(bool whenInUse)
+            internal static Task<PermissionStatus> RequestLocationAsync(bool whenInUse, Action<CLLocationManager> invokeRequest)
             {
-                var status = GetLocationStatus(whenInUse);
-                if (status == PermissionStatus.Granted)
-                    return Task.FromResult(status);
-
-                // if (locationManager == null)
                 var locationManager = new CLLocationManager();
 
                 var tcs = new TaskCompletionSource<PermissionStatus>(locationManager);
@@ -143,7 +141,7 @@ namespace Xamarin.Essentials
 
                 locationManager.AuthorizationChanged += LocationAuthCallback;
 
-                InitiateLocationRequest(locationManager);
+                invokeRequest(locationManager);
 
                 return tcs.Task;
 
@@ -174,12 +172,9 @@ namespace Xamarin.Essentials
                     tcs.TrySetResult(GetLocationStatus(whenInUse));
                 }
             }
-
-            internal virtual void InitiateLocationRequest(CLLocationManager manager)
-                => manager.RequestWhenInUseAuthorization();
         }
 
-        public partial class LocationAlways : LocationWhenInUse
+        public partial class LocationAlways : IosBasePermission
         {
         }
 

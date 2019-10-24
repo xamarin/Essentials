@@ -45,20 +45,22 @@ namespace Xamarin.Essentials
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSCalendarsUsageDescription" };
 
-            public override async Task<PermissionStatus> CheckStatusAsync()
+            public override Task<PermissionStatus> CheckStatusAsync()
             {
-                await base.CheckStatusAsync();
+                EnsureDeclared();
 
-                return EventPermission.CheckPermissionStatus(EKEntityType.Event);
+                return Task.FromResult(EventPermission.CheckPermissionStatus(EKEntityType.Event));
             }
 
-            public override async Task<PermissionStatus> RequestAsync()
+            public override Task<PermissionStatus> RequestAsync()
             {
-                var status = await base.RequestAsync();
-                if (status == PermissionStatus.Granted)
-                    return status;
+                EnsureDeclared();
 
-                return await EventPermission.RequestPermissionAsync(EKEntityType.Event);
+                var status = EventPermission.CheckPermissionStatus(EKEntityType.Event);
+                if (status == PermissionStatus.Granted)
+                    return Task.FromResult(status);
+
+                return EventPermission.RequestPermissionAsync(EKEntityType.Event);
             }
         }
 
@@ -71,20 +73,22 @@ namespace Xamarin.Essentials
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSRemindersUsageDescription" };
 
-            public override async Task<PermissionStatus> CheckStatusAsync()
+            public override Task<PermissionStatus> CheckStatusAsync()
             {
-                await base.CheckStatusAsync();
+                EnsureDeclared();
 
-                return EventPermission.CheckPermissionStatus(EKEntityType.Reminder);
+                return Task.FromResult(EventPermission.CheckPermissionStatus(EKEntityType.Reminder));
             }
 
-            public override async Task<PermissionStatus> RequestAsync()
+            public override Task<PermissionStatus> RequestAsync()
             {
-                var status = await base.RequestAsync();
-                if (status == PermissionStatus.Granted)
-                    return status;
+                EnsureDeclared();
 
-                return await EventPermission.RequestPermissionAsync(EKEntityType.Reminder);
+                var status = EventPermission.CheckPermissionStatus(EKEntityType.Reminder);
+                if (status == PermissionStatus.Granted)
+                    return Task.FromResult(status);
+
+                return EventPermission.RequestPermissionAsync(EKEntityType.Reminder);
             }
         }
 
@@ -93,10 +97,28 @@ namespace Xamarin.Essentials
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSMotionUsageDescription" };
 
-            public override async Task<PermissionStatus> CheckStatusAsync()
+            public override Task<PermissionStatus> CheckStatusAsync()
             {
-                await base.CheckStatusAsync();
+                EnsureDeclared();
 
+                return Task.FromResult(GetSensorPermissionStatus());
+            }
+
+            public override Task<PermissionStatus> RequestAsync()
+            {
+                EnsureDeclared();
+
+                var status = GetSensorPermissionStatus();
+                if (status == PermissionStatus.Granted)
+                    return Task.FromResult(status);
+
+                EnsureMainThread();
+
+                return RequestSensorPermission();
+            }
+
+            internal static PermissionStatus GetSensorPermissionStatus()
+            {
                 // Check if it's available
                 if (!CMMotionActivityManager.IsActivityAvailable)
                     return PermissionStatus.Disabled;
@@ -119,12 +141,8 @@ namespace Xamarin.Essentials
                 return PermissionStatus.Unknown;
             }
 
-            public override async Task<PermissionStatus> RequestAsync()
+            internal static async Task<PermissionStatus> RequestSensorPermission()
             {
-                var status = await base.RequestAsync();
-                if (status == PermissionStatus.Granted)
-                    return status;
-
                 var activityManager = new CMMotionActivityManager();
 
                 try
@@ -143,7 +161,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class LocationAlways : LocationWhenInUse
+        public partial class LocationAlways : IosBasePermission
         {
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[]
@@ -152,24 +170,25 @@ namespace Xamarin.Essentials
                     "NSLocationAlwaysUsageDescription"
                 };
 
-            public override async Task<PermissionStatus> CheckStatusAsync()
+            public override Task<PermissionStatus> CheckStatusAsync()
             {
-                await base.CheckStatusAsync();
+                EnsureDeclared();
 
-                return GetLocationStatus(false);
+                return Task.FromResult(LocationWhenInUse.GetLocationStatus(false));
             }
 
             public override async Task<PermissionStatus> RequestAsync()
             {
-                var status = await base.RequestAsync();
+                EnsureDeclared();
+
+                var status = LocationWhenInUse.GetLocationStatus(false);
                 if (status == PermissionStatus.Granted)
                     return status;
 
-                return await RequestLocationAsync(false);
-            }
+                EnsureMainThread();
 
-            internal override void InitiateLocationRequest(CLLocationManager manager)
-                => manager.RequestAlwaysAuthorization();
+                return await LocationWhenInUse.RequestLocationAsync(false, lm => lm.RequestAlwaysAuthorization());
+            }
         }
     }
 }
