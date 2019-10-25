@@ -7,7 +7,7 @@ namespace Xamarin.Essentials
 {
     public static partial class Permissions
     {
-        public partial class NetStandardBasePermission : BasePermission
+        public partial class BasePlatformPermission : BasePermission
         {
             public override Task<PermissionStatus> CheckStatusAsync() =>
                 throw ExceptionUtils.NotSupportedOrImplementedException;
@@ -19,95 +19,95 @@ namespace Xamarin.Essentials
                 throw ExceptionUtils.NotSupportedOrImplementedException;
         }
 
-        public partial class Battery : NetStandardBasePermission
+        public partial class Battery : BasePlatformPermission
         {
         }
 
-        public partial class CalendarRead : NetStandardBasePermission
+        public partial class CalendarRead : BasePlatformPermission
         {
         }
 
-        public partial class CalendarWrite : NetStandardBasePermission
+        public partial class CalendarWrite : BasePlatformPermission
         {
         }
 
-        public partial class Camera : NetStandardBasePermission
+        public partial class Camera : BasePlatformPermission
         {
         }
 
-        public partial class ContactsRead : NetStandardBasePermission
+        public partial class ContactsRead : BasePlatformPermission
         {
         }
 
-        public partial class ContactsWrite : NetStandardBasePermission
+        public partial class ContactsWrite : BasePlatformPermission
         {
         }
 
-        public partial class Flashlight : NetStandardBasePermission
+        public partial class Flashlight : BasePlatformPermission
         {
         }
 
-        public partial class LaunchApp : NetStandardBasePermission
+        public partial class LaunchApp : BasePlatformPermission
         {
         }
 
-        public partial class LocationWhenInUse : NetStandardBasePermission
+        public partial class LocationWhenInUse : BasePlatformPermission
         {
         }
 
-        public partial class LocationAlways : NetStandardBasePermission
+        public partial class LocationAlways : BasePlatformPermission
         {
         }
 
-        public partial class Maps : NetStandardBasePermission
+        public partial class Maps : BasePlatformPermission
         {
         }
 
-        public partial class Media : NetStandardBasePermission
+        public partial class Media : BasePlatformPermission
         {
         }
 
-        public partial class Microphone : NetStandardBasePermission
+        public partial class Microphone : BasePlatformPermission
         {
         }
 
-        public partial class NetworkState : NetStandardBasePermission
+        public partial class NetworkState : BasePlatformPermission
         {
         }
 
-        public partial class Phone : NetStandardBasePermission
+        public partial class Phone : BasePlatformPermission
         {
         }
 
-        public partial class Photos : NetStandardBasePermission
+        public partial class Photos : BasePlatformPermission
         {
         }
 
-        public partial class Reminders : NetStandardBasePermission
+        public partial class Reminders : BasePlatformPermission
         {
         }
 
-        public partial class Sensors : NetStandardBasePermission
+        public partial class Sensors : BasePlatformPermission
         {
         }
 
-        public partial class Sms : NetStandardBasePermission
+        public partial class Sms : BasePlatformPermission
         {
         }
 
-        public partial class Speech : NetStandardBasePermission
+        public partial class Speech : BasePlatformPermission
         {
         }
 
-        public partial class StorageRead : NetStandardBasePermission
+        public partial class StorageRead : BasePlatformPermission
         {
         }
 
-        public partial class StorageWrite : NetStandardBasePermission
+        public partial class StorageWrite : BasePlatformPermission
         {
         }
 
-        public partial class Vibrate : NetStandardBasePermission
+        public partial class Vibrate : BasePlatformPermission
         {
         }
     }

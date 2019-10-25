@@ -28,7 +28,7 @@ namespace Xamarin.Essentials
                 (!doc.Root.XPathSelectElements($"//x:Capability[@Name='{capabilityName}']", namespaceManager)?.Any() ?? false);
         }
 
-        public abstract partial class UwpPermissionBase : BasePermission
+        public abstract partial class BasePlatformPermission : BasePermission
         {
             protected virtual Func<IEnumerable<string>> RequiredDeclarations { get; }
 
@@ -51,23 +51,23 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class Battery : UwpPermissionBase
+        public partial class Battery : BasePlatformPermission
         {
         }
 
-        public partial class CalendarRead : UwpPermissionBase
+        public partial class CalendarRead : BasePlatformPermission
         {
         }
 
-        public partial class CalendarWrite : UwpPermissionBase
+        public partial class CalendarWrite : BasePlatformPermission
         {
         }
 
-        public partial class Camera : UwpPermissionBase
+        public partial class Camera : BasePlatformPermission
         {
         }
 
-        public partial class ContactsRead : UwpPermissionBase
+        public partial class ContactsRead : BasePlatformPermission
         {
             public override async Task<PermissionStatus> CheckStatusAsync()
             {
@@ -84,15 +84,15 @@ namespace Xamarin.Essentials
         {
         }
 
-        public partial class Flashlight : UwpPermissionBase
+        public partial class Flashlight : BasePlatformPermission
         {
         }
 
-        public partial class LaunchApp : UwpPermissionBase
+        public partial class LaunchApp : BasePlatformPermission
         {
         }
 
-        public partial class LocationWhenInUse : UwpPermissionBase
+        public partial class LocationWhenInUse : BasePlatformPermission
         {
             protected override Func<IEnumerable<string>> RequiredDeclarations => () =>
                 new[] { "location" };
@@ -119,37 +119,37 @@ namespace Xamarin.Essentials
         {
         }
 
-        public partial class Maps : UwpPermissionBase
+        public partial class Maps : BasePlatformPermission
         {
         }
 
-        public partial class Media : UwpPermissionBase
+        public partial class Media : BasePlatformPermission
         {
         }
 
-        public partial class Microphone : UwpPermissionBase
+        public partial class Microphone : BasePlatformPermission
         {
             protected override Func<IEnumerable<string>> RequiredDeclarations => () =>
                 new[] { "microphone" };
         }
 
-        public partial class NetworkState : UwpPermissionBase
+        public partial class NetworkState : BasePlatformPermission
         {
         }
 
-        public partial class Phone : UwpPermissionBase
+        public partial class Phone : BasePlatformPermission
         {
         }
 
-        public partial class Photos : UwpPermissionBase
+        public partial class Photos : BasePlatformPermission
         {
         }
 
-        public partial class Reminders : UwpPermissionBase
+        public partial class Reminders : BasePlatformPermission
         {
         }
 
-        public partial class Sensors : UwpPermissionBase
+        public partial class Sensors : BasePlatformPermission
         {
             static readonly Guid activitySensorClassId = new Guid("9D9E0118-1807-4F2E-96E4-2CE57142E196");
 
@@ -170,23 +170,23 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class Sms : UwpPermissionBase
+        public partial class Sms : BasePlatformPermission
         {
         }
 
-        public partial class Speech : UwpPermissionBase
+        public partial class Speech : BasePlatformPermission
         {
         }
 
-        public partial class StorageRead : UwpPermissionBase
+        public partial class StorageRead : BasePlatformPermission
         {
         }
 
-        public partial class StorageWrite : UwpPermissionBase
+        public partial class StorageWrite : BasePlatformPermission
         {
         }
 
-        public partial class Vibrate : UwpPermissionBase
+        public partial class Vibrate : BasePlatformPermission
         {
         }
     }

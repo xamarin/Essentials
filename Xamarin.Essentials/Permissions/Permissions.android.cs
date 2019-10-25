@@ -22,9 +22,9 @@ namespace Xamarin.Essentials
         }
 
         internal static void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
-            => AndroidBasePermission.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            => BasePlatformPermission.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        public abstract partial class AndroidBasePermission : BasePermission
+        public abstract partial class BasePlatformPermission : BasePermission
         {
             static readonly object locker = new object();
             static int requestCode = 0;
@@ -157,49 +157,49 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class Battery : AndroidBasePermission
+        public partial class Battery : BasePlatformPermission
         {
             [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.BatteryStats, false) };
         }
 
-        public partial class CalendarRead : AndroidBasePermission
+        public partial class CalendarRead : BasePlatformPermission
         {
             [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.ReadCalendar, true) };
         }
 
-        public partial class CalendarWrite : AndroidBasePermission
+        public partial class CalendarWrite : BasePlatformPermission
         {
             [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.WriteCalendar, true) };
         }
 
-        public partial class Camera : AndroidBasePermission
+        public partial class Camera : BasePlatformPermission
         {
             [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.Camera, true) };
         }
 
-        public partial class ContactsRead : AndroidBasePermission
+        public partial class ContactsRead : BasePlatformPermission
         {
             [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.ReadContacts, true) };
         }
 
-        public partial class ContactsWrite : AndroidBasePermission
+        public partial class ContactsWrite : BasePlatformPermission
         {
             [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.WriteContacts, true) };
         }
 
-        public partial class Flashlight : AndroidBasePermission
+        public partial class Flashlight : BasePlatformPermission
         {
             [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
@@ -214,7 +214,7 @@ namespace Xamarin.Essentials
         {
         }
 
-        public partial class LocationWhenInUse : AndroidBasePermission
+        public partial class LocationWhenInUse : BasePlatformPermission
         {
             [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
@@ -225,7 +225,7 @@ namespace Xamarin.Essentials
                 };
         }
 
-        public partial class LocationAlways : AndroidBasePermission
+        public partial class LocationAlways : BasePlatformPermission
         {
             [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
@@ -247,14 +247,14 @@ namespace Xamarin.Essentials
         {
         }
 
-        public partial class Microphone : AndroidBasePermission
+        public partial class Microphone : BasePlatformPermission
         {
             [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.RecordAudio, true) };
         }
 
-        public partial class NetworkState : AndroidBasePermission
+        public partial class NetworkState : BasePlatformPermission
         {
             [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions
@@ -274,7 +274,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class Phone : AndroidBasePermission
+        public partial class Phone : BasePlatformPermission
         {
             [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions
@@ -313,22 +313,22 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class Photos : AndroidBasePermission
+        public partial class Photos : BasePlatformPermission
         {
         }
 
-        public partial class Reminders : AndroidBasePermission
+        public partial class Reminders : BasePlatformPermission
         {
         }
 
-        public partial class Sensors : AndroidBasePermission
+        public partial class Sensors : BasePlatformPermission
         {
             [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.BodySensors, true) };
         }
 
-        public partial class Sms : AndroidBasePermission
+        public partial class Sms : BasePlatformPermission
         {
             [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions
@@ -358,21 +358,21 @@ namespace Xamarin.Essentials
         {
         }
 
-        public partial class StorageRead : AndroidBasePermission
+        public partial class StorageRead : BasePlatformPermission
         {
             [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.ReadExternalStorage, true) };
         }
 
-        public partial class StorageWrite : AndroidBasePermission
+        public partial class StorageWrite : BasePlatformPermission
         {
             [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.WriteExternalStorage, true) };
         }
 
-        public partial class Vibrate : AndroidBasePermission
+        public partial class Vibrate : BasePlatformPermission
         {
             [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>

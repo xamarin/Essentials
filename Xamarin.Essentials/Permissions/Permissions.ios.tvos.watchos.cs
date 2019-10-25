@@ -14,7 +14,7 @@ namespace Xamarin.Essentials
 
         public static TimeSpan LocationTimeout { get; set; } = TimeSpan.FromSeconds(10);
 
-        public abstract class IosBasePermission : BasePermission
+        public abstract class BasePlatformPermission : BasePermission
         {
             protected virtual Func<IEnumerable<string>> RequiredInfoPlistKeys { get; }
 
@@ -48,15 +48,15 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class EventPermissions : IosBasePermission
+        public partial class EventPermissions : BasePlatformPermission
         {
         }
 
-        public partial class Battery : IosBasePermission
+        public partial class Battery : BasePlatformPermission
         {
         }
 
-        public partial class CalendarRead : IosBasePermission
+        public partial class CalendarRead : BasePlatformPermission
         {
         }
 
@@ -64,11 +64,11 @@ namespace Xamarin.Essentials
         {
         }
 
-        public partial class Camera : IosBasePermission
+        public partial class Camera : BasePlatformPermission
         {
         }
 
-        public partial class ContactsRead : IosBasePermission
+        public partial class ContactsRead : BasePlatformPermission
         {
         }
 
@@ -76,15 +76,15 @@ namespace Xamarin.Essentials
         {
         }
 
-        public partial class Flashlight : IosBasePermission
+        public partial class Flashlight : BasePlatformPermission
         {
         }
 
-        public partial class LaunchApp : IosBasePermission
+        public partial class LaunchApp : BasePlatformPermission
         {
         }
 
-        public partial class LocationWhenInUse : IosBasePermission
+        public partial class LocationWhenInUse : BasePlatformPermission
         {
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSLocationWhenInUseUsageDescription" };
@@ -174,55 +174,55 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class LocationAlways : IosBasePermission
+        public partial class LocationAlways : BasePlatformPermission
         {
         }
 
-        public partial class Maps : IosBasePermission
+        public partial class Maps : BasePlatformPermission
         {
         }
 
-        public partial class Media : IosBasePermission
+        public partial class Media : BasePlatformPermission
         {
         }
 
-        public partial class Microphone : IosBasePermission
+        public partial class Microphone : BasePlatformPermission
         {
         }
 
-        public partial class NetworkState : IosBasePermission
+        public partial class NetworkState : BasePlatformPermission
         {
         }
 
-        public partial class Phone : IosBasePermission
+        public partial class Phone : BasePlatformPermission
         {
         }
 
-        public partial class Photos : IosBasePermission
+        public partial class Photos : BasePlatformPermission
         {
         }
 
-        public partial class Reminders : IosBasePermission
+        public partial class Reminders : BasePlatformPermission
         {
         }
 
-        public partial class Sensors : IosBasePermission
+        public partial class Sensors : BasePlatformPermission
         {
         }
 
-        public partial class Sms : IosBasePermission
+        public partial class Sms : BasePlatformPermission
         {
         }
 
-        public partial class StorageRead : IosBasePermission
+        public partial class StorageRead : BasePlatformPermission
         {
         }
 
-        public partial class StorageWrite : IosBasePermission
+        public partial class StorageWrite : BasePlatformPermission
         {
         }
 
-        public partial class Vibrate : IosBasePermission
+        public partial class Vibrate : BasePlatformPermission
         {
         }
     }

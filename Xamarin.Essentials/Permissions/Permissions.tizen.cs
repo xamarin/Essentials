@@ -22,7 +22,7 @@ namespace Xamarin.Essentials
             return true;
         }
 
-        public abstract partial class TizenPermissionBase : BasePermission
+        public abstract partial class BasePlatformPermission : BasePermission
         {
             public virtual (string tizenPrivilege, bool isRuntime)[] RequiredPrivileges { get; }
 
@@ -82,45 +82,45 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class Battery : TizenPermissionBase
+        public partial class Battery : BasePlatformPermission
         {
         }
 
-        public partial class CalendarRead : TizenPermissionBase
+        public partial class CalendarRead : BasePlatformPermission
         {
         }
 
-        public partial class CalendarWrite : TizenPermissionBase
+        public partial class CalendarWrite : BasePlatformPermission
         {
         }
 
-        public partial class Camera : TizenPermissionBase
+        public partial class Camera : BasePlatformPermission
         {
             public override (string tizenPrivilege, bool isRuntime)[] RequiredPrivileges =>
                 new[] { ("http://tizen.org/privilege/camera", false) };
         }
 
-        public partial class ContactsRead : TizenPermissionBase
+        public partial class ContactsRead : BasePlatformPermission
         {
         }
 
-        public partial class ContactsWrite : TizenPermissionBase
+        public partial class ContactsWrite : BasePlatformPermission
         {
         }
 
-        public partial class Flashlight : TizenPermissionBase
+        public partial class Flashlight : BasePlatformPermission
         {
             public override (string tizenPrivilege, bool isRuntime)[] RequiredPrivileges =>
                 new[] { ("http://tizen.org/privilege/led", false) };
         }
 
-        public partial class LaunchApp : TizenPermissionBase
+        public partial class LaunchApp : BasePlatformPermission
         {
             public override (string tizenPrivilege, bool isRuntime)[] RequiredPrivileges =>
                 new[] { ("http://tizen.org/privilege/appmanager.launch", false) };
         }
 
-        public partial class LocationWhenInUse : TizenPermissionBase
+        public partial class LocationWhenInUse : BasePlatformPermission
         {
             public override (string tizenPrivilege, bool isRuntime)[] RequiredPrivileges =>
                 new[] { ("http://tizen.org/privilege/location", true) };
@@ -130,7 +130,7 @@ namespace Xamarin.Essentials
         {
         }
 
-        public partial class Maps : TizenPermissionBase
+        public partial class Maps : BasePlatformPermission
         {
             public override (string tizenPrivilege, bool isRuntime)[] RequiredPrivileges =>
                 new[]
@@ -141,17 +141,17 @@ namespace Xamarin.Essentials
                 };
         }
 
-        public partial class Media : TizenPermissionBase
+        public partial class Media : BasePlatformPermission
         {
         }
 
-        public partial class Microphone : TizenPermissionBase
+        public partial class Microphone : BasePlatformPermission
         {
             public override (string tizenPrivilege, bool isRuntime)[] RequiredPrivileges =>
                 new[] { ("http://tizen.org/privilege/recorder", false) };
         }
 
-        public partial class NetworkState : TizenPermissionBase
+        public partial class NetworkState : BasePlatformPermission
         {
             public override (string tizenPrivilege, bool isRuntime)[] RequiredPrivileges =>
                 new[]
@@ -161,39 +161,39 @@ namespace Xamarin.Essentials
                 };
         }
 
-        public partial class Phone : TizenPermissionBase
+        public partial class Phone : BasePlatformPermission
         {
         }
 
-        public partial class Photos : TizenPermissionBase
+        public partial class Photos : BasePlatformPermission
         {
         }
 
-        public partial class Reminders : TizenPermissionBase
+        public partial class Reminders : BasePlatformPermission
         {
         }
 
-        public partial class Sensors : TizenPermissionBase
+        public partial class Sensors : BasePlatformPermission
         {
         }
 
-        public partial class Sms : TizenPermissionBase
+        public partial class Sms : BasePlatformPermission
         {
         }
 
-        public partial class Speech : TizenPermissionBase
+        public partial class Speech : BasePlatformPermission
         {
         }
 
-        public partial class StorageRead : TizenPermissionBase
+        public partial class StorageRead : BasePlatformPermission
         {
         }
 
-        public partial class StorageWrite : TizenPermissionBase
+        public partial class StorageWrite : BasePlatformPermission
         {
         }
 
-        public partial class Vibrate : TizenPermissionBase
+        public partial class Vibrate : BasePlatformPermission
         {
             public override (string tizenPrivilege, bool isRuntime)[] RequiredPrivileges =>
                 new[] { ("http://tizen.org/privilege/haptic", false) };

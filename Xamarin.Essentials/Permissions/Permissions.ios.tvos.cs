@@ -9,7 +9,7 @@ namespace Xamarin.Essentials
 {
     public static partial class Permissions
     {
-        public partial class Photos : IosBasePermission
+        public partial class Photos : BasePlatformPermission
         {
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys => () =>
             {

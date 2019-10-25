@@ -44,7 +44,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class Camera : IosBasePermission
+        public partial class Camera : BasePlatformPermission
         {
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSCameraUsageDescription" };
@@ -70,7 +70,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class ContactsRead : IosBasePermission
+        public partial class ContactsRead : BasePlatformPermission
         {
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSContactsUsageDescription" };
@@ -128,7 +128,7 @@ namespace Xamarin.Essentials
         {
         }
 
-        public partial class Media : IosBasePermission
+        public partial class Media : BasePlatformPermission
         {
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSAppleMusicUsageDescription" };
@@ -204,7 +204,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class Microphone : IosBasePermission
+        public partial class Microphone : BasePlatformPermission
         {
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSMicrophoneUsageDescription" };
@@ -230,7 +230,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class Speech : IosBasePermission
+        public partial class Speech : BasePlatformPermission
         {
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSSpeechRecognitionUsageDescription" };

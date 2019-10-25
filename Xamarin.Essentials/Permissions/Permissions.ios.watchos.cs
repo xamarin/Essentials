@@ -40,7 +40,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class CalendarRead : IosBasePermission
+        public partial class CalendarRead : BasePlatformPermission
         {
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSCalendarsUsageDescription" };
@@ -68,7 +68,7 @@ namespace Xamarin.Essentials
         {
         }
 
-        public partial class Reminders : IosBasePermission
+        public partial class Reminders : BasePlatformPermission
         {
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSRemindersUsageDescription" };
@@ -92,7 +92,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class Sensors : IosBasePermission
+        public partial class Sensors : BasePlatformPermission
         {
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[] { "NSMotionUsageDescription" };
@@ -161,7 +161,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class LocationAlways : IosBasePermission
+        public partial class LocationAlways : BasePlatformPermission
         {
             protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
                 () => new string[]
