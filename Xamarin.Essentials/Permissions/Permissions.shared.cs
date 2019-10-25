@@ -8,36 +8,16 @@ namespace Xamarin.Essentials
     public static partial class Permissions
     {
         public static Task<PermissionStatus> CheckStatusAsync<TPermission>()
-            where TPermission : BasePermission =>
-                CreateInstance<TPermission>().CheckStatusAsync();
-
-        public static Task<PermissionStatus> CheckStatusAsync<TPermission>(TPermission permission)
-            where TPermission : BasePermission =>
-                permission.CheckStatusAsync();
+            where TPermission : BasePermission, new() =>
+                new TPermission().CheckStatusAsync();
 
         public static Task<PermissionStatus> RequestAsync<TPermission>()
-            where TPermission : BasePermission =>
-                CreateInstance<TPermission>().RequestAsync();
-
-        public static Task<PermissionStatus> RequestAsync<TPermission>(TPermission permission)
-            where TPermission : BasePermission =>
-                permission.RequestAsync();
+            where TPermission : BasePermission, new() =>
+                new TPermission().RequestAsync();
 
         internal static void EnsureDeclared<TPermission>()
-            where TPermission : BasePermission =>
-                CreateInstance<TPermission>().EnsureDeclared();
-
-        internal static void EnsureDeclared<TPermission>(TPermission permission)
-            where TPermission : BasePermission =>
-                permission.EnsureDeclared();
-
-        internal static TPermission CreateInstance<TPermission>()
-            where TPermission : BasePermission =>
-#if NETSTANDARD
-             throw ExceptionUtils.NotSupportedOrImplementedException;
-#else
-            (TPermission)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(TPermission));
-#endif
+            where TPermission : BasePermission, new() =>
+                new TPermission().EnsureDeclared();
 
         public static void ShowSettingsUI() =>
             AppInfo.ShowSettingsUI();
