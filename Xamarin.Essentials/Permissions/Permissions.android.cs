@@ -210,7 +210,7 @@ namespace Xamarin.Essentials
                 };
         }
 
-        public partial class LaunchApp
+        public partial class LaunchApp : BasePlatformPermission
         {
         }
 
@@ -239,11 +239,11 @@ namespace Xamarin.Essentials
                 };
         }
 
-        public partial class Maps
+        public partial class Maps : BasePlatformPermission
         {
         }
 
-        public partial class Media
+        public partial class Media : BasePlatformPermission
         {
         }
 
@@ -354,8 +354,11 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class Speech : Microphone
+        public partial class Speech : BasePlatformPermission
         {
+            [Preserve]
+            public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
+                new (string, bool)[] { (Manifest.Permission.RecordAudio, true) };
         }
 
         public partial class StorageRead : BasePlatformPermission

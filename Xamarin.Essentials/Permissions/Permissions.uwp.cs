@@ -80,8 +80,17 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class ContactsWrite : ContactsRead
+        public partial class ContactsWrite : BasePlatformPermission
         {
+            public override async Task<PermissionStatus> CheckStatusAsync()
+            {
+                var accessStatus = await ContactManager.RequestStoreAsync(ContactStoreAccessType.AppContactsReadWrite);
+
+                if (accessStatus == null)
+                    return PermissionStatus.Denied;
+
+                return PermissionStatus.Granted;
+            }
         }
 
         public partial class Flashlight : BasePlatformPermission
@@ -97,7 +106,10 @@ namespace Xamarin.Essentials
             protected override Func<IEnumerable<string>> RequiredDeclarations => () =>
                 new[] { "location" };
 
-            public override async Task<PermissionStatus> CheckStatusAsync()
+            public override Task<PermissionStatus> CheckStatusAsync() =>
+                RequestLocationPermissionAsync();
+
+            internal static async Task<PermissionStatus> RequestLocationPermissionAsync()
             {
                 if (!MainThread.IsMainThread)
                     throw new PermissionException("Permission request must be invoked on main thread.");
@@ -115,8 +127,13 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class LocationAlways : LocationWhenInUse
+        public partial class LocationAlways : BasePlatformPermission
         {
+            protected override Func<IEnumerable<string>> RequiredDeclarations => () =>
+                new[] { "location" };
+
+            public override Task<PermissionStatus> CheckStatusAsync() =>
+                LocationWhenInUse.RequestLocationPermissionAsync();
         }
 
         public partial class Maps : BasePlatformPermission

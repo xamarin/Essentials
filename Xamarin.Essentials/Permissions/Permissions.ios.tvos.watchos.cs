@@ -60,7 +60,7 @@ namespace Xamarin.Essentials
         {
         }
 
-        public partial class CalendarWrite : CalendarRead
+        public partial class CalendarWrite : BasePlatformPermission
         {
         }
 
@@ -72,7 +72,7 @@ namespace Xamarin.Essentials
         {
         }
 
-        public partial class ContactsWrite : ContactsRead
+        public partial class ContactsWrite : BasePlatformPermission
         {
         }
 

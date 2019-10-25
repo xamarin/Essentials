@@ -64,8 +64,28 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class CalendarWrite : CalendarRead
+        public partial class CalendarWrite : BasePlatformPermission
         {
+            protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
+                () => new string[] { "NSCalendarsUsageDescription" };
+
+            public override Task<PermissionStatus> CheckStatusAsync()
+            {
+                EnsureDeclared();
+
+                return Task.FromResult(EventPermission.CheckPermissionStatus(EKEntityType.Event));
+            }
+
+            public override Task<PermissionStatus> RequestAsync()
+            {
+                EnsureDeclared();
+
+                var status = EventPermission.CheckPermissionStatus(EKEntityType.Event);
+                if (status == PermissionStatus.Granted)
+                    return Task.FromResult(status);
+
+                return EventPermission.RequestPermissionAsync(EKEntityType.Event);
+            }
         }
 
         public partial class Reminders : BasePlatformPermission

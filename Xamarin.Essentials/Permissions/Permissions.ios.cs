@@ -95,7 +95,7 @@ namespace Xamarin.Essentials
                 return RequestAddressBookPermission();
             }
 
-            static PermissionStatus GetAddressBookPermissionStatus()
+            internal static PermissionStatus GetAddressBookPermissionStatus()
             {
                 var status = ABAddressBook.GetAuthorizationStatus();
                 switch (status)
@@ -111,7 +111,7 @@ namespace Xamarin.Essentials
                 }
             }
 
-            static Task<PermissionStatus> RequestAddressBookPermission()
+            internal static Task<PermissionStatus> RequestAddressBookPermission()
             {
                 var addressBook = new ABAddressBook();
 
@@ -124,8 +124,30 @@ namespace Xamarin.Essentials
             }
         }
 
-        public partial class ContactsWrite : ContactsRead
+        public partial class ContactsWrite : BasePlatformPermission
         {
+            protected override Func<IEnumerable<string>> RequiredInfoPlistKeys =>
+                () => new string[] { "NSContactsUsageDescription" };
+
+            public override Task<PermissionStatus> CheckStatusAsync()
+            {
+                EnsureDeclared();
+
+                return Task.FromResult(ContactsRead.GetAddressBookPermissionStatus());
+            }
+
+            public override Task<PermissionStatus> RequestAsync()
+            {
+                EnsureDeclared();
+
+                var status = ContactsRead.GetAddressBookPermissionStatus();
+                if (status == PermissionStatus.Granted)
+                    return Task.FromResult(status);
+
+                EnsureMainThread();
+
+                return ContactsRead.RequestAddressBookPermission();
+            }
         }
 
         public partial class Media : BasePlatformPermission

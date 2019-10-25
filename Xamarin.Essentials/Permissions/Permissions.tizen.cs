@@ -128,6 +128,8 @@ namespace Xamarin.Essentials
 
         public partial class LocationAlways : LocationWhenInUse
         {
+            public override (string tizenPrivilege, bool isRuntime)[] RequiredPrivileges =>
+                new[] { ("http://tizen.org/privilege/location", true) };
         }
 
         public partial class Maps : BasePlatformPermission
