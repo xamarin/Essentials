@@ -159,49 +159,42 @@ namespace Xamarin.Essentials
 
         public partial class Battery : BasePlatformPermission
         {
-            [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.BatteryStats, false) };
         }
 
         public partial class CalendarRead : BasePlatformPermission
         {
-            [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.ReadCalendar, true) };
         }
 
         public partial class CalendarWrite : BasePlatformPermission
         {
-            [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.WriteCalendar, true) };
         }
 
         public partial class Camera : BasePlatformPermission
         {
-            [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.Camera, true) };
         }
 
         public partial class ContactsRead : BasePlatformPermission
         {
-            [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.ReadContacts, true) };
         }
 
         public partial class ContactsWrite : BasePlatformPermission
         {
-            [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.WriteContacts, true) };
         }
 
         public partial class Flashlight : BasePlatformPermission
         {
-            [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[]
                 {
@@ -216,7 +209,6 @@ namespace Xamarin.Essentials
 
         public partial class LocationWhenInUse : BasePlatformPermission
         {
-            [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[]
                 {
@@ -227,7 +219,6 @@ namespace Xamarin.Essentials
 
         public partial class LocationAlways : BasePlatformPermission
         {
-            [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[]
                 {
@@ -249,14 +240,12 @@ namespace Xamarin.Essentials
 
         public partial class Microphone : BasePlatformPermission
         {
-            [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.RecordAudio, true) };
         }
 
         public partial class NetworkState : BasePlatformPermission
         {
-            [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions
             {
                 get
@@ -276,7 +265,6 @@ namespace Xamarin.Essentials
 
         public partial class Phone : BasePlatformPermission
         {
-            [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions
             {
                 get
@@ -323,14 +311,12 @@ namespace Xamarin.Essentials
 
         public partial class Sensors : BasePlatformPermission
         {
-            [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.BodySensors, true) };
         }
 
         public partial class Sms : BasePlatformPermission
         {
-            [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions
             {
                 get
@@ -356,28 +342,24 @@ namespace Xamarin.Essentials
 
         public partial class Speech : BasePlatformPermission
         {
-            [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.RecordAudio, true) };
         }
 
         public partial class StorageRead : BasePlatformPermission
         {
-            [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.ReadExternalStorage, true) };
         }
 
         public partial class StorageWrite : BasePlatformPermission
         {
-            [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.WriteExternalStorage, true) };
         }
 
         public partial class Vibrate : BasePlatformPermission
         {
-            [Preserve]
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.Vibrate, false) };
         }
