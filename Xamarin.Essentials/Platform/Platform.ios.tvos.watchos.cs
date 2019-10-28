@@ -51,7 +51,7 @@ namespace Xamarin.Essentials
             UIDevice.CurrentDevice.CheckSystemVersion(major, minor);
 
 #if __IOS__ || __TVOS__
-        internal static UIViewController GetCurrentViewController(bool throwIfNull = true)
+        public static UIViewController GetCurrentViewController(bool throwIfNull = true)
         {
             UIViewController viewController = null;
 

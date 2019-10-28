@@ -21,7 +21,7 @@ namespace Xamarin.Essentials
         internal static Context AppContext =>
             Application.Context;
 
-        internal static Activity GetCurrentActivity(bool throwOnNull)
+        public static Activity GetCurrentActivity(bool throwOnNull)
         {
             var activity = lifecycleListener?.Activity;
             if (throwOnNull && activity == null)
