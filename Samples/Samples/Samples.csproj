@@ -35,5 +35,11 @@
     <ProjectReference Include="..\..\Xamarin.Essentials\Xamarin.Essentials.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="View\UnitConvertersPage.xaml.cs">
+      <DependentUpon>UnitConvertersPage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
   <Import Project="$(MSBuildThisFileDirectory)..\..\CodeStyles.targets" />
 </Project>
