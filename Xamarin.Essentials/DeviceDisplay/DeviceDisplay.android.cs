@@ -16,14 +16,14 @@ namespace Xamarin.Essentials
         {
             get
             {
-                var window = Platform.GetCurrentActivity(true)?.Window;
+                var window = Platform.GetCurrentActivity()?.Window;
                 var flags = window?.Attributes?.Flags ?? 0;
                 return flags.HasFlag(WindowManagerFlags.KeepScreenOn);
             }
 
             set
             {
-                var window = Platform.GetCurrentActivity(true)?.Window;
+                var window = Platform.GetCurrentActivity()?.Window;
                 if (value)
                     window?.AddFlags(WindowManagerFlags.KeepScreenOn);
                 else

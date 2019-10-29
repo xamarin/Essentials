@@ -30,7 +30,7 @@ namespace Xamarin.Essentials
 #if __ANDROID_25__
                     tabsIntent.LaunchUrl(Platform.AppContext, nativeUri);
 #else
-                    tabsIntent.LaunchUrl(Platform.GetCurrentActivity(true), nativeUri);
+                    tabsIntent.LaunchUrl(Platform.GetCurrentActivity(), nativeUri);
 #endif
                     break;
                 case BrowserLaunchMode.External:
