@@ -17,7 +17,7 @@ namespace Xamarin.Essentials
 
             listener = new MagnetometerListener();
             magnetometer = Platform.SensorManager?.GetDefaultSensor(SensorType.MagneticField);
-            Platform.SensorManager?.RegisterListener(listener, magnetometer, delay);
+            Platform.SensorManager!.RegisterListener(listener, magnetometer, delay);
         }
 
         internal static void PlatformStop()
@@ -25,7 +25,7 @@ namespace Xamarin.Essentials
             if (listener == null || magnetometer == null)
                 return;
 
-            Platform.SensorManager?.UnregisterListener(listener, magnetometer);
+            Platform.SensorManager!.UnregisterListener(listener, magnetometer);
             listener.Dispose();
             listener = null;
         }

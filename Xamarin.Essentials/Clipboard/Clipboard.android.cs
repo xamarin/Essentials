@@ -7,7 +7,7 @@ namespace Xamarin.Essentials
     {
         static Task PlatformSetTextAsync(string text)
         {
-            if (Platform.ClipboardManager?.PrimaryClip != null)
+            if (Platform.ClipboardManager != null)
                 Platform.ClipboardManager.PrimaryClip = ClipData.NewPlainText("Text", text);
             return Task.CompletedTask;
         }

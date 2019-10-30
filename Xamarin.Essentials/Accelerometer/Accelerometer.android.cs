@@ -24,7 +24,7 @@ namespace Xamarin.Essentials
             if (listener == null || accelerometer == null)
                 return;
 
-            Platform.SensorManager?.UnregisterListener(listener, accelerometer);
+            Platform.SensorManager!.UnregisterListener(listener, accelerometer);
             listener.Dispose();
             listener = null;
         }
