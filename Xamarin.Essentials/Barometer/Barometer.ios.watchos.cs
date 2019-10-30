@@ -8,7 +8,7 @@ namespace Xamarin.Essentials
         internal static bool IsSupported =>
             CMAltimeter.IsRelativeAltitudeAvailable;
 
-        static CMAltimeter altitudeManager;
+        static CMAltimeter? altitudeManager;
 
         static void PlatformStart(SensorSpeed sensorSpeed)
         {

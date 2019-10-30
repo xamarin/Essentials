@@ -14,10 +14,10 @@ namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
-        internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
-            Task.FromResult(SpeechSynthesizer.AllVoices.Select(v => new Locale(v.Language, null, v.DisplayName, v.Id)));
+        internal static Task<IEnumerable<Locale>?> PlatformGetLocalesAsync() =>
+            Task.FromResult<IEnumerable<Locale>?>(SpeechSynthesizer.AllVoices.Select(v => new Locale(v.Language, null, v.DisplayName, v.Id)));
 
-        internal static async Task PlatformSpeakAsync(string text, SpeechOptions options, CancellationToken cancelToken = default)
+        internal static async Task PlatformSpeakAsync(string text, SpeechOptions? options, CancellationToken cancelToken = default)
         {
             var tcsUtterance = new TaskCompletionSource<bool>();
 
@@ -31,7 +31,7 @@ namespace Xamarin.Essentials
 
                 if (!string.IsNullOrWhiteSpace(options?.Locale?.Id))
                 {
-                    var voiceInfo = SpeechSynthesizer.AllVoices.FirstOrDefault(v => v.Id == options.Locale.Id) ?? SpeechSynthesizer.DefaultVoice;
+                    var voiceInfo = SpeechSynthesizer.AllVoices.FirstOrDefault(v => v.Id == options?.Locale?.Id) ?? SpeechSynthesizer.DefaultVoice;
                     speechSynthesizer.Voice = voiceInfo;
                 }
 
@@ -67,7 +67,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static string GetSpeakParametersSSMLProsody(string text, SpeechOptions options)
+        static string GetSpeakParametersSSMLProsody(string text, SpeechOptions? options)
         {
             var volume = "default";
             var pitch = "default";
@@ -77,10 +77,10 @@ namespace Xamarin.Essentials
             var locale = options?.Locale?.Language ?? SpeechSynthesizer.DefaultVoice.Language;
 
             if (options?.Volume.HasValue ?? false)
-                volume = (options.Volume.Value * 100f).ToString(CultureInfo.InvariantCulture);
+                volume = (options!.Volume!.Value * 100f).ToString(CultureInfo.InvariantCulture);
 
             if (options?.Pitch.HasValue ?? false)
-                pitch = ProsodyPitch(options.Pitch);
+                pitch = ProsodyPitch(options!.Pitch!.Value);
 
             // SSML generation
             var ssml = new StringBuilder();
@@ -91,23 +91,18 @@ namespace Xamarin.Essentials
             return ssml.ToString();
         }
 
-        static string ProsodyPitch(float? pitch)
+        static string ProsodyPitch(float pitch)
         {
-            if (!pitch.HasValue)
-                return "default";
-
-            if (pitch.Value <= 0.25f)
+            if (pitch <= 0.25f)
                 return "x-low";
-            else if (pitch.Value > 0.25f && pitch.Value <= 0.75f)
+            else if (pitch > 0.25f && pitch <= 0.75f)
                 return "low";
-            else if (pitch.Value > 0.75f && pitch.Value <= 1.25f)
+            else if (pitch > 0.75f && pitch <= 1.25f)
                 return "medium";
-            else if (pitch.Value > 1.25f && pitch.Value <= 1.75f)
+            else if (pitch > 1.25f && pitch <= 1.75f)
                 return "high";
-            else if (pitch.Value > 1.75f)
+            else
                 return "x-high";
-
-            return "default";
         }
     }
 }

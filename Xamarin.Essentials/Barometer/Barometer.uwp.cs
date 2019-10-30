@@ -6,7 +6,7 @@ namespace Xamarin.Essentials
 {
     public static partial class Barometer
     {
-        static WinBarometer sensor;
+        static WinBarometer? sensor;
 
         static WinBarometer DefaultBarometer => WinBarometer.GetDefault();
 
@@ -28,7 +28,7 @@ namespace Xamarin.Essentials
 
         static void PlatformStop()
         {
-            sensor.ReadingChanged -= BarometerReportedInterval;
+            sensor!.ReadingChanged -= BarometerReportedInterval;
             sensor.ReportInterval = 0;
             sensor = null;
         }

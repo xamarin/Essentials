@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
         internal static bool IsComposeSupported
             => Platform.IsIntentSupported(CreateIntent(testEmail));
 
-        static Task PlatformComposeAsync(EmailMessage message)
+        static Task PlatformComposeAsync(EmailMessage? message)
         {
             var intent = CreateIntent(message)
                 .SetFlags(ActivityFlags.ClearTop)
@@ -27,7 +27,7 @@ namespace Xamarin.Essentials
             return Task.FromResult(true);
         }
 
-        static Intent CreateIntent(EmailMessage message)
+        static Intent CreateIntent(EmailMessage? message)
         {
             var action = message?.Attachments?.Count > 1 ? Intent.ActionSendMultiple : Intent.ActionSend;
             var intent = new Intent(action);
@@ -35,7 +35,7 @@ namespace Xamarin.Essentials
 
             if (!string.IsNullOrEmpty(message?.Body))
             {
-                if (message.BodyFormat == EmailBodyFormat.Html)
+                if (message?.BodyFormat == EmailBodyFormat.Html)
                 {
                     ISpanned html;
 #if __ANDROID_24__
@@ -54,11 +54,11 @@ namespace Xamarin.Essentials
                 }
                 else
                 {
-                    intent.PutExtra(Intent.ExtraText, message.Body);
+                    intent.PutExtra(Intent.ExtraText, message?.Body);
                 }
             }
             if (!string.IsNullOrEmpty(message?.Subject))
-                intent.PutExtra(Intent.ExtraSubject, message.Subject);
+                intent.PutExtra(Intent.ExtraSubject, message!.Subject);
             if (message?.To?.Count > 0)
                 intent.PutExtra(Intent.ExtraEmail, message.To.ToArray());
             if (message?.Cc?.Count > 0)

@@ -24,7 +24,7 @@ namespace Xamarin.Essentials
             });
         }
 
-        internal static IEnumerable<Placemark> ToPlacemarks(this MapLocationFinderResult result) =>
+        internal static IEnumerable<Placemark>? ToPlacemarks(this MapLocationFinderResult result) =>
             result?.ToPlacemarks();
     }
 }

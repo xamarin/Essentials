@@ -12,13 +12,13 @@ namespace Xamarin.Essentials
             Task.FromResult(AVSpeechSynthesisVoice.GetSpeechVoices()
                 .Select(v => new Locale(v.Language, null, v.Language, v.Identifier)));
 
-        internal static Task PlatformSpeakAsync(string text, SpeechOptions options, CancellationToken cancelToken = default)
+        internal static Task PlatformSpeakAsync(string text, SpeechOptions? options, CancellationToken cancelToken = default)
         {
             var speechUtterance = GetSpeechUtterance(text, options);
             return SpeakUtterance(speechUtterance, cancelToken);
         }
 
-        static AVSpeechUtterance GetSpeechUtterance(string text, SpeechOptions options)
+        static AVSpeechUtterance GetSpeechUtterance(string text, SpeechOptions? options)
         {
             var speechUtterance = new AVSpeechUtterance(text);
 

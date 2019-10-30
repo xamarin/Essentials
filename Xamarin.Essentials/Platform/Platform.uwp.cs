@@ -2,6 +2,6 @@
 {
     public static partial class Platform
     {
-        public static string MapServiceToken { get; set; }
+        public static string? MapServiceToken { get; set; }
     }
 }

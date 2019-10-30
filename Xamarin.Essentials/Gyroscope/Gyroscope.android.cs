@@ -8,16 +8,16 @@ namespace Xamarin.Essentials
         internal static bool IsSupported =>
                Platform.SensorManager?.GetDefaultSensor(SensorType.Gyroscope) != null;
 
-        static GyroscopeListener listener;
-        static Sensor gyroscope;
+        static GyroscopeListener? listener;
+        static Sensor? gyroscope;
 
         internal static void PlatformStart(SensorSpeed sensorSpeed)
         {
             var delay = sensorSpeed.ToPlatform();
 
             listener = new GyroscopeListener();
-            gyroscope = Platform.SensorManager.GetDefaultSensor(SensorType.Gyroscope);
-            Platform.SensorManager.RegisterListener(listener, gyroscope, delay);
+            gyroscope = Platform.SensorManager!.GetDefaultSensor(SensorType.Gyroscope);
+            Platform.SensorManager!.RegisterListener(listener, gyroscope, delay);
         }
 
         internal static void PlatformStop()
@@ -25,7 +25,7 @@ namespace Xamarin.Essentials
             if (listener == null || gyroscope == null)
                 return;
 
-            Platform.SensorManager.UnregisterListener(listener, gyroscope);
+            Platform.SensorManager!.UnregisterListener(listener, gyroscope);
             listener.Dispose();
             listener = null;
         }

@@ -10,7 +10,7 @@ namespace Xamarin.Essentials
         public static bool HasText
             => PlatformHasText;
 
-        public static Task<string> GetTextAsync()
+        public static Task<string?> GetTextAsync()
             => PlatformGetTextAsync();
     }
 }

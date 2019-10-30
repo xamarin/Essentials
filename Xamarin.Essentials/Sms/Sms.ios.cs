@@ -17,7 +17,7 @@ namespace Xamarin.Essentials
             // create the controller
             var messageController = new MFMessageComposeViewController();
             if (!string.IsNullOrWhiteSpace(message?.Body))
-                messageController.Body = message.Body;
+                messageController.Body = message!.Body;
 
             messageController.Recipients = message?.Recipients?.ToArray() ?? new string[] { };
 

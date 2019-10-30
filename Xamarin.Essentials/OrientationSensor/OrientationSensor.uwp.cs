@@ -6,7 +6,7 @@ namespace Xamarin.Essentials
     public static partial class OrientationSensor
     {
         // keep around a reference so we can stop this same instance
-        static WindowsOrientationSensor sensor;
+        static WindowsOrientationSensor? sensor;
 
         internal static WindowsOrientationSensor DefaultSensor =>
           WindowsOrientationSensor.GetDefault();
@@ -34,8 +34,8 @@ namespace Xamarin.Essentials
 
         internal static void PlatformStop()
         {
-            sensor.ReadingChanged -= DataUpdated;
-            sensor.ReportInterval = 0;
+            sensor!.ReadingChanged -= DataUpdated;
+            sensor!.ReportInterval = 0;
         }
     }
 }

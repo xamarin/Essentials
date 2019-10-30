@@ -14,7 +14,7 @@ namespace Xamarin.Essentials
         static bool PlatformHasText
             => UIPasteboard.General.HasStrings;
 
-        static Task<string> PlatformGetTextAsync()
-            => Task.FromResult(UIPasteboard.General.String);
+        static Task<string?> PlatformGetTextAsync()
+            => Task.FromResult<string?>(UIPasteboard.General.String);
     }
 }

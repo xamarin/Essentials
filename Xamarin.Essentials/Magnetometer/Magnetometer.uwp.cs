@@ -7,7 +7,7 @@ namespace Xamarin.Essentials
     public static partial class Magnetometer
     {
         // keep around a reference so we can stop this same instance
-        static WindowsMagnetometer sensor;
+        static WindowsMagnetometer? sensor;
 
         internal static WindowsMagnetometer DefaultSensor =>
             WindowsMagnetometer.GetDefault();
@@ -34,7 +34,7 @@ namespace Xamarin.Essentials
 
         internal static void PlatformStop()
         {
-            sensor.ReadingChanged -= DataUpdated;
+            sensor!.ReadingChanged -= DataUpdated;
             sensor.ReportInterval = 0;
         }
     }

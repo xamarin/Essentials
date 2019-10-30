@@ -68,7 +68,7 @@ namespace Xamarin.Essentials
                 : Platform.AppContext.CacheDir;
         }
 
-        internal static bool IsFileInPublicLocation(string filename)
+        internal static bool IsFileInPublicLocation(string? filename)
         {
             // get the Android path, we use "CanonicalPath" instead of "AbsolutePath"
             // because we want to resolve any ".." and links/redirects

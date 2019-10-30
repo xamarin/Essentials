@@ -5,7 +5,7 @@ namespace Xamarin.Essentials
 {
     public static partial class Connectivity
     {
-        static ReachabilityListener listener;
+        static ReachabilityListener? listener;
 
         static void StartListeners()
         {

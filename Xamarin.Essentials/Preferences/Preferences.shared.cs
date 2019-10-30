@@ -1,5 +1,6 @@
 ﻿using System;
 
+#nullable disable
 namespace Xamarin.Essentials
 {
     public static partial class Preferences

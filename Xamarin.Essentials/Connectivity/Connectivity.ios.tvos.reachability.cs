@@ -121,8 +121,8 @@ namespace Xamarin.Essentials
 
     class ReachabilityListener : IDisposable
     {
-        NetworkReachability defaultRouteReachability;
-        NetworkReachability remoteHostReachability;
+        NetworkReachability? defaultRouteReachability;
+        NetworkReachability? remoteHostReachability;
 
         internal ReachabilityListener()
         {
@@ -141,7 +141,7 @@ namespace Xamarin.Essentials
             remoteHostReachability.Schedule(CFRunLoop.Main, CFRunLoop.ModeDefault);
         }
 
-        internal event Action ReachabilityChanged;
+        internal event Action? ReachabilityChanged;
 
         void IDisposable.Dispose() => Dispose();
 

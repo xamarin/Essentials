@@ -5,6 +5,7 @@
     <AssemblyName>Xamarin.Essentials</AssemblyName>
     <RootNamespace>Xamarin.Essentials</RootNamespace>
     <PackageId>Xamarin.Essentials</PackageId>
+    <Nullable>enable</Nullable>
     <PackageIconUrl>https://raw.githubusercontent.com/xamarin/Essentials/master/Assets/xamarin.essentials_128x128.png</PackageIconUrl>
     <Summary>Xamarin.Essentials: a kit of essential API's for your apps</Summary>
     <PackageTags>xamarin, windows, ios, android, xamarin.forms, watchos, tvos, toolkit, Xamarin.Essentials, kit</PackageTags>
@@ -21,7 +22,7 @@
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
     <RepositoryUrl>https://github.com/xamarin/Essentials</RepositoryUrl>
     <PackageReleaseNotes>See: https://aka.ms/xamarinessentials-releasenotes</PackageReleaseNotes>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <DefineConstants>$(DefineConstants);</DefineConstants>
     <UseFullSemVerForNuGet>false</UseFullSemVerForNuGet>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>

@@ -6,7 +6,7 @@ namespace Xamarin.Essentials
     public static partial class DeviceDisplay
     {
         static readonly object locker = new object();
-        static DisplayRequest displayRequest;
+        static DisplayRequest? displayRequest;
 
         static bool PlatformKeepScreenOn
         {
@@ -42,7 +42,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static DisplayInfo GetMainDisplayInfo(DisplayInformation di = null)
+        static DisplayInfo GetMainDisplayInfo(DisplayInformation? di = null)
         {
             di = di ?? DisplayInformation.GetForCurrentView();
 

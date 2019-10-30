@@ -39,7 +39,7 @@ namespace Xamarin.Essentials
 
         static async Task PlatformRequestAsync(ShareFileRequest request)
         {
-            var storageFile = request.File.File ?? await StorageFile.GetFileFromPathAsync(request.File.FullPath);
+            var storageFile = request.File?.File ?? await StorageFile.GetFileFromPathAsync(request.File?.FullPath);
 
             var dataTransferManager = DataTransferManager.GetForCurrentView();
 

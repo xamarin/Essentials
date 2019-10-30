@@ -34,7 +34,7 @@ namespace Xamarin.Essentials
     public partial class FileBase
     {
         internal FileBase(Java.IO.File file)
-            : this(file?.Path)
+            : this(file?.Path ?? throw new ArgumentNullException(nameof(file)))
         {
         }
 

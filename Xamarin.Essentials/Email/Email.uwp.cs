@@ -23,9 +23,9 @@ namespace Xamarin.Essentials
 
             var nativeMessage = new NativeEmailMessage();
             if (!string.IsNullOrEmpty(message?.Body))
-                nativeMessage.Body = message.Body;
+                nativeMessage.Body = message!.Body;
             if (!string.IsNullOrEmpty(message?.Subject))
-                nativeMessage.Subject = message.Subject;
+                nativeMessage.Subject = message!.Subject;
             Sync(message?.To, nativeMessage.To);
             Sync(message?.Cc, nativeMessage.CC);
             Sync(message?.Bcc, nativeMessage.Bcc);
@@ -40,10 +40,10 @@ namespace Xamarin.Essentials
                     var stream = RandomAccessStreamReference.CreateFromFile(file);
                     var nativeAttachment = new NativeEmailAttachment(attachment.AttachmentName, stream);
 
-                    if (!string.IsNullOrEmpty(attachment.ContentType))
-                        nativeAttachment.MimeType = attachment.ContentType;
+                    if (!string.IsNullOrEmpty(attachment?.ContentType))
+                        nativeAttachment.MimeType = attachment!.ContentType;
                     else if (!string.IsNullOrWhiteSpace(file?.ContentType))
-                        nativeAttachment.MimeType = file.ContentType;
+                        nativeAttachment.MimeType = file!.ContentType;
 
                     nativeMessage.Attachments.Add(nativeAttachment);
                 }
@@ -52,7 +52,7 @@ namespace Xamarin.Essentials
             await EmailManager.ShowComposeNewEmailAsync(nativeMessage);
         }
 
-        static void Sync(List<string> recipients, IList<EmailRecipient> nativeRecipients)
+        static void Sync(List<string>? recipients, IList<EmailRecipient> nativeRecipients)
         {
             if (recipients == null)
                 return;

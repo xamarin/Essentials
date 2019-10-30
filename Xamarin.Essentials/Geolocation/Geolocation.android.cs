@@ -17,16 +17,18 @@ namespace Xamarin.Essentials
         const long twoMinutes = 120000;
         static readonly string[] ignoredProviders = new string[] { LocationManager.PassiveProvider, "local_database" };
 
-        static async Task<Location> PlatformLastKnownLocationAsync()
+        static async Task<Location?> PlatformLastKnownLocationAsync()
         {
             await Permissions.RequireAsync(PermissionType.LocationWhenInUse);
 
             var lm = Platform.LocationManager;
-            AndroidLocation bestLocation = null;
+            AndroidLocation? bestLocation = null;
 
-            foreach (var provider in lm.GetProviders(true))
+            var list = lm?.GetProviders(true) ?? Array.Empty<string>();
+            for (var i = 0; i < list.Count; i++)
             {
-                var location = lm.GetLastKnownLocation(provider);
+                var provider = list[i];
+                var location = lm?.GetLastKnownLocation(provider);
 
                 if (location != null && IsBetterLocation(location, bestLocation))
                     bestLocation = location;
@@ -35,13 +37,13 @@ namespace Xamarin.Essentials
             return bestLocation?.ToLocation();
         }
 
-        static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
+        static async Task<Location?> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
         {
             await Permissions.RequireAsync(PermissionType.LocationWhenInUse);
 
             var locationManager = Platform.LocationManager;
 
-            var enabledProviders = locationManager.GetProviders(true);
+            var enabledProviders = locationManager?.GetProviders(true);
             var hasProviders = enabledProviders.Any(p => !ignoredProviders.Contains(p));
 
             if (!hasProviders)
@@ -55,19 +57,20 @@ namespace Xamarin.Essentials
             if (string.IsNullOrEmpty(providerInfo.Provider))
                 return await GetLastKnownLocationAsync();
 
-            var tcs = new TaskCompletionSource<AndroidLocation>();
+            var tcs = new TaskCompletionSource<AndroidLocation?>();
 
-            var allProviders = locationManager.GetProviders(false);
+            var allProviders = locationManager?.GetProviders(false);
 
             var providers = new List<string>();
-            if (allProviders.Contains(LocationManager.GpsProvider))
+            if (allProviders?.Contains(LocationManager.GpsProvider) ?? false)
                 providers.Add(LocationManager.GpsProvider);
-            if (allProviders.Contains(LocationManager.NetworkProvider))
+            if (allProviders?.Contains(LocationManager.NetworkProvider) ?? false)
                 providers.Add(LocationManager.NetworkProvider);
 
-            if (providers.Count == 0)
+            if (providers?.Count == 0 && providerInfo.Provider != null)
                 providers.Add(providerInfo.Provider);
-
+            else
+                throw new InvalidOperationException("This should never happen currently, should only occur on devices without location providers if that even exists.");
             var listener = new SingleLocationListener(locationManager, providerInfo.Accuracy, providers);
             listener.LocationHandler = HandleLocation;
 
@@ -79,7 +82,7 @@ namespace Xamarin.Essentials
             var looper = Looper.MyLooper() ?? Looper.MainLooper;
 
             foreach (var provider in providers)
-                locationManager.RequestLocationUpdates(provider, 0, 0, listener, looper);
+                locationManager?.RequestLocationUpdates(provider, 0, 0, listener, looper);
 
             var androidLocation = await tcs.Task;
 
@@ -107,7 +110,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static (string Provider, float Accuracy) GetBestProvider(LocationManager locationManager, GeolocationAccuracy accuracy)
+        static (string? Provider, float Accuracy) GetBestProvider(LocationManager? locationManager, GeolocationAccuracy accuracy)
         {
             // Criteria: https://developer.android.com/reference/android/location/Criteria
 
@@ -155,12 +158,12 @@ namespace Xamarin.Essentials
                     break;
             }
 
-            var provider = locationManager.GetBestProvider(criteria, true) ?? locationManager.GetProviders(true).FirstOrDefault();
+            var provider = locationManager?.GetBestProvider(criteria, true) ?? locationManager?.GetProviders(true).FirstOrDefault();
 
             return (provider, accuracyDistance);
         }
 
-        internal static bool IsBetterLocation(AndroidLocation location, AndroidLocation bestLocation)
+        internal static bool IsBetterLocation(AndroidLocation location, AndroidLocation? bestLocation)
         {
             if (bestLocation == null)
                 return true;
@@ -203,15 +206,15 @@ namespace Xamarin.Essentials
 
         float desiredAccuracy;
 
-        internal AndroidLocation BestLocation { get; set; }
+        internal AndroidLocation? BestLocation { get; set; }
 
         HashSet<string> activeProviders = new HashSet<string>();
 
         bool wasRaised = false;
 
-        internal Action<AndroidLocation> LocationHandler { get; set; }
+        internal Action<AndroidLocation>? LocationHandler { get; set; }
 
-        internal SingleLocationListener(LocationManager manager, float desiredAccuracy, IEnumerable<string> activeProviders)
+        internal SingleLocationListener(LocationManager? manager, float desiredAccuracy, IEnumerable<string> activeProviders)
         {
             this.desiredAccuracy = desiredAccuracy;
 
@@ -219,7 +222,7 @@ namespace Xamarin.Essentials
 
             foreach (var provider in activeProviders)
             {
-                var location = manager.GetLastKnownLocation(provider);
+                var location = manager?.GetLastKnownLocation(provider);
                 if (location != null && Geolocation.IsBetterLocation(location, BestLocation))
                     BestLocation = location;
             }

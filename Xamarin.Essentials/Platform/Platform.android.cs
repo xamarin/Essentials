@@ -16,12 +16,12 @@ namespace Xamarin.Essentials
 {
     public static partial class Platform
     {
-        static ActivityLifecycleContextListener lifecycleListener;
+        static ActivityLifecycleContextListener? lifecycleListener;
 
         internal static Context AppContext =>
             Application.Context;
 
-        internal static Activity GetCurrentActivity(bool throwOnNull)
+        internal static Activity? GetCurrentActivity(bool throwOnNull)
         {
             var activity = lifecycleListener?.Activity;
             if (throwOnNull && activity == null)
@@ -39,7 +39,7 @@ namespace Xamarin.Essentials
         public static void Init(Activity activity, Bundle bundle)
         {
             Init(activity.Application);
-            lifecycleListener.Activity = activity;
+            lifecycleListener!.Activity = activity;
         }
 
         public static void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults) =>
@@ -63,7 +63,7 @@ namespace Xamarin.Essentials
             return activities.Any();
         }
 
-        internal static AndroidUri GetShareableFileUri(string filename)
+        internal static AndroidUri GetShareableFileUri(string? filename)
         {
             Java.IO.File sharedFile;
             if (FileProvider.IsFileInPublicLocation(filename))
@@ -140,28 +140,28 @@ namespace Xamarin.Essentials
         internal static bool HasApiLevel(BuildVersionCodes versionCode) =>
             (int)Build.VERSION.SdkInt >= (int)versionCode;
 
-        internal static CameraManager CameraManager =>
+        internal static CameraManager? CameraManager =>
             AppContext.GetSystemService(Context.CameraService) as CameraManager;
 
-        internal static ConnectivityManager ConnectivityManager =>
+        internal static ConnectivityManager? ConnectivityManager =>
             AppContext.GetSystemService(Context.ConnectivityService) as ConnectivityManager;
 
-        internal static Vibrator Vibrator =>
+        internal static Vibrator? Vibrator =>
             AppContext.GetSystemService(Context.VibratorService) as Vibrator;
 
-        internal static WifiManager WifiManager =>
+        internal static WifiManager? WifiManager =>
             AppContext.GetSystemService(Context.WifiService) as WifiManager;
 
-        internal static SensorManager SensorManager =>
+        internal static SensorManager? SensorManager =>
             AppContext.GetSystemService(Context.SensorService) as SensorManager;
 
-        internal static ClipboardManager ClipboardManager =>
+        internal static ClipboardManager? ClipboardManager =>
             AppContext.GetSystemService(Context.ClipboardService) as ClipboardManager;
 
-        internal static LocationManager LocationManager =>
+        internal static LocationManager? LocationManager =>
             AppContext.GetSystemService(Context.LocationService) as LocationManager;
 
-        internal static PowerManager PowerManager =>
+        internal static PowerManager? PowerManager =>
             AppContext.GetSystemService(Context.PowerService) as PowerManager;
 
         internal static Java.Util.Locale GetLocale()
@@ -195,12 +195,12 @@ namespace Xamarin.Essentials
 
     class ActivityLifecycleContextListener : Java.Lang.Object, Application.IActivityLifecycleCallbacks
     {
-        WeakReference<Activity> currentActivity = new WeakReference<Activity>(null);
+        WeakReference<Activity?> currentActivity = new WeakReference<Activity?>(null);
 
         internal Context Context =>
             Activity ?? Application.Context;
 
-        internal Activity Activity
+        internal Activity? Activity
         {
             get => currentActivity.TryGetTarget(out var a) ? a : null;
             set => currentActivity.SetTarget(value);

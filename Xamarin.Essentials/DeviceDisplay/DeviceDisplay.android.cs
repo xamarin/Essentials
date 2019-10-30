@@ -10,7 +10,7 @@ namespace Xamarin.Essentials
 {
     public static partial class DeviceDisplay
     {
-        static OrientationEventListener orientationListener;
+        static OrientationEventListener? orientationListener;
 
         static bool PlatformKeepScreenOn
         {
@@ -113,7 +113,7 @@ namespace Xamarin.Essentials
         static string GetSystemSetting(string name)
            => Settings.System.GetString(Platform.AppContext.ContentResolver, name);
 
-        static Display GetDefaultDisplay()
+        static Display? GetDefaultDisplay()
         {
             var service = Platform.AppContext.GetSystemService(Context.WindowService);
             return service?.JavaCast<IWindowManager>()?.DefaultDisplay;

@@ -41,10 +41,10 @@ namespace Xamarin.Essentials
 #if __IOS__
         static Task PlatformOpenAsync(OpenFileRequest request)
         {
-            var fileUrl = NSUrl.FromFilename(request.File.FullPath);
+            var fileUrl = NSUrl.FromFilename(request?.File?.FullPath);
 
             var documentController = UIDocumentInteractionController.FromUrl(fileUrl);
-            documentController.Uti = request.File.ContentType;
+            documentController.Uti = request?.File?.ContentType;
 
             var vc = Platform.GetCurrentViewController();
 

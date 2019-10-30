@@ -85,7 +85,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static string GetFullKey(string key, string sharedName = null)
+        static string GetFullKey(string key, string? sharedName = null)
         {
             if (string.IsNullOrEmpty(sharedName))
                 return key;

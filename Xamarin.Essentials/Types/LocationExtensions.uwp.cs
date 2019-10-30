@@ -17,10 +17,10 @@ namespace Xamarin.Essentials
                 Timestamp = DateTimeOffset.UtcNow
             };
 
-        internal static IEnumerable<Location> ToLocations(this IEnumerable<MapLocation> mapLocations) =>
+        internal static IEnumerable<Location>? ToLocations(this IEnumerable<MapLocation> mapLocations) =>
             mapLocations?.Select(a => a.ToLocation());
 
-        internal static IEnumerable<Location> ToLocations(this MapLocationFinderResult result) =>
+        internal static IEnumerable<Location>? ToLocations(this MapLocationFinderResult result) =>
             result?.ToLocations();
 
         internal static Location ToLocation(this Geoposition location) =>

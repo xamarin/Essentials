@@ -6,7 +6,7 @@ namespace Xamarin.Essentials
     public static partial class Gyroscope
     {
         // keep around a reference so we can stop this same instance
-        static WindowsGyro sensor;
+        static WindowsGyro? sensor;
 
         internal static WindowsGyro DefaultSensor =>
             WindowsGyro.GetDefault();
@@ -33,8 +33,8 @@ namespace Xamarin.Essentials
 
         internal static void PlatformStop()
         {
-            sensor.ReadingChanged -= DataUpdated;
-            sensor.ReportInterval = 0;
+            sensor!.ReadingChanged -= DataUpdated;
+            sensor!.ReportInterval = 0;
         }
     }
 }

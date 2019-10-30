@@ -7,7 +7,7 @@ namespace Xamarin.Essentials
     {
         static bool useSyncContext;
 
-        public static event EventHandler<GyroscopeChangedEventArgs> ReadingChanged;
+        public static event EventHandler<GyroscopeChangedEventArgs>? ReadingChanged;
 
         public static bool IsMonitoring { get; private set; }
 

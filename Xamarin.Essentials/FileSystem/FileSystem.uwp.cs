@@ -29,10 +29,10 @@ namespace Xamarin.Essentials
     public partial class FileBase
     {
         internal FileBase(IStorageFile file)
-            : this(file?.Path)
+            : this(file?.Path ?? throw new ArgumentNullException(nameof(file)))
         {
             File = file;
-            ContentType = file?.ContentType;
+            ContentType = file.ContentType;
         }
 
         internal void PlatformInit(FileBase file)
@@ -43,6 +43,6 @@ namespace Xamarin.Essentials
         internal IStorageFile File { get; set; }
 
         // we can't do anything here, but Windows will take care of it
-        internal static string PlatformGetContentType(string extension) => null;
+        internal static string? PlatformGetContentType(string extension) => null;
     }
 }

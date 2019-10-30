@@ -14,7 +14,7 @@ namespace Xamarin.Essentials
             if (string.IsNullOrWhiteSpace(options.Name))
                 options.Name = string.Empty;
 
-            NSDictionary dictionary = null;
+            NSDictionary? dictionary = null;
             var placemark = new MKPlacemark(new CLLocationCoordinate2D(latitude, longitude), dictionary);
             return OpenPlacemark(placemark, options);
         }
@@ -44,7 +44,9 @@ namespace Xamarin.Essentials
 #endif
 
             var coder = new CLGeocoder();
-            CLPlacemark[] placemarks = null;
+#pragma warning disable SA1011 // Closing square brackets should be spaced correctly, nullable screws with it
+            CLPlacemark[]? placemarks = null;
+#pragma warning restore SA1011 // Closing square brackets should be spaced correctly
             try
             {
                 placemarks = await coder.GeocodeAddressAsync(address);
@@ -60,7 +62,7 @@ namespace Xamarin.Essentials
                 Debug.WriteLine("No locations exist, please check address.");
             }
 
-            await OpenPlacemark(new MKPlacemark(placemarks[0].Location.Coordinate, address), options);
+            await OpenPlacemark(new MKPlacemark(placemarks![0].Location.Coordinate, address), options);
         }
 
         static Task OpenPlacemark(MKPlacemark placemark, MapLaunchOptions options)
@@ -70,7 +72,7 @@ namespace Xamarin.Essentials
                 Name = options.Name ?? string.Empty
             };
 
-            MKLaunchOptions launchOptions = null;
+            MKLaunchOptions? launchOptions = null;
             if (options.NavigationMode != NavigationMode.None)
             {
                 var mode = MKDirectionsMode.Default;

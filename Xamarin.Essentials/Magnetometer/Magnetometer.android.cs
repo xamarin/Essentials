@@ -8,16 +8,16 @@ namespace Xamarin.Essentials
         internal static bool IsSupported =>
                Platform.SensorManager?.GetDefaultSensor(SensorType.MagneticField) != null;
 
-        static MagnetometerListener listener;
-        static Sensor magnetometer;
+        static MagnetometerListener? listener;
+        static Sensor? magnetometer;
 
         internal static void PlatformStart(SensorSpeed sensorSpeed)
         {
             var delay = sensorSpeed.ToPlatform();
 
             listener = new MagnetometerListener();
-            magnetometer = Platform.SensorManager.GetDefaultSensor(SensorType.MagneticField);
-            Platform.SensorManager.RegisterListener(listener, magnetometer, delay);
+            magnetometer = Platform.SensorManager?.GetDefaultSensor(SensorType.MagneticField);
+            Platform.SensorManager?.RegisterListener(listener, magnetometer, delay);
         }
 
         internal static void PlatformStop()
@@ -25,7 +25,7 @@ namespace Xamarin.Essentials
             if (listener == null || magnetometer == null)
                 return;
 
-            Platform.SensorManager.UnregisterListener(listener, magnetometer);
+            Platform.SensorManager?.UnregisterListener(listener, magnetometer);
             listener.Dispose();
             listener = null;
         }

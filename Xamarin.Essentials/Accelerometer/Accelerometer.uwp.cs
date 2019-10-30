@@ -6,7 +6,7 @@ namespace Xamarin.Essentials
     public static partial class Accelerometer
     {
         // keep around a reference so we can stop this same instance
-        static WindowsAccelerometer sensor;
+        static WindowsAccelerometer? sensor;
 
         internal static WindowsAccelerometer DefaultSensor =>
             WindowsAccelerometer.GetDefault();
@@ -33,8 +33,8 @@ namespace Xamarin.Essentials
 
         internal static void PlatformStop()
         {
-            sensor.ReadingChanged -= DataUpdated;
-            sensor.ReportInterval = 0;
+            sensor!.ReadingChanged -= DataUpdated;
+            sensor!.ReportInterval = 0;
         }
     }
 }

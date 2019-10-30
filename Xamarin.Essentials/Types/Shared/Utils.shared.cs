@@ -9,7 +9,7 @@ namespace Xamarin.Essentials
 {
     class Utils
     {
-        internal static Version ParseVersion(string version)
+        internal static Version ParseVersion(string? version)
         {
             if (Version.TryParse(version, out var number))
                 return number;

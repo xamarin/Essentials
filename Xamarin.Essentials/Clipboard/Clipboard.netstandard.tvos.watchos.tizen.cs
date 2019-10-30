@@ -10,7 +10,7 @@ namespace Xamarin.Essentials
         static bool PlatformHasText
             => throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        static Task<string> PlatformGetTextAsync()
+        static Task<string?> PlatformGetTextAsync()
             => throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }

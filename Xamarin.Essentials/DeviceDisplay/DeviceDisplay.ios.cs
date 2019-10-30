@@ -5,7 +5,7 @@ namespace Xamarin.Essentials
 {
     public static partial class DeviceDisplay
     {
-        static NSObject observer;
+        static NSObject? observer;
 
         static bool PlatformKeepScreenOn
         {

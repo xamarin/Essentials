@@ -27,9 +27,9 @@ namespace Xamarin.Essentials
             return Task.FromResult(true);
         }
 
-        static Intent CreateIntent(string body, List<string> recipients)
+        static Intent CreateIntent(string? body, List<string>? recipients)
         {
-            Intent intent = null;
+            Intent? intent = null;
 
             body = body ?? string.Empty;
 

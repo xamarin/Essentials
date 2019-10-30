@@ -6,7 +6,7 @@ namespace Xamarin.Essentials
 {
     public static partial class Geocoding
     {
-        static async Task<IEnumerable<Placemark>> PlatformGetPlacemarksAsync(double latitude, double longitude)
+        static async Task<IEnumerable<Placemark>?> PlatformGetPlacemarksAsync(double latitude, double longitude)
         {
             Permissions.EnsureDeclared(PermissionType.Maps);
             if (string.IsNullOrWhiteSpace(Platform.MapServiceToken))
@@ -35,7 +35,7 @@ namespace Xamarin.Essentials
             return list;
         }
 
-        static async Task<IEnumerable<Location>> PlatformGetLocationsAsync(string address)
+        static async Task<IEnumerable<Location>?> PlatformGetLocationsAsync(string address)
         {
             Permissions.EnsureDeclared(PermissionType.Maps);
             if (string.IsNullOrWhiteSpace(Platform.MapServiceToken))

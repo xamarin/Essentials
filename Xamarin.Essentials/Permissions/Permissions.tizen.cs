@@ -50,7 +50,7 @@ namespace Xamarin.Essentials
                     if (askUser)
                     {
                         var tcs = new TaskCompletionSource<bool>();
-                        PrivacyPrivilegeManager.ResponseContext context = null;
+                        PrivacyPrivilegeManager.ResponseContext? context = null;
                         PrivacyPrivilegeManager.GetResponseContext(priv).TryGetTarget(out context);
                         void OnResponseFetched(object sender, RequestResponseEventArgs e)
                         {

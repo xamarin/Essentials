@@ -29,8 +29,7 @@ namespace Xamarin.Essentials
             var dirs = NSSearchPath.GetDirectories(directory, NSSearchPathDomain.User);
             if (dirs == null || dirs.Length == 0)
             {
-                // this should never happen...
-                return null;
+                throw new InvalidOperationException("This should be unreachable!");
             }
             return dirs[0];
         }
@@ -43,10 +42,13 @@ namespace Xamarin.Essentials
         {
         }
 
-        internal static string PlatformGetContentType(string extension)
+        internal static string? PlatformGetContentType(string extension)
         {
+            if (extension == null) // extension will never be null, we check before we invoke. still check for it though
+                throw new ArgumentNullException(nameof(extension));
+
             // ios does not like the extensions
-            extension = extension?.TrimStart('.');
+            extension = extension.TrimStart('.');
 
             var id = UTType.CreatePreferredIdentifier(UTType.TagClassFilenameExtension, extension, null);
             var mimeTypes = UTType.CopyAllTags(id, UTType.TagClassMIMEType);

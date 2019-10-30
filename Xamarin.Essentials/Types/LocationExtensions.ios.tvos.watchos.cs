@@ -17,7 +17,7 @@ namespace Xamarin.Essentials
                 Timestamp = DateTimeOffset.UtcNow
             };
 
-        internal static IEnumerable<Location> ToLocations(this IEnumerable<CLPlacemark> placemarks) =>
+        internal static IEnumerable<Location>? ToLocations(this IEnumerable<CLPlacemark> placemarks) =>
             placemarks?.Select(a => a.ToLocation());
 
         internal static Location ToLocation(this CLLocation location) =>

@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
     {
         const int maxSpeechInputLengthDefault = 4000;
 
-        static WeakReference<TextToSpeechImplementation> textToSpeechRef = null;
+        static WeakReference<TextToSpeechImplementation>? textToSpeechRef = null;
 
         static TextToSpeechImplementation GetTextToSpeech()
         {
@@ -29,7 +29,7 @@ namespace Xamarin.Essentials
             return tts;
         }
 
-        internal static Task PlatformSpeakAsync(string text, SpeechOptions options, CancellationToken cancelToken = default)
+        internal static Task PlatformSpeakAsync(string text, SpeechOptions? options, CancellationToken cancelToken = default)
         {
             var textToSpeech = GetTextToSpeech();
 
@@ -43,7 +43,7 @@ namespace Xamarin.Essentials
             return textToSpeech.SpeakAsync(text, max, options, cancelToken);
         }
 
-        internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync()
+        internal static Task<IEnumerable<Locale>?> PlatformGetLocalesAsync()
         {
             var textToSpeech = GetTextToSpeech();
 
@@ -59,9 +59,9 @@ namespace Xamarin.Essentials
         AndroidTextToSpeech.IOnUtteranceCompletedListener
 #pragma warning restore CS0618
     {
-        AndroidTextToSpeech tts;
-        TaskCompletionSource<bool> tcsInitialize;
-        TaskCompletionSource<bool> tcsUtterances;
+        AndroidTextToSpeech? tts;
+        TaskCompletionSource<bool>? tcsInitialize;
+        TaskCompletionSource<bool>? tcsUtterances;
 
         Task<bool> Initialize()
         {
@@ -101,7 +101,7 @@ namespace Xamarin.Essentials
         int numExpectedUtterances = 0;
         int numCompletedUtterances = 0;
 
-        public async Task SpeakAsync(string text, int max, SpeechOptions options, CancellationToken cancelToken)
+        public async Task SpeakAsync(string text, int max, SpeechOptions? options, CancellationToken cancelToken)
         {
             await Initialize();
 
@@ -127,13 +127,13 @@ namespace Xamarin.Essentials
 
             if (options?.Locale?.Language != null)
             {
-                JavaLocale locale = null;
-                if (!string.IsNullOrWhiteSpace(options?.Locale.Country))
-                    locale = new JavaLocale(options.Locale.Language, options.Locale.Country);
+                JavaLocale? locale = null;
+                if (!string.IsNullOrWhiteSpace(options?.Locale?.Country))
+                    locale = new JavaLocale(options!.Locale!.Language, options!.Locale!.Country);
                 else
-                    locale = new JavaLocale(options.Locale.Language);
+                    locale = new JavaLocale(options!.Locale!.Language);
 
-                tts.SetLanguage(locale);
+                tts?.SetLanguage(locale);
             }
             else
             {
@@ -141,11 +141,11 @@ namespace Xamarin.Essentials
             }
 
             if (options?.Pitch.HasValue ?? false)
-                tts.SetPitch(options.Pitch.Value);
+                tts?.SetPitch(options!.Pitch!.Value);
             else
-                tts.SetPitch(TextToSpeech.PitchDefault);
+                tts?.SetPitch(TextToSpeech.PitchDefault);
 
-            tts.SetSpeechRate(1.0f);
+            tts?.SetSpeechRate(1.0f);
 
             var parts = text.SplitSpeak(max);
 
@@ -168,7 +168,7 @@ namespace Xamarin.Essentials
                 // We use an obsolete overload here so it works on older API levels at runtime
                 // Flush on first entry and add (to not flush our own previous) subsequent entries
 #pragma warning disable CS0618
-                tts.Speak(parts[i], i == 0 ? QueueMode.Flush : QueueMode.Add, map);
+                tts?.Speak(parts[i], i == 0 ? QueueMode.Flush : QueueMode.Add, map);
 #pragma warning restore CS0618
             }
 
@@ -177,13 +177,13 @@ namespace Xamarin.Essentials
 
         public void OnInit(OperationResult status)
         {
-            if (status.Equals(OperationResult.Success))
-                tcsInitialize.TrySetResult(true);
+            if (status == OperationResult.Success)
+                tcsInitialize?.TrySetResult(true);
             else
-                tcsInitialize.TrySetException(new ArgumentException("Failed to initialize Text to Speech engine."));
+                tcsInitialize?.TrySetException(new ArgumentException("Failed to initialize Text to Speech engine."));
         }
 
-        public async Task<IEnumerable<Locale>> GetLocalesAsync()
+        public async Task<IEnumerable<Locale>?> GetLocalesAsync()
         {
             await Initialize();
 
@@ -191,7 +191,7 @@ namespace Xamarin.Essentials
             {
                 try
                 {
-                    return tts.AvailableLanguages.Select(a => new Locale(a.Language, a.Country, a.DisplayName, string.Empty));
+                    return tts?.AvailableLanguages.Select(a => new Locale(a.Language, a.Country, a.DisplayName, string.Empty));
                 }
                 catch (Exception ex)
                 {
@@ -210,7 +210,7 @@ namespace Xamarin.Essentials
         {
             try
             {
-                var r = tts.IsLanguageAvailable(l);
+                var r = tts?.IsLanguageAvailable(l);
                 return
                     r == LanguageAvailableResult.Available ||
                     r == LanguageAvailableResult.CountryAvailable ||
@@ -237,20 +237,20 @@ namespace Xamarin.Essentials
             {
                 try
                 {
-                    if (tts.DefaultLanguage == null && tts.Language != null)
-                        tts.SetLanguage(tts.Language);
-                    else if (tts.DefaultLanguage != null)
+                    if (tts?.DefaultLanguage == null && tts?.Language != null)
+                        tts?.SetLanguage(tts.Language);
+                    else if (tts?.DefaultLanguage != null)
                         tts.SetLanguage(tts.DefaultLanguage);
                 }
                 catch
                 {
-                    if (tts.Language != null)
+                    if (tts?.Language != null)
                         tts.SetLanguage(tts.Language);
                 }
             }
             else
             {
-                if (tts.Language != null)
+                if (tts?.Language != null)
                     tts.SetLanguage(tts.Language);
             }
         }

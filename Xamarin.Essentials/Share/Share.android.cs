@@ -7,29 +7,29 @@ namespace Xamarin.Essentials
 {
     public static partial class Share
     {
-        static Task PlatformRequestAsync(ShareTextRequest request)
+        static Task PlatformRequestAsync(ShareTextRequest? request)
         {
             var items = new List<string>();
-            if (!string.IsNullOrWhiteSpace(request.Text))
+            if (!string.IsNullOrWhiteSpace(request?.Text))
             {
-                items.Add(request.Text);
+                items.Add(request!.Text!);
             }
 
-            if (!string.IsNullOrWhiteSpace(request.Uri))
+            if (!string.IsNullOrWhiteSpace(request?.Uri))
             {
-                items.Add(request.Uri);
+                items.Add(request!.Uri!);
             }
 
             var intent = new Intent(Intent.ActionSend);
             intent.SetType("text/plain");
             intent.PutExtra(Intent.ExtraText, string.Join(Environment.NewLine, items));
 
-            if (!string.IsNullOrWhiteSpace(request.Subject))
+            if (!string.IsNullOrWhiteSpace(request?.Subject))
             {
-                intent.PutExtra(Intent.ExtraSubject, request.Subject);
+                intent.PutExtra(Intent.ExtraSubject, request?.Subject);
             }
 
-            var chooserIntent = Intent.CreateChooser(intent, request.Title ?? string.Empty);
+            var chooserIntent = Intent.CreateChooser(intent, request?.Title ?? string.Empty);
             chooserIntent.SetFlags(ActivityFlags.ClearTop);
             chooserIntent.SetFlags(ActivityFlags.NewTask);
             Platform.AppContext.StartActivity(chooserIntent);
@@ -39,19 +39,19 @@ namespace Xamarin.Essentials
 
         static Task PlatformRequestAsync(ShareFileRequest request)
         {
-            var contentUri = Platform.GetShareableFileUri(request.File.FullPath);
+            var contentUri = Platform.GetShareableFileUri(request?.File?.FullPath);
 
             var intent = new Intent(Intent.ActionSend);
-            intent.SetType(request.File.ContentType);
+            intent.SetType(request?.File?.ContentType);
             intent.SetFlags(ActivityFlags.GrantReadUriPermission);
             intent.PutExtra(Intent.ExtraStream, contentUri);
 
-            if (!string.IsNullOrEmpty(request.Title))
+            if (!string.IsNullOrEmpty(request?.Title))
             {
-                intent.PutExtra(Intent.ExtraTitle, request.Title);
+                intent.PutExtra(Intent.ExtraTitle, request?.Title);
             }
 
-            var chooserIntent = Intent.CreateChooser(intent, request.Title ?? string.Empty);
+            var chooserIntent = Intent.CreateChooser(intent, request?.Title ?? string.Empty);
             chooserIntent.SetFlags(ActivityFlags.ClearTop);
             chooserIntent.SetFlags(ActivityFlags.NewTask);
             Platform.AppContext.StartActivity(chooserIntent);

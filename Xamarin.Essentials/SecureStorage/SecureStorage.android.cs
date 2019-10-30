@@ -16,14 +16,14 @@ namespace Xamarin.Essentials
     {
         static readonly object locker = new object();
 
-        static Task<string> PlatformGetAsync(string key)
+        static Task<string?> PlatformGetAsync(string key)
         {
             var context = Platform.AppContext;
 
-            string defaultEncStr = null;
+            string? defaultEncStr = null;
             var encStr = Preferences.Get(Utils.Md5Hash(key), defaultEncStr, Alias);
 
-            string decryptedData = null;
+            string? decryptedData = null;
             if (!string.IsNullOrEmpty(encStr))
             {
                 try
@@ -49,7 +49,9 @@ namespace Xamarin.Essentials
         {
             var context = Platform.AppContext;
 
-            byte[] encryptedData = null;
+#pragma warning disable SA1011 // Closing square brackets should be spaced correctly
+            byte[]? encryptedData = null;
+#pragma warning restore SA1011 // Closing square brackets should be spaced correctly
             lock (locker)
             {
                 var ks = new AndroidKeyStore(context, Alias, AlwaysUseAsymmetricKeyStorage);
@@ -293,7 +295,7 @@ namespace Xamarin.Essentials
             return r;
         }
 
-        internal string Decrypt(byte[] data)
+        internal string? Decrypt(byte[] data)
         {
             if (data.Length < initializationVectorLen)
                 return null;

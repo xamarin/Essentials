@@ -10,18 +10,18 @@ namespace Xamarin.Essentials
             Platform.SensorManager?.GetDefaultSensor(SensorType.Accelerometer) != null &&
             Platform.SensorManager?.GetDefaultSensor(SensorType.MagneticField) != null;
 
-        static SensorListener listener;
-        static Sensor magnetometer;
-        static Sensor accelerometer;
+        static SensorListener? listener;
+        static Sensor? magnetometer;
+        static Sensor? accelerometer;
 
         internal static void PlatformStart(SensorSpeed sensorSpeed, bool applyLowPassFilter)
         {
             var delay = sensorSpeed.ToPlatform();
-            accelerometer = Platform.SensorManager.GetDefaultSensor(SensorType.Accelerometer);
-            magnetometer = Platform.SensorManager.GetDefaultSensor(SensorType.MagneticField);
-            listener = new SensorListener(accelerometer.Name, magnetometer.Name, delay, applyLowPassFilter);
-            Platform.SensorManager.RegisterListener(listener, accelerometer, delay);
-            Platform.SensorManager.RegisterListener(listener, magnetometer, delay);
+            accelerometer = Platform.SensorManager?.GetDefaultSensor(SensorType.Accelerometer);
+            magnetometer = Platform.SensorManager?.GetDefaultSensor(SensorType.MagneticField);
+            listener = new SensorListener(accelerometer?.Name, magnetometer?.Name, delay, applyLowPassFilter);
+            Platform.SensorManager?.RegisterListener(listener, accelerometer, delay);
+            Platform.SensorManager?.RegisterListener(listener, magnetometer, delay);
         }
 
         internal static void PlatformStop()
@@ -29,8 +29,8 @@ namespace Xamarin.Essentials
             if (listener == null)
                 return;
 
-            Platform.SensorManager.UnregisterListener(listener, accelerometer);
-            Platform.SensorManager.UnregisterListener(listener, magnetometer);
+            Platform.SensorManager?.UnregisterListener(listener, accelerometer);
+            Platform.SensorManager?.UnregisterListener(listener, magnetometer);
             listener.Dispose();
             listener = null;
         }
@@ -46,11 +46,11 @@ namespace Xamarin.Essentials
         float[] r = new float[9];
         float[] orientation = new float[3];
 
-        string magnetometer;
-        string accelerometer;
+        string? magnetometer;
+        string? accelerometer;
         bool applyLowPassFilter;
 
-        internal SensorListener(string accelerometer, string magnetometer, SensorDelay delay, bool applyLowPassFilter)
+        internal SensorListener(string? accelerometer, string? magnetometer, SensorDelay delay, bool applyLowPassFilter)
         {
             this.magnetometer = magnetometer;
             this.accelerometer = accelerometer;

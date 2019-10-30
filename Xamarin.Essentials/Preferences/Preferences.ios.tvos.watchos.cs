@@ -2,6 +2,7 @@
 using System.Globalization;
 using Foundation;
 
+#nullable disable
 namespace Xamarin.Essentials
 {
     public static partial class Preferences
@@ -98,7 +99,7 @@ namespace Xamarin.Essentials
                     switch (defaultValue)
                     {
                         case int i:
-                            value = (int)(nint)userDefaults.IntForKey(key);
+                            value = (int)userDefaults.IntForKey(key);
                             break;
                         case bool b:
                             value = userDefaults.BoolForKey(key);

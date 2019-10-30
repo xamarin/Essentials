@@ -7,7 +7,7 @@ namespace Xamarin.Essentials
 {
     public static partial class Geolocation
     {
-        static async Task<Location> PlatformLastKnownLocationAsync()
+        static async Task<Location?> PlatformLastKnownLocationAsync()
         {
             // no need for permissions as AllowFallbackToConsentlessPositions
             // will allow the device to return a location regardless
@@ -23,7 +23,7 @@ namespace Xamarin.Essentials
             return location?.Coordinate?.ToLocation();
         }
 
-        static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
+        static async Task<Location?> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
         {
             await Permissions.RequireAsync(PermissionType.LocationWhenInUse);
 

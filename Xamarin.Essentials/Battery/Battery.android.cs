@@ -6,8 +6,8 @@ namespace Xamarin.Essentials
 {
     public static partial class Battery
     {
-        static BatteryBroadcastReceiver batteryReceiver;
-        static EnergySaverBroadcastReceiver powerReceiver;
+        static BatteryBroadcastReceiver? batteryReceiver;
+        static EnergySaverBroadcastReceiver? powerReceiver;
 
         static void StartEnergySaverListeners()
         {
@@ -31,7 +31,7 @@ namespace Xamarin.Essentials
             {
                 System.Diagnostics.Debug.WriteLine("Energy saver receiver already unregistered. Disposing of it.");
             }
-            powerReceiver.Dispose();
+            powerReceiver?.Dispose();
             powerReceiver = null;
         }
 
@@ -65,7 +65,7 @@ namespace Xamarin.Essentials
             {
                 System.Diagnostics.Debug.WriteLine("Battery receiver already unregistered. Disposing of it.");
             }
-            batteryReceiver.Dispose();
+            batteryReceiver?.Dispose();
             batteryReceiver = null;
         }
 
@@ -145,7 +145,7 @@ namespace Xamarin.Essentials
     [BroadcastReceiver(Enabled = true, Exported = false, Label = "Essentials Battery Broadcast Receiver")]
     class BatteryBroadcastReceiver : BroadcastReceiver
     {
-        Action onChanged;
+        Action? onChanged;
 
         public BatteryBroadcastReceiver()
         {
@@ -161,7 +161,7 @@ namespace Xamarin.Essentials
     [BroadcastReceiver(Enabled = true, Exported = false, Label = "Essentials Energy Saver Broadcast Receiver")]
     class EnergySaverBroadcastReceiver : BroadcastReceiver
     {
-        Action onChanged;
+        Action? onChanged;
 
         public EnergySaverBroadcastReceiver()
         {

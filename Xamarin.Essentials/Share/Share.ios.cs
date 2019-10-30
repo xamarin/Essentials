@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Foundation;
 using UIKit;
@@ -36,9 +37,9 @@ namespace Xamarin.Essentials
         {
             var items = new List<NSObject>();
 
-            var fileUrl = NSUrl.FromFilename(request.File.FullPath);
-            if (!string.IsNullOrEmpty(request.Title))
-                items.Add(new ShareActivityItemSource(fileUrl, request.Title)); // Share with title (subject)
+            var fileUrl = NSUrl.FromFilename(request?.File?.FullPath);
+            if (!string.IsNullOrEmpty(request?.Title))
+                items.Add(new ShareActivityItemSource(fileUrl, request!.Title)); // Share with title (subject)
             else
                 items.Add(fileUrl); // No title specified
 
@@ -58,9 +59,9 @@ namespace Xamarin.Essentials
     class ShareActivityItemSource : UIActivityItemSource
     {
         readonly NSObject item;
-        readonly string subject;
+        readonly string? subject;
 
-        internal ShareActivityItemSource(NSObject item, string subject)
+        internal ShareActivityItemSource(NSObject item, string? subject)
         {
             this.item = item;
             this.subject = subject;
@@ -70,6 +71,6 @@ namespace Xamarin.Essentials
 
         public override NSObject GetPlaceholderData(UIActivityViewController activityViewController) => item;
 
-        public override string GetSubjectForActivity(UIActivityViewController activityViewController, NSString activityType) => subject;
+        public override string? GetSubjectForActivity(UIActivityViewController activityViewController, NSString activityType) => subject;
     }
 }

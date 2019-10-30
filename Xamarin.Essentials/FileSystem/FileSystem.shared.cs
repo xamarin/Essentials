@@ -20,7 +20,7 @@ namespace Xamarin.Essentials
     {
         internal const string DefaultContentType = "application/octet-stream";
 
-        string contentType;
+        string? contentType;
 
         internal FileBase(string fullPath)
         {
@@ -50,13 +50,13 @@ namespace Xamarin.Essentials
 
         public string FullPath { get; }
 
-        public string ContentType
+        public string? ContentType
         {
             get => GetContentType();
             set => contentType = value;
         }
 
-        internal string GetContentType()
+        internal string? GetContentType()
         {
             // try the provided type
             if (!string.IsNullOrWhiteSpace(contentType))
@@ -76,7 +76,7 @@ namespace Xamarin.Essentials
             return null;
         }
 
-        string attachmentName;
+        string attachmentName = string.Empty;
 
         internal string AttachmentName
         {

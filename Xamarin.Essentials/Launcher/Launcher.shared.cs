@@ -78,8 +78,8 @@ namespace Xamarin.Essentials
             File = new ReadOnlyFile(file);
         }
 
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
-        public ReadOnlyFile File { get; set; }
+        public ReadOnlyFile? File { get; set; }
     }
 }

@@ -9,17 +9,17 @@ namespace Xamarin.Essentials
         internal static bool IsSupported =>
                DefaultBarometer != null;
 
-        static Sensor DefaultBarometer => Platform.SensorManager?.GetDefaultSensor(SensorType.Pressure);
+        static Sensor? DefaultBarometer => Platform.SensorManager?.GetDefaultSensor(SensorType.Pressure);
 
-        static Sensor barometer;
+        static Sensor? barometer;
 
-        static BarometerListener listener;
+        static BarometerListener? listener;
 
         static void PlatformStart(SensorSpeed sensorSpeed)
         {
             listener = new BarometerListener();
             barometer = DefaultBarometer;
-            Platform.SensorManager.RegisterListener(listener, barometer, sensorSpeed.ToPlatform());
+            Platform.SensorManager?.RegisterListener(listener, barometer, sensorSpeed.ToPlatform());
         }
 
         static void PlatformStop()
@@ -27,7 +27,7 @@ namespace Xamarin.Essentials
             if (listener == null)
                 return;
 
-            Platform.SensorManager.UnregisterListener(listener, barometer);
+            Platform.SensorManager?.UnregisterListener(listener, barometer);
             listener.Dispose();
             listener = null;
         }

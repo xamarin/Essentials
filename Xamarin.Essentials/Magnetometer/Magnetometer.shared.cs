@@ -7,7 +7,7 @@ namespace Xamarin.Essentials
     {
         static bool useSyncContext;
 
-        public static event EventHandler<MagnetometerChangedEventArgs> ReadingChanged;
+        public static event EventHandler<MagnetometerChangedEventArgs>? ReadingChanged;
 
         public static bool IsMonitoring { get; private set; }
 

@@ -20,7 +20,7 @@ namespace Xamarin.Essentials
 
         static async Task PlatformOpenAsync(OpenFileRequest request)
         {
-            var storageFile = request.File.File ?? await StorageFile.GetFileFromPathAsync(request.File.FullPath);
+            var storageFile = request.File?.File ?? await StorageFile.GetFileFromPathAsync(request.File?.FullPath);
 
             await WinLauncher.LaunchFileAsync(storageFile).AsTask();
         }

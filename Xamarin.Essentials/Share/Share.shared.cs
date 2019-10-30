@@ -32,13 +32,13 @@ namespace Xamarin.Essentials
         public ShareTextRequest(string text, string title)
             : this(text) => Title = title;
 
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
-        public string Subject { get; set; }
+        public string? Subject { get; set; }
 
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
-        public string Uri { get; set; }
+        public string? Uri { get; set; }
     }
 
     public class ShareFileRequest
@@ -69,9 +69,9 @@ namespace Xamarin.Essentials
             File = new ShareFile(file);
         }
 
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
-        public ShareFile File { get; set; }
+        public ShareFile? File { get; set; }
     }
 
     public class ShareFile : FileBase

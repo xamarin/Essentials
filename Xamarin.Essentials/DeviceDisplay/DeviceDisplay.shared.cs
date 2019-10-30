@@ -4,7 +4,7 @@ namespace Xamarin.Essentials
 {
     public static partial class DeviceDisplay
     {
-        static event EventHandler<DisplayInfoChangedEventArgs> MainDisplayInfoChangedInternal;
+        static event EventHandler<DisplayInfoChangedEventArgs>? MainDisplayInfoChangedInternal;
 
         static DisplayInfo currentMetrics;
 

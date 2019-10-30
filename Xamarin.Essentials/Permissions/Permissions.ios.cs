@@ -80,7 +80,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static CLLocationManager locationManager;
+        static CLLocationManager? locationManager;
 
         static Task<PermissionStatus> RequestLocationAsync()
         {

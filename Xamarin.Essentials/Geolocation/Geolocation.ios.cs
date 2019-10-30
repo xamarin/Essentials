@@ -9,7 +9,7 @@ namespace Xamarin.Essentials
 {
     public static partial class Geolocation
     {
-        static async Task<Location> PlatformLastKnownLocationAsync()
+        static async Task<Location?> PlatformLastKnownLocationAsync()
         {
             if (!CLLocationManager.LocationServicesEnabled)
                 throw new FeatureNotEnabledException("Location services are not enabled on device.");
@@ -22,7 +22,7 @@ namespace Xamarin.Essentials
             return location?.ToLocation();
         }
 
-        static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
+        static async Task<Location?> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
         {
             if (!CLLocationManager.LocationServicesEnabled)
                 throw new FeatureNotEnabledException("Location services are not enabled on device.");
@@ -31,10 +31,10 @@ namespace Xamarin.Essentials
 
             // the location manager requires an active run loop
             // so just use the main loop
-            CLLocationManager manager = null;
+            CLLocationManager? manager = null;
             NSRunLoop.Main.InvokeOnMainThread(() => manager = new CLLocationManager());
 
-            var tcs = new TaskCompletionSource<CLLocation>(manager);
+            var tcs = new TaskCompletionSource<CLLocation?>(manager);
 
             var listener = new SingleLocationListener();
             listener.LocationHandler += HandleLocation;
@@ -42,8 +42,8 @@ namespace Xamarin.Essentials
             cancellationToken = Utils.TimeoutToken(cancellationToken, request.Timeout);
             cancellationToken.Register(Cancel);
 
-            manager.DesiredAccuracy = request.PlatformDesiredAccuracy;
-            manager.Delegate = listener;
+            manager!.DesiredAccuracy = request.PlatformDesiredAccuracy;
+            manager!.Delegate = listener;
 
 #if __IOS__
             // we're only listening for a single update
@@ -74,7 +74,7 @@ namespace Xamarin.Essentials
     {
         bool wasRaised = false;
 
-        internal Action<CLLocation> LocationHandler { get; set; }
+        internal Action<CLLocation>? LocationHandler { get; set; }
 
         public override void LocationsUpdated(CLLocationManager manager, CLLocation[] locations)
         {

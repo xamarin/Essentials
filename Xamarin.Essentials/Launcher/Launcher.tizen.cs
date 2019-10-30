@@ -37,7 +37,7 @@ namespace Xamarin.Essentials
 
         static Task PlatformOpenAsync(OpenFileRequest request)
         {
-            if (string.IsNullOrEmpty(request.File.FullPath))
+            if (string.IsNullOrEmpty(request?.File?.FullPath))
                 throw new ArgumentNullException(nameof(request.File.FullPath));
 
             Permissions.EnsureDeclared(PermissionType.LaunchApp);
@@ -47,8 +47,7 @@ namespace Xamarin.Essentials
                 Operation = AppControlOperations.View,
             };
 
-            if (!string.IsNullOrEmpty(request.File.FullPath))
-                appControl.ExtraData.Add("http://tizen.org/appcontrol/data/path", request.File.FullPath);
+            appControl.ExtraData.Add("http://tizen.org/appcontrol/data/path", request!.File!.FullPath);
 
             AppControl.SendLaunchRequest(appControl);
 

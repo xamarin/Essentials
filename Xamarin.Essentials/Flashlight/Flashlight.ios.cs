@@ -21,7 +21,7 @@ namespace Xamarin.Essentials
 
         static void Toggle(bool on)
         {
-            var captureDevice = AVCaptureDevice.GetDefaultDevice(AVMediaType.Video);
+            AVCaptureDevice? captureDevice = AVCaptureDevice.GetDefaultDevice(AVMediaType.Video);
             if (captureDevice == null || !(captureDevice.HasFlash || captureDevice.HasTorch))
                 throw new FeatureNotSupportedException();
 

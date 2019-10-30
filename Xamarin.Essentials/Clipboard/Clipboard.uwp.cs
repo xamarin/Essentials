@@ -19,12 +19,12 @@ namespace Xamarin.Essentials
         static bool PlatformHasText
             => WindowsClipboard.GetContent().Contains(StandardDataFormats.Text);
 
-        static Task<string> PlatformGetTextAsync()
+        static Task<string?> PlatformGetTextAsync()
         {
             var clipboardContent = WindowsClipboard.GetContent();
             return clipboardContent.Contains(StandardDataFormats.Text)
                 ? clipboardContent.GetTextAsync().AsTask()
-                : Task.FromResult<string>(null);
+                : Task.FromResult<string?>(null);
         }
     }
 }

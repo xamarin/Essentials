@@ -8,11 +8,11 @@ namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
-        static TtsClient tts = null;
-        static TaskCompletionSource<bool> tcsInitialize = null;
-        static TaskCompletionSource<bool> tcsUtterances = null;
+        static TtsClient? tts = null;
+        static TaskCompletionSource<bool>? tcsInitialize = null;
+        static TaskCompletionSource<bool>? tcsUtterances = null;
 
-        internal static async Task PlatformSpeakAsync(string text, SpeechOptions options, CancellationToken cancelToken = default)
+        internal static async Task PlatformSpeakAsync(string text, SpeechOptions? options, CancellationToken cancelToken = default)
         {
             await Initialize();
 
@@ -24,16 +24,16 @@ namespace Xamarin.Essentials
             {
                 cancelToken.Register(() =>
                 {
-                    tts?.Stop();
+                    tts!.Stop();
                     tcsUtterances?.TrySetResult(true);
                 });
             }
 
             var language = "en_US";
             var voiceType = Voice.Auto;
-            if (options?.Locale.Language != null)
+            if (options?.Locale?.Language != null)
             {
-                foreach (var voice in tts.GetSupportedVoices())
+                foreach (var voice in tts!.GetSupportedVoices() ?? Array.Empty<SupportedVoice>())
                 {
                     if (voice.Language == options.Locale.Language)
                     {
@@ -45,19 +45,19 @@ namespace Xamarin.Essentials
 
             var pitch = 0;
             if (options?.Pitch.HasValue ?? false)
-                pitch = (int)Math.Round(options.Pitch.Value / PitchMax * tts.GetSpeedRange().Max, MidpointRounding.AwayFromZero);
+                pitch = (int)Math.Round(options!.Pitch!.Value / PitchMax * tts!.GetSpeedRange().Max, MidpointRounding.AwayFromZero);
 
-            tts.AddText(text, language, (int)voiceType, pitch);
-            tts.Play();
+            tts!.AddText(text, language, (int)voiceType, pitch);
+            tts!.Play();
 
             await tcsUtterances.Task;
         }
 
-        internal static async Task<IEnumerable<Locale>> PlatformGetLocalesAsync()
+        internal static async Task<IEnumerable<Locale>?> PlatformGetLocalesAsync()
         {
             await Initialize();
             var list = new List<Locale>();
-            foreach (var voice in tts?.GetSupportedVoices())
+            foreach (var voice in tts!.GetSupportedVoices())
                 list.Add(new Locale(voice.Language, null, null, null));
             return list;
         }

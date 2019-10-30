@@ -5,15 +5,15 @@ namespace Xamarin.Essentials
 {
     public static partial class AppInfo
     {
-        static string PlatformGetPackageName() => GetBundleValue("CFBundleIdentifier");
+        static string? PlatformGetPackageName() => GetBundleValue("CFBundleIdentifier");
 
-        static string PlatformGetName() => GetBundleValue("CFBundleDisplayName") ?? GetBundleValue("CFBundleName");
+        static string? PlatformGetName() => GetBundleValue("CFBundleDisplayName") ?? GetBundleValue("CFBundleName");
 
-        static string PlatformGetVersionString() => GetBundleValue("CFBundleShortVersionString");
+        static string? PlatformGetVersionString() => GetBundleValue("CFBundleShortVersionString");
 
-        static string PlatformGetBuild() => GetBundleValue("CFBundleVersion");
+        static string? PlatformGetBuild() => GetBundleValue("CFBundleVersion");
 
-        static string GetBundleValue(string key)
+        static string? GetBundleValue(string key)
            => NSBundle.MainBundle.ObjectForInfoDictionary(key)?.ToString();
 
 #if __IOS__ || __TVOS__

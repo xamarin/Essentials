@@ -15,29 +15,29 @@ namespace Xamarin.Essentials
         internal const float VolumeDefault = 0.5f;
         internal const float VolumeMin = 0.0f;
 
-        static SemaphoreSlim semaphore;
+        static SemaphoreSlim? semaphore;
 
-        public static Task<IEnumerable<Locale>> GetLocalesAsync() =>
+        public static Task<IEnumerable<Locale>?> GetLocalesAsync() =>
             PlatformGetLocalesAsync();
 
         public static Task SpeakAsync(string text, CancellationToken cancelToken = default) =>
             SpeakAsync(text, default, cancelToken);
 
-        public static async Task SpeakAsync(string text, SpeechOptions options, CancellationToken cancelToken = default)
+        public static async Task SpeakAsync(string text, SpeechOptions? options, CancellationToken cancelToken = default)
         {
             if (string.IsNullOrEmpty(text))
                 throw new ArgumentNullException(nameof(text), "Text cannot be null or empty string");
 
             if (options?.Volume.HasValue ?? false)
             {
-                if (options.Volume.Value < VolumeMin || options.Volume.Value > VolumeMax)
-                    throw new ArgumentOutOfRangeException($"Volume must be >= {VolumeMin} and <= {VolumeMax}");
+                if (options!.Volume! < VolumeMin || options.Volume!.Value > VolumeMax)
+                    throw new ArgumentOutOfRangeException($"Volume must be >= {VolumeMin.ToString()} and <= {VolumeMax.ToString()}");
             }
 
             if (options?.Pitch.HasValue ?? false)
             {
-                if (options.Pitch.Value < PitchMin || options.Pitch.Value > PitchMax)
-                    throw new ArgumentOutOfRangeException($"Pitch must be >= {PitchMin} and <= {PitchMin}");
+                if (options!.Pitch!.Value < PitchMin || options!.Pitch!.Value > PitchMax)
+                    throw new ArgumentOutOfRangeException($"Pitch must be >= {PitchMin.ToString()} and <= {PitchMin.ToString()}");
             }
 
             if (semaphore == null)
@@ -65,15 +65,15 @@ namespace Xamarin.Essentials
 
     public class Locale
     {
-        public string Language { get; }
+        public string? Language { get; }
 
-        public string Country { get; }
+        public string? Country { get; }
 
-        public string Name { get; }
+        public string? Name { get; }
 
-        public string Id { get; }
+        public string? Id { get; }
 
-        internal Locale(string language, string country, string name, string id)
+        internal Locale(string? language, string? country, string? name, string? id)
         {
             Language = language;
             Country = country;
@@ -84,7 +84,7 @@ namespace Xamarin.Essentials
 
     public class SpeechOptions
     {
-        public Locale Locale { get; set; }
+        public Locale? Locale { get; set; }
 
         public float? Pitch { get; set; }
 

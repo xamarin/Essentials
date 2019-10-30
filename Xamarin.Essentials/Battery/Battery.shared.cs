@@ -4,9 +4,9 @@ namespace Xamarin.Essentials
 {
     public static partial class Battery
     {
-        static event EventHandler<BatteryInfoChangedEventArgs> BatteryInfoChangedInternal;
+        static event EventHandler<BatteryInfoChangedEventArgs>? BatteryInfoChangedInternal;
 
-        static event EventHandler<EnergySaverStatusChangedEventArgs> EnergySaverStatusChangedInternal;
+        static event EventHandler<EnergySaverStatusChangedEventArgs>? EnergySaverStatusChangedInternal;
 
         // a cache so that events aren't fired unnecessarily
         // this is mainly an issue on Android, but we can stiil do this everywhere

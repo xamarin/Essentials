@@ -15,7 +15,7 @@ namespace Xamarin.Essentials
         internal static bool IsSupported =>
             CLLocationManager.HeadingAvailable;
 
-        static CLLocationManager locationManager;
+        static CLLocationManager? locationManager;
 
         internal static void PlatformStart(SensorSpeed sensorSpeed, bool applyLowPassFilter)
         {

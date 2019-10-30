@@ -8,16 +8,16 @@ namespace Xamarin.Essentials
         internal static bool IsSupported =>
             Platform.SensorManager?.GetDefaultSensor(SensorType.RotationVector) != null;
 
-        static OrientationSensorListener listener;
-        static Sensor orientationSensor;
+        static OrientationSensorListener? listener;
+        static Sensor? orientationSensor;
 
         internal static void PlatformStart(SensorSpeed sensorSpeed)
         {
             var delay = sensorSpeed.ToPlatform();
 
             listener = new OrientationSensorListener();
-            orientationSensor = Platform.SensorManager.GetDefaultSensor(SensorType.RotationVector);
-            Platform.SensorManager.RegisterListener(listener, orientationSensor, delay);
+            orientationSensor = Platform.SensorManager?.GetDefaultSensor(SensorType.RotationVector);
+            Platform.SensorManager?.RegisterListener(listener, orientationSensor, delay);
         }
 
         internal static void PlatformStop()
@@ -25,7 +25,7 @@ namespace Xamarin.Essentials
             if (listener == null || orientationSensor == null)
                 return;
 
-            Platform.SensorManager.UnregisterListener(listener, orientationSensor);
+            Platform.SensorManager?.UnregisterListener(listener, orientationSensor);
             listener.Dispose();
             listener = null;
         }

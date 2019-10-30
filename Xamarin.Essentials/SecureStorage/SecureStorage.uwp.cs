@@ -9,7 +9,7 @@ namespace Xamarin.Essentials
 {
     public partial class SecureStorage
     {
-        static async Task<string> PlatformGetAsync(string key)
+        static async Task<string?> PlatformGetAsync(string key)
         {
             var settings = GetSettings(Alias);
 

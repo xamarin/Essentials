@@ -13,9 +13,9 @@ namespace Xamarin.Essentials
         static readonly object locker = new object();
 
 #pragma warning disable CS0618
-        static Camera camera;
+        static Camera? camera;
 #pragma warning restore CS0618
-        static SurfaceTexture surface;
+        static SurfaceTexture? surface;
 
         internal static bool IsSupported
             => Platform.HasSystemFeature(PackageManager.FeatureCameraFlash);
@@ -53,7 +53,7 @@ namespace Xamarin.Essentials
                     if (Platform.HasApiLevel(BuildVersionCodes.M) && !AlwaysUseCameraApi)
                     {
                         var cameraManager = Platform.CameraManager;
-                        foreach (var id in cameraManager.GetCameraIdList())
+                        foreach (var id in cameraManager!.GetCameraIdList())
                         {
                             var hasFlash = cameraManager.GetCameraCharacteristics(id).Get(CameraCharacteristics.FlashInfoAvailable);
                             if (Java.Lang.Boolean.True.Equals(hasFlash))
@@ -92,7 +92,7 @@ namespace Xamarin.Essentials
                             camera.Release();
                             camera.Dispose();
                             camera = null;
-                            surface.Dispose();
+                            surface?.Dispose();
                             surface = null;
                         }
                     }

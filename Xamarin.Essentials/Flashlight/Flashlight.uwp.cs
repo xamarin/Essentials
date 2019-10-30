@@ -11,7 +11,7 @@ namespace Xamarin.Essentials
     {
         static readonly object locker = new object();
         static bool hasLoadedLamp;
-        static Lamp lamp;
+        static Lamp? lamp;
 
         static async Task FindLampAsync()
         {

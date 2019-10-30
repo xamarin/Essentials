@@ -26,7 +26,7 @@ namespace Xamarin.Essentials
             return Task.CompletedTask;
         }
 
-        static Task<string> PlatformGetAsync(string key)
+        static Task<string?> PlatformGetAsync(string key)
         {
             var kc = new KeyChain(DefaultAccessible);
             var value = kc.ValueForKey(key, Alias);
@@ -68,7 +68,7 @@ namespace Xamarin.Essentials
             };
         }
 
-        internal string ValueForKey(string key, string service)
+        internal string? ValueForKey(string key, string service)
         {
             using (var record = ExistingRecordForKey(key, service))
             using (var match = SecKeyChain.QueryAsRecord(record, out var resultCode))

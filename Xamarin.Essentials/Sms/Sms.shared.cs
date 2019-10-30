@@ -9,7 +9,7 @@ namespace Xamarin.Essentials
         public static Task ComposeAsync()
             => ComposeAsync(null);
 
-        public static Task ComposeAsync(SmsMessage message)
+        public static Task ComposeAsync(SmsMessage? message)
         {
             if (!IsComposeSupported)
                 throw new FeatureNotSupportedException();
@@ -17,7 +17,7 @@ namespace Xamarin.Essentials
             if (message == null)
                 message = new SmsMessage();
 
-            if (message?.Recipients == null)
+            if (message.Recipients == null)
                 message.Recipients = new List<string>();
 
             return PlatformComposeAsync(message);
@@ -46,7 +46,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        public string Body { get; set; }
+        public string? Body { get; set; }
 
         public List<string> Recipients { get; set; } = new List<string>();
     }

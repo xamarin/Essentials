@@ -6,11 +6,11 @@ namespace Xamarin.Essentials
 {
     public partial class SecureStorage
     {
-        static Task<string> PlatformGetAsync(string key)
+        static Task<string?> PlatformGetAsync(string key)
         {
             try
             {
-                return Task.FromResult(Encoding.UTF8.GetString(DataManager.Get(key, null)));
+                return Task.FromResult<string?>(Encoding.UTF8.GetString(DataManager.Get(key, null)));
             }
             catch
             {

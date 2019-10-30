@@ -19,7 +19,7 @@ namespace Xamarin.Essentials
             var uwpCapabilities = permission.ToUWPCapabilities();
 
             // If no actual UWP capabilities are required here, just return
-            if (uwpCapabilities == null || !uwpCapabilities.Any())
+            if (!uwpCapabilities.Any())
                 return true;
 
             var doc = XDocument.Load(appManifestFilename, LoadOptions.None);
@@ -83,7 +83,7 @@ namespace Xamarin.Essentials
                 case PermissionType.LocationWhenInUse:
                     return new[] { "location" };
                 default:
-                    return null;
+                    return Array.Empty<string>();
             }
         }
     }

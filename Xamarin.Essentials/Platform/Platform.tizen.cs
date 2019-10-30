@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Tizen.Applications;
 using Tizen.Maps;
 using Tizen.Sensor;
@@ -14,13 +15,13 @@ namespace Xamarin.Essentials
 {
     public static partial class Platform
     {
-        static TizenAccelerometer accelerometer = null;
-        static TizenBarometer barometer = null;
-        static TizenCompass compass = null;
-        static TizenGyroscope gyroscope = null;
-        static TizenMagnetometer magnetometer = null;
-        static TizenOrientationSensor orientationSensor = null;
-        static MapService mapService = null;
+        static TizenAccelerometer? accelerometer = null;
+        static TizenBarometer? barometer = null;
+        static TizenCompass? compass = null;
+        static TizenGyroscope? gyroscope = null;
+        static TizenMagnetometer? magnetometer = null;
+        static TizenOrientationSensor? orientationSensor = null;
+        static MapService? mapService = null;
 
         internal static Package CurrentPackage
         {
@@ -76,11 +77,11 @@ namespace Xamarin.Essentials
                         Platform.orientationSensor = new TizenOrientationSensor();
                     return Platform.orientationSensor;
                 default:
-                    return null;
+                    throw new InvalidOperationException("switch case should be exhaustive.");
             }
         }
 
-        internal static async Task<MapService> GetMapServiceAsync(string key)
+        internal static async Task<MapService> GetMapServiceAsync(string? key)
         {
             if (mapService == null)
             {
@@ -90,7 +91,7 @@ namespace Xamarin.Essentials
             return mapService;
         }
 
-        public static string MapServiceToken { get; set; }
+        public static string? MapServiceToken { get; set; }
     }
 
     public enum SensorType

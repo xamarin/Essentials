@@ -13,22 +13,22 @@ namespace Xamarin.Essentials
 
         static readonly string sharedName = Preferences.GetPrivatePreferencesSharedName("versiontracking");
 
-        static Dictionary<string, List<string>> versionTrail;
+        static Dictionary<string, List<string?>> versionTrail;
 
         static VersionTracking()
         {
             IsFirstLaunchEver = !Preferences.ContainsKey(versionsKey, sharedName) || !Preferences.ContainsKey(buildsKey, sharedName);
             if (IsFirstLaunchEver)
             {
-                versionTrail = new Dictionary<string, List<string>>
+                versionTrail = new Dictionary<string, List<string?>>
                 {
-                    { versionsKey, new List<string>() },
-                    { buildsKey, new List<string>() }
+                    { versionsKey, new List<string?>() },
+                    { buildsKey, new List<string?>() }
                 };
             }
             else
             {
-                versionTrail = new Dictionary<string, List<string>>
+                versionTrail = new Dictionary<string, List<string?>>
                 {
                     { versionsKey, ReadHistory(versionsKey).ToList() },
                     { buildsKey, ReadHistory(buildsKey).ToList() }
@@ -65,21 +65,21 @@ namespace Xamarin.Essentials
 
         public static bool IsFirstLaunchForCurrentBuild { get; private set; }
 
-        public static string CurrentVersion => AppInfo.VersionString;
+        public static string? CurrentVersion => AppInfo.VersionString;
 
-        public static string CurrentBuild => AppInfo.BuildString;
+        public static string? CurrentBuild => AppInfo.BuildString;
 
-        public static string PreviousVersion => GetPrevious(versionsKey);
+        public static string? PreviousVersion => GetPrevious(versionsKey);
 
-        public static string PreviousBuild => GetPrevious(buildsKey);
+        public static string? PreviousBuild => GetPrevious(buildsKey);
 
-        public static string FirstInstalledVersion => versionTrail[versionsKey].FirstOrDefault();
+        public static string? FirstInstalledVersion => versionTrail[versionsKey].FirstOrDefault();
 
-        public static string FirstInstalledBuild => versionTrail[buildsKey].FirstOrDefault();
+        public static string? FirstInstalledBuild => versionTrail[buildsKey].FirstOrDefault();
 
-        public static IEnumerable<string> VersionHistory => versionTrail[versionsKey].ToArray();
+        public static IEnumerable<string?> VersionHistory => versionTrail[versionsKey].ToArray();
 
-        public static IEnumerable<string> BuildHistory => versionTrail[buildsKey].ToArray();
+        public static IEnumerable<string?> BuildHistory => versionTrail[buildsKey].ToArray();
 
         public static bool IsFirstLaunchForVersion(string version)
             => CurrentVersion == version && IsFirstLaunchForCurrentVersion;
@@ -92,9 +92,9 @@ namespace Xamarin.Essentials
             var sb = new StringBuilder();
             sb.AppendLine();
             sb.AppendLine("VersionTracking");
-            sb.AppendLine($"  IsFirstLaunchEver:              {IsFirstLaunchEver}");
-            sb.AppendLine($"  IsFirstLaunchForCurrentVersion: {IsFirstLaunchForCurrentVersion}");
-            sb.AppendLine($"  IsFirstLaunchForCurrentBuild:   {IsFirstLaunchForCurrentBuild}");
+            sb.AppendLine($"  IsFirstLaunchEver:              {IsFirstLaunchEver.ToString()}");
+            sb.AppendLine($"  IsFirstLaunchForCurrentVersion: {IsFirstLaunchForCurrentVersion.ToString()}");
+            sb.AppendLine($"  IsFirstLaunchForCurrentBuild:   {IsFirstLaunchForCurrentBuild.ToString()}");
             sb.AppendLine();
             sb.AppendLine($"  CurrentVersion:                 {CurrentVersion}");
             sb.AppendLine($"  PreviousVersion:                {PreviousVersion}");
@@ -108,13 +108,15 @@ namespace Xamarin.Essentials
             return sb.ToString();
         }
 
-        static string[] ReadHistory(string key)
+#pragma warning disable SA1011 // Closing square brackets should be spaced correctly
+        static string?[] ReadHistory(string key)
+#pragma warning restore SA1011 // Closing square brackets should be spaced correctly
             => Preferences.Get(key, null, sharedName)?.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries) ?? new string[0];
 
-        static void WriteHistory(string key, IEnumerable<string> history)
+        static void WriteHistory(string key, IEnumerable<string?> history)
             => Preferences.Set(key, string.Join("|", history), sharedName);
 
-        static string GetPrevious(string key)
+        static string? GetPrevious(string key)
         {
             var trail = versionTrail[key];
             return (trail.Count >= 2) ? trail[trail.Count - 2] : null;

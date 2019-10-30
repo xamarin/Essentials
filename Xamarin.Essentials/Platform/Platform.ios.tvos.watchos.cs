@@ -53,7 +53,7 @@ namespace Xamarin.Essentials
 #if __IOS__ || __TVOS__
         internal static UIViewController GetCurrentViewController(bool throwIfNull = true)
         {
-            UIViewController viewController = null;
+            UIViewController? viewController = null;
 
             var window = UIApplication.SharedApplication.KeyWindow;
 
@@ -84,7 +84,7 @@ namespace Xamarin.Essentials
 #endif
 
 #if __IOS__ || __WATCHOS__
-        static CMMotionManager motionManager;
+        static CMMotionManager? motionManager;
 
         internal static CMMotionManager MotionManager =>
             motionManager ?? (motionManager = new CMMotionManager());

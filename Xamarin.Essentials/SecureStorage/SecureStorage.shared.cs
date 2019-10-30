@@ -8,7 +8,7 @@ namespace Xamarin.Essentials
         // Special Alias that is only used for Secure Storage. All others should use: Preferences.GetPrivatePreferencesSharedName
         internal static readonly string Alias = $"{AppInfo.PackageName}.xamarinessentials";
 
-        public static Task<string> GetAsync(string key)
+        public static Task<string?> GetAsync(string key)
         {
             if (string.IsNullOrWhiteSpace(key))
                 throw new ArgumentNullException(nameof(key));

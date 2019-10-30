@@ -7,16 +7,16 @@ namespace Xamarin.Essentials
 {
     public static partial class Geolocation
     {
-        public static Task<Location> GetLastKnownLocationAsync() =>
+        public static Task<Location?> GetLastKnownLocationAsync() =>
             PlatformLastKnownLocationAsync();
 
-        public static Task<Location> GetLocationAsync() =>
+        public static Task<Location?> GetLocationAsync() =>
             PlatformLocationAsync(new GeolocationRequest(), default);
 
-        public static Task<Location> GetLocationAsync(GeolocationRequest request) =>
+        public static Task<Location?> GetLocationAsync(GeolocationRequest request) =>
             PlatformLocationAsync(request ?? new GeolocationRequest(), default);
 
-        public static Task<Location> GetLocationAsync(GeolocationRequest request, CancellationToken cancelToken) =>
+        public static Task<Location?> GetLocationAsync(GeolocationRequest request, CancellationToken cancelToken) =>
             PlatformLocationAsync(request ?? new GeolocationRequest(), cancelToken);
     }
 }

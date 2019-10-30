@@ -10,7 +10,7 @@ namespace Xamarin.Essentials
 {
     public partial class Connectivity
     {
-        static ConnectivityBroadcastReceiver conectivityReceiver;
+        static ConnectivityBroadcastReceiver? conectivityReceiver;
 
         static void StartListeners()
         {
@@ -55,16 +55,16 @@ namespace Xamarin.Essentials
 
                     if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
                     {
-                        foreach (var network in manager.GetAllNetworks())
+                        foreach (var network in manager?.GetAllNetworks() ?? Array.Empty<Network>())
                         {
                             try
                             {
-                                var capabilities = manager.GetNetworkCapabilities(network);
+                                var capabilities = manager?.GetNetworkCapabilities(network);
 
                                 if (capabilities == null)
                                     continue;
 
-                                var info = manager.GetNetworkInfo(network);
+                                var info = manager?.GetNetworkInfo(network);
 
 #pragma warning disable CS0618 // Type or member is obsolete
                                 if (info == null || !info.IsAvailable)
@@ -90,7 +90,7 @@ namespace Xamarin.Essentials
                     else
                     {
 #pragma warning disable CS0618 // Type or member is obsolete
-                        foreach (var info in manager.GetAllNetworkInfo())
+                        foreach (var info in manager?.GetAllNetworkInfo() ?? Array.Empty<NetworkInfo>())
 #pragma warning restore CS0618 // Type or member is obsolete
                         {
                             ProcessNetworkInfo(info);
@@ -131,12 +131,12 @@ namespace Xamarin.Essentials
                 var manager = Platform.ConnectivityManager;
                 if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
                 {
-                    foreach (var network in manager.GetAllNetworks())
+                    foreach (var network in manager?.GetAllNetworks() ?? Array.Empty<Network>())
                     {
-                        NetworkInfo info = null;
+                        NetworkInfo? info = null;
                         try
                         {
-                            info = manager.GetNetworkInfo(network);
+                            info = manager?.GetNetworkInfo(network);
                         }
                         catch
                         {
@@ -151,7 +151,7 @@ namespace Xamarin.Essentials
                 else
                 {
 #pragma warning disable CS0618 // Type or member is obsolete
-                    foreach (var info in manager.GetAllNetworkInfo())
+                    foreach (var info in manager?.GetAllNetworkInfo() ?? Array.Empty<NetworkInfo>())
 #pragma warning restore CS0618 // Type or member is obsolete
                     {
                         var p = ProcessNetworkInfo(info);
@@ -160,7 +160,7 @@ namespace Xamarin.Essentials
                     }
                 }
 
-                ConnectionProfile? ProcessNetworkInfo(NetworkInfo info)
+                ConnectionProfile? ProcessNetworkInfo(NetworkInfo? info)
                 {
 #pragma warning disable CS0618 // Type or member is obsolete
                     if (info == null || !info.IsAvailable || !info.IsConnectedOrConnecting)
@@ -218,7 +218,7 @@ namespace Xamarin.Essentials
     [BroadcastReceiver(Enabled = true, Exported = false, Label = "Essentials Connectivity Broadcast Receiver")]
     class ConnectivityBroadcastReceiver : BroadcastReceiver
     {
-        Action onChanged;
+        Action? onChanged;
 
         public ConnectivityBroadcastReceiver()
         {

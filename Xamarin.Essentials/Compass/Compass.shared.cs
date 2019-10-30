@@ -6,7 +6,7 @@ namespace Xamarin.Essentials
     {
         static bool useSyncContext;
 
-        public static event EventHandler<CompassChangedEventArgs> ReadingChanged;
+        public static event EventHandler<CompassChangedEventArgs>? ReadingChanged;
 
         public static bool IsMonitoring { get; private set; }
 

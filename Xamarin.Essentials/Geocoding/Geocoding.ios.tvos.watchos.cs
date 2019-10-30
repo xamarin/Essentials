@@ -6,7 +6,7 @@ namespace Xamarin.Essentials
 {
     public static partial class Geocoding
     {
-        static async Task<IEnumerable<Placemark>> PlatformGetPlacemarksAsync(double latitude, double longitude)
+        static async Task<IEnumerable<Placemark>?> PlatformGetPlacemarksAsync(double latitude, double longitude)
         {
             using (var geocoder = new CLGeocoder())
             {
@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static async Task<IEnumerable<Location>> PlatformGetLocationsAsync(string address)
+        static async Task<IEnumerable<Location>?> PlatformGetLocationsAsync(string address)
         {
             using (var geocoder = new CLGeocoder())
             {

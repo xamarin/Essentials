@@ -83,7 +83,7 @@ namespace Xamarin.Essentials
                 return funcTask();
             }
 
-            var tcs = new TaskCompletionSource<object>();
+            var tcs = new TaskCompletionSource<object?>();
 
             BeginInvokeOnMainThread(
                 async () =>
@@ -130,10 +130,10 @@ namespace Xamarin.Essentials
 
         public static async Task<SynchronizationContext> GetMainThreadSynchronizationContextAsync()
         {
-            SynchronizationContext ret = null;
+            SynchronizationContext? ret = null;
             await InvokeOnMainThreadAsync(() =>
                 ret = SynchronizationContext.Current).ConfigureAwait(false);
-            return ret;
+            return ret!;
         }
     }
 }

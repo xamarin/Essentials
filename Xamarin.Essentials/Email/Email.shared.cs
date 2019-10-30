@@ -15,7 +15,7 @@ namespace Xamarin.Essentials
         public static Task ComposeAsync(string subject, string body, params string[] to)
             => ComposeAsync(new EmailMessage(subject, body, to));
 
-        public static Task ComposeAsync(EmailMessage message)
+        public static Task ComposeAsync(EmailMessage? message)
         {
             if (!IsComposeSupported)
                 throw new FeatureNotSupportedException();
@@ -30,9 +30,9 @@ namespace Xamarin.Essentials
 
             var parts = new List<string>();
             if (!string.IsNullOrEmpty(message?.Body))
-                parts.Add("body=" + WebUtility.UrlEncode(message.Body));
+                parts.Add("body=" + WebUtility.UrlEncode(message!.Body));
             if (!string.IsNullOrEmpty(message?.Subject))
-                parts.Add("subject=" + WebUtility.UrlEncode(message.Subject));
+                parts.Add("subject=" + WebUtility.UrlEncode(message!.Subject));
             if (message?.To.Count > 0)
                 parts.Add("to=" + WebUtility.UrlEncode(string.Join(",", message.To)));
             if (message?.Cc.Count > 0)
@@ -60,9 +60,9 @@ namespace Xamarin.Essentials
             To = to?.ToList() ?? new List<string>();
         }
 
-        public string Subject { get; set; }
+        public string? Subject { get; set; }
 
-        public string Body { get; set; }
+        public string? Body { get; set; }
 
         public EmailBodyFormat BodyFormat { get; set; }
 

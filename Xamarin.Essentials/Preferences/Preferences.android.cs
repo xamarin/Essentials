@@ -4,6 +4,7 @@ using Android.App;
 using Android.Content;
 using Android.Preferences;
 
+#nullable disable
 namespace Xamarin.Essentials
 {
     public static partial class Preferences

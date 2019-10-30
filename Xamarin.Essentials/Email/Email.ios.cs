@@ -39,9 +39,9 @@ namespace Xamarin.Essentials
             // create the controller
             var controller = new MFMailComposeViewController();
             if (!string.IsNullOrEmpty(message?.Body))
-                controller.SetMessageBody(message.Body, message.BodyFormat == EmailBodyFormat.Html);
+                controller.SetMessageBody(message!.Body, message.BodyFormat == EmailBodyFormat.Html);
             if (!string.IsNullOrEmpty(message?.Subject))
-                controller.SetSubject(message.Subject);
+                controller.SetSubject(message!.Subject);
             if (message?.To?.Count > 0)
                 controller.SetToRecipients(message.To.ToArray());
             if (message?.Cc?.Count > 0)
