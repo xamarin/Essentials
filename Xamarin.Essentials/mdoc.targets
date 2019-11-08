@@ -80,7 +80,7 @@
       <MDocReferenceAssembly Include="$(FrameworkReferenceAssemblyPath)\Xamarin.TVOS\v1.0" />
       <MDocReferenceAssembly Include="$(FrameworkReferenceAssemblyPath)\Xamarin.WatchOS\v1.0" />
       <MDocReferenceAssembly Include="$(FrameworkReferenceAssemblyPath)\Xamarin.Mac\v2.0" />
-      <MDocReferenceAssembly Include="$(WindowsKitsReferenceAssemblyPath)\Windows.Foundation.FoundationContract\3.0.0.0" />
+      <MDocReferenceAssembly Include="$(WindowsKitsReferenceAssemblyPath)\Windows.Foundation.FoundationContract\5.0.0.0" />
       <MDocReferenceAssembly Include="$(WindowsKitsReferenceAssemblyPath)\Windows.Foundation.UniversalApiContract\5.0.0.0" />
     </ItemGroup>
     <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
@@ -95,7 +95,7 @@
     <MakeDir Directories="$(TmpDir)" />
     <Copy SourceFiles="$(MDocDocumentationDirectory)\..\frameworks.xml" DestinationFolder="$(TmpDir)" />
     <Copy SourceFiles="$(BinConfigDir)netstandard2.0\$(AssemblyName).dll" DestinationFolder="$(TmpDir)xamarin-essentials" />
-    <Copy SourceFiles="$(BinConfigDir)monoandroid81\81\$(AssemblyName).dll" DestinationFolder="$(TmpDir)xamarin-essentials-android" />
+    <Copy SourceFiles="$(BinConfigDir)monoandroid90\$(AssemblyName).dll" DestinationFolder="$(TmpDir)xamarin-essentials-android" />
     <Copy SourceFiles="$(BinConfigDir)xamarin.ios10\$(AssemblyName).dll" DestinationFolder="$(TmpDir)xamarin-essentials-ios" />
     <Copy SourceFiles="$(BinConfigDir)xamarin.tvos10\$(AssemblyName).dll" DestinationFolder="$(TmpDir)xamarin-essentials-tvos" />
     <Copy SourceFiles="$(BinConfigDir)xamarin.watchos10\$(AssemblyName).dll" DestinationFolder="$(TmpDir)xamarin-essentials-watchos" />

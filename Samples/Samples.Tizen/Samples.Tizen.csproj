@@ -4,13 +4,11 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>tizen40</TargetFramework>
     <TizenNetPackageVersion>4.0.0</TizenNetPackageVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>portable</DebugType>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>None</DebugType>
+
+  <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,4 +28,5 @@
   </ItemGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)..\..\CodeStyles.targets" />
+
 </Project>
