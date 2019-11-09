@@ -167,6 +167,40 @@
             }
           }
 
+          // the tooling can't handle the ToPlatform* that differs only on return types
+          if (xdoc.Root.Name == "Type") {
+            var typeNameAttr = xdoc.Root.Attribute("FullName");
+            if (typeNameAttr != null && typeNameAttr.Value.EndsWith("Extensions")) {
+              foreach (var member in xdoc.Root.Descendants("Member").ToArray()) {
+                var memberNameAttr = member.Attribute("MemberName");
+                if (memberNameAttr != null && memberNameAttr.Value.StartsWith("ToPlatform")) {
+                  member.Remove();
+                }
+              }
+            }
+          }
+          if (xdoc.Root.Name == "Overview") {
+            foreach (var member in xdoc.Root.Descendants("Member").ToArray()) {
+              var memberNameAttr = member.Attribute("MemberName");
+              if (memberNameAttr != null && memberNameAttr.Value.StartsWith("ToPlatform")) {
+                member.Remove();
+              }
+            }
+          }
+          if (xdoc.Root.Name == "Framework") {
+            foreach (var type in xdoc.Root.Descendants("Type").ToArray()) {
+              var typeNameAttr = type.Attribute("Name");
+              if (typeNameAttr != null && typeNameAttr.Value.EndsWith("Extensions")) {
+                foreach (var member in type.Descendants("Member").ToArray()) {
+                  var memberNameAttr = member.Attribute("Id");
+                  if (memberNameAttr != null && memberNameAttr.Value.Contains(".ToPlatform")) {
+                    member.Remove();
+                  }
+                }
+              }
+            }
+          }
+
           var settings = new XmlWriterSettings {
               Encoding = new UTF8Encoding(),
               Indent = true,

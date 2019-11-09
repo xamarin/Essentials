@@ -86,14 +86,14 @@
         <Attribute FrameworkAlternate="xamarin-essentials-watchos">
           <AttributeName>System.Runtime.Versioning.TargetFramework("Xamarin.WatchOS,Version=v1.0", FrameworkDisplayName="Xamarin.WatchOS")</AttributeName>
         </Attribute>
-        <Attribute>
-          <AttributeName>System.Reflection.AssemblyInformationalVersion("1.0.0+6439ccf3062e34c50010706be2c567360c8d5c48")</AttributeName>
-        </Attribute>
         <Attribute FrameworkAlternate="xamarin-essentials-android">
           <AttributeName>System.Reflection.AssemblyProduct("Xamarin.Essentials (MonoAndroid90)")</AttributeName>
         </Attribute>
         <Attribute FrameworkAlternate="xamarin-essentials-android">
           <AttributeName>System.Runtime.Versioning.TargetFramework("MonoAndroid,Version=v9.0", FrameworkDisplayName="Xamarin.Android v9.0 Support")</AttributeName>
+        </Attribute>
+        <Attribute>
+          <AttributeName>System.Reflection.AssemblyInformationalVersion("1.0.0+93121294be53f4171d1182fb463e3232d6d760c6")</AttributeName>
         </Attribute>
       </Attributes>
     </Assembly>
@@ -275,23 +275,6 @@
       <Targets>
         <Target Type="T:System.Drawing.Color" />
       </Targets>
-      <Member MemberName="ToPlatformColor">
-        <MemberSignature Language="C#" Value="public static Android.Graphics.Color ToPlatformColor (this System.Drawing.Color color);" FrameworkAlternate="xamarin-essentials-android" />
-        <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype Android.Graphics.Color ToPlatformColor(valuetype System.Drawing.Color color) cil managed" FrameworkAlternate="xamarin-essentials-android" />
-        <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.ColorExtensions.ToPlatformColor(System.Drawing.Color)" FrameworkAlternate="xamarin-essentials-android" />
-        <MemberType>ExtensionMethod</MemberType>
-        <ReturnValue>
-          <ReturnType>Android.Graphics.Color</ReturnType>
-        </ReturnValue>
-        <Parameters>
-          <Parameter Name="color" Type="System.Drawing.Color" RefType="this" Index="0" FrameworkAlternate="xamarin-essentials-android" />
-        </Parameters>
-        <Docs>
-          <param name="color">The color to use as a base.</param>
-          <summary>Converts the color to the platform specific color.</summary>
-        </Docs>
-        <Link Type="Xamarin.Essentials.ColorExtensions" Member="M:Xamarin.Essentials.ColorExtensions.ToPlatformColor(System.Drawing.Color)" />
-      </Member>
     </ExtensionMethod>
     <ExtensionMethod>
       <Targets>
@@ -627,67 +610,16 @@
       <Targets>
         <Target Type="T:System.Drawing.Point" />
       </Targets>
-      <Member MemberName="ToPlatformPoint">
-        <MemberSignature Language="C#" Value="public static Android.Graphics.Point ToPlatformPoint (this System.Drawing.Point point);" FrameworkAlternate="xamarin-essentials-android" />
-        <MemberSignature Language="ILAsm" Value=".method public static hidebysig class Android.Graphics.Point ToPlatformPoint(valuetype System.Drawing.Point point) cil managed" FrameworkAlternate="xamarin-essentials-android" />
-        <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.PointExtensions.ToPlatformPoint(System.Drawing.Point)" FrameworkAlternate="xamarin-essentials-android" />
-        <MemberType>ExtensionMethod</MemberType>
-        <ReturnValue>
-          <ReturnType>Android.Graphics.Point</ReturnType>
-        </ReturnValue>
-        <Parameters>
-          <Parameter Name="point" Type="System.Drawing.Point" Index="0" FrameworkAlternate="xamarin-essentials-android" RefType="this" />
-        </Parameters>
-        <Docs>
-          <param name="point">The point to convert.</param>
-          <summary>Converts the point ot the platform representation.</summary>
-        </Docs>
-        <Link Type="Xamarin.Essentials.PointExtensions" Member="M:Xamarin.Essentials.PointExtensions.ToPlatformPoint(System.Drawing.Point)" />
-      </Member>
     </ExtensionMethod>
     <ExtensionMethod>
       <Targets>
         <Target Type="T:System.Drawing.PointF" />
       </Targets>
-      <Member MemberName="ToPlatformPoint">
-        <MemberSignature Language="C#" Value="public static CoreGraphics.CGPoint ToPlatformPoint (this System.Drawing.PointF point);" FrameworkAlternate="xamarin-essentials-ios" />
-        <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype CoreGraphics.CGPoint ToPlatformPoint(valuetype System.Drawing.PointF point) cil managed" FrameworkAlternate="xamarin-essentials-ios" />
-        <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.PointExtensions.ToPlatformPoint(System.Drawing.PointF)" FrameworkAlternate="xamarin-essentials-ios" />
-        <MemberType>ExtensionMethod</MemberType>
-        <ReturnValue>
-          <ReturnType>CoreGraphics.CGPoint</ReturnType>
-        </ReturnValue>
-        <Parameters>
-          <Parameter Name="point" Type="System.Drawing.PointF" RefType="this" Index="0" FrameworkAlternate="xamarin-essentials-ios;xamarin-essentials-tvos;xamarin-essentials-watchos" />
-        </Parameters>
-        <Docs>
-          <param name="point">The point to convert.</param>
-          <summary>Converts the point ot the platform representation.</summary>
-        </Docs>
-        <Link Type="Xamarin.Essentials.PointExtensions" Member="M:Xamarin.Essentials.PointExtensions.ToPlatformPoint(System.Drawing.PointF)" />
-      </Member>
     </ExtensionMethod>
     <ExtensionMethod>
       <Targets>
         <Target Type="T:System.Drawing.PointF" />
       </Targets>
-      <Member MemberName="ToPlatformPointF">
-        <MemberSignature Language="C#" Value="public static Android.Graphics.PointF ToPlatformPointF (this System.Drawing.PointF point);" />
-        <MemberSignature Language="ILAsm" Value=".method public static hidebysig class Android.Graphics.PointF ToPlatformPointF(valuetype System.Drawing.PointF point) cil managed" />
-        <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.PointExtensions.ToPlatformPointF(System.Drawing.PointF)" />
-        <MemberType>ExtensionMethod</MemberType>
-        <ReturnValue>
-          <ReturnType>Android.Graphics.PointF</ReturnType>
-        </ReturnValue>
-        <Parameters>
-          <Parameter Name="point" Type="System.Drawing.PointF" Index="0" FrameworkAlternate="xamarin-essentials-android" RefType="this" />
-        </Parameters>
-        <Docs>
-          <param name="point">The point to convert.</param>
-          <summary>Converts the point ot the platform representation.</summary>
-        </Docs>
-        <Link Type="Xamarin.Essentials.PointExtensions" Member="M:Xamarin.Essentials.PointExtensions.ToPlatformPointF(System.Drawing.PointF)" />
-      </Member>
     </ExtensionMethod>
     <ExtensionMethod>
       <Targets>
@@ -825,67 +757,16 @@
       <Targets>
         <Target Type="T:System.Drawing.Rectangle" />
       </Targets>
-      <Member MemberName="ToPlatformRectangle">
-        <MemberSignature Language="C#" Value="public static Android.Graphics.Rect ToPlatformRectangle (this System.Drawing.Rectangle rect);" FrameworkAlternate="xamarin-essentials-android" />
-        <MemberSignature Language="ILAsm" Value=".method public static hidebysig class Android.Graphics.Rect ToPlatformRectangle(valuetype System.Drawing.Rectangle rect) cil managed" FrameworkAlternate="xamarin-essentials-android" />
-        <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.RectangleExtensions.ToPlatformRectangle(System.Drawing.Rectangle)" FrameworkAlternate="xamarin-essentials-android" />
-        <MemberType>ExtensionMethod</MemberType>
-        <ReturnValue>
-          <ReturnType>Android.Graphics.Rect</ReturnType>
-        </ReturnValue>
-        <Parameters>
-          <Parameter Name="rect" Type="System.Drawing.Rectangle" Index="0" FrameworkAlternate="xamarin-essentials-android" RefType="this" />
-        </Parameters>
-        <Docs>
-          <param name="rect">The base rectangle to convert.</param>
-          <summary>Convert to platform rectangle.</summary>
-        </Docs>
-        <Link Type="Xamarin.Essentials.RectangleExtensions" Member="M:Xamarin.Essentials.RectangleExtensions.ToPlatformRectangle(System.Drawing.Rectangle)" />
-      </Member>
     </ExtensionMethod>
     <ExtensionMethod>
       <Targets>
         <Target Type="T:System.Drawing.RectangleF" />
       </Targets>
-      <Member MemberName="ToPlatformRectangle">
-        <MemberSignature Language="C#" Value="public static CoreGraphics.CGRect ToPlatformRectangle (this System.Drawing.RectangleF rect);" FrameworkAlternate="xamarin-essentials-ios" />
-        <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype CoreGraphics.CGRect ToPlatformRectangle(valuetype System.Drawing.RectangleF rect) cil managed" FrameworkAlternate="xamarin-essentials-ios" />
-        <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.RectangleExtensions.ToPlatformRectangle(System.Drawing.RectangleF)" FrameworkAlternate="xamarin-essentials-ios" />
-        <MemberType>ExtensionMethod</MemberType>
-        <ReturnValue>
-          <ReturnType>CoreGraphics.CGRect</ReturnType>
-        </ReturnValue>
-        <Parameters>
-          <Parameter Name="rect" Type="System.Drawing.RectangleF" RefType="this" Index="0" FrameworkAlternate="xamarin-essentials-ios;xamarin-essentials-tvos;xamarin-essentials-watchos" />
-        </Parameters>
-        <Docs>
-          <param name="rect">The base rectangle to convert.</param>
-          <summary>Convert to platform rectangle.</summary>
-        </Docs>
-        <Link Type="Xamarin.Essentials.RectangleExtensions" Member="M:Xamarin.Essentials.RectangleExtensions.ToPlatformRectangle(System.Drawing.RectangleF)" />
-      </Member>
     </ExtensionMethod>
     <ExtensionMethod>
       <Targets>
         <Target Type="T:System.Drawing.RectangleF" />
       </Targets>
-      <Member MemberName="ToPlatformRectangleF">
-        <MemberSignature Language="C#" Value="public static Android.Graphics.RectF ToPlatformRectangleF (this System.Drawing.RectangleF rect);" />
-        <MemberSignature Language="ILAsm" Value=".method public static hidebysig class Android.Graphics.RectF ToPlatformRectangleF(valuetype System.Drawing.RectangleF rect) cil managed" />
-        <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.RectangleExtensions.ToPlatformRectangleF(System.Drawing.RectangleF)" />
-        <MemberType>ExtensionMethod</MemberType>
-        <ReturnValue>
-          <ReturnType>Android.Graphics.RectF</ReturnType>
-        </ReturnValue>
-        <Parameters>
-          <Parameter Name="rect" Type="System.Drawing.RectangleF" Index="0" FrameworkAlternate="xamarin-essentials-android" RefType="this" />
-        </Parameters>
-        <Docs>
-          <param name="rect">The base rectangle to convert.</param>
-          <summary>Convert to platform rectangle.</summary>
-        </Docs>
-        <Link Type="Xamarin.Essentials.RectangleExtensions" Member="M:Xamarin.Essentials.RectangleExtensions.ToPlatformRectangleF(System.Drawing.RectangleF)" />
-      </Member>
     </ExtensionMethod>
     <ExtensionMethod>
       <Targets>
@@ -1023,67 +904,16 @@
       <Targets>
         <Target Type="T:System.Drawing.Size" />
       </Targets>
-      <Member MemberName="ToPlatformSize">
-        <MemberSignature Language="C#" Value="public static Android.Util.Size ToPlatformSize (this System.Drawing.Size size);" FrameworkAlternate="xamarin-essentials-android" />
-        <MemberSignature Language="ILAsm" Value=".method public static hidebysig class Android.Util.Size ToPlatformSize(valuetype System.Drawing.Size size) cil managed" FrameworkAlternate="xamarin-essentials-android" />
-        <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SizeExtensions.ToPlatformSize(System.Drawing.Size)" FrameworkAlternate="xamarin-essentials-android" />
-        <MemberType>ExtensionMethod</MemberType>
-        <ReturnValue>
-          <ReturnType>Android.Util.Size</ReturnType>
-        </ReturnValue>
-        <Parameters>
-          <Parameter Name="size" Type="System.Drawing.Size" Index="0" FrameworkAlternate="xamarin-essentials-android" RefType="this" />
-        </Parameters>
-        <Docs>
-          <param name="size">Base size to convert.</param>
-          <summary>Convert to platform Size.</summary>
-        </Docs>
-        <Link Type="Xamarin.Essentials.SizeExtensions" Member="M:Xamarin.Essentials.SizeExtensions.ToPlatformSize(System.Drawing.Size)" />
-      </Member>
     </ExtensionMethod>
     <ExtensionMethod>
       <Targets>
         <Target Type="T:System.Drawing.SizeF" />
       </Targets>
-      <Member MemberName="ToPlatformSize">
-        <MemberSignature Language="C#" Value="public static CoreGraphics.CGSize ToPlatformSize (this System.Drawing.SizeF size);" FrameworkAlternate="xamarin-essentials-ios" />
-        <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype CoreGraphics.CGSize ToPlatformSize(valuetype System.Drawing.SizeF size) cil managed" FrameworkAlternate="xamarin-essentials-ios" />
-        <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SizeExtensions.ToPlatformSize(System.Drawing.SizeF)" FrameworkAlternate="xamarin-essentials-ios" />
-        <MemberType>ExtensionMethod</MemberType>
-        <ReturnValue>
-          <ReturnType>CoreGraphics.CGSize</ReturnType>
-        </ReturnValue>
-        <Parameters>
-          <Parameter Name="size" Type="System.Drawing.SizeF" RefType="this" Index="0" FrameworkAlternate="xamarin-essentials-ios" />
-        </Parameters>
-        <Docs>
-          <param name="size">Base size to convert.</param>
-          <summary>Convert to platform Size.</summary>
-        </Docs>
-        <Link Type="Xamarin.Essentials.SizeExtensions" Member="M:Xamarin.Essentials.SizeExtensions.ToPlatformSize(System.Drawing.SizeF)" />
-      </Member>
     </ExtensionMethod>
     <ExtensionMethod>
       <Targets>
         <Target Type="T:System.Drawing.SizeF" />
       </Targets>
-      <Member MemberName="ToPlatformSizeF">
-        <MemberSignature Language="C#" Value="public static Android.Util.SizeF ToPlatformSizeF (this System.Drawing.SizeF size);" />
-        <MemberSignature Language="ILAsm" Value=".method public static hidebysig class Android.Util.SizeF ToPlatformSizeF(valuetype System.Drawing.SizeF size) cil managed" />
-        <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SizeExtensions.ToPlatformSizeF(System.Drawing.SizeF)" />
-        <MemberType>ExtensionMethod</MemberType>
-        <ReturnValue>
-          <ReturnType>Android.Util.SizeF</ReturnType>
-        </ReturnValue>
-        <Parameters>
-          <Parameter Name="size" Type="System.Drawing.SizeF" Index="0" FrameworkAlternate="xamarin-essentials-android" RefType="this" />
-        </Parameters>
-        <Docs>
-          <param name="size">Base size to convert.</param>
-          <summary>Convert to platform SizeF.</summary>
-        </Docs>
-        <Link Type="Xamarin.Essentials.SizeExtensions" Member="M:Xamarin.Essentials.SizeExtensions.ToPlatformSizeF(System.Drawing.SizeF)" />
-      </Member>
     </ExtensionMethod>
     <ExtensionMethod>
       <Targets>
