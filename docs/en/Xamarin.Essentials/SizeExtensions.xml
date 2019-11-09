@@ -18,9 +18,9 @@
   </Docs>
   <Members>
     <Member MemberName="ToPlatformSize">
-      <MemberSignature Language="C#" Value="public static Android.Util.Size ToPlatformSize (this System.Drawing.Size size);" />
-      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class Android.Util.Size ToPlatformSize(valuetype System.Drawing.Size size) cil managed" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SizeExtensions.Android.ToPlatformSize(System.Drawing.Size)" />
+      <MemberSignature Language="C#" Value="public static Android.Util.Size ToPlatformSize (this System.Drawing.Size size);" FrameworkAlternate="xamarin-essentials-android" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class Android.Util.Size ToPlatformSize(valuetype System.Drawing.Size size) cil managed" FrameworkAlternate="xamarin-essentials-android" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SizeExtensions.ToPlatformSize(System.Drawing.Size)" FrameworkAlternate="xamarin-essentials-android" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -30,7 +30,7 @@
         <ReturnType>Android.Util.Size</ReturnType>
       </ReturnValue>
       <Parameters>
-        <Parameter Name="size" Type="System.Drawing.Size" RefType="this" />
+        <Parameter Name="size" Type="System.Drawing.Size" Index="0" FrameworkAlternate="xamarin-essentials-android" RefType="this" />
       </Parameters>
       <Docs>
         <param name="size">Base size to convert.</param>
@@ -40,9 +40,9 @@
       </Docs>
     </Member>
     <Member MemberName="ToPlatformSize">
-      <MemberSignature Language="C#" Value="public static CoreGraphics.CGSize ToPlatformSize (this System.Drawing.Size size);" />
-      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype CoreGraphics.CGSize ToPlatformSize(valuetype System.Drawing.Size size) cil managed" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SizeExtensions.iOS.ToPlatformSize(System.Drawing.Size)" />
+      <MemberSignature Language="C#" Value="public static CoreGraphics.CGSize ToPlatformSize (this System.Drawing.Size size);" FrameworkAlternate="xamarin-essentials-ios" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype CoreGraphics.CGSize ToPlatformSize(valuetype System.Drawing.Size size) cil managed" FrameworkAlternate="xamarin-essentials-ios" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SizeExtensions.ToPlatformSize(System.Drawing.Size)" FrameworkAlternate="xamarin-essentials-ios" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -52,7 +52,7 @@
         <ReturnType>CoreGraphics.CGSize</ReturnType>
       </ReturnValue>
       <Parameters>
-        <Parameter Name="size" Type="System.Drawing.Size" RefType="this" />
+        <Parameter Name="size" Type="System.Drawing.Size" RefType="this" Index="0" FrameworkAlternate="xamarin-essentials-ios" />
       </Parameters>
       <Docs>
         <param name="size">Base size to convert.</param>
@@ -62,9 +62,9 @@
       </Docs>
     </Member>
     <Member MemberName="ToPlatformSize">
-      <MemberSignature Language="C#" Value="public static Windows.Foundation.Size ToPlatformSize (this System.Drawing.Size size);" />
-      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype Windows.Foundation.Size ToPlatformSize(valuetype System.Drawing.Size size) cil managed" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SizeExtensions.UWP.ToPlatformSize(System.Drawing.Size)" />
+      <MemberSignature Language="C#" Value="public static Windows.Foundation.Size ToPlatformSize (this System.Drawing.Size size);" FrameworkAlternate="xamarin-essentials-uwp" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype Windows.Foundation.Size ToPlatformSize(valuetype System.Drawing.Size size) cil managed" FrameworkAlternate="xamarin-essentials-uwp" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SizeExtensions.ToPlatformSize(System.Drawing.Size)" FrameworkAlternate="xamarin-essentials-uwp" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -74,7 +74,7 @@
         <ReturnType>Windows.Foundation.Size</ReturnType>
       </ReturnValue>
       <Parameters>
-        <Parameter Name="size" Type="System.Drawing.Size" RefType="this" />
+        <Parameter Name="size" Type="System.Drawing.Size" RefType="this" Index="0" FrameworkAlternate="xamarin-essentials-uwp" />
       </Parameters>
       <Docs>
         <param name="size">Base size to convert.</param>
@@ -84,9 +84,9 @@
       </Docs>
     </Member>
     <Member MemberName="ToPlatformSize">
-      <MemberSignature Language="C#" Value="public static CoreGraphics.CGSize ToPlatformSize (this System.Drawing.SizeF size);" />
-      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype CoreGraphics.CGSize ToPlatformSize(valuetype System.Drawing.SizeF size) cil managed" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SizeExtensions.iOS.ToPlatformSize(System.Drawing.SizeF)" />
+      <MemberSignature Language="C#" Value="public static CoreGraphics.CGSize ToPlatformSize (this System.Drawing.SizeF size);" FrameworkAlternate="xamarin-essentials-ios" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype CoreGraphics.CGSize ToPlatformSize(valuetype System.Drawing.SizeF size) cil managed" FrameworkAlternate="xamarin-essentials-ios" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SizeExtensions.ToPlatformSize(System.Drawing.SizeF)" FrameworkAlternate="xamarin-essentials-ios" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -96,7 +96,7 @@
         <ReturnType>CoreGraphics.CGSize</ReturnType>
       </ReturnValue>
       <Parameters>
-        <Parameter Name="size" Type="System.Drawing.SizeF" RefType="this" />
+        <Parameter Name="size" Type="System.Drawing.SizeF" RefType="this" Index="0" FrameworkAlternate="xamarin-essentials-ios" />
       </Parameters>
       <Docs>
         <param name="size">Base size to convert.</param>
@@ -106,9 +106,9 @@
       </Docs>
     </Member>
     <Member MemberName="ToPlatformSize">
-      <MemberSignature Language="C#" Value="public static Windows.Foundation.Size ToPlatformSize (this System.Drawing.SizeF size);" />
-      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype Windows.Foundation.Size ToPlatformSize(valuetype System.Drawing.SizeF size) cil managed" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SizeExtensions.UWP.ToPlatformSize(System.Drawing.SizeF)" />
+      <MemberSignature Language="C#" Value="public static Windows.Foundation.Size ToPlatformSize (this System.Drawing.SizeF size);" FrameworkAlternate="xamarin-essentials-uwp" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype Windows.Foundation.Size ToPlatformSize(valuetype System.Drawing.SizeF size) cil managed" FrameworkAlternate="xamarin-essentials-uwp" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SizeExtensions.ToPlatformSize(System.Drawing.SizeF)" FrameworkAlternate="xamarin-essentials-uwp" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -118,7 +118,7 @@
         <ReturnType>Windows.Foundation.Size</ReturnType>
       </ReturnValue>
       <Parameters>
-        <Parameter Name="size" Type="System.Drawing.SizeF" RefType="this" />
+        <Parameter Name="size" Type="System.Drawing.SizeF" RefType="this" Index="0" FrameworkAlternate="xamarin-essentials-uwp" />
       </Parameters>
       <Docs>
         <param name="size">Base size to convert.</param>
@@ -130,7 +130,7 @@
     <Member MemberName="ToPlatformSizeF">
       <MemberSignature Language="C#" Value="public static Android.Util.SizeF ToPlatformSizeF (this System.Drawing.SizeF size);" />
       <MemberSignature Language="ILAsm" Value=".method public static hidebysig class Android.Util.SizeF ToPlatformSizeF(valuetype System.Drawing.SizeF size) cil managed" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SizeExtensions.Android.ToPlatformSizeF(System.Drawing.SizeF)" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.SizeExtensions.ToPlatformSizeF(System.Drawing.SizeF)" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -140,7 +140,7 @@
         <ReturnType>Android.Util.SizeF</ReturnType>
       </ReturnValue>
       <Parameters>
-        <Parameter Name="size" Type="System.Drawing.SizeF" RefType="this" />
+        <Parameter Name="size" Type="System.Drawing.SizeF" Index="0" FrameworkAlternate="xamarin-essentials-android" RefType="this" />
       </Parameters>
       <Docs>
         <param name="size">Base size to convert.</param>
@@ -162,7 +162,7 @@
         <ReturnType>System.Drawing.Size</ReturnType>
       </ReturnValue>
       <Parameters>
-        <Parameter Name="size" Type="Android.Util.Size" RefType="this" />
+        <Parameter Name="size" Type="Android.Util.Size" Index="0" FrameworkAlternate="xamarin-essentials-android" RefType="this" />
       </Parameters>
       <Docs>
         <param name="size">Base size to convert.</param>
@@ -184,7 +184,7 @@
         <ReturnType>System.Drawing.Size</ReturnType>
       </ReturnValue>
       <Parameters>
-        <Parameter Name="size" Type="CoreGraphics.CGSize" RefType="this" />
+        <Parameter Name="size" Type="CoreGraphics.CGSize" RefType="this" Index="0" FrameworkAlternate="xamarin-essentials-ios" />
       </Parameters>
       <Docs>
         <param name="size">Base size to convert.</param>
@@ -206,7 +206,7 @@
         <ReturnType>System.Drawing.Size</ReturnType>
       </ReturnValue>
       <Parameters>
-        <Parameter Name="size" Type="Windows.Foundation.Size" RefType="this" />
+        <Parameter Name="size" Type="Windows.Foundation.Size" RefType="this" Index="0" FrameworkAlternate="xamarin-essentials-uwp" />
       </Parameters>
       <Docs>
         <param name="size">Base size to convert.</param>
@@ -228,7 +228,7 @@
         <ReturnType>System.Drawing.SizeF</ReturnType>
       </ReturnValue>
       <Parameters>
-        <Parameter Name="size" Type="Android.Util.SizeF" RefType="this" />
+        <Parameter Name="size" Type="Android.Util.SizeF" Index="0" FrameworkAlternate="xamarin-essentials-android" RefType="this" />
       </Parameters>
       <Docs>
         <param name="size">Base size to convert.</param>
@@ -250,7 +250,7 @@
         <ReturnType>System.Drawing.SizeF</ReturnType>
       </ReturnValue>
       <Parameters>
-        <Parameter Name="size" Type="CoreGraphics.CGSize" RefType="this" />
+        <Parameter Name="size" Type="CoreGraphics.CGSize" RefType="this" Index="0" FrameworkAlternate="xamarin-essentials-ios" />
       </Parameters>
       <Docs>
         <param name="size">Base size to convert.</param>
@@ -272,7 +272,7 @@
         <ReturnType>System.Drawing.SizeF</ReturnType>
       </ReturnValue>
       <Parameters>
-        <Parameter Name="size" Type="Windows.Foundation.Size" RefType="this" />
+        <Parameter Name="size" Type="Windows.Foundation.Size" RefType="this" Index="0" FrameworkAlternate="xamarin-essentials-uwp" />
       </Parameters>
       <Docs>
         <param name="size">Base size to convert.</param>
