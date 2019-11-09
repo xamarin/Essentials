@@ -75,7 +75,7 @@
     </PropertyGroup>
     <ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
       <MDocReferenceAssembly Include="$(FrameworkReferenceAssemblyPath)\MonoAndroid\v1.0" />
-      <MDocReferenceAssembly Include="$(FrameworkReferenceAssemblyPath)\MonoAndroid\v4.4" />
+      <MDocReferenceAssembly Include="$(FrameworkReferenceAssemblyPath)\MonoAndroid\v9.0" />
       <MDocReferenceAssembly Include="$(FrameworkReferenceAssemblyPath)\Xamarin.iOS\v1.0" />
       <MDocReferenceAssembly Include="$(FrameworkReferenceAssemblyPath)\Xamarin.TVOS\v1.0" />
       <MDocReferenceAssembly Include="$(FrameworkReferenceAssemblyPath)\Xamarin.WatchOS\v1.0" />
@@ -83,13 +83,16 @@
       <MDocReferenceAssembly Include="$(WindowsKitsReferenceAssemblyPath)\Windows.Foundation.FoundationContract\5.0.0.0" />
       <MDocReferenceAssembly Include="$(WindowsKitsReferenceAssemblyPath)\Windows.Foundation.UniversalApiContract\5.0.0.0" />
     </ItemGroup>
-    <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
-      <MDocReferenceAssemblies>@(MDocReferenceAssembly -> '--lib=&quot;%(Identity)&quot;', ' ')</MDocReferenceAssemblies>
-    </PropertyGroup>
     <!-- the actual task -->
     <PropertyGroup>
       <BinConfigDir>$(MSBuildProjectDirectory)\bin\$(Configuration)\</BinConfigDir>
       <TmpDir>$(MSBuildProjectDirectory)\tmp\</TmpDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <MDocReferenceAssembly Include="$(BinConfigDir)monoandroid90" />
+    </ItemGroup>
+    <PropertyGroup>
+      <MDocReferenceAssemblies>@(MDocReferenceAssembly -> '--lib=&quot;%(Identity)&quot;', ' ')</MDocReferenceAssemblies>
     </PropertyGroup>
     <RemoveDir Directories="$(TmpDir)" />
     <MakeDir Directories="$(TmpDir)" />
