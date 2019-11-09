@@ -90,7 +90,7 @@
     <Member MemberName="ToPlatformColor">
       <MemberSignature Language="C#" Value="public static Android.Graphics.Color ToPlatformColor (this System.Drawing.Color color);" FrameworkAlternate="xamarin-essentials-android" />
       <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype Android.Graphics.Color ToPlatformColor(valuetype System.Drawing.Color color) cil managed" FrameworkAlternate="xamarin-essentials-android" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.ColorExtensions.ToPlatformColor(System.Drawing.Color)" FrameworkAlternate="xamarin-essentials-android" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.ColorExtensions.Android.ToPlatformColor(System.Drawing.Color)" FrameworkAlternate="xamarin-essentials-android" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -112,7 +112,7 @@
     <Member MemberName="ToPlatformColor">
       <MemberSignature Language="C#" Value="public static UIKit.UIColor ToPlatformColor (this System.Drawing.Color color);" FrameworkAlternate="xamarin-essentials-ios;xamarin-essentials-tvos;xamarin-essentials-watchos" />
       <MemberSignature Language="ILAsm" Value=".method public static hidebysig class UIKit.UIColor ToPlatformColor(valuetype System.Drawing.Color color) cil managed" FrameworkAlternate="xamarin-essentials-ios;xamarin-essentials-tvos;xamarin-essentials-watchos" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.ColorExtensions.ToPlatformColor(System.Drawing.Color)" FrameworkAlternate="xamarin-essentials-ios;xamarin-essentials-tvos;xamarin-essentials-watchos" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.ColorExtensions.iOS.ToPlatformColor(System.Drawing.Color)" FrameworkAlternate="xamarin-essentials-ios;xamarin-essentials-tvos;xamarin-essentials-watchos" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -134,7 +134,7 @@
     <Member MemberName="ToPlatformColor">
       <MemberSignature Language="C#" Value="public static Windows.UI.Color ToPlatformColor (this System.Drawing.Color color);" FrameworkAlternate="xamarin-essentials-uwp" />
       <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype Windows.UI.Color ToPlatformColor(valuetype System.Drawing.Color color) cil managed" FrameworkAlternate="xamarin-essentials-uwp" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.ColorExtensions.ToPlatformColor(System.Drawing.Color)" FrameworkAlternate="xamarin-essentials-uwp" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.ColorExtensions.UWP.ToPlatformColor(System.Drawing.Color)" FrameworkAlternate="xamarin-essentials-uwp" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>

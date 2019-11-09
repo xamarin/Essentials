@@ -20,7 +20,7 @@
     <Member MemberName="ToPlatformPoint">
       <MemberSignature Language="C#" Value="public static Android.Graphics.Point ToPlatformPoint (this System.Drawing.Point point);" FrameworkAlternate="xamarin-essentials-android" />
       <MemberSignature Language="ILAsm" Value=".method public static hidebysig class Android.Graphics.Point ToPlatformPoint(valuetype System.Drawing.Point point) cil managed" FrameworkAlternate="xamarin-essentials-android" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.PointExtensions.ToPlatformPoint(System.Drawing.Point)" FrameworkAlternate="xamarin-essentials-android" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.PointExtensions.Android.ToPlatformPoint(System.Drawing.Point)" FrameworkAlternate="xamarin-essentials-android" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -44,7 +44,7 @@
     <Member MemberName="ToPlatformPoint">
       <MemberSignature Language="C#" Value="public static CoreGraphics.CGPoint ToPlatformPoint (this System.Drawing.Point point);" FrameworkAlternate="xamarin-essentials-ios;xamarin-essentials-tvos;xamarin-essentials-watchos" />
       <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype CoreGraphics.CGPoint ToPlatformPoint(valuetype System.Drawing.Point point) cil managed" FrameworkAlternate="xamarin-essentials-ios;xamarin-essentials-tvos;xamarin-essentials-watchos" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.PointExtensions.ToPlatformPoint(System.Drawing.Point)" FrameworkAlternate="xamarin-essentials-ios;xamarin-essentials-tvos;xamarin-essentials-watchos" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.PointExtensions.iOS.ToPlatformPoint(System.Drawing.Point)" FrameworkAlternate="xamarin-essentials-ios;xamarin-essentials-tvos;xamarin-essentials-watchos" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -66,7 +66,7 @@
     <Member MemberName="ToPlatformPoint">
       <MemberSignature Language="C#" Value="public static Windows.Foundation.Point ToPlatformPoint (this System.Drawing.Point point);" FrameworkAlternate="xamarin-essentials-uwp" />
       <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype Windows.Foundation.Point ToPlatformPoint(valuetype System.Drawing.Point point) cil managed" FrameworkAlternate="xamarin-essentials-uwp" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.PointExtensions.ToPlatformPoint(System.Drawing.Point)" FrameworkAlternate="xamarin-essentials-uwp" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.PointExtensions.UWP.ToPlatformPoint(System.Drawing.Point)" FrameworkAlternate="xamarin-essentials-uwp" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -88,7 +88,7 @@
     <Member MemberName="ToPlatformPoint">
       <MemberSignature Language="C#" Value="public static CoreGraphics.CGPoint ToPlatformPoint (this System.Drawing.PointF point);" FrameworkAlternate="xamarin-essentials-ios;xamarin-essentials-tvos;xamarin-essentials-watchos" />
       <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype CoreGraphics.CGPoint ToPlatformPoint(valuetype System.Drawing.PointF point) cil managed" FrameworkAlternate="xamarin-essentials-ios;xamarin-essentials-tvos;xamarin-essentials-watchos" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.PointExtensions.ToPlatformPoint(System.Drawing.PointF)" FrameworkAlternate="xamarin-essentials-ios;xamarin-essentials-tvos;xamarin-essentials-watchos" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.PointExtensions.iOS.ToPlatformPoint(System.Drawing.PointF)" FrameworkAlternate="xamarin-essentials-ios;xamarin-essentials-tvos;xamarin-essentials-watchos" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -110,7 +110,7 @@
     <Member MemberName="ToPlatformPoint">
       <MemberSignature Language="C#" Value="public static Windows.Foundation.Point ToPlatformPoint (this System.Drawing.PointF point);" FrameworkAlternate="xamarin-essentials-uwp" />
       <MemberSignature Language="ILAsm" Value=".method public static hidebysig valuetype Windows.Foundation.Point ToPlatformPoint(valuetype System.Drawing.PointF point) cil managed" FrameworkAlternate="xamarin-essentials-uwp" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.PointExtensions.ToPlatformPoint(System.Drawing.PointF)" FrameworkAlternate="xamarin-essentials-uwp" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.PointExtensions.UWP.ToPlatformPoint(System.Drawing.PointF)" FrameworkAlternate="xamarin-essentials-uwp" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
