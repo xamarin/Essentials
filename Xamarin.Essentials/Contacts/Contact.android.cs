@@ -44,14 +44,8 @@ namespace Xamarin.Essentials
         {
             var context = Activity.ContentResolver;
 
-<<<<<<< HEAD
-            var loader = new CursorLoader(Activity, contactUri, null, null, null, null);
-            var cur = (ICursor)loader.LoadInBackground();
 
-            // var cur = context.Query(contactUri, null, null, null, null);
-=======
             var cur = context.Query(contactUri, null, null, null, null);
->>>>>>> - Fixed key error in Android
             var emails = new Dictionary<string, ContactType>();
             var phones = new Dictionary<string, ContactType>();
             var bDate = string.Empty;
