@@ -44,7 +44,6 @@ namespace Xamarin.Essentials
         {
             var context = Activity.ContentResolver;
 
-
             var cur = context.Query(contactUri, null, null, null, null);
             var emails = new Dictionary<string, ContactType>();
             var phones = new Dictionary<string, ContactType>();
