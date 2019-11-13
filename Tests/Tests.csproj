@@ -5,6 +5,7 @@
     <IsPackable>false</IsPackable>
     <AssemblyName>XamarinEssentialsTests</AssemblyName>
     <DebugType>portable</DebugType>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
