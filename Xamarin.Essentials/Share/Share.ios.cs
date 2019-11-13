@@ -28,7 +28,10 @@ namespace Xamarin.Essentials
             {
                 activityController.PopoverPresentationController.SourceView = vc.View;
                 if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
-                    activityController.PopoverPresentationController.SourceRect = new CoreGraphics.CGRect(20, 20, 100, 100);
+                {
+                    var sr = new CoreGraphics.CGRect(vc.View.Bounds.Width, 20, 0, 0);
+                    activityController.PopoverPresentationController.SourceRect = sr;
+                }
             }
 
             return vc.PresentViewControllerAsync(activityController, true);
@@ -52,7 +55,10 @@ namespace Xamarin.Essentials
             {
                 activityController.PopoverPresentationController.SourceView = vc.View;
                 if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
-                    activityController.PopoverPresentationController.SourceRect = new CoreGraphics.CGRect(20, 20, 100, 100);
+                {
+                    var sr = new CoreGraphics.CGRect(vc.View.Bounds.Width, 20, 0, 0);
+                    activityController.PopoverPresentationController.SourceRect = sr;
+                }
             }
 
             return vc.PresentViewControllerAsync(activityController, true);
