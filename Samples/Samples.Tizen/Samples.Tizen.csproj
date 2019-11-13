@@ -28,6 +28,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <Import Project="$(MSBuildThisFileDirectory)..\..\CodeStyles.targets" />
-
 </Project>

@@ -50,5 +50,4 @@
     <Reference Include="System.Numerics.Vectors" />
     <Reference Include="OpenTK-1.0" />
   </ItemGroup>
-  <Import Project="$(MSBuildThisFileDirectory)..\..\CodeStyles.targets" />
 </Project>

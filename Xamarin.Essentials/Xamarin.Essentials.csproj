@@ -102,5 +102,4 @@
     <None Remove="mdoc.targets" />
   </ItemGroup>
   <Import Project="$(MSBuildThisFileDirectory)mdoc.targets" />
-  <Import Project="$(MSBuildThisFileDirectory)..\CodeStyles.targets" />
 </Project>
