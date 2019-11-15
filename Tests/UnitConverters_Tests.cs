@@ -183,6 +183,7 @@ namespace Tests
         public void PascalsToAtmospheres(double pascal, double atm) =>
             Assert.Equal(UnitConverters.PascalsToAtmospheres(pascal), atm);
       
+        [Theory]
         [InlineData(3048, 10000)]
         public void MetersToInternationalFeet(double meters, double internationalFeet)
         {
