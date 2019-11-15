@@ -25,12 +25,8 @@ namespace DeviceTests
                 Assert.NotNull(placemarks);
                 Assert.True(placemarks.Any());
             }
-            catch (System.Exception ex)
+            catch (System.Exception ex) when (ex.Message.ToLower().Contains("grpc"))
             {
-                if (ex.Message.ToLower().Contains("grpc"))
-                    return;
-
-                throw ex;
             }
         }
 
@@ -45,12 +41,8 @@ namespace DeviceTests
                 Assert.NotNull(placemarks);
                 Assert.True(placemarks.Any());
             }
-            catch (System.Exception ex)
+            catch (System.Exception ex) when (ex.Message.ToLower().Contains("grpc"))
             {
-                if (ex.Message.ToLower().Contains("grpc"))
-                    return;
-
-                throw ex;
             }
         }
 
@@ -65,12 +57,8 @@ namespace DeviceTests
                 Assert.NotNull(locations);
                 Assert.True(locations.Any());
             }
-            catch (System.Exception ex)
+            catch (System.Exception ex) when (ex.Message.ToLower().Contains("grpc"))
             {
-                if (ex.Message.ToLower().Contains("grpc"))
-                    return;
-
-                throw ex;
             }
         }
     }
