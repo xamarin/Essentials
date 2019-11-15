@@ -166,5 +166,49 @@ namespace Tests
             Assert.Equal(distance, LocationExtensions.CalculateDistance(location1, location2, DistanceUnits.Miles), 3);
             Assert.Equal(distance, LocationExtensions.CalculateDistance(location2, location1, DistanceUnits.Miles), 3);
         }
+
+        [Theory]
+        [InlineData(1.0, 101325)]
+        [InlineData(1.5, 151987.5)]
+        [InlineData(2.0, 202650)]
+        [InlineData(2.5, 253312.5)]
+        public void AtmospheresToPascals(double atm, double pascal) =>
+            Assert.Equal(UnitConverters.AtmospheresToPascals(atm), pascal);
+
+        [Theory]
+        [InlineData(101325, 1.0)]
+        [InlineData(151987.5, 1.5)]
+        [InlineData(202650, 2.0)]
+        [InlineData(253312.5, 2.5)]
+        public void PascalsToAtmospheres(double pascal, double atm) =>
+            Assert.Equal(UnitConverters.PascalsToAtmospheres(pascal), atm);
+
+        [Theory]
+        [InlineData(3048, 10000)]
+        public void MetersToInternationalFeet(double meters, double internationalFeet)
+        {
+            Assert.Equal(internationalFeet, UnitConverters.MetersToInternationalFeet(meters));
+        }
+
+        [Theory]
+        [InlineData(20000, 6096)]
+        public void InternationalFeetToMeters(double internationalFeet, double meters)
+        {
+            Assert.Equal(meters, UnitConverters.InternationalFeetToMeters(internationalFeet));
+        }
+
+        [Theory]
+        [InlineData(1200, 3937)]
+        public void MetersToUSSurveyFeet(double meters, double usFeet)
+        {
+            Assert.Equal(usFeet, UnitConverters.MetersToUSSurveyFeet(meters));
+        }
+
+        [Theory]
+        [InlineData(7874, 2400)]
+        public void USSurveyFeetToMeters(double usFeet, double meters)
+        {
+            Assert.Equal(meters, UnitConverters.USSurveyFeetToMeters(usFeet));
+        }
     }
 }
