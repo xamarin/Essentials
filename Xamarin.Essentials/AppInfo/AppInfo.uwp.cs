@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Windows.ApplicationModel;
+using Windows.UI.ViewManagement;
 
 namespace Xamarin.Essentials
 {
@@ -20,5 +21,12 @@ namespace Xamarin.Essentials
 
         static void PlatformShowSettingsUI() =>
             Windows.System.Launcher.LaunchUriAsync(new System.Uri("ms-settings:appsfeatures-app")).WatchForError();
+
+        static WindowSize PlatformWindowAppSize()
+        {
+            var view = ApplicationView.GetForCurrentView();
+
+            return new WindowSize(view.VisibleBounds.Width, view.VisibleBounds.Height);
+        }
     }
 }
