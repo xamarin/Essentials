@@ -1,6 +1,10 @@
 ﻿using System.Globalization;
+using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.Util;
+using Android.Views;
+using Java.Interop;
 
 namespace Xamarin.Essentials
 {
@@ -47,6 +51,17 @@ namespace Xamarin.Essentials
             settingsIntent.AddFlags(ActivityFlags.NoHistory);
             settingsIntent.AddFlags(ActivityFlags.ExcludeFromRecents);
             context.StartActivity(settingsIntent);
+        }
+
+        static WindowSize PlatformWindowAppSize()
+        {
+            var context = Platform.GetCurrentActivity(false) ?? Platform.AppContext;
+            var windowManager = context.GetSystemService(Context.WindowService);
+            var windows = windowManager.JavaCast<IWindowManager>();
+            var metrics = new DisplayMetrics();
+            windows.DefaultDisplay.GetMetrics(metrics);
+
+            return new WindowSize(metrics.WidthPixels, metrics.HeightPixels);
         }
     }
 }

@@ -23,5 +23,17 @@ namespace Xamarin.Essentials
         static void PlatformShowSettingsUI() =>
             throw new FeatureNotSupportedException();
 #endif
+
+        static WindowSize PlatformWindowAppSize()
+        {
+#if __IOS__ || __TVOS__
+            var currentView = Platform.GetCurrentViewController().View.Window?.Frame;
+
+            if (currentView == null)
+                return default;
+
+            return new WindowSize(currentView.Value.Width, currentView.Value.Height);
+#endif
+        }
     }
 }

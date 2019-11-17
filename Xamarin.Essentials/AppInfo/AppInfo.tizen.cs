@@ -22,5 +22,7 @@ namespace Xamarin.Essentials
             Permissions.EnsureDeclared(PermissionType.LaunchApp);
             AppControl.SendLaunchRequest(new AppControl() { Operation = AppControlOperations.Setting });
         }
+
+        static WindowSize PlatformWindowAppSize() => throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }
