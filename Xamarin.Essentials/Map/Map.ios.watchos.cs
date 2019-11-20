@@ -49,7 +49,7 @@ namespace Xamarin.Essentials
 #pragma warning restore SA1011 // Closing square brackets should be spaced correctly
             try
             {
-                placemarks = await coder.GeocodeAddressAsync(address);
+                placemarks = await coder.GeocodeAddress(address, new CLRegion(), new CLRegion(), new CLGeocodeCompletionHandler  );
             }
             catch
             {

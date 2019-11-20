@@ -34,7 +34,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static void PlatformSet<T>(string key, T value, string sharedName)
+        static void PlatformSet<T>(string key, T? value, string sharedName)
         {
             lock (locker)
             {

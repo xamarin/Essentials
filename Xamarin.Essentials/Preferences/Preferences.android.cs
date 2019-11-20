@@ -4,7 +4,6 @@ using Android.App;
 using Android.Content;
 using Android.Preferences;
 
-#nullable disable
 namespace Xamarin.Essentials
 {
     public static partial class Preferences
@@ -74,7 +73,7 @@ namespace Xamarin.Essentials
                                 editor.PutLong(key, l);
                                 break;
                             case double d:
-                                var valueString = Convert.ToString(value, CultureInfo.InvariantCulture);
+                                var valueString = Convert.ToString(value.ToString(), CultureInfo.InvariantCulture);
                                 editor.PutString(key, valueString);
                                 break;
                             case float f:
@@ -91,7 +90,7 @@ namespace Xamarin.Essentials
         {
             lock (locker)
             {
-                object value = null;
+                object? value = null;
                 using (var sharedPreferences = GetSharedPreferences(sharedName))
                 {
                     if (defaultValue == null)
@@ -139,7 +138,7 @@ namespace Xamarin.Essentials
                     }
                 }
 
-                return (T)value;
+                return typeof(T) == typeof(string) ? (T?) value : (T)value!;
             }
         }
 

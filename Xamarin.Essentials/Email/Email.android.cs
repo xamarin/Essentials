@@ -54,7 +54,7 @@ namespace Xamarin.Essentials
                 }
                 else
                 {
-                    intent.PutExtra(Intent.ExtraText, message?.Body);
+                    intent.PutExtra(Intent.ExtraText, message!.Body);
                 }
             }
             if (!string.IsNullOrEmpty(message?.Subject))
