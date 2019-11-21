@@ -1,10 +1,9 @@
 ﻿using System;
-using Android.App;
 using Android.Content;
 using Android.Content.Res;
-using Android.OS;
 using Android.Provider;
 using Android.Runtime;
+using Android.Util;
 using Android.Views;
 
 namespace Xamarin.Essentials
@@ -13,11 +12,32 @@ namespace Xamarin.Essentials
     {
         static OrientationEventListener orientationListener;
 
-        static ScreenMetrics GetScreenMetrics()
+        static bool PlatformKeepScreenOn
         {
-            var displayMetrics = Platform.AppContext.Resources?.DisplayMetrics;
+            get
+            {
+                var window = Platform.GetCurrentActivity(true)?.Window;
+                var flags = window?.Attributes?.Flags ?? 0;
+                return flags.HasFlag(WindowManagerFlags.KeepScreenOn);
+            }
 
-            return new ScreenMetrics(
+            set
+            {
+                var window = Platform.GetCurrentActivity(true)?.Window;
+                if (value)
+                    window?.AddFlags(WindowManagerFlags.KeepScreenOn);
+                else
+                    window?.ClearFlags(WindowManagerFlags.KeepScreenOn);
+            }
+        }
+
+        static DisplayInfo GetMainDisplayInfo()
+        {
+            using var displayMetrics = new DisplayMetrics();
+            using var display = GetDefaultDisplay();
+            display?.GetRealMetrics(displayMetrics);
+
+            return new DisplayInfo(
                 width: displayMetrics?.WidthPixels ?? 0,
                 height: displayMetrics?.HeightPixels ?? 0,
                 density: displayMetrics?.Density ?? 0,
@@ -40,65 +60,49 @@ namespace Xamarin.Essentials
 
         static void OnScreenMetricsChanged()
         {
-            var metrics = GetScreenMetrics();
-            OnScreenMetricsChanged(metrics);
+            var metrics = GetMainDisplayInfo();
+            OnMainDisplayInfoChanged(metrics);
         }
 
-        static ScreenRotation CalculateRotation()
+        static DisplayRotation CalculateRotation()
         {
-            var service = Platform.AppContext.GetSystemService(Context.WindowService);
-            var display = service?.JavaCast<IWindowManager>()?.DefaultDisplay;
+            using var display = GetDefaultDisplay();
 
-            if (display != null)
+            return display?.Rotation switch
             {
-                switch (display.Rotation)
-                {
-                    case SurfaceOrientation.Rotation270:
-                        return ScreenRotation.Rotation270;
-                    case SurfaceOrientation.Rotation180:
-                        return ScreenRotation.Rotation180;
-                    case SurfaceOrientation.Rotation90:
-                        return ScreenRotation.Rotation90;
-                    case SurfaceOrientation.Rotation0:
-                        return ScreenRotation.Rotation0;
-                }
-            }
-
-            return ScreenRotation.Rotation0;
+                SurfaceOrientation.Rotation270 => DisplayRotation.Rotation270,
+                SurfaceOrientation.Rotation180 => DisplayRotation.Rotation180,
+                SurfaceOrientation.Rotation90 => DisplayRotation.Rotation90,
+                SurfaceOrientation.Rotation0 => DisplayRotation.Rotation0,
+                _ => DisplayRotation.Unknown,
+            };
         }
 
-        static ScreenOrientation CalculateOrientation()
+        static DisplayOrientation CalculateOrientation()
         {
-            var config = Platform.AppContext.Resources?.Configuration;
-
-            if (config != null)
+            return Platform.AppContext.Resources?.Configuration?.Orientation switch
             {
-                switch (config.Orientation)
-                {
-                    case Orientation.Landscape:
-                        return ScreenOrientation.Landscape;
-                    case Orientation.Portrait:
-                    case Orientation.Square:
-                        return ScreenOrientation.Portrait;
-                }
-            }
-
-            return ScreenOrientation.Unknown;
+                Orientation.Landscape => DisplayOrientation.Landscape,
+                Orientation.Portrait => DisplayOrientation.Portrait,
+                Orientation.Square => DisplayOrientation.Portrait,
+                _ => DisplayOrientation.Unknown
+            };
         }
 
-        static string GetSystemSetting(string name)
-           => Settings.System.GetString(Platform.AppContext.ContentResolver, name);
+        static Display GetDefaultDisplay()
+        {
+            using var service = Platform.AppContext.GetSystemService(Context.WindowService);
+            using var windowManager = service?.JavaCast<IWindowManager>();
+            return windowManager?.DefaultDisplay;
+        }
     }
 
     class Listener : OrientationEventListener
     {
-        Action onChanged;
+        readonly Action onChanged;
 
         internal Listener(Context context, Action handler)
-            : base(context)
-        {
-            onChanged = handler;
-        }
+            : base(context) => onChanged = handler;
 
         public override void OnOrientationChanged(int orientation) => onChanged();
     }

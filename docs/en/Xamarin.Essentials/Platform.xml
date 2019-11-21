@@ -30,14 +30,12 @@
         <ReturnType>System.Void</ReturnType>
       </ReturnValue>
       <Parameters>
-        <Parameter Name="application" Type="Android.App.Application" />
+        <Parameter Name="application" Type="Android.App.Application" Index="0" FrameworkAlternate="xamarin-essentials-android" />
       </Parameters>
       <Docs>
         <param name="application">Application to initialize with.</param>
         <summary>Initialize Xamarin.Essentials with Android's application class.</summary>
-        <remarks>
-          <para></para>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="Init">
@@ -53,16 +51,32 @@
         <ReturnType>System.Void</ReturnType>
       </ReturnValue>
       <Parameters>
-        <Parameter Name="activity" Type="Android.App.Activity" />
-        <Parameter Name="bundle" Type="Android.OS.Bundle" />
+        <Parameter Name="activity" Type="Android.App.Activity" Index="0" FrameworkAlternate="xamarin-essentials-android" />
+        <Parameter Name="bundle" Type="Android.OS.Bundle" Index="1" FrameworkAlternate="xamarin-essentials-android" />
       </Parameters>
       <Docs>
         <param name="activity">Activity to use for initialization.</param>
         <param name="bundle">Bundle of the activity.</param>
         <summary>Initialize Xamarin.Essentials with Android's activity and bundle.</summary>
-        <remarks>
-          <para></para>
-        </remarks>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="MapServiceToken">
+      <MemberSignature Language="C#" Value="public static string MapServiceToken { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property string MapServiceToken" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.Platform.MapServiceToken" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Get or sets the map API key.</summary>
+        <value>The current key for maps.</value>
+        <remarks>Needed only for UWP and can be generated from Bing Maps.</remarks>
       </Docs>
     </Member>
     <Member MemberName="OnRequestPermissionsResult">
@@ -78,9 +92,9 @@
         <ReturnType>System.Void</ReturnType>
       </ReturnValue>
       <Parameters>
-        <Parameter Name="requestCode" Type="System.Int32" />
-        <Parameter Name="permissions" Type="System.String[]" />
-        <Parameter Name="grantResults" Type="Android.Content.PM.Permission[]" />
+        <Parameter Name="requestCode" Type="System.Int32" Index="0" FrameworkAlternate="xamarin-essentials-android" />
+        <Parameter Name="permissions" Type="System.String[]" Index="1" FrameworkAlternate="xamarin-essentials-android" />
+        <Parameter Name="grantResults" Type="Android.Content.PM.Permission[]" Index="2" FrameworkAlternate="xamarin-essentials-android" />
       </Parameters>
       <Docs>
         <param name="requestCode">The requestCode from the corresponding overridden method in an activity.</param>

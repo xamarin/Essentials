@@ -5,20 +5,20 @@ namespace Xamarin.Essentials
 {
     public static partial class DeviceInfo
     {
-        static string GetModel() => throw new NotImplementedInReferenceAssemblyException();
+        static string GetModel() => throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        static string GetManufacturer() => throw new NotImplementedInReferenceAssemblyException();
+        static string GetManufacturer() => throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        static string GetDeviceName() => throw new NotImplementedInReferenceAssemblyException();
+        static string GetDeviceName() => throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        static string GetVersionString() => throw new NotImplementedInReferenceAssemblyException();
+        static string GetVersionString() => throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        static string GetPlatform() => throw new NotImplementedInReferenceAssemblyException();
+        static DevicePlatform GetPlatform() => DevicePlatform.Unknown;
 
-        static string GetIdiom() => throw new NotImplementedInReferenceAssemblyException();
+        static DeviceIdiom GetIdiom() => DeviceIdiom.Unknown;
 
-        static DeviceType GetDeviceType() => throw new NotImplementedInReferenceAssemblyException();
+        static DeviceType GetDeviceType() => DeviceType.Unknown;
 
-        static Task<List<StorageInfo>> PlatformGetStorageInformation() => throw new NotImplementedInReferenceAssemblyException();
+        static Task<List<StorageInfo>> PlatformGetStorageInformation() => throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }

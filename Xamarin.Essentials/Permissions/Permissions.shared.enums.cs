@@ -24,8 +24,11 @@
         Battery,
         Camera,
         Flashlight,
+        LaunchApp,
         LocationWhenInUse,
+        Maps,
         NetworkState,
         Vibrate,
+        WriteExternalStorage,
     }
 }

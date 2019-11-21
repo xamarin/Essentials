@@ -1,4 +1,6 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.IO;
+using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -6,6 +8,9 @@ namespace Samples.ViewModel
 {
     public class LauncherViewModel : BaseViewModel
     {
+        string fileAttachmentName;
+        string fileAttachmentContents;
+
         public string LaunchUri { get; set; }
 
         public ICommand LaunchCommand { get; }
@@ -16,12 +21,27 @@ namespace Samples.ViewModel
 
         public ICommand LaunchBrowserCommand { get; }
 
+        public ICommand LaunchFileCommand { get; }
+
         public LauncherViewModel()
         {
             LaunchCommand = new Command(OnLaunch);
             LaunchMailCommand = new Command(OnLaunchMail);
             LaunchBrowserCommand = new Command(OnLaunchBrowser);
             CanLaunchCommand = new Command(CanLaunch);
+            LaunchFileCommand = new Command(OnFileRequest);
+        }
+
+        public string FileAttachmentContents
+        {
+            get => fileAttachmentContents;
+            set => SetProperty(ref fileAttachmentContents, value);
+        }
+
+        public string FileAttachmentName
+        {
+            get => fileAttachmentName;
+            set => SetProperty(ref fileAttachmentName, value);
         }
 
         async void OnLaunchBrowser()
@@ -31,7 +51,14 @@ namespace Samples.ViewModel
 
         async void OnLaunch()
         {
-            await Launcher.OpenAsync(LaunchUri);
+            try
+            {
+                await Launcher.OpenAsync(LaunchUri);
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlertAsync($"Uri {LaunchUri} could not be launched: {ex}");
+            }
         }
 
         async void OnLaunchMail()
@@ -41,8 +68,31 @@ namespace Samples.ViewModel
 
         async void CanLaunch()
         {
-            var canBeLaunched = await Launcher.CanOpenAsync(LaunchUri);
-            await DisplayAlertAsync($"Uri {LaunchUri} can be Launched: {canBeLaunched}");
+            try
+            {
+                var canBeLaunched = await Launcher.CanOpenAsync(LaunchUri);
+                await DisplayAlertAsync($"Uri {LaunchUri} can be launched: {canBeLaunched}");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlertAsync($"Uri {LaunchUri} could not be verified as launchable: {ex}");
+            }
+        }
+
+        async void OnFileRequest()
+        {
+            if (!string.IsNullOrWhiteSpace(FileAttachmentContents))
+            {
+                // create a temprary file
+                var fn = string.IsNullOrWhiteSpace(FileAttachmentName) ? "Attachment.txt" : FileAttachmentName.Trim();
+                var file = Path.Combine(FileSystem.CacheDirectory, fn);
+                File.WriteAllText(file, FileAttachmentContents);
+
+                await Launcher.OpenAsync(new OpenFileRequest
+                {
+                    File = new ReadOnlyFile(file)
+                });
+            }
         }
     }
 }

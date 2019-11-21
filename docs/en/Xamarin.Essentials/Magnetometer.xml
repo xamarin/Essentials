@@ -11,7 +11,7 @@
   </Base>
   <Interfaces />
   <Docs>
-    <summary>Detect device's orentation relative to Earth's magnetic field.</summary>
+    <summary>Detect device's orentation relative to Earth's magnetic field in microteslas (µ).</summary>
     <remarks>
       <para></para>
     </remarks>
@@ -90,9 +90,7 @@
       <Parameters />
       <Docs>
         <summary>Stop monitoring for changes to magnetometer.</summary>
-        <remarks>
-          <para></para>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
   </Members>

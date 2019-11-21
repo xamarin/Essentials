@@ -5,8 +5,8 @@
 
 var TARGET = Argument("target", "Default");
 
-var IOS_SIM_NAME = EnvironmentVariable("IOS_SIM_NAME") ?? "iPhone X";
-var IOS_SIM_RUNTIME = EnvironmentVariable("IOS_SIM_RUNTIME") ?? "iOS 12.0";
+var IOS_SIM_NAME = EnvironmentVariable("IOS_SIM_NAME") ?? "iPhone 11";
+var IOS_SIM_RUNTIME = EnvironmentVariable("IOS_SIM_RUNTIME") ?? "com.apple.CoreSimulator.SimRuntime.iOS-13-1";
 var IOS_PROJ = "./DeviceTests.iOS/DeviceTests.iOS.csproj";
 var IOS_BUNDLE_ID = "com.xamarin.essentials.devicetests";
 var IOS_IPA_PATH = "./DeviceTests.iOS/bin/iPhoneSimulator/Release/XamarinEssentialsDeviceTestsiOS.app";
@@ -15,7 +15,7 @@ var IOS_TEST_RESULTS_PATH = "./xunit-ios.xml";
 var ANDROID_PROJ = "./DeviceTests.Android/DeviceTests.Android.csproj";
 var ANDROID_APK_PATH = "./DeviceTests.Android/bin/Release/com.xamarin.essentials.devicetests-Signed.apk";
 var ANDROID_TEST_RESULTS_PATH = "./xunit-android.xml";
-var ANDROID_AVD = "CABOODLE";
+var ANDROID_AVD = EnvironmentVariable("ANDROID_AVD") ?? "CABOODLE";
 var ANDROID_PKG_NAME = "com.xamarin.essentials.devicetests";
 var ANDROID_EMU_TARGET = EnvironmentVariable("ANDROID_EMU_TARGET") ?? "system-images;android-26;google_apis;x86";
 var ANDROID_EMU_DEVICE = EnvironmentVariable("ANDROID_EMU_DEVICE") ?? "Nexus 5X";
@@ -106,11 +106,14 @@ Task ("test-ios-emu")
     .IsDependentOn ("build-ios")
     .Does (() =>
 {
+    var sims = ListAppleSimulators ();
+    foreach (var s in sims)
+    {
+        Information("Info: {0} ({1} - {2} - {3})", s.Name, s.Runtime, s.UDID, s.Availability);
+    }
+
     // Look for a matching simulator on the system
-    var sim = ListAppleSimulators ()
-        .First (s => (s.Availability.Contains("available") || s.Availability.Contains("booted"))
-                && !s.Availability.Contains("unavailable")
-                && s.Name == IOS_SIM_NAME && s.Runtime == IOS_SIM_RUNTIME);
+    var sim = sims.First (s => s.Name == IOS_SIM_NAME && s.Runtime == IOS_SIM_RUNTIME);
 
     // Boot the simulator
     Information("Booting: {0} ({1} - {2})", sim.Name, sim.Runtime, sim.UDID);
@@ -176,10 +179,14 @@ Task ("test-android-emu")
     .IsDependentOn ("build-android")
     .Does (() =>
 {
-    if (EnvironmentVariable("ANDROID_SKIP_AVD_CREATE") == null) {
-        var avdSettings = new AndroidAvdManagerToolSettings  { SdkRoot = ANDROID_HOME };
+    var avdSettings = new AndroidAvdManagerToolSettings  { SdkRoot = ANDROID_HOME };
+    Information ("Available AVDs:");
+    foreach (var avd in AndroidAvdListAvds (avdSettings)) {
+        Information (" - " + avd);
+    }
 
-        // Create the AVD if necessary
+    // Create the AVD if necessary
+    if (EnvironmentVariable("ANDROID_SKIP_AVD_CREATE") == null) {
         Information ("Creating AVD if necessary: {0}...", ANDROID_AVD);
         if (!AndroidAvdListAvds (avdSettings).Any (a => a.Name == ANDROID_AVD))
             AndroidAvdCreate (ANDROID_AVD, ANDROID_EMU_TARGET, ANDROID_EMU_DEVICE, force: true, settings: avdSettings);
@@ -300,6 +307,11 @@ Task ("test-uwp-emu")
     uninstallPS();
     
     // Install the appx
+    var dependencies = GetFiles("./**/AppPackages/**/Dependencies/x86/*.appx");
+    foreach (var dep in dependencies) {
+        Information("Installing Dependency appx: {0}", dep);
+        StartProcess("powershell", "Add-AppxPackage -Path \"" + MakeAbsolute(dep).FullPath + "\"");
+    }
     var appxBundlePath = GetFiles("./**/AppPackages/**/*.appxbundle").First ();
     Information("Installing appx: {0}", appxBundlePath);
     StartProcess ("powershell", "Add-AppxPackage -Path \"" + MakeAbsolute(appxBundlePath).FullPath + "\"");
