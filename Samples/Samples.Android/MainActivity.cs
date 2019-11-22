@@ -21,7 +21,14 @@ namespace Samples.Droid
             Xamarin.Forms.FormsMaterial.Init(this, bundle);
 
             Xamarin.Essentials.Platform.ActivityStateChanged += Platform_ActivityStateChanged;
+
             LoadApplication(new App());
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            Xamarin.Essentials.Platform.ActivityStateChanged -= Platform_ActivityStateChanged;
         }
 
         void Platform_ActivityStateChanged(object sender, Xamarin.Essentials.ActivityStateChangedEventArgs e) =>

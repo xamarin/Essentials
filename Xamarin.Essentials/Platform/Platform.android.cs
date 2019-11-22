@@ -22,7 +22,7 @@ namespace Xamarin.Essentials
 
         public static Context AppContext => Application.Context;
 
-        public static Activity Activity => lifecycleListener?.Activity;
+        public static Activity CurrentActivity => lifecycleListener?.Activity;
 
         public static event EventHandler<ActivityStateChangedEventArgs> ActivityStateChanged;
 
@@ -31,8 +31,8 @@ namespace Xamarin.Essentials
 
         public static async Task<Activity> WaitForActivityAsync(CancellationToken cancelToken = default)
         {
-            if (Activity != null)
-                return Activity;
+            if (CurrentActivity != null)
+                return CurrentActivity;
 
             var tcs = new TaskCompletionSource<Activity>();
             var handler = new EventHandler<ActivityStateChangedEventArgs>((sender, args) =>

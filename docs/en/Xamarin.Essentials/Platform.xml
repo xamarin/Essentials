@@ -17,10 +17,10 @@
     </remarks>
   </Docs>
   <Members>
-    <Member MemberName="Activity">
-      <MemberSignature Language="C#" Value="public static Android.App.Activity Activity { get; }" />
-      <MemberSignature Language="ILAsm" Value=".property class Android.App.Activity Activity" />
-      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.Platform.Activity" />
+    <Member MemberName="CurrentActivity">
+      <MemberSignature Language="C#" Value="public static Android.App.Activity CurrentActivity { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property class Android.App.Activity CurrentActivity" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.Platform.CurrentActivity" />
       <MemberType>Property</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -30,7 +30,7 @@
         <ReturnType>Android.App.Activity</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gets the current visible Activity.</summary>
+        <summary>Gets the current Activity. This value is set OnCreate, OnPause, and OnResume.</summary>
         <value>The current Activity.</value>
         <remarks>
           <para></para>
