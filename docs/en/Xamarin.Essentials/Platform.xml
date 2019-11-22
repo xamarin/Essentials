@@ -17,26 +17,6 @@
     </remarks>
   </Docs>
   <Members>
-    <Member MemberName="CurrentActivity">
-      <MemberSignature Language="C#" Value="public static Android.App.Activity CurrentActivity { get; }" />
-      <MemberSignature Language="ILAsm" Value=".property class Android.App.Activity CurrentActivity" />
-      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.Platform.CurrentActivity" />
-      <MemberType>Property</MemberType>
-      <AssemblyInfo>
-        <AssemblyName>Xamarin.Essentials</AssemblyName>
-        <AssemblyVersion>1.0.0.0</AssemblyVersion>
-      </AssemblyInfo>
-      <ReturnValue>
-        <ReturnType>Android.App.Activity</ReturnType>
-      </ReturnValue>
-      <Docs>
-        <summary>Gets the current Activity. This value is set OnCreate, OnPause, and OnResume.</summary>
-        <value>The current Activity.</value>
-        <remarks>
-          <para></para>
-        </remarks>
-      </Docs>
-    </Member>
     <Member MemberName="ActivityStateChanged">
       <MemberSignature Language="C#" Value="public static event EventHandler&lt;Xamarin.Essentials.ActivityStateChangedEventArgs&gt; ActivityStateChanged;" />
       <MemberSignature Language="ILAsm" Value=".event class System.EventHandler`1&lt;class Xamarin.Essentials.ActivityStateChangedEventArgs&gt; ActivityStateChanged" />
@@ -73,6 +53,47 @@
         <value>The applications context.</value>
         <remarks>
           <para></para>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="CurrentActivity">
+      <MemberSignature Language="C#" Value="public static Android.App.Activity CurrentActivity { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property class Android.App.Activity CurrentActivity" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.Platform.CurrentActivity" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Android.App.Activity</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Gets the current Activity. This value is set OnCreate, OnPause, and OnResume.</summary>
+        <value>The current Activity or null if none or Init was not called.</value>
+        <remarks>
+          <para></para>
+        </remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetCurrentUIViewController">
+      <MemberSignature Language="C#" Value="public static UIKit.UIViewController GetCurrentUIViewController ();" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class UIKit.UIViewController GetCurrentUIViewController() cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.Platform.GetCurrentUIViewController" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>UIKit.UIViewController</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Get the currently visible UIViewController.</summary>
+        <returns>The visible UIViewController or null if not found.</returns>
+        <remarks>
+          <para />
         </remarks>
       </Docs>
     </Member>

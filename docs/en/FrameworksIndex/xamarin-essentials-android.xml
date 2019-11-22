@@ -550,8 +550,8 @@
       <Member Id="M:Xamarin.Essentials.Platform.Init(Android.App.Application)" />
       <Member Id="M:Xamarin.Essentials.Platform.OnRequestPermissionsResult(System.Int32,System.String[],Android.Content.PM.Permission[])" />
       <Member Id="M:Xamarin.Essentials.Platform.WaitForActivityAsync(System.Threading.CancellationToken)" />
-      <Member Id="P:Xamarin.Essentials.Platform.Activity" />
       <Member Id="P:Xamarin.Essentials.Platform.AppContext" />
+      <Member Id="P:Xamarin.Essentials.Platform.CurrentActivity" />
     </Type>
     <Type Name="Xamarin.Essentials.PointExtensions" Id="T:Xamarin.Essentials.PointExtensions">
       <Member Id="M:Xamarin.Essentials.PointExtensions.ToSystemPoint(Android.Graphics.Point)" />
