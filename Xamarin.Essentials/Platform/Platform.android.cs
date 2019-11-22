@@ -26,7 +26,7 @@ namespace Xamarin.Essentials
 
         public static event EventHandler<ActivityStateChangedEventArgs> ActivityStateChanged;
 
-        internal static void OnActivityStateChanged(Activity activity, ActivityEvent ev)
+        internal static void OnActivityStateChanged(Activity activity, ActivityState ev)
             => ActivityStateChanged?.Invoke(null, new ActivityStateChangedEventArgs(activity, ev));
 
         public static async Task<Activity> WaitForActivityAsync(CancellationToken cancelToken = default)
@@ -37,7 +37,7 @@ namespace Xamarin.Essentials
             var tcs = new TaskCompletionSource<Activity>();
             var handler = new EventHandler<ActivityStateChangedEventArgs>((sender, args) =>
             {
-                if (args.Event == ActivityEvent.Created || args.Event == ActivityEvent.Resumed)
+                if (args.State == ActivityState.Created || args.State == ActivityState.Resumed)
                     tcs.TrySetResult(args.Activity);
             });
 
@@ -227,7 +227,7 @@ namespace Xamarin.Essentials
         }
     }
 
-    public enum ActivityEvent
+    public enum ActivityState
     {
         Created,
         Resumed,
@@ -240,13 +240,13 @@ namespace Xamarin.Essentials
 
     public class ActivityStateChangedEventArgs : EventArgs
     {
-        internal ActivityStateChangedEventArgs(Activity activity, ActivityEvent ev)
+        internal ActivityStateChangedEventArgs(Activity activity, ActivityState ev)
         {
-            Event = ev;
+            State = ev;
             Activity = activity;
         }
 
-        public ActivityEvent Event { get; }
+        public ActivityState State { get; }
 
         public Activity Activity { get; }
     }
@@ -267,31 +267,31 @@ namespace Xamarin.Essentials
         void Application.IActivityLifecycleCallbacks.OnActivityCreated(Activity activity, Bundle savedInstanceState)
         {
             Activity = activity;
-            Platform.OnActivityStateChanged(activity, ActivityEvent.Created);
+            Platform.OnActivityStateChanged(activity, ActivityState.Created);
         }
 
         void Application.IActivityLifecycleCallbacks.OnActivityDestroyed(Activity activity) =>
-            Platform.OnActivityStateChanged(activity, ActivityEvent.Destroyed);
+            Platform.OnActivityStateChanged(activity, ActivityState.Destroyed);
 
         void Application.IActivityLifecycleCallbacks.OnActivityPaused(Activity activity)
         {
             Activity = activity;
-            Platform.OnActivityStateChanged(activity, ActivityEvent.Paused);
+            Platform.OnActivityStateChanged(activity, ActivityState.Paused);
         }
 
         void Application.IActivityLifecycleCallbacks.OnActivityResumed(Activity activity)
         {
             Activity = activity;
-            Platform.OnActivityStateChanged(activity, ActivityEvent.Resumed);
+            Platform.OnActivityStateChanged(activity, ActivityState.Resumed);
         }
 
         void Application.IActivityLifecycleCallbacks.OnActivitySaveInstanceState(Activity activity, Bundle outState) =>
-            Platform.OnActivityStateChanged(activity, ActivityEvent.SaveInstanceState);
+            Platform.OnActivityStateChanged(activity, ActivityState.SaveInstanceState);
 
         void Application.IActivityLifecycleCallbacks.OnActivityStarted(Activity activity) =>
-            Platform.OnActivityStateChanged(activity, ActivityEvent.Started);
+            Platform.OnActivityStateChanged(activity, ActivityState.Started);
 
         void Application.IActivityLifecycleCallbacks.OnActivityStopped(Activity activity) =>
-            Platform.OnActivityStateChanged(activity, ActivityEvent.Stopped);
+            Platform.OnActivityStateChanged(activity, ActivityState.Stopped);
     }
 }
