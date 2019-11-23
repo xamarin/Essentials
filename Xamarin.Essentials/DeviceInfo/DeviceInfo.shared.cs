@@ -60,9 +60,9 @@ namespace Xamarin.Essentials
             return obj is StorageInfo info && Equals(info);
         }
 
-        public override int GetHashCode() => (Capacity, UsedBytes, FreeBytes).GetHashCode();
+        public override int GetHashCode() => (Capacity, UsedBytes, FreeBytes, Type).GetHashCode();
 
-        public override string ToString() => $"Capacity: {Capacity}\nFreeBytes: {FreeBytes}\nUsedBytes: {UsedBytes}\nType: {Type}";
+        public override string ToString() => $"Capacity: {Capacity.ToString()}{Environment.NewLine}FreeBytes: {FreeBytes.ToString()}{Environment.NewLine}UsedBytes: {UsedBytes.ToString()}{Environment.NewLine}Type: {Type}";
     }
 
     public enum StorageType

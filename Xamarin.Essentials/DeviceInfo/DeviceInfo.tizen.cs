@@ -1,4 +1,8 @@
-﻿using Plat = Xamarin.Essentials.Platform;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Tizen.System;
+using Plat = Xamarin.Essentials.Platform;
 
 namespace Xamarin.Essentials
 {
@@ -34,6 +38,16 @@ namespace Xamarin.Essentials
                 return DeviceIdiom.TV;
             else
                 return DeviceIdiom.Unknown;
+        }
+
+        static Task<List<StorageInfo>> PlatformGetStorageInformation()
+        {
+            return Task.FromResult(StorageManager.Storages.Select(storage => new StorageInfo(
+                storage.TotalSpace,
+                storage.AvaliableSpace,
+                storage.TotalSpace - storage.AvaliableSpace,
+                storage.StorageType == StorageArea.Internal ? StorageType.Internal : StorageType.External))
+                .ToList());
         }
 
         static DeviceType GetDeviceType()
