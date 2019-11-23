@@ -36,7 +36,7 @@ namespace Xamarin.Essentials
                 var v2 = (v & 0x0000FFFF00000000L) >> 32;
                 var v3 = (v & 0x00000000FFFF0000L) >> 16;
                 var v4 = v & 0x000000000000FFFFL;
-                return $"{v1}.{v2}.{v3}.{v4}";
+                return $"{v1.ToString()}.{v2.ToString()}.{v3.ToString()}.{v4.ToString()}";
             }
 
             return version;
@@ -80,8 +80,9 @@ namespace Xamarin.Essentials
         {
             var storageInfos = new List<StorageInfo>();
             var folders = await KnownFolders.RemovableDevices.GetFoldersAsync();
-            foreach (var folder in folders)
+            for (var i = 0; i < folders.Count; i++)
             {
+                var folder = folders[i];
                 var folderProps = await folder.Properties.RetrievePropertiesAsync(properties);
                 var fCapacity = (ulong)folderProps[capacity];
                 var fFree = (ulong)folderProps[freeSpace];
