@@ -93,7 +93,7 @@
           <AttributeName>System.Runtime.Versioning.TargetFramework("MonoAndroid,Version=v9.0", FrameworkDisplayName="Xamarin.Android v9.0 Support")</AttributeName>
         </Attribute>
         <Attribute>
-          <AttributeName>System.Reflection.AssemblyInformationalVersion("1.0.0+93121294be53f4171d1182fb463e3232d6d760c6")</AttributeName>
+          <AttributeName>System.Reflection.AssemblyInformationalVersion("1.0.0+3beaa14163a45df2a89b6e73e85c71fbec012a8e")</AttributeName>
         </Attribute>
       </Attributes>
     </Assembly>
@@ -184,6 +184,8 @@
       <Type Name="PointExtensions" Kind="Class" />
       <Type Name="Preferences" Kind="Class" />
       <Type Name="ReadOnlyFile" Kind="Class" />
+      <Type Name="RecordedAudio" Kind="Class" />
+      <Type Name="Recorder" Kind="Class" />
       <Type Name="RectangleExtensions" Kind="Class" />
       <Type Name="SecureStorage" Kind="Class" />
       <Type Name="SensorSpeed" Kind="Enumeration" />
