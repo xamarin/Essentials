@@ -10,7 +10,7 @@ namespace Xamarin.Essentials
 {
     public static partial class Recorder
     {
-        internal static Task<bool> PlatformCanRecordAudio => Task.FromResult(true);
+        static Task<bool> PlatformCanRecordAudio => Task.FromResult(true);
 
         static MediaCapture mediaCapture;
 
@@ -46,7 +46,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        internal static async Task<RecordedAudio> PlatformStopAsync()
+        static async Task<RecordedAudio> PlatformStopAsync()
         {
             await mediaCapture.StopRecordAsync();
             var capture = new RecordedAudio(audioFilePath);

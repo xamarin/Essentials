@@ -48,7 +48,7 @@ namespace Xamarin.Essentials
             return Task.CompletedTask;
         }
 
-        public static Task<RecordedAudio> PlatformStopAsync()
+        static Task<RecordedAudio> PlatformStopAsync()
         {
             recorder.Stop();
 

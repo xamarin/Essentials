@@ -30,6 +30,7 @@ namespace Samples.ViewModel
             var record = await Recorder.StopAsync();
             var size = File.ReadAllBytes(record.FullPath).Length;
             await DisplayAlertAsync($"Recording saved in {record.FullPath}, size is {size}");
+            await Share.RequestAsync(new ShareFileRequest("recording", record));
         }
     }
 }

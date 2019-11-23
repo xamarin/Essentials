@@ -5,7 +5,7 @@ namespace Xamarin.Essentials
 {
     public static partial class Recorder
     {
-        public static Task<bool> PlatformCanRecordAudio
+        static Task<bool> PlatformCanRecordAudio
         => throw ExceptionUtils.NotSupportedOrImplementedException;
 
         static Task PlatformRecordAsync() => throw ExceptionUtils.NotSupportedOrImplementedException;
