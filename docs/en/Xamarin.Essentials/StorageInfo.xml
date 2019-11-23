@@ -20,8 +20,8 @@
     </Attribute>
   </Attributes>
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Data representing the storage options attached to the current device.</summary>
+    <remarks>No number validation takes place. This allows for empty drives, e.g. a cd drive on a desktop system to be shown as empty.</remarks>
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -40,12 +40,12 @@
         <Parameter Name="type" Type="Xamarin.Essentials.StorageType" />
       </Parameters>
       <Docs>
-        <param name="capapcity">To be added.</param>
-        <param name="freeBytes">To be added.</param>
-        <param name="usedBytes">To be added.</param>
-        <param name="type">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="capapcity">The capapcity of the storage.</param>
+        <param name="freeBytes">The remaining free bytes of the storage.</param>
+        <param name="usedBytes">The used bytes of the storage, calculated from capacity and free bytes.</param>
+        <param name="type">The type of storage, e.g. internal or external. Static on some platforms, see the DeviceInfo docs.</param>
+        <summary>Constructs a StorageInfo without validating parameters.</summary>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="Capacity">
@@ -61,9 +61,9 @@
         <ReturnType>System.UInt64</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>The total capacity of this storage device.</summary>
+        <value>The capacity.</value>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="Equals">
@@ -82,10 +82,10 @@
         <Parameter Name="obj" Type="System.Object" />
       </Parameters>
       <Docs>
-        <param name="obj">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="obj">The other StorageInfo with which to compare the current instance.</param>
+        <summary>Requires all properties to be equal, and as all are value types this should simply memory compare the structs.</summary>
+        <returns>true iff all properties are equal.</returns>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="Equals">
@@ -107,10 +107,10 @@
         <Parameter Name="other" Type="Xamarin.Essentials.StorageInfo" />
       </Parameters>
       <Docs>
-        <param name="other">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="other">The other StorageInfo with which to compare the current instance.</param>
+        <summary>Requires all properties to be equal, and as all are value types this should simply memory compare the structs.</summary>
+        <returns>true iff all properties are equal.</returns>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="FreeBytes">
@@ -126,9 +126,9 @@
         <ReturnType>System.UInt64</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>The total amount of free bytes of this storage device.</summary>
+        <value>The amount of free bytes.</value>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="GetHashCode">
@@ -145,9 +145,9 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <summary>Get the hash code for this object.</summary>
+        <returns>The hash code.</returns>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="op_Equality">
@@ -167,11 +167,11 @@
         <Parameter Name="rhs" Type="Xamarin.Essentials.StorageInfo" />
       </Parameters>
       <Docs>
-        <param name="lhs">To be added.</param>
-        <param name="rhs">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="lhs">Left to compare.</param>
+        <param name="rhs">Right to compare.</param>
+        <summary>Operator overload for equals call.</summary>
+        <returns>True iff the equals method returns true or both are null.</returns>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="op_Inequality">
@@ -191,11 +191,11 @@
         <Parameter Name="rhs" Type="Xamarin.Essentials.StorageInfo" />
       </Parameters>
       <Docs>
-        <param name="lhs">To be added.</param>
-        <param name="rhs">To be added.</param>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <param name="lhs">Left to compare.</param>
+        <param name="rhs">Right to compare.</param>
+        <summary>perator overload for negated equals call.</summary>
+        <returns>The inverse of the equality operator.</returns>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ToString">
@@ -212,9 +212,9 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <summary></summary>
+        <returns></returns>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="Type">
@@ -230,9 +230,9 @@
         <ReturnType>Xamarin.Essentials.StorageType</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>The storage type for this storage device.</summary>
+        <value>Internal on iOS and UWP, otherwise external or internal.</value>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="UsedBytes">
@@ -248,9 +248,9 @@
         <ReturnType>System.UInt64</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>The amount of used bytes of the storage.</summary>
+        <value>The used bytes.</value>
+        <remarks></remarks>
       </Docs>
     </Member>
   </Members>

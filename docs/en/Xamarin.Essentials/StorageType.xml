@@ -10,8 +10,8 @@
     <BaseTypeName>System.Enum</BaseTypeName>
   </Base>
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Represents the location of the storage device.</summary>
+    <remarks></remarks>
   </Docs>
   <Members>
     <Member MemberName="External">
@@ -28,7 +28,7 @@
       </ReturnValue>
       <MemberValue>2</MemberValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Represents external storages which may be changed.</summary>
       </Docs>
     </Member>
     <Member MemberName="Internal">
@@ -45,7 +45,7 @@
       </ReturnValue>
       <MemberValue>1</MemberValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Represents internal storages which are built-in.</summary>
       </Docs>
     </Member>
     <Member MemberName="Unknown">
@@ -62,7 +62,7 @@
       </ReturnValue>
       <MemberValue>0</MemberValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Unknown storage location, should never be visible.</summary>
       </Docs>
     </Member>
   </Members>

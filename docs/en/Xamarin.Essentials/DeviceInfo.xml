@@ -51,9 +51,9 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <summary>Gets all available storages for the current device.</summary>
+        <returns>The storages for the current device.</returns>
+        <remarks>iOS and uwp will always return internal storages, all other devices can return external storages.</remarks>
       </Docs>
     </Member>
     <Member MemberName="Idiom">
