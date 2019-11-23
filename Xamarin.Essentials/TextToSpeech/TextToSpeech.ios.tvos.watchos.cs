@@ -8,7 +8,7 @@ namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
-        internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
+        internal static Task<IEnumerable<Locale>?> PlatformGetLocalesAsync() =>
             Task.FromResult(AVSpeechSynthesisVoice.GetSpeechVoices()
                 .Select(v => new Locale(v.Language, null, v.Language, v.Identifier)));
 

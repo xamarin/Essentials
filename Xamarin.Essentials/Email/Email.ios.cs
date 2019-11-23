@@ -23,7 +23,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static Task PlatformComposeAsync(EmailMessage message)
+        static Task PlatformComposeAsync(EmailMessage? message)
         {
             if (MFMailComposeViewController.CanSendMail)
                 return ComposeWithMailCompose(message);

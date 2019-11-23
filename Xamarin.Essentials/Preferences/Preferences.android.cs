@@ -138,7 +138,7 @@ namespace Xamarin.Essentials
                     }
                 }
 
-                return typeof(T) == typeof(string) ? (T?) value : (T)value!;
+                return (T)value!;
             }
         }
 
