@@ -15,8 +15,10 @@
     </Interface>
   </Interfaces>
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>A .wav recording of the microphone input.</summary>
+    <remarks>
+      <para />
+    </remarks>
   </Docs>
   <Members>
     <Member MemberName="Dispose">
@@ -36,8 +38,10 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <summary>Deletes the temporary file.</summary>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="Dispose">
@@ -56,9 +60,11 @@
         <Parameter Name="isDisposing" Type="System.Boolean" />
       </Parameters>
       <Docs>
-        <param name="isDisposing">To be added.</param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <param name="isDisposing">
+          <para></para>
+        </param>
+        <summary>Deletes the temporary file.</summary>
+        <remarks>Standard subclass overridable disposing pattern.</remarks>
       </Docs>
     </Member>
     <Member MemberName="Disposed">
@@ -74,9 +80,11 @@
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Indicates whether the recording has been disposed.</summary>
+        <value>True if dispose has been called.</value>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="Finalize">
@@ -93,8 +101,10 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <summary>Calls the dispose method if the user fails to dipose.</summary>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
     <Member MemberName="PlatformOpenReadStreamAsync">
@@ -111,9 +121,13 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <summary>
+          <para>Opens a FileStream for the recording.</para>
+        </summary>
+        <returns>A readonly exclusive async FileStream.</returns>
+        <remarks>
+          <para />
+        </remarks>
       </Docs>
     </Member>
   </Members>

@@ -574,7 +574,6 @@
       <Member Id="M:Xamarin.Essentials.Recorder.StopAsync" />
       <Member Id="P:Xamarin.Essentials.Recorder.CanRecordAudio" />
       <Member Id="P:Xamarin.Essentials.Recorder.IsRecording" />
-      <Member Id="P:Xamarin.Essentials.Recorder.PlatformCanRecordAudio" />
     </Type>
     <Type Name="Xamarin.Essentials.SecureStorage" Id="T:Xamarin.Essentials.SecureStorage">
       <Member Id="M:Xamarin.Essentials.SecureStorage.GetAsync(System.String)" />
