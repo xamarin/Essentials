@@ -93,7 +93,7 @@
           <AttributeName>System.Runtime.Versioning.TargetFramework("MonoAndroid,Version=v9.0", FrameworkDisplayName="Xamarin.Android v9.0 Support")</AttributeName>
         </Attribute>
         <Attribute>
-          <AttributeName>System.Reflection.AssemblyInformationalVersion("1.0.0+9976b81a880287895e02f4fcac55260aeca09da1")</AttributeName>
+          <AttributeName>System.Reflection.AssemblyInformationalVersion("1.0.0+2600c1b84d7999e1545e5d43b98c6e26965cd86c")</AttributeName>
         </Attribute>
       </Attributes>
     </Assembly>
@@ -193,6 +193,7 @@
       <Type Name="Sms" Kind="Class" />
       <Type Name="SmsMessage" Kind="Class" />
       <Type Name="SpeechOptions" Kind="Class" />
+      <Type Name="StorageExtensions" Kind="Class" />
       <Type Name="StorageInfo" Kind="Structure" />
       <Type Name="StorageType" Kind="Enumeration" />
       <Type Name="TextToSpeech" Kind="Class" />
@@ -200,9 +201,7 @@
       <Type Name="VersionTracking" Kind="Class" />
       <Type Name="Vibration" Kind="Class" />
     </Namespace>
-    <Namespace Name="Xamarin.Essentials.Types">
-      <Type Name="StorageExtensions" Kind="Class" />
-    </Namespace>
+    <Namespace Name="Xamarin.Essentials.Types"></Namespace>
   </Types>
   <Title>Untitled</Title>
   <ExtensionMethods>
@@ -1059,7 +1058,7 @@
       <Member MemberName="FreePercentage">
         <MemberSignature Language="C#" Value="public static byte FreePercentage (this Xamarin.Essentials.StorageInfo info);" FrameworkAlternate="xamarin-essentials" />
         <MemberSignature Language="ILAsm" Value=".method public static hidebysig unsigned int8 FreePercentage(valuetype Xamarin.Essentials.StorageInfo info) cil managed" FrameworkAlternate="xamarin-essentials" />
-        <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.Types.StorageExtensions.FreePercentage(Xamarin.Essentials.StorageInfo)" FrameworkAlternate="xamarin-essentials" />
+        <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.StorageExtensions.FreePercentage(Xamarin.Essentials.StorageInfo)" FrameworkAlternate="xamarin-essentials" />
         <MemberType>ExtensionMethod</MemberType>
         <ReturnValue>
           <ReturnType>System.Byte</ReturnType>
@@ -1071,7 +1070,7 @@
           <param name="info">To be added.</param>
           <summary>To be added.</summary>
         </Docs>
-        <Link Type="Xamarin.Essentials.Types.StorageExtensions" Member="M:Xamarin.Essentials.Types.StorageExtensions.FreePercentage(Xamarin.Essentials.StorageInfo)" />
+        <Link Type="Xamarin.Essentials.StorageExtensions" Member="M:Xamarin.Essentials.StorageExtensions.FreePercentage(Xamarin.Essentials.StorageInfo)" />
       </Member>
     </ExtensionMethod>
     <ExtensionMethod>
@@ -1081,7 +1080,7 @@
       <Member MemberName="UsedPercentage">
         <MemberSignature Language="C#" Value="public static byte UsedPercentage (this Xamarin.Essentials.StorageInfo info);" FrameworkAlternate="xamarin-essentials" />
         <MemberSignature Language="ILAsm" Value=".method public static hidebysig unsigned int8 UsedPercentage(valuetype Xamarin.Essentials.StorageInfo info) cil managed" FrameworkAlternate="xamarin-essentials" />
-        <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.Types.StorageExtensions.UsedPercentage(Xamarin.Essentials.StorageInfo)" FrameworkAlternate="xamarin-essentials" />
+        <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.StorageExtensions.UsedPercentage(Xamarin.Essentials.StorageInfo)" FrameworkAlternate="xamarin-essentials" />
         <MemberType>ExtensionMethod</MemberType>
         <ReturnValue>
           <ReturnType>System.Byte</ReturnType>
@@ -1093,7 +1092,7 @@
           <param name="info">To be added.</param>
           <summary>To be added.</summary>
         </Docs>
-        <Link Type="Xamarin.Essentials.Types.StorageExtensions" Member="M:Xamarin.Essentials.Types.StorageExtensions.UsedPercentage(Xamarin.Essentials.StorageInfo)" />
+        <Link Type="Xamarin.Essentials.StorageExtensions" Member="M:Xamarin.Essentials.StorageExtensions.UsedPercentage(Xamarin.Essentials.StorageInfo)" />
       </Member>
     </ExtensionMethod>
   </ExtensionMethods>

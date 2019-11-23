@@ -1,0 +1,63 @@
+<Type Name="StorageExtensions" FullName="Xamarin.Essentials.StorageExtensions">
+  <TypeSignature Language="C#" Value="public static class StorageExtensions" />
+  <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract sealed beforefieldinit StorageExtensions extends System.Object" />
+  <TypeSignature Language="DocId" Value="T:Xamarin.Essentials.StorageExtensions" />
+  <AssemblyInfo>
+    <AssemblyName>Xamarin.Essentials</AssemblyName>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>To be added.</summary>
+    <remarks>To be added.</remarks>
+  </Docs>
+  <Members>
+    <Member MemberName="FreePercentage">
+      <MemberSignature Language="C#" Value="public static byte FreePercentage (this Xamarin.Essentials.StorageInfo info);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig unsigned int8 FreePercentage(valuetype Xamarin.Essentials.StorageInfo info) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.StorageExtensions.FreePercentage(Xamarin.Essentials.StorageInfo)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Byte</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="info" Type="Xamarin.Essentials.StorageInfo" RefType="this" />
+      </Parameters>
+      <Docs>
+        <param name="info">The retrieved StorageInformation.</param>
+        <summary>Calculates the percentage of free bytes using total capacity and free bytes.</summary>
+        <returns>A percentage from 0 to 100.</returns>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="UsedPercentage">
+      <MemberSignature Language="C#" Value="public static byte UsedPercentage (this Xamarin.Essentials.StorageInfo info);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig unsigned int8 UsedPercentage(valuetype Xamarin.Essentials.StorageInfo info) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.StorageExtensions.UsedPercentage(Xamarin.Essentials.StorageInfo)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Byte</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="info" Type="Xamarin.Essentials.StorageInfo" RefType="this" />
+      </Parameters>
+      <Docs>
+        <param name="info">The retrieved StorageInformation.</param>
+        <summary>Calculates the percentage of used bytes using total capacity and free bytes.</summary>
+        <returns>A percentage from 0 to 100.</returns>
+        <remarks>Returns completely full for drives with an empty capacity.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

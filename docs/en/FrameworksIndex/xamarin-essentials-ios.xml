@@ -638,6 +638,10 @@
       <Member Id="P:Xamarin.Essentials.SpeechOptions.Pitch" />
       <Member Id="P:Xamarin.Essentials.SpeechOptions.Volume" />
     </Type>
+    <Type Name="Xamarin.Essentials.StorageExtensions" Id="T:Xamarin.Essentials.StorageExtensions">
+      <Member Id="M:Xamarin.Essentials.StorageExtensions.FreePercentage(Xamarin.Essentials.StorageInfo)" />
+      <Member Id="M:Xamarin.Essentials.StorageExtensions.UsedPercentage(Xamarin.Essentials.StorageInfo)" />
+    </Type>
     <Type Name="Xamarin.Essentials.StorageInfo" Id="T:Xamarin.Essentials.StorageInfo">
       <Member Id="M:Xamarin.Essentials.StorageInfo.#ctor(System.UInt64,System.UInt64,System.UInt64,Xamarin.Essentials.StorageType)" />
       <Member Id="M:Xamarin.Essentials.StorageInfo.Equals(System.Object)" />
@@ -715,12 +719,6 @@
       <Member Id="M:Xamarin.Essentials.Vibration.Vibrate" />
       <Member Id="M:Xamarin.Essentials.Vibration.Vibrate(System.Double)" />
       <Member Id="M:Xamarin.Essentials.Vibration.Vibrate(System.TimeSpan)" />
-    </Type>
-  </Namespace>
-  <Namespace Name="Xamarin.Essentials.Types">
-    <Type Name="Xamarin.Essentials.Types.StorageExtensions" Id="T:Xamarin.Essentials.Types.StorageExtensions">
-      <Member Id="M:Xamarin.Essentials.Types.StorageExtensions.FreePercentage(Xamarin.Essentials.StorageInfo)" />
-      <Member Id="M:Xamarin.Essentials.Types.StorageExtensions.UsedPercentage(Xamarin.Essentials.StorageInfo)" />
     </Type>
   </Namespace>
 </Framework>

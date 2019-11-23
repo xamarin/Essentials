@@ -1,7 +1,7 @@
 ﻿using System;
 using Xamarin.Essentials;
 
-namespace Xamarin.Essentials.Types
+namespace Xamarin.Essentials
 {
     public static class StorageExtensions
     {

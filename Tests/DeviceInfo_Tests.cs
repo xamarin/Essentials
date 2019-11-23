@@ -1,5 +1,4 @@
 ﻿using Xamarin.Essentials;
-using Xamarin.Essentials.Types;
 using Xunit;
 
 namespace Tests
