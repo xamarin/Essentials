@@ -90,7 +90,7 @@ namespace Xamarin.Essentials
             var localProps = await ApplicationData.Current.LocalFolder.Properties.RetrievePropertiesAsync(properties);
             var localCapacity = (ulong)localProps[capacity];
             var localFree = (ulong)localProps[freeSpace];
-            storageInfos.Add(new StorageInfo(localCapacity, localFree, localCapacity - localFree, StorageType.External));
+            storageInfos.Add(new StorageInfo(localCapacity, localFree, localCapacity - localFree, StorageType.Internal));
             return storageInfos;
         }
     }
