@@ -123,6 +123,54 @@ namespace Tests
         }
 
         [Theory]
+        [InlineData(115, 52.1631)]
+        [InlineData(65.9, 29.8917)]
+        [InlineData(180, 81.6466)]
+        [InlineData(8, 3.6287)]
+        [InlineData(331.1, 150.1844)]
+        [InlineData(0, 0)]
+        public void PoundsToKilograms(double pounds, double kg)
+        {
+            Assert.Equal(kg, UnitConverters.PoundsToKilograms(pounds), 4);
+        }
+
+        [Theory]
+        [InlineData(115, 8.2143)]
+        [InlineData(65.9, 4.7071)]
+        [InlineData(180, 12.8571)]
+        [InlineData(8, 0.5714)]
+        [InlineData(184.8, 13.2)]
+        [InlineData(0, 0)]
+        public void PoundsToStones(double pounds, double stones)
+        {
+            Assert.Equal(stones, UnitConverters.PoundsToStones(pounds), 4);
+        }
+
+        [Theory]
+        [InlineData(14, 196)]
+        [InlineData(10.8, 151.2)]
+        [InlineData(22.8, 319.2)]
+        [InlineData(5, 70)]
+        [InlineData(16.85, 235.9)]
+        [InlineData(0, 0)]
+        public void StonesToPounds(double stones, double pounds)
+        {
+            Assert.Equal(pounds, UnitConverters.StonesToPounds(stones), 4);
+        }
+
+        [Theory]
+        [InlineData(79.2, 174.6061)]
+        [InlineData(94.6, 208.5573)]
+        [InlineData(67.0, 147.7097)]
+        [InlineData(57, 125.6635)]
+        [InlineData(82.85, 182.6530)]
+        [InlineData(0, 0)]
+        public void KilogramsToPounds(double kg, double pounds)
+        {
+            Assert.Equal(pounds, UnitConverters.KilogramsToPounds(kg), 4);
+        }
+
+        [Theory]
         [InlineData(55.85781, -4.24253, 51.509865, -0.118092, 554.3128)] // glasgow -> london
         [InlineData(36.12, -86.67, 33.94, -118.40, 2886.4444)] // nashville, tn -> los angeles, ca
         [InlineData(51.509865, -0.118092, -33.92528, 18.42389, 9671.1251)] // london -> cape town
@@ -130,9 +178,85 @@ namespace Tests
         [InlineData(42.93708, -75.6107, -33.92528, 18.42389, 12789.5628)] // new york -> cape town
         [InlineData(45.80721, 15.96757, 19.432608, -99.133209, 10264.4796)] // zagreb -> mexico city
         [InlineData(43.623409, -79.368683, 42.35866, -71.05674, 690.2032)] // toronto -> boston, ma
+        [InlineData(37.720134, -122.182552, 37.720266, -122.181969, .0533)]
         public void CoordinatesToKilometers(double lat1, double lon1, double lat2, double lon2, double distance)
         {
             Assert.Equal(distance, UnitConverters.CoordinatesToKilometers(lat1, lon1, lat2, lon2), 4);
+            var location1 = new Location(lat1, lon1);
+            var location2 = new Location(lat2, lon2);
+            Assert.Equal(distance, Location.CalculateDistance(location1, location2, DistanceUnits.Kilometers), 4);
+            Assert.Equal(distance, Location.CalculateDistance(location2, location1, DistanceUnits.Kilometers), 4);
+            Assert.Equal(distance, location1.CalculateDistance(location2, DistanceUnits.Kilometers), 4);
+            Assert.Equal(distance, location2.CalculateDistance(location1, DistanceUnits.Kilometers), 4);
+            Assert.Equal(distance, LocationExtensions.CalculateDistance(location1, location2, DistanceUnits.Kilometers), 4);
+            Assert.Equal(distance, LocationExtensions.CalculateDistance(location2, location1, DistanceUnits.Kilometers), 4);
+        }
+
+        [Theory]
+        [InlineData(55.85781, -4.24253, 51.509865, -0.118092, 554.3128)] // glasgow -> london
+        [InlineData(36.12, -86.67, 33.94, -118.40, 2886.4444)] // nashville, tn -> los angeles, ca
+        [InlineData(51.509865, -0.118092, -33.92528, 18.42389, 9671.1251)] // london -> cape town
+        [InlineData(51.509865, -0.118092, 40.42028, -3.70577, 1263.4938)] // london -> madrid
+        [InlineData(42.93708, -75.6107, -33.92528, 18.42389, 12789.5628)] // new york -> cape town
+        [InlineData(45.80721, 15.96757, 19.432608, -99.133209, 10264.4796)] // zagreb -> mexico city
+        [InlineData(43.623409, -79.368683, 42.35866, -71.05674, 690.2032)] // toronto -> boston, ma
+        [InlineData(37.720134, -122.182552, 37.720266, -122.181969, .0533)]
+        public void CoordinatesToMiles(double lat1, double lon1, double lat2, double lon2, double distance)
+        {
+            distance = UnitConverters.KilometersToMiles(distance);
+            Assert.Equal(distance, UnitConverters.CoordinatesToMiles(lat1, lon1, lat2, lon2), 3);
+            var location1 = new Location(lat1, lon1);
+            var location2 = new Location(lat2, lon2);
+            Assert.Equal(distance, Location.CalculateDistance(location1, location2, DistanceUnits.Miles), 3);
+            Assert.Equal(distance, Location.CalculateDistance(location2, location1, DistanceUnits.Miles), 3);
+            Assert.Equal(distance, location1.CalculateDistance(location2, DistanceUnits.Miles), 3);
+            Assert.Equal(distance, location2.CalculateDistance(location1, DistanceUnits.Miles), 3);
+            Assert.Equal(distance, LocationExtensions.CalculateDistance(location1, location2, DistanceUnits.Miles), 3);
+            Assert.Equal(distance, LocationExtensions.CalculateDistance(location2, location1, DistanceUnits.Miles), 3);
+        }
+
+        [Theory]
+        [InlineData(1.0, 101325)]
+        [InlineData(1.5, 151987.5)]
+        [InlineData(2.0, 202650)]
+        [InlineData(2.5, 253312.5)]
+        public void AtmospheresToPascals(double atm, double pascal) =>
+            Assert.Equal(UnitConverters.AtmospheresToPascals(atm), pascal);
+
+        [Theory]
+        [InlineData(101325, 1.0)]
+        [InlineData(151987.5, 1.5)]
+        [InlineData(202650, 2.0)]
+        [InlineData(253312.5, 2.5)]
+        public void PascalsToAtmospheres(double pascal, double atm) =>
+            Assert.Equal(UnitConverters.PascalsToAtmospheres(pascal), atm);
+
+        [Theory]
+        [InlineData(3048, 10000)]
+        public void MetersToInternationalFeet(double meters, double internationalFeet)
+        {
+            Assert.Equal(internationalFeet, UnitConverters.MetersToInternationalFeet(meters));
+        }
+
+        [Theory]
+        [InlineData(20000, 6096)]
+        public void InternationalFeetToMeters(double internationalFeet, double meters)
+        {
+            Assert.Equal(meters, UnitConverters.InternationalFeetToMeters(internationalFeet));
+        }
+
+        [Theory]
+        [InlineData(1200, 3937)]
+        public void MetersToUSSurveyFeet(double meters, double usFeet)
+        {
+            Assert.Equal(usFeet, UnitConverters.MetersToUSSurveyFeet(meters));
+        }
+
+        [Theory]
+        [InlineData(7874, 2400)]
+        public void USSurveyFeetToMeters(double usFeet, double meters)
+        {
+            Assert.Equal(meters, UnitConverters.USSurveyFeetToMeters(usFeet));
         }
     }
 }

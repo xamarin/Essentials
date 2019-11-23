@@ -11,7 +11,7 @@ namespace Xamarin.Essentials
     {
         static Task<bool> PlatformCanOpenAsync(Uri uri)
         {
-            var intent = new Intent(Intent.ActionView, AndroidUri.Parse(uri.AbsoluteUri));
+            var intent = new Intent(Intent.ActionView, AndroidUri.Parse(uri.OriginalString));
 
             if (Platform.AppContext == null)
                 return Task.FromResult(false);
@@ -23,11 +23,37 @@ namespace Xamarin.Essentials
 
         static Task PlatformOpenAsync(Uri uri)
         {
-            var intent = new Intent(Intent.ActionView, AndroidUri.Parse(uri.AbsoluteUri));
+            var intent = new Intent(Intent.ActionView, AndroidUri.Parse(uri.OriginalString));
             intent.SetFlags(ActivityFlags.ClearTop);
             intent.SetFlags(ActivityFlags.NewTask);
             Platform.AppContext.StartActivity(intent);
             return Task.CompletedTask;
+        }
+
+        static Task PlatformOpenAsync(OpenFileRequest request)
+        {
+            var contentUri = Platform.GetShareableFileUri(request.File.FullPath);
+
+            var intent = new Intent(Intent.ActionView);
+            intent.SetDataAndType(contentUri, request.File.ContentType);
+            intent.SetFlags(ActivityFlags.GrantReadUriPermission);
+
+            var chooserIntent = Intent.CreateChooser(intent, request.Title ?? string.Empty);
+            chooserIntent.SetFlags(ActivityFlags.ClearTop);
+            chooserIntent.SetFlags(ActivityFlags.NewTask);
+            Platform.AppContext.StartActivity(chooserIntent);
+
+            return Task.CompletedTask;
+        }
+
+        static async Task<bool> PlatformTryOpenAsync(Uri uri)
+        {
+            var canOpen = await PlatformCanOpenAsync(uri).ConfigureAwait(false);
+
+            if (canOpen)
+                await PlatformOpenAsync(uri).ConfigureAwait(false);
+
+            return canOpen;
         }
     }
 }

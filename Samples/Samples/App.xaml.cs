@@ -19,6 +19,8 @@ namespace Samples
         {
             InitializeComponent();
 
+            // Enable currently experimental features
+
             VersionTracking.Track();
 
             MainPage = new NavigationPage(new HomePage());

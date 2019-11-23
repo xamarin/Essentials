@@ -61,7 +61,7 @@ namespace Samples.ViewModel
                     "Quickly and easily use the clipboard.",
                     new[] { "clipboard", "copy", "paste" }),
                 new SampleItem(
-                    "📏",
+                    "🧭",
                     "Compass",
                     typeof(CompassPage),
                     "Monitor compass for changes.",
@@ -133,7 +133,7 @@ namespace Samples.ViewModel
                     "Detect device's orientation relative to Earth's magnetic field.",
                     new[] { "compass", "magnetometer", "sensors", "hardware", "device" }),
                 new SampleItem(
-                    "📍",
+                    "🗺",
                     "Launch Maps",
                     typeof(MapsPage),
                     "Easily launch maps with coordinates.",
@@ -166,7 +166,7 @@ namespace Samples.ViewModel
                     "📲",
                     "Share",
                     typeof(SharePage),
-                    "Send text and website uris to other apps.",
+                    "Send text, website uris and files to other apps.",
                     new[] { "data", "transfer", "share", "communication" }),
                 new SampleItem(
                     "💬",
@@ -180,6 +180,12 @@ namespace Samples.ViewModel
                     typeof(TextToSpeechPage),
                     "Vocalize text on the device.",
                     new[] { "text", "message", "speech", "communication" }),
+                new SampleItem(
+                    "🌡",
+                    "Unit Converters",
+                    typeof(UnitConvertersPage),
+                    "Easily converter different units.",
+                    new[] { "units", "converters", "calculations" }),
                 new SampleItem(
                     "📳",
                     "Vibration",

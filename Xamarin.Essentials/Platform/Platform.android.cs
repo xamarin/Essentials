@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -9,6 +11,8 @@ using Android.Locations;
 using Android.Net;
 using Android.Net.Wifi;
 using Android.OS;
+using Android.Support.V4.Content;
+using AndroidUri = Android.Net.Uri;
 
 namespace Xamarin.Essentials
 {
@@ -16,8 +20,40 @@ namespace Xamarin.Essentials
     {
         static ActivityLifecycleContextListener lifecycleListener;
 
-        internal static Context AppContext =>
-            Application.Context;
+        public static Context AppContext => Application.Context;
+
+        public static Activity CurrentActivity => lifecycleListener?.Activity;
+
+        public static event EventHandler<ActivityStateChangedEventArgs> ActivityStateChanged;
+
+        internal static void OnActivityStateChanged(Activity activity, ActivityState ev)
+            => ActivityStateChanged?.Invoke(null, new ActivityStateChangedEventArgs(activity, ev));
+
+        public static async Task<Activity> WaitForActivityAsync(CancellationToken cancelToken = default)
+        {
+            if (CurrentActivity != null)
+                return CurrentActivity;
+
+            var tcs = new TaskCompletionSource<Activity>();
+            var handler = new EventHandler<ActivityStateChangedEventArgs>((sender, args) =>
+            {
+                if (args.State == ActivityState.Created || args.State == ActivityState.Resumed)
+                    tcs.TrySetResult(args.Activity);
+            });
+
+            try
+            {
+                using (cancelToken.Register(() => tcs.TrySetCanceled()))
+                {
+                    ActivityStateChanged += handler;
+                    return await tcs.Task.ConfigureAwait(false);
+                }
+            }
+            finally
+            {
+                ActivityStateChanged -= handler;
+            }
+        }
 
         internal static Activity GetCurrentActivity(bool throwOnNull)
         {
@@ -61,6 +97,80 @@ namespace Xamarin.Essentials
             return activities.Any();
         }
 
+        internal static AndroidUri GetShareableFileUri(string filename)
+        {
+            Java.IO.File sharedFile;
+            if (FileProvider.IsFileInPublicLocation(filename))
+            {
+                // we are sharing a file in a "shared/public" location
+                sharedFile = new Java.IO.File(filename);
+            }
+            else
+            {
+                var rootDir = FileProvider.GetTemporaryDirectory();
+
+                // create a unique directory just in case there are multiple file with the same name
+                var tmpDir = new Java.IO.File(rootDir, Guid.NewGuid().ToString("N"));
+                tmpDir.Mkdirs();
+                tmpDir.DeleteOnExit();
+
+                // create the new temprary file
+                var tmpFile = new Java.IO.File(tmpDir, System.IO.Path.GetFileName(filename));
+                System.IO.File.Copy(filename, tmpFile.CanonicalPath);
+                tmpFile.DeleteOnExit();
+
+                sharedFile = tmpFile;
+            }
+
+            // create the uri, if N use file provider
+            if (HasApiLevelN)
+            {
+                var providerAuthority = AppContext.PackageName + ".fileProvider";
+                return FileProvider.GetUriForFile(
+                    AppContext.ApplicationContext,
+                    providerAuthority,
+                    sharedFile);
+            }
+
+            // use the shared file path created
+            return AndroidUri.FromFile(sharedFile);
+        }
+
+        internal static bool HasApiLevelN =>
+#if __ANDROID_24__
+            HasApiLevel(BuildVersionCodes.N);
+#else
+            false;
+#endif
+
+        internal static bool HasApiLevelNMr1 =>
+#if __ANDROID_25__
+        HasApiLevel(BuildVersionCodes.NMr1);
+#else
+        false;
+#endif
+
+        internal static bool HasApiLevelO =>
+#if __ANDROID_26__
+            HasApiLevel(BuildVersionCodes.O);
+#else
+            false;
+#endif
+
+        internal static bool HasApiLevelOMr1 =>
+#if __ANDROID_27__
+            HasApiLevel(BuildVersionCodes.OMr1);
+#else
+            false;
+#endif
+
+        internal static bool HasApiLevelP =>
+#if __ANDROID_28__
+            HasApiLevel(BuildVersionCodes.P);
+#else
+            false;
+#endif
+
         internal static bool HasApiLevel(BuildVersionCodes versionCode) =>
             (int)Build.VERSION.SdkInt >= (int)versionCode;
 
@@ -92,8 +202,10 @@ namespace Xamarin.Essentials
         {
             var resources = AppContext.Resources;
             var config = resources.Configuration;
-            if (HasApiLevel(BuildVersionCodes.N))
+#if __ANDROID_24__
+            if (HasApiLevelN)
                 return config.Locales.Get(0);
+#endif
 
             return config.Locale;
         }
@@ -103,7 +215,8 @@ namespace Xamarin.Essentials
             Java.Util.Locale.Default = locale;
             var resources = AppContext.Resources;
             var config = resources.Configuration;
-            if (HasApiLevel(BuildVersionCodes.N))
+
+            if (HasApiLevelN)
                 config.SetLocale(locale);
             else
                 config.Locale = locale;
@@ -112,6 +225,30 @@ namespace Xamarin.Essentials
             resources.UpdateConfiguration(config, resources.DisplayMetrics);
 #pragma warning restore CS0618 // Type or member is obsolete
         }
+    }
+
+    public enum ActivityState
+    {
+        Created,
+        Resumed,
+        Paused,
+        Destroyed,
+        SaveInstanceState,
+        Started,
+        Stopped
+    }
+
+    public class ActivityStateChangedEventArgs : EventArgs
+    {
+        internal ActivityStateChangedEventArgs(Activity activity, ActivityState ev)
+        {
+            State = ev;
+            Activity = activity;
+        }
+
+        public ActivityState State { get; }
+
+        public Activity Activity { get; }
     }
 
     class ActivityLifecycleContextListener : Java.Lang.Object, Application.IActivityLifecycleCallbacks
@@ -123,33 +260,38 @@ namespace Xamarin.Essentials
 
         internal Activity Activity
         {
-           get => currentActivity.TryGetTarget(out var a) ? a : null;
-           set => currentActivity.SetTarget(value);
+            get => currentActivity.TryGetTarget(out var a) ? a : null;
+            set => currentActivity.SetTarget(value);
         }
 
-        void Application.IActivityLifecycleCallbacks.OnActivityCreated(Activity activity, Bundle savedInstanceState) =>
+        void Application.IActivityLifecycleCallbacks.OnActivityCreated(Activity activity, Bundle savedInstanceState)
+        {
             Activity = activity;
-
-        void Application.IActivityLifecycleCallbacks.OnActivityDestroyed(Activity activity)
-        {
+            Platform.OnActivityStateChanged(activity, ActivityState.Created);
         }
 
-        void Application.IActivityLifecycleCallbacks.OnActivityPaused(Activity activity) =>
+        void Application.IActivityLifecycleCallbacks.OnActivityDestroyed(Activity activity) =>
+            Platform.OnActivityStateChanged(activity, ActivityState.Destroyed);
+
+        void Application.IActivityLifecycleCallbacks.OnActivityPaused(Activity activity)
+        {
             Activity = activity;
+            Platform.OnActivityStateChanged(activity, ActivityState.Paused);
+        }
 
-        void Application.IActivityLifecycleCallbacks.OnActivityResumed(Activity activity) =>
+        void Application.IActivityLifecycleCallbacks.OnActivityResumed(Activity activity)
+        {
             Activity = activity;
-
-        void Application.IActivityLifecycleCallbacks.OnActivitySaveInstanceState(Activity activity, Bundle outState)
-        {
+            Platform.OnActivityStateChanged(activity, ActivityState.Resumed);
         }
 
-        void Application.IActivityLifecycleCallbacks.OnActivityStarted(Activity activity)
-        {
-        }
+        void Application.IActivityLifecycleCallbacks.OnActivitySaveInstanceState(Activity activity, Bundle outState) =>
+            Platform.OnActivityStateChanged(activity, ActivityState.SaveInstanceState);
 
-        void Application.IActivityLifecycleCallbacks.OnActivityStopped(Activity activity)
-        {
-        }
+        void Application.IActivityLifecycleCallbacks.OnActivityStarted(Activity activity) =>
+            Platform.OnActivityStateChanged(activity, ActivityState.Started);
+
+        void Application.IActivityLifecycleCallbacks.OnActivityStopped(Activity activity) =>
+            Platform.OnActivityStateChanged(activity, ActivityState.Stopped);
     }
 }

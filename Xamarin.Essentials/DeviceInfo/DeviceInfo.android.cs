@@ -33,8 +33,15 @@ namespace Xamarin.Essentials
             // first try UIModeManager
             using (var uiModeManager = UiModeManager.FromContext(Essentials.Platform.AppContext))
             {
-                var uiMode = uiModeManager?.CurrentModeType ?? UiMode.TypeUndefined;
-                currentIdiom = DetectIdiom(uiMode);
+                try
+                {
+                    var uiMode = uiModeManager?.CurrentModeType ?? UiMode.TypeUndefined;
+                    currentIdiom = DetectIdiom(uiMode);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Unable to detect using UiModeManager: {ex.Message}");
+                }
             }
 
             // then try Configuration
@@ -75,7 +82,7 @@ namespace Xamarin.Essentials
         static DeviceIdiom DetectIdiom(UiMode uiMode)
         {
             if (uiMode.HasFlag(UiMode.TypeNormal))
-                return DeviceIdiom.Phone;
+                return DeviceIdiom.Unknown;
             else if (uiMode.HasFlag(UiMode.TypeTelevision))
                 return DeviceIdiom.TV;
             else if (uiMode.HasFlag(UiMode.TypeDesk))
@@ -95,6 +102,7 @@ namespace Xamarin.Essentials
                 Build.Model.Contains("Emulator") ||
                 Build.Model.Contains("Android SDK built for x86") ||
                 Build.Manufacturer.Contains("Genymotion") ||
+                Build.Manufacturer.Contains("VS Emulator") ||
                 (Build.Brand.StartsWith("generic", StringComparison.InvariantCulture) && Build.Device.StartsWith("generic", StringComparison.InvariantCulture)) ||
                 Build.Product.Equals("google_sdk", StringComparison.InvariantCulture);
 
