@@ -16,6 +16,6 @@ namespace Xamarin.Essentials
 
         public static void ShowSettingsUI() => PlatformShowSettingsUI();
 
-        public static WindowSize WindowAppSize() => PlatformWindowAppSize();
+        public static WindowSize AppViewInfo => PlatformAppViewInfo();
     }
 }

@@ -89,7 +89,7 @@ namespace Xamarin.Essentials
             };
         }
 
-        static Display GetDefaultDisplay()
+        internal static Display GetDefaultDisplay()
         {
             using var service = Platform.AppContext.GetSystemService(Context.WindowService);
             using var windowManager = service?.JavaCast<IWindowManager>();

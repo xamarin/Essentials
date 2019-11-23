@@ -25,7 +25,7 @@ namespace Xamarin.Essentials
 #endif
 
 #if __IOS__ || __TVOS__
-        static WindowSize PlatformWindowAppSize()
+        static WindowSize PlatformAppViewInfo()
         {
             var currentView = Platform.GetCurrentViewController().View.Window?.Frame;
 
@@ -35,7 +35,7 @@ namespace Xamarin.Essentials
             return new WindowSize(currentView.Value.Width, currentView.Value.Height);
         }
 #else
-        static WindowSize PlatformWindowAppSize() =>
+        static WindowSize PlatformAppViewInfo() =>
             throw ExceptionUtils.NotSupportedOrImplementedException;
 #endif
     }

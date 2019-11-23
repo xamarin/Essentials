@@ -23,6 +23,6 @@ namespace Xamarin.Essentials
             AppControl.SendLaunchRequest(new AppControl() { Operation = AppControlOperations.Setting });
         }
 
-        static WindowSize PlatformWindowAppSize() => throw ExceptionUtils.NotSupportedOrImplementedException;
+        static WindowSize PlatformAppViewInfo() => throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }

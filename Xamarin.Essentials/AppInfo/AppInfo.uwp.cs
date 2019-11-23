@@ -22,7 +22,7 @@ namespace Xamarin.Essentials
         static void PlatformShowSettingsUI() =>
             Windows.System.Launcher.LaunchUriAsync(new System.Uri("ms-settings:appsfeatures-app")).WatchForError();
 
-        static WindowSize PlatformWindowAppSize()
+        static WindowSize PlatformAppViewInfo()
         {
             var view = ApplicationView.GetForCurrentView();
 
