@@ -2,15 +2,13 @@
 using System.IO;
 using System.Threading.Tasks;
 using AVFoundation;
-using CoreTelephony;
 using Foundation;
-using UIKit;
 
 namespace Xamarin.Essentials
 {
     public static partial class Recorder
     {
-        static bool CanRecordAudio => AVAudioSession.SharedInstance().InputAvailable;
+        static Task<bool> PlatformCanRecordAudio => Task.FromResult(AVAudioSession.SharedInstance().InputAvailable);
 
         static AVAudioRecorder recorder;
 
@@ -20,11 +18,11 @@ namespace Xamarin.Essentials
 
             var err = audioSession.SetCategory(AVAudioSessionCategory.PlayAndRecord);
             if (err != null)
-                throw new Exception(err.ToString());
+                ThrowNSError(err);
 
             err = audioSession.SetActive(true);
             if (err != null)
-                throw new Exception(err.ToString());
+                ThrowNSError(err);
         }
 
         static void InitAudioRecorder()
@@ -32,14 +30,12 @@ namespace Xamarin.Essentials
             var url = NSUrl.FromFilename(GetTempFileName());
             recorder = AVAudioRecorder.Create(url, new AudioSettings(settings), out var error);
             if (error != null)
-                throw new Exception(error.ToString());
+                ThrowNSError(error);
         }
 
         static string GetTempFileName()
         {
-            var docFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            var libFolder = Path.Combine(docFolder, "..", "Library");
-            var tempFileName = Path.Combine(libFolder, Path.GetTempFileName());
+            var tempFileName = Path.Combine(FileSystem.CacheDirectory, Path.GetTempFileName());
 
             return tempFileName;
         }
@@ -52,19 +48,23 @@ namespace Xamarin.Essentials
             return Task.CompletedTask;
         }
 
-        public Task<AudioRecording> StopAsync()
+        public static Task<RecordedAudio> PlatformStopAsync()
         {
             recorder.Stop();
+
+            var recording = new RecordedAudio(recorder.Url.Path);
             recorder.Dispose();
             recorder = null;
             var audioSession = AVAudioSession.SharedInstance();
             audioSession.SetActive(false);
-            var recording = new AudioRecording(recorder.Url.Path);
 
             return Task.FromResult(recording);
         }
 
-        private static NSDictionary<NSString, NSObject> settings = new NSDictionary<NSString, NSObject>(
+        static void ThrowNSError(NSError error)
+            => throw new Exception(error.ToString());
+
+        static readonly NSDictionary<NSString, NSObject> settings = new NSDictionary<NSString, NSObject>(
         new[]
         {
             AVAudioSettings.AVSampleRateKey,
