@@ -23,7 +23,7 @@ namespace Xamarin.Essentials
             return PlatformComposeAsync(message);
         }
 
-        static string GetMailToUri(EmailMessage message)
+        static string GetMailToUri(EmailMessage? message)
         {
             if (message != null && message.BodyFormat != EmailBodyFormat.PlainText)
                 throw new FeatureNotSupportedException("Only EmailBodyFormat.PlainText is supported if no email account is set up.");

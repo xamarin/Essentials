@@ -31,7 +31,7 @@ namespace Xamarin.Essentials
                 return ComposeWithUrl(message);
         }
 
-        static Task ComposeWithMailCompose(EmailMessage message)
+        static Task ComposeWithMailCompose(EmailMessage? message)
         {
             // do this first so we can throw as early as possible
             var parentController = Platform.GetCurrentViewController();
@@ -70,7 +70,7 @@ namespace Xamarin.Essentials
             return tcs.Task;
         }
 
-        static Task ComposeWithUrl(EmailMessage message)
+        static Task ComposeWithUrl(EmailMessage? message)
         {
             var url = GetMailToUri(message);
 
