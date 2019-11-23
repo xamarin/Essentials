@@ -40,7 +40,8 @@ namespace Xamarin.Essentials
             File = file.File;
         }
 
-        internal IStorageFile File { get; set; }
+        internal IStorageFile? File { get; set; }
+
 
         // we can't do anything here, but Windows will take care of it
         internal static string? PlatformGetContentType(string extension) => null;

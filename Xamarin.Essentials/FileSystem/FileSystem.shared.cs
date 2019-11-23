@@ -22,7 +22,7 @@ namespace Xamarin.Essentials
 
         string? contentType;
 
-        internal FileBase(string fullPath)
+        internal FileBase(string? fullPath)
         {
             if (fullPath == null)
                 throw new ArgumentNullException(nameof(fullPath));
