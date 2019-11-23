@@ -13,7 +13,7 @@ namespace Samples.ViewModel
 
         public string AppBuild => AppInfo.BuildString;
 
-        public string WindowAppSize => AppInfo.AppViewInfo.ToString();
+        public string WindowAppSize => AppInfo.CurrentView.ToString();
 
         public Command ShowSettingsUICommand { get; }
 

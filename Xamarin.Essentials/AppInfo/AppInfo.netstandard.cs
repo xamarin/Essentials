@@ -12,6 +12,6 @@
 
         static void PlatformShowSettingsUI() => throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        static WindowSize PlatformAppViewInfo() => throw ExceptionUtils.NotSupportedOrImplementedException;
+        static AppViewInfo PlatformCurrentView() => throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }

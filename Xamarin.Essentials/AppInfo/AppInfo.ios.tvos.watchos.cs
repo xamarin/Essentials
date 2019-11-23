@@ -25,17 +25,17 @@ namespace Xamarin.Essentials
 #endif
 
 #if __IOS__ || __TVOS__
-        static WindowSize PlatformAppViewInfo()
+        static AppViewInfo PlatformCurrentView()
         {
             var currentView = Platform.GetCurrentViewController().View.Window?.Frame;
 
             if (currentView == null)
                 return default;
 
-            return new WindowSize(currentView.Value.Width, currentView.Value.Height);
+            return new AppViewInfo(currentView.Value.Width, currentView.Value.Height);
         }
 #else
-        static WindowSize PlatformAppViewInfo() =>
+        static AppViewInfo PlatformCurrentView() =>
             throw ExceptionUtils.NotSupportedOrImplementedException;
 #endif
     }
