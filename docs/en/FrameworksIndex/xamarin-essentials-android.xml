@@ -190,6 +190,7 @@
       <Member Id="P:Xamarin.Essentials.DeviceIdiom.Watch" />
     </Type>
     <Type Name="Xamarin.Essentials.DeviceInfo" Id="T:Xamarin.Essentials.DeviceInfo">
+      <Member Id="M:Xamarin.Essentials.DeviceInfo.GetStorageInformationAsync" />
       <Member Id="P:Xamarin.Essentials.DeviceInfo.DeviceType" />
       <Member Id="P:Xamarin.Essentials.DeviceInfo.Idiom" />
       <Member Id="P:Xamarin.Essentials.DeviceInfo.Manufacturer" />
@@ -647,6 +648,24 @@
       <Member Id="P:Xamarin.Essentials.SpeechOptions.Pitch" />
       <Member Id="P:Xamarin.Essentials.SpeechOptions.Volume" />
     </Type>
+    <Type Name="Xamarin.Essentials.StorageInfo" Id="T:Xamarin.Essentials.StorageInfo">
+      <Member Id="M:Xamarin.Essentials.StorageInfo.#ctor(System.UInt64,System.UInt64,System.UInt64,Xamarin.Essentials.StorageType)" />
+      <Member Id="M:Xamarin.Essentials.StorageInfo.Equals(System.Object)" />
+      <Member Id="M:Xamarin.Essentials.StorageInfo.Equals(Xamarin.Essentials.StorageInfo)" />
+      <Member Id="M:Xamarin.Essentials.StorageInfo.GetHashCode" />
+      <Member Id="M:Xamarin.Essentials.StorageInfo.op_Equality(Xamarin.Essentials.StorageInfo,Xamarin.Essentials.StorageInfo)" />
+      <Member Id="M:Xamarin.Essentials.StorageInfo.op_Inequality(Xamarin.Essentials.StorageInfo,Xamarin.Essentials.StorageInfo)" />
+      <Member Id="M:Xamarin.Essentials.StorageInfo.ToString" />
+      <Member Id="P:Xamarin.Essentials.StorageInfo.Capacity" />
+      <Member Id="P:Xamarin.Essentials.StorageInfo.FreeBytes" />
+      <Member Id="P:Xamarin.Essentials.StorageInfo.Type" />
+      <Member Id="P:Xamarin.Essentials.StorageInfo.UsedBytes" />
+    </Type>
+    <Type Name="Xamarin.Essentials.StorageType" Id="T:Xamarin.Essentials.StorageType">
+      <Member Id="F:Xamarin.Essentials.StorageType.External" />
+      <Member Id="F:Xamarin.Essentials.StorageType.Internal" />
+      <Member Id="F:Xamarin.Essentials.StorageType.Unknown" />
+    </Type>
     <Type Name="Xamarin.Essentials.TextToSpeech" Id="T:Xamarin.Essentials.TextToSpeech">
       <Member Id="M:Xamarin.Essentials.TextToSpeech.GetLocalesAsync" />
       <Member Id="M:Xamarin.Essentials.TextToSpeech.SpeakAsync(System.String,System.Threading.CancellationToken)" />
@@ -706,6 +725,12 @@
       <Member Id="M:Xamarin.Essentials.Vibration.Vibrate" />
       <Member Id="M:Xamarin.Essentials.Vibration.Vibrate(System.Double)" />
       <Member Id="M:Xamarin.Essentials.Vibration.Vibrate(System.TimeSpan)" />
+    </Type>
+  </Namespace>
+  <Namespace Name="Xamarin.Essentials.Types">
+    <Type Name="Xamarin.Essentials.Types.StorageExtensions" Id="T:Xamarin.Essentials.Types.StorageExtensions">
+      <Member Id="M:Xamarin.Essentials.Types.StorageExtensions.FreePercentage(Xamarin.Essentials.StorageInfo)" />
+      <Member Id="M:Xamarin.Essentials.Types.StorageExtensions.UsedPercentage(Xamarin.Essentials.StorageInfo)" />
     </Type>
   </Namespace>
 </Framework>

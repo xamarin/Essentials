@@ -100,7 +100,6 @@
       </Parameters>
       <Docs>
         <param name="uri">uri scheme</param>
-
         <summary>Launches the app specified by the uri scheme</summary>
         <returns>
           <para></para>
