@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Android.Content;
 using Android.Net;
@@ -55,7 +56,16 @@ namespace Xamarin.Essentials
 
                     if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
                     {
-                        foreach (var network in manager?.GetAllNetworks() ?? Array.Empty<Network>())
+                        var networks = manager?.GetAllNetworks();
+
+                        // some devices running 21 and 22 only use the older api.
+                        if (networks?.Length == 0 && (int)Build.VERSION.SdkInt < 23)
+                        {
+                            ProcessAllNetworkInfo();
+                            return currentAccess;
+                        }
+
+                        foreach (var network in networks ?? Enumerable.Empty<Network>())
                         {
                             try
                             {
@@ -89,8 +99,13 @@ namespace Xamarin.Essentials
                     }
                     else
                     {
+                        ProcessAllNetworkInfo();
+                    }
+
+                    void ProcessAllNetworkInfo()
+                    {
 #pragma warning disable CS0618 // Type or member is obsolete
-                        foreach (var info in manager?.GetAllNetworkInfo() ?? Array.Empty<NetworkInfo>())
+                        foreach (var info in manager.GetAllNetworkInfo())
 #pragma warning restore CS0618 // Type or member is obsolete
                         {
                             ProcessNetworkInfo(info);
@@ -131,7 +146,7 @@ namespace Xamarin.Essentials
                 var manager = Platform.ConnectivityManager;
                 if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
                 {
-                    foreach (var network in manager?.GetAllNetworks() ?? Array.Empty<Network>())
+                    foreach (var network in manager?.GetAllNetworks() ?? Enumerable.Empty<Network>())
                     {
                         NetworkInfo? info = null;
                         try
@@ -151,7 +166,7 @@ namespace Xamarin.Essentials
                 else
                 {
 #pragma warning disable CS0618 // Type or member is obsolete
-                    foreach (var info in manager?.GetAllNetworkInfo() ?? Array.Empty<NetworkInfo>())
+                    foreach (var info in manager?.GetAllNetworkInfo() ?? Enumerable.Empty<NetworkInfo>())
 #pragma warning restore CS0618 // Type or member is obsolete
                     {
                         var p = ProcessNetworkInfo(info);
