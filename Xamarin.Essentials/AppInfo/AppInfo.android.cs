@@ -52,17 +52,14 @@ namespace Xamarin.Essentials
             context.StartActivity(settingsIntent);
         }
 
-        static WindowSize PlatformAppViewInfo()
+        static AppViewInfo PlatformCurrentView()
         {
-            using var display = DeviceDisplay.GetDefaultDisplay();
-
-            if (display == null)
-                return default;
-
+            var context = Platform.GetCurrentActivity(false) ?? Platform.AppContext;
+            using var windowManager = context.GetSystemService(Context.WindowService);
+            using var windows = windowManager.JavaCast<IWindowManager>();
             using var metrics = new DisplayMetrics();
-            display.GetMetrics(metrics);
-
-            return new WindowSize(metrics.WidthPixels, metrics.HeightPixels);
+            windows.DefaultDisplay.GetMetrics(metrics);
+            return new AppViewInfo(metrics.WidthPixels, metrics.HeightPixels);
         }
     }
 }
