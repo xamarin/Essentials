@@ -24,7 +24,7 @@ namespace Xamarin.Essentials
         }
     }
 
-    public class ShareBase
+    public class ShareRequestBase
     {
         public string Title { get; set; }
 
@@ -33,7 +33,7 @@ namespace Xamarin.Essentials
 #endif
     }
 
-    public class ShareTextRequest : ShareBase
+    public class ShareTextRequest : ShareRequestBase
     {
         public ShareTextRequest()
         {
@@ -51,7 +51,7 @@ namespace Xamarin.Essentials
         public string Uri { get; set; }
     }
 
-    public class ShareFileRequest : ShareBase
+    public class ShareFileRequest : ShareRequestBase
     {
         public ShareFileRequest()
         {
