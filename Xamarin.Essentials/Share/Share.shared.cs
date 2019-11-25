@@ -24,7 +24,7 @@ namespace Xamarin.Essentials
         }
     }
 
-    public class ShareRequestBase
+    public abstract class ShareRequestBase
     {
         public string Title { get; set; }
 
