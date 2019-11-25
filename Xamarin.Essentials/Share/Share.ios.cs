@@ -29,8 +29,8 @@ namespace Xamarin.Essentials
             {
                 activityController.PopoverPresentationController.SourceView = vc.View;
 
-                if (request.SourceScreenPosition != Rectangle.Empty)
-                    activityController.PopoverPresentationController.SourceRect = request.SourceScreenPosition.ToPlatformRectangle();
+                if (request.PresentationSourceBounds != Rectangle.Empty)
+                    activityController.PopoverPresentationController.SourceRect = request.PresentationSourceBounds.ToPlatformRectangle();
             }
 
             return vc.PresentViewControllerAsync(activityController, true);
@@ -54,8 +54,8 @@ namespace Xamarin.Essentials
             {
                 activityController.PopoverPresentationController.SourceView = vc.View;
 
-                if (request.SourceScreenPosition != Rectangle.Empty)
-                    activityController.PopoverPresentationController.SourceRect = request.SourceScreenPosition.ToPlatformRectangle();
+                if (request.PresentationSourceBounds != Rectangle.Empty)
+                    activityController.PopoverPresentationController.SourceRect = request.PresentationSourceBounds.ToPlatformRectangle();
             }
 
             return vc.PresentViewControllerAsync(activityController, true);

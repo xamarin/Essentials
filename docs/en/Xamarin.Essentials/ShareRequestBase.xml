@@ -31,7 +31,7 @@
       </Docs>
     </Member>
     <Member MemberName="SourceScreenPosition">
-      <MemberSignature Language="C#" Value="public System.Drawing.Rectangle SourceScreenPosition { get; set; }" />
+      <MemberSignature Language="C#" Value="public System.Drawing.Rectangle PresentationSourceBounds { get; set; }" />
       <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Drawing.Rectangle SourceScreenPosition" />
       <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.ShareRequestBase.SourceScreenPosition" />
       <MemberType>Property</MemberType>

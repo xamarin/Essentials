@@ -105,7 +105,7 @@ namespace Samples.ViewModel
                 {
                     Title = Title,
                     File = new ShareFile(file),
-                    SourceScreenPosition = Device.RuntimePlatform == Device.iOS && Device.Idiom == TargetIdiom.Tablet
+                    PresentationSourceBounds = Device.RuntimePlatform == Device.iOS && Device.Idiom == TargetIdiom.Tablet
                                             ? new System.Drawing.Rectangle(0, 20, 0, 0)
                                             : System.Drawing.Rectangle.Empty
                 });

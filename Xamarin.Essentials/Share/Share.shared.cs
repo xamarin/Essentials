@@ -29,7 +29,7 @@ namespace Xamarin.Essentials
         public string Title { get; set; }
 
 #if !NETSTANDARD1_0
-        public Rectangle SourceScreenPosition { get; set; } = Rectangle.Empty;
+        public Rectangle PresentationSourceBounds { get; set; } = Rectangle.Empty;
 #endif
     }
 
