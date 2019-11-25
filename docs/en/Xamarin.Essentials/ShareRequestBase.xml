@@ -30,10 +30,10 @@
         <remarks></remarks>
       </Docs>
     </Member>
-    <Member MemberName="SourceScreenPosition">
+    <Member MemberName="PresentationSourceBounds">
       <MemberSignature Language="C#" Value="public System.Drawing.Rectangle PresentationSourceBounds { get; set; }" />
-      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Drawing.Rectangle SourceScreenPosition" />
-      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.ShareRequestBase.SourceScreenPosition" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype System.Drawing.Rectangle PresentationSourceBounds" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.ShareRequestBase.PresentationSourceBounds" />
       <MemberType>Property</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>

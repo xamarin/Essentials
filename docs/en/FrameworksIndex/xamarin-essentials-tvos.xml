@@ -609,7 +609,7 @@
     </Type>
     <Type Name="Xamarin.Essentials.ShareRequestBase" Id="T:Xamarin.Essentials.ShareRequestBase">
       <Member Id="M:Xamarin.Essentials.ShareRequestBase.#ctor" />
-      <Member Id="P:Xamarin.Essentials.ShareRequestBase.SourceScreenPosition" />
+      <Member Id="P:Xamarin.Essentials.ShareRequestBase.PresentationSourceBounds" />
       <Member Id="P:Xamarin.Essentials.ShareRequestBase.Title" />
     </Type>
     <Type Name="Xamarin.Essentials.ShareTextRequest" Id="T:Xamarin.Essentials.ShareTextRequest">
