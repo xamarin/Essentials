@@ -36,7 +36,7 @@ namespace Xamarin.Essentials
                 var v2 = (v & 0x0000FFFF00000000L) >> 32;
                 var v3 = (v & 0x00000000FFFF0000L) >> 16;
                 var v4 = v & 0x000000000000FFFFL;
-                return $"{v1.ToString()}.{v2.ToString()}.{v3.ToString()}.{v4.ToString()}";
+                return $"{v1}.{v2}.{v3}.{v4}";
             }
 
             return version;
