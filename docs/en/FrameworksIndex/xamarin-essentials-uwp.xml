@@ -637,10 +637,6 @@
       <Member Id="P:Xamarin.Essentials.SpeechOptions.Pitch" />
       <Member Id="P:Xamarin.Essentials.SpeechOptions.Volume" />
     </Type>
-    <Type Name="Xamarin.Essentials.StorageExtensions" Id="T:Xamarin.Essentials.StorageExtensions">
-      <Member Id="M:Xamarin.Essentials.StorageExtensions.FreePercentage(Xamarin.Essentials.StorageInfo)" />
-      <Member Id="M:Xamarin.Essentials.StorageExtensions.UsedPercentage(Xamarin.Essentials.StorageInfo)" />
-    </Type>
     <Type Name="Xamarin.Essentials.StorageInfo" Id="T:Xamarin.Essentials.StorageInfo">
       <Member Id="M:Xamarin.Essentials.StorageInfo.#ctor(System.UInt64,System.UInt64,System.UInt64,Xamarin.Essentials.StorageType)" />
       <Member Id="M:Xamarin.Essentials.StorageInfo.Equals(System.Object)" />
