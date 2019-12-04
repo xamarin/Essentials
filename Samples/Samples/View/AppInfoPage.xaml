@@ -25,5 +25,5 @@
             </StackLayout>
         </ScrollView>
     </StackLayout>
-
+	
 </views:BasePage>

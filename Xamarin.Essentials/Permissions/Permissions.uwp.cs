@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Windows.ApplicationModel.Appointments;
 using Windows.Devices.Geolocation;
 
 namespace Xamarin.Essentials
@@ -30,7 +31,8 @@ namespace Xamarin.Essentials
             {
                 // If the manifest doesn't contain a capability we need, throw
                 if ((!doc.Root.XPathSelectElements($"//x:DeviceCapability[@Name='{cap}']", namespaceManager)?.Any() ?? false) &&
-                    (!doc.Root.XPathSelectElements($"//x:Capability[@Name='{cap}']", namespaceManager)?.Any() ?? false))
+                    (!doc.Root.XPathSelectElements($"//x:Capability[@Name='{cap}']", namespaceManager)?.Any() ?? false) &&
+                    (!doc.Root.XPathSelectElements($"//x:uap:Capability[@Name='{cap}']", namespaceManager)?.Any() ?? false))
                 {
                     if (throwIfMissing)
                         throw new PermissionException($"You need to declare the capability `{cap}` in your AppxManifest.xml file");
@@ -46,6 +48,8 @@ namespace Xamarin.Essentials
         {
             switch (permission)
             {
+                case PermissionType.CalendarRead:
+                    return CheckCalendarReadAsync();
                 case PermissionType.LocationWhenInUse:
                     return CheckLocationAsync();
                 default:
@@ -72,6 +76,18 @@ namespace Xamarin.Essentials
                     return PermissionStatus.Denied;
             }
         }
+
+        static async Task<PermissionStatus> CheckCalendarReadAsync()
+        {
+            if (!MainThread.IsMainThread)
+                throw new PermissionException("Permission request must be invoked on main thread.");
+
+            if (await CalendarRequest.GetInstanceAsync() != null)
+            {
+                return PermissionStatus.Granted;
+            }
+            return PermissionStatus.Denied;
+        }
     }
 
     static class PermissionTypeExtensions
@@ -82,6 +98,8 @@ namespace Xamarin.Essentials
             {
                 case PermissionType.LocationWhenInUse:
                     return new[] { "location" };
+                case PermissionType.CalendarRead:
+                    return new[] { "appointments" };
                 default:
                     return null;
             }

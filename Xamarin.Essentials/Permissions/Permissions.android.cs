@@ -80,6 +80,7 @@ namespace Xamarin.Essentials
         static async Task<PermissionStatus> PlatformRequestAsync(PermissionType permission)
         {
             // Check status before requesting first
+
             if (await PlatformCheckStatusAsync(permission) == PermissionStatus.Granted)
                 return PermissionStatus.Granted;
 
@@ -156,6 +157,9 @@ namespace Xamarin.Essentials
                     break;
                 case PermissionType.Camera:
                     permissions.Add((Manifest.Permission.Camera, true));
+                    break;
+                case PermissionType.CalendarRead:
+                    permissions.Add((Manifest.Permission.ReadCalendar, true));
                     break;
                 case PermissionType.Flashlight:
                     permissions.Add((Manifest.Permission.Camera, true));

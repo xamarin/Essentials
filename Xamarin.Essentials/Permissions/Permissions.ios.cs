@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using CoreLocation;
+using EventKit;
 using Foundation;
 
 namespace Xamarin.Essentials
@@ -20,6 +21,16 @@ namespace Xamarin.Essentials
                         return false;
                 }
             }
+            else if (permission == PermissionType.CalendarRead)
+            {
+                if (!info.ContainsKey(new NSString("NSCalendarsUsageDescription")))
+                {
+                    if (throwIfMissing)
+                        throw new PermissionException("You must set `NSCalendarsUsageDescription` in your Info.plist file to enable Authorization Requests for Calendar usage.");
+                    else
+                        return false;
+                }
+            }
 
             return true;
         }
@@ -32,6 +43,8 @@ namespace Xamarin.Essentials
             {
                 case PermissionType.LocationWhenInUse:
                     return Task.FromResult(GetLocationStatus());
+                case PermissionType.CalendarRead:
+                    return RequestCalendarAsync();
             }
 
             return Task.FromResult(PermissionStatus.Granted);
@@ -54,6 +67,12 @@ namespace Xamarin.Essentials
                         throw new PermissionException("Permission request must be invoked on main thread.");
 
                     return await RequestLocationAsync();
+                case PermissionType.CalendarRead:
+
+                    if (!MainThread.IsMainThread)
+                        throw new PermissionException("Permission request must be invoked on main thread.");
+
+                    return await RequestCalendarAsync();
                 default:
                     return PermissionStatus.Granted;
             }
@@ -105,6 +124,18 @@ namespace Xamarin.Essentials
                 locationManager?.Dispose();
                 locationManager = null;
             }
+        }
+
+        static Task<PermissionStatus> RequestCalendarAsync()
+        {
+            var tcs = new TaskCompletionSource<PermissionStatus>(CalendarRequest.Instance);
+            CalendarRequest.Instance.RequestAccess(
+            EKEntityType.Event,
+            (bool granted, NSError e) =>
+            {
+                tcs.SetResult(granted ? PermissionStatus.Granted : PermissionStatus.Denied);
+            });
+            return tcs.Task;
         }
     }
 }

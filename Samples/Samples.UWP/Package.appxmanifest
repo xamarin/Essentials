@@ -24,6 +24,7 @@
   </Applications>
   <Capabilities>
     <Capability Name="internetClient" />
+    <uap:Capability Name="appointments"/>
     <DeviceCapability Name="location" />
   </Capabilities>
 </Package>
