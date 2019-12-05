@@ -5,6 +5,7 @@
              x:Class="Samples.App">
     <Application.Resources>
         <ResourceDictionary>
+            <x:String x:Key="DateDisplayFormatter">{0:dd/MM/yy hh:mm tt}</x:String>
             <converters:NegativeConverter x:Key="NegativeConverter" />
             <Style TargetType="Page" ApplyToDerivedTypes="True">
                 <Setter Property="Visual" Value="Material" />
