@@ -60,7 +60,7 @@ namespace Xamarin.Essentials
             var eDate = endDate ?? sDate.Add(defaultEndTimeFromStartTime);
             if (!string.IsNullOrEmpty(calendarId))
             {
-                // Match other platforms where if you pass in a bad id return an empty list, this must be a bad id as android ids can only be integers.
+                // Match other platforms where if you pass in a bad id return an empty list, this must be a bad id as android calendar ids can only be integers.
                 if (!int.TryParse(calendarId, out var resultId))
                 {
                     return new List<DeviceEvent>();
