@@ -41,16 +41,12 @@ namespace Xamarin.Essentials
             var sDate = startDateToConvert.ToNSDate();
             var eDate = endDateToConvert.ToNSDate();
             EKCalendar[] calendars;
-            try
-            {
-                calendars = !string.IsNullOrWhiteSpace(calendarId)
-                    ? CalendarRequest.Instance.Calendars.Where(x => x.CalendarIdentifier == calendarId).ToArray()
-                    : null;
-            }
-            catch (NullReferenceException ex)
-            {
-                throw new NullReferenceException($"iOS: Unexpected null reference exception {ex.Message}");
-            }
+            calendars = !string.IsNullOrWhiteSpace(calendarId)
+                ? CalendarRequest.Instance.Calendars.Where(x => x.CalendarIdentifier == calendarId).ToArray()
+                : null;
+
+            if (calendars.Length == 0 && !string.IsNullOrWhiteSpace(calendarId))
+                return new List<DeviceEvent>();
 
             var query = CalendarRequest.Instance.PredicateForEvents(sDate, eDate, calendars);
             var events = CalendarRequest.Instance.EventsMatching(query);

@@ -29,7 +29,7 @@ namespace Xamarin.Essentials
         {
             await Permissions.RequireAsync(PermissionType.CalendarRead);
 
-            var options = new FindAppointmentsOptions();
+          var options = new FindAppointmentsOptions();
             options.FetchProperties.Add(AppointmentProperties.Subject);
             options.FetchProperties.Add(AppointmentProperties.StartTime);
             options.FetchProperties.Add(AppointmentProperties.Duration);
