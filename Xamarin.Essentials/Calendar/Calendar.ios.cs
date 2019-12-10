@@ -40,13 +40,14 @@ namespace Xamarin.Essentials
             var endDateToConvert = endDate ?? startDateToConvert.Add(defaultEndTimeFromStartTime);  // NOTE: 4 years is the maximum period that a iOS calendar events can search
             var sDate = startDateToConvert.ToNSDate();
             var eDate = endDateToConvert.ToNSDate();
-            EKCalendar[] calendars;
-            calendars = !string.IsNullOrWhiteSpace(calendarId)
-                ? CalendarRequest.Instance.Calendars.Where(x => x.CalendarIdentifier == calendarId).ToArray()
-                : null;
+            EKCalendar[] calendars = null;
+            if (!string.IsNullOrWhiteSpace(calendarId))
+            {
+                calendars = CalendarRequest.Instance.Calendars.Where(x => x.CalendarIdentifier == calendarId).ToArray();
 
-            if (calendars.Length == 0 && !string.IsNullOrWhiteSpace(calendarId))
-                return new List<DeviceEvent>();
+                if (calendars.Length == 0 && !string.IsNullOrWhiteSpace(calendarId))
+                    throw new ArgumentOutOfRangeException($"[iOS]: No calendar exists with the Id {calendarId}");
+            }
 
             var query = CalendarRequest.Instance.PredicateForEvents(sDate, eDate, calendars);
             var events = CalendarRequest.Instance.EventsMatching(query);

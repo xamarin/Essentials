@@ -63,7 +63,7 @@ namespace Xamarin.Essentials
                 // Match other platforms where if you pass in a bad id return an empty list, this must be a bad id as android calendar ids can only be integers.
                 if (!int.TryParse(calendarId, out var resultId))
                 {
-                    return new List<DeviceEvent>();
+                    throw new ArgumentOutOfRangeException($"[Android]: No calendar exists with the Id {calendarId}");
                 }
                 calendarSpecificEvent = $"{CalendarContract.Events.InterfaceConsts.CalendarId}={resultId} {andCondition} ";
             }
@@ -71,9 +71,9 @@ namespace Xamarin.Essentials
             calendarSpecificEvent += $"{CalendarContract.Events.InterfaceConsts.Dtstart} <= {eDate.AddMilliseconds(sDate.Offset.TotalMilliseconds).ToUnixTimeMilliseconds()} {andCondition} ";
             calendarSpecificEvent += $"{CalendarContract.Events.InterfaceConsts.Deleted} != 1";
 
+            var events = new List<DeviceEvent>();
             using (var cur = Platform.AppContext.ApplicationContext.ContentResolver.Query(eventsUri, eventsProjection.ToArray(), calendarSpecificEvent, null, $"{CalendarContract.Events.InterfaceConsts.Dtstart} ASC"))
             {
-                var events = new List<DeviceEvent>();
                 while (cur.MoveToNext())
                 {
                     events.Add(new DeviceEvent()
@@ -85,7 +85,41 @@ namespace Xamarin.Essentials
                         EndDate = cur.GetInt(eventsProjection.IndexOf(CalendarContract.Events.InterfaceConsts.AllDay)) == 0 ? (DateTimeOffset?)DateTimeOffset.FromUnixTimeMilliseconds(cur.GetLong(eventsProjection.IndexOf(CalendarContract.Events.InterfaceConsts.Dtend))) : null
                     });
                 }
-                return events;
+            }
+            if (events.Count == 0)
+            {
+                // Make sure this calendar exists by testing retrieval
+                GetCalendarById(calendarId);
+            }
+
+            return events;
+        }
+
+        static DeviceCalendar GetCalendarById(string calendarId)
+        {
+            var calendarsUri = CalendarContract.Calendars.ContentUri;
+            var calendarsProjection = new List<string>
+            {
+                CalendarContract.Calendars.InterfaceConsts.Id,
+                CalendarContract.Calendars.InterfaceConsts.CalendarDisplayName
+            };
+            var queryConditions = $"{CalendarContract.Calendars.InterfaceConsts.Deleted} != 1 {andCondition} {CalendarContract.Calendars.InterfaceConsts.Id} = {calendarId}";
+
+            using (var cur = Platform.AppContext.ApplicationContext.ContentResolver.Query(calendarsUri, calendarsProjection.ToArray(), queryConditions, null, null))
+            {
+                if (cur.Count > 0)
+                {
+                    cur.MoveToNext();
+                    return new DeviceCalendar()
+                    {
+                        Id = cur.GetString(calendarsProjection.IndexOf(CalendarContract.Calendars.InterfaceConsts.Id)),
+                        Name = cur.GetString(calendarsProjection.IndexOf(CalendarContract.Calendars.InterfaceConsts.CalendarDisplayName)),
+                    };
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException($"[Android]: No calendar exists with the Id {calendarId}");
+                }
             }
         }
 

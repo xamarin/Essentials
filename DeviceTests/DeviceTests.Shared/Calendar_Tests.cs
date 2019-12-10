@@ -41,8 +41,7 @@ namespace DeviceTests
         {
             return Utils.OnMainThread(async () =>
             {
-                var eventList = await Calendar.GetEventsAsync(calendarId);
-                Assert.Empty(eventList);
+                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendar.GetEventsAsync(calendarId));
             });
         }
 

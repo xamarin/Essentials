@@ -56,7 +56,32 @@ namespace Xamarin.Essentials
                             .OrderBy(e => e.StartDate)
                             .ToList();
 
+            if (eventList.Count == 0 && !string.IsNullOrWhiteSpace(calendarId))
+            {
+                await GetCalendarById(calendarId);
+            }
+
             return eventList;
+        }
+
+        static async Task<DeviceCalendar> GetCalendarById(string calendarId)
+        {
+            var instance = await CalendarRequest.GetInstanceAsync();
+            var uwpCalendarList = await instance.FindAppointmentCalendarsAsync(FindAppointmentCalendarsOptions.IncludeHidden);
+
+            var result = (from calendar in uwpCalendarList
+                             select new DeviceCalendar
+                             {
+                                 Id = calendar.LocalId,
+                                 Name = calendar.DisplayName
+                             })
+                             .Where(c => c.Id == calendarId).FirstOrDefault();
+            if (result == null)
+            {
+                throw new ArgumentOutOfRangeException($"[UWP]: No calendar exists with the Id {calendarId}");
+            }
+
+            return result;
         }
 
         static async Task<DeviceEvent> PlatformGetEventByIdAsync(string eventId)
