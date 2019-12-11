@@ -35,6 +35,20 @@ namespace DeviceTests
 
         [Theory]
         [InlineData("ThisIsAFakeId")]
+        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
+        public Task Get_Events_By_Bad_Calendar_Text_Id(string calendarId)
+        {
+            return Utils.OnMainThread(async () =>
+            {
+#if __ANDROID__
+                await Assert.ThrowsAsync<ArgumentException>(() => Calendar.GetEventsAsync(calendarId));
+#else
+                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendar.GetEventsAsync(calendarId));
+#endif
+            });
+        }
+
+        [Theory]
         [InlineData("-1")]
         [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
         public Task Get_Events_By_Bad_Calendar_Id(string calendarId)
@@ -46,18 +60,38 @@ namespace DeviceTests
         }
 
         [Theory]
-        [InlineData("ThisIsAFakeId")]
-        [InlineData("-1")]
         [InlineData("")]
+        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
+        public Task Get_Event_By_Blank_Id(string eventId)
+        {
+            return Utils.OnMainThread(async () =>
+            {
+                await Assert.ThrowsAsync<ArgumentException>(() => Calendar.GetEventByIdAsync(eventId));
+            });
+        }
+
+        [Theory]
+        [InlineData("-1")]
         [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
         public Task Get_Event_By_Bad_Id(string eventId)
         {
             return Utils.OnMainThread(async () =>
             {
-#if __IOS__
-                await Assert.ThrowsAsync<NullReferenceException>(() => Calendar.GetEventByIdAsync(eventId));
-#else
+                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendar.GetEventByIdAsync(eventId));
+            });
+        }
+
+        [Theory]
+        [InlineData("ThisIsAFakeId")]
+        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
+        public Task Get_Event_By_Bad_Text_Id(string eventId)
+        {
+            return Utils.OnMainThread(async () =>
+            {
+#if __ANDROID__
                 await Assert.ThrowsAsync<ArgumentException>(() => Calendar.GetEventByIdAsync(eventId));
+#else
+                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendar.GetEventByIdAsync(eventId));
 #endif
             });
         }

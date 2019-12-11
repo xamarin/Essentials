@@ -98,11 +98,14 @@ namespace Xamarin.Essentials
             }
             catch (ArgumentException)
             {
-                throw new ArgumentException($"[UWP]: No Event found for event Id {eventId}");
-            }
-            catch (NullReferenceException)
-            {
-                throw new NullReferenceException($"[UWP]: No Event found for event Id {eventId}");
+                if (string.IsNullOrWhiteSpace(eventId))
+                {
+                    throw new ArgumentException($"[UWP]: No Event found for event Id {eventId}");
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException($"[UWP]: No Event found for event Id {eventId}");
+                }
             }
 
             return new DeviceEvent()

@@ -71,26 +71,29 @@ namespace Xamarin.Essentials
         {
             await Permissions.RequireAsync(PermissionType.CalendarRead);
 
-            EKEvent e;
-            try
+            var calendarEvent = CalendarRequest.Instance.GetCalendarItem(eventId) as EKEvent;
+            if (calendarEvent == null)
             {
-                e = CalendarRequest.Instance.GetCalendarItem(eventId) as EKEvent;
-            }
-            catch (NullReferenceException)
-            {
-                throw new NullReferenceException($"[iOS]: No Event found for event Id {eventId}");
+                if (string.IsNullOrWhiteSpace(eventId))
+                {
+                    throw new ArgumentException($"[iOS]: No Event found for event Id {eventId}");
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException($"[iOS]: No Event found for event Id {eventId}");
+                }
             }
 
             return new DeviceEvent
             {
-                Id = e.CalendarItemIdentifier,
-                CalendarId = e.Calendar.CalendarIdentifier,
-                Title = e.Title,
-                Description = e.Notes,
-                Location = e.Location,
-                StartDate = e.StartDate.ToDateTimeOffset(),
-                EndDate = !e.AllDay ? (DateTimeOffset?)e.EndDate.ToDateTimeOffset() : null,
-                Attendees = e.Attendees != null ? GetAttendeesForEvent(e.Attendees) : new List<DeviceEventAttendee>()
+                Id = calendarEvent.CalendarItemIdentifier,
+                CalendarId = calendarEvent.Calendar.CalendarIdentifier,
+                Title = calendarEvent.Title,
+                Description = calendarEvent.Notes,
+                Location = calendarEvent.Location,
+                StartDate = calendarEvent.StartDate.ToDateTimeOffset(),
+                EndDate = !calendarEvent.AllDay ? (DateTimeOffset?)calendarEvent.EndDate.ToDateTimeOffset() : null,
+                Attendees = calendarEvent.Attendees != null ? GetAttendeesForEvent(calendarEvent.Attendees) : new List<DeviceEventAttendee>()
             };
         }
 

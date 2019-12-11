@@ -60,10 +60,10 @@ namespace Xamarin.Essentials
             var eDate = endDate ?? sDate.Add(defaultEndTimeFromStartTime);
             if (!string.IsNullOrEmpty(calendarId))
             {
-                // Match other platforms where if you pass in a bad id return an empty list, this must be a bad id as android calendar ids can only be integers.
+                // Android event ids are always integers
                 if (!int.TryParse(calendarId, out var resultId))
                 {
-                    throw new ArgumentOutOfRangeException($"[Android]: No calendar exists with the Id {calendarId}");
+                    throw new ArgumentException($"[Android]: No Event found for event Id {calendarId}");
                 }
                 calendarSpecificEvent = $"{CalendarContract.Events.InterfaceConsts.CalendarId}={resultId} {andCondition} ";
             }
@@ -89,7 +89,22 @@ namespace Xamarin.Essentials
             if (events.Count == 0)
             {
                 // Make sure this calendar exists by testing retrieval
-                GetCalendarById(calendarId);
+                try
+                {
+                    GetCalendarById(calendarId);
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    throw;
+                }
+                catch (ArgumentException)
+                {
+                    throw;
+                }
+                catch (Exception)
+                {
+                    throw new ArgumentOutOfRangeException($"[Android]: No calendar exists with the Id {calendarId}");
+                }
             }
 
             return events;
@@ -103,7 +118,14 @@ namespace Xamarin.Essentials
                 CalendarContract.Calendars.InterfaceConsts.Id,
                 CalendarContract.Calendars.InterfaceConsts.CalendarDisplayName
             };
-            var queryConditions = $"{CalendarContract.Calendars.InterfaceConsts.Deleted} != 1 {andCondition} {CalendarContract.Calendars.InterfaceConsts.Id} = {calendarId}";
+
+            // Android event ids are always integers
+            if (!int.TryParse(calendarId, out var resultId))
+            {
+                throw new ArgumentException($"[Android]: No Event found for event Id {calendarId}");
+            }
+
+            var queryConditions = $"{CalendarContract.Calendars.InterfaceConsts.Deleted} != 1 {andCondition} {CalendarContract.Calendars.InterfaceConsts.Id} = {resultId}";
 
             using (var cur = Platform.AppContext.ApplicationContext.ContentResolver.Query(calendarsUri, calendarsProjection.ToArray(), queryConditions, null, null))
             {
@@ -167,7 +189,7 @@ namespace Xamarin.Essentials
                 }
                 else
                 {
-                    throw new ArgumentException($"[Android]: No Event found for event Id {eventId}");
+                    throw new ArgumentOutOfRangeException($"[Android]: No Event found for event Id {eventId}");
                 }
             }
         }
