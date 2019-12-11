@@ -61,6 +61,7 @@ namespace DeviceTests
 
         [Theory]
         [InlineData("")]
+        [InlineData(null)]
         [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
         public Task Get_Event_By_Blank_Id(string eventId)
         {

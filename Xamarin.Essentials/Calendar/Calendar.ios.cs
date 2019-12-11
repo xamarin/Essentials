@@ -71,17 +71,15 @@ namespace Xamarin.Essentials
         {
             await Permissions.RequireAsync(PermissionType.CalendarRead);
 
+            if (string.IsNullOrWhiteSpace(eventId))
+            {
+                throw new ArgumentException($"[iOS]: No Event found for event Id {eventId}");
+            }
+
             var calendarEvent = CalendarRequest.Instance.GetCalendarItem(eventId) as EKEvent;
             if (calendarEvent == null)
             {
-                if (string.IsNullOrWhiteSpace(eventId))
-                {
-                    throw new ArgumentException($"[iOS]: No Event found for event Id {eventId}");
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException($"[iOS]: No Event found for event Id {eventId}");
-                }
+                throw new ArgumentOutOfRangeException($"[iOS]: No Event found for event Id {eventId}");
             }
 
             return new DeviceEvent
