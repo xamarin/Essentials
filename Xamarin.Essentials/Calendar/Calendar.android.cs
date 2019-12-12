@@ -86,7 +86,7 @@ namespace Xamarin.Essentials
                     });
                 }
             }
-            if (events.Count == 0)
+            if (events.Count == 0 && !string.IsNullOrEmpty(calendarId))
             {
                 // Make sure this calendar exists by testing retrieval
                 try
