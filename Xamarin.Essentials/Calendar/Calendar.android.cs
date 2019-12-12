@@ -60,15 +60,20 @@ namespace Xamarin.Essentials
             var eDate = endDate ?? sDate.Add(defaultEndTimeFromStartTime);
             if (!string.IsNullOrEmpty(calendarId))
             {
-                calendarSpecificEvent = $"{CalendarContract.Events.InterfaceConsts.CalendarId}={calendarId} {andCondition} ";
+                // Android event ids are always integers
+                if (!int.TryParse(calendarId, out var resultId))
+                {
+                    throw new ArgumentException($"[Android]: No Event found for event Id {calendarId}");
+                }
+                calendarSpecificEvent = $"{CalendarContract.Events.InterfaceConsts.CalendarId}={resultId} {andCondition} ";
             }
             calendarSpecificEvent += $"{CalendarContract.Events.InterfaceConsts.Dtend} >= {sDate.AddMilliseconds(sDate.Offset.TotalMilliseconds).ToUnixTimeMilliseconds()} {andCondition} ";
             calendarSpecificEvent += $"{CalendarContract.Events.InterfaceConsts.Dtstart} <= {eDate.AddMilliseconds(sDate.Offset.TotalMilliseconds).ToUnixTimeMilliseconds()} {andCondition} ";
             calendarSpecificEvent += $"{CalendarContract.Events.InterfaceConsts.Deleted} != 1";
 
+            var events = new List<DeviceEvent>();
             using (var cur = Platform.AppContext.ApplicationContext.ContentResolver.Query(eventsUri, eventsProjection.ToArray(), calendarSpecificEvent, null, $"{CalendarContract.Events.InterfaceConsts.Dtstart} ASC"))
             {
-                var events = new List<DeviceEvent>();
                 while (cur.MoveToNext())
                 {
                     events.Add(new DeviceEvent()
@@ -80,7 +85,55 @@ namespace Xamarin.Essentials
                         EndDate = cur.GetInt(eventsProjection.IndexOf(CalendarContract.Events.InterfaceConsts.AllDay)) == 0 ? (DateTimeOffset?)DateTimeOffset.FromUnixTimeMilliseconds(cur.GetLong(eventsProjection.IndexOf(CalendarContract.Events.InterfaceConsts.Dtend))) : null
                     });
                 }
-                return events;
+            }
+            if (events.Count == 0)
+            {
+                // Make sure this calendar exists by testing retrieval
+                try
+                {
+                    GetCalendarById(calendarId);
+                }
+                catch (Exception)
+                {
+                    throw new ArgumentOutOfRangeException($"[Android]: No calendar exists with the Id {calendarId}");
+                }
+            }
+
+            return events;
+        }
+
+        static DeviceCalendar GetCalendarById(string calendarId)
+        {
+            var calendarsUri = CalendarContract.Calendars.ContentUri;
+            var calendarsProjection = new List<string>
+            {
+                CalendarContract.Calendars.InterfaceConsts.Id,
+                CalendarContract.Calendars.InterfaceConsts.CalendarDisplayName
+            };
+
+            // Android event ids are always integers
+            if (!int.TryParse(calendarId, out var resultId))
+            {
+                throw new ArgumentException($"[Android]: No Event found for event Id {calendarId}");
+            }
+
+            var queryConditions = $"{CalendarContract.Calendars.InterfaceConsts.Deleted} != 1 {andCondition} {CalendarContract.Calendars.InterfaceConsts.Id} = {resultId}";
+
+            using (var cur = Platform.AppContext.ApplicationContext.ContentResolver.Query(calendarsUri, calendarsProjection.ToArray(), queryConditions, null, null))
+            {
+                if (cur.Count > 0)
+                {
+                    cur.MoveToNext();
+                    return new DeviceCalendar()
+                    {
+                        Id = cur.GetString(calendarsProjection.IndexOf(CalendarContract.Calendars.InterfaceConsts.Id)),
+                        Name = cur.GetString(calendarsProjection.IndexOf(CalendarContract.Calendars.InterfaceConsts.CalendarDisplayName)),
+                    };
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException($"[Android]: No calendar exists with the Id {calendarId}");
+                }
             }
         }
 
@@ -128,7 +181,7 @@ namespace Xamarin.Essentials
                 }
                 else
                 {
-                    throw new ArgumentException($"[Android]: No Event found for event Id {eventId}");
+                    throw new ArgumentOutOfRangeException($"[Android]: No Event found for event Id {eventId}");
                 }
             }
         }

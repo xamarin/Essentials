@@ -56,7 +56,32 @@ namespace Xamarin.Essentials
                             .OrderBy(e => e.StartDate)
                             .ToList();
 
+            if (eventList.Count == 0 && !string.IsNullOrWhiteSpace(calendarId))
+            {
+                await GetCalendarById(calendarId);
+            }
+
             return eventList;
+        }
+
+        static async Task<DeviceCalendar> GetCalendarById(string calendarId)
+        {
+            var instance = await CalendarRequest.GetInstanceAsync();
+            var uwpCalendarList = await instance.FindAppointmentCalendarsAsync(FindAppointmentCalendarsOptions.IncludeHidden);
+
+            var result = (from calendar in uwpCalendarList
+                             select new DeviceCalendar
+                             {
+                                 Id = calendar.LocalId,
+                                 Name = calendar.DisplayName
+                             })
+                             .Where(c => c.Id == calendarId).FirstOrDefault();
+            if (result == null)
+            {
+                throw new ArgumentOutOfRangeException($"[UWP]: No calendar exists with the Id {calendarId}");
+            }
+
+            return result;
         }
 
         static async Task<DeviceEvent> PlatformGetEventByIdAsync(string eventId)
@@ -73,11 +98,14 @@ namespace Xamarin.Essentials
             }
             catch (ArgumentException)
             {
-                throw new ArgumentException($"[UWP]: No Event found for event Id {eventId}");
-            }
-            catch (NullReferenceException)
-            {
-                throw new NullReferenceException($"[UWP]: No Event found for event Id {eventId}");
+                if (string.IsNullOrWhiteSpace(eventId))
+                {
+                    throw new ArgumentException($"[UWP]: No Event found for event Id {eventId}");
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException($"[UWP]: No Event found for event Id {eventId}");
+                }
             }
 
             return new DeviceEvent()

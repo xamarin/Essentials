@@ -40,16 +40,13 @@ namespace Xamarin.Essentials
             var endDateToConvert = endDate ?? startDateToConvert.Add(defaultEndTimeFromStartTime);  // NOTE: 4 years is the maximum period that a iOS calendar events can search
             var sDate = startDateToConvert.ToNSDate();
             var eDate = endDateToConvert.ToNSDate();
-            EKCalendar[] calendars;
-            try
+            EKCalendar[] calendars = null;
+            if (!string.IsNullOrWhiteSpace(calendarId))
             {
-                calendars = !string.IsNullOrWhiteSpace(calendarId)
-                    ? CalendarRequest.Instance.Calendars.Where(x => x.CalendarIdentifier == calendarId).ToArray()
-                    : null;
-            }
-            catch (NullReferenceException ex)
-            {
-                throw new NullReferenceException($"iOS: Unexpected null reference exception {ex.Message}");
+                calendars = CalendarRequest.Instance.Calendars.Where(x => x.CalendarIdentifier == calendarId).ToArray();
+
+                if (calendars.Length == 0 && !string.IsNullOrWhiteSpace(calendarId))
+                    throw new ArgumentOutOfRangeException($"[iOS]: No calendar exists with the Id {calendarId}");
             }
 
             var query = CalendarRequest.Instance.PredicateForEvents(sDate, eDate, calendars);
@@ -74,26 +71,27 @@ namespace Xamarin.Essentials
         {
             await Permissions.RequireAsync(PermissionType.CalendarRead);
 
-            EKEvent e;
-            try
+            if (string.IsNullOrWhiteSpace(eventId))
             {
-                e = CalendarRequest.Instance.GetCalendarItem(eventId) as EKEvent;
+                throw new ArgumentException($"[iOS]: No Event found for event Id {eventId}");
             }
-            catch (NullReferenceException)
+
+            var calendarEvent = CalendarRequest.Instance.GetCalendarItem(eventId) as EKEvent;
+            if (calendarEvent == null)
             {
-                throw new NullReferenceException($"[iOS]: No Event found for event Id {eventId}");
+                throw new ArgumentOutOfRangeException($"[iOS]: No Event found for event Id {eventId}");
             }
 
             return new DeviceEvent
             {
-                Id = e.CalendarItemIdentifier,
-                CalendarId = e.Calendar.CalendarIdentifier,
-                Title = e.Title,
-                Description = e.Notes,
-                Location = e.Location,
-                StartDate = e.StartDate.ToDateTimeOffset(),
-                EndDate = !e.AllDay ? (DateTimeOffset?)e.EndDate.ToDateTimeOffset() : null,
-                Attendees = e.Attendees != null ? GetAttendeesForEvent(e.Attendees) : new List<DeviceEventAttendee>()
+                Id = calendarEvent.CalendarItemIdentifier,
+                CalendarId = calendarEvent.Calendar.CalendarIdentifier,
+                Title = calendarEvent.Title,
+                Description = calendarEvent.Notes,
+                Location = calendarEvent.Location,
+                StartDate = calendarEvent.StartDate.ToDateTimeOffset(),
+                EndDate = !calendarEvent.AllDay ? (DateTimeOffset?)calendarEvent.EndDate.ToDateTimeOffset() : null,
+                Attendees = calendarEvent.Attendees != null ? GetAttendeesForEvent(calendarEvent.Attendees) : new List<DeviceEventAttendee>()
             };
         }
 
