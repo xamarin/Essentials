@@ -93,14 +93,6 @@ namespace Xamarin.Essentials
                 {
                     GetCalendarById(calendarId);
                 }
-                catch (ArgumentOutOfRangeException)
-                {
-                    throw;
-                }
-                catch (ArgumentException)
-                {
-                    throw;
-                }
                 catch (Exception)
                 {
                     throw new ArgumentOutOfRangeException($"[Android]: No calendar exists with the Id {calendarId}");
