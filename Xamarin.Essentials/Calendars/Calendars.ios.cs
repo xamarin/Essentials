@@ -7,9 +7,9 @@ using Foundation;
 
 namespace Xamarin.Essentials
 {
-    public static partial class Calendar
+    public static partial class Calendars
     {
-        static async Task<IEnumerable<DeviceCalendar>> PlatformGetCalendarsAsync()
+        static async Task<IEnumerable<Calendar>> PlatformGetCalendarsAsync()
         {
             await Permissions.RequireAsync(PermissionType.CalendarRead);
 
@@ -23,7 +23,7 @@ namespace Xamarin.Essentials
                 throw new Exception($"iOS: Unexpected null reference exception {ex.Message}");
             }
             var calendarList = (from calendar in calendars
-                                select new DeviceCalendar
+                                select new Calendar
                                 {
                                     Id = calendar.CalendarIdentifier,
                                     Name = calendar.Title
@@ -32,7 +32,7 @@ namespace Xamarin.Essentials
             return calendarList;
         }
 
-        static async Task<IEnumerable<DeviceEvent>> PlatformGetEventsAsync(string calendarId = null, DateTimeOffset? startDate = null, DateTimeOffset? endDate = null)
+        static async Task<IEnumerable<CalendarEvent>> PlatformGetEventsAsync(string calendarId = null, DateTimeOffset? startDate = null, DateTimeOffset? endDate = null)
         {
             await Permissions.RequireAsync(PermissionType.CalendarRead);
 
@@ -53,7 +53,7 @@ namespace Xamarin.Essentials
             var events = CalendarRequest.Instance.EventsMatching(query);
 
             var eventList = (from e in events
-                            select new DeviceEvent
+                            select new CalendarEvent
                             {
                                 Id = e.CalendarItemIdentifier,
                                 CalendarId = e.Calendar.CalendarIdentifier,
@@ -67,7 +67,7 @@ namespace Xamarin.Essentials
             return eventList;
         }
 
-        static async Task<DeviceEvent> PlatformGetEventByIdAsync(string eventId)
+        static async Task<CalendarEvent> PlatformGetEventByIdAsync(string eventId)
         {
             await Permissions.RequireAsync(PermissionType.CalendarRead);
 
@@ -82,7 +82,7 @@ namespace Xamarin.Essentials
                 throw new ArgumentOutOfRangeException($"[iOS]: No Event found for event Id {eventId}");
             }
 
-            return new DeviceEvent
+            return new CalendarEvent
             {
                 Id = calendarEvent.CalendarItemIdentifier,
                 CalendarId = calendarEvent.Calendar.CalendarIdentifier,
@@ -91,14 +91,14 @@ namespace Xamarin.Essentials
                 Location = calendarEvent.Location,
                 StartDate = calendarEvent.StartDate.ToDateTimeOffset(),
                 EndDate = !calendarEvent.AllDay ? (DateTimeOffset?)calendarEvent.EndDate.ToDateTimeOffset() : null,
-                Attendees = calendarEvent.Attendees != null ? GetAttendeesForEvent(calendarEvent.Attendees) : new List<DeviceEventAttendee>()
+                Attendees = calendarEvent.Attendees != null ? GetAttendeesForEvent(calendarEvent.Attendees) : new List<CalendarEventAttendee>()
             };
         }
 
-        static IEnumerable<DeviceEventAttendee> GetAttendeesForEvent(IEnumerable<EKParticipant> inviteList)
+        static IEnumerable<CalendarEventAttendee> GetAttendeesForEvent(IEnumerable<EKParticipant> inviteList)
         {
             var attendees = (from attendee in inviteList
-                             select new DeviceEventAttendee
+                             select new CalendarEventAttendee
                              {
                                  Name = attendee.Name,
                                  Email = attendee.Name

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Xamarin.Essentials
 {
     [Preserve(AllMembers = true)]
-    public class DeviceCalendar
+    public class Calendar
     {
         public string Id { get; set; }
 
@@ -12,7 +12,7 @@ namespace Xamarin.Essentials
     }
 
     [Preserve(AllMembers = true)]
-    public class DeviceEvent
+    public class CalendarEvent
     {
         public string Id { get; set; }
 
@@ -60,11 +60,11 @@ namespace Xamarin.Essentials
 
         public DateTimeOffset? EndDate { get; set; }
 
-        public IEnumerable<DeviceEventAttendee> Attendees { get; set; }
+        public IEnumerable<CalendarEventAttendee> Attendees { get; set; }
     }
 
     [Preserve(AllMembers = true)]
-    public class DeviceEventAttendee
+    public class CalendarEventAttendee
     {
         public string Name { get; set; }
 

@@ -23,7 +23,7 @@ namespace Samples.ViewModel
             EndDateEnabledCheckBoxChanged = new Command(OnEndCheckboxChanged);
         }
 
-        DeviceCalendar selectedCalendar;
+        Calendar selectedCalendar;
 
         bool startdatePickersEnabled;
 
@@ -65,11 +65,11 @@ namespace Samples.ViewModel
 
         public bool HasCalendarReadAccess { get; set; }
 
-        public ObservableCollection<DeviceCalendar> Calendars { get; } = new ObservableCollection<DeviceCalendar>();
+        public ObservableCollection<Calendar> CalendarList { get; } = new ObservableCollection<Calendar>();
 
-        public ObservableCollection<DeviceEvent> Events { get; } = new ObservableCollection<DeviceEvent>();
+        public ObservableCollection<CalendarEvent> EventList { get; } = new ObservableCollection<CalendarEvent>();
 
-        public DeviceCalendar SelectedCalendar
+        public Calendar SelectedCalendar
         {
             get => selectedCalendar;
 
@@ -104,14 +104,14 @@ namespace Samples.ViewModel
 
         async void OnClickGetCalendars()
         {
-            Calendars.Clear();
-            Calendars.Add(new DeviceCalendar() { Id = null, Name = "All" });
-            var calendars = await Calendar.GetCalendarsAsync();
+            CalendarList.Clear();
+            CalendarList.Add(new Calendar() { Id = null, Name = "All" });
+            var calendars = await Calendars.GetCalendarsAsync();
             foreach (var calendar in calendars)
             {
-                Calendars.Add(calendar);
+                CalendarList.Add(calendar);
             }
-            SelectedCalendar = Calendars[0];
+            SelectedCalendar = CalendarList[0];
         }
 
         void OnStartDateSelected(object parameter)
@@ -159,14 +159,14 @@ namespace Samples.ViewModel
         {
             startDate = StartDatePickersEnabled && !startDate.HasValue ? (DateTime?)StartDate.Date + StartTime : startDate;
             endDate = (EndDatePickersEnabled && !endDate.HasValue) ? (DateTime?)EndDate.Date + EndTime : endDate;
-            if (Calendars.Count == 0)
+            if (CalendarList.Count == 0)
                 return;
 
-            Events.Clear();
-            var events = await Calendar.GetEventsAsync(calendarId, startDate, endDate);
+            EventList.Clear();
+            var events = await Calendars.GetEventsAsync(calendarId, startDate, endDate);
             foreach (var calendarEvent in events)
             {
-                Events.Add(calendarEvent);
+                EventList.Add(calendarEvent);
             }
         }
     }

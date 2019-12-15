@@ -17,7 +17,7 @@ namespace DeviceTests
         {
             return Utils.OnMainThread(async () =>
             {
-                var calendarList = await Calendar.GetCalendarsAsync();
+                var calendarList = await Calendars.GetCalendarsAsync();
                 Assert.NotNull(calendarList);
             });
         }
@@ -28,7 +28,7 @@ namespace DeviceTests
         {
             return Utils.OnMainThread(async () =>
             {
-                var eventList = await Calendar.GetEventsAsync();
+                var eventList = await Calendars.GetEventsAsync();
                 Assert.NotNull(eventList);
             });
         }
@@ -41,9 +41,9 @@ namespace DeviceTests
             return Utils.OnMainThread(async () =>
             {
 #if __ANDROID__
-                await Assert.ThrowsAsync<ArgumentException>(() => Calendar.GetEventsAsync(calendarId));
+                await Assert.ThrowsAsync<ArgumentException>(() => Calendars.GetEventsAsync(calendarId));
 #else
-                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendar.GetEventsAsync(calendarId));
+                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendars.GetEventsAsync(calendarId));
 #endif
             });
         }
@@ -55,7 +55,7 @@ namespace DeviceTests
         {
             return Utils.OnMainThread(async () =>
             {
-                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendar.GetEventsAsync(calendarId));
+                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendars.GetEventsAsync(calendarId));
             });
         }
 
@@ -67,7 +67,7 @@ namespace DeviceTests
         {
             return Utils.OnMainThread(async () =>
             {
-                await Assert.ThrowsAsync<ArgumentException>(() => Calendar.GetEventByIdAsync(eventId));
+                await Assert.ThrowsAsync<ArgumentException>(() => Calendars.GetEventByIdAsync(eventId));
             });
         }
 
@@ -78,7 +78,7 @@ namespace DeviceTests
         {
             return Utils.OnMainThread(async () =>
             {
-                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendar.GetEventByIdAsync(eventId));
+                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendars.GetEventByIdAsync(eventId));
             });
         }
 
@@ -90,9 +90,9 @@ namespace DeviceTests
             return Utils.OnMainThread(async () =>
             {
 #if __ANDROID__
-                await Assert.ThrowsAsync<ArgumentException>(() => Calendar.GetEventByIdAsync(eventId));
+                await Assert.ThrowsAsync<ArgumentException>(() => Calendars.GetEventByIdAsync(eventId));
 #else
-                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendar.GetEventByIdAsync(eventId));
+                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendars.GetEventByIdAsync(eventId));
 #endif
             });
         }

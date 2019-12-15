@@ -9,11 +9,11 @@ using Java.Security;
 
 namespace Xamarin.Essentials
 {
-    public static partial class Calendar
+    public static partial class Calendars
     {
         const string andCondition = "AND";
 
-        static async Task<IEnumerable<DeviceCalendar>> PlatformGetCalendarsAsync()
+        static async Task<IEnumerable<Calendar>> PlatformGetCalendarsAsync()
         {
             await Permissions.RequireAsync(PermissionType.CalendarRead);
 
@@ -27,10 +27,10 @@ namespace Xamarin.Essentials
 
             using (var cur = Platform.AppContext.ApplicationContext.ContentResolver.Query(calendarsUri, calendarsProjection.ToArray(), queryConditions, null, null))
             {
-                var calendars = new List<DeviceCalendar>();
+                var calendars = new List<Calendar>();
                 while (cur.MoveToNext())
                 {
-                    calendars.Add(new DeviceCalendar()
+                    calendars.Add(new Calendar()
                     {
                         Id = cur.GetString(calendarsProjection.IndexOf(CalendarContract.Calendars.InterfaceConsts.Id)),
                         Name = cur.GetString(calendarsProjection.IndexOf(CalendarContract.Calendars.InterfaceConsts.CalendarDisplayName)),
@@ -40,7 +40,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static async Task<IEnumerable<DeviceEvent>> PlatformGetEventsAsync(string calendarId = null, DateTimeOffset? startDate = null, DateTimeOffset? endDate = null)
+        static async Task<IEnumerable<CalendarEvent>> PlatformGetEventsAsync(string calendarId = null, DateTimeOffset? startDate = null, DateTimeOffset? endDate = null)
         {
             await Permissions.RequireAsync(PermissionType.CalendarRead);
 
@@ -71,12 +71,12 @@ namespace Xamarin.Essentials
             calendarSpecificEvent += $"{CalendarContract.Events.InterfaceConsts.Dtstart} <= {eDate.AddMilliseconds(sDate.Offset.TotalMilliseconds).ToUnixTimeMilliseconds()} {andCondition} ";
             calendarSpecificEvent += $"{CalendarContract.Events.InterfaceConsts.Deleted} != 1";
 
-            var events = new List<DeviceEvent>();
+            var events = new List<CalendarEvent>();
             using (var cur = Platform.AppContext.ApplicationContext.ContentResolver.Query(eventsUri, eventsProjection.ToArray(), calendarSpecificEvent, null, $"{CalendarContract.Events.InterfaceConsts.Dtstart} ASC"))
             {
                 while (cur.MoveToNext())
                 {
-                    events.Add(new DeviceEvent()
+                    events.Add(new CalendarEvent()
                     {
                         Id = cur.GetString(eventsProjection.IndexOf(CalendarContract.Events.InterfaceConsts.Id)),
                         CalendarId = cur.GetString(eventsProjection.IndexOf(CalendarContract.Events.InterfaceConsts.CalendarId)),
@@ -102,7 +102,7 @@ namespace Xamarin.Essentials
             return events;
         }
 
-        static DeviceCalendar GetCalendarById(string calendarId)
+        static Calendar GetCalendarById(string calendarId)
         {
             var calendarsUri = CalendarContract.Calendars.ContentUri;
             var calendarsProjection = new List<string>
@@ -124,7 +124,7 @@ namespace Xamarin.Essentials
                 if (cur.Count > 0)
                 {
                     cur.MoveToNext();
-                    return new DeviceCalendar()
+                    return new Calendar()
                     {
                         Id = cur.GetString(calendarsProjection.IndexOf(CalendarContract.Calendars.InterfaceConsts.Id)),
                         Name = cur.GetString(calendarsProjection.IndexOf(CalendarContract.Calendars.InterfaceConsts.CalendarDisplayName)),
@@ -137,7 +137,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static async Task<DeviceEvent> PlatformGetEventByIdAsync(string eventId)
+        static async Task<CalendarEvent> PlatformGetEventByIdAsync(string eventId)
         {
             await Permissions.RequireAsync(PermissionType.CalendarRead);
 
@@ -166,7 +166,7 @@ namespace Xamarin.Essentials
                 if (cur.Count > 0)
                 {
                     cur.MoveToNext();
-                    var eventResult = new DeviceEvent
+                    var eventResult = new CalendarEvent
                     {
                         Id = cur.GetString(eventsProjection.IndexOf(CalendarContract.Events.InterfaceConsts.Id)),
                         CalendarId = cur.GetString(eventsProjection.IndexOf(CalendarContract.Events.InterfaceConsts.CalendarId)),
@@ -186,7 +186,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static IEnumerable<DeviceEventAttendee> GetAttendeesForEvent(string eventId)
+        static IEnumerable<CalendarEventAttendee> GetAttendeesForEvent(string eventId)
         {
             var attendeesUri = CalendarContract.Attendees.ContentUri;
             var attendeesProjection = new List<string>
@@ -197,10 +197,10 @@ namespace Xamarin.Essentials
             };
             var attendeeSpecificAttendees = $"{CalendarContract.Attendees.InterfaceConsts.EventId}={eventId}";
             var cur = Platform.AppContext.ApplicationContext.ContentResolver.Query(attendeesUri, attendeesProjection.ToArray(), attendeeSpecificAttendees, null, null);
-            var attendees = new List<DeviceEventAttendee>();
+            var attendees = new List<CalendarEventAttendee>();
             while (cur.MoveToNext())
             {
-                attendees.Add(new DeviceEventAttendee()
+                attendees.Add(new CalendarEventAttendee()
                 {
                     Name = cur.GetString(attendeesProjection.IndexOf(CalendarContract.Attendees.InterfaceConsts.AttendeeName)),
                     Email = cur.GetString(attendeesProjection.IndexOf(CalendarContract.Attendees.InterfaceConsts.AttendeeEmail)),
