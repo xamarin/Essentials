@@ -22,5 +22,10 @@ namespace Xamarin.Essentials
             Permissions.EnsureDeclared<Permissions.LaunchApp>();
             AppControl.SendLaunchRequest(new AppControl() { Operation = AppControlOperations.Setting });
         }
+
+        static AppTheme PlatformRequestedTheme()
+        {
+            return AppTheme.Unspecified;
+        }
     }
 }
