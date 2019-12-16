@@ -26,11 +26,11 @@ namespace Xamarin.Essentials
 
         public abstract partial class BasePlatformPermission : BasePermission
         {
+            static readonly Dictionary<string, (int requestCode, TaskCompletionSource<PermissionStatus> tcs)> requests =
+                   new Dictionary<string, (int, TaskCompletionSource<PermissionStatus>)>();
+
             static readonly object locker = new object();
             static int requestCode = 0;
-
-            static Dictionary<string, (int requestCode, TaskCompletionSource<PermissionStatus> tcs)> requests =
-                new Dictionary<string, (int, TaskCompletionSource<PermissionStatus>)>();
 
             public virtual (string androidPermission, bool isRuntime)[] RequiredPermissions { get; }
 
@@ -42,22 +42,22 @@ namespace Xamarin.Essentials
                 var context = Platform.AppContext;
                 var targetsMOrHigher = context.ApplicationInfo.TargetSdkVersion >= BuildVersionCodes.M;
 
-                foreach (var p in RequiredPermissions)
+                foreach (var (androidPermission, isRuntime) in RequiredPermissions)
                 {
-                    var ap = p.androidPermission;
-                    if (!Permissions.IsDeclaredInManifest(ap))
-                        throw new PermissionException($"You need to declare using the permission: `{p.androidPermission}` in your AndroidManifest.xml");
+                    var ap = androidPermission;
+                    if (!IsDeclaredInManifest(ap))
+                        throw new PermissionException($"You need to declare using the permission: `{androidPermission}` in your AndroidManifest.xml");
 
                     var status = PermissionStatus.Denied;
 
                     if (targetsMOrHigher)
                     {
-                        if (ContextCompat.CheckSelfPermission(context, p.androidPermission) != Permission.Granted)
+                        if (ContextCompat.CheckSelfPermission(context, androidPermission) != Permission.Granted)
                             status = PermissionStatus.Denied;
                     }
                     else
                     {
-                        if (PermissionChecker.CheckSelfPermission(context, p.androidPermission) != PermissionChecker.PermissionGranted)
+                        if (PermissionChecker.CheckSelfPermission(context, androidPermission) != PermissionChecker.PermissionGranted)
                             status = PermissionStatus.Denied;
                     }
 
@@ -124,11 +124,11 @@ namespace Xamarin.Essentials
 
             public override void EnsureDeclared()
             {
-                foreach (var p in RequiredPermissions)
+                foreach (var (androidPermission, isRuntime) in RequiredPermissions)
                 {
-                    var ap = p.androidPermission;
-                    if (!Permissions.IsDeclaredInManifest(ap))
-                        throw new PermissionException($"You need to declare using the permission: `{p.androidPermission}` in your AndroidManifest.xml");
+                    var ap = androidPermission;
+                    if (!IsDeclaredInManifest(ap))
+                        throw new PermissionException($"You need to declare using the permission: `{androidPermission}` in your AndroidManifest.xml");
                 }
             }
 
@@ -222,9 +222,9 @@ namespace Xamarin.Essentials
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[]
                 {
-                    #if __ANDROID_100__
+#if __ANDROID_29__
                     (Manifest.Permission.AccessBackgroundLocation, true),
-                    #endif
+#endif
                     (Manifest.Permission.AccessCoarseLocation, true),
                     (Manifest.Permission.AccessFineLocation, true)
                 };
@@ -278,19 +278,19 @@ namespace Xamarin.Essentials
                         permissions.Add((Manifest.Permission.CallPhone, true));
                     if (IsDeclaredInManifest(Manifest.Permission.ReadCallLog))
                         permissions.Add((Manifest.Permission.ReadCallLog, true));
-                    if (Permissions.IsDeclaredInManifest(Manifest.Permission.WriteCallLog))
+                    if (IsDeclaredInManifest(Manifest.Permission.WriteCallLog))
                         permissions.Add((Manifest.Permission.WriteCallLog, true));
-                    if (Permissions.IsDeclaredInManifest(Manifest.Permission.AddVoicemail))
+                    if (IsDeclaredInManifest(Manifest.Permission.AddVoicemail))
                         permissions.Add((Manifest.Permission.AddVoicemail, true));
-                    if (Permissions.IsDeclaredInManifest(Manifest.Permission.UseSip))
+                    if (IsDeclaredInManifest(Manifest.Permission.UseSip))
                         permissions.Add((Manifest.Permission.UseSip, true));
 
 #pragma warning disable CS0618 // Type or member is obsolete
-                    if (Permissions.IsDeclaredInManifest(Manifest.Permission.ProcessOutgoingCalls))
+                    if (IsDeclaredInManifest(Manifest.Permission.ProcessOutgoingCalls))
                     {
-#if __ANDROID_100__
+#if __ANDROID_29__
                         if (Platform.HasApiLevel(BuildVersionCodes.Q))
-                            Debug.WriteLine($"{Manifest.Permission.ProcessOutgoingCalls} is deprecated in Android 10");
+                            System.Diagnostics.Debug.WriteLine($"{Manifest.Permission.ProcessOutgoingCalls} is deprecated in Android 10");
 #endif
                         permissions.Add((Manifest.Permission.ProcessOutgoingCalls, true));
                     }
@@ -326,13 +326,13 @@ namespace Xamarin.Essentials
                         (Manifest.Permission.ReceiveSms, true)
                     };
 
-                    if (Permissions.IsDeclaredInManifest(Manifest.Permission.SendSms))
+                    if (IsDeclaredInManifest(Manifest.Permission.SendSms))
                         permissions.Add((Manifest.Permission.SendSms, true));
-                    if (Permissions.IsDeclaredInManifest(Manifest.Permission.ReadSms))
+                    if (IsDeclaredInManifest(Manifest.Permission.ReadSms))
                         permissions.Add((Manifest.Permission.ReadSms, true));
-                    if (Permissions.IsDeclaredInManifest(Manifest.Permission.ReceiveWapPush))
+                    if (IsDeclaredInManifest(Manifest.Permission.ReceiveWapPush))
                         permissions.Add((Manifest.Permission.ReceiveWapPush, true));
-                    if (Permissions.IsDeclaredInManifest(Manifest.Permission.ReceiveMms))
+                    if (IsDeclaredInManifest(Manifest.Permission.ReceiveMms))
                         permissions.Add((Manifest.Permission.ReceiveMms, true));
 
                     return permissions.ToArray();

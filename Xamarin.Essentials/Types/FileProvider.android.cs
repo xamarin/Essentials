@@ -86,8 +86,8 @@ namespace Xamarin.Essentials
             // the shared paths from the "xamarin_essentials_fileprovider_file_paths.xml" resource
             var publicLocations = new List<string>
             {
-#if __ANDROID__Q__
-                Platform.AppContext.GetExternalFilesDir(null).CanonicalPath,   
+#if __ANDROID_29__
+                Platform.AppContext.GetExternalFilesDir(null).CanonicalPath,
 #else
                 #pragma warning disable CS0618 // Type or member is obsolete
                 AndroidEnvironment.ExternalStorageDirectory.CanonicalPath,

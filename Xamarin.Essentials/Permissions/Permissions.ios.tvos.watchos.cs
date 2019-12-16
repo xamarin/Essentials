@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using CoreLocation;
 using Foundation;
@@ -36,7 +35,7 @@ namespace Xamarin.Essentials
 
                 foreach (var requiredInfoPlistKey in plistKeys)
                 {
-                    if (!Permissions.IsKeyDeclaredInInfoPlist(requiredInfoPlistKey))
+                    if (!IsKeyDeclaredInInfoPlist(requiredInfoPlistKey))
                         throw new PermissionException($"You must set `{requiredInfoPlistKey}` in your Info.plist file to use the Permission: {GetType().Name}.");
                 }
             }
@@ -116,19 +115,14 @@ namespace Xamarin.Essentials
 
                 var status = CLLocationManager.Status;
 
-                switch (status)
+                return status switch
                 {
-                    case CLAuthorizationStatus.AuthorizedAlways:
-                        return PermissionStatus.Granted;
-                    case CLAuthorizationStatus.AuthorizedWhenInUse:
-                        return whenInUse ? PermissionStatus.Granted : PermissionStatus.Denied;
-                    case CLAuthorizationStatus.Denied:
-                        return PermissionStatus.Denied;
-                    case CLAuthorizationStatus.Restricted:
-                        return PermissionStatus.Restricted;
-                    default:
-                        return PermissionStatus.Unknown;
-                }
+                    CLAuthorizationStatus.AuthorizedAlways => PermissionStatus.Granted,
+                    CLAuthorizationStatus.AuthorizedWhenInUse => whenInUse ? PermissionStatus.Granted : PermissionStatus.Denied,
+                    CLAuthorizationStatus.Denied => PermissionStatus.Denied,
+                    CLAuthorizationStatus.Restricted => PermissionStatus.Restricted,
+                    _ => PermissionStatus.Unknown,
+                };
             }
 
             internal static Task<PermissionStatus> RequestLocationAsync(bool whenInUse, Action<CLLocationManager> invokeRequest)

@@ -41,22 +41,21 @@ namespace Xamarin.Essentials
 
                 var tizenPrivileges = RequiredPrivileges.Where(p => p.isRuntime);
 
-                foreach (var priv in tizenPrivileges)
+                foreach (var (tizenPrivilege, isRuntime) in tizenPrivileges)
                 {
-                    if (PrivacyPrivilegeManager.CheckPermission(priv.tizenPrivilege) == CheckResult.Ask)
+                    if (PrivacyPrivilegeManager.CheckPermission(tizenPrivilege) == CheckResult.Ask)
                     {
                         if (ask)
                         {
                             var tcs = new TaskCompletionSource<bool>();
-                            PrivacyPrivilegeManager.ResponseContext context = null;
-                            PrivacyPrivilegeManager.GetResponseContext(priv.tizenPrivilege)
-                                .TryGetTarget(out context);
+                            PrivacyPrivilegeManager.GetResponseContext(tizenPrivilege)
+                                .TryGetTarget(out var context);
                             void OnResponseFetched(object sender, RequestResponseEventArgs e)
                             {
                                 tcs.TrySetResult(e.result == RequestResult.AllowForever);
                             }
                             context.ResponseFetched += OnResponseFetched;
-                            PrivacyPrivilegeManager.RequestPermission(priv.tizenPrivilege);
+                            PrivacyPrivilegeManager.RequestPermission(tizenPrivilege);
                             var result = await tcs.Task;
                             context.ResponseFetched -= OnResponseFetched;
                             if (result)
@@ -64,7 +63,7 @@ namespace Xamarin.Essentials
                         }
                         return PermissionStatus.Denied;
                     }
-                    else if (PrivacyPrivilegeManager.CheckPermission(priv.tizenPrivilege) == CheckResult.Deny)
+                    else if (PrivacyPrivilegeManager.CheckPermission(tizenPrivilege) == CheckResult.Deny)
                     {
                         return PermissionStatus.Denied;
                     }
@@ -74,10 +73,10 @@ namespace Xamarin.Essentials
 
             public override void EnsureDeclared()
             {
-                foreach (var p in RequiredPrivileges)
+                foreach (var (tizenPrivilege, isRuntime) in RequiredPrivileges)
                 {
-                    if (!IsPrivilegeDeclared(p.tizenPrivilege))
-                        throw new PermissionException($"You need to declare the privilege: `{p.tizenPrivilege}` in your tizen-manifest.xml");
+                    if (!IsPrivilegeDeclared(tizenPrivilege))
+                        throw new PermissionException($"You need to declare the privilege: `{tizenPrivilege}` in your tizen-manifest.xml");
                 }
             }
         }

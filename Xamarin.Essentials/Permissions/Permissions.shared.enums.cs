@@ -2,19 +2,19 @@
 {
     public enum PermissionStatus
     {
+        // Permission is in an unknown state
+        Unknown = 0,
+
         // Denied by user
-        Denied,
+        Denied = 1,
 
         // Feature is disabled on device
-        Disabled,
+        Disabled = 2,
 
         // Granted by user
-        Granted,
+        Granted = 3,
 
         // Restricted (only iOS)
-        Restricted,
-
-        // Permission is in an unknown state
-        Unknown
+        Restricted = 4
     }
 }

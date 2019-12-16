@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Xamarin.Essentials
 {
@@ -18,9 +15,6 @@ namespace Xamarin.Essentials
         internal static void EnsureDeclared<TPermission>()
             where TPermission : BasePermission, new() =>
                 new TPermission().EnsureDeclared();
-
-        public static void ShowSettingsUI() =>
-            AppInfo.ShowSettingsUI();
 
         public abstract partial class BasePermission
         {
