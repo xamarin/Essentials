@@ -31,17 +31,16 @@ namespace Xamarin.Essentials
             var currentIdiom = DeviceIdiom.Unknown;
 
             // first try UIModeManager
-            using (var uiModeManager = UiModeManager.FromContext(Essentials.Platform.AppContext))
+            using var uiModeManager = UiModeManager.FromContext(Essentials.Platform.AppContext);
+
+            try
             {
-                try
-                {
-                    var uiMode = uiModeManager?.CurrentModeType ?? UiMode.TypeUndefined;
-                    currentIdiom = DetectIdiom(uiMode);
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"Unable to detect using UiModeManager: {ex.Message}");
-                }
+                var uiMode = uiModeManager?.CurrentModeType ?? UiMode.TypeUndefined;
+                currentIdiom = DetectIdiom(uiMode);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Unable to detect using UiModeManager: {ex.Message}");
             }
 
             // then try Configuration
