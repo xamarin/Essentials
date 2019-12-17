@@ -50,28 +50,20 @@ namespace Xamarin.Essentials
                 var configuration = Essentials.Platform.AppContext.Resources?.Configuration;
                 if (configuration != null)
                 {
-                    var uiMode = configuration.UiMode;
-                    currentIdiom = DetectIdiom(uiMode);
-
-                    // now just guess
-                    if (currentIdiom == DeviceIdiom.Unknown)
+                    var minWidth = configuration.SmallestScreenWidthDp;
+                    var isWide = minWidth >= tabletCrossover;
+                    currentIdiom = isWide ? DeviceIdiom.Tablet : DeviceIdiom.Phone;
+                }
+                else
+                {
+                    // start clutching at straws
+                    using var metrics = Essentials.Platform.AppContext.Resources?.DisplayMetrics;
+                    if (metrics != null)
                     {
-                        var minWidth = configuration.SmallestScreenWidthDp;
-                        var isWide = minWidth >= tabletCrossover;
+                        var minSize = Math.Min(metrics.WidthPixels, metrics.HeightPixels);
+                        var isWide = minSize * metrics.Density >= tabletCrossover;
                         currentIdiom = isWide ? DeviceIdiom.Tablet : DeviceIdiom.Phone;
                     }
-                }
-            }
-
-            // start clutching at straws
-            if (currentIdiom == DeviceIdiom.Unknown)
-            {
-                var metrics = Essentials.Platform.AppContext.Resources?.DisplayMetrics;
-                if (metrics != null)
-                {
-                    var minSize = Math.Min(metrics.WidthPixels, metrics.HeightPixels);
-                    var isWide = minSize * metrics.Density >= tabletCrossover;
-                    currentIdiom = isWide ? DeviceIdiom.Tablet : DeviceIdiom.Phone;
                 }
             }
 
