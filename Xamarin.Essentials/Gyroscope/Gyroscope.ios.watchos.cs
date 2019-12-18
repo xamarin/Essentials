@@ -12,7 +12,7 @@ namespace Xamarin.Essentials
         {
             var manager = Platform.MotionManager;
             manager.GyroUpdateInterval = sensorSpeed.ToPlatform();
-            manager.StartGyroUpdates(Platform.GetCurrentQueue(), DataUpdated);
+            manager.StartGyroUpdates(Platform.GetCurrentQueue(), (data, erorr) => DataUpdated(data, erorr));
         }
 
         static void DataUpdated(CMGyroData data, NSError error)

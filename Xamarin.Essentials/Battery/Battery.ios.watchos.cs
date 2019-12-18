@@ -19,7 +19,8 @@ namespace Xamarin.Essentials
 
         static void StartEnergySaverListeners()
         {
-            saverStatusObserver = NSNotificationCenter.DefaultCenter.AddObserver(NSProcessInfo.PowerStateDidChangeNotification, PowerChangedNotification);
+            saverStatusObserver = NSNotificationCenter.DefaultCenter.AddObserver(NSProcessInfo.PowerStateDidChangeNotification, 
+                (notification) => PowerChangedNotification(notification));
         }
 
         static void StopEnergySaverListeners()
@@ -29,7 +30,7 @@ namespace Xamarin.Essentials
         }
 
         static void PowerChangedNotification(NSNotification notification)
-            => MainThread.BeginInvokeOnMainThread(OnEnergySaverChanged);
+            => MainThread.BeginInvokeOnMainThread(() => OnEnergySaverChanged());
 
         static EnergySaverStatus PlatformEnergySaverStatus =>
             NSProcessInfo.ProcessInfo?.LowPowerModeEnabled == true ? EnergySaverStatus.On : EnergySaverStatus.Off;
@@ -40,8 +41,8 @@ namespace Xamarin.Essentials
             throw new FeatureNotSupportedException();
 #else
             UIDevice.CurrentDevice.BatteryMonitoringEnabled = true;
-            levelObserver = UIDevice.Notifications.ObserveBatteryLevelDidChange(BatteryInfoChangedNotification);
-            stateObserver = UIDevice.Notifications.ObserveBatteryStateDidChange(BatteryInfoChangedNotification);
+            levelObserver = UIDevice.Notifications.ObserveBatteryLevelDidChange((sender, args) => BatteryInfoChangedNotification(sender, args));
+            stateObserver = UIDevice.Notifications.ObserveBatteryStateDidChange((sender, args) => BatteryInfoChangedNotification(sender, args));
 #endif
         }
 
@@ -59,7 +60,7 @@ namespace Xamarin.Essentials
         }
 
         static void BatteryInfoChangedNotification(object sender, NSNotificationEventArgs args)
-            => MainThread.BeginInvokeOnMainThread(OnBatteryInfoChanged);
+            => MainThread.BeginInvokeOnMainThread(() => OnBatteryInfoChanged());
 
         static double PlatformChargeLevel
         {

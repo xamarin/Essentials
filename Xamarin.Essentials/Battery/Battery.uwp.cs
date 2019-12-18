@@ -11,7 +11,7 @@ namespace Xamarin.Essentials
             PowerManager.EnergySaverStatusChanged -= ReportEnergySaverUpdated;
 
         static void ReportEnergySaverUpdated(object sender, object e)
-            => MainThread.BeginInvokeOnMainThread(OnEnergySaverChanged);
+            => MainThread.BeginInvokeOnMainThread(() => OnEnergySaverChanged());
 
         static void StartBatteryListeners() =>
             DefaultBattery.ReportUpdated += ReportUpdated;
@@ -20,7 +20,7 @@ namespace Xamarin.Essentials
             DefaultBattery.ReportUpdated -= ReportUpdated;
 
         static void ReportUpdated(object sender, object e)
-            => MainThread.BeginInvokeOnMainThread(OnBatteryInfoChanged);
+            => MainThread.BeginInvokeOnMainThread(() => OnBatteryInfoChanged());
 
         static Windows.Devices.Power.Battery DefaultBattery =>
             Windows.Devices.Power.Battery.AggregateBattery;

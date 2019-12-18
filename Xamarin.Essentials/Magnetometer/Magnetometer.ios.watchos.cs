@@ -12,7 +12,7 @@ namespace Xamarin.Essentials
         {
             var manager = Platform.MotionManager;
             manager.MagnetometerUpdateInterval = sensorSpeed.ToPlatform();
-            manager.StartMagnetometerUpdates(Platform.GetCurrentQueue(), DataUpdated);
+            manager.StartMagnetometerUpdates(Platform.GetCurrentQueue(), (data, error) => DataUpdated(data, error));
         }
 
         static void DataUpdated(CMMagnetometerData data, NSError error)

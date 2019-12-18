@@ -30,7 +30,7 @@ namespace Xamarin.Essentials
         {
             var notificationCenter = NSNotificationCenter.DefaultCenter;
             var notification = UIApplication.DidChangeStatusBarOrientationNotification;
-            observer = notificationCenter.AddObserver(notification, OnScreenMetricsChanged);
+            observer = notificationCenter.AddObserver(notification, (obj) => OnScreenMetricsChanged(obj));
         }
 
         static void StopScreenMetricsListeners()

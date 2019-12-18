@@ -13,11 +13,12 @@ namespace Xamarin.Essentials
         static void PlatformStart(SensorSpeed sensorSpeed)
         {
             altitudeManager = new CMAltimeter();
-            altitudeManager.StartRelativeAltitudeUpdates(Platform.GetCurrentQueue(), LocationManagerUpdatedHeading);
-
-            void LocationManagerUpdatedHeading(CMAltitudeData e, NSError error) =>
-                OnChanged(new BarometerData(UnitConverters.KilopascalsToHectopascals(e.Pressure.DoubleValue)));
+            altitudeManager.StartRelativeAltitudeUpdates(Platform.GetCurrentQueue(), (data, error)
+                => LocationManagerUpdatedHeading(data, error));
         }
+
+        static void LocationManagerUpdatedHeading(CMAltitudeData e, NSError error) =>
+            OnChanged(new BarometerData(UnitConverters.KilopascalsToHectopascals(e.Pressure.DoubleValue)));
 
         static void PlatformStop()
         {

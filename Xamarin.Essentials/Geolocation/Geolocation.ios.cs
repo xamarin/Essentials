@@ -40,7 +40,7 @@ namespace Xamarin.Essentials
             listener.LocationHandler += HandleLocation;
 
             cancellationToken = Utils.TimeoutToken(cancellationToken, request.Timeout);
-            cancellationToken.Register(Cancel);
+            cancellationToken.Register(() => Cancel());
 
             manager.DesiredAccuracy = request.PlatformDesiredAccuracy;
             manager.Delegate = listener;

@@ -10,7 +10,7 @@ namespace Xamarin.Essentials
 
         static void PlatformBeginInvokeOnMainThread(Action action)
         {
-            NSRunLoop.Main.BeginInvokeOnMainThread(action.Invoke);
+            NSRunLoop.Main.BeginInvokeOnMainThread(() => action.Invoke());
         }
     }
 }

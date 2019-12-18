@@ -177,7 +177,7 @@ namespace Xamarin.Essentials
 
         public void OnInit(OperationResult status)
         {
-            if (status.Equals(OperationResult.Success))
+            if (status == OperationResult.Success)
                 tcsInitialize.TrySetResult(true);
             else
                 tcsInitialize.TrySetException(new ArgumentException("Failed to initialize Text to Speech engine."));
@@ -200,7 +200,7 @@ namespace Xamarin.Essentials
             }
 
             return JavaLocale.GetAvailableLocales()
-                .Where(IsLocaleAvailable)
+                .Where(l => IsLocaleAvailable(l))
                 .Select(l => new Locale(l.Language, l.Country, l.DisplayName, string.Empty))
                 .GroupBy(c => c.ToString())
                 .Select(g => g.First());

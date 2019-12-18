@@ -128,7 +128,7 @@ namespace Xamarin.Essentials
         {
             var ip = new IPAddress(0);
             defaultRouteReachability = new NetworkReachability(ip);
-            defaultRouteReachability.SetNotification(OnChange);
+            defaultRouteReachability.SetNotification((f) => OnChange(f));
             defaultRouteReachability.Schedule(CFRunLoop.Main, CFRunLoop.ModeDefault);
 
             remoteHostReachability = new NetworkReachability(Reachability.HostName);
@@ -137,7 +137,7 @@ namespace Xamarin.Essentials
             // this only happens when you create NetworkReachability from a hostname
             remoteHostReachability.TryGetFlags(out var flags);
 
-            remoteHostReachability.SetNotification(OnChange);
+            remoteHostReachability.SetNotification((f) => OnChange(f));
             remoteHostReachability.Schedule(CFRunLoop.Main, CFRunLoop.ModeDefault);
         }
 

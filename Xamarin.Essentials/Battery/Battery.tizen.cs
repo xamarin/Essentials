@@ -6,7 +6,7 @@ namespace Xamarin.Essentials
     public static partial class Battery
     {
         static void OnChanged(object sender, object e)
-            => MainThread.BeginInvokeOnMainThread(OnBatteryInfoChanged);
+            => MainThread.BeginInvokeOnMainThread(() => OnBatteryInfoChanged());
 
         static void StartBatteryListeners()
         {

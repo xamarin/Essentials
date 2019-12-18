@@ -49,7 +49,7 @@ namespace Xamarin.Essentials
             {
                 speechSynthesizer.DidFinishSpeechUtterance += OnFinishedSpeechUtterance;
                 speechSynthesizer.SpeakUtterance(speechUtterance);
-                using (cancelToken.Register(TryCancel))
+                using (cancelToken.Register(() => TryCancel()))
                 {
                     await tcsUtterance.Task;
                 }

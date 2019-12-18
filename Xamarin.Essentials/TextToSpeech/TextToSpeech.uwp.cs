@@ -47,7 +47,7 @@ namespace Xamarin.Essentials
                     tcsUtterance.TrySetResult(true);
                 }
 
-                using (cancelToken.Register(OnCancel))
+                using (cancelToken.Register(() => OnCancel()))
                 {
                     await tcsUtterance.Task;
                 }

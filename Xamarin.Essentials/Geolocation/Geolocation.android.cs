@@ -72,7 +72,7 @@ namespace Xamarin.Essentials
             listener.LocationHandler = HandleLocation;
 
             cancellationToken = Utils.TimeoutToken(cancellationToken, request.Timeout);
-            cancellationToken.Register(Cancel);
+            cancellationToken.Register(() => Cancel());
 
             // start getting location updates
             // make sure to use a thread with a looper

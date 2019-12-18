@@ -12,7 +12,7 @@ namespace Xamarin.Essentials
         {
             var manager = Platform.MotionManager;
             manager.AccelerometerUpdateInterval = sensorSpeed.ToPlatform();
-            manager.StartAccelerometerUpdates(Platform.GetCurrentQueue(), DataUpdated);
+            manager.StartAccelerometerUpdates(Platform.GetCurrentQueue(), (data, error) => DataUpdated(data, error));
         }
 
         static void DataUpdated(CMAccelerometerData data, NSError error)
