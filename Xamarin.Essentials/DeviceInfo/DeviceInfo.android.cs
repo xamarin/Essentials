@@ -72,13 +72,13 @@ namespace Xamarin.Essentials
 
         static DeviceIdiom DetectIdiom(UiMode uiMode)
         {
-            if (uiMode.HasFlag(UiMode.TypeNormal))
+            if (uiMode == UiMode.TypeNormal)
                 return DeviceIdiom.Unknown;
-            else if (uiMode.HasFlag(UiMode.TypeTelevision))
+            else if (uiMode == UiMode.TypeTelevision)
                 return DeviceIdiom.TV;
-            else if (uiMode.HasFlag(UiMode.TypeDesk))
+            else if (uiMode == UiMode.TypeDesk)
                 return DeviceIdiom.Desktop;
-            else if (Essentials.Platform.HasApiLevel(BuildVersionCodes.KitkatWatch) && uiMode.HasFlag(UiMode.TypeWatch))
+            else if (Essentials.Platform.HasApiLevel(BuildVersionCodes.KitkatWatch) && uiMode == UiMode.TypeWatch)
                 return DeviceIdiom.Watch;
 
             return DeviceIdiom.Unknown;
