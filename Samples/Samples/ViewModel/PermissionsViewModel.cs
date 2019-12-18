@@ -1,23 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Collections.Generic;
 using Samples.Model;
 using Xamarin.Essentials;
-using Xamarin.Forms;
 
 namespace Samples.ViewModel
 {
     public class PermissionsViewModel : BaseViewModel
     {
-        public ICommand AppSettingsCommand =>
-            new Command(() => Permissions.ShowSettingsUI());
-
         public List<PermissionItem> PermissionItems =>
             new List<PermissionItem>
             {

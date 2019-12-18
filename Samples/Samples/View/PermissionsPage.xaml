@@ -9,14 +9,10 @@
              mc:Ignorable="d"
              x:Class="Samples.View.PermissionsPage"
              Title="Permissions">
-    
+
     <views:BasePage.BindingContext>
         <viewmodels:PermissionsViewModel x:Name="viewModel" />
     </views:BasePage.BindingContext>
-
-    <views:BasePage.ToolbarItems>
-        <ToolbarItem Text="App ⚙" Command="{Binding AppSettingsCommand}" />
-    </views:BasePage.ToolbarItems>
 
     <StackLayout>
         <ListView ItemsSource="{Binding PermissionItems}">
