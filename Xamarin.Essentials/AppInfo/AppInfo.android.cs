@@ -1,6 +1,9 @@
 ﻿using System.Globalization;
 using Android.Content;
 using Android.Content.PM;
+using Android.Util;
+using Android.Views;
+using Java.Interop;
 using Android.Content.Res;
 
 namespace Xamarin.Essentials
@@ -50,6 +53,16 @@ namespace Xamarin.Essentials
             context.StartActivity(settingsIntent);
         }
 
+        static AppViewInfo PlatformCurrentView()
+        {
+            var context = Platform.GetCurrentActivity(false) ?? Platform.AppContext;
+            using var windowManager = context.GetSystemService(Context.WindowService);
+            using var windows = windowManager.JavaCast<IWindowManager>();
+            using var metrics = new DisplayMetrics();
+            windows.DefaultDisplay.GetMetrics(metrics);
+            return new AppViewInfo(metrics.WidthPixels, metrics.HeightPixels);
+        }
+      
         static AppTheme PlatformRequestedTheme()
         {
             return (Platform.AppContext.Resources.Configuration.UiMode & UiMode.NightMask) switch

@@ -25,6 +25,16 @@ namespace Xamarin.Essentials
 #endif
 
 #if __IOS__ || __TVOS__
+        static AppViewInfo PlatformCurrentView()
+        {
+            var currentView = Platform.GetCurrentViewController().View.Window?.Frame;
+
+            if (currentView == null)
+                return default;
+
+            return new AppViewInfo(currentView.Value.Width, currentView.Value.Height);
+        }      
+      
         static AppTheme PlatformRequestedTheme()
         {
             if (!Platform.HasOSVersion(13, 0))
@@ -38,6 +48,9 @@ namespace Xamarin.Essentials
             };
         }
 #else
+        static AppViewInfo PlatformCurrentView() =>
+            throw ExceptionUtils.NotSupportedOrImplementedException;
+      
         static AppTheme PlatformRequestedTheme() =>
             AppTheme.Unspecified;
 #endif

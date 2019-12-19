@@ -23,6 +23,8 @@ namespace Xamarin.Essentials
             AppControl.SendLaunchRequest(new AppControl() { Operation = AppControlOperations.Setting });
         }
 
+        static AppViewInfo PlatformCurrentView() => throw ExceptionUtils.NotSupportedOrImplementedException;
+      
         static AppTheme PlatformRequestedTheme()
         {
             return AppTheme.Unspecified;
