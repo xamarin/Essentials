@@ -15,6 +15,8 @@ namespace Samples.ViewModel
 
         public string WindowAppSize => AppInfo.CurrentView.ToString();
 
+        public string AppTheme => AppInfo.RequestedTheme.ToString();
+
         public Command ShowSettingsUICommand { get; }
 
         public AppInfoViewModel()

@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using Windows.ApplicationModel;
 using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
 
 namespace Xamarin.Essentials
 {
@@ -28,5 +29,8 @@ namespace Xamarin.Essentials
 
             return new AppViewInfo(view.VisibleBounds.Width, view.VisibleBounds.Height);
         }
+
+        static AppTheme PlatformRequestedTheme() =>
+            Application.Current.RequestedTheme == ApplicationTheme.Dark ? AppTheme.Dark : AppTheme.Light;
     }
 }

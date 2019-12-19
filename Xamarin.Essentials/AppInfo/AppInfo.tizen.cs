@@ -24,5 +24,10 @@ namespace Xamarin.Essentials
         }
 
         static AppViewInfo PlatformCurrentView() => throw ExceptionUtils.NotSupportedOrImplementedException;
+      
+        static AppTheme PlatformRequestedTheme()
+        {
+            return AppTheme.Unspecified;
+        }
     }
 }

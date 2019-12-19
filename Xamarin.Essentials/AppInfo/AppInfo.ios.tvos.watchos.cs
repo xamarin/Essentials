@@ -33,10 +33,26 @@ namespace Xamarin.Essentials
                 return default;
 
             return new AppViewInfo(currentView.Value.Width, currentView.Value.Height);
+        }      
+      
+        static AppTheme PlatformRequestedTheme()
+        {
+            if (!Platform.HasOSVersion(13, 0))
+                return AppTheme.Unspecified;
+
+            return Platform.GetCurrentViewController().TraitCollection.UserInterfaceStyle switch
+            {
+                UIUserInterfaceStyle.Light => AppTheme.Light,
+                UIUserInterfaceStyle.Dark => AppTheme.Dark,
+                _ => AppTheme.Unspecified
+            };
         }
 #else
         static AppViewInfo PlatformCurrentView() =>
             throw ExceptionUtils.NotSupportedOrImplementedException;
+      
+        static AppTheme PlatformRequestedTheme() =>
+            AppTheme.Unspecified;
 #endif
     }
 }
