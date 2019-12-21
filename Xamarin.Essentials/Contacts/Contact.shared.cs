@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Xamarin.Essentials
 {
@@ -23,8 +20,8 @@ namespace Xamarin.Essentials
         {
             if (DeviceInfo.Platform != DevicePlatform.iOS)
             {
-                await Permissions.RequestAsync<Permissions.ContactsRead>().ConfigureAwait(false);
-                await Permissions.RequestAsync<Permissions.ContactsWrite>().ConfigureAwait(false);
+                await Permissions.RequestAsync<Permissions.ContactsRead>();
+                await Permissions.RequestAsync<Permissions.ContactsWrite>();
             }
         }
     }
