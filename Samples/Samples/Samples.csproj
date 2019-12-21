@@ -23,11 +23,4 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Xamarin.Essentials\Xamarin.Essentials.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="View\ColorConvertersPage.xaml.cs">
-      <DependentUpon>ColorConvertersPage.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
 </Project>
