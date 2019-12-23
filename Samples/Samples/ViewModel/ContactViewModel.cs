@@ -2,7 +2,6 @@
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
-using Xamarin.Forms.Internals;
 
 namespace Samples.ViewModel
 {
@@ -110,14 +109,19 @@ namespace Samples.ViewModel
                 Birthday = string.Empty;
 
                 var contact = await Contact.PickContactAsync();
-                contact.Numbers.ForEach(item =>
+
+                foreach (var numbers in contact.Numbers)
                 {
-                    item.ForEach(v => Phones += v + Environment.NewLine);
-                });
-                contact.Emails.ForEach(item =>
+                    foreach (var number in numbers)
+                        Phones += number + Environment.NewLine;
+                }
+
+                foreach (var emails in contact.Emails)
                 {
-                    item.ForEach(v => Emails += v + Environment.NewLine);
-                });
+                    foreach (var email in emails)
+                        Emails += email + Environment.NewLine;
+                }
+
                 Name = contact.Name;
                 Birthday = contact.Birthday.ToString();
             }

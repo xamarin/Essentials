@@ -14,17 +14,18 @@ namespace Xamarin.Essentials
     {
         internal static Action<PhoneContact> CallBack { get; set; }
 
-        internal static UIViewController UIView => Platform.GetCurrentViewController();
-
         static Task<PhoneContact> PlatformPickContactAsync()
         {
+            var uiView = Platform.GetCurrentViewController();
+            if (uiView == null)
+                throw new ArgumentNullException($"The View Controller can't be null.");
+
             using var picker = new CNContactPickerViewController
             {
                 Delegate = new ContactPickerDelegate()
             };
 
-            UIView.PresentViewController(picker, true, null);
-
+            uiView.PresentViewController(picker, true, null);
             var source = new TaskCompletionSource<PhoneContact>();
             try
             {
@@ -81,6 +82,11 @@ namespace Xamarin.Essentials
 
         static Task PlatformSaveContactAsync(string name, string phone, string email)
         {
+            var uiView = Platform.GetCurrentViewController();
+
+            if (uiView == null)
+                throw new ArgumentNullException($"The View Controller can't be null.");
+
             using var contact = new CNMutableContact();
 
             if (!string.IsNullOrEmpty(name))
@@ -111,7 +117,7 @@ namespace Xamarin.Essentials
                 using var view = CNContactViewController.FromNewContact(contact);
                 view.Delegate = new ContactSaveDelegate();
                 using var nav = new UINavigationController(view);
-                UIView.PresentModalViewController(nav, true);
+                uiView.PresentModalViewController(nav, true);
 
                 return Task.CompletedTask;
             }
