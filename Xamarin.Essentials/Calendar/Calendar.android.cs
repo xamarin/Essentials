@@ -15,7 +15,7 @@ namespace Xamarin.Essentials
 
         static async Task<IEnumerable<DeviceCalendar>> PlatformGetCalendarsAsync()
         {
-            await Permissions.RequireAsync(PermissionType.CalendarRead);
+            await Permissions.RequestAsync<Permissions.CalendarRead>();
 
             var calendarsUri = CalendarContract.Calendars.ContentUri;
             var calendarsProjection = new List<string>
@@ -42,7 +42,7 @@ namespace Xamarin.Essentials
 
         static async Task<IEnumerable<DeviceEvent>> PlatformGetEventsAsync(string calendarId = null, DateTimeOffset? startDate = null, DateTimeOffset? endDate = null)
         {
-            await Permissions.RequireAsync(PermissionType.CalendarRead);
+            await Permissions.RequestAsync<Permissions.CalendarRead>();
 
             var eventsUri = CalendarContract.Events.ContentUri;
             var eventsProjection = new List<string>
@@ -86,7 +86,7 @@ namespace Xamarin.Essentials
 
         static async Task<DeviceEvent> PlatformGetEventByIdAsync(string eventId)
         {
-            await Permissions.RequireAsync(PermissionType.CalendarRead);
+            await Permissions.RequestAsync<Permissions.CalendarRead>();
 
             var eventsUri = CalendarContract.Events.ContentUri;
             var eventsProjection = new List<string>
