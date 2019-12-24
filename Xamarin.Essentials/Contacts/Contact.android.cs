@@ -56,9 +56,9 @@ namespace Xamarin.Essentials
 
                 id = cur.GetString(cur.GetColumnIndex(ContactsContract.CommonDataKinds.Email.InterfaceConsts.ContactId));
 
-                var idQ = new string[] { id };
+                var idQ = new string[1] { id };
 
-                var projection = new string[]
+                var projection = new string[2]
                 {
                         ContactsContract.CommonDataKinds.Phone.Number,
                         ContactsContract.CommonDataKinds.Phone.InterfaceConsts.Type,
@@ -67,7 +67,7 @@ namespace Xamarin.Essentials
                 var cursor = context.Query(
                    ContactsContract.CommonDataKinds.Phone.ContentUri,
                    null,
-                   ContactsContract.CommonDataKinds.Phone.InterfaceConsts.ContactId + " = ?",
+                   ContactsContract.CommonDataKinds.Phone.InterfaceConsts.ContactId + "=?",
                    idQ,
                    null);
 
@@ -86,13 +86,13 @@ namespace Xamarin.Essentials
                 }
                 cursor.Close();
 
-                projection = new string[]
+                projection = new string[2]
                 {
                         ContactsContract.CommonDataKinds.Email.Address,
                         ContactsContract.CommonDataKinds.Email.InterfaceConsts.Type
                 };
 
-                cursor = context.Query(ContactsContract.CommonDataKinds.Email.ContentUri, null, ContactsContract.CommonDataKinds.Email.InterfaceConsts.ContactId + " = ?", idQ, null);
+                cursor = context.Query(ContactsContract.CommonDataKinds.Email.ContentUri, null, ContactsContract.CommonDataKinds.Email.InterfaceConsts.ContactId + "=?", idQ, null);
 
                 while (cursor.MoveToNext())
                 {
@@ -106,15 +106,15 @@ namespace Xamarin.Essentials
 
                 cursor.Close();
 
-                projection = new string[]
+                projection = new string[3]
                 {
                             ContactsContract.CommonDataKinds.StructuredPostal.Street,
                             ContactsContract.CommonDataKinds.StructuredPostal.City,
                             ContactsContract.CommonDataKinds.StructuredPostal.Postcode
                 };
 
-                var query = ContactsContract.CommonDataKinds.CommonColumns.Type + " = " + 3
-                     + " AND " + ContactsContract.CommonDataKinds.Event.InterfaceConsts.ContactId + " = ?";
+                var query = ContactsContract.CommonDataKinds.CommonColumns.Type + "=" + 3
+                     + " AND " + ContactsContract.CommonDataKinds.Event.InterfaceConsts.ContactId + "=?";
 
                 cursor = context.Query(ContactsContract.Data.ContentUri, null, query, idQ, null);
                 if (cursor.MoveToFirst())
