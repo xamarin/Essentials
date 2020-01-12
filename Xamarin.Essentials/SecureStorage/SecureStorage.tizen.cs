@@ -23,6 +23,7 @@ namespace Xamarin.Essentials
         {
             try
             {
+                PlatformRemove(key);
                 DataManager.Save(key, Encoding.UTF8.GetBytes(data), new Policy());
             }
             catch
