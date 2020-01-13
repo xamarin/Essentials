@@ -17,4 +17,19 @@
         // Restricted (only iOS)
         Restricted = 4
     }
+
+    enum PermissionType
+    {
+        Unknown,
+        Battery,
+        Camera,
+        Flashlight,
+        LaunchApp,
+        LocationWhenInUse,
+        Maps,
+        NetworkState,
+        Vibrate,
+        WriteExternalStorage,
+        ReadExternalStorage,
+    }
 }
