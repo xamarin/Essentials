@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
         {
             // we only need the permission when accessing the file, but it's more natural
             // to ask the user first, then show the picker.
-            await Permissions.RequireAsync(PermissionType.ReadExternalStorage);
+            Permissions.EnsureDeclared<Permissions.StorageRead>();
 
             var intent = new Intent(Intent.ActionGetContent);
             intent.SetType("*/*");
@@ -67,18 +67,9 @@ namespace Xamarin.Essentials
 
         readonly global::Android.Net.Uri contentUri;
 
+        // Basically with android 10, its highly discouraged to get the path. Work with the URI.
         static string GetFullPath(global::Android.Net.Uri contentUri)
         {
-            // if this is a file, use that
-            if (contentUri.Scheme == "file")
-                return contentUri.Path;
-
-            // ask the content provider for the data column, which may contain the actual file path
-            var path = QueryContentResolverColumn(contentUri, MediaStore.Files.FileColumns.Data);
-            if (!string.IsNullOrEmpty(path) && Path.IsPathRooted(path))
-                return path;
-
-            // fallback: use content URI
             return contentUri.ToString();
         }
 
