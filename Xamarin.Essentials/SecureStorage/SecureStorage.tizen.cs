@@ -23,7 +23,13 @@ namespace Xamarin.Essentials
         {
             try
             {
-                PlatformRemove(key);
+                try
+                {
+                    DataManager.RemoveAlias(key);
+                }
+                catch // Swallow the exception since we are just removing it if it exists
+                {
+                }
                 DataManager.Save(key, Encoding.UTF8.GetBytes(data), new Policy());
             }
             catch
