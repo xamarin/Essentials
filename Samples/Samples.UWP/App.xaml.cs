@@ -72,5 +72,12 @@ namespace Samples.UWP
 
             deferral.Complete();
         }
+
+        protected override void OnActivated(IActivatedEventArgs args)
+        {
+            base.OnActivated(args);
+
+            Xamarin.Essentials.Platform.OnActivated(args);
+        }
     }
 }
