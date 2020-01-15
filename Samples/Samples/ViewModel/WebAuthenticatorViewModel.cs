@@ -27,7 +27,7 @@ namespace Samples.ViewModel
         {
             try
             {
-                var authUrl = new Uri("https://redirect.me/?xamarinessentials%3A%2F%2F%23access_token%3D123XYZ-TOKEN");
+                var authUrl = new Uri("https://redirect.me/?xamarinessentials%3A%2F%2F%3Faccess_token%3D123XYZ-TOKEN");
                 var callbackUrl = new Uri("xamarinessentials://");
 
                 var r = await WebAuthenticator.AuthenticateAsync(authUrl, callbackUrl);

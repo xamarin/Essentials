@@ -207,7 +207,7 @@ namespace Samples.ViewModel
                 new SampleItem(
                     "🔓",
                     "Web Authenticator",
-                    typeof(VibrationPage),
+                    typeof(WebAuthenticatorPage),
                     "Quickly and easily authenticate and wait for a callback.",
                     new[] { "auth", "authenticate", "authenticator", "web", "webauth" }),
             };
