@@ -25,9 +25,10 @@ namespace Xamarin.Essentials
             {
                 try
                 {
+                    // Swallow the exception since we are just removing it if it exists
                     DataManager.RemoveAlias(key);
                 }
-                catch // Swallow the exception since we are just removing it if it exists
+                catch
                 {
                 }
                 DataManager.Save(key, Encoding.UTF8.GetBytes(data), new Policy());
