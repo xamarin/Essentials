@@ -12,14 +12,21 @@ namespace Xamarin.Essentials
     {
         static AuthManager authManager;
 
-        public static async Task<AuthResult> AuthenticateAsync(Uri url, Uri callbackUrl)
+        public static async Task<AuthResult> AuthenticateAsync(bool includeFullNameScope = true, bool includeEmailScope = true)
         {
             var provider = new ASAuthorizationAppleIdProvider();
             var req = provider.CreateRequest();
 
             authManager = new AuthManager(Platform.GetCurrentWindow());
 
-            req.RequestedScopes = new[] { ASAuthorizationScope.FullName, ASAuthorizationScope.Email };
+            var scopes = new List<ASAuthorizationScope>();
+
+            if (includeFullNameScope)
+                scopes.Add(ASAuthorizationScope.FullName);
+            if (includeEmailScope)
+                scopes.Add(ASAuthorizationScope.Email);
+
+            req.RequestedScopes = scopes.ToArray();
             var controller = new ASAuthorizationController(new[] { req });
 
             controller.Delegate = authManager;
