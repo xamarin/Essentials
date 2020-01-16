@@ -61,25 +61,23 @@ namespace Xamarin.Essentials
                     return await tcsResponse.Task;
                 }
 
-                if (UIDevice.CurrentDevice.CheckSystemVersion(9, 0))
+                // THis is only on iOS9+ but we only support 10+ in Essentials anyway
+                var controller = new SFSafariViewController(new NSUrl(url.OriginalString), false)
                 {
-                    var controller = new SFSafariViewController(new NSUrl(url.OriginalString), false)
+                    Delegate = new NativeSFSafariViewControllerDelegate
                     {
-                        Delegate = new NativeSFSafariViewControllerDelegate
+                        DidFinishHandler = (svc) =>
                         {
-                            DidFinishHandler = (svc) =>
-                            {
-                                // Cancel our task if it wasn't already marked as completed
-                                if (!(tcsResponse?.Task?.IsCompleted ?? true))
-                                    tcsResponse.TrySetException(new OperationCanceledException());
-                            }
-                        },
-                    };
+                            // Cancel our task if it wasn't already marked as completed
+                            if (!(tcsResponse?.Task?.IsCompleted ?? true))
+                                tcsResponse.TrySetException(new OperationCanceledException());
+                        }
+                    },
+                };
 
-                    currentViewController = controller;
-                    await Platform.GetCurrentUIViewController().PresentViewControllerAsync(controller, true);
-                    return await tcsResponse.Task;
-                }
+                currentViewController = controller;
+                await Platform.GetCurrentUIViewController().PresentViewControllerAsync(controller, true);
+                return await tcsResponse.Task;
 #endif
 
                 var opened = UIApplication.SharedApplication.OpenUrl(url);
