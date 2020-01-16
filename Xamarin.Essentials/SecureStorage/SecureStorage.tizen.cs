@@ -19,18 +19,15 @@ namespace Xamarin.Essentials
             }
         }
 
-        static Task PlatformSetAsync(string key, string data)
+        static async Task PlatformSetAsync(string key, string data)
         {
             try
             {
-                try
+                if (await PlatformGetAsync(key) != null)
                 {
-                    // Swallow the exception since we are just removing it if it exists
-                    DataManager.RemoveAlias(key);
+                    PlatformRemove(key);
                 }
-                catch
-                {
-                }
+                    
                 DataManager.Save(key, Encoding.UTF8.GetBytes(data), new Policy());
             }
             catch
@@ -38,8 +35,6 @@ namespace Xamarin.Essentials
                 Tizen.Log.Error(Platform.CurrentPackage.Label, "Failed to save data.");
                 throw;
             }
-
-            return Task.CompletedTask;
         }
 
         static void PlatformRemoveAll()
