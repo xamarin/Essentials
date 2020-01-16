@@ -78,11 +78,11 @@ namespace Xamarin.Essentials
                 currentViewController = controller;
                 await Platform.GetCurrentUIViewController().PresentViewControllerAsync(controller, true);
                 return await tcsResponse.Task;
-#endif
-
+#else
                 var opened = UIApplication.SharedApplication.OpenUrl(url);
                 if (!opened)
                     tcsResponse.TrySetException(new Exception("Error opening Safari"));
+#endif
             }
             catch (Exception ex)
             {
