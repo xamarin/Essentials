@@ -8,11 +8,14 @@ using UIKit;
 
 namespace Xamarin.Essentials
 {
-    public class AppleSignInAuthenticator
+    public static partial class AppleSignInAuthenticator
     {
         static AuthManager authManager;
 
-        public static async Task<AuthResult> AuthenticateAsync(bool includeFullNameScope = true, bool includeEmailScope = true)
+        static bool PlatformIsSupported =>
+            true;
+
+        static async Task<AuthResult> PlatformAuthenticateAsync(bool includeFullNameScope = true, bool includeEmailScope = true)
         {
             var provider = new ASAuthorizationAppleIdProvider();
             var req = provider.CreateRequest();
