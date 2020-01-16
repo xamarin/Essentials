@@ -127,25 +127,31 @@ namespace Xamarin.Essentials
 
             var cleansed = scheme.Replace("://", string.Empty);
             var schemes = GetCFBundleURLSchemes().ToList();
-            return schemes.Any(x => x.Equals(cleansed, StringComparison.InvariantCultureIgnoreCase));
+            return schemes.Any(x => x != null && x.Equals(cleansed, StringComparison.InvariantCultureIgnoreCase));
         }
 
         static IEnumerable<string> GetCFBundleURLSchemes()
         {
+            var schemes = new List<string>();
+
             NSObject nsobj = null;
             if (!NSBundle.MainBundle.InfoDictionary.TryGetValue((NSString)"CFBundleURLTypes", out nsobj))
-                yield return null;
+                return schemes;
+
             var array = nsobj as NSArray;
             for (nuint i = 0; i < (array?.Count ?? 0); i++)
             {
                 var d = array.GetItem<NSDictionary>(i);
                 if (!d?.TryGetValue((NSString)"CFBundleURLSchemes", out nsobj) ?? false)
-                    yield return null;
+                    continue;
+
                 var a = nsobj as NSArray;
                 var urls = ConvertToIEnumerable<NSString>(a).Select(x => x.ToString()).ToArray();
                 foreach (var url in urls)
-                    yield return url;
+                    schemes.Add(url);
             }
+
+            return schemes;
         }
 
         static IEnumerable<T> ConvertToIEnumerable<T>(NSArray array)
@@ -160,18 +166,14 @@ namespace Xamarin.Essentials
         {
             public Action<SFSafariViewController> DidFinishHandler { get; set; }
 
-            public override void DidFinish(SFSafariViewController controller)
-            {
+            public override void DidFinish(SFSafariViewController controller) =>
                 DidFinishHandler?.Invoke(controller);
-            }
         }
 
         class ContextProvider : NSObject, IASWebAuthenticationPresentationContextProviding
         {
-            public ContextProvider(UIWindow window)
-            {
+            public ContextProvider(UIWindow window) =>
                 Window = window;
-            }
 
             public UIWindow Window { get; private set; }
 
