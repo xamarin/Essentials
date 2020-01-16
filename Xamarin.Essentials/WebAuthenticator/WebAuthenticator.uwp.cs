@@ -6,56 +6,29 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Windows.Security.Authentication.Web;
 
 namespace Xamarin.Essentials
 {
     public static partial class WebAuthenticator
     {
-        static Uri redirectUri;
-
-        static TaskCompletionSource<AuthResult> tcsResponse = null;
-
-        static Task<AuthResult> PlatformAuthenticateAsync(Uri url, Uri callbackUrl)
+        static async Task<AuthResult> PlatformAuthenticateAsync(Uri url, Uri callbackUrl)
         {
-            // Cancel any previous task that's still pending
-            if (tcsResponse?.Task != null && !tcsResponse.Task.IsCompleted)
-                tcsResponse.TrySetCanceled();
-
-            redirectUri = callbackUrl;
-
-            tcsResponse = new TaskCompletionSource<AuthResult>();
-
             if (!IsUriProtocolDeclared(callbackUrl.Scheme))
                 throw new InvalidOperationException($"You need to declare the windows.protocol usage of the protocol/scheme `{callbackUrl.Scheme}` in your AppxManifest.xml file");
 
-            Windows.System.Launcher.LaunchUriAsync(url).AsTask();
+            var r = await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, url, callbackUrl);
 
-            return tcsResponse.Task;
-        }
-
-        internal static bool OnActivated(Uri uri)
-        {
-            // If we aren't waiting on a task, don't handle the url
-            if (tcsResponse?.Task?.IsCompleted ?? true)
-                return false;
-
-            // Only handle the url with our callback uri scheme
-            if (!uri.Scheme.Equals(redirectUri.Scheme))
-                return false;
-
-            try
+            switch (r.ResponseStatus)
             {
-                // Parse the account from the url the app opened with
-                var r = new AuthResult(uri);
-
-                // Set our account result
-                tcsResponse.TrySetResult(r);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                tcsResponse.TrySetException(ex);
-                return false;
+                case WebAuthenticationStatus.Success:
+                    // For GET requests this is a URI:
+                    var resultUri = new Uri(r.ResponseData.ToString());
+                    return new AuthResult(resultUri);
+                case WebAuthenticationStatus.ErrorHttp:
+                    throw new UnauthorizedAccessException();
+                default:
+                    throw new Exception(r.ResponseData.ToString());
             }
         }
 
