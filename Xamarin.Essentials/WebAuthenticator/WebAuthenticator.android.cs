@@ -37,7 +37,7 @@ namespace Xamarin.Essentials
                 // Only handle schemes we expect
                 if (!WebUtils.CanHandleCallback(RedirectUri, intentUri))
                 {
-                    tcsResponse.TrySetException(new InvalidOperationException("Invalid Redirect URI"));
+                    tcsResponse.TrySetException(new InvalidOperationException($"Invalid Redirect URI, detected `{intentUri}` but expected a URI in the format of `{RedirectUri}`"));
                     return false;
                 }
 
