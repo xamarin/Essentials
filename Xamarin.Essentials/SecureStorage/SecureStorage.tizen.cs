@@ -25,7 +25,7 @@ namespace Xamarin.Essentials
             {
                 try
                 {
-                    // This throws an exception if key does not exist
+                    // This throws an exception if key does not exist. The second parameter is not the default value.
                     var existing = DataManager.Get(key, null);
                     if (existing != null)
                     {
