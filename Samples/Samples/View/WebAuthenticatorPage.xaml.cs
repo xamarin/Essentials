@@ -9,7 +9,6 @@ using Xamarin.Forms.Xaml;
 
 namespace Samples.View
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class WebAuthenticatorPage : BasePage
     {
         public WebAuthenticatorPage()
