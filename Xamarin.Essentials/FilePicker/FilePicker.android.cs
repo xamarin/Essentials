@@ -68,6 +68,10 @@ namespace Xamarin.Essentials
         // Basically with android 10, its highly discouraged to get the path. Work with the URI.
         static string GetFullPath(global::Android.Net.Uri contentUri)
         {
+            // if this is a file, use that
+            if (contentUri.Scheme == "file")
+            return contentUri.Path;
+
             // fallback: use content URI
             return contentUri.ToString();
         }
