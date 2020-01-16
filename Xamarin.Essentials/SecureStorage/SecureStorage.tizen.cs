@@ -23,22 +23,18 @@ namespace Xamarin.Essentials
         {
             try
             {
-                var exists = false;
-
                 try
                 {
-                    // This call throws an exception if key does not exist
+                    // This throws an exception if key does not exist
                     var existing = DataManager.Get(key, null);
-                    exists = existing != null;
+                    if (existing != null)
+                    {
+                        DataManager.RemoveAlias(key);
+                    }
                 }
                 catch
                 {
                     Tizen.Log.Error(Platform.CurrentPackage.Label, "Key did not exist when setting");
-                }
-
-                if (exists)
-                {
-                    PlatformRemove(key);
                 }
 
                 DataManager.Save(key, Encoding.UTF8.GetBytes(data), new Policy());
