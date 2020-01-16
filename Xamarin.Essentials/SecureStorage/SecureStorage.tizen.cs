@@ -19,16 +19,32 @@ namespace Xamarin.Essentials
             }
         }
 
-        static async Task PlatformSetAsync(string key, string data)
+        static Task PlatformSetAsync(string key, string data)
         {
             try
             {
-                if (await PlatformGetAsync(key) != null)
+                var exists = false;
+                
+                try
+                {
+                    // This call throws an exception if key does not exist
+                    var existing = DataManager.Get(key, null);
+                    exists = existing != null;
+                }
+                catch
+                {
+                    Tizen.Log.Error(Platform.CurrentPackage.Label, "Value did not exist when setting");
+                }
+                       
+                
+                if (exists)
                 {
                     PlatformRemove(key);
                 }
 
                 DataManager.Save(key, Encoding.UTF8.GetBytes(data), new Policy());
+
+                return Task.CompletedTask;
             }
             catch
             {
