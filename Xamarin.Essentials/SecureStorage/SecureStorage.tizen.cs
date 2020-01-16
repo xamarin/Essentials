@@ -24,7 +24,7 @@ namespace Xamarin.Essentials
             try
             {
                 var exists = false;
-                
+
                 try
                 {
                     // This call throws an exception if key does not exist
@@ -35,7 +35,7 @@ namespace Xamarin.Essentials
                 {
                     Tizen.Log.Error(Platform.CurrentPackage.Label, "Key did not exist when setting");
                 }
-                       
+
                 if (exists)
                 {
                     PlatformRemove(key);
