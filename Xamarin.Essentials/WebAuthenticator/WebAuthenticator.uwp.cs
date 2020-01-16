@@ -11,8 +11,16 @@ namespace Xamarin.Essentials
 {
     public static partial class WebAuthenticator
     {
+        static Uri redirectUri;
+
+        static TaskCompletionSource<AuthResult> tcsResponse = null;
+
         static Task<AuthResult> PlatformAuthenticateAsync(Uri url, Uri callbackUrl)
         {
+            // Cancel any previous task that's still pending
+            if (tcsResponse?.Task != null && !tcsResponse.Task.IsCompleted)
+                tcsResponse.TrySetCanceled();
+
             redirectUri = callbackUrl;
 
             tcsResponse = new TaskCompletionSource<AuthResult>();
@@ -24,10 +32,6 @@ namespace Xamarin.Essentials
 
             return tcsResponse.Task;
         }
-
-        static Uri redirectUri;
-
-        static TaskCompletionSource<AuthResult> tcsResponse = null;
 
         internal static bool OnActivated(Uri uri)
         {

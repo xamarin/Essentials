@@ -20,6 +20,10 @@ namespace Xamarin.Essentials
 
         internal static async Task<AuthResult> PlatformAuthenticateAsync(Uri url, Uri callbackUrl)
         {
+            // Cancel any previous task that's still pending
+            if (tcsResponse?.Task != null && !tcsResponse.Task.IsCompleted)
+                tcsResponse.TrySetCanceled();
+
             tcsResponse = new TaskCompletionSource<AuthResult>();
             redirectUri = callbackUrl;
 

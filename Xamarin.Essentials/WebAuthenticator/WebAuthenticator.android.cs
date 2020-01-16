@@ -57,6 +57,10 @@ namespace Xamarin.Essentials
             // We can query package manager to get intents that can handle our callbackurl scheme
             // to ensure we actually set this up correctly
 
+            // Cancel any previous task that's still pending
+            if (tcsResponse?.Task != null && !tcsResponse.Task.IsCompleted)
+                tcsResponse.TrySetCanceled();
+
             tcsResponse = new TaskCompletionSource<AuthResult>();
             tcsResponse.Task.ContinueWith(t =>
             {
