@@ -81,10 +81,6 @@ namespace Xamarin.Essentials
                 if (expiresIn >= 0)
                     return TimeSpan.FromSeconds(expiresIn);
 
-                // Try the IdToken to see if it has 'exp' which is the id_token's expiry seconds since epoch
-                // if (IdToken != null && IdToken.ContainsKey("exp") && int.TryParse(IdToken["exp"].ToString(), out var seconds))
-                // return DateTimeOffset.FromUnixTimeSeconds(seconds) - DateTime.UtcNow;
-
                 return TimeSpan.MinValue;
             }
         }
