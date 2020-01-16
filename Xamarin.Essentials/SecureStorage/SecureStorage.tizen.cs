@@ -33,10 +33,9 @@ namespace Xamarin.Essentials
                 }
                 catch
                 {
-                    Tizen.Log.Error(Platform.CurrentPackage.Label, "Value did not exist when setting");
+                    Tizen.Log.Error(Platform.CurrentPackage.Label, "Key did not exist when setting");
                 }
                        
-                
                 if (exists)
                 {
                     PlatformRemove(key);
