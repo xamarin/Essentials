@@ -107,7 +107,7 @@ namespace Xamarin.Essentials
             }
 
             if (throwIfNull && window == null)
-                throw new InvalidOperationException("Could not find current view controller.");
+                throw new InvalidOperationException("Could not find current window.");
 
             return window;
         }
