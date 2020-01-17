@@ -8,12 +8,23 @@ namespace Samples.ViewModel
 {
     public class WebAuthenticatorViewModel : BaseViewModel
     {
+        const string authenticationUrl = "https://xamarin-essentials-auth-sample.azurewebsites.net/mobileauth/";
+
         public WebAuthenticatorViewModel()
         {
-            AuthenticateCommand = new Command(async () => await OnAuthenticate());
+            MicrosoftCommand = new Command(async () => await OnAuthenticate("Microsoft"));
+            GoogleCommand = new Command(async () => await OnAuthenticate("Google"));
+            FacebookCommand = new Command(async () => await OnAuthenticate("Facebook"));
+            AppleCommand = new Command(async () => await OnAuthenticate("Apple"));
         }
 
-        public ICommand AuthenticateCommand { get; }
+        public ICommand MicrosoftCommand { get; }
+
+        public ICommand GoogleCommand { get; }
+
+        public ICommand FacebookCommand { get; }
+
+        public ICommand AppleCommand { get; }
 
         string accessToken = string.Empty;
 
@@ -23,14 +34,23 @@ namespace Samples.ViewModel
             set => SetProperty(ref accessToken, value);
         }
 
-        async Task OnAuthenticate()
+        async Task OnAuthenticate(string scheme)
         {
             try
             {
-                var authUrl = new Uri("https://redirect.me/?xamarinessentials%3A%2F%2F%3Faccess_token%3D123XYZ-TOKEN");
-                var callbackUrl = new Uri("xamarinessentials://");
+                AuthResult r = null;
 
-                var r = await WebAuthenticator.AuthenticateAsync(authUrl, callbackUrl);
+                if (scheme.Equals("Apple") && AppleSignInAuthenticator.IsSupported)
+                {
+                    r = await AppleSignInAuthenticator.AuthenticateAsync(true, true);
+                }
+                else
+                {
+                    var authUrl = new Uri(authenticationUrl + scheme);
+                    var callbackUrl = new Uri("xamarinessentials://");
+
+                    r = await WebAuthenticator.AuthenticateAsync(authUrl, callbackUrl);
+                }
 
                 AccessToken = r?.AccessToken;
             }

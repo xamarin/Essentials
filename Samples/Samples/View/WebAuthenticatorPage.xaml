@@ -13,8 +13,11 @@
 
         <ScrollView>
             <StackLayout Padding="12,0,12,12" Spacing="6">
-                
-                <Button Text="Authenticate" Command="{Binding AuthenticateCommand}" />
+
+                <Button Text="Microsoft" Command="{Binding MicrosoftCommand}" BackgroundColor="#00A4EF" TextColor="White" />
+                <Button Text="Google" Command="{Binding GoogleCommand}" BackgroundColor="#d34836" TextColor="White" />
+                <Button Text="Facebook" Command="{Binding FacebookCommand}" BackgroundColor="#3b5998" TextColor="White" />
+                <Button Text="Apple" Command="{Binding AppleCommand}" BackgroundColor="Black" TextColor="White" />
 
                 <Label Text="Access Token:" FontAttributes="Bold" Margin="12,12,12,0" />
                 <Label Text="{Binding AccessToken}" TextColor="Red" FontAttributes="Italic" />
