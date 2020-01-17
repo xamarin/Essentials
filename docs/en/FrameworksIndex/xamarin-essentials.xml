@@ -34,10 +34,31 @@
       <Member Id="P:Xamarin.Essentials.AppInfo.Version" />
       <Member Id="P:Xamarin.Essentials.AppInfo.VersionString" />
     </Type>
+    <Type Name="Xamarin.Essentials.AppleSignInAuthenticator" Id="T:Xamarin.Essentials.AppleSignInAuthenticator">
+      <Member Id="M:Xamarin.Essentials.AppleSignInAuthenticator.AuthenticateAsync(System.Boolean,System.Boolean)" />
+      <Member Id="P:Xamarin.Essentials.AppleSignInAuthenticator.IsSupported" />
+    </Type>
     <Type Name="Xamarin.Essentials.AppTheme" Id="T:Xamarin.Essentials.AppTheme">
       <Member Id="F:Xamarin.Essentials.AppTheme.Dark" />
       <Member Id="F:Xamarin.Essentials.AppTheme.Light" />
       <Member Id="F:Xamarin.Essentials.AppTheme.Unspecified" />
+    </Type>
+    <Type Name="Xamarin.Essentials.AuthResult" Id="T:Xamarin.Essentials.AuthResult">
+      <Member Id="M:Xamarin.Essentials.AuthResult.#ctor" />
+      <Member Id="M:Xamarin.Essentials.AuthResult.#ctor(System.Collections.Generic.IDictionary{System.String,System.String})" />
+      <Member Id="M:Xamarin.Essentials.AuthResult.#ctor(System.Uri)" />
+      <Member Id="M:Xamarin.Essentials.AuthResult.Get(System.String)" />
+      <Member Id="M:Xamarin.Essentials.AuthResult.GetInt(System.String,System.Int32)" />
+      <Member Id="M:Xamarin.Essentials.AuthResult.Put(System.String,System.Object)" />
+      <Member Id="P:Xamarin.Essentials.AuthResult.AccessToken" />
+      <Member Id="P:Xamarin.Essentials.AuthResult.ExpiresIn" />
+      <Member Id="P:Xamarin.Essentials.AuthResult.IsExpired" />
+      <Member Id="P:Xamarin.Essentials.AuthResult.IsRefreshExpired" />
+      <Member Id="P:Xamarin.Essentials.AuthResult.Properties" />
+      <Member Id="P:Xamarin.Essentials.AuthResult.RefreshToken" />
+      <Member Id="P:Xamarin.Essentials.AuthResult.RefreshTokenExpiresIn" />
+      <Member Id="P:Xamarin.Essentials.AuthResult.Timestamp" />
+      <Member Id="P:Xamarin.Essentials.AuthResult.TokenType" />
     </Type>
     <Type Name="Xamarin.Essentials.Barometer" Id="T:Xamarin.Essentials.Barometer">
       <Member Id="E:Xamarin.Essentials.Barometer.ReadingChanged" />
@@ -781,6 +802,9 @@
       <Member Id="M:Xamarin.Essentials.Vibration.Vibrate" />
       <Member Id="M:Xamarin.Essentials.Vibration.Vibrate(System.Double)" />
       <Member Id="M:Xamarin.Essentials.Vibration.Vibrate(System.TimeSpan)" />
+    </Type>
+    <Type Name="Xamarin.Essentials.WebAuthenticator" Id="T:Xamarin.Essentials.WebAuthenticator">
+      <Member Id="M:Xamarin.Essentials.WebAuthenticator.AuthenticateAsync(System.Uri,System.Uri)" />
     </Type>
   </Namespace>
 </Framework>
