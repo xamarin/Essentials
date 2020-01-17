@@ -13,7 +13,7 @@ namespace Xamarin.Essentials
         static AuthManager authManager;
 
         static bool PlatformIsSupported =>
-            true;
+            DeviceInfo.Version >= new Version(13, 0);
 
         static async Task<AuthResult> PlatformAuthenticateAsync(bool includeFullNameScope = true, bool includeEmailScope = true)
         {
