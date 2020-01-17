@@ -32,7 +32,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        public static bool IsUriProtocolDeclared(string scheme)
+        static bool IsUriProtocolDeclared(string scheme)
         {
             var doc = XDocument.Load(Platform.AppManifestFilename, LoadOptions.None);
             var reader = doc.CreateReader();

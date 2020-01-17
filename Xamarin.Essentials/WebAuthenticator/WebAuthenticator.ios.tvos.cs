@@ -117,7 +117,7 @@ namespace Xamarin.Essentials
             return false;
         }
 
-        public static bool VerifyHasUrlSchemeOrDoesntRequire(string scheme)
+        static bool VerifyHasUrlSchemeOrDoesntRequire(string scheme)
         {
             // iOS11+ uses sfAuthenticationSession which handles its own url routing
             if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
