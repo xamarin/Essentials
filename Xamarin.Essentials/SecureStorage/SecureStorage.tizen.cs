@@ -14,7 +14,7 @@ namespace Xamarin.Essentials
                 // a password
                 return Task.FromResult(Encoding.UTF8.GetString(DataManager.Get(key, null)));
             }
-            catch (InvalidOperationException)
+            catch (System.InvalidOperationException)
             {
                 // The DataManager.Get call throws an exception if key does not exist. Not logging
                 // anything since this is an expected and normal situation (if the key did not exist).
