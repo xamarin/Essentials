@@ -17,7 +17,7 @@ namespace DeviceTests
         {
             return Utils.OnMainThread(async () =>
             {
-                var calendarList = await Calendar.GetCalendarsAsync();
+                var calendarList = await Calendars.GetCalendarsAsync();
                 Assert.NotNull(calendarList);
             });
         }
@@ -28,24 +28,71 @@ namespace DeviceTests
         {
             return Utils.OnMainThread(async () =>
             {
-                var eventList = await Calendar.GetEventsAsync();
+                var eventList = await Calendars.GetEventsAsync();
                 Assert.NotNull(eventList);
             });
         }
 
         [Theory]
         [InlineData("ThisIsAFakeId")]
-        [InlineData("-1")]
-        [InlineData("")]
         [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
-        public Task Get_Event_By_Bad_Id(string calendarId)
+        public Task Get_Events_By_Bad_Calendar_Text_Id(string calendarId)
         {
             return Utils.OnMainThread(async () =>
             {
-#if __IOS__
-                await Assert.ThrowsAsync<NullReferenceException>(() => Calendar.GetEventByIdAsync(calendarId));
+#if __ANDROID__
+                await Assert.ThrowsAsync<ArgumentException>(() => Calendars.GetEventsAsync(calendarId));
 #else
-                await Assert.ThrowsAsync<ArgumentException>(() => Calendar.GetEventByIdAsync(calendarId));
+                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendars.GetEventsAsync(calendarId));
+#endif
+            });
+        }
+
+        [Theory]
+        [InlineData("-1")]
+        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
+        public Task Get_Events_By_Bad_Calendar_Id(string calendarId)
+        {
+            return Utils.OnMainThread(async () =>
+            {
+                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendars.GetEventsAsync(calendarId));
+            });
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
+        public Task Get_Event_By_Blank_Id(string eventId)
+        {
+            return Utils.OnMainThread(async () =>
+            {
+                await Assert.ThrowsAsync<ArgumentException>(() => Calendars.GetEventByIdAsync(eventId));
+            });
+        }
+
+        [Theory]
+        [InlineData("-1")]
+        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
+        public Task Get_Event_By_Bad_Id(string eventId)
+        {
+            return Utils.OnMainThread(async () =>
+            {
+                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendars.GetEventByIdAsync(eventId));
+            });
+        }
+
+        [Theory]
+        [InlineData("ThisIsAFakeId")]
+        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
+        public Task Get_Event_By_Bad_Text_Id(string eventId)
+        {
+            return Utils.OnMainThread(async () =>
+            {
+#if __ANDROID__
+                await Assert.ThrowsAsync<ArgumentException>(() => Calendars.GetEventByIdAsync(eventId));
+#else
+                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendars.GetEventByIdAsync(eventId));
 #endif
             });
         }

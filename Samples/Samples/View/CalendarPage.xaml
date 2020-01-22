@@ -14,7 +14,7 @@
             <converters:CheckBoxEventArgsConverter x:Key="CheckBoxEventArgsConverter" />
             <converters:DateSelectedEventArgsConverter x:Key="DateSelectedEventArgsConverter" />
             <converters:TimeSelectedEventArgsConverter x:Key="TimeSelectedEventArgsConverter" />
-            <DataTemplate x:DataType="essentials:DeviceEvent"
+            <DataTemplate x:DataType="essentials:CalendarEvent"
                           x:Key="EventItemTemplate">
                 <ViewCell>
                     <StackLayout>
@@ -67,7 +67,7 @@
             <Picker x:Name="SelectedCalendar"
                     Grid.Row="1"
                     Title="Select a Calendar"
-                    ItemsSource="{Binding Calendars}"
+                    ItemsSource="{Binding CalendarList}"
                     ItemDisplayBinding="{Binding Name}"
                     SelectedItem="{Binding SelectedCalendar}" />
             <Grid Grid.Row="2">
@@ -159,7 +159,7 @@
                      Color="#5b5d68" />
             <ListView Grid.Row="4"
                       HasUnevenRows="true"
-                      ItemsSource="{Binding Events}"
+                      ItemsSource="{Binding EventList}"
                       ItemTemplate="{StaticResource EventItemTemplate}"
                       SelectionMode="None"
                       ItemTapped="OnEventTapped" />

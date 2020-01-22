@@ -6,7 +6,7 @@
              xmlns:essentials="clr-namespace:Xamarin.Essentials;assembly=Xamarin.Essentials"
              xmlns:converters="clr-namespace:Samples.Converters;assembly=Samples"
              x:Class="Samples.View.CalendarEventPage"
-             x:DataType="essentials:DeviceEvent"
+             x:DataType="essentials:CalendarEvent"
              Title="Event"
              Padding="20,20,20,20">
     <views:BasePage.Resources>
@@ -32,45 +32,41 @@
               <RowDefinition Height="Auto"/>
               <RowDefinition Height="Auto"/>
               <RowDefinition Height="Auto"/>
-              <RowDefinition/>
             </Grid.RowDefinitions>
-            <Label Grid.Row="1"
+            <Label Grid.Row="0"
                    Grid.Column="0"
                    Text="Location:"/>
-            <Label Grid.Row="1"
+            <Label Grid.Row="0"
                    Grid.Column="1"
                    Grid.ColumnSpan="3"
                    HorizontalTextAlignment="Center"
                    Text="{Binding Location}"/>
-            <Label Grid.Row="2"
+            <Label Grid.Row="1"
                    Grid.Column="0"
                    Text="When:"/>
             <Label Grid.Column="1"
-                   Grid.Row="2"
+                   Grid.Row="1"
                    Text="{Binding StartDate, StringFormat={StaticResource DateDisplayFormatter}, Mode=OneWay}"
                    TextColor="Black"
                    HorizontalTextAlignment="Center"/>
             <Label Grid.Column="2"
-                   Grid.Row="2"
+                   Grid.Row="1"
                    Text="-"
                    IsVisible="{Binding AllDay, Converter={StaticResource NegativeConverter}}"/>
             <Label Grid.Column="3"
-                   Grid.Row="2"
+                   Grid.Row="1"
                    Text="{Binding EndDate, StringFormat={StaticResource DateDisplayFormatter}, Mode=OneWay}"
                    TextColor="Black"
                    HorizontalTextAlignment="Center"/>
+            <Label Grid.Row="2"
+                   Grid.Column="0"
+                   Text="Duration: "/>
+            <Label Grid.Row="2"
+                   Grid.Column="1"
+                   Grid.ColumnSpan="3"
+                   Text="{Binding Duration, StringFormat={StaticResource TimeSpanFormatter}}"
+                   HorizontalTextAlignment="Center"/>
           </Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Label Text="Duration: "/>
-                <Label Grid.Column="1"  
-                       Text="{Binding Duration, StringFormat={StaticResource TimeSpanFormatter}}"
-                       HorizontalTextAlignment="Center"/>
-            </Grid>
-            
           <ScrollView>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -86,7 +82,7 @@
                            Grid.Column="1"
                            BindableLayout.ItemsSource="{Binding Attendees}">
                   <BindableLayout.ItemTemplate>
-                    <DataTemplate x:DataType="essentials:DeviceEventAttendee">
+                    <DataTemplate x:DataType="essentials:CalendarEventAttendee">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>

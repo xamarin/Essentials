@@ -22,10 +22,12 @@ namespace Xamarin.Essentials
             var reader = doc.CreateReader();
             var namespaceManager = new XmlNamespaceManager(reader.NameTable);
             namespaceManager.AddNamespace("x", appManifestXmlns);
+            namespaceManager.AddNamespace("uap", appManifestXmlns);
 
             // If the manifest doesn't contain a capability we need, throw
             return (!doc.Root.XPathSelectElements($"//x:DeviceCapability[@Name='{capabilityName}']", namespaceManager)?.Any() ?? false) &&
-                (!doc.Root.XPathSelectElements($"//x:Capability[@Name='{capabilityName}']", namespaceManager)?.Any() ?? false);
+                (!doc.Root.XPathSelectElements($"//x:Capability[@Name='{capabilityName}']", namespaceManager)?.Any() ?? false) &&
+                (!doc.Root.XPathSelectElements($"//uap:Capability[@Name='{capabilityName}']", namespaceManager)?.Any() ?? false);
         }
 
         public abstract partial class BasePlatformPermission : BasePermission
@@ -57,6 +59,8 @@ namespace Xamarin.Essentials
 
         public partial class CalendarRead : BasePlatformPermission
         {
+            protected override Func<IEnumerable<string>> RequiredDeclarations => () =>
+                new[] { "appointments" };
         }
 
         public partial class CalendarWrite : BasePlatformPermission
