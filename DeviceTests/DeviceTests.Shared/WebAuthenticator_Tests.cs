@@ -16,6 +16,7 @@ namespace DeviceTests
             "testtokenvalue",
             "testrefreshvalue",
             99)]
+        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
         public async Task Redirect(string urlBase, string callbackScheme, string accessToken, string refreshToken, int expires)
         {
             var r = await WebAuthenticator.AuthenticateAsync(
@@ -30,6 +31,7 @@ namespace DeviceTests
         [Theory]
         [InlineData("xamarinessentials://#access_token=blah&refresh_token=blah2&expires=1", "blah", "blah2", "1")]
         [InlineData("xamarinessentials://?access_token=blah&refresh_token=blah2&expires=1", "blah", "blah2", "1")]
+        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
         public void ParseQueryString(string url, string accessToken, string refreshToken, string expires)
         {
             var r = WebUtils.ParseQueryString(url);
