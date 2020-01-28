@@ -140,7 +140,10 @@ namespace Xamarin.Essentials
             for (nuint i = 0; i < (array?.Count ?? 0); i++)
             {
                 var d = array.GetItem<NSDictionary>(i);
-                if (!d?.TryGetValue((NSString)"CFBundleURLSchemes", out nsobj) ?? false)
+                if (d == null || !d.Any())
+                    continue;
+
+                if (!d.TryGetValue((NSString)"CFBundleURLSchemes", out nsobj))
                     continue;
 
                 var a = nsobj as NSArray;
