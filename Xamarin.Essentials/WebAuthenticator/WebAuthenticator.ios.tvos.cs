@@ -137,7 +137,11 @@ namespace Xamarin.Essentials
                 return schemes;
 
             var array = nsobj as NSArray;
-            for (nuint i = 0; i < (array?.Count ?? 0); i++)
+
+            if (array == null)
+                return schemes;
+
+            for (nuint i = 0; i < array.Count; i++)
             {
                 var d = array.GetItem<NSDictionary>(i);
                 if (d == null || !d.Any())
