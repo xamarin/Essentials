@@ -38,11 +38,13 @@ namespace Samples.ViewModel
         {
             try
             {
-                AuthResult r = null;
+                WebAuthenticatorResult r = null;
 
-                if (scheme.Equals("Apple") && AppleSignInAuthenticator.IsSupported)
+                if (scheme.Equals("Apple")
+                    && DeviceInfo.Platform == DevicePlatform.iOS
+                    && DeviceInfo.Version.Major >= 13)
                 {
-                    r = await AppleSignInAuthenticator.AuthenticateAsync(true, true);
+                    r = await AppleSignInAuthenticator.AuthenticateAsync();
                 }
                 else
                 {
