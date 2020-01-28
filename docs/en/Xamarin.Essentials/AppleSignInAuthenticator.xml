@@ -12,48 +12,28 @@
   <Interfaces />
   <Docs>
     <summary>Native Apple Sign In authentication API.</summary>
-    <remarks>This API is only supported on iOS 13.0+ and the IsSupported property should be queryed before the API is used at runtime.</remarks>
+    <remarks>This API is only supported on iOS 13.0+ and should not be called on other devices at runtime.</remarks>
   </Docs>
   <Members>
     <Member MemberName="AuthenticateAsync">
-      <MemberSignature Language="C#" Value="public static System.Threading.Tasks.Task&lt;Xamarin.Essentials.AuthResult&gt; AuthenticateAsync (bool includeFullNameScope = true, bool includeEmailScope = true);" />
-      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Tasks.Task`1&lt;class Xamarin.Essentials.AuthResult&gt; AuthenticateAsync(bool includeFullNameScope, bool includeEmailScope) cil managed" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.AppleSignInAuthenticator.AuthenticateAsync(System.Boolean,System.Boolean)" />
+      <MemberSignature Language="C#" Value="public static System.Threading.Tasks.Task&lt;Xamarin.Essentials.WebAuthenticatorResult&gt; AuthenticateAsync (Xamarin.Essentials.AppleSignInAuthenticator.AppleSignInOptions options = null);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Tasks.Task`1&lt;class Xamarin.Essentials.WebAuthenticatorResult&gt; AuthenticateAsync(class Xamarin.Essentials.AppleSignInAuthenticator/AppleSignInOptions options) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.AppleSignInAuthenticator.AuthenticateAsync(Xamarin.Essentials.AppleSignInAuthenticator.AppleSignInOptions)" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
-        <ReturnType>System.Threading.Tasks.Task&lt;Xamarin.Essentials.AuthResult&gt;</ReturnType>
+        <ReturnType>System.Threading.Tasks.Task&lt;Xamarin.Essentials.WebAuthenticatorResult&gt;</ReturnType>
       </ReturnValue>
       <Parameters>
-        <Parameter Name="includeFullNameScope" Type="System.Boolean" />
-        <Parameter Name="includeEmailScope" Type="System.Boolean" />
+        <Parameter Name="options" Type="Xamarin.Essentials.AppleSignInAuthenticator+AppleSignInOptions" />
       </Parameters>
       <Docs>
-        <param name="includeFullNameScope">To be added.</param>
-        <param name="includeEmailScope">To be added.</param>
-        <summary>Authenticate with the native Apple Sign In authentication API's.</summary>
+        <param name="options">To be added.</param>
+        <summary>Performs a native Apple Sign In authentication request.</summary>
         <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
-      </Docs>
-    </Member>
-    <Member MemberName="IsSupported">
-      <MemberSignature Language="C#" Value="public static bool IsSupported { get; }" />
-      <MemberSignature Language="ILAsm" Value=".property bool IsSupported" />
-      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.AppleSignInAuthenticator.IsSupported" />
-      <MemberType>Property</MemberType>
-      <AssemblyInfo>
-        <AssemblyName>Xamarin.Essentials</AssemblyName>
-        <AssemblyVersion>1.0.0.0</AssemblyVersion>
-      </AssemblyInfo>
-      <ReturnValue>
-        <ReturnType>System.Boolean</ReturnType>
-      </ReturnValue>
-      <Docs>
-        <summary>Is native Apple Sign In supported on this device.</summary>
-        <value>To be added.</value>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
