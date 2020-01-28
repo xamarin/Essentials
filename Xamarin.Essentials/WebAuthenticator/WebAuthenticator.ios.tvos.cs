@@ -14,17 +14,17 @@ namespace Xamarin.Essentials
 {
     public static partial class WebAuthenticator
     {
-        static TaskCompletionSource<AuthResult> tcsResponse;
+        static TaskCompletionSource<WebAuthenticatorResult> tcsResponse;
         static UIViewController currentViewController;
         static Uri redirectUri;
 
-        internal static async Task<AuthResult> PlatformAuthenticateAsync(Uri url, Uri callbackUrl)
+        internal static async Task<WebAuthenticatorResult> PlatformAuthenticateAsync(Uri url, Uri callbackUrl)
         {
             // Cancel any previous task that's still pending
             if (tcsResponse?.Task != null && !tcsResponse.Task.IsCompleted)
                 tcsResponse.TrySetCanceled();
 
-            tcsResponse = new TaskCompletionSource<AuthResult>();
+            tcsResponse = new TaskCompletionSource<WebAuthenticatorResult>();
             redirectUri = callbackUrl;
 
             try
@@ -107,7 +107,7 @@ namespace Xamarin.Essentials
                 currentViewController?.DismissViewControllerAsync(true);
                 currentViewController = null;
 
-                tcsResponse.TrySetResult(new AuthResult(uri));
+                tcsResponse.TrySetResult(new WebAuthenticatorResult(uri));
                 return true;
             }
             catch (Exception ex)

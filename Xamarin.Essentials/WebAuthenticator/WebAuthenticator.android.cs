@@ -7,7 +7,7 @@ namespace Xamarin.Essentials
 {
     public partial class WebAuthenticator
     {
-        static TaskCompletionSource<AuthResult> tcsResponse = null;
+        static TaskCompletionSource<WebAuthenticatorResult> tcsResponse = null;
 
         static Uri uri = null;
 
@@ -15,7 +15,7 @@ namespace Xamarin.Essentials
 
         static Uri RedirectUri { get; set; }
 
-        internal static Task<AuthResult> ResponseTask
+        internal static Task<WebAuthenticatorResult> ResponseTask
             => tcsResponse?.Task;
 
         internal static bool OnResume(Intent intent)
@@ -41,7 +41,7 @@ namespace Xamarin.Essentials
                     return false;
                 }
 
-                tcsResponse?.TrySetResult(new AuthResult(intentUri));
+                tcsResponse?.TrySetResult(new WebAuthenticatorResult(intentUri));
                 return true;
             }
             catch (Exception ex)
@@ -51,7 +51,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static Task<AuthResult> PlatformAuthenticateAsync(Uri url, Uri callbackUrl)
+        static Task<WebAuthenticatorResult> PlatformAuthenticateAsync(Uri url, Uri callbackUrl)
         {
             // TODO: Check for intent filter registered for scheme
             // We can query package manager to get intents that can handle our callbackurl scheme
@@ -61,7 +61,7 @@ namespace Xamarin.Essentials
             if (tcsResponse?.Task != null && !tcsResponse.Task.IsCompleted)
                 tcsResponse.TrySetCanceled();
 
-            tcsResponse = new TaskCompletionSource<AuthResult>();
+            tcsResponse = new TaskCompletionSource<WebAuthenticatorResult>();
             tcsResponse.Task.ContinueWith(t =>
             {
                 // Cleanup when done

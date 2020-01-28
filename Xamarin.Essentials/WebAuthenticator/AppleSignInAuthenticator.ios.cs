@@ -12,11 +12,11 @@ namespace Xamarin.Essentials
     {
         static AuthManager authManager;
 
-        static bool PlatformIsSupported =>
-            DeviceInfo.Version >= new Version(13, 0);
-
-        static async Task<AuthResult> PlatformAuthenticateAsync(bool includeFullNameScope = true, bool includeEmailScope = true)
+        static async Task<WebAuthenticatorResult> PlatformAuthenticateAsync(AppleSignInOptions options)
         {
+            if (DeviceInfo.Version.Major < 13)
+                throw new FeatureNotSupportedException();
+
             var provider = new ASAuthorizationAppleIdProvider();
             var req = provider.CreateRequest();
 
@@ -24,9 +24,9 @@ namespace Xamarin.Essentials
 
             var scopes = new List<ASAuthorizationScope>();
 
-            if (includeFullNameScope)
+            if (options.IncludeFullNameScope)
                 scopes.Add(ASAuthorizationScope.FullName);
-            if (includeEmailScope)
+            if (options.IncludeEmailScope)
                 scopes.Add(ASAuthorizationScope.Email);
 
             req.RequestedScopes = scopes.ToArray();
@@ -42,7 +42,7 @@ namespace Xamarin.Essentials
             if (creds == null)
                 return null;
 
-            var appleAccount = new AuthResult();
+            var appleAccount = new WebAuthenticatorResult();
             appleAccount.Properties.Add("id_token", new NSString(creds.IdentityToken, NSStringEncoding.UTF8).ToString());
             appleAccount.Properties.Add("email", creds.Email);
             appleAccount.Properties.Add("user_id", creds.User);

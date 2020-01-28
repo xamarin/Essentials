@@ -8,7 +8,7 @@ namespace Xamarin.Essentials
 {
     public static partial class WebAuthenticator
     {
-        public static Task<AuthResult> AuthenticateAsync(Uri url, Uri callbackUrl)
+        public static Task<WebAuthenticatorResult> AuthenticateAsync(Uri url, Uri callbackUrl)
             => PlatformAuthenticateAsync(url, callbackUrl);
     }
 }

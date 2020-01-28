@@ -7,10 +7,7 @@ namespace Xamarin.Essentials
 {
     public static partial class AppleSignInAuthenticator
     {
-        static bool PlatformIsSupported =>
-            false;
-
-        static Task<AuthResult> PlatformAuthenticateAsync(bool includeFullNameScope = true, bool includeEmailScope = true) =>
+        static Task<WebAuthenticatorResult> PlatformAuthenticateAsync(AppleSignInOptions options) =>
             throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }

@@ -12,7 +12,7 @@ namespace Xamarin.Essentials
 {
     public static partial class WebAuthenticator
     {
-        static async Task<AuthResult> PlatformAuthenticateAsync(Uri url, Uri callbackUrl)
+        static async Task<WebAuthenticatorResult> PlatformAuthenticateAsync(Uri url, Uri callbackUrl)
         {
             if (!IsUriProtocolDeclared(callbackUrl.Scheme))
                 throw new InvalidOperationException($"You need to declare the windows.protocol usage of the protocol/scheme `{callbackUrl.Scheme}` in your AppxManifest.xml file");
@@ -24,7 +24,7 @@ namespace Xamarin.Essentials
                 case WebAuthenticationStatus.Success:
                     // For GET requests this is a URI:
                     var resultUri = new Uri(r.ResponseData.ToString());
-                    return new AuthResult(resultUri);
+                    return new WebAuthenticatorResult(resultUri);
                 case WebAuthenticationStatus.ErrorHttp:
                     throw new UnauthorizedAccessException();
                 default:
