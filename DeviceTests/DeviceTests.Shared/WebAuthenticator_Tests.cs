@@ -25,7 +25,8 @@ namespace DeviceTests
 
             Assert.Equal(accessToken, r?.AccessToken);
             Assert.Equal(refreshToken, r?.RefreshToken);
-            Assert.Equal(expires, (int)(r?.ExpiresIn.TotalSeconds ?? -1));
+            Assert.NotNull(r?.ExpiresIn);
+            Assert.True(r?.ExpiresIn > DateTime.UtcNow);
         }
 
         [Theory]
