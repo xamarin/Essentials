@@ -53,9 +53,20 @@ namespace Xamarin.Essentials
 
         static Task<WebAuthenticatorResult> PlatformAuthenticateAsync(Uri url, Uri callbackUrl)
         {
-            // TODO: Check for intent filter registered for scheme
-            // We can query package manager to get intents that can handle our callbackurl scheme
-            // to ensure we actually set this up correctly
+            var packageName = Platform.AppContext.PackageName;
+
+            // Create an intent to see if the app developer wired up the callback activity correctly
+            var intent = new Intent(Intent.ActionView);
+            intent.AddCategory(Intent.CategoryBrowsable);
+            intent.AddCategory(Intent.CategoryDefault);
+            intent.SetPackage(packageName);
+            intent.SetData(global::Android.Net.Uri.Parse(callbackUrl.OriginalString));
+
+            // Try to find the activity for the callback intent
+            var c = intent.ResolveActivity(Platform.AppContext.PackageManager);
+
+            if (c == null || c.PackageName != packageName)
+                throw new InvalidOperationException($"You must subclass the `{nameof(WebAuthenticatorCallbackActivity)}` and create an IntentFilter for it which matches your `{nameof(callbackUrl)}`.");
 
             // Cancel any previous task that's still pending
             if (tcsResponse?.Task != null && !tcsResponse.Task.IsCompleted)
