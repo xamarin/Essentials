@@ -64,6 +64,10 @@ namespace Xamarin.Essentials
             var intent = new Intent(Intent.ActionView, AndroidUri.Parse(uri));
             intent.SetFlags(ActivityFlags.ClearTop);
             intent.SetFlags(ActivityFlags.NewTask);
+#if __ANDROID_24__
+            if (Platform.HasApiLevelN)
+                intent.SetFlags(ActivityFlags.LaunchAdjacent);
+#endif
             Platform.AppContext.StartActivity(intent);
         }
     }

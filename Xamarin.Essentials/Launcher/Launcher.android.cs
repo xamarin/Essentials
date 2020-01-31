@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using AndroidUri = Android.Net.Uri;
@@ -26,6 +27,12 @@ namespace Xamarin.Essentials
             var intent = new Intent(Intent.ActionView, AndroidUri.Parse(uri.OriginalString));
             intent.SetFlags(ActivityFlags.ClearTop);
             intent.SetFlags(ActivityFlags.NewTask);
+
+#if __ANDROID_24__
+            if (Platform.HasApiLevelN)
+                intent.SetFlags(ActivityFlags.LaunchAdjacent);
+#endif
+
             Platform.AppContext.StartActivity(intent);
             return Task.CompletedTask;
         }
@@ -41,6 +48,12 @@ namespace Xamarin.Essentials
             var chooserIntent = Intent.CreateChooser(intent, request.Title ?? string.Empty);
             chooserIntent.SetFlags(ActivityFlags.ClearTop);
             chooserIntent.SetFlags(ActivityFlags.NewTask);
+
+#if __ANDROID_24__
+            if (Platform.HasApiLevelN)
+                chooserIntent.SetFlags(ActivityFlags.LaunchAdjacent);
+#endif
+
             Platform.AppContext.StartActivity(chooserIntent);
 
             return Task.CompletedTask;

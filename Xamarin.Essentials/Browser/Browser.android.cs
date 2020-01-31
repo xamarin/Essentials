@@ -27,6 +27,11 @@ namespace Xamarin.Essentials
                     var tabsIntent = tabsBuilder.Build();
                     tabsIntent.Intent.SetFlags(ActivityFlags.ClearTop);
                     tabsIntent.Intent.SetFlags(ActivityFlags.NewTask);
+#if __ANDROID_24__
+                    if (Platform.HasApiLevelN)
+                        tabsIntent.Intent.SetFlags(ActivityFlags.LaunchAdjacent);
+#endif
+
 #if __ANDROID_25__
                     tabsIntent.LaunchUrl(Platform.AppContext, nativeUri);
 #else
@@ -37,6 +42,11 @@ namespace Xamarin.Essentials
                     var intent = new Intent(Intent.ActionView, nativeUri);
                     intent.SetFlags(ActivityFlags.ClearTop);
                     intent.SetFlags(ActivityFlags.NewTask);
+
+#if __ANDROID_24__
+                    if (Platform.HasApiLevelN)
+                        intent.SetFlags(ActivityFlags.LaunchAdjacent);
+#endif
 
                     if (!Platform.IsIntentSupported(intent))
                         throw new FeatureNotSupportedException();

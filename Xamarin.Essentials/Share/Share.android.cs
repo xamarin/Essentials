@@ -32,6 +32,10 @@ namespace Xamarin.Essentials
             var chooserIntent = Intent.CreateChooser(intent, request.Title ?? string.Empty);
             chooserIntent.SetFlags(ActivityFlags.ClearTop);
             chooserIntent.SetFlags(ActivityFlags.NewTask);
+#if __ANDROID_24__
+            if (Platform.HasApiLevelN)
+                chooserIntent.SetFlags(ActivityFlags.LaunchAdjacent);
+#endif
             Platform.AppContext.StartActivity(chooserIntent);
 
             return Task.CompletedTask;
@@ -54,6 +58,10 @@ namespace Xamarin.Essentials
             var chooserIntent = Intent.CreateChooser(intent, request.Title ?? string.Empty);
             chooserIntent.SetFlags(ActivityFlags.ClearTop);
             chooserIntent.SetFlags(ActivityFlags.NewTask);
+#if __ANDROID_24__
+            if (Platform.HasApiLevelN)
+                chooserIntent.SetFlags(ActivityFlags.LaunchAdjacent);
+#endif
             Platform.AppContext.StartActivity(chooserIntent);
 
             return Task.CompletedTask;
