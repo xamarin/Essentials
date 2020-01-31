@@ -25,13 +25,12 @@ namespace Xamarin.Essentials
         static Task PlatformOpenAsync(Uri uri)
         {
             var intent = new Intent(Intent.ActionView, AndroidUri.Parse(uri.OriginalString));
-            intent.SetFlags(ActivityFlags.ClearTop);
-            intent.SetFlags(ActivityFlags.NewTask);
-
+            var flags = ActivityFlags.ClearTop | ActivityFlags.NewTask;
 #if __ANDROID_24__
             if (Platform.HasApiLevelN)
-                intent.SetFlags(ActivityFlags.LaunchAdjacent);
+                flags |= ActivityFlags.LaunchAdjacent;
 #endif
+            intent.SetFlags(flags);
 
             Platform.AppContext.StartActivity(intent);
             return Task.CompletedTask;
@@ -46,13 +45,12 @@ namespace Xamarin.Essentials
             intent.SetFlags(ActivityFlags.GrantReadUriPermission);
 
             var chooserIntent = Intent.CreateChooser(intent, request.Title ?? string.Empty);
-            chooserIntent.SetFlags(ActivityFlags.ClearTop);
-            chooserIntent.SetFlags(ActivityFlags.NewTask);
-
+            var flags = ActivityFlags.ClearTop | ActivityFlags.NewTask;
 #if __ANDROID_24__
             if (Platform.HasApiLevelN)
-                chooserIntent.SetFlags(ActivityFlags.LaunchAdjacent);
+                flags |= ActivityFlags.LaunchAdjacent;
 #endif
+            chooserIntent.SetFlags(flags);
 
             Platform.AppContext.StartActivity(chooserIntent);
 
