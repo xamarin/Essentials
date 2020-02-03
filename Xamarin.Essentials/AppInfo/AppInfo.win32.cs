@@ -30,27 +30,12 @@ namespace Xamarin.Essentials
             return string.Empty;
         }
 
-        static string PlatformGetVersionString()
-        {
-            var attr = launchingAssembly.GetCustomAttribute<AssemblyVersionAttribute>();
-            if (attr != null)
-            {
-                return attr.Version;
-            }
-
-            return string.Empty;
-        }
+        static string PlatformGetVersionString() =>
+            launchingAssembly.GetName().Version.ToString();
 
         static string PlatformGetBuild()
         {
-            var ver = PlatformGetVersionString();
-            if (!string.IsNullOrEmpty(ver))
-            {
-                var version = new Version(ver);
-                return version.Build.ToString();
-            }
-
-            return string.Empty;
+            return launchingAssembly.GetName().Version.Build.ToString();
         }
 
         static void PlatformShowSettingsUI()

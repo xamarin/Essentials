@@ -110,6 +110,9 @@
     <Compile Include="**\*.win32.*.cs" />
     <Compile Include="**\*.win32.cs" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Speech" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>

@@ -1,26 +1,31 @@
-﻿using System.IO;
+﻿using System;
 using System.Threading.Tasks;
+using IO = System.IO;
 
 namespace Xamarin.Essentials
 {
     public static partial class FileSystem
     {
         static string PlatformCacheDirectory
-            => throw ExceptionUtils.NotSupportedOrImplementedException;
+            => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
         static string PlatformAppDataDirectory
-            => throw ExceptionUtils.NotSupportedOrImplementedException;
+            => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
-        static Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
-             => throw ExceptionUtils.NotSupportedOrImplementedException;
+        static Task<IO.Stream> PlatformOpenAppPackageFileAsync(string filename)
+             => Task.FromResult<IO.Stream>(IO.File.OpenRead(IO.Path.Combine(Environment.CurrentDirectory, filename)));
     }
 
     public partial class FileBase
     {
-        static string PlatformGetContentType(string extension) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+        internal void PlatformInit(FileBase file)
+        {
+            ContentType = PlatformGetContentType(file.FullPath);
+        }
 
-        internal void PlatformInit(FileBase file) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+        static string PlatformGetContentType(string extension)
+        {
+            return System.Web.MimeMapping.GetMimeMapping(extension);
+        }
     }
 }
