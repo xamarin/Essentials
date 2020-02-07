@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Contacts;
 using CoreLocation;
 using Foundation;
 using MapKit;
@@ -21,30 +22,10 @@ namespace Xamarin.Essentials
 
         internal static async Task PlatformOpenMapsAsync(Placemark placemark, MapLaunchOptions options)
         {
-#if __IOS__
-            var address = new MKPlacemarkAddress
-            {
-                CountryCode = placemark.CountryCode,
-                Country = placemark.CountryName,
-                State = placemark.AdminArea,
-                Street = placemark.Thoroughfare,
-                City = placemark.Locality,
-                Zip = placemark.PostalCode
-            }.Dictionary;
-#else
-            var address = new NSDictionary
-            {
-                [Contacts.CNPostalAddressKey.City] = new NSString(placemark.Locality),
-                [Contacts.CNPostalAddressKey.Country] = new NSString(placemark.CountryName),
-                [Contacts.CNPostalAddressKey.State] = new NSString(placemark.AdminArea),
-                [Contacts.CNPostalAddressKey.Street] = new NSString(placemark.Thoroughfare),
-                [Contacts.CNPostalAddressKey.PostalCode] = new NSString(placemark.PostalCode),
-                [Contacts.CNPostalAddressKey.IsoCountryCode] = new NSString(placemark.CountryCode)
-            };
-#endif
+            var address = $"{placemark.Thoroughfare} {placemark.Locality} {placemark.AdminArea} {placemark.PostalCode} {placemark.CountryName}";
 
             var coder = new CLGeocoder();
-            CLPlacemark[] placemarks = null;
+            CLPlacemark[] placemarks;
             try
             {
                 placemarks = await coder.GeocodeAddressAsync(address);
@@ -58,9 +39,19 @@ namespace Xamarin.Essentials
             if ((placemarks?.Length ?? 0) == 0)
             {
                 Debug.WriteLine("No locations exist, please check address.");
+                return;
             }
 
-            await OpenPlacemark(new MKPlacemark(placemarks[0].Location.Coordinate, address), options);
+            await OpenPlacemark(
+                new MKPlacemark(placemarks[0].Location.Coordinate, new CNMutablePostalAddress
+            {
+                City = placemark.Locality ?? string.Empty,
+                Country = placemark.CountryName ?? string.Empty,
+                State = placemark.AdminArea ?? string.Empty,
+                Street = placemark.Thoroughfare ?? string.Empty,
+                PostalCode = placemark.PostalCode ?? string.Empty,
+                IsoCountryCode = placemark.CountryCode ?? string.Empty
+            }), options);
         }
 
         static Task OpenPlacemark(MKPlacemark placemark, MapLaunchOptions options)
