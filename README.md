@@ -60,7 +60,7 @@ A minimum version of Visual Studio 2019 16.3 or Visual Studio for Mac 2019 8.3 a
 * Android 10.0, 9.0, 8.1, 8.0, 7.1, 7.0, & 6.0 SDK Installed
 * UWP 10.0.16299 SDK Installed
 
-Your can run the included `android-setup.ps1` script in **Adminstration Mode** and it will automatically setup your Android environment.
+Your can run the included `android-setup.ps1` script in **Administrator Mode** and it will automatically setup your Android environment.
 
 ## FAQ
 
