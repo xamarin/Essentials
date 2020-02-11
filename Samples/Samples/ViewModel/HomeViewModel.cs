@@ -61,6 +61,12 @@ namespace Samples.ViewModel
                     "Quickly and easily use the clipboard.",
                     new[] { "clipboard", "copy", "paste" }),
                 new SampleItem(
+                    "🎨",
+                    "Color Converters",
+                    typeof(ColorConvertersPage),
+                    "Convert and adjust colors.",
+                    new[] { "color", "drawing", "style" }),
+                new SampleItem(
                     "🧭",
                     "Compass",
                     typeof(CompassPage),
@@ -145,6 +151,12 @@ namespace Samples.ViewModel
                     "Retrieve orientation of the device in 3D space.",
                     new[] { "orientation", "sensors", "hardware", "device" }),
                 new SampleItem(
+                    "🔒",
+                    "Permissions",
+                    typeof(PermissionsPage),
+                    "Request various permissions.",
+                    new[] { "permissions" }),
+                new SampleItem(
                     "📞",
                     "Phone Dialer",
                     typeof(PhoneDialerPage),
@@ -192,6 +204,12 @@ namespace Samples.ViewModel
                     typeof(VibrationPage),
                     "Quickly and easily make the device vibrate.",
                     new[] { "vibration", "vibrate", "hardware", "device" }),
+                new SampleItem(
+                    "🔓",
+                    "Web Authenticator",
+                    typeof(WebAuthenticatorPage),
+                    "Quickly and easily authenticate and wait for a callback.",
+                    new[] { "auth", "authenticate", "authenticator", "web", "webauth" }),
             };
             filteredItems = samples;
             filterText = string.Empty;
