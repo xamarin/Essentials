@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Xamarin.Essentials
 {
@@ -9,35 +10,54 @@ namespace Xamarin.Essentials
     {
         static readonly string settingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), AppInfo.Name, "settings.dat");
 
-        static Dictionary<string, Dictionary<string, string>> preferences = new Dictionary<string, Dictionary<string, string>>();
+        static readonly Dictionary<string, Dictionary<string, object>> preferences = new Dictionary<string, Dictionary<string, object>>();
 
         static Preferences()
         {
             if (File.Exists(settingsPath))
             {
-                var json = File.ReadAllText(settingsPath);
-                try
+                using (var stream = File.OpenRead(settingsPath))
                 {
-                    preferences = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(json);
-                }
-                catch
-                {
-                    File.Delete(settingsPath);
+                    try
+                    {
+                        var formatter = new BinaryFormatter();
+                        var readPreferences = (Dictionary<string, Dictionary<string, object>>)formatter.Deserialize(stream);
+                        stream.Close();
+
+                        if (readPreferences is object)
+                        {
+                            preferences = readPreferences;
+                        }
+                    }
+                    catch (SerializationException)
+                    {
+                        // if deserialization fails proceed with empty settings
+                    }
                 }
             }
             else
             {
-                preferences.Add(string.Empty, new Dictionary<string, string>());
+                if (!Directory.Exists(Path.GetDirectoryName(settingsPath)))
+                {
+                    // create folder for app settings
+                    Directory.CreateDirectory(Path.GetDirectoryName(settingsPath));
+                }
+            }
 
-                // create folder for app settings
-                Directory.CreateDirectory(Path.GetDirectoryName(settingsPath));
+            if (!preferences.ContainsKey(string.Empty))
+            {
+                preferences.Add(string.Empty, new Dictionary<string, object>());
             }
         }
 
         static void Save()
         {
-            var json = JsonConvert.SerializeObject(preferences);
-            File.WriteAllText(settingsPath, json);
+            using (var stream = File.OpenWrite(settingsPath))
+            {
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(stream, preferences);
+                stream.Close();
+            }
         }
 
         static string CleanSharedName(string sharedName)
@@ -82,16 +102,16 @@ namespace Xamarin.Essentials
         {
             if (!preferences.ContainsKey(CleanSharedName(sharedName)))
             {
-                preferences.Add(CleanSharedName(sharedName), new Dictionary<string, string>());
+                preferences.Add(CleanSharedName(sharedName), new Dictionary<string, object>());
             }
 
             if (preferences[CleanSharedName(sharedName)].ContainsKey(key))
             {
-                preferences[CleanSharedName(sharedName)][key] = JsonConvert.SerializeObject(value);
+                preferences[CleanSharedName(sharedName)][key] = value;
             }
             else
             {
-                preferences[CleanSharedName(sharedName)].Add(key, JsonConvert.SerializeObject(value));
+                preferences[CleanSharedName(sharedName)].Add(key, value);
             }
 
             Save();
@@ -103,7 +123,7 @@ namespace Xamarin.Essentials
             {
                 if (preferences[CleanSharedName(sharedName)].ContainsKey(key))
                 {
-                    return JsonConvert.DeserializeObject<T>(preferences[CleanSharedName(sharedName)][key]);
+                    return (T)preferences[CleanSharedName(sharedName)][key];
                 }
             }
 

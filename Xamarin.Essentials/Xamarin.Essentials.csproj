@@ -2,6 +2,8 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard1.0;netstandard2.0;Xamarin.iOS10;Xamarin.TVOS10;Xamarin.WatchOS10;MonoAndroid60;MonoAndroid70;MonoAndroid71;MonoAndroid80;MonoAndroid81;MonoAndroid90;MonoAndroid10.0;tizen40;net461</TargetFrameworks>
     <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);uap10.0.16299;</TargetFrameworks>
+    <RuntimeIdentifiers Condition=" $(TargetFramework.StartsWith('net461')) ">win</RuntimeIdentifiers>
+    <ExtrasBuildEachRuntimeIdentifier Condition=" $(TargetFramework.StartsWith('net461')) ">false</ExtrasBuildEachRuntimeIdentifier>
     <AssemblyName>Xamarin.Essentials</AssemblyName>
     <RootNamespace>Xamarin.Essentials</RootNamespace>
     <PackageId>Xamarin.Essentials</PackageId>
@@ -109,19 +111,18 @@
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net461')) ">
     <Compile Include="**\*.win32.*.cs" />
     <Compile Include="**\*.win32.cs" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <Reference Include="System.Management" />
     <Reference Include="System.Speech" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
+    <!--<Reference Include="C:Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETCorev4.5\System.Runtime.WindowsRuntime.dll"/>
+    <Reference Include="C:Program Files (x86)\Windows Kits\10\UnionMetadata\Windows.winmd"/>-->
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="mdoc.targets" />
