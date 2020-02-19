@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using PreferencesDictionary = System.Collections.Generic.Dictionary<string, System.Collections.Generic.Dictionary<string, object>>;
 
 namespace Xamarin.Essentials
 {
     public static partial class Preferences
     {
-        static readonly string settingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), AppInfo.Name, "settings.dat");
+        static readonly string settingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), GetCleanAppName(), "settings.dat");
 
-        static readonly Dictionary<string, Dictionary<string, object>> preferences = new Dictionary<string, Dictionary<string, object>>();
+        static readonly PreferencesDictionary preferences = new PreferencesDictionary();
 
         static Preferences()
         {
@@ -21,10 +23,9 @@ namespace Xamarin.Essentials
                     try
                     {
                         var formatter = new BinaryFormatter();
-                        var readPreferences = (Dictionary<string, Dictionary<string, object>>)formatter.Deserialize(stream);
-                        stream.Close();
+                        var readPreferences = (PreferencesDictionary)formatter.Deserialize(stream);
 
-                        if (readPreferences is object)
+                        if (readPreferences != null)
                         {
                             preferences = readPreferences;
                         }
@@ -50,6 +51,18 @@ namespace Xamarin.Essentials
             }
         }
 
+        static string GetCleanAppName()
+        {
+            var appName = AppInfo.Name;
+
+            if (string.IsNullOrEmpty(appName))
+            {
+                return Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().CodeBase);
+            }
+
+            return string.Concat(appName.Split(Path.GetInvalidFileNameChars()));
+        }
+
         static void Save()
         {
             using (var stream = File.OpenWrite(settingsPath))
@@ -72,9 +85,9 @@ namespace Xamarin.Essentials
 
         static bool PlatformContainsKey(string key, string sharedName)
         {
-            if (preferences.ContainsKey(CleanSharedName(sharedName)))
+            if (preferences.TryGetValue(CleanSharedName(sharedName), out var inner))
             {
-                return preferences[sharedName].ContainsKey(key);
+                return inner.ContainsKey(key);
             }
 
             return false;
@@ -82,48 +95,42 @@ namespace Xamarin.Essentials
 
         static void PlatformRemove(string key, string sharedName)
         {
-            if (preferences.ContainsKey(CleanSharedName(sharedName)))
+            if (preferences.TryGetValue(CleanSharedName(sharedName), out var inner))
             {
-                preferences[CleanSharedName(sharedName)].Remove(key);
+                inner.Remove(key);
                 Save();
             }
         }
 
         static void PlatformClear(string sharedName)
         {
-            if (preferences.ContainsKey(CleanSharedName(sharedName)))
+            if (preferences.TryGetValue(CleanSharedName(sharedName), out var inner))
             {
-                preferences[CleanSharedName(sharedName)].Clear();
+                inner.Clear();
                 Save();
             }
         }
 
         static void PlatformSet<T>(string key, T value, string sharedName)
         {
-            if (!preferences.ContainsKey(CleanSharedName(sharedName)))
+            if (!preferences.TryGetValue(CleanSharedName(sharedName), out var inner))
             {
-                preferences.Add(CleanSharedName(sharedName), new Dictionary<string, object>());
+                inner = new Dictionary<string, object>();
+                preferences.Add(CleanSharedName(sharedName), inner);
             }
 
-            if (preferences[CleanSharedName(sharedName)].ContainsKey(key))
-            {
-                preferences[CleanSharedName(sharedName)][key] = value;
-            }
-            else
-            {
-                preferences[CleanSharedName(sharedName)].Add(key, value);
-            }
+            inner[key] = value;
 
             Save();
         }
 
         static T PlatformGet<T>(string key, T defaultValue, string sharedName)
         {
-            if (preferences.ContainsKey(CleanSharedName(sharedName)))
+            if (preferences.TryGetValue(CleanSharedName(sharedName), out var inner))
             {
-                if (preferences[CleanSharedName(sharedName)].ContainsKey(key))
+                if (inner.TryGetValue(key, out var value))
                 {
-                    return (T)preferences[CleanSharedName(sharedName)][key];
+                    return (T)value;
                 }
             }
 
