@@ -13,6 +13,7 @@ variables:
   ANDROID_EMU_TARGET: 'system-images;android-26;google_apis;x86'
   ANDROID_EMU_DEVICE: 'Nexus 5X'
   RunPoliCheck: 'false'
+  SkipDeviceTests: 'false'
 
 resources:
   repositories:
@@ -170,6 +171,7 @@ jobs:
 
   - job: devicetests_ios
     displayName: Run iOS Device Tests
+    condition: and(succeeded(), not(variables['SkipDeviceTests']))
     dependsOn:
       - build_windows
       - build_macos
@@ -212,6 +214,7 @@ jobs:
 
   - job: devicetests_android
     displayName: Run Android Device Tests
+    condition: and(succeeded(), not(variables['SkipDeviceTests']))
     dependsOn:
       - build_windows
       - build_macos
