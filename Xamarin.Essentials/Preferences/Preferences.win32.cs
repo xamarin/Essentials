@@ -13,6 +13,7 @@ namespace Xamarin.Essentials
         static readonly string settingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), GetCleanAppName(), "settings.dat");
 
         static readonly PreferencesDictionary preferences = new PreferencesDictionary();
+        static readonly BinaryFormatter formatter = new BinaryFormatter(null, new StreamingContext(StreamingContextStates.Persistence));
 
         static Preferences()
         {
@@ -22,7 +23,6 @@ namespace Xamarin.Essentials
                 {
                     try
                     {
-                        var formatter = new BinaryFormatter();
                         var readPreferences = (PreferencesDictionary)formatter.Deserialize(stream);
 
                         if (readPreferences != null)
@@ -67,7 +67,6 @@ namespace Xamarin.Essentials
         {
             using (var stream = File.OpenWrite(settingsPath))
             {
-                var formatter = new BinaryFormatter();
                 formatter.Serialize(stream, preferences);
                 stream.Close();
             }

@@ -22,7 +22,7 @@ namespace Xamarin.Essentials
                 uri = $"bingmaps:?rtp=~pos.{lat}_{lng}_{name}{GetMode(options.NavigationMode)}";
             }
 
-            return LaunchUri(new Uri(uri));
+            return Launcher.OpenAsync(uri);
         }
 
         internal static string GetMode(NavigationMode mode)
@@ -61,10 +61,7 @@ namespace Xamarin.Essentials
                     $"{GetMode(options.NavigationMode)}";
             }
 
-            return LaunchUri(new Uri(uri));
+            return Launcher.OpenAsync(uri);
         }
-
-        static Task LaunchUri(Uri mapsUri) =>
-            Windows.System.Launcher.LaunchUriAsync(mapsUri).AsTask();
     }
 }
