@@ -107,7 +107,7 @@ namespace Samples.ViewModel
                     File = new ShareFile(file),
                     PresentationSourceBounds = Device.RuntimePlatform == Device.iOS && Device.Idiom == TargetIdiom.Tablet
                                             ? new System.Drawing.Rectangle(0, 20, 0, 0)
-                                            : System.Drawing.Rectangle.Empty
+                                            : new System.Drawing.Rectangle(0, 0, 0, 0)
                 });
             }
         }
