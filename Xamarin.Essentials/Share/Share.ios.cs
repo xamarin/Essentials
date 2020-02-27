@@ -8,8 +8,6 @@ namespace Xamarin.Essentials
 {
     public static partial class Share
     {
-        static Rectangle emptyRect = new Rectangle(0, 0, 0, 0);
-
         static Task PlatformRequestAsync(ShareTextRequest request)
         {
             var items = new List<NSObject>();
@@ -31,8 +29,8 @@ namespace Xamarin.Essentials
             {
                 activityController.PopoverPresentationController.SourceView = vc.View;
 
-                if (request.PresentationSourceBounds != emptyRect)
-                    activityController.PopoverPresentationController.SourceRect = request.PresentationSourceBounds.ToPlatformRectangle();
+                if (request.PresentationSourcePoint != Point.Empty && request.PresentationSourceSize != Size.Empty)
+                    activityController.PopoverPresentationController.SourceRect = new CoreGraphics.CGRect(request.PresentationSourcePoint.ToPlatformPoint(), request.PresentationSourceSize.ToPlatformSize());
             }
 
             return vc.PresentViewControllerAsync(activityController, true);
@@ -56,8 +54,8 @@ namespace Xamarin.Essentials
             {
                 activityController.PopoverPresentationController.SourceView = vc.View;
 
-                if (request.PresentationSourceBounds != emptyRect)
-                    activityController.PopoverPresentationController.SourceRect = request.PresentationSourceBounds.ToPlatformRectangle();
+                if (request.PresentationSourcePoint != Point.Empty && request.PresentationSourceSize != Size.Empty)
+                    activityController.PopoverPresentationController.SourceRect = new CoreGraphics.CGRect(request.PresentationSourcePoint.ToPlatformPoint(), request.PresentationSourceSize.ToPlatformSize());
             }
 
             return vc.PresentViewControllerAsync(activityController, true);

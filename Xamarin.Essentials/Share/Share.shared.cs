@@ -28,8 +28,10 @@ namespace Xamarin.Essentials
     {
         public string Title { get; set; }
 
-#if !NETSTANDARD1_0 && !__ANDROID__
-        public Rectangle PresentationSourceBounds { get; set; } = new Rectangle(0, 0, 0, 0);
+#if !NETSTANDARD1_0
+        public Size PresentationSourceSize { get; set; } = Size.Empty;
+
+        public Point PresentationSourcePoint { get; set; } = Point.Empty;
 #endif
     }
 
