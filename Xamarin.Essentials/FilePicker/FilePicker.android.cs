@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
         {
             // we only need the permission when accessing the file, but it's more natural
             // to ask the user first, then show the picker.
-            await Permissions.RequireAsync(PermissionType.ReadExternalStorage);
+            await Permissions.RequestAsync<Permissions.StorageRead>();
 
             var intent = new Intent(Intent.ActionGetContent);
             intent.SetType("*/*");
