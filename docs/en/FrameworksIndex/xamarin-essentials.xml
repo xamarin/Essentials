@@ -34,6 +34,14 @@
       <Member Id="P:Xamarin.Essentials.AppInfo.Version" />
       <Member Id="P:Xamarin.Essentials.AppInfo.VersionString" />
     </Type>
+    <Type Name="Xamarin.Essentials.AppleSignInAuthenticator" Id="T:Xamarin.Essentials.AppleSignInAuthenticator">
+      <Member Id="M:Xamarin.Essentials.AppleSignInAuthenticator.AuthenticateAsync(Xamarin.Essentials.AppleSignInAuthenticator.Options)" />
+    </Type>
+    <Type Name="Xamarin.Essentials.AppleSignInAuthenticator/Options" Id="T:Xamarin.Essentials.AppleSignInAuthenticator.Options">
+      <Member Id="M:Xamarin.Essentials.AppleSignInAuthenticator.Options.#ctor" />
+      <Member Id="P:Xamarin.Essentials.AppleSignInAuthenticator.Options.IncludeEmailScope" />
+      <Member Id="P:Xamarin.Essentials.AppleSignInAuthenticator.Options.IncludeFullNameScope" />
+    </Type>
     <Type Name="Xamarin.Essentials.AppTheme" Id="T:Xamarin.Essentials.AppTheme">
       <Member Id="F:Xamarin.Essentials.AppTheme.Dark" />
       <Member Id="F:Xamarin.Essentials.AppTheme.Light" />
@@ -406,6 +414,7 @@
       <Member Id="P:Xamarin.Essentials.Location.Longitude" />
       <Member Id="P:Xamarin.Essentials.Location.Speed" />
       <Member Id="P:Xamarin.Essentials.Location.Timestamp" />
+      <Member Id="P:Xamarin.Essentials.Location.VerticalAccuracy" />
     </Type>
     <Type Name="Xamarin.Essentials.LocationExtensions" Id="T:Xamarin.Essentials.LocationExtensions">
       <Member Id="M:Xamarin.Essentials.LocationExtensions.CalculateDistance(Xamarin.Essentials.Location,System.Double,System.Double,Xamarin.Essentials.DistanceUnits)" />
@@ -781,6 +790,23 @@
       <Member Id="M:Xamarin.Essentials.Vibration.Vibrate" />
       <Member Id="M:Xamarin.Essentials.Vibration.Vibrate(System.Double)" />
       <Member Id="M:Xamarin.Essentials.Vibration.Vibrate(System.TimeSpan)" />
+    </Type>
+    <Type Name="Xamarin.Essentials.WebAuthenticator" Id="T:Xamarin.Essentials.WebAuthenticator">
+      <Member Id="M:Xamarin.Essentials.WebAuthenticator.AuthenticateAsync(System.Uri,System.Uri)" />
+    </Type>
+    <Type Name="Xamarin.Essentials.WebAuthenticatorResult" Id="T:Xamarin.Essentials.WebAuthenticatorResult">
+      <Member Id="M:Xamarin.Essentials.WebAuthenticatorResult.#ctor" />
+      <Member Id="M:Xamarin.Essentials.WebAuthenticatorResult.#ctor(System.Collections.Generic.IDictionary{System.String,System.String})" />
+      <Member Id="M:Xamarin.Essentials.WebAuthenticatorResult.#ctor(System.Uri)" />
+      <Member Id="M:Xamarin.Essentials.WebAuthenticatorResult.Get(System.String)" />
+      <Member Id="M:Xamarin.Essentials.WebAuthenticatorResult.Put(System.String,System.String)" />
+      <Member Id="P:Xamarin.Essentials.WebAuthenticatorResult.AccessToken" />
+      <Member Id="P:Xamarin.Essentials.WebAuthenticatorResult.ExpiresIn" />
+      <Member Id="P:Xamarin.Essentials.WebAuthenticatorResult.Properties" />
+      <Member Id="P:Xamarin.Essentials.WebAuthenticatorResult.RefreshToken" />
+      <Member Id="P:Xamarin.Essentials.WebAuthenticatorResult.RefreshTokenExpiresIn" />
+      <Member Id="P:Xamarin.Essentials.WebAuthenticatorResult.Timestamp" />
+      <Member Id="P:Xamarin.Essentials.WebAuthenticatorResult.TokenType" />
     </Type>
   </Namespace>
 </Framework>
