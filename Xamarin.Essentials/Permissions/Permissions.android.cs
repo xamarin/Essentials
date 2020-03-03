@@ -229,9 +229,10 @@ namespace Xamarin.Essentials
                 get
                 {
                     var permissions = new List<(string, bool)>();
-
+#if __ANDROID_29__
                     if (Platform.HasApiLevelQ)
                         permissions.Add((Manifest.Permission.AccessBackgroundLocation, true));
+#endif
 
                     permissions.Add((Manifest.Permission.AccessCoarseLocation, true));
                     permissions.Add((Manifest.Permission.AccessFineLocation, true));
