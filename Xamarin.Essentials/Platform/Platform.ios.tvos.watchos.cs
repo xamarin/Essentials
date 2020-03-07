@@ -76,13 +76,13 @@ namespace Xamarin.Essentials
                     .OrderByDescending(w => w.WindowLevel)
                     .FirstOrDefault(w => w.RootViewController != null && w.WindowLevel == UIWindowLevel.Normal);
 
-                if (window == null)
+                if (window == null && throwIfNull)
                     throw new InvalidOperationException("Could not find current view controller.");
                 else
                     viewController = window.RootViewController;
             }
 
-            while (viewController.PresentedViewController != null)
+            while (viewController?.PresentedViewController != null)
                 viewController = viewController.PresentedViewController;
 
             if (throwIfNull && viewController == null)
