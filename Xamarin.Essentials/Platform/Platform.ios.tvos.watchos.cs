@@ -66,7 +66,7 @@ namespace Xamarin.Essentials
 
             var window = UIApplication.SharedApplication.KeyWindow;
 
-            if (window.WindowLevel == UIWindowLevel.Normal)
+            if (window != null && window.WindowLevel == UIWindowLevel.Normal)
                 viewController = window.RootViewController;
 
             if (viewController == null)
@@ -79,7 +79,7 @@ namespace Xamarin.Essentials
                 if (window == null && throwIfNull)
                     throw new InvalidOperationException("Could not find current view controller.");
                 else
-                    viewController = window.RootViewController;
+                    viewController = window?.RootViewController;
             }
 
             while (viewController?.PresentedViewController != null)
@@ -95,7 +95,7 @@ namespace Xamarin.Essentials
         {
             var window = UIApplication.SharedApplication.KeyWindow;
 
-            if (window.WindowLevel == UIWindowLevel.Normal)
+            if (window != null && window.WindowLevel == UIWindowLevel.Normal)
                 return window;
 
             if (window == null)
