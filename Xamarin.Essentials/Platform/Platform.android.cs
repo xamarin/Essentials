@@ -11,7 +11,6 @@ using Android.Locations;
 using Android.Net;
 using Android.Net.Wifi;
 using Android.OS;
-using Android.Support.V4.Content;
 using AndroidUri = Android.Net.Uri;
 
 namespace Xamarin.Essentials
@@ -78,6 +77,9 @@ namespace Xamarin.Essentials
 
         public static void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults) =>
             Permissions.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        public static void OnResume() =>
+            WebAuthenticator.OnResume(null);
 
         internal static bool HasSystemFeature(string systemFeature)
         {
@@ -167,6 +169,13 @@ namespace Xamarin.Essentials
         internal static bool HasApiLevelP =>
 #if __ANDROID_28__
             HasApiLevel(BuildVersionCodes.P);
+#else
+            false;
+#endif
+
+        internal static bool HasApiLevelQ =>
+#if __ANDROID_29__
+            HasApiLevel(BuildVersionCodes.Q);
 #else
             false;
 #endif
