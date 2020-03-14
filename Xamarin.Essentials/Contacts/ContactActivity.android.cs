@@ -30,9 +30,6 @@ namespace Xamarin.Essentials
         {
             base.OnActivityResult(requestCode, resultCode, data);
 
-            if (resultCode == Result.Canceled)
-                Finish();
-
             try
             {
                 if (requestCode != 101)
@@ -45,7 +42,7 @@ namespace Xamarin.Essentials
             }
             catch (Exception ex)
             {
-                throw ex;
+                Contact.ErrorCallBack(ex);
             }
             finally
             {

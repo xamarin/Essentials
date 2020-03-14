@@ -8,7 +8,7 @@ namespace Xamarin.Essentials
 {
     public static partial class Contact
     {
-        static async Task<PhoneContact> PlatformPickContactAsync()
+        static async Task<PhoneContact?> PlatformPickContactAsync()
         {
             var contactPicker = new ContactPicker();
 

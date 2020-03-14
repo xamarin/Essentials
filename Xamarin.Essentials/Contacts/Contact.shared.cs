@@ -4,7 +4,7 @@ namespace Xamarin.Essentials
 {
     public static partial class Contact
     {
-        public static async Task<PhoneContact> PickContactAsync()
+        public static async Task<PhoneContact?> PickContactAsync()
         {
             await CheckPermissionAsync();
             return await PlatformPickContactAsync();

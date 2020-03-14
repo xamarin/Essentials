@@ -110,20 +110,22 @@ namespace Samples.ViewModel
                 Birthday = string.Empty;
 
                 var contact = await Contact.PickContactAsync();
-                contact.Numbers.ForEach(item =>
+                if (contact == null)
+                    return;
+                contact?.Numbers.ForEach(item =>
                 {
                     item.ForEach(v => Phones += v + Environment.NewLine);
                 });
-                contact.Emails.ForEach(item =>
+                contact?.Emails.ForEach(item =>
                 {
                     item.ForEach(v => Emails += v + Environment.NewLine);
                 });
-                Name = contact.Name;
-                Birthday = contact.Birthday.ToString();
+                Name = contact?.Name;
+                Birthday = contact?.Birthday.ToString();
             }
             catch (Exception ex)
             {
-                await DisplayAlertAsync($"Error:{ex.Message}");
+                MainThread.BeginInvokeOnMainThread(async () => await DisplayAlertAsync($"Error:{ex.Message}"));
             }
             finally
             {

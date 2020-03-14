@@ -12,9 +12,9 @@ namespace Xamarin.Essentials
 {
     public static partial class Contact
     {
-        internal static Action<PhoneContact> CallBack { get; set; }
+        internal static Action<PhoneContact?> CallBack { get; set; }
 
-        static Task<PhoneContact> PlatformPickContactAsync()
+        static Task<PhoneContact?> PlatformPickContactAsync()
         {
             var uiView = Platform.GetCurrentViewController();
             if (uiView == null)
@@ -26,7 +26,7 @@ namespace Xamarin.Essentials
             };
 
             uiView.PresentViewController(picker, true, null);
-            var source = new TaskCompletionSource<PhoneContact>();
+            var source = new TaskCompletionSource<PhoneContact?>();
             try
             {
                 CallBack = (phoneContact) =>

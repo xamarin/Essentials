@@ -15,11 +15,13 @@ namespace Xamarin.Essentials
     {
         static Activity Activity => Platform.GetCurrentActivity(true);
 
-        internal static Action<PhoneContact> CallBack { get; set; }
+        internal static Action<PhoneContact?> CallBack { get; set; }
 
-        static Task<PhoneContact> PlatformPickContactAsync()
+        internal static Action<Exception> ErrorCallBack { get; set; }
+
+        static Task<PhoneContact?> PlatformPickContactAsync()
         {
-            var source = new TaskCompletionSource<PhoneContact>();
+            var source = new TaskCompletionSource<PhoneContact?>();
             try
             {
                 var contactPicker = new Intent(Activity, typeof(ContactActivity));
@@ -30,6 +32,12 @@ namespace Xamarin.Essentials
                 {
                     var tcs = Interlocked.Exchange(ref source, null);
                     tcs?.SetResult(phoneContact);
+                };
+
+                ErrorCallBack = (ex) =>
+                {
+                    var tcs = Interlocked.Exchange(ref source, null);
+                    tcs?.SetException(ex);
                 };
             }
             catch (Exception ex)
@@ -42,6 +50,9 @@ namespace Xamarin.Essentials
 
         internal static PhoneContact PlatformGetContacts(Net.Uri contactUri)
         {
+            if (contactUri == null)
+                return default;
+
             using var context = Activity.ContentResolver;
 
             using var cur = context.Query(contactUri, null, null, null, null);
