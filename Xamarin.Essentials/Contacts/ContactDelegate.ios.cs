@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Contacts;
 using ContactsUI;
 
@@ -34,21 +35,21 @@ namespace Xamarin.Essentials
 
         public override void ContactPickerDidCancel(CNContactPickerViewController picker)
         {
-            Console.WriteLine("User canceled picker");
+            Debug.WriteLine("User canceled picker");
             Contact.CallBack(default);
             picker.DismissModalViewController(true);
         }
 
         public override void DidSelectContact(CNContactPickerViewController picker, CNContact contact)
         {
-            Console.WriteLine("Selected: {0}", contact);
+            Debug.WriteLine("Selected: {0}", contact);
             Contact.CallBack(Contact.GetContact(contact));
             picker.DismissModalViewController(true);
         }
 
         public override void DidSelectContactProperty(CNContactPickerViewController picker, CNContactProperty contactProperty)
         {
-            Console.WriteLine("Selected Property: {0}", contactProperty);
+            Debug.WriteLine("Selected Property: {0}", contactProperty);
 
             picker.DismissModalViewController(true);
         }

@@ -8,9 +8,9 @@ using Content = Android.Content;
 namespace Xamarin.Essentials
 {
     [Activity(ConfigurationChanges = Content.PM.ConfigChanges.Orientation | Content.PM.ConfigChanges.ScreenSize)]
-#pragma warning disable IDE0040 // Adicionar modificadores de acessibilidade
+#pragma warning disable IDE0040 // Add accessibility modifiers
     internal class ContactActivity : Activity
-#pragma warning restore IDE0040 // Adicionar modificadores de acessibilidade
+#pragma warning restore IDE0040 // Add accessibility modifiers
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -21,7 +21,7 @@ namespace Xamarin.Essentials
 
         void StartContactPicker()
         {
-            var intent = new Content.Intent(Content.Intent.ActionPick);
+            using var intent = new Content.Intent(Content.Intent.ActionPick);
             intent.SetType(ContactsContract.CommonDataKinds.Phone.ContentType);
             StartActivityForResult(intent, 101);
         }

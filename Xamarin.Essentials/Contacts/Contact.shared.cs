@@ -19,7 +19,10 @@ namespace Xamarin.Essentials
         static async Task CheckPermissionAsync()
         {
             if (DeviceInfo.Platform != DevicePlatform.iOS)
-                await Permissions.RequireAsync(PermissionType.Contacts);
+            {
+                await Permissions.RequestAsync<Permissions.ContactsRead>();
+                await Permissions.RequestAsync<Permissions.ContactsWrite>();
+            }
         }
     }
 

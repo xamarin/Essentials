@@ -14,17 +14,18 @@ namespace Xamarin.Essentials
     {
         internal static Action<PhoneContact> CallBack { get; set; }
 
-        internal static UIViewController UIView => Platform.GetCurrentViewController();
-
         static Task<PhoneContact> PlatformPickContactAsync()
         {
-            var picker = new CNContactPickerViewController
+            var uiView = Platform.GetCurrentViewController();
+            if (uiView == null)
+                throw new ArgumentNullException($"The View Controller can't be null.");
+
+            using var picker = new CNContactPickerViewController
             {
                 Delegate = new ContactPickerDelegate()
             };
 
-            UIView.PresentViewController(picker, true, null);
-
+            uiView.PresentViewController(picker, true, null);
             var source = new TaskCompletionSource<PhoneContact>();
             try
             {
@@ -73,11 +74,20 @@ namespace Xamarin.Essentials
             {
                 throw ex;
             }
+            finally
+            {
+                contact.Dispose();
+            }
         }
 
         static Task PlatformSaveContactAsync(string name, string phone, string email)
         {
-            var contact = new CNMutableContact();
+            var uiView = Platform.GetCurrentViewController();
+
+            if (uiView == null)
+                throw new ArgumentNullException($"The View Controller can't be null.");
+
+            using var contact = new CNMutableContact();
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -104,20 +114,16 @@ namespace Xamarin.Essentials
 
             try
             {
-                var view = CNContactViewController.FromNewContact(contact);
+                using var view = CNContactViewController.FromNewContact(contact);
                 view.Delegate = new ContactSaveDelegate();
-                var nav = new UINavigationController(view);
-                UIView.PresentModalViewController(nav, true);
+                using var nav = new UINavigationController(view);
+                uiView.PresentModalViewController(nav, true);
 
                 return Task.CompletedTask;
             }
             catch (Exception ex)
             {
                 return Task.FromException(ex);
-            }
-            finally
-            {
-                contact.Dispose();
             }
         }
 

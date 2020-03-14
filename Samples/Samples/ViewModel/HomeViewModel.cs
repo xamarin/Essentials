@@ -61,7 +61,13 @@ namespace Samples.ViewModel
                     "Quickly and easily use the clipboard.",
                     new[] { "clipboard", "copy", "paste" }),
                 new SampleItem(
-                    "📏",
+                    "🎨",
+                    "Color Converters",
+                    typeof(ColorConvertersPage),
+                    "Convert and adjust colors.",
+                    new[] { "color", "drawing", "style" }),
+                new SampleItem(
+                    "🧭",
                     "Compass",
                     typeof(CompassPage),
                     "Monitor compass for changes.",
@@ -72,6 +78,12 @@ namespace Samples.ViewModel
                     typeof(ConnectivityPage),
                     "Check connectivity state and detect changes.",
                     new[] { "connectivity", "internet", "wifi" }),
+                new SampleItem(
+                    "👶",
+                    "Contacts",
+                    typeof(ContactPage),
+                    "Get and add contacts in your device.",
+                    new[] { "contacts", "people", "device" }),
                 new SampleItem(
                     "📱",
                     "Device Info",
@@ -133,7 +145,7 @@ namespace Samples.ViewModel
                     "Detect device's orientation relative to Earth's magnetic field.",
                     new[] { "compass", "magnetometer", "sensors", "hardware", "device" }),
                 new SampleItem(
-                    "📍",
+                    "🗺",
                     "Launch Maps",
                     typeof(MapsPage),
                     "Easily launch maps with coordinates.",
@@ -144,6 +156,12 @@ namespace Samples.ViewModel
                     typeof(OrientationSensorPage),
                     "Retrieve orientation of the device in 3D space.",
                     new[] { "orientation", "sensors", "hardware", "device" }),
+                new SampleItem(
+                    "🔒",
+                    "Permissions",
+                    typeof(PermissionsPage),
+                    "Request various permissions.",
+                    new[] { "permissions" }),
                 new SampleItem(
                     "📞",
                     "Phone Dialer",
@@ -181,12 +199,23 @@ namespace Samples.ViewModel
                     "Vocalize text on the device.",
                     new[] { "text", "message", "speech", "communication" }),
                 new SampleItem(
+                    "🌡",
+                    "Unit Converters",
+                    typeof(UnitConvertersPage),
+                    "Easily converter different units.",
+                    new[] { "units", "converters", "calculations" }),
+                new SampleItem(
                     "📳",
                     "Vibration",
                     typeof(VibrationPage),
                     "Quickly and easily make the device vibrate.",
                     new[] { "vibration", "vibrate", "hardware", "device" }),
                 new SampleItem(
+                    "🔓",
+                    "Web Authenticator",
+                    typeof(WebAuthenticatorPage),
+                    "Quickly and easily authenticate and wait for a callback.",
+                    new[] { "auth", "authenticate", "authenticator", "web", "webauth" }),
                     "👶",
                     "Contacts",
                     typeof(ContactPage),
