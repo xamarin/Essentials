@@ -216,11 +216,6 @@ namespace Samples.ViewModel
                     typeof(WebAuthenticatorPage),
                     "Quickly and easily authenticate and wait for a callback.",
                     new[] { "auth", "authenticate", "authenticator", "web", "webauth" }),
-                    "👶",
-                    "Contacts",
-                    typeof(ContactPage),
-                    "Get and add contacts in your device.",
-                    new[] { "contacts", "people", "device" }),
             };
             filteredItems = samples;
             filterText = string.Empty;

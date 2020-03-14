@@ -321,7 +321,6 @@ namespace Xamarin.Essentials
         {
         }
 
-            if (onlyRuntimePermissions)
         public partial class Sensors : BasePlatformPermission
         {
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
