@@ -38,7 +38,10 @@ namespace Xamarin.Essentials
                 if (requestCode != 101)
                     return;
 
-                Contact.CallBack(Contact.PlatformGetContacts(data.Data));
+                if (data?.Data != null)
+                    Contact.CallBack(Contact.PlatformGetContacts(data.Data));
+                else
+                    Contact.CallBack(default);
             }
             catch (Exception ex)
             {

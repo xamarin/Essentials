@@ -155,7 +155,7 @@ namespace Xamarin.Essentials
             else if (type == "3" || type == "17" || type == "18")
                 return ContactType.Work;
             else
-                return ContactType.Unknow;
+                return ContactType.Unknown;
         }
     }
 }

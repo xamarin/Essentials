@@ -28,7 +28,7 @@ namespace Xamarin.Essentials
 
     public enum ContactType
     {
-        Unknow = 0,
+        Unknown = 0,
         Personal = 1,
         Work = 2
     }

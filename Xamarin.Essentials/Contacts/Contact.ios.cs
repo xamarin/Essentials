@@ -136,7 +136,7 @@ namespace Xamarin.Essentials
                 case CNContactType.Organization:
                     return ContactType.Work;
                 default:
-                    return ContactType.Unknow;
+                    return ContactType.Unknown;
             }
         }
     }

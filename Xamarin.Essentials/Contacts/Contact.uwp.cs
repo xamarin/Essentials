@@ -81,7 +81,7 @@ namespace Xamarin.Essentials
                 case ContactPhoneKind.Company:
                     return ContactType.Work;
                 default:
-                    return ContactType.Unknow;
+                    return ContactType.Unknown;
             }
         }
 
@@ -94,7 +94,7 @@ namespace Xamarin.Essentials
                 case ContactEmailKind.Work:
                     return ContactType.Work;
                 default:
-                    return ContactType.Unknow;
+                    return ContactType.Unknown;
             }
         }
     }
