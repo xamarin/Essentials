@@ -27,12 +27,6 @@ namespace Xamarin.Essentials
                         tabsBuilder.SetShowTitle(options.TitleMode == BrowserTitleMode.Show);
 
                     var tabsIntent = tabsBuilder.Build();
-                    var flags = ActivityFlags.ClearTop | ActivityFlags.NewTask;
-#if __ANDROID_24__
-                    if (Platform.HasApiLevelN)
-                        flags |= ActivityFlags.LaunchAdjacent;
-#endif
-                    tabsIntent.Intent.SetFlags(flags);
 
 #if __ANDROID_25__
                     tabsIntent.LaunchUrl(Platform.AppContext, nativeUri);
@@ -42,7 +36,7 @@ namespace Xamarin.Essentials
                     break;
                 case BrowserLaunchMode.External:
                     var intent = new Intent(Intent.ActionView, nativeUri);
-                    flags = ActivityFlags.ClearTop | ActivityFlags.NewTask;
+                    var flags = ActivityFlags.ClearTop | ActivityFlags.NewTask;
 #if __ANDROID_24__
                     if (Platform.HasApiLevelN)
                         flags |= ActivityFlags.LaunchAdjacent;
