@@ -1,11 +1,17 @@
 ﻿using System.Globalization;
 using Windows.ApplicationModel;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 
 namespace Xamarin.Essentials
 {
     public static partial class AppInfo
     {
+        static UISettings uiSetting;
+
+        static UISettings UISettings => uiSetting ??= new UISettings();
+
         static string PlatformGetPackageName() => Package.Current.Id.Name;
 
         static string PlatformGetName() => Package.Current.DisplayName;
@@ -24,5 +30,19 @@ namespace Xamarin.Essentials
 
         static AppTheme PlatformRequestedTheme() =>
             Application.Current.RequestedTheme == ApplicationTheme.Dark ? AppTheme.Dark : AppTheme.Light;
+
+        static void StartThemeListeners() =>
+            UISettings.ColorValuesChanged += UISettingsColorValuesChanged;
+
+        static void StopThemeListeners() =>
+            UISettings.ColorValuesChanged -= UISettingsColorValuesChanged;
+
+        static void UISettingsColorValuesChanged(UISettings sender, object args)
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                OnAppThemeChanged(PlatformRequestedTheme());
+            });
+        }
     }
 }

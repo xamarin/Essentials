@@ -30,19 +30,29 @@ namespace Xamarin.Essentials
             if (!Platform.HasOSVersion(13, 0))
                 return AppTheme.Unspecified;
 
-            var uiStyle = Platform.GetCurrentUIViewController()?.TraitCollection?.UserInterfaceStyle ??
-                UITraitCollection.CurrentTraitCollection.UserInterfaceStyle;
+            return PlatformRequestedTheme(
+                Platform.GetCurrentUIViewController()?.TraitCollection ??
+                UITraitCollection.CurrentTraitCollection);
+        }
 
-            return uiStyle switch
+        internal static AppTheme PlatformRequestedTheme(UITraitCollection uiTraitCollection) =>
+            (uiTraitCollection?.UserInterfaceStyle ?? UIUserInterfaceStyle.Unspecified) switch
             {
                 UIUserInterfaceStyle.Light => AppTheme.Light,
                 UIUserInterfaceStyle.Dark => AppTheme.Dark,
                 _ => AppTheme.Unspecified
             };
-        }
 #else
         static AppTheme PlatformRequestedTheme() =>
             AppTheme.Unspecified;
 #endif
+
+        static void StartThemeListeners()
+        {
+        }
+
+        static void StopThemeListeners()
+        {
+        }
     }
 }

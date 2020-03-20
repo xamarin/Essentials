@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.Content.Res;
 using Android.Hardware;
 using Android.Hardware.Camera2;
 using Android.Locations;
@@ -77,6 +78,9 @@ namespace Xamarin.Essentials
 
         public static void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults) =>
             Permissions.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        public static void OnConfigurationChanged(Configuration newConfig) =>
+            AppInfo.OnAppThemeChanged(AppInfo.PlatformRequestedTheme(newConfig));
 
         public static void OnResume() =>
             WebAuthenticator.OnResume(null);

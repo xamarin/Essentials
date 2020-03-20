@@ -13,5 +13,11 @@
         static void PlatformShowSettingsUI() => throw ExceptionUtils.NotSupportedOrImplementedException;
 
         static AppTheme PlatformRequestedTheme() => throw ExceptionUtils.NotSupportedOrImplementedException;
+
+        static void StartThemeListeners() =>
+            throw ExceptionUtils.NotSupportedOrImplementedException;
+
+        static void StopThemeListeners() =>
+            throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }

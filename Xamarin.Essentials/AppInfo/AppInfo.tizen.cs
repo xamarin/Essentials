@@ -23,9 +23,14 @@ namespace Xamarin.Essentials
             AppControl.SendLaunchRequest(new AppControl() { Operation = AppControlOperations.Setting });
         }
 
-        static AppTheme PlatformRequestedTheme()
+        static AppTheme PlatformRequestedTheme() => AppTheme.Unspecified;
+
+        static void StartThemeListeners()
         {
-            return AppTheme.Unspecified;
+        }
+
+        static void StopThemeListeners()
+        {
         }
     }
 }

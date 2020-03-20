@@ -57,14 +57,23 @@ namespace Xamarin.Essentials
             context.StartActivity(settingsIntent);
         }
 
-        static AppTheme PlatformRequestedTheme()
-        {
-            return (Platform.AppContext.Resources.Configuration.UiMode & UiMode.NightMask) switch
+        static AppTheme PlatformRequestedTheme() =>
+            PlatformRequestedTheme(Platform.AppContext.Resources.Configuration);
+
+        internal static AppTheme PlatformRequestedTheme(Configuration configuration) =>
+            (configuration.UiMode & UiMode.NightMask) switch
             {
                 UiMode.NightYes => AppTheme.Dark,
                 UiMode.NightNo => AppTheme.Light,
                 _ => AppTheme.Unspecified
             };
+
+        static void StartThemeListeners()
+        {
+        }
+
+        static void StopThemeListeners()
+        {
         }
     }
 }

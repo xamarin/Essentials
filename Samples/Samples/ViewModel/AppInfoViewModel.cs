@@ -1,4 +1,5 @@
-﻿using Xamarin.Essentials;
+﻿using System;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Samples.ViewModel
@@ -15,11 +16,32 @@ namespace Samples.ViewModel
 
         public string AppTheme => AppInfo.RequestedTheme.ToString();
 
+        public string AppThemeUpdated { get; set; }
+
         public Command ShowSettingsUICommand { get; }
 
         public AppInfoViewModel()
         {
             ShowSettingsUICommand = new Command(() => AppInfo.ShowSettingsUI());
+        }
+
+        public override void OnAppearing()
+        {
+            base.OnAppearing();
+            AppInfo.RequestedThemeChanged += AppInfoRequestedThemeChanged;
+        }
+
+        public override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            AppInfo.RequestedThemeChanged -= AppInfoRequestedThemeChanged;
+        }
+
+        void AppInfoRequestedThemeChanged(object sender, AppThemeChangedEventArgs e)
+        {
+            AppThemeUpdated = $"{DateTime.UtcNow.ToShortTimeString()}: {e.RequestedTheme} updated";
+            OnPropertyChanged(nameof(AppTheme));
+            OnPropertyChanged(nameof(AppThemeUpdated));
         }
     }
 }
