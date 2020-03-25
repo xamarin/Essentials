@@ -28,11 +28,18 @@ namespace Xamarin.Essentials
 
                     var tabsIntent = tabsBuilder.Build();
 
-#if __ANDROID_25__
-                    tabsIntent.LaunchUrl(Platform.AppContext, nativeUri);
-#else
-                    tabsIntent.LaunchUrl(Platform.GetCurrentActivity(true), nativeUri);
-#endif
+                    Context context = Platform.GetCurrentActivity(false);
+
+                    if (context == null)
+                    {
+                        context = Platform.AppContext;
+
+                        // If using ApplicationContext we need to set ClearTop/NewTask (See #225)
+                        tabsIntent.Intent.SetFlags(ActivityFlags.ClearTop | ActivityFlags.NewTask);
+                    }
+
+                    tabsIntent.LaunchUrl(context, nativeUri);
+
                     break;
                 case BrowserLaunchMode.External:
                     var intent = new Intent(Intent.ActionView, nativeUri);
