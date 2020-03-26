@@ -28,9 +28,8 @@ namespace Xamarin.Essentials
     public enum BrowserLaunchFlags
     {
         None = 0,
-        PresentModal = 1,
-        LaunchAdjacent = 2,
-        PresentAsPageSheet = 4,
-        PresentAsFormSheet = 8
+        LaunchAdjacent = 1,
+        PresentAsPageSheet = 2,
+        PresentAsFormSheet = 4
     }
 }

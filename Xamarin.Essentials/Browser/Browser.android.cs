@@ -39,7 +39,7 @@ namespace Xamarin.Essentials
                         tabsFlags = ActivityFlags.ClearTop | ActivityFlags.NewTask;
                     }
 
-#if ANDROID_24
+#if __ANDROID_24__
                     if (Platform.HasApiLevelN && options.HasFlag(BrowserLaunchFlags.LaunchAdjacent))
                     {
                         if (tabsFlags.HasValue)
@@ -60,7 +60,7 @@ namespace Xamarin.Essentials
                     var intent = new Intent(Intent.ActionView, nativeUri);
                     var flags = ActivityFlags.ClearTop | ActivityFlags.NewTask;
 #if __ANDROID_24__
-                    if (Platform.HasApiLevelN)
+                    if (Platform.HasApiLevelN && options.HasFlag(BrowserLaunchFlags.LaunchAdjacent))
                         flags |= ActivityFlags.LaunchAdjacent;
 #endif
                     intent.SetFlags(flags);

@@ -16,7 +16,7 @@ namespace Samples.ViewModel
         int browserTitleType = (int)BrowserTitleMode.Default;
         int controlColor = 0;
         int toolbarColor = 0;
-        bool presentModal = false;
+        bool presentAsFormSheet = false;
         bool presentAsPageSheet = false;
         bool launchAdjacent = false;
 
@@ -92,10 +92,10 @@ namespace Samples.ViewModel
             set => SetProperty(ref controlColor, value);
         }
 
-        public bool PresentModal
+        public bool PresentAsFormSheet
         {
-            get => presentModal;
-            set => SetProperty(ref presentModal, value);
+            get => presentAsFormSheet;
+            set => SetProperty(ref presentAsFormSheet, value);
         }
 
         public bool PresentAsPageSheet
@@ -121,8 +121,8 @@ namespace Samples.ViewModel
                 var flags = BrowserLaunchFlags.None;
                 if (PresentAsPageSheet)
                     flags |= BrowserLaunchFlags.PresentAsPageSheet;
-                if (PresentModal)
-                    flags |= BrowserLaunchFlags.PresentModal;
+                if (PresentAsFormSheet)
+                    flags |= BrowserLaunchFlags.PresentAsFormSheet;
                 if (LaunchAdjacent)
                     flags |= BrowserLaunchFlags.LaunchAdjacent;
 

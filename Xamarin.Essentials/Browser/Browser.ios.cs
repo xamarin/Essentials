@@ -31,13 +31,10 @@ namespace Xamarin.Essentials
 
                     if (options.HasFlag(BrowserLaunchFlags.PresentAsFormSheet))
                         sfViewController.ModalPresentationStyle = UIModalPresentationStyle.FormSheet;
-                    if (options.HasFlag(BrowserLaunchFlags.PresentAsPageSheet))
+                    else if (options.HasFlag(BrowserLaunchFlags.PresentAsPageSheet))
                         sfViewController.ModalPresentationStyle = UIModalPresentationStyle.PageSheet;
 
-                    if (options.HasFlag(BrowserLaunchFlags.PresentModal))
-                        vc.PresentModalViewController(sfViewController, true);
-                    else
-                        await vc.PresentViewControllerAsync(sfViewController, true);
+                    await vc.PresentViewControllerAsync(sfViewController, true);
                     break;
                 case BrowserLaunchMode.External:
                     if (Platform.HasOSVersion(10, 0))
