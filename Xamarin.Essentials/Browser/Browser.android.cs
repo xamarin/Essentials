@@ -27,6 +27,7 @@ namespace Xamarin.Essentials
                         tabsBuilder.SetShowTitle(options.TitleMode == BrowserTitleMode.Show);
 
                     var tabsIntent = tabsBuilder.Build();
+                    ActivityFlags? tabsFlags = null;
 
                     Context context = Platform.GetCurrentActivity(false);
 
@@ -35,8 +36,22 @@ namespace Xamarin.Essentials
                         context = Platform.AppContext;
 
                         // If using ApplicationContext we need to set ClearTop/NewTask (See #225)
-                        tabsIntent.Intent.SetFlags(ActivityFlags.ClearTop | ActivityFlags.NewTask);
+                        tabsFlags = ActivityFlags.ClearTop | ActivityFlags.NewTask;
                     }
+
+#if ANDROID_24
+                    if (Platform.HasApiLevelN && options.HasFlag(BrowserLaunchFlags.PreferAdjacent))
+                    {
+                        if (tabsFlags.HasValue)
+                            tabsFlags |= ActivityFlags.LaunchAdjacent | ActivityFlags.NewTask;
+                        else
+                            tabsFlags = ActivityFlags.LaunchAdjacent | ActivityFlags.NewTask;
+                    }
+#endif
+
+                    // Check if there's flags specified to use
+                    if (tabsFlags.HasValue)
+                        tabsIntent.Intent.SetFlags(tabsFlags.Value);
 
                     tabsIntent.LaunchUrl(context, nativeUri);
 

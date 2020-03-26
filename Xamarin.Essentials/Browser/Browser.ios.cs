@@ -28,7 +28,11 @@ namespace Xamarin.Essentials
                     {
                         sfViewController.PopoverPresentationController.SourceView = vc.View;
                     }
-                    await vc.PresentViewControllerAsync(sfViewController, true);
+
+                    if (options.HasFlag(BrowserLaunchFlags.PreferModal))
+                        vc.PresentModalViewController(sfViewController, true);
+                    else
+                        await vc.PresentViewControllerAsync(sfViewController, true);
                     break;
                 case BrowserLaunchMode.External:
                     if (Platform.HasOSVersion(10, 0))
