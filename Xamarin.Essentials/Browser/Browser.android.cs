@@ -40,7 +40,7 @@ namespace Xamarin.Essentials
                     }
 
 #if ANDROID_24
-                    if (Platform.HasApiLevelN && options.HasFlag(BrowserLaunchFlags.PreferAdjacent))
+                    if (Platform.HasApiLevelN && options.HasFlag(BrowserLaunchFlags.LaunchAdjacent))
                     {
                         if (tabsFlags.HasValue)
                             tabsFlags |= ActivityFlags.LaunchAdjacent | ActivityFlags.NewTask;

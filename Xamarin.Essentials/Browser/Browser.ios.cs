@@ -29,7 +29,12 @@ namespace Xamarin.Essentials
                         sfViewController.PopoverPresentationController.SourceView = vc.View;
                     }
 
-                    if (options.HasFlag(BrowserLaunchFlags.PreferModal))
+                    if (options.HasFlag(BrowserLaunchFlags.PresentAsFormSheet))
+                        sfViewController.ModalPresentationStyle = UIModalPresentationStyle.FormSheet;
+                    if (options.HasFlag(BrowserLaunchFlags.PresentAsPageSheet))
+                        sfViewController.ModalPresentationStyle = UIModalPresentationStyle.PageSheet;
+
+                    if (options.HasFlag(BrowserLaunchFlags.PresentModal))
                         vc.PresentModalViewController(sfViewController, true);
                     else
                         await vc.PresentViewControllerAsync(sfViewController, true);
