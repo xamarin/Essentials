@@ -30,7 +30,7 @@ namespace Xamarin.Essentials
             return new FilePickerResult(file);
         }
 
-        static async Task<FilePickerResult> PlatformPickFileToSaveAsync(PickOptions options, string suggestedFileName)
+        static async Task<FilePickerResult> PlatformPickFileToSaveAsync(PickOptions options)
         {
             var picker = new FileSavePicker
             {
