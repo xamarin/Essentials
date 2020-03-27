@@ -18,8 +18,6 @@ namespace Xamarin.Essentials
         /// <returns>corresponding geohash</returns>
         public static string Encode(double lat, double lon, int precision)
         {
-
-
             int idx = 0; // index into base32 map
             int bit = 0; // each char holds 5 bits
             bool evenBit = true;
@@ -224,8 +222,6 @@ namespace Xamarin.Essentials
 
             // append letter for direction to parent
             return parent + base32[(neighbour[direction][type].IndexOf(lastCh))];
-
-
         }
         /// <summary>
         /// Get all the neighbouring Geohashes [All 8]
@@ -298,6 +294,7 @@ namespace Xamarin.Essentials
             Longitude = longitude;
         }
     }
+
     public struct Bound
     {
         public GeoPoint SW { get; }
@@ -308,6 +305,7 @@ namespace Xamarin.Essentials
             NE = ne;
         }
     }
+
     public enum Direction
     {
         East,
@@ -315,6 +313,7 @@ namespace Xamarin.Essentials
         North,
         South
     }
+
     public struct Neighbour
     {
         public string North { get; }
