@@ -197,17 +197,17 @@ namespace Xamarin.Essentials
             Dictionary<Direction, string[]> border = new Dictionary<Direction, string[]>()
             {
                 {
-                    Direction.North , new string[]{ "prxz","bcfguvyz" }
+                    Direction.North , new string[] { "prxz","bcfguvyz" }
                 },
                 {
-                    Direction.South,new string[]{ "028b","0145hjnp" }
+                    Direction.South,new string[] { "028b","0145hjnp" }
                 }
                 ,
                 {
-                     Direction.East,new string[]{ "bcfguvyz","prxz" }
+                     Direction.East,new string[] { "bcfguvyz","prxz" }
                 },
                 {
-                     Direction.West,new string[]{ "0145hjnp","028b" }
+                     Direction.West,new string[] { "0145hjnp","028b" }
                 }
             };
 
