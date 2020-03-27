@@ -1,4 +1,7 @@
-﻿using System;
+﻿/*
+ * Verify from here http://www.movable-type.co.uk/scripts/geohash.html
+ */
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Xamarin.Essentials;
