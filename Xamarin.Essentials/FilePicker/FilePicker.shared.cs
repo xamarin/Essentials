@@ -13,6 +13,15 @@ namespace Xamarin.Essentials
         public static Task<FilePickerResult> PickFileAsync(PickOptions options) =>
             PlatformPickFileAsync(options ?? PickOptions.Default);
 
+        public static Task<FilePickerResult> PickFileToSaveAsync() =>
+            PlatformPickFileToSaveAsync(PickOptions.Default);
+
+        public static Task<FilePickerResult> PickFileToSaveAsync(PickOptions options) =>
+            PlatformPickFileToSaveAsync(options ?? PickOptions.Default);
+
+        public static Task<IEnumerable<FilePickerResult>> PickMultipleFilesAsync() =>
+            PlatformPickMultipleFilesAsync(PickOptions.Default);
+
         public static Task<IEnumerable<FilePickerResult>> PickMultipleFilesAsync(PickOptions options) =>
             PlatformPickMultipleFilesAsync(options ?? PickOptions.Default);
     }
@@ -59,11 +68,16 @@ namespace Xamarin.Essentials
         public string PickerTitle { get; set; }
 
         public FilePickerFileType FileTypes { get; set; }
+
+        public string SuggestedFileName { get; set; }
     }
 
     public partial class FilePickerResult : FileBase
     {
         public Task<Stream> OpenReadStreamAsync()
             => PlatformOpenReadStreamAsync();
+
+        public Task<Stream> OpenWriteStreamAsync()
+            => PlatformOpenWriteStreamAsync();
     }
 }

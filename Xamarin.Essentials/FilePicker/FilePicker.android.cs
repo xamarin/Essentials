@@ -14,21 +14,62 @@ namespace Xamarin.Essentials
     {
         const int requestCodeFilePicker = 12345;
 
-        static async Task<FilePickerResult> PlatformPickFileAsync(PickOptions options)
+        static async Task<Intent> CreateIntent(PickOptions options, bool multipleSelect, bool save)
         {
+            // Save takes precedence over multi-select
+
+            if (multipleSelect && !save && (int)global::Android.OS.Build.VERSION.SdkInt < 18)
+                throw new FeatureNotSupportedException("Picking multiple files is only available on API level 18 (Android 4.3) or later.");
+
             // we only need the permission when accessing the file, but it's more natural
             // to ask the user first, then show the picker.
-            await Permissions.RequestAsync<Permissions.StorageRead>();
+            if (save)
+                await Permissions.RequestAsync<Permissions.StorageWrite>();
+            else
+                await Permissions.RequestAsync<Permissions.StorageRead>();
 
-            var intent = new Intent(Intent.ActionGetContent);
+            Intent intent;
+            if (save)
+                intent = new Intent(Intent.ActionCreateDocument);
+            else if ((int)global::Android.OS.Build.VERSION.SdkInt < 19)
+                intent = new Intent(Intent.ActionGetContent);
+            else
+                intent = new Intent(Intent.ActionOpenDocument);
+
             intent.SetType("*/*");
             intent.AddCategory(Intent.CategoryOpenable);
+
+            if (multipleSelect && !save)
+                intent.PutExtra(Intent.ExtraAllowMultiple, true);
+            else if (save && !string.IsNullOrEmpty(options.SuggestedFileName))
+                intent.PutExtra(Intent.ExtraTitle, options.SuggestedFileName);
 
             var allowedTypes = options?.FileTypes?.Value?.ToArray();
             if (allowedTypes?.Length > 0)
                 intent.PutExtra(Intent.ExtraMimeTypes, allowedTypes);
 
-            var pickerIntent = Intent.CreateChooser(intent, options?.PickerTitle ?? "Select file");
+            return Intent.CreateChooser(intent, options?.PickerTitle ?? (multipleSelect && !save ? "Select files" : "Select file"));
+        }
+
+        static async Task<FilePickerResult> PlatformPickFileAsync(PickOptions options)
+        {
+            var pickerIntent = await CreateIntent(options, false, false);
+
+            try
+            {
+                var result = await IntermediateActivity.StartAsync(pickerIntent, requestCodeFilePicker);
+                var contentUri = result.Data;
+                return new FilePickerResult(contentUri);
+            }
+            catch (OperationCanceledException)
+            {
+                return null;
+            }
+        }
+
+        static async Task<FilePickerResult> PlatformPickFileToSaveAsync(PickOptions options)
+        {
+            var pickerIntent = await CreateIntent(options, false, true);
 
             try
             {
@@ -44,23 +85,7 @@ namespace Xamarin.Essentials
 
         static async Task<IEnumerable<FilePickerResult>> PlatformPickMultipleFilesAsync(PickOptions options)
         {
-            if ((int)global::Android.OS.Build.VERSION.SdkInt < 18)
-                throw new FeatureNotSupportedException("multiple files picking is only available from API level 18 (Android 4.3) on");
-
-            // we only need the permission when accessing the file, but it's more natural
-            // to ask the user first, then show the picker.
-            await Permissions.RequestAsync<Permissions.StorageRead>();
-
-            var intent = new Intent(Intent.ActionGetContent);
-            intent.SetType("*/*");
-            intent.AddCategory(Intent.CategoryOpenable);
-            intent.PutExtra(Intent.ExtraAllowMultiple, true);
-
-            var allowedTypes = options?.FileTypes?.Value?.ToArray();
-            if (allowedTypes?.Length > 0)
-                intent.PutExtra(Intent.ExtraMimeTypes, allowedTypes);
-
-            var pickerIntent = Intent.CreateChooser(intent, options?.PickerTitle ?? "Select files");
+            var pickerIntent = await CreateIntent(options, true, false);
 
             try
             {
@@ -163,7 +188,19 @@ namespace Xamarin.Essentials
                 return Task.FromResult(content);
             }
 
-            var stream = File.OpenRead(FullPath);
+            var stream = File.Open(FullPath, FileMode.Open, FileAccess.Read);
+            return Task.FromResult<Stream>(stream);
+        }
+
+        Task<Stream> PlatformOpenWriteStreamAsync()
+        {
+            if (contentUri.Scheme == "content")
+            {
+                var content = Application.Context.ContentResolver.OpenOutputStream(contentUri);
+                return Task.FromResult(content);
+            }
+
+            var stream = File.Open(FullPath, FileMode.OpenOrCreate, FileAccess.Write);
             return Task.FromResult<Stream>(stream);
         }
     }

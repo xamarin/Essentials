@@ -30,6 +30,28 @@ namespace Xamarin.Essentials
             return new FilePickerResult(file);
         }
 
+        static async Task<FilePickerResult> PlatformPickFileToSaveAsync(PickOptions options, string suggestedFileName)
+        {
+            var picker = new FileSavePicker
+            {
+                SuggestedStartLocation = PickerLocationId.DocumentsLibrary
+            };
+
+            // Set the suggested file name
+            if (!string.IsNullOrEmpty(options.SuggestedFileName))
+                picker.SuggestedFileName = options.SuggestedFileName;
+
+            // The UWP save picker doesn't support file types, so we can't do anything with them.
+
+            var file = await picker.PickSaveFileAsync();
+            if (file == null)
+                return null;
+
+            StorageApplicationPermissions.FutureAccessList.Add(file);
+
+            return new FilePickerResult(file);
+        }
+
         static async Task<IEnumerable<FilePickerResult>> PlatformPickMultipleFilesAsync(PickOptions options)
         {
             var picker = new FileOpenPicker
@@ -102,5 +124,14 @@ namespace Xamarin.Essentials
         // is with an IStorageFile
         Task<Stream> PlatformOpenReadStreamAsync()
             => storageFile.OpenStreamForReadAsync();
+
+        Task<Stream> PlatformOpenWriteStreamAsync()
+        {
+            // Create the file for the user so we can return a stream for them to write to.
+            if (!System.IO.File.Exists(storageFile.Path))
+                System.IO.File.Create(storageFile.Path);
+
+            return storageFile.OpenStreamForWriteAsync();
+        }
     }
 }

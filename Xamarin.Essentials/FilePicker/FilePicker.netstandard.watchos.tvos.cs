@@ -9,6 +9,9 @@ namespace Xamarin.Essentials
         static Task<FilePickerResult> PlatformPickFileAsync(PickOptions options)
             => throw new NotImplementedInReferenceAssemblyException();
 
+        static Task<FilePickerResult> PlatformPickFileToSaveAsync(PickOptions options)
+            => throw new NotImplementedInReferenceAssemblyException();
+
         static Task<IEnumerable<FilePickerResult>> PlatformPickMultipleFilesAsync(PickOptions options)
             => throw new NotImplementedInReferenceAssemblyException();
     }
@@ -25,6 +28,9 @@ namespace Xamarin.Essentials
     public partial class FilePickerResult
     {
         Task<Stream> PlatformOpenReadStreamAsync()
+            => throw new NotImplementedInReferenceAssemblyException();
+
+        Task<Stream> PlatformOpenWriteStreamAsync()
             => throw new NotImplementedInReferenceAssemblyException();
     }
 }

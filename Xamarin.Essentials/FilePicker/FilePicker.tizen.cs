@@ -46,6 +46,9 @@ namespace Xamarin.Essentials
             return tcs.Task;
         }
 
+        static Task<FilePickerResult> PlatformPickFileToSaveAsync(PickOptions options)
+            => throw new NotImplementedInReferenceAssemblyException();
+
         static Task<IEnumerable<FilePickerResult>> PlatformPickMultipleFilesAsync(PickOptions options)
             => throw new NotImplementedInReferenceAssemblyException();
     }
@@ -94,6 +97,14 @@ namespace Xamarin.Essentials
             await Permissions.RequestAsync<Permissions.StorageRead>();
 
             var stream = File.Open(fullPath, FileMode.Open, FileAccess.Read);
+            return Task.FromResult<Stream>(stream).Result;
+        }
+
+        async Task<Stream> PlatformOpenWriteStreamAsync()
+        {
+            await Permissions.RequestAsync<Permissions.StorageWrite>();
+
+            var stream = File.Open(fullPath, FileMode.OpenOrCreate, FileAccess.Write);
             return Task.FromResult<Stream>(stream).Result;
         }
     }
