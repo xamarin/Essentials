@@ -181,16 +181,16 @@ namespace Xamarin.Essentials
                                                    "bc01fg45238967deuvhjyznpkmstqrwx" }
                 },
                 {
-                    Direction.South,new string[]{  "14365h7k9dcfesgujnmqp0r2twvyx8zb",
+                    Direction.South,new string[] {  "14365h7k9dcfesgujnmqp0r2twvyx8zb",
                                                     "238967debc01fg45kmstqrwxuvhjyznp" }
                 }
                 ,
                 {
-                     Direction.East,new string[]{ "bc01fg45238967deuvhjyznpkmstqrwx",
+                     Direction.East,new string[] { "bc01fg45238967deuvhjyznpkmstqrwx",
                                                    "p0r21436x8zb9dcf5h7kjnmqesgutwvy" }
                 },
                 {
-                     Direction.West,new string[]{ "238967debc01fg45kmstqrwxuvhjyznp",
+                     Direction.West,new string[] { "238967debc01fg45kmstqrwxuvhjyznp",
                                                    "14365h7k9dcfesgujnmqp0r2twvyx8zb" }
                 }
             };
