@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Tests
 {
-    public class GeoHash_Test
+    public class GeoHash_Tests
     {
         [Fact]
         public void EncodeFromCoords()
