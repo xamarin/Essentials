@@ -23,6 +23,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
@@ -64,8 +65,17 @@
                    Grid.Column="1"
                    HorizontalTextAlignment="Start"/>
 
+            <Label Text="Contact Type:"
+                   FontAttributes="Bold"
+                   Grid.Row="4"/>
+
+            <Label Text="{Binding ContactType}"
+                   Grid.Row="4"
+                   Grid.Column="1"
+                   HorizontalTextAlignment="Start"/>
+
             <Button Text="Get Contact"
-                    Grid.Row="4"
+                    Grid.Row="5"
                     Grid.ColumnSpan="2"
                     Command="{Binding GetContactCommand}"/>
         </Grid>

@@ -14,6 +14,8 @@ namespace Xamarin.Essentials
     {
         internal static Action<PhoneContact?> CallBack { get; set; }
 
+        internal static Action<Exception> ErrorCallBack { get; set; }
+
         static Task<PhoneContact?> PlatformPickContactAsync()
         {
             var uiView = Platform.GetCurrentViewController();
@@ -34,6 +36,12 @@ namespace Xamarin.Essentials
                     var tcs = Interlocked.Exchange(ref source, null);
                     tcs?.SetResult(phoneContact);
                 };
+
+                ErrorCallBack = (ex) =>
+                {
+                    var tcs = Interlocked.Exchange(ref source, null);
+                    tcs?.SetException(ex);
+                };
             }
             catch (Exception ex)
             {
@@ -50,29 +58,34 @@ namespace Xamarin.Essentials
             try
             {
                 var contactType = ToPhoneContact(contact.ContactType);
-                var phones = new Dictionary<string, ContactType>();
+                var phones = new Dictionary<string, string>();
 
                 foreach (var item in contact.PhoneNumbers)
-                    phones.Add(item?.Value?.StringValue, contactType);
+                    phones.Add(item?.Value?.StringValue, NormalizeString(item?.Label));
 
-                var emails = new Dictionary<string, ContactType>();
+                var emails = new Dictionary<string, string>();
 
                 foreach (var item in contact.EmailAddresses)
-                    emails.Add(item?.Value?.ToString(), contactType);
+                    emails.Add(item?.Value?.ToString(), NormalizeString(item?.Label));
 
-                var name = $"{contact.GivenName} {contact.MiddleName} {contact.FamilyName}";
+                var name = string.Empty;
+
+                if (string.IsNullOrEmpty(contact.MiddleName))
+                    name = $"{contact.GivenName} {contact.FamilyName}";
+                else
+                    name = $"{contact.GivenName} {contact.MiddleName} {contact.FamilyName}";
 
                 var birthday = contact.Birthday?.Date.ToDateTime().Date;
-                var p = (Lookup<ContactType, string>)emails.ToLookup(k => k.Value, v => v.Key);
                 return new PhoneContact(
                                        name,
-                                       (Lookup<ContactType, string>)phones.ToLookup(k => k.Value, v => v.Key),
-                                       (Lookup<ContactType, string>)emails.ToLookup(k => k.Value, v => v.Key),
-                                       birthday);
+                                       (Lookup<string, string>)phones.ToLookup(k => k.Value, v => v.Key),
+                                       (Lookup<string, string>)emails.ToLookup(k => k.Value, v => v.Key),
+                                       birthday,
+                                       contactType);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -93,7 +106,7 @@ namespace Xamarin.Essentials
             {
                 var nameSplit = name.Split(' ');
                 contact.GivenName = nameSplit[0];
-                contact.FamilyName = nameSplit.Length > 1 ? nameSplit[nameSplit.Length - 1] : " ";
+                contact.FamilyName = nameSplit.Length > 1 ? nameSplit[^1] : " ";
             }
 
             if (!string.IsNullOrEmpty(email))
@@ -127,17 +140,25 @@ namespace Xamarin.Essentials
             }
         }
 
-        static ContactType ToPhoneContact(CNContactType type)
+        static ContactType ToPhoneContact(CNContactType type) => type switch
         {
-            switch (type)
+            CNContactType.Person => ContactType.Personal,
+            CNContactType.Organization => ContactType.Work,
+            _ => ContactType.Unknown,
+        };
+
+        static string NormalizeString(string contactType)
+        {
+            // _$!<Work>!$_
+
+            if (!contactType.StartsWith("_$!<"))
             {
-                case CNContactType.Person:
-                    return ContactType.Personal;
-                case CNContactType.Organization:
-                    return ContactType.Work;
-                default:
-                    return ContactType.Unknown;
+                return contactType;
             }
+
+            var type = contactType.Split('<')[1];
+            type = type.Split('>')[0];
+            return type;
         }
-    }
+     }
 }

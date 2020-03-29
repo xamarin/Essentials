@@ -8,22 +8,26 @@ namespace Xamarin.Essentials
     {
         public string Name { get; }
 
-        public Lookup<ContactType, string> Numbers { get; }
+        public ContactType ContactType { get; }
 
-        public Lookup<ContactType, string> Emails { get; }
+        public Lookup<string, string> Numbers { get; }
+
+        public Lookup<string, string> Emails { get; }
 
         public DateTime? Birthday { get; }
 
         internal PhoneContact(
             string name,
-            Lookup<ContactType, string> numbers,
-            Lookup<ContactType, string> email,
-            DateTime? bd)
+            Lookup<string, string> numbers,
+            Lookup<string, string> email,
+            DateTime? bd,
+            ContactType contactType)
         {
             Name = name;
             Birthday = bd;
             Emails = email;
             Numbers = numbers;
+            ContactType = contactType;
         }
 
         public static bool operator ==(PhoneContact left, PhoneContact right) =>

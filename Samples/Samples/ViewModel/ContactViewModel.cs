@@ -64,6 +64,14 @@ namespace Samples.ViewModel
             set => SetProperty(ref contactEmail, value);
         }
 
+        string contactType;
+
+        public string ContactType
+        {
+            get => contactType;
+            set => SetProperty(ref contactType, value);
+        }
+
         public ICommand GetContactCommand { get; }
 
         public ICommand SaveContactCommand { get; }
@@ -108,13 +116,14 @@ namespace Samples.ViewModel
                 Emails = string.Empty;
                 Name = string.Empty;
                 Birthday = string.Empty;
+                ContactType = string.Empty;
 
                 var contact = await Contact.PickContactAsync();
                 if (contact == null)
                     return;
                 contact?.Numbers.ForEach(item =>
                 {
-                    item.ForEach(v => Phones += v + Environment.NewLine);
+                    item.ForEach(v => Phones += v + item.Key + Environment.NewLine);
                 });
                 contact?.Emails.ForEach(item =>
                 {
@@ -122,6 +131,7 @@ namespace Samples.ViewModel
                 });
                 Name = contact?.Name;
                 Birthday = contact?.Birthday.ToString();
+                ContactType = contact?.ContactType.ToString();
             }
             catch (Exception ex)
             {
