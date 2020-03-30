@@ -14,7 +14,7 @@ namespace Xamarin.Essentials
                 Latitude = mapLocation.Point.Position.Latitude,
                 Longitude = mapLocation.Point.Position.Longitude,
                 Altitude = mapLocation.Point.Position.Altitude,
-                AltitudeReferenceSystem = mapLocation.Point.AltitudeReferenceSystem,
+                AltitudeReferenceSystem = (AltitudeReferenceSystem)mapLocation.Point.AltitudeReferenceSystem,
                 Timestamp = DateTimeOffset.UtcNow
             };
 
@@ -36,7 +36,7 @@ namespace Xamarin.Essentials
                 Speed = (!location.Coordinate.Speed.HasValue || double.IsNaN(location.Coordinate.Speed.Value)) ? default : location.Coordinate.Speed,
                 Course = (!location.Coordinate.Heading.HasValue || double.IsNaN(location.Coordinate.Heading.Value)) ? default : location.Coordinate.Heading,
                 IsFromMockProvider = false,
-                AltitudeReferenceSystem = location.Coordinate.Point.AltitudeReferenceSystem
+                AltitudeReferenceSystem = (AltitudeReferenceSystem)location.Coordinate.Point.AltitudeReferenceSystem
             };
 
         internal static Location ToLocation(this Geocoordinate coordinate) =>
@@ -50,7 +50,7 @@ namespace Xamarin.Essentials
                  VerticalAccuracy = coordinate.AltitudeAccuracy,
                  Speed = (!coordinate.Speed.HasValue || double.IsNaN(coordinate.Speed.Value)) ? default : coordinate.Speed,
                  Course = (!coordinate.Heading.HasValue || double.IsNaN(coordinate.Heading.Value)) ? default : coordinate.Heading,
-                 AltitudeReferenceSystem = coordinate.Point.AltitudeReferenceSystem
+                 AltitudeReferenceSystem = (AltitudeReferenceSystem)coordinate.Point.AltitudeReferenceSystem
              };
     }
 }
