@@ -8,13 +8,21 @@ namespace Xamarin.Essentials
 {
     public static partial class LocationExtensions
     {
+        internal static AltitudeReferenceSystem ConvertRefSys(Windows.Devices.Geolocation.AltitudeReferenceSystem refsys)
+        {
+            if (Enum.IsDefined(typeof(AltitudeReferenceSystem), refsys))
+                return (AltitudeReferenceSystem)refsys;
+            else
+                return AltitudeReferenceSystem.Unspecified;
+        }
+
         internal static Location ToLocation(this MapLocation mapLocation) =>
             new Location
             {
                 Latitude = mapLocation.Point.Position.Latitude,
                 Longitude = mapLocation.Point.Position.Longitude,
                 Altitude = mapLocation.Point.Position.Altitude,
-                AltitudeReferenceSystem = (AltitudeReferenceSystem)mapLocation.Point.AltitudeReferenceSystem,
+                AltitudeReferenceSystem = ConvertRefSys(mapLocation.Point.AltitudeReferenceSystem),
                 Timestamp = DateTimeOffset.UtcNow
             };
 
@@ -36,7 +44,7 @@ namespace Xamarin.Essentials
                 Speed = (!location.Coordinate.Speed.HasValue || double.IsNaN(location.Coordinate.Speed.Value)) ? default : location.Coordinate.Speed,
                 Course = (!location.Coordinate.Heading.HasValue || double.IsNaN(location.Coordinate.Heading.Value)) ? default : location.Coordinate.Heading,
                 IsFromMockProvider = false,
-                AltitudeReferenceSystem = (AltitudeReferenceSystem)location.Coordinate.Point.AltitudeReferenceSystem
+                AltitudeReferenceSystem = ConvertRefSys(location.Coordinate.Point.AltitudeReferenceSystem)
             };
 
         internal static Location ToLocation(this Geocoordinate coordinate) =>
@@ -50,7 +58,7 @@ namespace Xamarin.Essentials
                  VerticalAccuracy = coordinate.AltitudeAccuracy,
                  Speed = (!coordinate.Speed.HasValue || double.IsNaN(coordinate.Speed.Value)) ? default : coordinate.Speed,
                  Course = (!coordinate.Heading.HasValue || double.IsNaN(coordinate.Heading.Value)) ? default : coordinate.Heading,
-                 AltitudeReferenceSystem = (AltitudeReferenceSystem)coordinate.Point.AltitudeReferenceSystem
+                 AltitudeReferenceSystem = ConvertRefSys(coordinate.Point.AltitudeReferenceSystem)
              };
     }
 }
