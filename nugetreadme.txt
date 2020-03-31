@@ -12,7 +12,7 @@ https://aka.ms/essentials-getstarted
 
 ## Release Notes
 
-If you are upgrading from an earlier preview the stable version contains several breaking API changes. 
+If you are upgrading from an earlier preview, the stable version contains several breaking API changes. 
 
 We have documented a full transition guide when migrating from older versions. 
 
