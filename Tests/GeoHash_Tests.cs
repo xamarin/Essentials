@@ -14,19 +14,19 @@ namespace Tests
         [Fact]
         public void EncodeFromCoords()
         {
-            var actual8 = "eusftqx9";
-            var calculated8 = GeoHash.Encode(25.78792, -4.32913, 8);
-            Assert.Equal(actual8, calculated8);
+            var actual = "eusftqx9";
+            var calculated = GeoHash.Encode(25.78792, -4.32913, 8);
+            Assert.Equal(actual, calculated);
             Assert.Equal("efkbt6rx", GeoHash.Encode(new GeoPoint(12.7578, -4.32913), 8));
         }
 
         [Fact]
         public void DecodeFromCoords()
         {
-            double lat_actual5 = 25.787, long_actual5 = -4.3291;
-            var calculated8 = GeoHash.Decode("eusftqx9");
-            Assert.Equal(calculated8.Latitude.ToString().Substring(0, 6), lat_actual5.ToString());
-            Assert.Equal(calculated8.Longitude.ToString().Substring(0, 7), long_actual5.ToString());
+            double lat_actual = 25.787, long_actual = -4.3291;
+            var calculated = GeoHash.Decode("eusftqx9");
+            Assert.Equal(calculated.Latitude.ToString().Substring(0, 6), lat_actual.ToString());
+            Assert.Equal(calculated.Longitude.ToString().Substring(0, 7), long_actual.ToString());
         }
 
         [Fact]
