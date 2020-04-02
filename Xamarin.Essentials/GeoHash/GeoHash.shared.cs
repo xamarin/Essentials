@@ -232,7 +232,7 @@ namespace Xamarin.Essentials
         /// <param name="geohash">main geohash</param>
         /// <param name="direction">direction of geohash</param>
         /// <returns>geohash of Neighbouring cell</returns>
-        public static string GetAdjacent(string geohash, CardinalDirection direction)
+        public static string Adjacent(string geohash, CardinalDirection direction)
         {
             geohash = geohash.ToLower();
 
@@ -247,7 +247,7 @@ namespace Xamarin.Essentials
             // check for edge-cases which don't share common prefix
             if (border[direction][type].IndexOf(lastCh) != -1 && parent != string.Empty)
             {
-                parent = GetAdjacent(parent, direction);
+                parent = Adjacent(parent, direction);
             }
 
             // append letter for direction to parent
@@ -259,16 +259,16 @@ namespace Xamarin.Essentials
         /// </summary>
         /// <param name="geohash">Current Geohash</param>
         /// <returns>Neigbour Object</returns>
-        public static Neighbour GetNeighbours(string geohash)
+        public static Neighbour Neighbours(string geohash)
         {
-            var n = GetAdjacent(geohash, CardinalDirection.North);
-            var ne = GetAdjacent(GetAdjacent(geohash, CardinalDirection.North), CardinalDirection.East);
-            var e = GetAdjacent(geohash, CardinalDirection.East);
-            var se = GetAdjacent(GetAdjacent(geohash, CardinalDirection.South), CardinalDirection.East);
-            var s = GetAdjacent(geohash, CardinalDirection.South);
-            var sw = GetAdjacent(GetAdjacent(geohash, CardinalDirection.South), CardinalDirection.West);
-            var w = GetAdjacent(geohash, CardinalDirection.West);
-            var nw = GetAdjacent(GetAdjacent(geohash, CardinalDirection.North), CardinalDirection.West);
+            var n = Adjacent(geohash, CardinalDirection.North);
+            var ne = Adjacent(Adjacent(geohash, CardinalDirection.North), CardinalDirection.East);
+            var e = Adjacent(geohash, CardinalDirection.East);
+            var se = Adjacent(Adjacent(geohash, CardinalDirection.South), CardinalDirection.East);
+            var s = Adjacent(geohash, CardinalDirection.South);
+            var sw = Adjacent(Adjacent(geohash, CardinalDirection.South), CardinalDirection.West);
+            var w = Adjacent(geohash, CardinalDirection.West);
+            var nw = Adjacent(Adjacent(geohash, CardinalDirection.North), CardinalDirection.West);
 
             return new Neighbour(n, s, e, w, ne, se, nw, sw);
         }
@@ -376,8 +376,8 @@ namespace Xamarin.Essentials
             && (East ?? string.Empty).Equals(other.East) && (West ?? string.Empty).Equals(other.West);
 
         public override int GetHashCode() =>
-            (West ?? string.Empty).GetHashCode() ^ (East ?? string.Empty).GetHashCode()
-            + (North ?? string.Empty).GetHashCode() ^ (South ?? string.Empty).GetHashCode();
+            (West ?? string.Empty).GetHashCode() + (East ?? string.Empty).GetHashCode()
+            + (North ?? string.Empty).GetHashCode() + (South ?? string.Empty).GetHashCode();
 
         public static bool operator ==(Neighbour left, Neighbour right) =>
             left.Equals(right);
