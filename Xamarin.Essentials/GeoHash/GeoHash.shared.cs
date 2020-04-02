@@ -90,12 +90,12 @@ namespace Xamarin.Essentials
         /// <returns>A GeoPoint (Corresponding Lat,Long)</returns>
         public static GeoPoint Decode(string geohash)
         {
-            var bounds = Bounds(geohash); // <-- the hard work
+            var bounds = GetBound(geohash); // <-- the hard work
 
             // now just determine the centre of the cell...
 
-            double latMin = bounds.SW.Latitude, lonMin = bounds.SW.Longitude;
-            double latMax = bounds.NE.Latitude, lonMax = bounds.NE.Longitude;
+            double latMin = bounds.Southwest.Latitude, lonMin = bounds.Southwest.Longitude;
+            double latMax = bounds.Northeast.Latitude, lonMax = bounds.Northeast.Longitude;
 
             // cell centre
             var lat = (latMin + latMax) / 2.0;
@@ -116,7 +116,7 @@ namespace Xamarin.Essentials
         /// </summary>
         /// <param name="geohash">hash of location</param>
         /// <returns>SW,NE location</returns>
-        public static Bound Bounds(string geohash)
+        public static GeoHashBound GetBound(string geohash)
         {
             geohash = geohash.ToLower();
             var evenBit = true;
@@ -163,8 +163,68 @@ namespace Xamarin.Essentials
                 }
             }
 
-            return new Bound(new GeoPoint(latMin, lonMin), new GeoPoint(latMax, lonMax));
+            return new GeoHashBound(new GeoPoint(latMin, lonMin), new GeoPoint(latMax, lonMax));
         }
+
+        static Dictionary<CardinalDirection, string[]> neighbour = new Dictionary<CardinalDirection, string[]>()
+            {
+                {
+                    CardinalDirection.North, new string[]
+                    {
+                        "p0r21436x8zb9dcf5h7kjnmqesgutwvy",
+                        "bc01fg45238967deuvhjyznpkmstqrwx"
+                    }
+                },
+                {
+                    CardinalDirection.South, new string[]
+                    {
+                        "14365h7k9dcfesgujnmqp0r2twvyx8zb",
+                        "238967debc01fg45kmstqrwxuvhjyznp"
+                    }
+                },
+                {
+                     CardinalDirection.East, new string[]
+                     {
+                         "bc01fg45238967deuvhjyznpkmstqrwx",
+                         "p0r21436x8zb9dcf5h7kjnmqesgutwvy"
+                     }
+                },
+                {
+                     CardinalDirection.West, new string[]
+                     {
+                         "238967debc01fg45kmstqrwxuvhjyznp",
+                         "14365h7k9dcfesgujnmqp0r2twvyx8zb"
+                     }
+                }
+            };
+
+        static Dictionary<CardinalDirection, string[]> border = new Dictionary<CardinalDirection, string[]>()
+            {
+                {
+                    CardinalDirection.North, new string[]
+                    {
+                        "prxz", "bcfguvyz"
+                    }
+                },
+                {
+                    CardinalDirection.South, new string[]
+                    {
+                        "028b", "0145hjnp"
+                    }
+                },
+                {
+                     CardinalDirection.East, new string[]
+                     {
+                         "bcfguvyz", "prxz"
+                     }
+                },
+                {
+                     CardinalDirection.West, new string[]
+                     {
+                         "0145hjnp", "028b"
+                     }
+                }
+            };
 
         /// <summary>
         /// Get the adjacent geohash
@@ -172,71 +232,12 @@ namespace Xamarin.Essentials
         /// <param name="geohash">main geohash</param>
         /// <param name="direction">direction of geohash</param>
         /// <returns>geohash of Neighbouring cell</returns>
-        public static string Adjacent(string geohash, Direction direction)
+        public static string Adjacent(string geohash, CardinalDirection direction)
         {
             geohash = geohash.ToLower();
 
             if (geohash.Length == 0)
                 throw new Exception("Invalid geohash");
-
-            var neighbour = new Dictionary<Direction, string[]>()
-            {
-                {
-                    Direction.North, new string[]
-                    {
-                        "p0r21436x8zb9dcf5h7kjnmqesgutwvy",
-                        "bc01fg45238967deuvhjyznpkmstqrwx"
-                    }
-                },
-                {
-                    Direction.South, new string[]
-                    {
-                        "14365h7k9dcfesgujnmqp0r2twvyx8zb",
-                        "238967debc01fg45kmstqrwxuvhjyznp"
-                    }
-                },
-                {
-                     Direction.East, new string[]
-                     {
-                         "bc01fg45238967deuvhjyznpkmstqrwx",
-                         "p0r21436x8zb9dcf5h7kjnmqesgutwvy"
-                     }
-                },
-                {
-                     Direction.West, new string[]
-                     {
-                         "238967debc01fg45kmstqrwxuvhjyznp",
-                         "14365h7k9dcfesgujnmqp0r2twvyx8zb"
-                     }
-                }
-            };
-            var border = new Dictionary<Direction, string[]>()
-            {
-                {
-                    Direction.North, new string[]
-                    {
-                        "prxz", "bcfguvyz"
-                    }
-                },
-                {
-                    Direction.South, new string[]
-                    {
-                        "028b", "0145hjnp"
-                    }
-                },
-                {
-                     Direction.East, new string[]
-                     {
-                         "bcfguvyz", "prxz"
-                     }
-                },
-                {
-                     Direction.West, new string[]
-                     {
-                         "0145hjnp", "028b"
-                     }
-                }
-            };
 
             var lastCh = geohash[geohash.Length - 1];    // last character of hash
             var parent = geohash.Substring(0, geohash.Length - 1); // hash without last character
@@ -260,63 +261,20 @@ namespace Xamarin.Essentials
         /// <returns>Neigbour Object</returns>
         public static Neighbour Neighbours(string geohash)
         {
-            var n = Adjacent(geohash, Direction.North);
-            var ne = Adjacent(Adjacent(geohash, Direction.North), Direction.East);
-            var e = Adjacent(geohash, Direction.East);
-            var se = Adjacent(Adjacent(geohash, Direction.South), Direction.East);
-            var s = Adjacent(geohash, Direction.South);
-            var sw = Adjacent(Adjacent(geohash, Direction.South), Direction.West);
-            var w = Adjacent(geohash, Direction.West);
-            var nw = Adjacent(Adjacent(geohash, Direction.North), Direction.West);
+            var n = Adjacent(geohash, CardinalDirection.North);
+            var ne = Adjacent(Adjacent(geohash, CardinalDirection.North), CardinalDirection.East);
+            var e = Adjacent(geohash, CardinalDirection.East);
+            var se = Adjacent(Adjacent(geohash, CardinalDirection.South), CardinalDirection.East);
+            var s = Adjacent(geohash, CardinalDirection.South);
+            var sw = Adjacent(Adjacent(geohash, CardinalDirection.South), CardinalDirection.West);
+            var w = Adjacent(geohash, CardinalDirection.West);
+            var nw = Adjacent(Adjacent(geohash, CardinalDirection.North), CardinalDirection.West);
 
             return new Neighbour(n, s, e, w, ne, se, nw, sw);
         }
-
-        /// <summary>
-        /// Get hash table containg the cell-sizes with precision as key from 1-12
-        /// </summary>
-        public static Dictionary<int, CellSize> BoxSizeTable { get; } = new Dictionary<int, CellSize>()
-        {
-                   { 1, new CellSize(5000000, 5000000) },
-                   { 2, new CellSize(1250000, 625000) },
-                   { 3, new CellSize(156000, 156000) },
-                   { 4, new CellSize(39100, 19500) },
-                   { 5, new CellSize(39100, 19500) },
-                   { 6, new CellSize(1220, 610) },
-                   { 7, new CellSize(153, 153) },
-                   { 8, new CellSize(38.2, 19.1) },
-                   { 9, new CellSize(4.77, 4.77) },
-                   { 10, new CellSize(1.19, 0.596) },
-                   { 11, new CellSize(0.149, 0.149) },
-                   { 12,  new CellSize(0.0372, 0.0186) }
-        };
     }
 
-    public struct CellSize
-    {
-        /// <summary>
-        /// Width of the GeoCell
-        /// </summary>
-        public double Width { get; }
-
-        /// <summary>
-        /// Height of the GeoCell
-        /// </summary>
-        public double Height { get; }
-
-        /// <summary>
-        /// Pathagorean Diagonal of the GeoCell
-        /// </summary>
-        public double Diagonal => Math.Sqrt((Width * Width) + (Height * Height));
-
-        public CellSize(double w, double h)
-        {
-            Width = w;
-            Height = h;
-        }
-    }
-
-    public struct GeoPoint
+    public readonly struct GeoPoint : IEquatable<GeoPoint>
     {
         public double Latitude { get; }
 
@@ -327,22 +285,52 @@ namespace Xamarin.Essentials
             Latitude = latitude;
             Longitude = longitude;
         }
+
+        public override bool Equals(object obj) =>
+                    (obj is GeoPoint data) && Equals(data);
+
+        public bool Equals(GeoPoint other) =>
+            Latitude.Equals(other.Latitude) && Longitude.Equals(other.Longitude);
+
+        public override int GetHashCode() =>
+            Latitude.GetHashCode() ^ Longitude.GetHashCode();
+
+        public static bool operator ==(GeoPoint left, GeoPoint right) =>
+            left.Equals(right);
+
+        public static bool operator !=(GeoPoint left, GeoPoint right) =>
+            !left.Equals(right);
     }
 
-    public struct Bound
+    public readonly struct GeoHashBound : IEquatable<GeoHashBound>
     {
-        public GeoPoint SW { get; }
+        public GeoPoint Southwest { get; }
 
-        public GeoPoint NE { get; }
+        public GeoPoint Northeast { get; }
 
-        public Bound(GeoPoint sw, GeoPoint ne)
+        public GeoHashBound(GeoPoint southWest, GeoPoint northEast)
         {
-            SW = sw;
-            NE = ne;
+            Southwest = southWest;
+            Northeast = northEast;
         }
+
+        public override bool Equals(object obj) =>
+                    (obj is GeoHashBound data) && Equals(data);
+
+        public bool Equals(GeoHashBound other) =>
+            Southwest.Equals(other.Southwest) && Northeast.Equals(other.Northeast);
+
+        public override int GetHashCode() =>
+            Southwest.GetHashCode() ^ Northeast.GetHashCode();
+
+        public static bool operator ==(GeoHashBound left, GeoHashBound right) =>
+            left.Equals(right);
+
+        public static bool operator !=(GeoHashBound left, GeoHashBound right) =>
+            !left.Equals(right);
     }
 
-    public enum Direction
+    public enum CardinalDirection
     {
         East,
         West,
@@ -350,7 +338,7 @@ namespace Xamarin.Essentials
         South
     }
 
-    public struct Neighbour
+    public readonly struct Neighbour : IEquatable<Neighbour>
     {
         public string North { get; }
 
@@ -360,13 +348,13 @@ namespace Xamarin.Essentials
 
         public string West { get; }
 
-        public string NorthEast { get; }
+        public string Northeast { get; }
 
-        public string SouthEast { get; }
+        public string Southeast { get; }
 
-        public string NorthWest { get; }
+        public string Northwest { get; }
 
-        public string SouthWest { get; }
+        public string Southwest { get; }
 
         public Neighbour(string n, string s, string e, string w, string ne, string se, string nw, string sw)
         {
@@ -374,10 +362,27 @@ namespace Xamarin.Essentials
             South = s;
             East = e;
             West = w;
-            NorthEast = ne;
-            SouthEast = se;
-            NorthWest = nw;
-            SouthWest = sw;
+            Northeast = ne;
+            Southeast = se;
+            Northwest = nw;
+            Southwest = sw;
         }
+
+        public override bool Equals(object obj) =>
+               (obj is Neighbour data) && Equals(data);
+
+        public bool Equals(Neighbour other) =>
+            (South ?? string.Empty).Equals(other.South) && (North ?? string.Empty).Equals(other.North)
+            && (East ?? string.Empty).Equals(other.East) && (West ?? string.Empty).Equals(other.West);
+
+        public override int GetHashCode() =>
+            (West ?? string.Empty).GetHashCode() + (East ?? string.Empty).GetHashCode()
+            + (North ?? string.Empty).GetHashCode() + (South ?? string.Empty).GetHashCode();
+
+        public static bool operator ==(Neighbour left, Neighbour right) =>
+            left.Equals(right);
+
+        public static bool operator !=(Neighbour left, Neighbour right) =>
+            !left.Equals(right);
     }
 }

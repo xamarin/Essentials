@@ -32,10 +32,10 @@ namespace Tests
         [Fact]
         public void DirectionEncodeTest()
         {
-            Assert.Equal("eusftqxd", GeoHash.Adjacent("eusftqx9", Direction.North));
-            Assert.Equal("eusftqx8", GeoHash.Adjacent("eusftqx9", Direction.South));
-            Assert.Equal("eusftqxc", GeoHash.Adjacent("eusftqx9", Direction.East));
-            Assert.Equal("eusftqx3", GeoHash.Adjacent("eusftqx9", Direction.West));
+            Assert.Equal("eusftqxd", GeoHash.Adjacent("eusftqx9", CardinalDirection.North));
+            Assert.Equal("eusftqx8", GeoHash.Adjacent("eusftqx9", CardinalDirection.South));
+            Assert.Equal("eusftqxc", GeoHash.Adjacent("eusftqx9", CardinalDirection.East));
+            Assert.Equal("eusftqx3", GeoHash.Adjacent("eusftqx9", CardinalDirection.West));
         }
 
         [Fact]
@@ -46,10 +46,10 @@ namespace Tests
             Assert.Equal("efkbt6rw", bounds.South);
             Assert.Equal("efkbt6rr", bounds.West);
             Assert.Equal("efkbt6rz", bounds.East);
-            Assert.Equal("efkbt6ry", bounds.SouthEast);
-            Assert.Equal("efkbt6xb", bounds.NorthEast);
-            Assert.Equal("efkbt6rq", bounds.SouthWest);
-            Assert.Equal("efkbt6x2", bounds.NorthWest);
+            Assert.Equal("efkbt6ry", bounds.Southeast);
+            Assert.Equal("efkbt6xb", bounds.Northeast);
+            Assert.Equal("efkbt6rq", bounds.Southwest);
+            Assert.Equal("efkbt6x2", bounds.Northwest);
         }
     }
 }
