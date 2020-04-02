@@ -32,16 +32,16 @@ namespace Tests
         [Fact]
         public void DirectionEncodeTest()
         {
-            Assert.Equal("eusftqxd", GeoHash.GetAdjacent("eusftqx9", CardinalDirection.North));
-            Assert.Equal("eusftqx8", GeoHash.GetAdjacent("eusftqx9", CardinalDirection.South));
-            Assert.Equal("eusftqxc", GeoHash.GetAdjacent("eusftqx9", CardinalDirection.East));
-            Assert.Equal("eusftqx3", GeoHash.GetAdjacent("eusftqx9", CardinalDirection.West));
+            Assert.Equal("eusftqxd", GeoHash.Adjacent("eusftqx9", CardinalDirection.North));
+            Assert.Equal("eusftqx8", GeoHash.Adjacent("eusftqx9", CardinalDirection.South));
+            Assert.Equal("eusftqxc", GeoHash.Adjacent("eusftqx9", CardinalDirection.East));
+            Assert.Equal("eusftqx3", GeoHash.Adjacent("eusftqx9", CardinalDirection.West));
         }
 
         [Fact]
         public void NeiboursTest()
         {
-            var bounds = GeoHash.GetNeighbours("efkbt6rx");
+            var bounds = GeoHash.Neighbours("efkbt6rx");
             Assert.Equal("efkbt6x8", bounds.North);
             Assert.Equal("efkbt6rw", bounds.South);
             Assert.Equal("efkbt6rr", bounds.West);
