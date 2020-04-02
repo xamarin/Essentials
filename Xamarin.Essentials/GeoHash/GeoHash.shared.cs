@@ -229,7 +229,7 @@ namespace Xamarin.Essentials
         /// <summary>
         /// Get the adjacent geohash
         /// </summary>
-        /// <param name="geohash">main geohash</param>
+        /// <param name="geohash">main geohash string</param>
         /// <param name="direction">direction of geohash</param>
         /// <returns>geohash of Neighbouring cell</returns>
         public static string GetAdjacent(string geohash, CardinalDirection direction)
