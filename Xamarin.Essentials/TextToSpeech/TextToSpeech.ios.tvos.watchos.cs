@@ -9,7 +9,7 @@ namespace Xamarin.Essentials
 {
     public static partial class TextToSpeech
     {
-        static readonly Lazy<AVSpeechSynthesizer> speechSynthesizer = new Lazy<AVSpeechSynthesizer>();
+        static AVSpeechSynthesizer speechSynthesizer;
 
         internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
             Task.FromResult(AVSpeechSynthesisVoice.GetSpeechVoices()
@@ -51,8 +51,10 @@ namespace Xamarin.Essentials
             var tcsUtterance = new TaskCompletionSource<bool>();
             try
             {
-                speechSynthesizer.Value.DidFinishSpeechUtterance += OnFinishedSpeechUtterance;
-                speechSynthesizer.Value.SpeakUtterance(speechUtterance);
+                speechSynthesizer ??= new AVSpeechSynthesizer();
+
+                speechSynthesizer.DidFinishSpeechUtterance += OnFinishedSpeechUtterance;
+                speechSynthesizer.SpeakUtterance(speechUtterance);
                 using (cancelToken.Register(TryCancel))
                 {
                     await tcsUtterance.Task;
@@ -60,12 +62,12 @@ namespace Xamarin.Essentials
             }
             finally
             {
-                speechSynthesizer.Value.DidFinishSpeechUtterance -= OnFinishedSpeechUtterance;
+                speechSynthesizer.DidFinishSpeechUtterance -= OnFinishedSpeechUtterance;
             }
 
             void TryCancel()
             {
-                speechSynthesizer.Value?.StopSpeaking(AVSpeechBoundary.Word);
+                speechSynthesizer?.StopSpeaking(AVSpeechBoundary.Word);
                 tcsUtterance?.TrySetResult(true);
             }
 
