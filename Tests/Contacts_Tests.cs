@@ -24,8 +24,8 @@ namespace Tests
             var emails = GenerateEmails();
             var phones = GeneratePhones();
             var bd = DateTime.Now;
-            var contact1 = new PhoneContact("Xamarin", phones, emails, bd);
-            var contact2 = new PhoneContact("Xamarin", phones, emails, bd);
+            var contact1 = new PhoneContact("Xamarin", phones, emails, bd, ContactType.Personal);
+            var contact2 = new PhoneContact("Xamarin", phones, emails, bd, ContactType.Personal);
 
             Assert.True(contact1.Equals(contact2));
             Assert.True(contact1 == contact2);
@@ -39,8 +39,8 @@ namespace Tests
         {
             var emails = GenerateEmails();
             var phones = GeneratePhones();
-            var contact1 = new PhoneContact("Xamarin", phones, emails, DateTime.Now);
-            var contact2 = new PhoneContact("Essentials", phones, emails, DateTime.Now);
+            var contact1 = new PhoneContact("Xamarin", phones, emails, DateTime.Now, ContactType.Personal);
+            var contact2 = new PhoneContact("Essentials", phones, emails, DateTime.Now, ContactType.Personal);
 
             Assert.False(contact1.Equals(contact2));
             Assert.False(contact1 == contact2);
@@ -49,26 +49,26 @@ namespace Tests
             Assert.NotEqual(contact1.GetHashCode(), contact2.GetHashCode());
         }
 
-        static Lookup<ContactType, string> GeneratePhones()
+        static Lookup<string, string> GeneratePhones()
         {
-            var phonesDictionary = new Dictionary<string, ContactType>
+            var phonesDictionary = new Dictionary<string, string>
             {
-                { "98888888", ContactType.Personal },
-                { "89999999", ContactType.Work }
+                { "98888888", ContactType.Personal.ToString() },
+                { "89999999", ContactType.Work.ToString() }
             };
 
-            return (Lookup<ContactType, string>)phonesDictionary.ToLookup(k => k.Value, v => v.Key);
+            return (Lookup<string, string>)phonesDictionary.ToLookup(k => k.Value, v => v.Key);
         }
 
-        static Lookup<ContactType, string> GenerateEmails()
+        static Lookup<string, string> GenerateEmails()
         {
-            var emailsDictionary = new Dictionary<string, ContactType>
+            var emailsDictionary = new Dictionary<string, string>
             {
-                { "test@test.com", ContactType.Personal },
-                { "anothertest@test.com", ContactType.Work }
+                { "test@test.com", ContactType.Personal.ToString() },
+                { "anothertest@test.com", ContactType.Work.ToString() }
             };
 
-            return (Lookup<ContactType, string>)emailsDictionary.ToLookup(k => k.Value, v => v.Key);
+            return (Lookup<string, string>)emailsDictionary.ToLookup(k => k.Value, v => v.Key);
         }
     }
 }

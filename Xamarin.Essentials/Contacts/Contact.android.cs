@@ -56,8 +56,8 @@ namespace Xamarin.Essentials
             using var context = Activity.ContentResolver;
 
             using var cur = context.Query(contactUri, null, null, null, null);
-            var emails = new Dictionary<string, ContactType>();
-            var phones = new Dictionary<string, ContactType>();
+            var emails = new Dictionary<string, string>();
+            var phones = new Dictionary<string, string>();
             var bDate = string.Empty;
 
             if (cur.MoveToFirst())
@@ -89,9 +89,9 @@ namespace Xamarin.Essentials
                         var phone = cursor.GetString(cursor.GetColumnIndex(projection[0]));
                         var phoneType = cursor.GetString(cursor.GetColumnIndex(projection[1]));
 
-                        var contactType = GetContactType(phoneType);
+                        var contactType = GetPhoneContactType(phoneType);
                         if (!phones.ContainsKey(phone))
-                            phones.Add(phone, contactType);
+                            phones.Add(phone, contactType.ToString());
                     }
                     while (cursor.MoveToNext());
                 }
@@ -110,9 +110,9 @@ namespace Xamarin.Essentials
                     var email = cursor.GetString(cursor.GetColumnIndex(projection[0]));
                     var emailType = cursor.GetString(cursor.GetColumnIndex(projection[1]));
 
-                    var contactType = GetContactType(emailType);
+                    var contactType = GetEmailContactType(emailType);
                     if (!emails.ContainsKey(email))
-                        emails.Add(email, contactType);
+                        emails.Add(email, contactType.ToString());
                 }
 
                 cursor.Close();
@@ -134,14 +134,15 @@ namespace Xamarin.Essentials
                 }
                 cursor.Close();
                 DateTime.TryParse(bDate, out var birthday);
-                var p = (Lookup<ContactType, string>)emails.ToLookup(x => x.Value, z => z.Key);
+                var p = (Lookup<string, string>)emails.ToLookup(x => x.Value, z => z.Key);
                 cursor?.Dispose();
 
                 return new PhoneContact(
-                                        name,
-                                        (Lookup<ContactType, string>)phones.ToLookup(k => k.Value, v => v.Key),
-                                        (Lookup<ContactType, string>)emails.ToLookup(k => k.Value, v => v.Key),
-                                        birthday);
+                                       name,
+                                       (Lookup<string, string>)phones.ToLookup(k => k.Value, v => v.Key),
+                                       (Lookup<string, string>)emails.ToLookup(k => k.Value, v => v.Key),
+                                       birthday,
+                                       ContactType.Personal);
             }
 
             return default;
@@ -159,14 +160,53 @@ namespace Xamarin.Essentials
             return Task.CompletedTask;
         }
 
-        static ContactType GetContactType(string type)
+        static ContactType GetPhoneContactType(string type)
         {
-            if (type == "1" || type == "2" || type == "5")
-                return ContactType.Personal;
-            else if (type == "3" || type == "17" || type == "18")
-                return ContactType.Work;
-            else
-                return ContactType.Unknown;
+            if (int.TryParse(type, out var typeInt))
+            {
+                try
+                {
+                    var phoneKind = (PhoneDataKind)typeInt;
+                    return phoneKind switch
+                    {
+                        PhoneDataKind.Home => ContactType.Personal,
+                        PhoneDataKind.Mobile => ContactType.Personal,
+                        PhoneDataKind.Main => ContactType.Personal,
+                        PhoneDataKind.Work => ContactType.Work,
+                        PhoneDataKind.WorkMobile => ContactType.Work,
+                        PhoneDataKind.CompanyMain => ContactType.Work,
+                        PhoneDataKind.WorkPager => ContactType.Work,
+                        _ => ContactType.Unknown
+                    };
+                }
+                catch (Exception)
+                {
+                    return ContactType.Unknown;
+                }
+            }
+            return ContactType.Unknown;
+        }
+
+        static ContactType GetEmailContactType(string type)
+        {
+            if (int.TryParse(type, out var typeInt))
+            {
+                try
+                {
+                    var emailKind = (EmailDataKind)typeInt;
+                    return emailKind switch
+                    {
+                        EmailDataKind.Home => ContactType.Personal,
+                        EmailDataKind.Work => ContactType.Work,
+                        _ => ContactType.Unknown
+                    };
+                }
+                catch (Exception)
+                {
+                    return ContactType.Unknown;
+                }
+            }
+            return ContactType.Unknown;
         }
     }
 }
