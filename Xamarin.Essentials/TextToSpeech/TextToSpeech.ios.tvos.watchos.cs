@@ -11,6 +11,12 @@ namespace Xamarin.Essentials
     {
         static readonly Lazy<AVSpeechSynthesizer> speechSynthesizer = new Lazy<AVSpeechSynthesizer>();
 
+        static TextToSpeech()
+        {
+            // Since we are using Lazy, this will ensure it doesn't get linked out.
+            var linkerSafe = typeof(AVSpeechSynthesizer);
+        }
+
         internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
             Task.FromResult(AVSpeechSynthesisVoice.GetSpeechVoices()
                 .Select(v => new Locale(v.Language, null, v.Language, v.Identifier)));
