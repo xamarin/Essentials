@@ -14,7 +14,7 @@ namespace Xamarin.Essentials
         static TextToSpeech()
         {
             // Since we are using Lazy, this will ensure it doesn't get linked out.
-            var linkerSafe = typeof(AVSpeechSynthesizer);
+            var linkerSafe = new AVSpeechSynthesizer();
         }
 
         internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
