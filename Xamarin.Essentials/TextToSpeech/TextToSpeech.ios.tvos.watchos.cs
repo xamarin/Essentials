@@ -11,12 +11,6 @@ namespace Xamarin.Essentials
     {
         static readonly Lazy<AVSpeechSynthesizer> speechSynthesizer = new Lazy<AVSpeechSynthesizer>();
 
-        static TextToSpeech()
-        {
-            // Since we are using Lazy, this will ensure it doesn't get linked out.
-            var linkerSafe = new AVSpeechSynthesizer();
-        }
-
         internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
             Task.FromResult(AVSpeechSynthesisVoice.GetSpeechVoices()
                 .Select(v => new Locale(v.Language, null, v.Language, v.Identifier)));
@@ -57,6 +51,10 @@ namespace Xamarin.Essentials
             var tcsUtterance = new TaskCompletionSource<bool>();
             try
             {
+                // Ensures linker doesn't remove.
+                if (DateTime.UtcNow.Ticks < 0)
+                    new AVSpeechSynthesizer();
+                
                 speechSynthesizer.Value.DidFinishSpeechUtterance += OnFinishedSpeechUtterance;
                 speechSynthesizer.Value.SpeakUtterance(speechUtterance);
                 using (cancelToken.Register(TryCancel))
