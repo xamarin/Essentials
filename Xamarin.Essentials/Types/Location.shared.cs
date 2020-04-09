@@ -103,10 +103,13 @@ namespace Xamarin.Essentials
         }
 
         public override string ToString() =>
-            $"{nameof(Latitude)}: {Latitude}, {nameof(Longitude)}: {Longitude}, " +
-            $"{nameof(Altitude)}: {Altitude ?? 0}, {nameof(Accuracy)}: {Accuracy ?? 0}, " +
-            $"{nameof(VerticalAccuracy)}: {VerticalAccuracy ?? 0}, " +
-            $"{nameof(Speed)}: {Speed ?? 0}, {nameof(Course)}: {Course ?? 0}, " +
+            $"{nameof(Latitude)}: {Latitude}, " +
+            $"{nameof(Longitude)}: {Longitude}, " +
+            $"{nameof(Altitude)}: {Altitude}, " +
+            $"{nameof(Accuracy)}: {Accuracy}, " +
+            $"{nameof(VerticalAccuracy)}: {VerticalAccuracy}, " +
+            $"{nameof(Speed)}: {Speed}, " +
+            $"{nameof(Course)}: {Course}, " +
             $"{nameof(Timestamp)}: {Timestamp}";
     }
 }
