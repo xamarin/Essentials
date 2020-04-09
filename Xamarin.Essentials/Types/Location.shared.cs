@@ -39,6 +39,14 @@ namespace Xamarin.Essentials
             Timestamp = timestamp;
         }
 
+        public Location(double latitude, double longitude, double altitude)
+        {
+            Latitude = latitude;
+            Longitude = longitude;
+            Altitude = altitude;
+            Timestamp = DateTimeOffset.UtcNow;
+        }
+
         public Location(Location point)
         {
             if (point == null)
