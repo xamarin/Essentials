@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Contacts;
@@ -23,19 +24,25 @@ namespace Xamarin.Essentials
                 var contact = await contactManager.FindContactsAsync(contactSelected.Name);
 
                 var phoneContact = contact[0];
-                var phones = new Dictionary<string, ContactType>();
-                var emails = new Dictionary<string, ContactType>();
+                var phones = new Dictionary<string, string>();
+                var emails = new Dictionary<string, string>();
+                var z = phoneContact.Fields;
+
+                foreach (var item in z)
+                {
+                    Debug.WriteLine(item.Category + " - " + item.Value);
+                }
 
                 foreach (var item in phoneContact.Phones)
                 {
                     if (!phones.ContainsKey(item.Number))
-                        phones.Add(item.Number, GetPhoneContactType(item.Kind));
+                        phones.Add(item.Number, GetPhoneContactType(item.Kind).ToString());
                 }
 
                 foreach (var item in phoneContact.Emails)
                 {
                     if (!emails.ContainsKey(item.Address))
-                        emails.Add(item.Address, GetEmailContactType(item.Kind));
+                        emails.Add(item.Address, GetEmailContactType(item.Kind).ToString());
                 }
                 var b = phoneContact.ImportantDates.FirstOrDefault(x => x.Kind == ContactDateKind.Birthday);
 
@@ -43,13 +50,14 @@ namespace Xamarin.Essentials
                     new DateTime((int)b?.Year, (int)b?.Month, (int)b?.Day, 0, 0, 0);
                 return new PhoneContact(
                                         phoneContact.Name,
-                                        (Lookup<ContactType, string>)phones.ToLookup(k => k.Value, v => v.Key),
-                                        (Lookup<ContactType, string>)emails.ToLookup(k => k.Value, v => v.Key),
-                                        birthday);
+                                        (Lookup<string, string>)phones.ToLookup(k => k.Value, v => v.Key),
+                                        (Lookup<string, string>)emails.ToLookup(k => k.Value, v => v.Key),
+                                        birthday,
+                                        ContactType.Unknown);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -61,9 +69,9 @@ namespace Xamarin.Essentials
 
                 await Windows.System.Launcher.LaunchUriAsync(uriPeople);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -85,17 +93,11 @@ namespace Xamarin.Essentials
             }
         }
 
-        static ContactType GetEmailContactType(ContactEmailKind type)
+        static ContactType GetEmailContactType(ContactEmailKind type) => type switch
         {
-            switch (type)
-            {
-                case ContactEmailKind.Personal:
-                    return ContactType.Personal;
-                case ContactEmailKind.Work:
-                    return ContactType.Work;
-                default:
-                    return ContactType.Unknown;
-            }
-        }
+            ContactEmailKind.Personal => ContactType.Personal,
+            ContactEmailKind.Work => ContactType.Work,
+            _ => ContactType.Unknown,
+        };
     }
 }
