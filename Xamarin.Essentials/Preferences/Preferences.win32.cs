@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization.Json;
 using PreferencesDictionary = System.Collections.Generic.Dictionary<string, System.Collections.Generic.Dictionary<string, object>>;
 
@@ -69,7 +68,6 @@ namespace Xamarin.Essentials
             using (var stream = File.OpenWrite(settingsPath))
             {
                 serializer.WriteObject(stream, preferences);
-                stream.Close();
             }
         }
 
