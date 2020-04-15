@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization.Json;
 using PreferencesDictionary = System.Collections.Generic.Dictionary<string, System.Collections.Generic.Dictionary<string, object>>;
 
 namespace Xamarin.Essentials
@@ -13,7 +14,7 @@ namespace Xamarin.Essentials
         static readonly string settingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), GetCleanAppName(), "settings.dat");
 
         static readonly PreferencesDictionary preferences = new PreferencesDictionary();
-        static readonly BinaryFormatter formatter = new BinaryFormatter(null, new StreamingContext(StreamingContextStates.Persistence));
+        static readonly DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(PreferencesDictionary));
 
         static Preferences()
         {
@@ -23,7 +24,7 @@ namespace Xamarin.Essentials
                 {
                     try
                     {
-                        var readPreferences = (PreferencesDictionary)formatter.Deserialize(stream);
+                        var readPreferences = (PreferencesDictionary)serializer.ReadObject(stream);
 
                         if (readPreferences != null)
                         {
@@ -67,7 +68,7 @@ namespace Xamarin.Essentials
         {
             using (var stream = File.OpenWrite(settingsPath))
             {
-                formatter.Serialize(stream, preferences);
+                serializer.WriteObject(stream, preferences);
                 stream.Close();
             }
         }
