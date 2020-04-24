@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -19,7 +18,7 @@ namespace Xamarin.Essentials
         {
             // Save takes precedence over multi-select
 
-            if (multipleSelect && !save && (int)global::Android.OS.Build.VERSION.SdkInt < 18)
+            if (multipleSelect && !save && Build.VERSION.SdkInt < BuildVersionCodes.JellyBeanMr2)
                 throw new FeatureNotSupportedException("Picking multiple files is only available on API level 18 (Android 4.3) or later.");
 
             // we only need the permission when accessing the file, but it's more natural
