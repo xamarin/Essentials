@@ -32,7 +32,7 @@ namespace Xamarin.Essentials
             Intent intent;
             if (save)
                 intent = new Intent(Intent.ActionCreateDocument);
-            else if ((int)global::Android.OS.Build.VERSION.SdkInt < BuildVersionCodes.Kitkat)
+            else if (Build.VERSION.SdkInt < BuildVersionCodes.Kitkat)
                 intent = new Intent(Intent.ActionGetContent);
             else
                 intent = new Intent(Intent.ActionOpenDocument);
@@ -90,7 +90,7 @@ namespace Xamarin.Essentials
                 var contentUri = result.Data;
                 return new FilePickerResult(contentUri);
             }
-            catch (OperationCanceledException)
+            catch (System.OperationCanceledException)
             {
                 return null;
             }
