@@ -9,19 +9,38 @@ namespace Xamarin.Essentials
 {
     public static partial class FilePicker
     {
-        static Task<FilePickerResult> PlatformPickFileAsync(PickOptions options)
+        static NSSavePanel CreatePanel(PickOptions options, bool multipleSelect, bool save)
         {
-            var openPanel = new NSOpenPanel
+            // We use NSSavePanel as NSOpenPanel inherits from this.
+            NSSavePanel filePanel;
+            if (save)
             {
-                CanChooseFiles = true,
-                AllowsMultipleSelection = false,
-                CanChooseDirectories = false
-            };
+                filePanel = new NSSavePanel();
+
+                if (!string.IsNullOrEmpty(options.SuggestedFileName))
+                    filePanel.NameFieldStringValue = options.SuggestedFileName;
+            }
+            else
+            {
+                filePanel = new NSOpenPanel()
+                {
+                    CanChooseFiles = true,
+                    AllowsMultipleSelection = multipleSelect,
+                    CanChooseDirectories = false,
+                };
+            }
 
             if (options.PickerTitle != null)
-                openPanel.Title = options.PickerTitle;
+                filePanel.Title = options.PickerTitle;
 
-            SetFileTypes(options, openPanel);
+            SetFileTypes(options, filePanel);
+
+            return filePanel;
+        }
+
+        static Task<FilePickerResult> PlatformPickFileAsync(PickOptions options)
+        {
+            var openPanel = CreatePanel(options, false, false) as NSOpenPanel;
 
             FilePickerResult result = null;
             var panelResult = openPanel.RunModal();
@@ -33,19 +52,23 @@ namespace Xamarin.Essentials
             return Task.FromResult(result);
         }
 
+        static Task<FilePickerResult> PlatformPickFileToSaveAsync(PickOptions options)
+        {
+            var savePanel = CreatePanel(options, false, true);
+
+            FilePickerResult result = null;
+            var panelResult = savePanel.RunModal();
+            if (panelResult == (nint)(long)NSModalResponse.OK)
+            {
+                result = new FilePickerResult(savePanel.Url.Path);
+            }
+
+            return Task.FromResult(result);
+        }
+
         static Task<IEnumerable<FilePickerResult>> PlatformPickMultipleFilesAsync(PickOptions options)
         {
-            var openPanel = new NSOpenPanel
-            {
-                CanChooseFiles = true,
-                AllowsMultipleSelection = true,
-                CanChooseDirectories = false
-            };
-
-            if (options.PickerTitle != null)
-                openPanel.Title = options.PickerTitle;
-
-            SetFileTypes(options, openPanel);
+            var openPanel = CreatePanel(options, true, false) as NSOpenPanel;
 
             var resultList = new List<FilePickerResult>();
             var panelResult = openPanel.RunModal();
@@ -60,7 +83,7 @@ namespace Xamarin.Essentials
             return Task.FromResult<IEnumerable<FilePickerResult>>(resultList);
         }
 
-        static void SetFileTypes(PickOptions options, NSOpenPanel panel)
+        static void SetFileTypes(PickOptions options, NSSavePanel panel)
         {
             var allowedFileTypes = new List<string>();
 
@@ -100,6 +123,15 @@ namespace Xamarin.Essentials
         }
 
         Task<Stream> PlatformOpenReadStreamAsync()
-            => Task.FromResult<Stream>(File.OpenRead(FullPath));
+        {
+            var stream = File.Open(FullPath, FileMode.Open, FileAccess.Read);
+            return Task.FromResult<Stream>(stream);
+        }
+
+        Task<Stream> PlatformOpenWriteStreamAsync()
+        {
+            var stream = File.Open(FullPath, FileMode.OpenOrCreate, FileAccess.Write);
+            return Task.FromResult<Stream>(stream);
+        }
     }
 }
