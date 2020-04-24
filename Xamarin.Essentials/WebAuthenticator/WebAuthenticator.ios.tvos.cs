@@ -69,8 +69,6 @@ namespace Xamarin.Essentials
 
                     was.Start();
                     var result = await tcsResponse.Task;
-                    was?.Dispose();
-                    was = null;
                     return result;
                 }
 
@@ -79,8 +77,6 @@ namespace Xamarin.Essentials
                     sf = new SFAuthenticationSession(new NSUrl(url.OriginalString), scheme, AuthSessionCallback);
                     sf.Start();
                     var result = await tcsResponse.Task;
-                    sf?.Dispose();
-                    sf = null;
                     return result;
                 }
 
