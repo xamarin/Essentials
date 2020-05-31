@@ -14,9 +14,20 @@ namespace Xamarin.Essentials
 {
     public static partial class WebAuthenticator
     {
+#if __IOS__
+        [System.Runtime.InteropServices.DllImport(ObjCRuntime.Constants.ObjectiveCLibrary, EntryPoint = "objc_msgSend")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Required for iOS Export")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:Element should begin with upper-case letter", Justification = "Required for iOS Export")]
+        static extern void void_objc_msgSend_IntPtr(IntPtr receiver, IntPtr selector, IntPtr arg1);
+#endif
+
         static TaskCompletionSource<WebAuthenticatorResult> tcsResponse;
         static UIViewController currentViewController;
         static Uri redirectUri;
+#if __IOS__
+        static ASWebAuthenticationSession was;
+        static SFAuthenticationSession sf;
+#endif
 
         internal static async Task<WebAuthenticatorResult> PlatformAuthenticateAsync(Uri url, Uri callbackUrl)
         {
@@ -48,17 +59,29 @@ namespace Xamarin.Essentials
 
                 if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
                 {
-                    var was = new ASWebAuthenticationSession(new NSUrl(url.OriginalString), scheme, AuthSessionCallback);
-                    was.PresentationContextProvider = new ContextProvider(Platform.GetCurrentWindow());
+                    was = new ASWebAuthenticationSession(new NSUrl(url.OriginalString), scheme, AuthSessionCallback);
+
+                    if (UIDevice.CurrentDevice.CheckSystemVersion(13, 0))
+                    {
+                        var ctx = new ContextProvider(Platform.GetCurrentWindow());
+                        void_objc_msgSend_IntPtr(was.Handle, ObjCRuntime.Selector.GetHandle("setPresentationContextProvider:"), ctx.Handle);
+                    }
+
                     was.Start();
-                    return await tcsResponse.Task;
+                    var result = await tcsResponse.Task;
+                    was?.Dispose();
+                    was = null;
+                    return result;
                 }
 
                 if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
                 {
-                    var sf = new SFAuthenticationSession(new NSUrl(url.OriginalString), scheme, AuthSessionCallback);
+                    sf = new SFAuthenticationSession(new NSUrl(url.OriginalString), scheme, AuthSessionCallback);
                     sf.Start();
-                    return await tcsResponse.Task;
+                    var result = await tcsResponse.Task;
+                    sf?.Dispose();
+                    sf = null;
+                    return result;
                 }
 
                 // THis is only on iOS9+ but we only support 10+ in Essentials anyway
@@ -175,13 +198,15 @@ namespace Xamarin.Essentials
                 DidFinishHandler?.Invoke(controller);
         }
 
-        class ContextProvider : NSObject, IASWebAuthenticationPresentationContextProviding
+        [ObjCRuntime.Adopts("ASWebAuthenticationPresentationContextProviding")]
+        class ContextProvider : NSObject
         {
             public ContextProvider(UIWindow window) =>
                 Window = window;
 
             public UIWindow Window { get; private set; }
 
+            [Export("presentationAnchorForWebAuthenticationSession:")]
             public UIWindow GetPresentationAnchor(ASWebAuthenticationSession session)
                 => Window;
         }
