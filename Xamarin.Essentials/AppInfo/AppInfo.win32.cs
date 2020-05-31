@@ -46,6 +46,24 @@ namespace Xamarin.Essentials
             }
         }
 
-        static AppTheme PlatformRequestedTheme() => AppTheme.Unspecified;
+        static AppTheme PlatformRequestedTheme()
+        {
+            var themeVal = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize").GetValue("AppsUseLightTheme");
+
+            if (themeVal != null)
+            {
+                var val = (int)themeVal;
+                switch (val)
+                {
+                    case 1:
+                        return AppTheme.Light;
+
+                    case 0:
+                        return AppTheme.Dark;
+                }
+            }
+
+            return AppTheme.Unspecified;
+        }
     }
 }
