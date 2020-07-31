@@ -14,13 +14,28 @@ namespace Xamarin.Essentials
             if (!IsComposeSupported)
                 throw new FeatureNotSupportedException();
 
+            FillMessageIfAnyMandatoryFieldsIsNull(message);
+
+            return PlatformComposeAsync(message);
+        }
+
+        public static Task ComposeInBackgroundAsync(SmsMessage message)
+        {
+            if (!IsComposeInBackgroundSupported)
+                throw new FeatureNotSupportedException();
+
+            FillMessageIfAnyMandatoryFieldsIsNull(message);
+
+            return PlatformComposeInBackgroundAsync(message);
+        }
+
+        static void FillMessageIfAnyMandatoryFieldsIsNull(SmsMessage message)
+        {
             if (message == null)
                 message = new SmsMessage();
 
             if (message?.Recipients == null)
                 message.Recipients = new List<string>();
-
-            return PlatformComposeAsync(message);
         }
     }
 

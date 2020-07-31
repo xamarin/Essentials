@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Chat;
+using Windows.Devices.Sms;
 using Windows.Foundation.Metadata;
 
 namespace Xamarin.Essentials
@@ -8,6 +10,9 @@ namespace Xamarin.Essentials
     public static partial class Sms
     {
         internal static bool IsComposeSupported
+            => ApiInformation.IsTypePresent("Windows.ApplicationModel.Chat.ChatMessageManager");
+
+        internal static bool IsComposeInBackgroundSupported
             => ApiInformation.IsTypePresent("Windows.ApplicationModel.Chat.ChatMessageManager");
 
         static Task PlatformComposeAsync(SmsMessage message)
@@ -20,6 +25,17 @@ namespace Xamarin.Essentials
                 chat.Recipients.Add(recipient);
 
             return ChatMessageManager.ShowComposeSmsMessageAsync(chat).AsTask();
+        }
+
+        static Task PlatformComposeInBackgroundAsync(SmsMessage message)
+        {
+            var sendingMessage = new SmsTextMessage2()
+            {
+                Body = message.Body,
+                To = message.Recipients.First()
+            };
+
+            return SmsDevice2.GetDefault().SendMessageAndGetResultAsync(sendingMessage).AsTask();
         }
     }
 }

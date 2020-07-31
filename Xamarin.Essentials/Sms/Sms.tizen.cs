@@ -8,6 +8,9 @@ namespace Xamarin.Essentials
         internal static bool IsComposeSupported
             => Platform.GetFeatureInfo<bool>("network.telephony.sms");
 
+        internal static bool IsComposeInBackgroundSupported
+            => throw ExceptionUtils.NotSupportedOrImplementedException;
+
         static Task PlatformComposeAsync(SmsMessage message)
         {
             Permissions.EnsureDeclared<Permissions.LaunchApp>();
@@ -27,5 +30,8 @@ namespace Xamarin.Essentials
 
             return Task.CompletedTask;
         }
+
+        static Task PlatformComposeInBackgroundAsync(SmsMessage message)
+            => throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }

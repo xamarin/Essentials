@@ -9,6 +9,9 @@ namespace Xamarin.Essentials
         internal static bool IsComposeSupported
             => MFMessageComposeViewController.CanSendText;
 
+        internal static bool IsComposeInBackgroundSupported
+            => throw ExceptionUtils.NotSupportedOrImplementedException;
+
         static Task PlatformComposeAsync(SmsMessage message)
         {
             // do this first so we can throw as early as possible
@@ -32,5 +35,8 @@ namespace Xamarin.Essentials
 
             return tcs.Task;
         }
+
+        static Task PlatformComposeInBackgroundAsync(SmsMessage message)
+            => throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }

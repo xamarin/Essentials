@@ -11,6 +11,9 @@ namespace Xamarin.Essentials
         internal static bool IsComposeSupported =>
             MainThread.InvokeOnMainThread(() => NSWorkspace.SharedWorkspace.UrlForApplication(NSUrl.FromString("sms:")) != null);
 
+        internal static bool IsComposeInBackgroundSupported
+            => throw ExceptionUtils.NotSupportedOrImplementedException;
+
         static Task PlatformComposeAsync(SmsMessage message)
         {
             var recipients = string.Join(",", message.Recipients.Select(r => Uri.EscapeDataString(r)));
@@ -24,5 +27,8 @@ namespace Xamarin.Essentials
             NSWorkspace.SharedWorkspace.OpenUrl(nsurl);
             return Task.CompletedTask;
         }
+
+        static Task PlatformComposeInBackgroundAsync(SmsMessage message)
+            => throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }

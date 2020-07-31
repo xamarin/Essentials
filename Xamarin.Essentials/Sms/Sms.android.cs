@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Android.Content;
 using Android.OS;
 using Android.Provider;
-
+using Android.Telephony;
 using AndroidUri = Android.Net.Uri;
 
 namespace Xamarin.Essentials
@@ -15,6 +15,9 @@ namespace Xamarin.Essentials
 
         internal static bool IsComposeSupported
             => Platform.IsIntentSupported(CreateIntent(null, new List<string> { "0000000000" }));
+
+        internal static bool IsComposeInBackgroundSupported
+            => true;
 
         static Task PlatformComposeAsync(SmsMessage message)
         {
@@ -28,6 +31,14 @@ namespace Xamarin.Essentials
             intent.SetFlags(flags);
 
             Platform.AppContext.StartActivity(intent);
+
+            return Task.FromResult(true);
+        }
+
+        static Task PlatformComposeInBackgroundAsync(SmsMessage message)
+        {
+            var messageParts = SmsManager.Default.DivideMessage(message.Body);
+            SmsManager.Default.SendMultipartTextMessage(message.Recipients.First(), null, messageParts, null, null);
 
             return Task.FromResult(true);
         }

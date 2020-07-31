@@ -7,7 +7,13 @@ namespace Xamarin.Essentials
         internal static bool IsComposeSupported
             => throw ExceptionUtils.NotSupportedOrImplementedException;
 
+        internal static bool IsComposeInBackgroundSupported
+            => throw ExceptionUtils.NotSupportedOrImplementedException;
+
         static Task PlatformComposeAsync(SmsMessage message)
+            => throw ExceptionUtils.NotSupportedOrImplementedException;
+
+        static Task PlatformComposeInBackgroundAsync(SmsMessage message)
             => throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }
