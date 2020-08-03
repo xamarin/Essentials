@@ -1,8 +1,7 @@
-﻿using System;
+﻿using System.IO;
 using System.Threading.Tasks;
 using Foundation;
 using MessageUI;
-using MobileCoreServices;
 using UIKit;
 
 namespace Xamarin.Essentials
@@ -44,6 +43,11 @@ namespace Xamarin.Essentials
                 foreach (var attachment in message.Attachments)
                 {
                     var data = NSData.FromFile(attachment.FullPath);
+                    if (data == null)
+                    {
+                        throw new FileNotFoundException($"Attachment {attachment.FileName} not found.", attachment.FullPath);
+                    }
+
                     controller.AddAttachmentData(data, attachment.ContentType, attachment.FileName);
                 }
             }
