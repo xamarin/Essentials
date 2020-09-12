@@ -102,11 +102,11 @@ namespace Xamarin.Essentials
                     _ => PermissionStatus.Unknown,
                 };
             }
-
+            
+            ABAddressBook addressBook;
             internal static Task<PermissionStatus> RequestAddressBookPermission()
             {
-                var addressBook = new ABAddressBook();
-
+                addressBook = new ABAddressBook()
                 var tcs = new TaskCompletionSource<PermissionStatus>();
 
                 addressBook.RequestAccess((success, error) =>
