@@ -40,7 +40,7 @@ namespace Xamarin.Essentials
             var sDate = NSDate.FromTimeIntervalSince1970(TimeSpan.FromMilliseconds(startDateToConvert.ToUnixTimeMilliseconds()).TotalSeconds);
             var eDate = NSDate.FromTimeIntervalSince1970(TimeSpan.FromMilliseconds(endDateToConvert.ToUnixTimeMilliseconds()).TotalSeconds);
 
-            EKCalendar[] calendars = null;
+            var calendars = EventStore.GetCalendars(EKEntityType.Event);
             if (!string.IsNullOrEmpty(calendarId))
             {
                 var calendar = calendars.FirstOrDefault(c => c.CalendarIdentifier == calendarId);
@@ -53,7 +53,7 @@ namespace Xamarin.Essentials
             var query = EventStore.PredicateForEvents(sDate, eDate, calendars);
             var events = EventStore.EventsMatching(query);
 
-            return Task.FromResult<IEnumerable<CalendarEvent>>(ToEvents(events.OrderBy(e => e.StartDate)).ToList());
+            return Task.FromResult<IEnumerable<CalendarEvent>>(ToEvents(events).OrderBy(e => e.StartDate).ToList());
         }
 
         static Task<CalendarEvent> PlatformGetEventAsync(string eventId)

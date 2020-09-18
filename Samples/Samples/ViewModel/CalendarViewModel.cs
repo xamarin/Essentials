@@ -26,7 +26,7 @@ namespace Samples.ViewModel
             endDate = startDate + TimeSpan.FromDays(14); // to 14 days from now
 
             startTime = DateTime.Now.TimeOfDay; // from now
-            endTime = TimeSpan.FromDays(1) - TimeSpan.FromTicks(1); // to the end of the day
+            endTime = TimeSpan.FromDays(1) - TimeSpan.FromSeconds(1); // to the end of the day
 
             RefreshCalendarsCommand = new Command(OnRefreshCalendars);
         }
