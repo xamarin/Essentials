@@ -40,11 +40,7 @@ namespace DeviceTests
         {
             return Utils.OnMainThread(async () =>
             {
-#if __ANDROID__
-                await Assert.ThrowsAsync<ArgumentException>(() => Calendars.GetEventsAsync(calendarId));
-#else
                 await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendars.GetEventsAsync(calendarId));
-#endif
             });
         }
 
@@ -61,13 +57,24 @@ namespace DeviceTests
 
         [Theory]
         [InlineData("")]
-        [InlineData(null)]
+        [InlineData("   ")]
         [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
         public Task Get_Event_By_Blank_Id(string eventId)
         {
             return Utils.OnMainThread(async () =>
             {
-                await Assert.ThrowsAsync<ArgumentException>(() => Calendars.GetEventByIdAsync(eventId));
+                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendars.GetEventAsync(eventId));
+            });
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [Trait(Traits.InteractionType, Traits.InteractionTypes.Human)]
+        public Task Get_Event_By_Null_Id(string eventId)
+        {
+            return Utils.OnMainThread(async () =>
+            {
+                await Assert.ThrowsAsync<ArgumentNullException>(() => Calendars.GetEventAsync(eventId));
             });
         }
 
@@ -78,7 +85,7 @@ namespace DeviceTests
         {
             return Utils.OnMainThread(async () =>
             {
-                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendars.GetEventByIdAsync(eventId));
+                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendars.GetEventAsync(eventId));
             });
         }
 
@@ -89,11 +96,7 @@ namespace DeviceTests
         {
             return Utils.OnMainThread(async () =>
             {
-#if __ANDROID__
-                await Assert.ThrowsAsync<ArgumentException>(() => Calendars.GetEventByIdAsync(eventId));
-#else
-                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendars.GetEventByIdAsync(eventId));
-#endif
+                await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => Calendars.GetEventAsync(eventId));
             });
         }
     }

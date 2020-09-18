@@ -20,6 +20,8 @@ namespace Xamarin.Essentials
         {
             if (calendarId == null)
                 throw new ArgumentNullException(nameof(calendarId));
+            if (string.IsNullOrWhiteSpace(calendarId))
+                throw InvalidCalendar(calendarId);
 
             await Permissions.RequestAsync<Permissions.CalendarRead>();
 
@@ -33,10 +35,12 @@ namespace Xamarin.Essentials
             return await PlatformGetEventsAsync(calendarId, startDate, endDate);
         }
 
-        public static async Task<CalendarEvent> GetEvent(string eventId)
+        public static async Task<CalendarEvent> GetEventAsync(string eventId)
         {
             if (eventId == null)
                 throw new ArgumentNullException(nameof(eventId));
+            if (string.IsNullOrWhiteSpace(eventId))
+                throw InvalidEvent(eventId);
 
             await Permissions.RequestAsync<Permissions.CalendarRead>();
 
@@ -44,9 +48,9 @@ namespace Xamarin.Essentials
         }
 
         static ArgumentException InvalidCalendar(string calendarId) =>
-            new ArgumentException($"No calendar exists with the Id {calendarId}.", nameof(calendarId));
+            new ArgumentOutOfRangeException($"No calendar exists with the ID '{calendarId}'.", nameof(calendarId));
 
         static ArgumentException InvalidEvent(string eventId) =>
-            new ArgumentException($"No event exists with the Id {eventId}.", nameof(eventId));
+            new ArgumentOutOfRangeException($"No event exists with the ID '{eventId}'.", nameof(eventId));
     }
 }
