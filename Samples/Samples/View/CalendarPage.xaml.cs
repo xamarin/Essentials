@@ -14,7 +14,7 @@ namespace Samples.View
         {
             if (e.Item is CalendarEvent evt)
             {
-                var calendarEvent = await Calendars.GetEvent(evt.Id);
+                var calendarEvent = await Calendars.GetEventAsync(evt.Id);
 
                 var page = new CalendarEventPage
                 {
