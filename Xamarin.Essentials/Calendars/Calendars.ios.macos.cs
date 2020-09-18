@@ -3,21 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EventKit;
+using Foundation;
 
 namespace Xamarin.Essentials
 {
     public static partial class Calendars
     {
+        static EKEventStore eventStore;
+
+        static EKEventStore EventStore =>
+            eventStore ??= new EKEventStore();
+
         static Task<IEnumerable<Calendar>> PlatformGetCalendarsAsync()
         {
-            var calendars = CalendarRequest.Instance.Calendars;
+            var calendars = EventStore.GetCalendars(EKEntityType.Event);
 
             return Task.FromResult<IEnumerable<Calendar>>(ToCalendars(calendars).ToList());
         }
 
         static Task<Calendar> PlatformGetCalendarAsync(string calendarId)
         {
-            var calendars = CalendarRequest.Instance.Calendars;
+            var calendars = EventStore.GetCalendars(EKEntityType.Event);
 
             var calendar = calendars.FirstOrDefault(c => c.CalendarIdentifier == calendarId);
             if (calendar == null)
@@ -30,8 +36,9 @@ namespace Xamarin.Essentials
         {
             var startDateToConvert = startDate ?? DateTimeOffset.Now.Add(defaultStartTimeFromNow);
             var endDateToConvert = endDate ?? startDateToConvert.Add(defaultEndTimeFromStartTime); // NOTE: 4 years is the maximum period that a iOS calendar events can search
-            var sDate = startDateToConvert.ToNSDate();
-            var eDate = endDateToConvert.ToNSDate();
+
+            var sDate = NSDate.FromTimeIntervalSince1970(TimeSpan.FromMilliseconds(startDateToConvert.ToUnixTimeMilliseconds()).TotalSeconds);
+            var eDate = NSDate.FromTimeIntervalSince1970(TimeSpan.FromMilliseconds(endDateToConvert.ToUnixTimeMilliseconds()).TotalSeconds);
 
             EKCalendar[] calendars = null;
             if (!string.IsNullOrEmpty(calendarId))
@@ -43,15 +50,15 @@ namespace Xamarin.Essentials
                 calendars = new[] { calendar };
             }
 
-            var query = CalendarRequest.Instance.PredicateForEvents(sDate, eDate, calendars);
-            var events = CalendarRequest.Instance.EventsMatching(query);
+            var query = EventStore.PredicateForEvents(sDate, eDate, calendars);
+            var events = EventStore.EventsMatching(query);
 
-            return Task.FromResult<IEnumerable<CalendarEvent>>(ToEvents(events).OrderBy(e => e.StartDate).ToList());
+            return Task.FromResult<IEnumerable<CalendarEvent>>(ToEvents(events.OrderBy(e => e.StartDate)).ToList());
         }
 
         static Task<CalendarEvent> PlatformGetEventAsync(string eventId)
         {
-            if (!(CalendarRequest.Instance.GetCalendarItem(eventId) is EKEvent calendarEvent))
+            if (!(EventStore.GetCalendarItem(eventId) is EKEvent calendarEvent))
                 throw InvalidEvent(eventId);
 
             return Task.FromResult(ToEvent(calendarEvent));
@@ -89,8 +96,8 @@ namespace Xamarin.Essentials
                 Description = native.Notes,
                 Location = native.Location,
                 AllDay = native.AllDay,
-                StartDate = native.StartDate.ToDateTimeOffset(),
-                EndDate = native.EndDate.ToDateTimeOffset(),
+                StartDate = DateTimeOffset.UnixEpoch + TimeSpan.FromSeconds(native.StartDate.SecondsSince1970),
+                EndDate = DateTimeOffset.UnixEpoch + TimeSpan.FromSeconds(native.EndDate.SecondsSince1970),
                 Attendees = native.Attendees != null
                     ? ToAttendees(native.Attendees).ToList()
                     : new List<CalendarEventAttendee>()
