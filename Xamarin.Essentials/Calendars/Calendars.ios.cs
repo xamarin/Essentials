@@ -3,110 +3,109 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EventKit;
-using Foundation;
 
 namespace Xamarin.Essentials
 {
     public static partial class Calendars
     {
-        static async Task<IEnumerable<Calendar>> PlatformGetCalendarsAsync()
+        static Task<IEnumerable<Calendar>> PlatformGetCalendarsAsync()
         {
-            await Permissions.RequestAsync<Permissions.CalendarRead>();
+            var calendars = CalendarRequest.Instance.Calendars;
 
-            EKCalendar[] calendars;
-            try
-            {
-                calendars = CalendarRequest.Instance.Calendars;
-            }
-            catch (NullReferenceException ex)
-            {
-                throw new Exception($"iOS: Unexpected null reference exception {ex.Message}");
-            }
-            var calendarList = (from calendar in calendars
-                                select new Calendar
-                                {
-                                    Id = calendar.CalendarIdentifier,
-                                    Name = calendar.Title
-                                }).ToList();
-
-            return calendarList;
+            return Task.FromResult<IEnumerable<Calendar>>(ToCalendars(calendars).ToList());
         }
 
-        static async Task<IEnumerable<CalendarEvent>> PlatformGetEventsAsync(string calendarId = null, DateTimeOffset? startDate = null, DateTimeOffset? endDate = null)
+        static Task<Calendar> PlatformGetCalendarAsync(string calendarId)
         {
-            await Permissions.RequestAsync<Permissions.CalendarRead>();
+            var calendars = CalendarRequest.Instance.Calendars;
 
+            var calendar = calendars.FirstOrDefault(c => c.CalendarIdentifier == calendarId);
+            if (calendar == null)
+                throw InvalidCalendar(calendarId);
+
+            return Task.FromResult(ToCalendar(calendar));
+        }
+
+        static Task<IEnumerable<CalendarEvent>> PlatformGetEventsAsync(string calendarId = null, DateTimeOffset? startDate = null, DateTimeOffset? endDate = null)
+        {
             var startDateToConvert = startDate ?? DateTimeOffset.Now.Add(defaultStartTimeFromNow);
-            var endDateToConvert = endDate ?? startDateToConvert.Add(defaultEndTimeFromStartTime);  // NOTE: 4 years is the maximum period that a iOS calendar events can search
+            var endDateToConvert = endDate ?? startDateToConvert.Add(defaultEndTimeFromStartTime); // NOTE: 4 years is the maximum period that a iOS calendar events can search
             var sDate = startDateToConvert.ToNSDate();
             var eDate = endDateToConvert.ToNSDate();
-            EKCalendar[] calendars = null;
-            if (!string.IsNullOrWhiteSpace(calendarId))
-            {
-                calendars = CalendarRequest.Instance.Calendars.Where(x => x.CalendarIdentifier == calendarId).ToArray();
 
-                if (calendars.Length == 0 && !string.IsNullOrWhiteSpace(calendarId))
-                    throw new ArgumentOutOfRangeException($"[iOS]: No calendar exists with the Id {calendarId}");
+            EKCalendar[] calendars = null;
+            if (!string.IsNullOrEmpty(calendarId))
+            {
+                var calendar = calendars.FirstOrDefault(c => c.CalendarIdentifier == calendarId);
+                if (calendar == null)
+                    throw InvalidCalendar(calendarId);
+
+                calendars = new[] { calendar };
             }
 
             var query = CalendarRequest.Instance.PredicateForEvents(sDate, eDate, calendars);
             var events = CalendarRequest.Instance.EventsMatching(query);
 
-            var eventList = (from e in events
-                            select new CalendarEvent
-                            {
-                                Id = e.CalendarItemIdentifier,
-                                CalendarId = e.Calendar.CalendarIdentifier,
-                                Title = e.Title,
-                                StartDate = e.StartDate.ToDateTimeOffset(),
-                                EndDate = !e.AllDay ? (DateTimeOffset?)e.EndDate.ToDateTimeOffset() : null
-                            })
-                            .OrderBy(e => e.StartDate)
-                            .ToList();
-
-            return eventList;
+            return Task.FromResult<IEnumerable<CalendarEvent>>(ToEvents(events.OrderBy(e => e.StartDate)).ToList());
         }
 
-        static async Task<CalendarEvent> PlatformGetEventByIdAsync(string eventId)
+        static Task<CalendarEvent> PlatformGetEventAsync(string eventId)
         {
-            await Permissions.RequestAsync<Permissions.CalendarRead>();
+            if (!(CalendarRequest.Instance.GetCalendarItem(eventId) is EKEvent calendarEvent))
+                throw InvalidEvent(eventId);
 
-            if (string.IsNullOrWhiteSpace(eventId))
+            return Task.FromResult(ToEvent(calendarEvent));
+        }
+
+        static IEnumerable<Calendar> ToCalendars(IEnumerable<EKCalendar> native)
+        {
+            foreach (var calendar in native)
             {
-                throw new ArgumentException($"[iOS]: No Event found for event Id {eventId}");
+                yield return ToCalendar(calendar);
             }
+        }
 
-            var calendarEvent = CalendarRequest.Instance.GetCalendarItem(eventId) as EKEvent;
-            if (calendarEvent == null)
+        static Calendar ToCalendar(EKCalendar calendar) =>
+            new Calendar
             {
-                throw new ArgumentOutOfRangeException($"[iOS]: No Event found for event Id {eventId}");
-            }
-
-            return new CalendarEvent
-            {
-                Id = calendarEvent.CalendarItemIdentifier,
-                CalendarId = calendarEvent.Calendar.CalendarIdentifier,
-                Title = calendarEvent.Title,
-                Description = calendarEvent.Notes,
-                Location = calendarEvent.Location,
-                StartDate = calendarEvent.StartDate.ToDateTimeOffset(),
-                EndDate = !calendarEvent.AllDay ? (DateTimeOffset?)calendarEvent.EndDate.ToDateTimeOffset() : null,
-                Attendees = calendarEvent.Attendees != null ? GetAttendeesForEvent(calendarEvent.Attendees) : new List<CalendarEventAttendee>()
+                Id = calendar.CalendarIdentifier,
+                Name = calendar.Title
             };
+
+        static IEnumerable<CalendarEvent> ToEvents(IEnumerable<EKEvent> native)
+        {
+            foreach (var e in native)
+            {
+                yield return ToEvent(e);
+            }
         }
 
-        static IEnumerable<CalendarEventAttendee> GetAttendeesForEvent(IEnumerable<EKParticipant> inviteList)
-        {
-            var attendees = (from attendee in inviteList
-                             select new CalendarEventAttendee
-                             {
-                                 Name = attendee.Name,
-                                 Email = attendee.Name
-                             })
-                            .OrderBy(e => e.Name)
-                            .ToList();
+        static CalendarEvent ToEvent(EKEvent native) =>
+            new CalendarEvent
+            {
+                Id = native.CalendarItemIdentifier,
+                CalendarId = native.Calendar.CalendarIdentifier,
+                Title = native.Title,
+                Description = native.Notes,
+                Location = native.Location,
+                AllDay = native.AllDay,
+                StartDate = native.StartDate.ToDateTimeOffset(),
+                EndDate = native.EndDate.ToDateTimeOffset(),
+                Attendees = native.Attendees != null
+                    ? ToAttendees(native.Attendees).ToList()
+                    : new List<CalendarEventAttendee>()
+            };
 
-            return attendees;
+        static IEnumerable<CalendarEventAttendee> ToAttendees(IEnumerable<EKParticipant> inviteList)
+        {
+            foreach (var attendee in inviteList)
+            {
+                yield return new CalendarEventAttendee
+                {
+                    Name = attendee.Name,
+                    Email = attendee.Name
+                };
+            }
         }
     }
 }

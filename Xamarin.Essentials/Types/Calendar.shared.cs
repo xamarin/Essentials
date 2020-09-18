@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Xamarin.Essentials
 {
-    [Preserve(AllMembers = true)]
     public class Calendar
     {
         public string Id { get; set; }
@@ -11,7 +10,6 @@ namespace Xamarin.Essentials
         public string Name { get; set; }
     }
 
-    [Preserve(AllMembers = true)]
     public class CalendarEvent
     {
         public string Id { get; set; }
@@ -24,46 +22,18 @@ namespace Xamarin.Essentials
 
         public string Location { get; set; }
 
-        public bool AllDay
-        {
-            get => !EndDate.HasValue;
-            set
-            {
-                if (value)
-                {
-                    EndDate = null;
-                }
-                else
-                {
-                    EndDate = StartDate;
-                }
-            }
-        }
+        public bool AllDay { get; set; }
 
         public DateTimeOffset StartDate { get; set; }
 
-        public TimeSpan? Duration
-        {
-            get => EndDate.HasValue ? EndDate - StartDate : null;
-            set
-            {
-                if (value.HasValue)
-                {
-                    EndDate = StartDate.Add(value.Value);
-                }
-                else
-                {
-                    EndDate = null;
-                }
-            }
-        }
+        public DateTimeOffset EndDate { get; set; }
 
-        public DateTimeOffset? EndDate { get; set; }
+        public TimeSpan Duration =>
+            AllDay ? TimeSpan.FromDays(1) : EndDate - StartDate;
 
         public IEnumerable<CalendarEventAttendee> Attendees { get; set; }
     }
 
-    [Preserve(AllMembers = true)]
     public class CalendarEventAttendee
     {
         public string Name { get; set; }

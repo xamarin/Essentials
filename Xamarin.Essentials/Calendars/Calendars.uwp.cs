@@ -8,107 +8,102 @@ namespace Xamarin.Essentials
 {
     public static partial class Calendars
     {
+        static Task<AppointmentStore> uwpAppointmentStore;
+
+        static Task<AppointmentStore> GetInstanceAsync() =>
+            uwpAppointmentStore ??= AppointmentManager.RequestStoreAsync(AppointmentStoreAccessType.AllCalendarsReadOnly).AsTask();
+
         static async Task<IEnumerable<Calendar>> PlatformGetCalendarsAsync()
         {
-            await Permissions.RequestAsync<Permissions.CalendarRead>();
+            var instance = await GetInstanceAsync().ConfigureAwait(false);
 
-            var instance = await CalendarRequest.GetInstanceAsync();
-            var uwpCalendarList = await instance.FindAppointmentCalendarsAsync(FindAppointmentCalendarsOptions.IncludeHidden);
+            var calendars = await instance.FindAppointmentCalendarsAsync(FindAppointmentCalendarsOptions.IncludeHidden).AsTask().ConfigureAwait(false);
 
-            var calendars = (from calendar in uwpCalendarList
-                                select new Calendar
-                                {
-                                    Id = calendar.LocalId,
-                                    Name = calendar.DisplayName
-                                }).ToList();
-
-            return calendars;
+            return ToCalendars(calendars).ToList();
         }
 
         static async Task<IEnumerable<CalendarEvent>> PlatformGetEventsAsync(string calendarId = null, DateTimeOffset? startDate = null, DateTimeOffset? endDate = null)
         {
-            await Permissions.RequestAsync<Permissions.CalendarRead>();
-
             var options = new FindAppointmentsOptions();
+
+            // properties
             options.FetchProperties.Add(AppointmentProperties.Subject);
+            options.FetchProperties.Add(AppointmentProperties.Details);
+            options.FetchProperties.Add(AppointmentProperties.Location);
             options.FetchProperties.Add(AppointmentProperties.StartTime);
             options.FetchProperties.Add(AppointmentProperties.Duration);
             options.FetchProperties.Add(AppointmentProperties.AllDay);
+            options.FetchProperties.Add(AppointmentProperties.Invitees);
+
+            // calendar
+            if (!string.IsNullOrEmpty(calendarId))
+                options.CalendarIds.Add(calendarId);
+
+            // dates
             var sDate = startDate ?? DateTimeOffset.Now.Add(defaultStartTimeFromNow);
             var eDate = endDate ?? sDate.Add(defaultEndTimeFromStartTime);
-
             if (eDate < sDate)
                 eDate = sDate;
 
-            var instance = await CalendarRequest.GetInstanceAsync();
-            var events = await instance.FindAppointmentsAsync(sDate, eDate.Subtract(sDate), options);
+            var instance = await GetInstanceAsync().ConfigureAwait(false);
 
-            var eventList = (from e in events
-                             select new CalendarEvent
-                             {
-                                 Id = e.LocalId,
-                                 CalendarId = e.CalendarId,
-                                 Title = e.Subject,
-                                 StartDate = e.StartTime,
-                                 EndDate = !e.AllDay ? (DateTimeOffset?)e.StartTime.Add(e.Duration) : null
-                             })
-                            .Where(e => e.CalendarId == calendarId || calendarId == null)
-                            .OrderBy(e => e.StartDate)
-                            .ToList();
+            var events = await instance.FindAppointmentsAsync(sDate, eDate.Subtract(sDate), options).AsTask().ConfigureAwait(false);
 
-            if (eventList.Count == 0 && !string.IsNullOrWhiteSpace(calendarId))
-            {
-                await GetCalendarById(calendarId);
-            }
+            // confirm the calendar exists if no events were found
+            // the PlatformGetCalendarAsync wll throw if not
+            if ((events == null || events.Count == 0) && !string.IsNullOrEmpty(calendarId))
+                await PlatformGetCalendarAsync(calendarId).ConfigureAwait(false);
 
-            return eventList;
+            return ToEvents(events.OrderBy(e => e.StartTime)).ToList();
         }
 
-        static async Task<Calendar> GetCalendarById(string calendarId)
+        static async Task<Calendar> PlatformGetCalendarAsync(string calendarId)
         {
-            var instance = await CalendarRequest.GetInstanceAsync();
-            var uwpCalendarList = await instance.FindAppointmentCalendarsAsync(FindAppointmentCalendarsOptions.IncludeHidden);
+            var instance = await GetInstanceAsync().ConfigureAwait(false);
 
-            var result = (from calendar in uwpCalendarList
-                             select new Calendar
-                             {
-                                 Id = calendar.LocalId,
-                                 Name = calendar.DisplayName
-                             })
-                             .Where(c => c.Id == calendarId).FirstOrDefault();
-            if (result == null)
-            {
-                throw new ArgumentOutOfRangeException($"[UWP]: No calendar exists with the Id {calendarId}");
-            }
+            var calendar = await instance.GetAppointmentCalendarAsync(calendarId).AsTask().ConfigureAwait(false);
+            if (calendar == null)
+                throw InvalidCalendar(calendarId);
 
-            return result;
+            return ToCalendar(calendar);
         }
 
-        static async Task<CalendarEvent> PlatformGetEventByIdAsync(string eventId)
+        static async Task<CalendarEvent> PlatformGetEventAsync(string eventId)
         {
-            await Permissions.RequestAsync<Permissions.CalendarRead>();
+            var instance = await GetInstanceAsync().ConfigureAwait(false);
 
-            var instance = await CalendarRequest.GetInstanceAsync();
+            var e = await instance.GetAppointmentAsync(eventId).AsTask().ConfigureAwait(false);
+            if (e == null)
+                throw InvalidEvent(eventId);
 
-            Appointment e;
-            try
+            return ToEvent(e);
+        }
+
+        static IEnumerable<Calendar> ToCalendars(IEnumerable<AppointmentCalendar> native)
+        {
+            foreach (var calendar in native)
             {
-                e = await instance.GetAppointmentAsync(eventId);
-                e.DetailsKind = AppointmentDetailsKind.PlainText;
+                yield return ToCalendar(calendar);
             }
-            catch (ArgumentException)
-            {
-                if (string.IsNullOrWhiteSpace(eventId))
-                {
-                    throw new ArgumentException($"[UWP]: No Event found for event Id {eventId}");
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException($"[UWP]: No Event found for event Id {eventId}");
-                }
-            }
+        }
 
-            return new CalendarEvent()
+        static Calendar ToCalendar(AppointmentCalendar calendar) =>
+            new Calendar
+            {
+                Id = calendar.LocalId,
+                Name = calendar.DisplayName
+            };
+
+        static IEnumerable<CalendarEvent> ToEvents(IEnumerable<Appointment> native)
+        {
+            foreach (var e in native)
+            {
+                yield return ToEvent(e);
+            }
+        }
+
+        static CalendarEvent ToEvent(Appointment e) =>
+            new CalendarEvent
             {
                 Id = e.LocalId,
                 CalendarId = e.CalendarId,
@@ -116,23 +111,23 @@ namespace Xamarin.Essentials
                 Description = e.Details,
                 Location = e.Location,
                 StartDate = e.StartTime,
-                EndDate = !e.AllDay ? (DateTimeOffset?)e.StartTime.Add(e.Duration) : null,
-                Attendees = GetAttendeesForEvent(e.Invitees)
+                AllDay = e.AllDay,
+                EndDate = e.StartTime.Add(e.Duration),
+                Attendees = e.Invitees != null
+                    ? ToAttendees(e.Invitees).ToList()
+                    : new List<CalendarEventAttendee>()
             };
-        }
 
-        static IEnumerable<CalendarEventAttendee> GetAttendeesForEvent(IEnumerable<AppointmentInvitee> inviteList)
+        static IEnumerable<CalendarEventAttendee> ToAttendees(IEnumerable<AppointmentInvitee> native)
         {
-            var attendees = (from attendee in inviteList
-                             select new CalendarEventAttendee
-                             {
-                                 Name = attendee.DisplayName,
-                                 Email = attendee.Address
-                             })
-                            .OrderBy(e => e.Name)
-                            .ToList();
-
-            return attendees;
+            foreach (var attendee in native)
+            {
+                yield return new CalendarEventAttendee
+                {
+                    Name = attendee.DisplayName,
+                    Email = attendee.Address
+                };
+            }
         }
     }
 }

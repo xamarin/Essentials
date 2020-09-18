@@ -1,110 +1,48 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<views:BasePage  xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:views="clr-namespace:Samples.View"
-             xmlns:viewmodels="clr-namespace:Samples.ViewModel"
-             xmlns:essentials="clr-namespace:Xamarin.Essentials;assembly=Xamarin.Essentials"
-             xmlns:converters="clr-namespace:Samples.Converters;assembly=Samples"
-             x:Class="Samples.View.CalendarEventPage"
-             x:DataType="essentials:CalendarEvent"
-             Title="Event"
-             Padding="20,20,20,20">
-    <views:BasePage.Resources>
-        <ResourceDictionary>
-            <x:String x:Key="DateDisplayFormatter">{0:dd/MM/yy hh:mm tt}</x:String>
-            <x:String x:Key="TimeSpanFormatter">{0:h\:mm}</x:String>
-        </ResourceDictionary>
-    </views:BasePage.Resources>
-    <views:BasePage.Content>
-        <StackLayout>
-            <Label Text="{Binding Title}"
-                   FontSize="34"
-                   TextColor="Black"
-                   HorizontalTextAlignment="Center"/>
-          <Grid>
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition/>
-              <ColumnDefinition/>
-              <ColumnDefinition Width="Auto"/>
-              <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-              <RowDefinition Height="Auto"/>
-              <RowDefinition Height="Auto"/>
-              <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Label Grid.Row="0"
-                   Grid.Column="0"
-                   Text="Location:"/>
-            <Label Grid.Row="0"
-                   Grid.Column="1"
-                   Grid.ColumnSpan="3"
-                   HorizontalTextAlignment="Center"
-                   Text="{Binding Location}"/>
-            <Label Grid.Row="1"
-                   Grid.Column="0"
-                   Text="When:"/>
-            <Label Grid.Column="1"
-                   Grid.Row="1"
-                   Text="{Binding StartDate, StringFormat={StaticResource DateDisplayFormatter}, Mode=OneWay}"
-                   TextColor="Black"
-                   HorizontalTextAlignment="Center"/>
-            <Label Grid.Column="2"
-                   Grid.Row="1"
-                   Text="-"
-                   IsVisible="{Binding AllDay, Converter={StaticResource NegativeConverter}}"/>
-            <Label Grid.Column="3"
-                   Grid.Row="1"
-                   Text="{Binding EndDate, StringFormat={StaticResource DateDisplayFormatter}, Mode=OneWay}"
-                   TextColor="Black"
-                   HorizontalTextAlignment="Center"/>
-            <Label Grid.Row="2"
-                   Grid.Column="0"
-                   Text="Duration: "/>
-            <Label Grid.Row="2"
-                   Grid.Column="1"
-                   Grid.ColumnSpan="3"
-                   Text="{Binding Duration, StringFormat={StaticResource TimeSpanFormatter}}"
-                   HorizontalTextAlignment="Center"/>
-          </Grid>
-          <ScrollView>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-              <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto"/>
-                  <RowDefinition/>
-              </Grid.RowDefinitions>
-                <Label Text="Attendees:"/>
-              <StackLayout Grid.Row="0"
-                           Grid.Column="1"
-                           BindableLayout.ItemsSource="{Binding Attendees}">
-                  <BindableLayout.ItemTemplate>
-                    <DataTemplate x:DataType="essentials:CalendarEventAttendee">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Label Text="{Binding Name}"
-                                   TextColor="Black"/>
-                            <Label Grid.Column="1"
-                                   Text="{Binding Email}"
-                                   TextColor="DarkGray"/>
-                        </Grid>
-                    </DataTemplate>
-                  </BindableLayout.ItemTemplate>
-              </StackLayout>
-                <Label Grid.Row="1" 
-                       Grid.Column="0"
-                       Text="Description:"/>
-                <Label Grid.Row="1"
-                       Grid.Column="1"
-                       Text="{Binding Description}"/>
+﻿<views:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:views="clr-namespace:Samples.View"
+                xmlns:viewmodels="clr-namespace:Samples.ViewModel"
+                xmlns:essentials="clr-namespace:Xamarin.Essentials;assembly=Xamarin.Essentials"
+                xmlns:converters="clr-namespace:Samples.Converters;assembly=Samples"
+                x:Class="Samples.View.CalendarEventPage"
+                x:DataType="essentials:CalendarEvent"
+                Title="{Binding Title}">
+
+    <ScrollView>
+        <StackLayout Padding="12" Spacing="6">
+
+        <Label Text="{Binding Title}" FontSize="Title" HorizontalTextAlignment="Center" />
+
+            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+                  ColumnSpacing="6" RowSpacing="6">
+                <Label Grid.Column="0" Grid.Row="0" Text="When: " FontAttributes="Bold" />
+                <Label Grid.Column="1" Grid.Row="0" Text="{Binding ., Converter={StaticResource CalendarEventDateConverter}}" />
+
+                <Label Grid.Column="0" Grid.Row="1" Text="Duration: " FontAttributes="Bold" />
+                <Label Grid.Column="1" Grid.Row="1" Text="{Binding Duration}" />
+
+                <Label Grid.Column="0" Grid.Row="2" Text="Location: " FontAttributes="Bold" />
+                <Label Grid.Column="1" Grid.Row="2" Text="{Binding Location}" />
+
+                <Label Grid.Column="0" Grid.Row="3" Text="Attendees: " FontAttributes="Bold" />
+                <ScrollView Grid.Column="1" Grid.Row="3" HeightRequest="300">
+                    <StackLayout Spacing="3" BindableLayout.ItemsSource="{Binding Attendees}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="essentials:CalendarEventAttendee">
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{Binding Name}" />
+                                    <Label Text="{Binding Email}" TextColor="DarkGray"/>
+                                </StackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </ScrollView>
+
+                <Label Grid.Column="0" Grid.Row="4" Text="Description: " FontAttributes="Bold" />
+                <Label Grid.Column="1" Grid.Row="4" Text="{Binding Description}" />
             </Grid>
-          </ScrollView >
+
         </StackLayout>
-    </views:BasePage.Content>
+    </ScrollView>
+
 </views:BasePage>
