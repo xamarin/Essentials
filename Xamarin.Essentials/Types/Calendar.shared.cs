@@ -5,6 +5,16 @@ namespace Xamarin.Essentials
 {
     public class Calendar
     {
+        public Calendar()
+        {
+        }
+
+        public Calendar(string id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+
         public string Id { get; set; }
 
         public string Name { get; set; }
@@ -12,6 +22,17 @@ namespace Xamarin.Essentials
 
     public class CalendarEvent
     {
+        public CalendarEvent()
+        {
+        }
+
+        public CalendarEvent(string id, string calendarId, string title)
+        {
+            Id = id;
+            CalendarId = calendarId;
+            Title = title;
+        }
+
         public string Id { get; set; }
 
         public string CalendarId { get; set; }
@@ -36,6 +57,16 @@ namespace Xamarin.Essentials
 
     public class CalendarEventAttendee
     {
+        public CalendarEventAttendee()
+        {
+        }
+
+        public CalendarEventAttendee(string name, string email)
+        {
+            Name = name;
+            Email = email;
+        }
+
         public string Name { get; set; }
 
         public string Email { get; set; }
