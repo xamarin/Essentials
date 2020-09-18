@@ -46,7 +46,7 @@ namespace Xamarin.Essentials
             var query = CalendarRequest.Instance.PredicateForEvents(sDate, eDate, calendars);
             var events = CalendarRequest.Instance.EventsMatching(query);
 
-            return Task.FromResult<IEnumerable<CalendarEvent>>(ToEvents(events.OrderBy(e => e.StartDate)).ToList());
+            return Task.FromResult<IEnumerable<CalendarEvent>>(ToEvents(events).OrderBy(e => e.StartDate).ToList());
         }
 
         static Task<CalendarEvent> PlatformGetEventAsync(string eventId)

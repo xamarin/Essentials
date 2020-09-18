@@ -25,7 +25,7 @@
                 <Label Grid.Column="1" Grid.Row="2" Text="{Binding Location}" />
 
                 <Label Grid.Column="0" Grid.Row="3" Text="Attendees: " FontAttributes="Bold" />
-                <ScrollView Grid.Column="1" Grid.Row="3" HeightRequest="300">
+                <ScrollView Grid.Column="1" Grid.Row="3">
                     <StackLayout Spacing="3" BindableLayout.ItemsSource="{Binding Attendees}">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate x:DataType="essentials:CalendarEventAttendee">
