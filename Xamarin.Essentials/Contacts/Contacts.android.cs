@@ -22,6 +22,29 @@ namespace Xamarin.Essentials
             return null;
         }
 
+        static async Task<IEnumerable<Contact>> PlatformGetAllAsync()
+        {
+            await Task.CompletedTask;
+            return GetAll();
+        }
+
+        static IEnumerable<Contact> GetAll()
+        {
+            var cursor = Platform.AppContext.ContentResolver
+                .Query(ContactsContract.Contacts.ContentUri, null, null, null, null);
+
+            // if (cursor.Count == 0)
+            yield break;
+
+            // while (cursor.MoveToNext())
+            // {
+            //    var contact = GetContact(cursor, Platform.AppContext);
+
+            // if (contact != null)
+            //        yield return contact;
+            // }
+        }
+
         internal static Contact PlatformGetContacts(Net.Uri contactUri)
         {
             if (contactUri == null)

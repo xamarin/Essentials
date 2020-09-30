@@ -16,33 +16,39 @@ namespace Xamarin.Essentials
             try
             {
                 var contactSelected = await contactPicker.PickContactAsync();
-
-                if (contactSelected == null)
-                    return null;
-
-                var phones = new List<ContactPhone>();
-                var emails = new List<ContactEmail>();
-
-                foreach (var item in contactSelected.Phones)
-                    phones.Add(new ContactPhone(item.Number, GetPhoneContactType(item.Kind)));
-
-                phones = phones.Distinct().ToList();
-
-                foreach (var item in contactSelected.Emails)
-                    emails.Add(new ContactEmail(item.Address, GetEmailContactType(item.Kind)));
-
-                emails = emails.Distinct().ToList();
-
-                return new Contact(
-                                    contactSelected.Name,
-                                    phones,
-                                    emails,
-                                    ContactType.Unknown);
+                return GetContact(contactSelected);
             }
             catch (Exception)
             {
                 throw;
             }
+        }
+
+        static async Task<IEnumerable<Contact>> PlatformGetAllAsync()
+        {
+            var contactStore = await ContactManager.RequestStoreAsync();
+            return (await contactStore.FindContactsAsync())?.Select(a => GetContact(a));
+        }
+
+        internal static Contact GetContact(Windows.ApplicationModel.Contacts.Contact contact)
+        {
+            if (contact == null)
+                return default;
+
+            var phones = new List<ContactPhone>();
+            var emails = new List<ContactEmail>();
+
+            foreach (var item in contact.Phones)
+                phones.Add(new ContactPhone(item.Number, GetPhoneContactType(item.Kind)));
+
+            phones = phones.Distinct().ToList();
+
+            foreach (var item in contact.Emails)
+                emails.Add(new ContactEmail(item.Address, GetEmailContactType(item.Kind)));
+
+            emails = emails.Distinct().ToList();
+
+            return new Contact(contact.Name, phones, emails, ContactType.Unknown);
         }
 
         static ContactType GetPhoneContactType(ContactPhoneKind type)

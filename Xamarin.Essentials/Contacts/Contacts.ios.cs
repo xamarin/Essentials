@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Contacts;
 using ContactsUI;
@@ -27,6 +29,46 @@ namespace Xamarin.Essentials
             return source.Task;
         }
 
+        static async Task<IEnumerable<Contact>> PlatformGetAllAsync()
+        {
+            await Task.CompletedTask;
+            return GetAll();
+        }
+
+        static IEnumerable<Contact> GetAll()
+        {
+            var keys = new[]
+            {
+                CNContactKey.NamePrefix,
+                CNContactKey.GivenName,
+                CNContactKey.MiddleName,
+                CNContactKey.FamilyName,
+                CNContactKey.NameSuffix,
+                CNContactKey.EmailAddresses,
+                CNContactKey.PhoneNumbers
+            };
+
+            var results = new List<Contact>();
+            using (var store = new CNContactStore())
+            {
+                var containers = store.GetContainers(null, out var error);
+
+                foreach (var container in containers)
+                {
+                    try
+                    {
+                        using var pred = CNContact.GetPredicateForContactsInContainer(container.Identifier);
+                        results.AddRange(store.GetUnifiedContacts(pred, keys, out error)?.Select(a => GetContact(a)));
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+
+            return results;
+        }
+
         internal static Contact GetContact(CNContact contact)
         {
             if (contact == null)
@@ -47,6 +89,7 @@ namespace Xamarin.Essentials
 
                 var name = string.Empty;
 
+                // $"{item.NamePrefix} {item.GivenName} {item.MiddleName} {item.FamilyName} {item.NameSuffix}"
                 if (string.IsNullOrEmpty(contact.MiddleName))
                     name = $"{contact.GivenName} {contact.FamilyName}";
                 else

@@ -86,6 +86,8 @@ namespace Xamarin.Essentials
             return await tcs.Task;
         }
 
+        static Task<IEnumerable<Contact>> PlatformGetAllAsync() => null;
+
         static ContactType GetContactType(TizenEmail.Types emailType)
             => emailType switch
             {

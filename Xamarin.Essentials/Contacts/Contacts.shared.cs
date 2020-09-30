@@ -15,6 +15,15 @@ namespace Xamarin.Essentials
 
             return await PlatformPickContactAsync();
         }
+
+        public static async Task<IEnumerable<Contact>> GetAllAsync()
+        {
+            // iOS does not require permissions for the picker
+            if (DeviceInfo.Platform != DevicePlatform.iOS)
+                await Permissions.EnsureGrantedAsync<Permissions.ContactsRead>();
+
+            return await PlatformGetAllAsync();
+        }
     }
 
     public enum ContactType
