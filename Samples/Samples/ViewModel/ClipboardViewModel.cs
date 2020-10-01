@@ -59,7 +59,10 @@ namespace Samples.ViewModel
             LastCopied = $"Last copied text at {DateTime.UtcNow:T}";
         }
 
-        async void OnCopy() => await Clipboard.SetTextAsync(FieldValue);
+        async void OnCopy()
+        {
+            await Clipboard.SetTextAsync(FieldValue);
+        }
 
         async void OnPaste()
         {

@@ -44,7 +44,7 @@ namespace Xamarin.Essentials
                 foreach (var attachment in message.Attachments)
                 {
                     var data = NSData.FromFile(attachment.FullPath);
-                    controller.AddAttachmentData(data, attachment.ContentType, attachment.AttachmentName);
+                    controller.AddAttachmentData(data, attachment.ContentType, attachment.FileName);
                 }
             }
 
@@ -53,7 +53,7 @@ namespace Xamarin.Essentials
             controller.Finished += (sender, e) =>
             {
                 controller.DismissViewController(true, null);
-                tcs.SetResult(e.Result == MFMailComposeResult.Sent);
+                tcs.TrySetResult(e.Result == MFMailComposeResult.Sent);
             };
             parentController.PresentViewController(controller, true, null);
 
