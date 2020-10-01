@@ -91,5 +91,11 @@ namespace Xamarin.Essentials
             {
                 { DevicePlatform.iOS, new string[] { UTType.MPEG4, UTType.Video, UTType.AVIMovie, UTType.AppleProtectedMPEG4Video, "mp4", "m4v", "mpg", "mpeg", "mp2", "mov", "avi", "mkv", "flv", "gifv", "qt" } }
             });
+
+        public static FilePickerFileType PlatformPdfFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.iOS, new[] { (string)UTType.PDF } }
+            });
     }
 }

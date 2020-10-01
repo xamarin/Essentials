@@ -20,5 +20,8 @@ namespace Xamarin.Essentials
 
         static FilePickerFileType PlatformVideoFileType()
             => throw new NotImplementedInReferenceAssemblyException();
+
+        static FilePickerFileType PlatformPdfFileType()
+            => throw new NotImplementedInReferenceAssemblyException();
     }
 }

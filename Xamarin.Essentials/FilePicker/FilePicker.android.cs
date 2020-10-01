@@ -86,5 +86,11 @@ namespace Xamarin.Essentials
             {
                 { DevicePlatform.Android, new[] { "video/*" } }
             });
+
+        public static FilePickerFileType PlatformPdfFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.Android, new[] { "application/pdf" } }
+            });
     }
 }

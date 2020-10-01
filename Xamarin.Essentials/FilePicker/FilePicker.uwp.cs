@@ -81,5 +81,11 @@ namespace Xamarin.Essentials
            {
                 { DevicePlatform.UWP, new[] { "*.mp4", "*.mov", "*.avi", "*.wmv", "*.m4v", "*.mpg", "*.mpeg", "*.mp2", "*.mkv", "*.flv", "*.gifv", "*.qt" } }
            });
+
+        public static FilePickerFileType PlatformPdfFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.UWP, new[] { "*.pdf" } }
+            });
     }
 }
