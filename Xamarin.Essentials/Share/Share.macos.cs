@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AppKit;
 using Foundation;
@@ -9,6 +10,12 @@ namespace Xamarin.Essentials
     {
         static Task PlatformRequestAsync(ShareTextRequest request)
         {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            if (string.IsNullOrEmpty(request.Text) && string.IsNullOrEmpty(request.Uri))
+                throw new ArgumentNullException(nameof(request.Text));
+
             var items = new List<NSObject>();
             if (!string.IsNullOrWhiteSpace(request.Title))
                 items.Add(new NSString(request.Title));
