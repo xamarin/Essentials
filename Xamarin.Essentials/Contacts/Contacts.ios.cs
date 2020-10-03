@@ -21,7 +21,7 @@ namespace Xamarin.Essentials
             using var picker = new CNContactPickerViewController
             {
                 Delegate = new ContactPickerDelegate(phoneContact =>
-                    source?.TrySetResult(Contacts.GetContact(phoneContact)))
+                    source?.TrySetResult(Contacts.ConvertContact(phoneContact)))
             };
 
             uiView.PresentViewController(picker, true, null);
@@ -45,7 +45,8 @@ namespace Xamarin.Essentials
                 CNContactKey.FamilyName,
                 CNContactKey.NameSuffix,
                 CNContactKey.EmailAddresses,
-                CNContactKey.PhoneNumbers
+                CNContactKey.PhoneNumbers,
+                CNContactKey.Type
             };
 
             var results = new List<Contact>();
@@ -58,7 +59,7 @@ namespace Xamarin.Essentials
                     try
                     {
                         using var pred = CNContact.GetPredicateForContactsInContainer(container.Identifier);
-                        results.AddRange(store.GetUnifiedContacts(pred, keys, out error)?.Select(a => GetContact(a)));
+                        results.AddRange(store.GetUnifiedContacts(pred, keys, out error)?.Select(a => ConvertContact(a)));
                     }
                     catch
                     {
@@ -69,7 +70,7 @@ namespace Xamarin.Essentials
             return results;
         }
 
-        internal static Contact GetContact(CNContact contact)
+        internal static Contact ConvertContact(CNContact contact)
         {
             if (contact == null)
                 return default;
@@ -97,9 +98,9 @@ namespace Xamarin.Essentials
 
                 return new Contact(name, phones, emails, contactType);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
             finally
             {

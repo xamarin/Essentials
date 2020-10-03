@@ -9,29 +9,39 @@
         <viewmodel:ContactsViewModel />
     </view:BasePage.BindingContext>
 
-    <StackLayout>
-        <Label Text="Get and add contacts in your device." FontAttributes="Bold" Margin="12" />
 
-        <ScrollView>
-            <StackLayout Padding="12,0,12,12" Spacing="6">
+    <ListView ItemsSource="{Binding ContactsList}">
+        <ListView.Header>
+            <StackLayout>
+                <Label Text="Get and add contacts in your device." FontAttributes="Bold" Margin="12" />
 
-                <Label FontAttributes="Bold" Text="Name:" />
-                <Label Text="{Binding Name}" />
+                <StackLayout Padding="12,0,12,12" Spacing="6">
 
-                <Label FontAttributes="Bold" Text="Numbers:" />
-                <Label Text="{Binding Phones}" />
+                    <Label FontAttributes="Bold" Text="Name:" />
+                    <Label Text="{Binding Name}" />
 
-                <Label FontAttributes="Bold" Text="Emails:" />
-                <Label Text="{Binding Emails}" />
+                    <Label FontAttributes="Bold" Text="Numbers:" />
+                    <Label Text="{Binding Phones}" />
 
-                <Label FontAttributes="Bold" Text="Contact Type:" />
+                    <Label FontAttributes="Bold" Text="Emails:" />
+                    <Label Text="{Binding Emails}" />
 
-                <Label Text="{Binding ContactType}" />
+                    <Label FontAttributes="Bold" Text="Contact Type:" />
 
-                <Button Command="{Binding GetContactCommand}" Text="Get Contact" />
+                    <Label Text="{Binding ContactType}" />
 
+                    <Button Command="{Binding GetContactCommand}" Text="Get Contact" />
+
+                    <Button Command="{Binding GetAllContactCommand}" Text="Get All Contact" />
+
+                </StackLayout>
             </StackLayout>
-        </ScrollView>
-    </StackLayout>
+        </ListView.Header>
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <TextCell Text="{Binding Name}" />
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
 
 </view:BasePage>

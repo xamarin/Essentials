@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -39,11 +40,18 @@ namespace Samples.ViewModel
             set => SetProperty(ref contactType, value);
         }
 
+        IEnumerable<Contact> contactsList;
+
+        public IEnumerable<Contact> ContactsList { get => contactsList; set => SetProperty(ref contactsList, value); }
+
         public ICommand GetContactCommand { get; }
+
+        public ICommand GetAllContactCommand { get; }
 
         public ContactsViewModel()
         {
             GetContactCommand = new Command(OnGetContact);
+            GetAllContactCommand = new Command(OnGetAllContact);
         }
 
         async void OnGetContact()
@@ -70,6 +78,25 @@ namespace Samples.ViewModel
 
                 Name = contact?.Name;
                 ContactType = contact?.ContactType.ToString();
+            }
+            catch (Exception ex)
+            {
+                MainThread.BeginInvokeOnMainThread(async () => await DisplayAlertAsync($"Error:{ex.Message}"));
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        async void OnGetAllContact()
+        {
+            if (IsBusy)
+                return;
+            IsBusy = true;
+            try
+            {
+                ContactsList = await Contacts.GetAllAsync();
             }
             catch (Exception ex)
             {
