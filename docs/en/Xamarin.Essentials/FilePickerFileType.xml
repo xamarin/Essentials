@@ -87,10 +87,46 @@
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
+    <Member MemberName="Pdf">
+      <MemberSignature Language="C#" Value="public static readonly Xamarin.Essentials.FilePickerFileType Pdf;" />
+      <MemberSignature Language="ILAsm" Value=".field public static initonly class Xamarin.Essentials.FilePickerFileType Pdf" />
+      <MemberSignature Language="DocId" Value="F:Xamarin.Essentials.FilePickerFileType.Pdf" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Xamarin.Essentials.FilePickerFileType</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
     <Member MemberName="PlatformImageFileType">
       <MemberSignature Language="C#" Value="public static Xamarin.Essentials.FilePickerFileType PlatformImageFileType ();" />
       <MemberSignature Language="ILAsm" Value=".method public static hidebysig class Xamarin.Essentials.FilePickerFileType PlatformImageFileType() cil managed" />
       <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.FilePickerFileType.PlatformImageFileType" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Xamarin.Essentials.FilePickerFileType</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added.</summary>
+        <returns>To be added.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="PlatformPdfFileType">
+      <MemberSignature Language="C#" Value="public static Xamarin.Essentials.FilePickerFileType PlatformPdfFileType ();" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class Xamarin.Essentials.FilePickerFileType PlatformPdfFileType() cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.FilePickerFileType.PlatformPdfFileType" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
