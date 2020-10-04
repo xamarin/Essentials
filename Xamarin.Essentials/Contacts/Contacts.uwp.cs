@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
             try
             {
                 var contactSelected = await contactPicker.PickContactAsync();
-                return GetContact(contactSelected);
+                return ConvertContact(contactSelected);
             }
             catch (Exception)
             {
@@ -27,7 +27,7 @@ namespace Xamarin.Essentials
         static async Task<IEnumerable<Contact>> PlatformGetAllAsync()
         {
             var contactStore = await ContactManager.RequestStoreAsync();
-            return (await contactStore.FindContactsAsync())?.Select(a => GetContact(a));
+            return (await contactStore?.FindContactsAsync())?.Select(a => ConvertContact(a));
         }
 
         internal static Contact ConvertContact(Windows.ApplicationModel.Contacts.Contact contact)
