@@ -64,8 +64,6 @@ namespace Xamarin.Essentials
             };
         }
 
-        static bool isOverrideActive;
-
         static BrightnessOverride PlatformSetBrightness(Brightness brightness)
         {
             var window = Platform.GetCurrentActivity(false)?.Window;
@@ -76,7 +74,6 @@ namespace Xamarin.Essentials
             attributes.CopyFrom(window.Attributes);
             attributes.ScreenBrightness = (float)brightness.Value;
             window.Attributes = attributes;
-            isOverrideActive = true;
             return new BrightnessOverride(PlatformGetBrightness(), brightness);
         }
 
@@ -86,9 +83,7 @@ namespace Xamarin.Essentials
             return new Brightness(currentActivity?.Window.Attributes.ScreenBrightness ?? -1d);
         }
 
-        internal static void ResetBrightnessOverride() => isOverrideActive = false;
-
-        static bool PlatformIsBrightnessOverrideActive() => isOverrideActive;
+        static bool PlatformIsBrightnessOverrideActive() => (Platform.GetCurrentActivity(false)?.Window.Attributes.ScreenBrightness ?? 0d) < 0d;
 
         static bool PlatformIsBrightnessSupported() => true;
     }

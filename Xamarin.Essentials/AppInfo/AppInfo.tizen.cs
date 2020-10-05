@@ -42,7 +42,7 @@ namespace Xamarin.Essentials
 
         static Brightness PlatformGetBrightness() => new Brightness(Tizen.System.Display.Displays[0].Brightness);
 
-        static bool PlatformIsBrightnessOverrideActive() => throw ExceptionUtils.NotSupportedOrImplementedException;
+        static bool PlatformIsBrightnessOverrideActive() => false;
 
         static AppTheme PlatformRequestedTheme()
         {

@@ -24,6 +24,6 @@ namespace Xamarin.Essentials
 
         public static BrightnessOverride SetBrightness(Brightness brightness) => PlatformSetBrightness(brightness);
 
-        public static bool IsBrightnessSupported() => PlatformIsBrightnessSupported();
+        public static bool IsBrightnessSupported => PlatformIsBrightnessSupported();
     }
 }
