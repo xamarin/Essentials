@@ -11,7 +11,7 @@ iOS, Android, and UWP offer unique operating system and platform APIs that devel
 | Build Server | Type         | Platform | Status                                                                                                                                                                                 |
 |--------------|--------------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Jenkins      | Build        | Windows  | [![Jenkins Build Status](https://jenkins.mono-project.com/buildStatus/icon?job=Components-Essentials)](https://jenkins.mono-project.com/view/Components/job/Components-Essentials/)        |
-| VSTS         | Build        | Windows  | ![VSTS Build Status](https://devdiv.visualstudio.com/_apis/public/build/definitions/0bdbc590-a062-4c3f-b0f6-9383f67865ee/8538/badge)                                                   |
+| VSTS         | Build        | Windows  | ![VSTS Build Status](https://devdiv.visualstudio.com/_apis/public/build/definitions/0bdbc590-a062-4c3f-b0f6-9383f67865ee/8538/badge?WT.mc_id=essentials-github-jamont)                                                   |
 | Jenkins      | Device Tests | macOS    | [![Build Status](https://jenkins.mono-project.com/buildStatus/icon?job=Components-Essentials-DeviceTests-Mac)](https://jenkins.mono-project.com/job/Components-Essentials-DeviceTests-Mac) |
 | App Center   | Sample App   | Android  | [![Build status](https://build.appcenter.ms/v0.1/apps/7a1f46ca-ba2f-477e-aacc-ff013c7d5f7a/branches/master/badge)](https://appcenter.ms) |
 | App Center   | Sample App   | iOS      | [![Build status](https://build.appcenter.ms/v0.1/apps/43b39e9e-2b2b-482f-8afa-e9906334c85e/branches/master/badge)](https://appcenter.ms) |
@@ -28,11 +28,11 @@ Xamarin.Essentials is available via:
 * NuGet Official Releases: [![NuGet](https://img.shields.io/nuget/vpre/Xamarin.Essentials.svg?label=NuGet)](https://www.nuget.org/packages/Xamarin.Essentials)
 * MyGet Development Feed: https://www.myget.org/F/xamarin-essentials/api/v3/index.json
 
-Please read our [Getting Started with Xamarin.Essentials guide](https://docs.microsoft.com/xamarin/essentials/get-started) for full setup instructions.
+Please read our [Getting Started with Xamarin.Essentials guide](https://docs.microsoft.com/xamarin/essentials/get-started?WT.mc_id=essentials-github-jamont) for full setup instructions.
 
 ## Documentation
 
-Browse our [full documentation for Xamarin.Essentials](https://docs.microsoft.com/xamarin/essentials), including feature guides, on how to use each feature.
+Browse our [full documentation for Xamarin.Essentials](https://docs.microsoft.com/xamarin/essentials?WT.mc_id=essentials-github-jamont), including feature guides, on how to use each feature.
 
 ## Supported Platforms
 
@@ -46,36 +46,36 @@ Xamarin.Essentials is focused on the following platforms:
 
 The following cross-platform APIs are available in Xamarin.Essentials:
 
-* [Accelerometer](https://docs.microsoft.com/xamarin/essentials/accelerometer)
-* [App Information](https://docs.microsoft.com/xamarin/essentials/app-information)
-* [Battery](https://docs.microsoft.com/xamarin/essentials/battery)
-* [Clipboard](https://docs.microsoft.com/xamarin/essentials/clipboard)
-* [Compass](https://docs.microsoft.com/xamarin/essentials/compass)
-* [Connectivity](https://docs.microsoft.com/xamarin/essentials/connectivity)
-* [Device Display Information](https://docs.microsoft.com/en-us/xamarin/essentials/device-display)
-* [Device Information](https://docs.microsoft.com/xamarin/essentials/device-information)
-* [Email](https://docs.microsoft.com/xamarin/essentials/email)
-* [File System Helpers](https://docs.microsoft.com/xamarin/essentials/file-system-helpers)
-* [Flashlight](https://docs.microsoft.com/xamarin/essentials/flashlight)
-* [Geocoding](https://docs.microsoft.com/xamarin/essentials/geocoding)
-* [Geolocation](https://docs.microsoft.com/xamarin/essentials/geolocation)
-* [Gyroscope](https://docs.microsoft.com/xamarin/essentials/gyroscope)
-* [Launcher](https://docs.microsoft.com/xamarin/essentials/launcher)
-* [Magnetometer](https://docs.microsoft.com/xamarin/essentials/magnetometer)
-* [MainThread](https://docs.microsoft.com/xamarin/essentials/main-thread)
-* [Maps](https://docs.microsoft.com/xamarin/essentials/maps)
-* [Open Browser](https://docs.microsoft.com/xamarin/essentials/open-browser)
-* [Orientation Sensor](https://docs.microsoft.com/en-us/xamarin/essentials/orientation-sensor)
-* [Phone Dialer](https://docs.microsoft.com/xamarin/essentials/phone-dialer)
-* [Power](https://docs.microsoft.com/en-us/xamarin/essentials/power)
-* [Preferences](https://docs.microsoft.com/xamarin/essentials/preferences)
-* [Screen Lock](https://docs.microsoft.com/xamarin/essentials/screen-lock)
-* [Secure Storage](https://docs.microsoft.com/xamarin/essentials/secure-storage)
-* [Share](https://docs.microsoft.com/xamarin/essentials/share)
-* [SMS](https://docs.microsoft.com/xamarin/essentials/sms)
-* [Text-to-Speech](https://docs.microsoft.com/xamarin/essentials/text-to-speech)
-* [Version Tracking](https://docs.microsoft.com/xamarin/essentials/version-tracking)
-* [Vibrate](https://docs.microsoft.com/xamarin/essentials/vibrate)
+* [Accelerometer](https://docs.microsoft.com/xamarin/essentials/accelerometer?WT.mc_id=essentials-github-jamont)
+* [App Information](https://docs.microsoft.com/xamarin/essentials/app-information?WT.mc_id=essentials-github-jamont)
+* [Battery](https://docs.microsoft.com/xamarin/essentials/battery?WT.mc_id=essentials-github-jamont)
+* [Clipboard](https://docs.microsoft.com/xamarin/essentials/clipboard?WT.mc_id=essentials-github-jamont)
+* [Compass](https://docs.microsoft.com/xamarin/essentials/compass?WT.mc_id=essentials-github-jamont)
+* [Connectivity](https://docs.microsoft.com/xamarin/essentials/connectivity?WT.mc_id=essentials-github-jamont)
+* [Device Display Information](https://docs.microsoft.com/xamarin/essentials/device-display?WT.mc_id=essentials-github-jamont)
+* [Device Information](https://docs.microsoft.com/xamarin/essentials/device-information?WT.mc_id=essentials-github-jamont)
+* [Email](https://docs.microsoft.com/xamarin/essentials/email?WT.mc_id=essentials-github-jamont)
+* [File System Helpers](https://docs.microsoft.com/xamarin/essentials/file-system-helpers?WT.mc_id=essentials-github-jamont)
+* [Flashlight](https://docs.microsoft.com/xamarin/essentials/flashlight?WT.mc_id=essentials-github-jamont)
+* [Geocoding](https://docs.microsoft.com/xamarin/essentials/geocoding?WT.mc_id=essentials-github-jamont)
+* [Geolocation](https://docs.microsoft.com/xamarin/essentials/geolocation?WT.mc_id=essentials-github-jamont)
+* [Gyroscope](https://docs.microsoft.com/xamarin/essentials/gyroscope?WT.mc_id=essentials-github-jamont)
+* [Launcher](https://docs.microsoft.com/xamarin/essentials/launcher?WT.mc_id=essentials-github-jamont)
+* [Magnetometer](https://docs.microsoft.com/xamarin/essentials/magnetometer?WT.mc_id=essentials-github-jamont)
+* [MainThread](https://docs.microsoft.com/xamarin/essentials/main-thread?WT.mc_id=essentials-github-jamont)
+* [Maps](https://docs.microsoft.com/xamarin/essentials/maps?WT.mc_id=essentials-github-jamont)
+* [Open Browser](https://docs.microsoft.com/xamarin/essentials/open-browser?WT.mc_id=essentials-github-jamont)
+* [Orientation Sensor](https://docs.microsoft.com/xamarin/essentials/orientation-sensor?WT.mc_id=essentials-github-jamont)
+* [Phone Dialer](https://docs.microsoft.com/xamarin/essentials/phone-dialer?WT.mc_id=essentials-github-jamont)
+* [Power](https://docs.microsoft.com/xamarin/essentials/power?WT.mc_id=essentials-github-jamont)
+* [Preferences](https://docs.microsoft.com/xamarin/essentials/preferences?WT.mc_id=essentials-github-jamont)
+* [Screen Lock](https://docs.microsoft.com/xamarin/essentials/screen-lock?WT.mc_id=essentials-github-jamont)
+* [Secure Storage](https://docs.microsoft.com/xamarin/essentials/secure-storage?WT.mc_id=essentials-github-jamont)
+* [Share](https://docs.microsoft.com/xamarin/essentials/share?WT.mc_id=essentials-github-jamont)
+* [SMS](https://docs.microsoft.com/xamarin/essentials/sms?WT.mc_id=essentials-github-jamont)
+* [Text-to-Speech](https://docs.microsoft.com/xamarin/essentials/text-to-speech?WT.mc_id=essentials-github-jamont)
+* [Version Tracking](https://docs.microsoft.com/xamarin/essentials/version-tracking?WT.mc_id=essentials-github-jamont)
+* [Vibrate](https://docs.microsoft.com/xamarin/essentials/vibrate?WT.mc_id=essentials-github-jamont)
 
 ## Contributing
 
