@@ -9,12 +9,6 @@ namespace Xamarin.Essentials
     {
         static Task PlatformRequestAsync(ShareTextRequest request)
         {
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            if (string.IsNullOrEmpty(request.Text) && string.IsNullOrEmpty(request.Uri))
-                throw new ArgumentNullException(nameof(request.Text));
-
             var dataTransferManager = DataTransferManager.GetForCurrentView();
 
             dataTransferManager.DataRequested += ShareTextHandler;
