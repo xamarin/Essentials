@@ -4,14 +4,14 @@
     {
         static bool PlatformKeepScreenOn
         {
-            get => throw ExceptionUtils.NotSupportedOrImplementedException;
-            set => throw ExceptionUtils.NotSupportedOrImplementedException;
+            get => ThrowHelper.ThrowNotImplementedException<bool>();
+            set => ThrowHelper.ThrowNotImplementedException();
         }
 
-        static DisplayInfo GetMainDisplayInfo() => throw ExceptionUtils.NotSupportedOrImplementedException;
+        static DisplayInfo GetMainDisplayInfo() => ThrowHelper.ThrowNotImplementedException<DisplayInfo>();
 
-        static void StartScreenMetricsListeners() => throw ExceptionUtils.NotSupportedOrImplementedException;
+        static void StartScreenMetricsListeners() => ThrowHelper.ThrowNotImplementedException();
 
-        static void StopScreenMetricsListeners() => throw ExceptionUtils.NotSupportedOrImplementedException;
+        static void StopScreenMetricsListeners() => ThrowHelper.ThrowNotImplementedException();
     }
 }

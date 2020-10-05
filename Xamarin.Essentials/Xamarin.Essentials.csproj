@@ -122,6 +122,9 @@
     <Reference Include="OpenTK-1.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Types\Shared\ThrowHelper.shared.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="mdoc.targets" />
   </ItemGroup>
   <Import Project="$(MSBuildThisFileDirectory)mdoc.targets" />

@@ -5,18 +5,18 @@ namespace Xamarin.Essentials
     public static partial class Clipboard
     {
         static Task PlatformSetTextAsync(string text)
-            => throw ExceptionUtils.NotSupportedOrImplementedException;
+            => ThrowHelper.ThrowNotImplementedException<Task>();
 
         static bool PlatformHasText
-            => throw ExceptionUtils.NotSupportedOrImplementedException;
+            => ThrowHelper.ThrowNotImplementedException<bool>();
 
         static Task<string> PlatformGetTextAsync()
-            => throw ExceptionUtils.NotSupportedOrImplementedException;
+            => ThrowHelper.ThrowNotImplementedException<Task<string>>();
 
         static void StartClipboardListeners()
-            => throw ExceptionUtils.NotSupportedOrImplementedException;
+            => ThrowHelper.ThrowNotImplementedException();
 
         static void StopClipboardListeners()
-            => throw ExceptionUtils.NotSupportedOrImplementedException;
+            => ThrowHelper.ThrowNotImplementedException();
     }
 }

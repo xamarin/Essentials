@@ -5,9 +5,9 @@ namespace Xamarin.Essentials
     public static partial class Sms
     {
         internal static bool IsComposeSupported
-            => throw ExceptionUtils.NotSupportedOrImplementedException;
+            => ThrowHelper.ThrowNotImplementedException<bool>();
 
         static Task PlatformComposeAsync(SmsMessage message)
-            => throw ExceptionUtils.NotSupportedOrImplementedException;
+            => ThrowHelper.ThrowNotImplementedException<Task>();
     }
 }

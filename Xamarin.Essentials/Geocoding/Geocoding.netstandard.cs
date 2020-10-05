@@ -6,9 +6,9 @@ namespace Xamarin.Essentials
     public static partial class Geocoding
     {
         static Task<IEnumerable<Placemark>> PlatformGetPlacemarksAsync(double latitude, double longitude) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<Task<IEnumerable<Placemark>>>();
 
         static Task<IEnumerable<Location>> PlatformGetLocationsAsync(string address) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<Task<IEnumerable<Location>>>();
     }
 }

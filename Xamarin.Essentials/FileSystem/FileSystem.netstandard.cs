@@ -6,24 +6,24 @@ namespace Xamarin.Essentials
     public static partial class FileSystem
     {
         static string PlatformCacheDirectory
-            => throw ExceptionUtils.NotSupportedOrImplementedException;
+            => ThrowHelper.ThrowNotImplementedException<string>();
 
         static string PlatformAppDataDirectory
-            => throw ExceptionUtils.NotSupportedOrImplementedException;
+            => ThrowHelper.ThrowNotImplementedException<string>();
 
         static Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
-             => throw ExceptionUtils.NotSupportedOrImplementedException;
+             => ThrowHelper.ThrowNotImplementedException<Task<Stream>>();
     }
 
     public partial class FileBase
     {
         static string PlatformGetContentType(string extension) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<string>();
 
         internal void PlatformInit(FileBase file) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException();
 
         internal virtual Task<Stream> PlatformOpenReadAsync()
-            => throw ExceptionUtils.NotSupportedOrImplementedException;
+            => ThrowHelper.ThrowNotImplementedException<Task<Stream>>();
     }
 }

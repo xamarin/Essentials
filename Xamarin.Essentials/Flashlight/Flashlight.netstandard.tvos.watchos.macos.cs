@@ -5,9 +5,9 @@ namespace Xamarin.Essentials
     public static partial class Flashlight
     {
         static Task PlatformTurnOnAsync() =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<Task>();
 
         static Task PlatformTurnOffAsync() =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<Task>();
     }
 }

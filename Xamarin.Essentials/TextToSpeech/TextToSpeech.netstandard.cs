@@ -7,9 +7,9 @@ namespace Xamarin.Essentials
     public static partial class TextToSpeech
     {
         internal static Task PlatformSpeakAsync(string text, SpeechOptions options, CancellationToken cancelToken = default) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<Task>();
 
         internal static Task<IEnumerable<Locale>> PlatformGetLocalesAsync() =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<Task<IEnumerable<Locale>>>();
     }
 }

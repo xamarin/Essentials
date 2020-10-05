@@ -7,16 +7,16 @@ namespace Xamarin.Essentials
         public partial class BasePlatformPermission : BasePermission
         {
             public override Task<PermissionStatus> CheckStatusAsync() =>
-                throw ExceptionUtils.NotSupportedOrImplementedException;
+                ThrowHelper.ThrowNotImplementedException<Task<PermissionStatus>>();
 
             public override Task<PermissionStatus> RequestAsync() =>
-                throw ExceptionUtils.NotSupportedOrImplementedException;
+                ThrowHelper.ThrowNotImplementedException<Task<PermissionStatus>>();
 
             public override void EnsureDeclared() =>
-                throw ExceptionUtils.NotSupportedOrImplementedException;
+                ThrowHelper.ThrowNotImplementedException();
 
             public override bool ShouldShowRationale() =>
-                throw ExceptionUtils.NotSupportedOrImplementedException;
+                ThrowHelper.ThrowNotImplementedException<bool>();
         }
 
         public partial class Battery : BasePlatformPermission

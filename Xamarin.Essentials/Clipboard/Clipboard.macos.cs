@@ -33,9 +33,9 @@ namespace Xamarin.Essentials
                 null)?[0]?.ToString();
 
         static void StartClipboardListeners()
-            => throw ExceptionUtils.NotSupportedOrImplementedException;
+            => ThrowHelper.ThrowNotImplementedException();
 
         static void StopClipboardListeners()
-            => throw ExceptionUtils.NotSupportedOrImplementedException;
+            => ThrowHelper.ThrowNotImplementedException();
     }
 }

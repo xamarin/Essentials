@@ -3,12 +3,12 @@
     public static partial class OrientationSensor
     {
         internal static bool IsSupported =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<bool>();
 
         static void PlatformStart(SensorSpeed sensorSpeed) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException();
 
         static void PlatformStop() =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException();
     }
 }

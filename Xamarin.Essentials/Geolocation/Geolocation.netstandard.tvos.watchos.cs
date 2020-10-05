@@ -7,9 +7,9 @@ namespace Xamarin.Essentials
     public static partial class Geolocation
     {
         static Task<Location> PlatformLastKnownLocationAsync() =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<Task<Location>>();
 
         static Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<Task<Location>>();
     }
 }

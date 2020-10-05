@@ -5,15 +5,15 @@ namespace Xamarin.Essentials
     public partial class SecureStorage
     {
         static Task<string> PlatformGetAsync(string key) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<Task<string>>();
 
         static Task PlatformSetAsync(string key, string data) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<Task>();
 
         static bool PlatformRemove(string key) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<bool>();
 
         static void PlatformRemoveAll() =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException();
     }
 }

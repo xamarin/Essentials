@@ -5,9 +5,9 @@ namespace Xamarin.Essentials
     public static partial class MainThread
     {
         static void PlatformBeginInvokeOnMainThread(Action action) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException();
 
         static bool PlatformIsMainThread =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<bool>();
     }
 }

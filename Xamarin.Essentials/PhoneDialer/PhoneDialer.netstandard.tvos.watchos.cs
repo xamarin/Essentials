@@ -3,9 +3,9 @@
     public static partial class PhoneDialer
     {
         internal static bool IsSupported =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<bool>();
 
         static void PlatformOpen(string number) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException();
     }
 }

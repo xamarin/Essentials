@@ -3,12 +3,12 @@
     public static partial class Magnetometer
     {
         internal static bool IsSupported =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<bool>();
 
         internal static void PlatformStart(SensorSpeed sensorSpeed) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException();
 
         internal static void PlatformStop() =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException();
     }
 }

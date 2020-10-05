@@ -5,15 +5,15 @@ namespace Xamarin.Essentials
     public static partial class Connectivity
     {
         static NetworkAccess PlatformNetworkAccess =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<NetworkAccess>();
 
         static IEnumerable<ConnectionProfile> PlatformConnectionProfiles =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<IEnumerable<ConnectionProfile>>();
 
         static void StartListeners() =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException();
 
         static void StopListeners() =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException();
     }
 }

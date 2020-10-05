@@ -6,10 +6,10 @@ namespace Xamarin.Essentials
     public static partial class Screenshot
     {
         static bool PlatformIsCaptureSupported =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<bool>();
 
         static Task<ScreenshotResult> PlatformCaptureAsync() =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<Task<ScreenshotResult>>();
     }
 
     public partial class ScreenshotResult
@@ -19,6 +19,6 @@ namespace Xamarin.Essentials
         }
 
         internal Task<Stream> PlatformOpenReadAsync(ScreenshotFormat format) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            ThrowHelper.ThrowNotImplementedException<Task<Stream>>();
     }
 }

@@ -5,12 +5,12 @@ namespace Xamarin.Essentials
     public static partial class Vibration
     {
         internal static bool IsSupported
-            => throw ExceptionUtils.NotSupportedOrImplementedException;
+            => ThrowHelper.ThrowNotImplementedException<bool>();
 
         static void PlatformVibrate(TimeSpan duration)
-            => throw ExceptionUtils.NotSupportedOrImplementedException;
+            => ThrowHelper.ThrowNotImplementedException();
 
         static void PlatformCancel()
-            => throw ExceptionUtils.NotSupportedOrImplementedException;
+            => ThrowHelper.ThrowNotImplementedException();
     }
 }
