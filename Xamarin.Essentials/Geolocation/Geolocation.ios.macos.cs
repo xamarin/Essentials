@@ -12,7 +12,7 @@ namespace Xamarin.Essentials
         static async Task<Location> PlatformLastKnownLocationAsync()
         {
             if (!CLLocationManager.LocationServicesEnabled)
-                throw new FeatureNotEnabledException("Location services are not enabled on device.");
+                ThrowHelper.ThrowFeatureNotEnabledException("Location services are not enabled on device.");
 
             await Permissions.EnsureGrantedAsync<Permissions.LocationWhenInUse>();
 
@@ -25,7 +25,7 @@ namespace Xamarin.Essentials
         static async Task<Location> PlatformLocationAsync(GeolocationRequest request, CancellationToken cancellationToken)
         {
             if (!CLLocationManager.LocationServicesEnabled)
-                throw new FeatureNotEnabledException("Location services are not enabled on device.");
+                ThrowHelper.ThrowFeatureNotEnabledException("Location services are not enabled on device.");
 
             await Permissions.EnsureGrantedAsync<Permissions.LocationWhenInUse>();
 

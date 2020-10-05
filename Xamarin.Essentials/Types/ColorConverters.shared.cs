@@ -22,7 +22,7 @@ namespace Xamarin.Essentials
         {
             // Undefined
             if (hex.Length < 3)
-                throw new ArgumentException(nameof(hex));
+                ThrowHelper.ThrowArgumentException(nameof(hex));
 
             var idx = (hex[0] == '#') ? 1 : 0;
 
@@ -57,7 +57,7 @@ namespace Xamarin.Essentials
                             (int)(ToHex(hex[idx++]) << 4 | ToHex(hex[idx])));
 
                 default: // everything else will result in unexpected results
-                    throw new ArgumentException(nameof(hex));
+                    ThrowHelper.ThrowArgumentException(nameof(hex));
             }
         }
 

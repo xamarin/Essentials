@@ -51,7 +51,7 @@ namespace Xamarin.Essentials
                 {
                     var ap = androidPermission;
                     if (!IsDeclaredInManifest(ap))
-                        throw new PermissionException($"You need to declare using the permission: `{androidPermission}` in your AndroidManifest.xml");
+                        ThrowHelper.ThrowPermissionException($"You need to declare using the permission: `{androidPermission}` in your AndroidManifest.xml");
 
                     var status = PermissionStatus.Granted;
 
@@ -113,7 +113,7 @@ namespace Xamarin.Essentials
                     return await tcs.Task;
 
                 if (!MainThread.IsMainThread)
-                    throw new PermissionException("Permission request must be invoked on main thread.");
+                    ThrowHelper.ThrowPermissionException("Permission request must be invoked on main thread.");
 
                 ActivityCompat.RequestPermissions(Platform.GetCurrentActivity(true), runtimePermissions.ToArray(), requestCode);
 
@@ -134,7 +134,7 @@ namespace Xamarin.Essentials
                 {
                     var ap = androidPermission;
                     if (!IsDeclaredInManifest(ap))
-                        throw new PermissionException($"You need to declare using the permission: `{androidPermission}` in your AndroidManifest.xml");
+                        ThrowHelper.ThrowPermissionException($"You need to declare using the permission: `{androidPermission}` in your AndroidManifest.xml");
                 }
             }
 

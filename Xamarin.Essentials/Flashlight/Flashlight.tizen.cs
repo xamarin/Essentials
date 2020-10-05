@@ -14,7 +14,7 @@ namespace Xamarin.Essentials
             return Task.Run(() =>
             {
                 if (!IsSupported)
-                    throw new FeatureNotSupportedException();
+                   ThrowHelper.ThrowNotImplementedException();
 
                 if (switchOn)
                     Led.Brightness = Led.MaxBrightness;

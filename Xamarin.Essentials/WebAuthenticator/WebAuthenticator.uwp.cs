@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -17,7 +14,7 @@ namespace Xamarin.Essentials
         static async Task<WebAuthenticatorResult> PlatformAuthenticateAsync(Uri url, Uri callbackUrl)
         {
             if (!IsUriProtocolDeclared(callbackUrl.Scheme))
-                throw new InvalidOperationException($"You need to declare the windows.protocol usage of the protocol/scheme `{callbackUrl.Scheme}` in your AppxManifest.xml file");
+                ThrowHelper.ThrowArgumentNullException($"You need to declare the windows.protocol usage of the protocol/scheme `{callbackUrl.Scheme}` in your AppxManifest.xml file");
 
             try
             {
@@ -30,16 +27,16 @@ namespace Xamarin.Essentials
                         var resultUri = new Uri(r.ResponseData.ToString());
                         return new WebAuthenticatorResult(resultUri);
                     case WebAuthenticationStatus.UserCancel:
-                        throw new TaskCanceledException();
+                        return ThrowHelper.ThrowTaskCancelledException<WebAuthenticatorResult>();
                     case WebAuthenticationStatus.ErrorHttp:
-                        throw new HttpRequestException("Error: " + r.ResponseErrorDetail);
+                        return ThrowHelper.ThrowHttpRequestException<WebAuthenticatorResult>("Error: " + r.ResponseErrorDetail);
                     default:
-                        throw new Exception("Response: " + r.ResponseData.ToString() + "\nStatus: " + r.ResponseStatus);
+                        return ThrowHelper.ThrowException<WebAuthenticatorResult>("Response: " + r.ResponseData.ToString() + "\nStatus: " + r.ResponseStatus);
                 }
             }
             catch (FileNotFoundException)
             {
-                throw new TaskCanceledException();
+                return ThrowHelper.ThrowTaskCancelledException<WebAuthenticatorResult>();
             }
         }
 

@@ -51,7 +51,7 @@ namespace Xamarin.Essentials
             if (propertyLength == 0)
             {
                 Marshal.FreeHGlobal(lengthPtr);
-                throw new InvalidOperationException("Unable to read length of property.");
+                ThrowHelper.ThrowArgumentNullException("Unable to read length of property.");
             }
 
             var valuePtr = Marshal.AllocHGlobal(propertyLength);
@@ -90,7 +90,7 @@ namespace Xamarin.Essentials
                     .FirstOrDefault(w => w.RootViewController != null && w.WindowLevel == UIWindowLevel.Normal);
 
                 if (window == null && throwIfNull)
-                    throw new InvalidOperationException("Could not find current view controller.");
+                    ThrowHelper.ThrowArgumentNullException("Could not find current view controller.");
                 else
                     viewController = window?.RootViewController;
             }
@@ -99,7 +99,7 @@ namespace Xamarin.Essentials
                 viewController = viewController.PresentedViewController;
 
             if (throwIfNull && viewController == null)
-                throw new InvalidOperationException("Could not find current view controller.");
+                ThrowHelper.ThrowArgumentNullException("Could not find current view controller.");
 
             return viewController;
         }
@@ -120,7 +120,7 @@ namespace Xamarin.Essentials
             }
 
             if (throwIfNull && window == null)
-                throw new InvalidOperationException("Could not find current window.");
+                ThrowHelper.ThrowArgumentNullException("Could not find current window.");
 
             return window;
         }

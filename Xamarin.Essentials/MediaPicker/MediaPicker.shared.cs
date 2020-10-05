@@ -15,7 +15,7 @@ namespace Xamarin.Essentials
         public static Task<FileResult> CapturePhotoAsync(MediaPickerOptions options = null)
         {
             if (!IsCaptureSupported)
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
 
             return PlatformCapturePhotoAsync(options);
         }
@@ -26,7 +26,7 @@ namespace Xamarin.Essentials
         public static Task<FileResult> CaptureVideoAsync(MediaPickerOptions options = null)
         {
             if (!IsCaptureSupported)
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
 
             return PlatformCaptureVideoAsync(options);
         }

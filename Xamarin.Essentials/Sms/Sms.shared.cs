@@ -12,7 +12,7 @@ namespace Xamarin.Essentials
         public static Task ComposeAsync(SmsMessage message)
         {
             if (!IsComposeSupported)
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
 
             if (message == null)
                 message = new SmsMessage();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 using Foundation;
@@ -15,10 +16,10 @@ namespace Xamarin.Essentials
         public static Task SetAsync(string key, string value, SecAccessible accessible)
         {
             if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentNullException(nameof(key));
+                ThrowHelper.ThrowArgumentNullException(nameof(key));
 
             if (value == null)
-                throw new ArgumentNullException(nameof(value));
+                ThrowHelper.ThrowArgumentNullException(nameof(value));
 
             var kc = new KeyChain(accessible);
             kc.SetValueForKey(value, key, Alias);
@@ -112,7 +113,7 @@ namespace Xamarin.Essentials
                             {
                                 result = SecKeyChain.Add(newRecord);
                                 if (result != SecStatusCode.Success)
-                                    throw new Exception($"Error adding record: {result}");
+                                    ThrowHelper.ThrowExternalException($"Error adding record: {result}", (int)result);
                             }
                             else
                             {
@@ -123,7 +124,8 @@ namespace Xamarin.Essentials
                     case SecStatusCode.Success:
                         return;
                     default:
-                        throw new Exception($"Error adding record: {result}");
+                        ThrowHelper.ThrowExternalException($"Error adding record: {result}", (int)result);
+                        break;
                 }
             }
         }
@@ -166,7 +168,7 @@ namespace Xamarin.Essentials
         {
             var result = SecKeyChain.Remove(record);
             if (result != SecStatusCode.Success && result != SecStatusCode.ItemNotFound)
-                throw new Exception($"Error removing record: {result}");
+                ThrowHelper.ThrowExternalException($"Error removing record: {result}", (int)result);
 
             return true;
         }

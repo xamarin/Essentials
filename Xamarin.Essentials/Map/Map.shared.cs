@@ -11,10 +11,10 @@ namespace Xamarin.Essentials
         public static Task OpenAsync(Location location, MapLaunchOptions options)
         {
             if (location == null)
-                throw new ArgumentNullException(nameof(location));
+                ThrowHelper.ThrowArgumentNullException(nameof(location));
 
             if (options == null)
-                throw new ArgumentNullException(nameof(options));
+                ThrowHelper.ThrowArgumentNullException(nameof(options));
 
             return PlatformOpenMapsAsync(location.Latitude, location.Longitude, options);
         }
@@ -25,7 +25,7 @@ namespace Xamarin.Essentials
         public static Task OpenAsync(double latitude, double longitude, MapLaunchOptions options)
         {
             if (options == null)
-                throw new ArgumentNullException(nameof(options));
+                ThrowHelper.ThrowArgumentNullException(nameof(options));
 
             return PlatformOpenMapsAsync(latitude, longitude, options);
         }
@@ -36,10 +36,10 @@ namespace Xamarin.Essentials
         public static Task OpenAsync(Placemark placemark, MapLaunchOptions options)
         {
             if (placemark == null)
-                throw new ArgumentNullException(nameof(placemark));
+                ThrowHelper.ThrowArgumentNullException(nameof(placemark));
 
             if (options == null)
-                throw new ArgumentNullException(nameof(options));
+                ThrowHelper.ThrowArgumentNullException(nameof(options));
 
             return PlatformOpenMapsAsync(placemark, options);
         }

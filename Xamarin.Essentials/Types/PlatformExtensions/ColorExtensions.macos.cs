@@ -9,7 +9,7 @@ namespace Xamarin.Essentials
         public static Color ToSystemColor(this NSColor color)
         {
             if (color == null)
-                throw new ArgumentNullException(nameof(color));
+                ThrowHelper.ThrowArgumentNullException(nameof(color));
 
             // make sure the colorspace is valid for RGBA
             // we can't check as the check will throw if it is invalid

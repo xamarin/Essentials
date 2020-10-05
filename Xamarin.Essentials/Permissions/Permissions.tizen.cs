@@ -79,7 +79,7 @@ namespace Xamarin.Essentials
                 foreach (var (tizenPrivilege, isRuntime) in RequiredPrivileges)
                 {
                     if (!IsPrivilegeDeclared(tizenPrivilege))
-                        throw new PermissionException($"You need to declare the privilege: `{tizenPrivilege}` in your tizen-manifest.xml");
+                        ThrowHelper.ThrowPermissionException($"You need to declare the privilege: `{tizenPrivilege}` in your tizen-manifest.xml");
                 }
             }
 

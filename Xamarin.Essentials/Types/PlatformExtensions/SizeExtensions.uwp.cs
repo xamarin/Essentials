@@ -9,10 +9,10 @@ namespace Xamarin.Essentials
         public static Size ToSystemSize(this WindowsSize size)
         {
             if (size.Width > int.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(size.Width));
+                ThrowHelper.ThrowIndexOutOfRangeException(nameof(size.Width));
 
             if (size.Height > int.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(size.Height));
+                ThrowHelper.ThrowIndexOutOfRangeException(nameof(size.Height));
 
             return new Size((int)size.Width, (int)size.Height);
         }

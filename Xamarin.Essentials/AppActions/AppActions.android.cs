@@ -15,7 +15,7 @@ namespace Xamarin.Essentials
         static Task<IEnumerable<AppAction>> PlatformGetAsync()
         {
             if (!IsSupported)
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
 
 #if __ANDROID_25__
             return Task.FromResult(Platform.ShortcutManager.DynamicShortcuts.Select(s => s.ToAppAction()));
@@ -27,7 +27,7 @@ namespace Xamarin.Essentials
         static Task PlatformSetAsync(IEnumerable<AppAction> actions)
         {
             if (!IsSupported)
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
 
 #if __ANDROID_25__
             Platform.ShortcutManager.SetDynamicShortcuts(actions.Select(a => a.ToShortcutInfo()).ToList());

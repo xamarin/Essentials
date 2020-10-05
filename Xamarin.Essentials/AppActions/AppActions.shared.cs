@@ -36,8 +36,8 @@ namespace Xamarin.Essentials
     {
         public AppAction(string id, string title, string subtitle = null, string icon = null)
         {
-            Id = id ?? throw new ArgumentNullException(nameof(id));
-            Title = title ?? throw new ArgumentNullException(nameof(title));
+            Id = id ?? ThrowHelper.ThrowArgumentNullException(nameof(id));
+            Title = title ?? ThrowHelper.ThrowArgumentNullException(nameof(title));
 
             Subtitle = subtitle;
             Icon = icon;

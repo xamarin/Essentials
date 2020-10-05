@@ -66,7 +66,7 @@ namespace Xamarin.Essentials
                     intent.SetFlags(flags);
 
                     if (!Platform.IsIntentSupported(intent))
-                        throw new FeatureNotSupportedException();
+                       ThrowHelper.ThrowNotImplementedException();
 
                     Platform.AppContext.StartActivity(intent);
                     break;

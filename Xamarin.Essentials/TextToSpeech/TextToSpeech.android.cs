@@ -34,7 +34,7 @@ namespace Xamarin.Essentials
             var textToSpeech = GetTextToSpeech();
 
             if (textToSpeech == null)
-                throw new PlatformNotSupportedException("Unable to start text-to-speech engine, not supported on device.");
+                ThrowHelper.ThrowNotImplementedException("Unable to start text-to-speech engine, not supported on device.");
 
             var max = maxSpeechInputLengthDefault;
             if (Platform.HasApiLevel(BuildVersionCodes.JellyBeanMr2))
@@ -48,7 +48,7 @@ namespace Xamarin.Essentials
             var textToSpeech = GetTextToSpeech();
 
             if (textToSpeech == null)
-                throw new PlatformNotSupportedException("Unable to start text-to-speech engine, not supported on device.");
+                ThrowHelper.ThrowNotImplementedException("Unable to start text-to-speech engine, not supported on device.");
 
             return textToSpeech.GetLocalesAsync();
         }

@@ -15,7 +15,7 @@ namespace Xamarin.Essentials
         static async Task<WebAuthenticatorResult> PlatformAuthenticateAsync(Options options)
         {
             if (DeviceInfo.Version.Major < 13)
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
 
             var provider = new ASAuthorizationAppleIdProvider();
             var req = provider.CreateRequest();

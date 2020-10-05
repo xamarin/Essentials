@@ -37,7 +37,7 @@ namespace Xamarin.Essentials
             if (fileTypes.TryGetValue(platform, out var type))
                 return type;
 
-            throw new PlatformNotSupportedException("This platform does not support this file type.");
+            return ThrowHelper.ThrowNotImplementedException<IEnumerable<string>>("This platform does not support this file type.");
         }
     }
 

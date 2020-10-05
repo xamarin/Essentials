@@ -35,7 +35,7 @@ namespace Xamarin.Essentials
                     foreach (var requiredKey in plistKeys)
                     {
                         if (!IsKeyDeclaredInInfoPlist(requiredKey))
-                            throw new PermissionException($"You must set `{requiredKey}` in your Info.plist file to use the Permission: {GetType().Name}.");
+                            ThrowHelper.ThrowPermissionException($"You must set `{requiredKey}` in your Info.plist file to use the Permission: {GetType().Name}.");
                     }
                 }
 
@@ -56,7 +56,7 @@ namespace Xamarin.Essentials
             internal void EnsureMainThread()
             {
                 if (!MainThread.IsMainThread)
-                    throw new PermissionException("Permission request must be invoked on main thread.");
+                    ThrowHelper.ThrowPermissionException("Permission request must be invoked on main thread.");
             }
         }
 

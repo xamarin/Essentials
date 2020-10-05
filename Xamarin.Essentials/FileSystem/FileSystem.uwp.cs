@@ -17,7 +17,7 @@ namespace Xamarin.Essentials
         static Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
         {
             if (filename == null)
-                throw new ArgumentNullException(nameof(filename));
+                ThrowHelper.ThrowArgumentNullException(nameof(filename));
 
             return Package.Current.InstalledLocation.OpenStreamForReadAsync(NormalizePath(filename));
         }

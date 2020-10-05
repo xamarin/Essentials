@@ -13,7 +13,7 @@ namespace Xamarin.Essentials
         public static void Vibrate(TimeSpan duration)
         {
             if (!IsSupported)
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
 
             if (duration.TotalMilliseconds < 0)
                 duration = TimeSpan.Zero;
@@ -26,7 +26,7 @@ namespace Xamarin.Essentials
         public static void Cancel()
         {
             if (!IsSupported)
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
 
             PlatformCancel();
         }

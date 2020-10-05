@@ -30,11 +30,11 @@ namespace Xamarin.Essentials
         internal FileBase(string fullPath)
         {
             if (fullPath == null)
-                throw new ArgumentNullException(nameof(fullPath));
+                ThrowHelper.ThrowArgumentNullException(nameof(fullPath));
             if (string.IsNullOrWhiteSpace(fullPath))
-                throw new ArgumentException("The file path cannot be an empty string.", nameof(fullPath));
+                ThrowHelper.ThrowArgumentException("The file path cannot be an empty string.", nameof(fullPath));
             if (string.IsNullOrWhiteSpace(Path.GetFileName(fullPath)))
-                throw new ArgumentException("The file path must be a file path.", nameof(fullPath));
+                ThrowHelper.ThrowArgumentException("The file path must be a file path.", nameof(fullPath));
 
             FullPath = fullPath;
         }
@@ -98,7 +98,7 @@ namespace Xamarin.Essentials
                 return Path.GetFileName(FullPath);
 
             // this should never happen as the path is validated in the constructor
-            throw new InvalidOperationException($"Unable to determine the file name from '{FullPath}'.");
+            return ThrowHelper.ThrowArgumentNullException<string>($"Unable to determine the file name from '{FullPath}'.");
         }
 
         public Task<Stream> OpenReadAsync()

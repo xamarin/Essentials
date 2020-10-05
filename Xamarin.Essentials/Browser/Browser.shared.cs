@@ -18,7 +18,7 @@ namespace Xamarin.Essentials
         {
             if (string.IsNullOrWhiteSpace(uri))
             {
-                throw new ArgumentNullException(nameof(uri), $"Uri cannot be empty.");
+                ThrowHelper.ThrowArgumentNullException(nameof(uri), $"Uri cannot be empty.");
             }
 
             return OpenAsync(new Uri(uri), options);
@@ -39,7 +39,7 @@ namespace Xamarin.Essentials
         internal static Uri EscapeUri(Uri uri)
         {
             if (uri == null)
-                throw new ArgumentNullException(nameof(uri));
+                ThrowHelper.ThrowArgumentNullException(nameof(uri));
 
 #if NETSTANDARD1_0
             return uri;

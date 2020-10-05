@@ -11,7 +11,7 @@ namespace Xamarin.Essentials
         public static Task<string> GetAsync(string key)
         {
             if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentNullException(nameof(key));
+                ThrowHelper.ThrowArgumentNullException(nameof(key));
 
             return PlatformGetAsync(key);
         }
@@ -19,10 +19,10 @@ namespace Xamarin.Essentials
         public static Task SetAsync(string key, string value)
         {
             if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentNullException(nameof(key));
+                ThrowHelper.ThrowArgumentNullException(nameof(key));
 
             if (value == null)
-                throw new ArgumentNullException(nameof(value));
+                ThrowHelper.ThrowArgumentNullException(nameof(value));
 
             return PlatformSetAsync(key, value);
         }

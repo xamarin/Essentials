@@ -26,7 +26,7 @@ namespace Xamarin.Essentials
             var status = await RequestAsync<TPermission>();
 
             if (status != PermissionStatus.Granted)
-                throw new PermissionException($"{typeof(TPermission).Name} permission was not granted: {status}");
+                ThrowHelper.ThrowPermissionException($"{typeof(TPermission).Name} permission was not granted: {status}");
         }
 
         public abstract partial class BasePermission

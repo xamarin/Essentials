@@ -87,7 +87,7 @@ namespace Xamarin.Essentials
         }
 #else
         static Task PlatformOpenAsync(OpenFileRequest request) =>
-            throw new FeatureNotSupportedException();
+           ThrowHelper.ThrowNotImplementedException<Task>();
 #endif
     }
 }

@@ -39,7 +39,7 @@ namespace Xamarin.Essentials
         static async Task CheckSupportAsync()
         {
             if (!IsSupported)
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
 
             await Permissions.EnsureGrantedAsync<Permissions.Flashlight>();
         }

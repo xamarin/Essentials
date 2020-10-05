@@ -15,7 +15,7 @@ namespace Xamarin.Essentials
         internal static Placemark Escape(this Placemark placemark)
         {
             if (placemark == null)
-                throw new ArgumentNullException(nameof(placemark));
+                ThrowHelper.ThrowArgumentNullException(nameof(placemark));
             var escaped = new Placemark();
 
             if (placemark.Location == null)

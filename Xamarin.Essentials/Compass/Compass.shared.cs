@@ -15,10 +15,10 @@ namespace Xamarin.Essentials
         public static void Start(SensorSpeed sensorSpeed, bool applyLowPassFilter)
         {
             if (!IsSupported)
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
 
             if (IsMonitoring)
-                throw new InvalidOperationException("Compass has already been started.");
+                ThrowHelper.ThrowArgumentNullException("Compass has already been started.");
 
             IsMonitoring = true;
             useSyncContext = sensorSpeed == SensorSpeed.Default || sensorSpeed == SensorSpeed.UI;
@@ -37,7 +37,7 @@ namespace Xamarin.Essentials
         public static void Stop()
         {
             if (!IsSupported)
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
 
             if (!IsMonitoring)
                 return;

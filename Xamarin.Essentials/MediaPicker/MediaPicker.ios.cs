@@ -33,9 +33,9 @@ namespace Xamarin.Essentials
             var mediaType = photo ? UTType.Image : UTType.Movie;
 
             if (!UIImagePickerController.IsSourceTypeAvailable(sourceType))
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
             if (!UIImagePickerController.AvailableMediaTypes(sourceType).Contains(mediaType))
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
 
             if (!photo)
                 await Permissions.EnsureGrantedAsync<Permissions.Microphone>();

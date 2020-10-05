@@ -7,7 +7,7 @@ namespace Xamarin.Essentials
         public static void Perform(HapticFeedbackType type = HapticFeedbackType.Click)
         {
             if (!IsSupported)
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
             PlatformPerform(type);
         }
     }

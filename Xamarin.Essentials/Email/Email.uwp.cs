@@ -19,7 +19,7 @@ namespace Xamarin.Essentials
         static async Task PlatformComposeAsync(EmailMessage message)
         {
             if (message != null && message.BodyFormat != EmailBodyFormat.PlainText)
-                throw new FeatureNotSupportedException("UWP can only compose plain text email messages.");
+               ThrowHelper.ThrowNotImplementedException("UWP can only compose plain text email messages.");
 
             var nativeMessage = new NativeEmailMessage();
             if (!string.IsNullOrEmpty(message?.Body))

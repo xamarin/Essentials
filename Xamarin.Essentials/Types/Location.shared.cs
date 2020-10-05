@@ -42,7 +42,7 @@ namespace Xamarin.Essentials
         public Location(Location point)
         {
             if (point == null)
-                throw new ArgumentNullException(nameof(point));
+                ThrowHelper.ThrowArgumentNullException(nameof(point));
 
             Latitude = point.Latitude;
             Longitude = point.Longitude;
@@ -98,7 +98,7 @@ namespace Xamarin.Essentials
                 case DistanceUnits.Miles:
                     return UnitConverters.CoordinatesToMiles(latitudeStart, longitudeStart, latitudeEnd, longitudeEnd);
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(units));
+                    return ThrowHelper.ThrowIndexOutOfRangeException<double>(nameof(units));
             }
         }
 

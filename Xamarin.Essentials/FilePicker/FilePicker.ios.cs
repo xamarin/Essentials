@@ -14,7 +14,7 @@ namespace Xamarin.Essentials
         static Task<IEnumerable<FileResult>> PlatformPickAsync(PickOptions options, bool allowMultiple = false)
         {
             if (allowMultiple && !Platform.HasOSVersion(11, 0))
-                throw new FeatureNotSupportedException("Multiple file picking is only available on iOS 11 or later.");
+               ThrowHelper.ThrowNotImplementedException("Multiple file picking is only available on iOS 11 or later.");
 
             var allowedUtis = options?.FileTypes?.Value?.ToArray() ?? new string[]
             {

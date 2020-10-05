@@ -38,7 +38,7 @@ namespace Xamarin.Essentials
         }
 #else
         static void PlatformShowSettingsUI() =>
-            throw new FeatureNotSupportedException();
+           ThrowHelper.ThrowNotImplementedException();
 #endif
 
 #if __IOS__ || __TVOS__

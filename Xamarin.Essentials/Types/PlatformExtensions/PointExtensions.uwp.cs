@@ -9,10 +9,10 @@ namespace Xamarin.Essentials
         public static Point ToSystemPoint(this WindowsPoint point)
         {
             if (point.X > int.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(point.X));
+                ThrowHelper.ThrowIndexOutOfRangeException(nameof(point.X));
 
             if (point.Y > int.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(point.Y));
+                ThrowHelper.ThrowIndexOutOfRangeException(nameof(point.Y));
 
             return new Point((int)point.X, (int)point.Y);
         }

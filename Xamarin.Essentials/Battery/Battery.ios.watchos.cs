@@ -37,7 +37,7 @@ namespace Xamarin.Essentials
         static void StartBatteryListeners()
         {
 #if __WATCHOS__
-            throw new FeatureNotSupportedException();
+           ThrowHelper.ThrowNotImplementedException();
 #else
             UIDevice.CurrentDevice.BatteryMonitoringEnabled = true;
             levelObserver = UIDevice.Notifications.ObserveBatteryLevelDidChange(BatteryInfoChangedNotification);
@@ -48,7 +48,7 @@ namespace Xamarin.Essentials
         static void StopBatteryListeners()
         {
 #if __WATCHOS__
-            throw new FeatureNotSupportedException();
+           ThrowHelper.ThrowNotImplementedException();
 #else
             UIDevice.CurrentDevice.BatteryMonitoringEnabled = false;
             levelObserver?.Dispose();

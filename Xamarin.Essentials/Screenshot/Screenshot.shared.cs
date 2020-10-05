@@ -11,7 +11,7 @@ namespace Xamarin.Essentials
         public static Task<ScreenshotResult> CaptureAsync()
         {
             if (!IsCaptureSupported)
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
 
             return PlatformCaptureAsync();
         }

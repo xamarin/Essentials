@@ -26,18 +26,18 @@ namespace Xamarin.Essentials
         public static async Task SpeakAsync(string text, SpeechOptions options, CancellationToken cancelToken = default)
         {
             if (string.IsNullOrEmpty(text))
-                throw new ArgumentNullException(nameof(text), "Text cannot be null or empty string");
+                ThrowHelper.ThrowArgumentNullException(nameof(text), "Text cannot be null or empty string");
 
             if (options?.Volume.HasValue ?? false)
             {
                 if (options.Volume.Value < VolumeMin || options.Volume.Value > VolumeMax)
-                    throw new ArgumentOutOfRangeException($"Volume must be >= {VolumeMin} and <= {VolumeMax}");
+                    ThrowHelper.ThrowIndexOutOfRangeException($"Volume must be >= {VolumeMin} and <= {VolumeMax}");
             }
 
             if (options?.Pitch.HasValue ?? false)
             {
                 if (options.Pitch.Value < PitchMin || options.Pitch.Value > PitchMax)
-                    throw new ArgumentOutOfRangeException($"Pitch must be >= {PitchMin} and <= {PitchMin}");
+                    ThrowHelper.ThrowIndexOutOfRangeException($"Pitch must be >= {PitchMin} and <= {PitchMin}");
             }
 
             if (semaphore == null)

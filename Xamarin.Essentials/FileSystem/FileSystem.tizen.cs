@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
         static Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
         {
             if (string.IsNullOrWhiteSpace(filename))
-                throw new ArgumentNullException(nameof(filename));
+                ThrowHelper.ThrowArgumentNullException(nameof(filename));
 
             filename = filename.Replace('\\', Path.DirectorySeparatorChar);
             Stream fs = File.OpenRead(Path.Combine(Application.Current.DirectoryInfo.Resource, filename));

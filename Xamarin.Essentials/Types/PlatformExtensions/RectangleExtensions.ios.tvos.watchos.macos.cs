@@ -9,16 +9,16 @@ namespace Xamarin.Essentials
         public static Rectangle ToSystemRectangle(this iOSRectangle rect)
         {
             if (rect.X > int.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(rect.X));
+                ThrowHelper.ThrowIndexOutOfRangeException(nameof(rect.X));
 
             if (rect.Y > int.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(rect.Y));
+                ThrowHelper.ThrowIndexOutOfRangeException(nameof(rect.Y));
 
             if (rect.Width > int.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(rect.Width));
+                ThrowHelper.ThrowIndexOutOfRangeException(nameof(rect.Width));
 
             if (rect.Height > int.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(rect.Height));
+                ThrowHelper.ThrowIndexOutOfRangeException(nameof(rect.Height));
 
             return new Rectangle((int)rect.X, (int)rect.Y, (int)rect.Width, (int)rect.Height);
         }

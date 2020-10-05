@@ -45,7 +45,7 @@ namespace Xamarin.Essentials
             var hasProviders = enabledProviders.Any(p => !ignoredProviders.Contains(p));
 
             if (!hasProviders)
-                throw new FeatureNotEnabledException("Location services are not enabled on device.");
+                ThrowHelper.ThrowFeatureNotEnabledException("Location services are not enabled on device.");
 
             // get the best possible provider for the requested accuracy
             var providerInfo = GetBestProvider(locationManager, request.DesiredAccuracy);

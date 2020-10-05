@@ -25,10 +25,10 @@ namespace Xamarin.Essentials
         DevicePlatform(string devicePlatform)
         {
             if (devicePlatform == null)
-                throw new ArgumentNullException(nameof(devicePlatform));
+                ThrowHelper.ThrowArgumentNullException(nameof(devicePlatform));
 
             if (devicePlatform.Length == 0)
-                throw new ArgumentException(nameof(devicePlatform));
+                ThrowHelper.ThrowArgumentException(nameof(devicePlatform));
 
             this.devicePlatform = devicePlatform;
         }

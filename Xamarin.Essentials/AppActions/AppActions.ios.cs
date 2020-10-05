@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
         static Task<IEnumerable<AppAction>> PlatformGetAsync()
         {
             if (!IsSupported)
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
 
             return Task.FromResult(UIApplication.SharedApplication.ShortcutItems.Select(s => s.ToAppAction()));
         }
@@ -24,7 +24,7 @@ namespace Xamarin.Essentials
         static Task PlatformSetAsync(IEnumerable<AppAction> actions)
         {
             if (!IsSupported)
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
 
             UIApplication.SharedApplication.ShortcutItems = actions.Select(a => a.ToShortcutItem()).ToArray();
 

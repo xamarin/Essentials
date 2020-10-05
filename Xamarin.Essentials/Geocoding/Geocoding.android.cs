@@ -20,7 +20,7 @@ namespace Xamarin.Essentials
         static async Task<IEnumerable<Location>> PlatformGetLocationsAsync(string address)
         {
             if (address == null)
-                throw new ArgumentNullException(nameof(address));
+                ThrowHelper.ThrowArgumentNullException(nameof(address));
 
             using (var geocoder = new Geocoder(Platform.AppContext))
             {

@@ -10,7 +10,7 @@ namespace Xamarin.Essentials
         static Task<bool> PlatformOpenAsync(Uri uri, BrowserLaunchOptions launchMode)
         {
             if (uri == null)
-                throw new ArgumentNullException(nameof(uri));
+                ThrowHelper.ThrowArgumentNullException(nameof(uri));
 
             Permissions.EnsureDeclared<Permissions.LaunchApp>();
 

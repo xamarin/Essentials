@@ -12,7 +12,7 @@ namespace Xamarin.Essentials
         {
             var uiView = Platform.GetCurrentViewController();
             if (uiView == null)
-                throw new ArgumentNullException($"The View Controller can't be null.");
+                ThrowHelper.ThrowArgumentNullException($"The View Controller can't be null.");
 
             var source = new TaskCompletionSource<Contact>();
 

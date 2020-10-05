@@ -7,10 +7,10 @@ namespace Xamarin.Essentials
         internal static void ValidateOpen(string number)
         {
             if (string.IsNullOrWhiteSpace(number))
-                throw new ArgumentNullException(nameof(number));
+                ThrowHelper.ThrowArgumentNullException(nameof(number));
 
             if (!IsSupported)
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
         }
 
         public static void Open(string number)

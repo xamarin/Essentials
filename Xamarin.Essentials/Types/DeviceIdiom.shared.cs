@@ -21,10 +21,10 @@ namespace Xamarin.Essentials
         DeviceIdiom(string deviceIdiom)
         {
             if (deviceIdiom == null)
-                throw new ArgumentNullException(nameof(deviceIdiom));
+                ThrowHelper.ThrowArgumentNullException(nameof(deviceIdiom));
 
             if (deviceIdiom.Length == 0)
-                throw new ArgumentException(nameof(deviceIdiom));
+                ThrowHelper.ThrowArgumentException(nameof(deviceIdiom));
 
             this.deviceIdiom = deviceIdiom;
         }

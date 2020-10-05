@@ -23,7 +23,7 @@ namespace Xamarin.Essentials
         {
             var captureDevice = AVCaptureDevice.GetDefaultDevice(AVMediaType.Video);
             if (captureDevice == null || !(captureDevice.HasFlash || captureDevice.HasTorch))
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
 
             captureDevice.LockForConfiguration(out var error);
 

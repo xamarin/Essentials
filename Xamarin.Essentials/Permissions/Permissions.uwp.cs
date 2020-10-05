@@ -45,7 +45,7 @@ namespace Xamarin.Essentials
                 foreach (var d in RequiredDeclarations())
                 {
                     if (!IsCapabilityDeclared(d))
-                        throw new PermissionException($"You need to declare the capability `{d}` in your AppxManifest.xml file");
+                        ThrowHelper.ThrowPermissionException($"You need to declare the capability `{d}` in your AppxManifest.xml file");
                 }
             }
 
@@ -128,7 +128,7 @@ namespace Xamarin.Essentials
             internal static async Task<PermissionStatus> RequestLocationPermissionAsync()
             {
                 if (!MainThread.IsMainThread)
-                    throw new PermissionException("Permission request must be invoked on main thread.");
+                    ThrowHelper.ThrowPermissionException("Permission request must be invoked on main thread.");
 
                 var accessStatus = await Geolocator.RequestAccessAsync();
                 return accessStatus switch

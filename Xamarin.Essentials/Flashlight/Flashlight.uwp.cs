@@ -52,7 +52,7 @@ namespace Xamarin.Essentials
             await FindLampAsync();
 
             if (lamp == null)
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
 
             lock (locker)
             {

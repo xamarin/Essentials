@@ -22,10 +22,10 @@ namespace Xamarin.Essentials
         public static void Start(SensorSpeed sensorSpeed)
         {
             if (!IsSupported)
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
 
             if (IsMonitoring)
-                throw new InvalidOperationException("Accelerometer has already been started.");
+                ThrowHelper.ThrowArgumentNullException("Accelerometer has already been started.");
 
             IsMonitoring = true;
             useSyncContext = sensorSpeed == SensorSpeed.Default || sensorSpeed == SensorSpeed.UI;
@@ -44,7 +44,7 @@ namespace Xamarin.Essentials
         public static void Stop()
         {
             if (!IsSupported)
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
 
             if (!IsMonitoring)
                 return;

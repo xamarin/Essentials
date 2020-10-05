@@ -80,7 +80,7 @@ namespace Xamarin.Essentials
         {
             var activity = lifecycleListener?.Activity;
             if (throwOnNull && activity == null)
-                throw new NullReferenceException("The current Activity can not be detected. Ensure that you have called Init in your Activity or Application class.");
+                ThrowHelper.ThrowNullReferenceException("The current Activity can not be detected. Ensure that you have called Init in your Activity or Application class.");
 
             return activity;
         }

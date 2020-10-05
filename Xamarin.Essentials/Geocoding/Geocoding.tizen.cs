@@ -10,7 +10,7 @@ namespace Xamarin.Essentials
         {
             Permissions.EnsureDeclared<Permissions.Maps>();
             if (string.IsNullOrWhiteSpace(Platform.MapServiceToken))
-                throw new ArgumentNullException(nameof(Platform.MapServiceToken));
+                ThrowHelper.ThrowArgumentNullException(nameof(Platform.MapServiceToken));
             var map = await Platform.GetMapServiceAsync(Platform.MapServiceToken);
             var request = map.CreateReverseGeocodeRequest(latitude, longitude);
 
@@ -39,7 +39,7 @@ namespace Xamarin.Essentials
         {
             Permissions.EnsureDeclared<Permissions.Maps>();
             if (string.IsNullOrWhiteSpace(Platform.MapServiceToken))
-                throw new ArgumentNullException(nameof(Platform.MapServiceToken));
+                ThrowHelper.ThrowArgumentNullException(nameof(Platform.MapServiceToken));
             var map = await Platform.GetMapServiceAsync(Platform.MapServiceToken);
             var request = map.CreateGeocodeRequest(address);
             var list = new List<Location>();

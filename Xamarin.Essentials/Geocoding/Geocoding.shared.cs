@@ -9,7 +9,7 @@ namespace Xamarin.Essentials
         public static Task<IEnumerable<Placemark>> GetPlacemarksAsync(Location location)
         {
             if (location == null)
-                throw new ArgumentNullException(nameof(location));
+                ThrowHelper.ThrowArgumentNullException(nameof(location));
 
             return GetPlacemarksAsync(location.Latitude, location.Longitude);
         }

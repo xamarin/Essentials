@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
         public static Task ComposeAsync(EmailMessage message)
         {
             if (!IsComposeSupported)
-                throw new FeatureNotSupportedException();
+               ThrowHelper.ThrowNotImplementedException();
 
             return PlatformComposeAsync(message);
         }
@@ -24,7 +24,7 @@ namespace Xamarin.Essentials
         static string GetMailToUri(EmailMessage message)
         {
             if (message != null && message.BodyFormat != EmailBodyFormat.PlainText)
-                throw new FeatureNotSupportedException("Only EmailBodyFormat.PlainText is supported if no email account is set up.");
+               ThrowHelper.ThrowNotImplementedException("Only EmailBodyFormat.PlainText is supported if no email account is set up.");
 
             var parts = new List<string>();
             if (!string.IsNullOrEmpty(message?.Body))

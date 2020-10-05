@@ -38,7 +38,7 @@ namespace Xamarin.Essentials
         static Task PlatformOpenAsync(OpenFileRequest request)
         {
             if (string.IsNullOrEmpty(request.File.FullPath))
-                throw new ArgumentNullException(nameof(request.File.FullPath));
+                ThrowHelper.ThrowArgumentNullException(nameof(request.File.FullPath));
 
             Permissions.EnsureDeclared<Permissions.LaunchApp>();
 

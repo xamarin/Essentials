@@ -11,7 +11,7 @@ namespace Xamarin.Essentials
         public Placemark(Placemark placemark)
         {
             if (placemark == null)
-                throw new ArgumentNullException(nameof(placemark));
+                ThrowHelper.ThrowArgumentNullException(nameof(placemark));
 
             if (placemark.Location == null)
                 Location = new Location();

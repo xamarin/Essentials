@@ -19,7 +19,7 @@ namespace Xamarin.Essentials
         static Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
         {
             if (filename == null)
-                throw new ArgumentNullException(nameof(filename));
+                return ThrowHelper.ThrowArgumentNullException<Task<Stream>>(nameof(filename));
 
             filename = filename.Replace('\\', Path.DirectorySeparatorChar);
             try
@@ -28,7 +28,7 @@ namespace Xamarin.Essentials
             }
             catch (Java.IO.FileNotFoundException ex)
             {
-                throw new FileNotFoundException(ex.Message, filename, ex);
+                return ThrowHelper.ThrowFileNotFoundException<Task<Stream>>(ex.Message, filename, ex);
             }
         }
     }

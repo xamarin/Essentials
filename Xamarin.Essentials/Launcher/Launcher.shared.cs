@@ -9,7 +9,7 @@ namespace Xamarin.Essentials
         public static Task<bool> CanOpenAsync(string uri)
         {
             if (string.IsNullOrWhiteSpace(uri))
-                throw new ArgumentNullException(nameof(uri));
+                ThrowHelper.ThrowArgumentNullException(nameof(uri));
 
             return PlatformCanOpenAsync(new Uri(uri));
         }
@@ -17,7 +17,7 @@ namespace Xamarin.Essentials
         public static Task<bool> CanOpenAsync(Uri uri)
         {
             if (uri == null)
-                throw new ArgumentNullException(nameof(uri));
+                ThrowHelper.ThrowArgumentNullException(nameof(uri));
 
             return PlatformCanOpenAsync(uri);
         }
@@ -25,7 +25,7 @@ namespace Xamarin.Essentials
         public static Task OpenAsync(string uri)
         {
             if (string.IsNullOrWhiteSpace(uri))
-                throw new ArgumentNullException(nameof(uri));
+                ThrowHelper.ThrowArgumentNullException(nameof(uri));
 
             return PlatformOpenAsync(new Uri(uri));
         }
@@ -33,7 +33,7 @@ namespace Xamarin.Essentials
         public static Task OpenAsync(Uri uri)
         {
             if (uri == null)
-                throw new ArgumentNullException(nameof(uri));
+                ThrowHelper.ThrowArgumentNullException(nameof(uri));
 
             return PlatformOpenAsync(uri);
         }
@@ -41,9 +41,9 @@ namespace Xamarin.Essentials
         public static Task OpenAsync(OpenFileRequest request)
         {
             if (request == null)
-                throw new ArgumentNullException(nameof(request));
+                ThrowHelper.ThrowArgumentNullException(nameof(request));
             if (request.File == null)
-                throw new ArgumentNullException(nameof(request.File));
+                ThrowHelper.ThrowArgumentNullException(nameof(request.File));
 
             return PlatformOpenAsync(request);
         }
@@ -51,7 +51,7 @@ namespace Xamarin.Essentials
         public static Task<bool> TryOpenAsync(string uri)
         {
             if (string.IsNullOrWhiteSpace(uri))
-                throw new ArgumentNullException(nameof(uri));
+                ThrowHelper.ThrowArgumentNullException(nameof(uri));
 
             return PlatformTryOpenAsync(new Uri(uri));
         }
@@ -59,7 +59,7 @@ namespace Xamarin.Essentials
         public static Task<bool> TryOpenAsync(Uri uri)
         {
             if (uri == null)
-                throw new ArgumentNullException(nameof(uri));
+                ThrowHelper.ThrowArgumentNullException(nameof(uri));
 
             return PlatformTryOpenAsync(uri);
         }
