@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
               ThrowHelper.ThrowNotImplementedException();
 
             if (IsMonitoring)
-                ThrowHelper.ThrowArgumentNullException("Barometer has already been started.");
+                ThrowHelper.ThrowInvalidOperationException("Barometer has already been started.");
 
             IsMonitoring = true;
             useSyncContext = sensorSpeed == SensorSpeed.Default || sensorSpeed == SensorSpeed.UI;

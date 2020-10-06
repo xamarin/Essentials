@@ -47,7 +47,7 @@ namespace Xamarin.Essentials
                                     + " to use it, you must opt-in by calling "
                                     + $"ExperimentalFeatures.Enable(\"{featureName}\") before using this feature.";
 
-                ThrowHelper.ThrowArgumentNullException(errorMessage);
+                ThrowHelper.ThrowInvalidOperationException(errorMessage);
             }
         }
     }

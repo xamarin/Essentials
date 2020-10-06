@@ -57,7 +57,7 @@ namespace Xamarin.Essentials
                             (int)(ToHex(hex[idx++]) << 4 | ToHex(hex[idx])));
 
                 default: // everything else will result in unexpected results
-                    ThrowHelper.ThrowArgumentException(nameof(hex));
+                    return ThrowHelper.ThrowArgumentException<Color>(nameof(hex));
             }
         }
 

@@ -70,7 +70,7 @@ namespace Xamarin.Essentials
             var c = intent.ResolveActivity(Platform.AppContext.PackageManager);
 
             if (c == null || c.PackageName != packageName)
-                ThrowHelper.ThrowArgumentNullException($"You must subclass the `{nameof(WebAuthenticatorCallbackActivity)}` and create an IntentFilter for it which matches your `{nameof(callbackUrl)}`.");
+                ThrowHelper.ThrowNotImplementedException($"You must subclass the `{nameof(WebAuthenticatorCallbackActivity)}` and create an IntentFilter for it which matches your `{nameof(callbackUrl)}`.");
 
             // Cancel any previous task that's still pending
             if (tcsResponse?.Task != null && !tcsResponse.Task.IsCompleted)

@@ -25,7 +25,7 @@ namespace Xamarin.Essentials
                ThrowHelper.ThrowNotImplementedException();
 
             if (IsMonitoring)
-                ThrowHelper.ThrowArgumentNullException("Accelerometer has already been started.");
+                ThrowHelper.ThrowInvalidOperationException("Accelerometer has already been started.");
 
             IsMonitoring = true;
             useSyncContext = sensorSpeed == SensorSpeed.Default || sensorSpeed == SensorSpeed.UI;

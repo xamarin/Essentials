@@ -14,7 +14,7 @@ namespace Xamarin.Essentials
         static async Task<WebAuthenticatorResult> PlatformAuthenticateAsync(Uri url, Uri callbackUrl)
         {
             if (!IsUriProtocolDeclared(callbackUrl.Scheme))
-                ThrowHelper.ThrowArgumentNullException($"You need to declare the windows.protocol usage of the protocol/scheme `{callbackUrl.Scheme}` in your AppxManifest.xml file");
+                ThrowHelper.ThrowInvalidOperationException($"You need to declare the windows.protocol usage of the protocol/scheme `{callbackUrl.Scheme}` in your AppxManifest.xml file");
 
             try
             {

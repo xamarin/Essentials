@@ -47,6 +47,7 @@ namespace Xamarin.Essentials
                     case PositionStatus.Disabled:
                     case PositionStatus.NotAvailable:
                         ThrowHelper.ThrowFeatureNotEnabledException("Location services are not enabled on device.");
+                        break;
                 }
             }
         }

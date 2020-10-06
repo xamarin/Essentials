@@ -17,7 +17,7 @@ namespace Xamarin.Essentials
                ThrowHelper.ThrowNotImplementedException();
 
             if (IsMonitoring)
-                ThrowHelper.ThrowArgumentNullException("Gyroscope has already been started.");
+                ThrowHelper.ThrowInvalidOperationException("Gyroscope has already been started.");
 
             IsMonitoring = true;
             useSyncContext = sensorSpeed == SensorSpeed.Default || sensorSpeed == SensorSpeed.UI;

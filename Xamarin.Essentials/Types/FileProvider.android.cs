@@ -72,7 +72,7 @@ namespace Xamarin.Essentials
 
             // fail if we need the external storage, but there is none
             if (externalOnly && !hasExternalMedia)
-                ThrowHelper.ThrowArgumentNullException("Unable to access the external storage, the media is not mounted.");
+                ThrowHelper.ThrowInvalidOperationException("Unable to access the external storage, the media is not mounted.");
 
             // based on permssions, return the correct directory
             // if permission were required, then it would have already thrown

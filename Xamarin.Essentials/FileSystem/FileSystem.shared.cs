@@ -98,7 +98,7 @@ namespace Xamarin.Essentials
                 return Path.GetFileName(FullPath);
 
             // this should never happen as the path is validated in the constructor
-            return ThrowHelper.ThrowArgumentNullException<string>($"Unable to determine the file name from '{FullPath}'.");
+            return ThrowHelper.ThrowInvalidOperationException<string>($"Unable to determine the file name from '{FullPath}'.");
         }
 
         public Task<Stream> OpenReadAsync()

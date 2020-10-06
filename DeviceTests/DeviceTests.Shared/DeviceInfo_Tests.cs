@@ -46,7 +46,7 @@ namespace DeviceTests
                 Assert.True(isEmulator);
             }
 #else
-            throw new PlatformNotSupportedException();
+            ThrowHelper.ThrowNotImplementedException();
 #endif
         }
 
@@ -60,7 +60,7 @@ namespace DeviceTests
 #elif __ANDROID__
             Assert.Equal("com.xamarin.essentials.devicetests", AppInfo.PackageName);
 #else
-            throw new PlatformNotSupportedException();
+            ThrowHelper.ThrowNotImplementedException();
 #endif
         }
 
@@ -74,7 +74,7 @@ namespace DeviceTests
 #elif __ANDROID__
             Assert.Equal(DevicePlatform.Android, DeviceInfo.Platform);
 #else
-            throw new PlatformNotSupportedException();
+            ThrowHelper.ThrowNotImplementedException();
 #endif
         }
 

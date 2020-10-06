@@ -18,7 +18,7 @@ namespace Xamarin.Essentials
                ThrowHelper.ThrowNotImplementedException();
 
             if (IsMonitoring)
-                ThrowHelper.ThrowArgumentNullException("Compass has already been started.");
+                ThrowHelper.ThrowInvalidOperationException("Compass has already been started.");
 
             IsMonitoring = true;
             useSyncContext = sensorSpeed == SensorSpeed.Default || sensorSpeed == SensorSpeed.UI;
