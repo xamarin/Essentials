@@ -34,7 +34,7 @@ namespace Xamarin.Essentials
             var dispatcher = CoreApplication.MainView?.CoreWindow?.Dispatcher;
 
             if (dispatcher == null)
-                ThrowHelper.ThrowArgumentNullException("Unable to find main thread.");
+                ThrowHelper.ThrowInvalidOperationException("Unable to find main thread.");
             dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => action()).WatchForError();
         }
     }
