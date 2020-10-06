@@ -20,7 +20,7 @@ namespace Xamarin.Essentials
                 throw new ArgumentNullException(nameof(request));
 
             if (string.IsNullOrEmpty(request.Text) && string.IsNullOrEmpty(request.Uri))
-                throw new ArgumentNullException(nameof(request.Text));
+                throw new ArgumentException($"Both the {nameof(request.Text)} and {nameof(request.Uri)} are invalid. Make sure to include at least one of them in the request.");
 
             return PlatformRequestAsync(request);
         }
@@ -31,10 +31,10 @@ namespace Xamarin.Essentials
                 throw new ArgumentNullException(nameof(request));
 
             if (request.File == null)
-                throw new ArgumentNullException(nameof(request.File));
+                throw new ArgumentException($"The {nameof(request.File)} in the request is invalid.");
 
             if (string.IsNullOrEmpty(request.File.FullPath))
-                throw new ArgumentNullException(nameof(request.File.FullPath));
+                throw new ArgumentException($"The request file's {nameof(request.File.FullPath)} is invalid.");
 
             return PlatformRequestAsync(request);
         }
