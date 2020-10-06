@@ -32,6 +32,8 @@ namespace Xamarin.Essentials
 
         public static void ThrowArgumentException(string message, string paramName) => throw new ArgumentException(message, paramName);
 
+        public static T ThrowArgumentException<T>(string message) => throw new ArgumentException(message);
+
         public static void ThrowArgumentException(string paramName) => throw new ArgumentException(paramName);
 
         public static void ThrowArgumentNullException(string paramName) => throw new ArgumentNullException(paramName);
