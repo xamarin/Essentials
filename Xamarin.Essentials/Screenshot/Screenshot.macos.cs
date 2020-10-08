@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using AppKit;
 using CoreGraphics;
 using Foundation;
-using Core.Graphics;
 using ImageIO;
 using MobileCoreServices;
 
@@ -20,14 +21,21 @@ namespace Xamarin.Essentials
 
         // https://developer.apple.com/documentation/coregraphics/1454595-cgdisplaycreateimage
         [DllImport(appServicesPath, EntryPoint = "CGDisplayCreateImage")]
-        static extern /* CGImageRef */ IntPtr CGDisplayCreateImage(int displayId, CGRect rect);
+        static extern /* CGImageRef */ IntPtr CGDisplayCreateImage(int displayId);
+
+        [DllImport("/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/CoreGraphics.framework/CoreGraphics", EntryPoint = "CGWindowListCreateImage")]
+        static extern IntPtr CGWindowListCreateImage(CGRect screenBounds, CGWindowListOption windowOption, uint windowID, CGWindowImageOption imageOption);
 
         static Task<ScreenshotResult> PlatformCaptureAsync()
         {
-            var displayId = CGDisplay.MainDisplayID;// todo: Not working on second screen
-            var rect = NSApplication.SharedApplication.KeyWindow.Frame; // todo: Full screen, not only app
-            var handle = CGDisplayCreateImage(displayId, rect);
+            using var pool = new NSAutoreleasePool();
+            var location = NSApplication.SharedApplication.KeyWindow.Frame.Location;
+            var screens = new List<NSScreen>(NSScreen.Screens);
+            var screen = screens.First(obj => obj.Frame.Contains(location));
+            var windowNumber = (NSNumber)screen.DeviceDescription["NSScreenNumber"];
+            var displayId = windowNumber.Int32Value;
 
+            var handle = CGDisplayCreateImage(displayId); // CGWindowListCreateImage not working
             var image = new CGImage(handle);
             var result = new ScreenshotResult(image);
             return Task.FromResult(result);
@@ -55,6 +63,7 @@ namespace Xamarin.Essentials
             return Task.FromResult(r.BaseStream);
         }
 
+        // We have to save because MemoryStream is not working
         internal void Save(string filename, ScreenshotFormat format)
         {
             var utType = UTType.JPEG;
