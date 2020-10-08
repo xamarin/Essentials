@@ -23,9 +23,6 @@ namespace Xamarin.Essentials
         [DllImport(appServicesPath, EntryPoint = "CGDisplayCreateImage")]
         static extern /* CGImageRef */ IntPtr CGDisplayCreateImage(int displayId);
 
-        [DllImport("/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/CoreGraphics.framework/CoreGraphics", EntryPoint = "CGWindowListCreateImage")]
-        static extern IntPtr CGWindowListCreateImage(CGRect screenBounds, CGWindowListOption windowOption, uint windowID, CGWindowImageOption imageOption);
-
         static Task<ScreenshotResult> PlatformCaptureAsync()
         {
             using var pool = new NSAutoreleasePool();
