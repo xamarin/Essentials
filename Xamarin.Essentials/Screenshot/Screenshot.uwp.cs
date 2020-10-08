@@ -21,7 +21,10 @@ namespace Xamarin.Essentials
                 throw new InvalidOperationException("Unable to find main window content.");
 
             var bmp = new RenderTargetBitmap();
-            await bmp.RenderAsync(element).AsTask().ConfigureAwait(false);
+
+            // We must use ConfigureAwait(true), to ensure we keep the same execution context (thread); otherwise we'll get an exception
+            // in the ScreenshotResult constructor, when trying to access the properties of the RendertargetBitmap instance
+            await bmp.RenderAsync(element).AsTask().ConfigureAwait(true);
 
             return new ScreenshotResult(bmp);
         }
