@@ -17,6 +17,7 @@ namespace Xamarin.Essentials
         {
             var image = ApplicationServices.GetScreenshot();
             var result = new ScreenshotResult(new NSImage(image, new CGSize(image.Width, image.Height)));
+            image?.Dispose();
             return Task.FromResult(result);
         }
     }
@@ -86,6 +87,7 @@ namespace Xamarin.Essentials
             protected override void Dispose(bool disposing)
             {
                 nativeImage.Dispose();
+                decoratedStream.Dispose();
                 base.Dispose(disposing);
             }
         }
