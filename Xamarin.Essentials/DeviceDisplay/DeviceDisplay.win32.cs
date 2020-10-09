@@ -27,9 +27,9 @@ namespace Xamarin.Essentials
                 var mi = default(NativeMethods.MONITORINFOEX);
                 mi.cbSize = Marshal.SizeOf(mi);
 
-                if (NativeMethods.GetMonitorInfo(hMonitor, ref mi))
+                if (NativeMethods.GetMonitorInfoW(hMonitor, ref mi))
                 {
-                    var dc = NativeMethods.CreateDC(mi.szDevice, null, null, IntPtr.Zero);
+                    var dc = NativeMethods.CreateDCW(mi.szDevice, null, null, IntPtr.Zero);
                     if (dc != IntPtr.Zero)
                     {
                         var xpixels = NativeMethods.GetDeviceCaps(dc, NativeMethods.DeviceCap.HORZRES);
