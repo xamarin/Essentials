@@ -49,6 +49,10 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xamarin.Essentials, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Xamarin.Essentials\bin\Debug\net461\Xamarin.Essentials.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -95,10 +99,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Xamarin.Essentials\Xamarin.Essentials.csproj">
-      <Project>{cd6d6ae6-83a1-41b1-bd7c-c555a77c288b}</Project>
-      <Name>Xamarin.Essentials</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Samples\Samples.csproj">
       <Project>{b4227123-2eeb-494a-a221-c061b5659aed}</Project>
       <Name>Samples</Name>
@@ -106,10 +106,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms">
-      <Version>4.4.0.991537</Version>
+      <Version>4.7.0.1239</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms.Platform.WPF">
-      <Version>4.4.0.991537</Version>
+      <Version>4.7.0.1239</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
