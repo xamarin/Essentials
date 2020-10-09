@@ -8,10 +8,8 @@ namespace Xamarin.Essentials
     {
         static Task<bool> PlatformOpenAsync(Uri uri, BrowserLaunchOptions options)
         {
-            return new Task<bool>(() =>
-            {
-                return Process.Start(uri.ToString()) != null;
-            });
+            var p = Process.Start(uri.ToString());
+            return Task.FromResult(p != null);
         }
     }
 }

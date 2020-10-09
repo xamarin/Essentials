@@ -90,9 +90,10 @@ namespace Xamarin.Essentials
 
         static class NativeMethods
         {
-            [DllImport("Kernel32")]
+            [DllImport("Kernel32", ExactSpelling = true)]
             internal static extern bool GetSystemPowerStatus(out SYSTEM_POWER_STATUS systemPowerStatus);
 
+            [StructLayout(LayoutKind.Sequential)]
             internal struct SYSTEM_POWER_STATUS
             {
                 [MarshalAs(UnmanagedType.U1)]

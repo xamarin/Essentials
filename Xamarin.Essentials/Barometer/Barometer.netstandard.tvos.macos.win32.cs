@@ -3,7 +3,7 @@
     public static partial class Barometer
     {
         internal static bool IsSupported =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+            false;
 
         internal static void PlatformStart(SensorSpeed sensorSpeed) =>
             throw ExceptionUtils.NotSupportedOrImplementedException;

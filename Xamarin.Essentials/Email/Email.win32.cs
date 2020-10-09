@@ -75,7 +75,7 @@ namespace Xamarin.Essentials
 
                         for (var i = 0; i < message.Attachments.Count; i++)
                         {
-                            var f = new NativeMethods.MapiFileDescW(message.Attachments[i].FullPath, message.Attachments[i].AttachmentName);
+                            var f = new NativeMethods.MapiFileDescW(message.Attachments[i].FullPath, message.Attachments[i].FileName);
                             Marshal.StructureToPtr(f, IntPtr.Add(msg.lpFiles, fileDescLen * i), false);
                         }
                     }

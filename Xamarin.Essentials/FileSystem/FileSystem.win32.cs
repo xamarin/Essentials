@@ -27,5 +27,11 @@ namespace Xamarin.Essentials
         {
             return System.Web.MimeMapping.GetMimeMapping(extension);
         }
+
+        internal virtual Task<IO.Stream> PlatformOpenReadAsync()
+        {
+            var stream = IO.File.OpenRead(FullPath);
+            return Task.FromResult<IO.Stream>(stream);
+        }
     }
 }

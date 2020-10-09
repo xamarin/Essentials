@@ -59,7 +59,7 @@ namespace Xamarin.Essentials
 
         static class NativeMethods
         {
-            [DllImport("Kernel32", SetLastError = true)]
+            [DllImport("Kernel32", SetLastError = true, ExactSpelling = true)]
             internal static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags);
 
             internal enum EXECUTION_STATE : uint
@@ -68,10 +68,10 @@ namespace Xamarin.Essentials
                 DISPLAY_REQUIRED = 0x00000002,
             }
 
-            [DllImport("user32")]
+            [DllImport("user32", ExactSpelling = true)]
             internal static extern IntPtr GetDesktopWindow();
 
-            [DllImport("user32")]
+            [DllImport("user32", ExactSpelling = true)]
             internal static extern IntPtr MonitorFromWindow(IntPtr hwnd, MONITOR_DEFAULTTO dwFlags);
 
             internal enum MONITOR_DEFAULTTO : int
@@ -81,10 +81,10 @@ namespace Xamarin.Essentials
                 NEAREST = 2,
             }
 
-            [DllImport("user32")]
-            internal static extern bool GetMonitorInfo(IntPtr hMonitor, ref MONITORINFOEX lpmi);
+            [DllImport("user32", ExactSpelling = true)]
+            internal static extern bool GetMonitorInfoW(IntPtr hMonitor, ref MONITORINFOEX lpmi);
 
-            [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+            [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
             internal struct MONITORINFOEX
             {
                 internal int cbSize;
@@ -95,6 +95,7 @@ namespace Xamarin.Essentials
                 internal string szDevice;
             }
 
+            [StructLayout(LayoutKind.Sequential)]
             internal struct RECT
             {
                 internal int left;
@@ -103,13 +104,13 @@ namespace Xamarin.Essentials
                 internal int bottom;
             }
 
-            [DllImport("gdi32")]
-            internal static extern IntPtr CreateDC(string lpszDriver, string lpszDevice, string lpszOutput, IntPtr lpInitData);
+            [DllImport("gdi32", ExactSpelling = true)]
+            internal static extern IntPtr CreateDCW(string lpszDriver, string lpszDevice, string lpszOutput, IntPtr lpInitData);
 
-            [DllImport("gdi32")]
+            [DllImport("gdi32", ExactSpelling = true)]
             internal static extern bool DeleteDC(IntPtr hdc);
 
-            [DllImport("gdi32")]
+            [DllImport("gdi32", ExactSpelling = true)]
             internal static extern int GetDeviceCaps(IntPtr hdc, DeviceCap nIndex);
 
             internal enum DeviceCap : int

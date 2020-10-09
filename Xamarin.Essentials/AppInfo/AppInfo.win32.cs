@@ -40,10 +40,7 @@ namespace Xamarin.Essentials
 
         static void PlatformShowSettingsUI()
         {
-            if (Process.Start("ms-settings:appsfeatures-app") is null)
-            {
-                throw new PlatformNotSupportedException();
-            }
+            Process.Start(new ProcessStartInfo { FileName = "ms-settings:appsfeatures-app", UseShellExecute = true });
         }
 
         static AppTheme PlatformRequestedTheme()
