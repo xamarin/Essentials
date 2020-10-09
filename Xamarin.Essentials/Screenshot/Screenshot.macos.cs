@@ -37,12 +37,17 @@ namespace Xamarin.Essentials
 
         internal Task<Stream> PlatformOpenReadAsync(ScreenshotFormat format)
         {
-            var utType = UTType.JPEG;
+            NSString utType;
             switch (format)
             {
                 case ScreenshotFormat.Png:
                     utType = UTType.PNG;
                     break;
+                case ScreenshotFormat.Jpeg:
+                    utType = UTType.JPEG;
+                    break;
+                default:
+                    throw new NotImplementedException("The ScreenshotFormat is not supported");
             }
 
             var data = new NSMutableData();
