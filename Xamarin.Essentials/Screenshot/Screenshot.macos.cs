@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using AppKit;
 using CoreGraphics;
@@ -19,48 +16,78 @@ namespace Xamarin.Essentials
         static Task<ScreenshotResult> PlatformCaptureAsync()
         {
             var image = ApplicationServices.GetScreenshot();
-            var result = new ScreenshotResult(image);
+            var result = new ScreenshotResult(new NSImage(image, new CGSize(image.Width, image.Height)));
             return Task.FromResult(result);
         }
     }
 
     public partial class ScreenshotResult
     {
-        readonly CGImage cgImage;
+        readonly NSImage uiImage;
 
-        ~ScreenshotResult()
+        internal ScreenshotResult(NSImage image)
         {
-            cgImage?.Dispose();
-        }
+            uiImage = image;
 
-        internal ScreenshotResult(CGImage image)
-        {
-            cgImage = image;
-            Width = (int)cgImage.Width;
-            Height = (int)cgImage.Height;
+            Width = (int)image.Size.Width;
+            Height = (int)image.Size.Height;
         }
 
         internal Task<Stream> PlatformOpenReadAsync(ScreenshotFormat format)
         {
-            NSString utType;
-            switch (format)
+            return Task.FromResult<Stream>(new ImageTypeStream(uiImage.CGImage, format));
+        }
+
+        // This way we do not leak memory and can read the stream infinity times. We also do not require a finalizer this way
+        internal class ImageTypeStream : Stream
+        {
+            readonly Stream decoratedStream;
+            readonly CGImage nativeImage;
+
+            internal ImageTypeStream(CGImage image, ScreenshotFormat format)
             {
-                case ScreenshotFormat.Png:
-                    utType = UTType.PNG;
-                    break;
-                case ScreenshotFormat.Jpeg:
-                    utType = UTType.JPEG;
-                    break;
-                default:
-                    throw new NotImplementedException("The ScreenshotFormat is not supported");
+                nativeImage = image;
+
+                var utType = format switch
+                {
+                    ScreenshotFormat.Png => UTType.PNG,
+                    ScreenshotFormat.Jpeg => UTType.JPEG,
+                    _ => throw new NotImplementedException("The ScreenshotFormat is not supported"),
+                };
+
+                var data = new NSMutableData();
+                var dest = CGImageDestination.Create(data, utType, imageCount: 1);
+                dest.AddImage(nativeImage);
+                dest.Close();
+
+                decoratedStream = data.AsStream();
             }
 
-            var data = new NSMutableData();
-            var destination = CGImageDestination.Create(data, utType, imageCount: 1);
-            destination.AddImage(cgImage);
-            destination.Close();
+            public override bool CanRead => decoratedStream.CanRead;
 
-            return Task.FromResult(data.AsStream());
+            public override bool CanSeek => decoratedStream.CanSeek;
+
+            public override bool CanWrite => decoratedStream.CanWrite;
+
+            public override long Length => decoratedStream.Length;
+
+            public override long Position { get => decoratedStream.Position; set => decoratedStream.Position = value; }
+
+            public override void Flush() => decoratedStream.Flush();
+
+            public override int Read(byte[] buffer, int offset, int count) => decoratedStream.Read(buffer, offset, count);
+
+            public override long Seek(long offset, SeekOrigin origin) => decoratedStream.Seek(offset, origin);
+
+            public override void SetLength(long value) => decoratedStream.SetLength(value);
+
+            public override void Write(byte[] buffer, int offset, int count) => decoratedStream.Write(buffer, offset, count);
+
+            protected override void Dispose(bool disposing)
+            {
+                nativeImage.Dispose();
+                base.Dispose(disposing);
+            }
         }
     }
 }

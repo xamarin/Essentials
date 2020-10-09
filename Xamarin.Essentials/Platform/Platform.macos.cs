@@ -27,6 +27,7 @@ namespace Xamarin.Essentials
     {
         const string appServicesPath = "/System/Library/Frameworks/ApplicationServices.framework/Versions/Current/ApplicationServices";
 
+        // CGWindowListCreateImage and CGImage.ScreenImage not working, so we have to use this
         // https://developer.apple.com/documentation/coregraphics/1454595-cgdisplaycreateimage
         [DllImport(appServicesPath, EntryPoint = "CGDisplayCreateImage")]
         static extern /* CGImageRef */ IntPtr CGDisplayCreateImage(int displayId);
@@ -57,7 +58,7 @@ namespace Xamarin.Essentials
 
             var windowNumber = (NSNumber)screen.DeviceDescription["NSScreenNumber"];
             var displayId = windowNumber.Int32Value;
-            var handle = CGDisplayCreateImage(displayId); // CGWindowListCreateImage not working
+            var handle = CGDisplayCreateImage(displayId);
             var image = new CGImage(handle);
             return image;
         }
