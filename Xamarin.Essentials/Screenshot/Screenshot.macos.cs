@@ -51,9 +51,9 @@ namespace Xamarin.Essentials
             }
 
             var data = new NSMutableData();
-            var dest = CGImageDestination.Create(data, utType, imageCount: 1);
-            dest.AddImage(cgImage);
-            dest.Close();
+            var destination = CGImageDestination.Create(data, utType, imageCount: 1);
+            destination.AddImage(cgImage);
+            destination.Close();
 
             return Task.FromResult(data.AsStream());
         }
