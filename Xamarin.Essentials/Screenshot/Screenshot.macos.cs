@@ -15,9 +15,8 @@ namespace Xamarin.Essentials
 
         static Task<ScreenshotResult> PlatformCaptureAsync()
         {
-            var image = ApplicationServices.GetScreenshot();
+            using var image = ApplicationServices.GetScreenshot();
             var result = new ScreenshotResult(new NSImage(image, new CGSize(image.Width, image.Height)));
-            image?.Dispose();
             return Task.FromResult(result);
         }
     }
