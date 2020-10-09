@@ -28,6 +28,11 @@ namespace Xamarin.Essentials
     {
         readonly CGImage cgImage;
 
+        ~ScreenshotResult()
+        {
+            cgImage?.Dispose();
+        }
+
         internal ScreenshotResult(CGImage image)
         {
             cgImage = image;
