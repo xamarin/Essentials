@@ -9,5 +9,8 @@ namespace Xamarin.Essentials
 
         static Task PlatformRequestAsync(ShareFileRequest request) =>
             throw ExceptionUtils.NotSupportedOrImplementedException;
+
+        static Task PlatformRequestAsync(ShareFilesRequest request) =>
+            throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }

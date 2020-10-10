@@ -58,5 +58,7 @@ namespace Xamarin.Essentials
 
             return Task.CompletedTask;
         }
+
+        static Task PlatformRequestAsync(ShareFilesRequest request) => Task.CompletedTask;
     }
 }

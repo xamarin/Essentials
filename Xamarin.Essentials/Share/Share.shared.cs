@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 #if !NETSTANDARD1_0
 using System.Drawing;
@@ -31,13 +33,33 @@ namespace Xamarin.Essentials
                 throw new ArgumentNullException(nameof(request));
 
             if (request.File == null)
-                throw new ArgumentException($"The {nameof(request.File)} in the request is invalid.");
+                throw new ArgumentException(FileNullExeption(nameof(request.File)));
 
             if (string.IsNullOrEmpty(request.File.FullPath))
-                throw new ArgumentException($"The request file's {nameof(request.File.FullPath)} is invalid.");
+                throw new ArgumentException(EmptyPathExeption(nameof(request.File.FullPath)));
 
             return PlatformRequestAsync(request);
         }
+
+        public static Task RequestAsync(ShareFilesRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            if (!(request.Files?.Count() > 0))
+                throw new ArgumentException(FileNullExeption(nameof(request.Files)));
+
+            if (request.Files.Any(file => string.IsNullOrEmpty(file.FullPath)))
+                throw new ArgumentException(EmptyPathExeption(nameof(ShareFile.FullPath)));
+
+            return PlatformRequestAsync(request);
+        }
+
+        static string FileNullExeption(string file)
+            => $"The request file's {file} is invalid.";
+
+        static string EmptyPathExeption(string path)
+            => $"The request file's {path} is invalid.";
     }
 
     public abstract class ShareRequestBase
@@ -86,16 +108,36 @@ namespace Xamarin.Essentials
         }
 
         public ShareFileRequest(ShareFile file)
-        {
-            File = file;
-        }
+            => File = file;
 
         public ShareFileRequest(FileBase file)
-        {
-            File = new ShareFile(file);
-        }
+            => File = new ShareFile(file);
 
         public ShareFile File { get; set; }
+    }
+
+    public class ShareFilesRequest : ShareRequestBase
+    {
+        public ShareFilesRequest()
+        {
+        }
+
+        public ShareFilesRequest(IEnumerable<ShareFile> files, string title = null)
+        {
+            Files = files;
+            Title = title;
+        }
+
+        public ShareFilesRequest(IEnumerable<FileBase> files, string title = null)
+        {
+            Files = files?.Select(file => new ShareFile(file));
+            Title = title;
+        }
+
+        public IEnumerable<ShareFile> Files { get; set; }
+
+        public static explicit operator ShareFilesRequest(ShareFileRequest request)
+            => new ShareFilesRequest(new ShareFile[] { request.File }, request.Title);
     }
 
     public class ShareFile : FileBase

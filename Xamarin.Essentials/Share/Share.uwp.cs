@@ -57,5 +57,7 @@ namespace Xamarin.Essentials
                 dataTransferManager.DataRequested -= ShareTextHandler;
             }
         }
+
+        static Task PlatformRequestAsync(ShareFilesRequest request) => Task.CompletedTask;
     }
 }
