@@ -104,7 +104,7 @@ namespace Xamarin.Essentials
                 internal int bottom;
             }
 
-            [DllImport("gdi32", ExactSpelling = true)]
+            [DllImport("gdi32", ExactSpelling = true, CharSet = CharSet.Unicode)]
             internal static extern IntPtr CreateDCW(string lpszDriver, string lpszDevice, string lpszOutput, IntPtr lpInitData);
 
             [DllImport("gdi32", ExactSpelling = true)]
