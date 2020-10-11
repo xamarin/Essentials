@@ -137,7 +137,13 @@ namespace Xamarin.Essentials
         public IEnumerable<ShareFile> Files { get; set; }
 
         public static explicit operator ShareFilesRequest(ShareFileRequest request)
-            => new ShareFilesRequest(new ShareFile[] { request.File }, request.Title);
+        {
+            var requestFiles = new ShareFilesRequest(new ShareFile[] { request.File }, request.Title);
+#if !NETSTANDARD1_0
+            requestFiles.PresentationSourceBounds = request.PresentationSourceBounds;
+#endif
+            return requestFiles;
+        }
     }
 
     public class ShareFile : FileBase

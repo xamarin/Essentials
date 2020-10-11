@@ -30,7 +30,11 @@ namespace Samples
 
             MainPage = new NavigationPage(new HomePage());
 
-            AppActions.OnAppAction += AppActions_OnAppAction;
+            var a = false;
+            if (a)
+            {
+                AppActions.OnAppAction += AppActions_OnAppAction;
+            }
         }
 
         protected override async void OnStart()
@@ -47,10 +51,13 @@ namespace Samples
                 typeof(Crashes),
                 typeof(Distribute));
             }
-
-            await AppActions.SetAsync(
+            var a = false;
+            if (a)
+            {
+                await AppActions.SetAsync(
                 new AppAction("app_info", "App Info", icon: "app_info_action_icon"),
                 new AppAction("battery_info", "Battery Info"));
+            }
         }
 
         void AppActions_OnAppAction(object sender, AppActionEventArgs e)

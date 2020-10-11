@@ -139,7 +139,7 @@ namespace Samples.ViewModel
 
             await Share.RequestAsync(new ShareFileRequest
             {
-                Title = Title,
+                Title = ShareFileTitle,
                 File = new ShareFile(file),
                 PresentationSourceBounds = GetRectangle(element)
             });
@@ -156,7 +156,7 @@ namespace Samples.ViewModel
 
             await Share.RequestAsync(new ShareFilesRequest
             {
-                Title = Title,
+                Title = ShareFilesTitle,
                 Files = new ShareFile[] { new ShareFile(file1), new ShareFile(file2) },
                 PresentationSourceBounds = GetRectangle(element)
             });

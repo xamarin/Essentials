@@ -21,12 +21,17 @@ namespace Xamarin.Essentials
         }
 
         static Task PlatformRequestAsync(ShareFileRequest request)
+            => PlatformRequestAsync((ShareFilesRequest)request);
+
+        static Task PlatformRequestAsync(ShareFilesRequest request)
         {
             var items = new List<NSObject>();
+
             if (!string.IsNullOrWhiteSpace(request.Title))
                 items.Add(new NSString(request.Title));
-            if (request.File != null)
-                items.Add(NSUrl.FromFilename(request.File.FullPath));
+
+            foreach (var file in request.Files)
+                items.Add(NSUrl.FromFilename(file.FullPath));
 
             return PlatformShowRequestAsync(request, items);
         }
@@ -44,7 +49,5 @@ namespace Xamarin.Essentials
 
             return Task.CompletedTask;
         }
-
-        static Task PlatformRequestAsync(ShareFilesRequest request) => Task.CompletedTask;
     }
 }

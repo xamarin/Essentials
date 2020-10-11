@@ -30,6 +30,9 @@ namespace Xamarin.Essentials
         }
 
         static Task PlatformRequestAsync(ShareFileRequest request)
+            => PlatformRequestAsync((ShareFilesRequest)request);
+
+        static Task PlatformRequestAsync(ShareFilesRequest request)
         {
             Permissions.EnsureDeclared<Permissions.LaunchApp>();
 
@@ -38,16 +41,15 @@ namespace Xamarin.Essentials
                 Operation = AppControlOperations.ShareText,
             };
 
-            if (!string.IsNullOrEmpty(request.File.FullPath))
-                appControl.ExtraData.Add("http://tizen.org/appcontrol/data/path", request.File.FullPath);
             if (!string.IsNullOrEmpty(request.Title))
                 appControl.ExtraData.Add("http://tizen.org/appcontrol/data/title", request.Title);
+
+            foreach (var file in request.Files)
+                appControl.ExtraData.Add("http://tizen.org/appcontrol/data/path", file.FullPath);
 
             AppControl.SendLaunchRequest(appControl);
 
             return Task.CompletedTask;
         }
-
-        static Task PlatformRequestAsync(ShareFilesRequest request) => Task.CompletedTask;
     }
 }
