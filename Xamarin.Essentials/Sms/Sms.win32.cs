@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Win32;
 
 namespace Xamarin.Essentials
 {
     public static partial class Sms
     {
         internal static bool IsComposeSupported
-            => true;
+        {
+            get
+            {
+                using var key = Registry.ClassesRoot.OpenSubKey("sms");
+                return key.SubKeyCount > 0;
+            }
+        }
 
         static Task PlatformComposeAsync(SmsMessage message)
         {
