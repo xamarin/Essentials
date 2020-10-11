@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,11 +25,18 @@ namespace Xamarin.Essentials
             }
         }
 
-        static async Task<IEnumerable<Contact>> PlatformGetAllAsync()
+        static IEnumerable<Contact> PlatformGetAllAsync()
         {
-            var contactStore = await ContactManager.RequestStoreAsync();
-            return (await contactStore?.FindContactsAsync())?.Select(a => ConvertContact(a));
+            // await Task.CompletedTask;
+            // return GetAll();
+            return null;
         }
+
+        // static async Task<IEnumerable<Contact>> PlatformGetAllAsync()
+        // {
+        //    var contactStore = await ContactManager.RequestStoreAsync();
+        //    return (await contactStore?.FindContactsAsync())?.Select(a => ConvertContact(a));
+        // }
 
         internal static Contact ConvertContact(Windows.ApplicationModel.Contacts.Contact contact)
         {

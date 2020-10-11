@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,13 +30,14 @@ namespace Xamarin.Essentials
             return source.Task;
         }
 
-        static async Task<IEnumerable<Contact>> PlatformGetAllAsync()
-        {
-            await Task.CompletedTask;
-            return GetAll();
-        }
+        // static IEnumerable<Contact> PlatformGetAllAsync()
+        // {
+        //    // await Task.CompletedTask;
+        //    // return GetAll();
+        //    return null;
+        // }
 
-        static IEnumerable<Contact> GetAll()
+        static IEnumerable<Contact> PlatformGetAllAsync()
         {
             var keys = new[]
             {
@@ -49,25 +51,23 @@ namespace Xamarin.Essentials
                 CNContactKey.Type
             };
 
-            var results = new List<Contact>();
+            // var results = new List<Contact>();
             using (var store = new CNContactStore())
             {
                 var containers = store.GetContainers(null, out var error);
 
                 foreach (var container in containers)
                 {
-                    try
-                    {
                         using var pred = CNContact.GetPredicateForContactsInContainer(container.Identifier);
-                        results.AddRange(store.GetUnifiedContacts(pred, keys, out error)?.Select(a => ConvertContact(a)));
-                    }
-                    catch
-                    {
-                    }
+
+                        // results.AddRange(store.GetUnifiedContacts(pred, keys, out error)?.Select(a => ConvertContact(a)));
+                        var contacts = store.GetUnifiedContacts(pred, keys, out error);
+                        foreach (var item in contacts)
+                            yield return ConvertContact(item);
                 }
             }
 
-            return results;
+            // return results;
         }
 
         internal static Contact ConvertContact(CNContact contact)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using AppKit;
@@ -12,10 +13,11 @@ namespace Xamarin.Essentials
     {
         static Task<Contact> PlatformPickContactAsync() => null;
 
-        static async Task<IEnumerable<Contact>> PlatformGetAllAsync()
+        static IEnumerable<Contact> PlatformGetAllAsync()
         {
-            await Task.CompletedTask;
-            return GetAll();
+            // await Task.CompletedTask;
+            // return GetAll();
+            return null;
         }
 
         static IEnumerable<Contact> GetAll()

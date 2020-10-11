@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Tizen.Applications;
@@ -49,16 +50,23 @@ namespace Xamarin.Essentials
             return await tcs.Task;
         }
 
-        static async Task<IEnumerable<Contact>> PlatformGetAllAsync()
+        static IEnumerable<Contact> PlatformGetAllAsync()
         {
-            Permissions.EnsureDeclared<Permissions.ContactsRead>();
-            await Permissions.RequestAsync<Permissions.ContactsRead>();
-
-            var contactsList = manager.Database.GetAll(TizenContact.Uri, 0, 0);
-            if (contactsList.Count > 0)
-                contactsList.MoveFirst();
-            return await Task.FromResult<IEnumerable<Contact>>(ToContacts(contactsList).ToList());
+            // await Task.CompletedTask;
+            // return GetAll();
+            return null;
         }
+
+        // static async Task<IEnumerable<Contact>> PlatformGetAllAsync()
+        // {
+        //    Permissions.EnsureDeclared<Permissions.ContactsRead>();
+        //    await Permissions.RequestAsync<Permissions.ContactsRead>();
+
+        // var contactsList = manager.Database.GetAll(TizenContact.Uri, 0, 0);
+        //    if (contactsList.Count > 0)
+        //        contactsList.MoveFirst();
+        //    return await Task.FromResult<IEnumerable<Contact>>(ToContacts(contactsList).ToList());
+        // }
 
         static IEnumerable<Contact> ToContacts(ContactsList contactsList)
         {

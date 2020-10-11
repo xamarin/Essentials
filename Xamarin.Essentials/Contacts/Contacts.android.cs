@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
@@ -23,17 +24,22 @@ namespace Xamarin.Essentials
                 var contact = GetContact(result.Data);
                 return contact;
             }
-
             return null;
         }
 
-        static Task<IEnumerable<Contact>> PlatformGetAllAsync()
-        {
-            var list = GetAll();
-            return Task.FromResult(list);
-        }
+        // static ObservableCollection<Contact> PlatformGetAllAsync()
+        // {
+        //    var collect = new ObservableCollection<Contact>(GetAll());
+        //    Task.Run(() =>
+        //    {
+        //        var all = GetAll();
+        //        foreach (var a in all)
+        //            collect.Add(a);
+        //    });
+        //    return collect;
+        // }
 
-        static IEnumerable<Contact> GetAll()
+        static IEnumerable<Contact> PlatformGetAllAsync()
         {
             using var context = Platform.AppContext.ContentResolver;
             using var cursor = context.Query(ContactsContract.Contacts.ContentUri, null, null, null, null);
@@ -75,8 +81,8 @@ namespace Xamarin.Essentials
 
             var id = cursor.GetString(cursor.GetColumnIndex(idKey));
             var idQ = new string[1] { id };
-            var phones = GetNumbers(context, idQ)?.ToList();
-            var emails = GetEmails(context, idQ)?.ToList();
+            var phones = GetNumbers(context, idQ);
+            var emails = GetEmails(context, idQ);
 
             // TODO ContactType
             // var typeOfContact = cur.GetString(cur.GetColumnIndex(ContactsContract.CommonDataKinds.Phone.InterfaceConsts.Type));

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -40,9 +42,9 @@ namespace Samples.ViewModel
             set => SetProperty(ref contactType, value);
         }
 
-        IEnumerable<Contact> contactsList;
+        ObservableCollection<Contact> contactsList = new ObservableCollection<Contact>();
 
-        public IEnumerable<Contact> ContactsList { get => contactsList; set => SetProperty(ref contactsList, value); }
+        public ObservableCollection<Contact> ContactsList { get => contactsList; set => SetProperty(ref contactsList, value); }
 
         public ICommand GetContactCommand { get; }
 
@@ -89,14 +91,20 @@ namespace Samples.ViewModel
             }
         }
 
-        async void OnGetAllContact()
+        void OnGetAllContact()
         {
             if (IsBusy)
                 return;
             IsBusy = true;
             try
             {
-                ContactsList = await Contacts.GetAllAsync();
+                var collect = Contacts.GetAllAsync();
+
+                Task.Run(() =>
+                {
+                    foreach (var a in collect)
+                        MainThread.BeginInvokeOnMainThread(() => ContactsList.Add(a));
+                });
             }
             catch (Exception ex)
             {
