@@ -72,17 +72,11 @@ namespace Samples
         {
             // Don't handle events fired for old application instances
             // and cleanup the old instance's event handler
-            try
+
+            if (Application.Current != this && Application.Current is App app)
             {
-                if (Application.Current != this && Application.Current is App app)
-                {
-                    AppActions.OnAppAction -= app.AppActions_OnAppAction;
-                    return;
-                }
-            }
-            catch (FeatureNotSupportedException ex)
-            {
-                Debug.WriteLine($"{nameof(AppActions)} Exception: {ex}");
+                AppActions.OnAppAction -= app.AppActions_OnAppAction;
+                return;
             }
 
             Device.BeginInvokeOnMainThread(async () =>
