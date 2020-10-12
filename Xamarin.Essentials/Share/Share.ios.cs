@@ -36,10 +36,7 @@ namespace Xamarin.Essentials
             return vc.PresentViewControllerAsync(activityController, true);
         }
 
-        static Task PlatformRequestAsync(ShareFileRequest request)
-            => PlatformRequestAsync((ShareFilesRequest)request);
-
-        static Task PlatformRequestAsync(ShareFilesRequest request)
+        static Task PlatformRequestAsync(ShareMultipleFilesRequest request)
         {
             var items = new List<NSObject>();
 

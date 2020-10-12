@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Android.Content;
 using Android.OS;
@@ -38,18 +39,15 @@ namespace Xamarin.Essentials
             return Task.CompletedTask;
         }
 
-        static Task PlatformRequestAsync(ShareFileRequest request)
-            => PlatformRequestAsync((ShareFilesRequest)request);
-
-        static Task PlatformRequestAsync(ShareFilesRequest request)
+        static Task PlatformRequestAsync(ShareMultipleFilesRequest request)
         {
             var contentUris = new List<IParcelable>();
             var intent = new Intent(Intent.ActionSendMultiple);
             foreach (var file in request.Files)
-            {
                 contentUris.Add(Platform.GetShareableFileUri(file));
-                intent.SetType(file.ContentType);
-            }
+
+            intent.SetType(request.Files.FirstOrDefault().ContentType);
+
             intent.SetFlags(ActivityFlags.GrantReadUriPermission);
             intent.PutParcelableArrayListExtra(Intent.ExtraStream, contentUris);
 

@@ -29,10 +29,7 @@ namespace Xamarin.Essentials
             return Task.CompletedTask;
         }
 
-        static Task PlatformRequestAsync(ShareFileRequest request)
-            => PlatformRequestAsync((ShareFilesRequest)request);
-
-        static Task PlatformRequestAsync(ShareFilesRequest request)
+        static Task PlatformRequestAsync(ShareMultipleFilesRequest request)
         {
             Permissions.EnsureDeclared<Permissions.LaunchApp>();
 

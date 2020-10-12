@@ -38,10 +38,10 @@ namespace Xamarin.Essentials
             if (string.IsNullOrEmpty(request.File.FullPath))
                 throw new ArgumentException(EmptyPathExeption(nameof(request.File.FullPath)));
 
-            return PlatformRequestAsync(request);
+            return PlatformRequestAsync((ShareMultipleFilesRequest)request);
         }
 
-        public static Task RequestAsync(ShareFilesRequest request)
+        public static Task RequestAsync(ShareMultipleFilesRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
@@ -116,19 +116,19 @@ namespace Xamarin.Essentials
         public ShareFile File { get; set; }
     }
 
-    public class ShareFilesRequest : ShareRequestBase
+    public class ShareMultipleFilesRequest : ShareRequestBase
     {
-        public ShareFilesRequest()
+        public ShareMultipleFilesRequest()
         {
         }
 
-        public ShareFilesRequest(IEnumerable<ShareFile> files, string title = null)
+        public ShareMultipleFilesRequest(IEnumerable<ShareFile> files, string title = null)
         {
             Files = files;
             Title = title;
         }
 
-        public ShareFilesRequest(IEnumerable<FileBase> files, string title = null)
+        public ShareMultipleFilesRequest(IEnumerable<FileBase> files, string title = null)
         {
             Files = files?.Select(file => new ShareFile(file));
             Title = title;
@@ -136,9 +136,9 @@ namespace Xamarin.Essentials
 
         public IEnumerable<ShareFile> Files { get; set; }
 
-        public static explicit operator ShareFilesRequest(ShareFileRequest request)
+        public static explicit operator ShareMultipleFilesRequest(ShareFileRequest request)
         {
-            var requestFiles = new ShareFilesRequest(new ShareFile[] { request.File }, request.Title);
+            var requestFiles = new ShareMultipleFilesRequest(new ShareFile[] { request.File }, request.Title);
 #if !NETSTANDARD1_0
             requestFiles.PresentationSourceBounds = request.PresentationSourceBounds;
 #endif
