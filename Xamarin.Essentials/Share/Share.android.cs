@@ -46,7 +46,7 @@ namespace Xamarin.Essentials
             foreach (var file in request.Files)
                 contentUris.Add(Platform.GetShareableFileUri(file));
 
-            intent.SetType(request.Files.FirstOrDefault().ContentType);
+            intent.SetType(request.Files.Count() > 1 ? "*/*" : request.Files.FirstOrDefault().ContentType);
 
             intent.SetFlags(ActivityFlags.GrantReadUriPermission);
             intent.PutParcelableArrayListExtra(Intent.ExtraStream, contentUris);
