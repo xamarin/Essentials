@@ -5,7 +5,6 @@ using UwpBrightness = Windows.Graphics.Display.BrightnessOverride;
 
 namespace Xamarin.Essentials
 {
-    [Preserve(AllMembers = true)]
     public readonly partial struct BrightnessOverride : IDisposable, IEquatable<BrightnessOverride>
     {
         internal BrightnessOverride(Brightness oldBrightness, Brightness appliedBrightness)
@@ -56,7 +55,6 @@ namespace Xamarin.Essentials
 #endif
     }
 
-    [Preserve(AllMembers = true)]
     public readonly struct Brightness
     {
         public double Value { get; }
