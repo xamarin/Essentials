@@ -48,9 +48,12 @@ namespace Samples
                 typeof(Distribute));
             }
 
-            await AppActions.SetAsync(
-                new AppAction("app_info", "App Info", icon: "app_info_action_icon"),
-                new AppAction("battery_info", "Battery Info"));
+            if (AppActions.IsSupported)
+            {
+                await AppActions.SetAsync(
+                    new AppAction("app_info", "App Info", icon: "app_info_action_icon"),
+                    new AppAction("battery_info", "Battery Info"));
+            }
         }
 
         void AppActions_OnAppAction(object sender, AppActionEventArgs e)

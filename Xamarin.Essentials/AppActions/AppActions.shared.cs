@@ -6,7 +6,7 @@ namespace Xamarin.Essentials
 {
     public static partial class AppActions
     {
-        internal static bool IsSupported
+        public static bool IsSupported
             => PlatformIsSupported;
 
         public static Task<IEnumerable<AppAction>> GetAsync()
