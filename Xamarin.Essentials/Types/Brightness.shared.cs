@@ -42,6 +42,21 @@ namespace Xamarin.Essentials
         }
 #endif
 
+        public static bool operator ==(BrightnessOverride lhs, BrightnessOverride rhs)
+        {
+            return lhs.Equals(rhs);
+        }
+
+        public static bool operator !=(BrightnessOverride lhs, BrightnessOverride rhs)
+        {
+            return !(lhs == rhs);
+        }
+
+        public override bool Equals(object other)
+        {
+            return other is BrightnessOverride b && Equals(b);
+        }
+
         public Brightness OldBrightness { get; }
 
         public Brightness AppliedBrightness { get; }
@@ -79,6 +94,21 @@ namespace Xamarin.Essentials
             if (value < minValue || value > 1d)
                 throw new ArgumentException("Value has to be between (0,1) or less than one on Android", nameof(value));
             Value = value;
+        }
+
+        public static bool operator ==(Brightness lhs, Brightness rhs)
+        {
+            return lhs.Equals(rhs);
+        }
+
+        public static bool operator !=(Brightness lhs, Brightness rhs)
+        {
+            return !(lhs == rhs);
+        }
+
+        public override bool Equals(object other)
+        {
+            return other is Brightness b && Equals(b);
         }
 
         public bool Equals(Brightness other)
