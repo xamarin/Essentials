@@ -6,8 +6,7 @@ namespace Xamarin.Essentials
 {
     public static partial class AppActions
     {
-        internal static bool PlatformIsSupported
-            => throw ExceptionUtils.NotSupportedOrImplementedException;
+        internal static bool PlatformIsSupported => false;
 
         static Task<IEnumerable<AppAction>> PlatformGetAsync() =>
             throw ExceptionUtils.NotSupportedOrImplementedException;
