@@ -39,26 +39,7 @@ namespace Xamarin.Essentials
         }
 
         static Task PlatformRequestAsync(ShareFileRequest request)
-        {
-            var contentUri = Platform.GetShareableFileUri(request.File);
-
-            var intent = new Intent(Intent.ActionSend);
-            intent.SetType(request.File.ContentType);
-            intent.SetFlags(ActivityFlags.GrantReadUriPermission);
-            intent.PutExtra(Intent.ExtraStream, contentUri);
-
-            if (!string.IsNullOrEmpty(request.Title))
-            {
-                intent.PutExtra(Intent.ExtraTitle, request.Title);
-            }
-
-            var chooserIntent = Intent.CreateChooser(intent, request.Title ?? string.Empty);
-            var flags = ActivityFlags.ClearTop | ActivityFlags.NewTask;
-            chooserIntent.SetFlags(flags);
-            Platform.AppContext.StartActivity(chooserIntent);
-
-            return Task.CompletedTask;
-        }
+            => PlatformRequestAsync((ShareFilesRequest)request);
 
         static Task PlatformRequestAsync(ShareFilesRequest request)
         {
