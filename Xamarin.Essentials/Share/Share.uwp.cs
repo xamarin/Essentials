@@ -38,10 +38,7 @@ namespace Xamarin.Essentials
             return Task.CompletedTask;
         }
 
-        static Task PlatformRequestAsync(ShareFileRequest request)
-            => PlatformRequestAsync((ShareFilesRequest)request);
-
-        static async Task PlatformRequestAsync(ShareFilesRequest request)
+        static async Task PlatformRequestAsync(ShareMultipleFilesRequest request)
         {
             var storageFiles = new List<IStorageFile>();
             foreach (var file in request.Files)

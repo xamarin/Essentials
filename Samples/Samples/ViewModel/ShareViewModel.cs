@@ -154,7 +154,7 @@ namespace Samples.ViewModel
             var file1 = CreateFile(ShareFile1AttachmentName, ShareFile1AttachmentContents, "Attachment1.txt");
             var file2 = CreateFile(ShareFile2AttachmentName, ShareFile2AttachmentContents, "Attachment2.txt");
 
-            await Share.RequestAsync(new ShareFilesRequest
+            await Share.RequestAsync(new ShareMultipleFilesRequest
             {
                 Title = ShareFilesTitle,
                 Files = new ShareFile[] { new ShareFile(file1), new ShareFile(file2) },
