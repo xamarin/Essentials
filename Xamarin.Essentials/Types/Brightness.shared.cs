@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 #if WINDOWS_UWP
 using UwpBrightness = Windows.Graphics.Display.BrightnessOverride;
 #endif
@@ -34,6 +35,11 @@ namespace Xamarin.Essentials
         {
             return OldBrightness.Equals(other.OldBrightness) && AppliedBrightness.Equals(other.AppliedBrightness) && @override.Equals(other.@override);
         }
+
+        public override int GetHashCode()
+        {
+            return (OldBrightness, AppliedBrightness, @override).GetHashCode();
+        }
 #endif
 
         public Brightness OldBrightness { get; }
@@ -52,10 +58,15 @@ namespace Xamarin.Essentials
         {
             return OldBrightness.Equals(other.OldBrightness) && AppliedBrightness.Equals(other.AppliedBrightness);
         }
+
+        public override int GetHashCode()
+        {
+            return (OldBrightness, AppliedBrightness).GetHashCode();
+        }
 #endif
     }
 
-    public readonly struct Brightness
+    public readonly struct Brightness : IEquatable<Brightness>
     {
         public double Value { get; }
 
@@ -68,6 +79,21 @@ namespace Xamarin.Essentials
             if (value < minValue || value > 1d)
                 throw new ArgumentException("Value has to be between (0,1) or less than one on Android", nameof(value));
             Value = value;
+        }
+
+        public bool Equals(Brightness other)
+        {
+            return Value.Equals(other.Value);
+        }
+
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return $"{Value.ToString("F", CultureInfo.InvariantCulture)}";
         }
     }
 }
