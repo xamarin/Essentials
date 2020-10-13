@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xunit;
@@ -49,6 +50,33 @@ namespace DeviceTests
         public async Task Share_NullShareFileRequest()
         {
             ShareFileRequest request = null;
+            await Assert.ThrowsAsync<ArgumentNullException>(() => Share.RequestAsync(request));
+        }
+
+        [Fact]
+        public async Task Share_ShareMultipleFilesRequestWithInvalidFilesList()
+        {
+            var request = new ShareMultipleFilesRequest
+            {
+                Files = new List<ShareFile>()
+            };
+            await Assert.ThrowsAsync<ArgumentException>(() => Share.RequestAsync(request));
+        }
+
+        [Fact]
+        public async Task Share_ShareMultipleFilesRequestWithInvalidFilePath()
+        {
+            var request = new ShareMultipleFilesRequest
+            {
+                Files = new List<ShareFile> { new ShareFile(fullPath: null) }
+            };
+            await Assert.ThrowsAsync<ArgumentException>(() => Share.RequestAsync(request));
+        }
+
+        [Fact]
+        public async Task Share_NullShareMultipleFilesRequest()
+        {
+            ShareMultipleFilesRequest request = null;
             await Assert.ThrowsAsync<ArgumentNullException>(() => Share.RequestAsync(request));
         }
     }
