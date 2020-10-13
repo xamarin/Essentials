@@ -87,13 +87,13 @@ Every pull request which affects public types or members should include correspo
 
 If you're looking for something to fix, please browse [open issues](https://github.com/xamarin/Essentials/issues). 
 
-Follow the style used by the [.NET Foundation](https://github.com/dotnet/corefx/blob/master/Documentation/coding-guidelines/coding-style.md), with two primary exceptions:
+Follow the style used by the [.NET Foundation](https://github.com/dotnet/runtime/blob/master/docs/coding-guidelines/coding-style.md), with two primary exceptions:
 
 - We do not use the `private` keyword as it is the default accessibility level in C#.
 - We will **not** use `_` or `s_` as a prefix for internal or private field names
 - We will use `camelCaseFieldName` for naming internal or private fields in both instance and static implementations
 
-Read and follow our [Pull Request template](https://github.com/xamarin/Essentials/blob/master/.github/PULL_REQUEST_TEMPLATE.md)
+Read and follow our [Pull Request template](https://github.com/xamarin/Essentials/blob/main/.github/PULL_REQUEST_TEMPLATE.md)
 
 ### Proposals
 

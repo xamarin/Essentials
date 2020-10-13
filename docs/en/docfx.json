@@ -52,7 +52,7 @@
       "ms.technology":"xamarin-essentials",
       "feedback_system": "GitHub",
       "feedback_github_repo": "MicrosoftDocs/xamarin-docs",
-      "feedback_product_url": "https://github.com/xamarin/Essentials/blob/master/PRODUCT-FEEDBACK.md"
+      "feedback_product_url": "https://github.com/xamarin/Essentials/blob/main/PRODUCT-FEEDBACK.md"
     },
     "fileMetadata": {
       "author": {
@@ -61,9 +61,6 @@
     },
     "template": [],
     "dest": "_site",
-    "xref": [
-      "_zip/msdn.4.5.2.zip"
-    ],
     "lruSize": 0
   }
 }

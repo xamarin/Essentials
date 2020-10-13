@@ -20,7 +20,12 @@ namespace Xamarin.Essentials
             var canOpen = UIApplication.SharedApplication.CanOpenUrl(nativeUrl);
 
             if (canOpen)
-                return UIApplication.SharedApplication.OpenUrlAsync(nativeUrl, new UIApplicationOpenUrlOptions());
+            {
+                if (Platform.HasOSVersion(10, 0))
+                    return UIApplication.SharedApplication.OpenUrlAsync(nativeUrl, new UIApplicationOpenUrlOptions());
+
+                UIApplication.SharedApplication.OpenUrl(nativeUrl);
+            }
 
             return Task.FromResult(canOpen);
         }
@@ -39,11 +44,21 @@ namespace Xamarin.Essentials
         }
 
 #if __IOS__
+        static UIDocumentInteractionController documentController;
+
         static Task PlatformOpenAsync(OpenFileRequest request)
         {
             var fileUrl = NSUrl.FromFilename(request.File.FullPath);
 
-            var documentController = UIDocumentInteractionController.FromUrl(fileUrl);
+            documentController = UIDocumentInteractionController.FromUrl(fileUrl);
+            documentController.Delegate = new DocumentControllerDelegate
+            {
+                DismissHandler = () =>
+                {
+                    documentController?.Dispose();
+                    documentController = null;
+                }
+            };
             documentController.Uti = request.File.ContentType;
 
             var vc = Platform.GetCurrentViewController();
@@ -61,6 +76,14 @@ namespace Xamarin.Essentials
             documentController.PresentOpenInMenu(rect.Value, vc.View, true);
 
             return Task.CompletedTask;
+        }
+
+        class DocumentControllerDelegate : UIDocumentInteractionControllerDelegate
+        {
+            public Action DismissHandler { get; set; }
+
+            public override void DidDismissOpenInMenu(UIDocumentInteractionController controller)
+                => DismissHandler?.Invoke();
         }
 #else
         static Task PlatformOpenAsync(OpenFileRequest request) =>

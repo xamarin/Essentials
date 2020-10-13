@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Foundation;
 using ObjCRuntime;
 using UIKit;
@@ -19,6 +20,18 @@ namespace Xamarin.Essentials
 #if __IOS__ || __TVOS__
         public static bool OpenUrl(UIApplication app, NSUrl url, NSDictionary options)
             => WebAuthenticator.OpenUrl(new Uri(url.AbsoluteString));
+#endif
+
+#if __IOS__
+        public static void PerformActionForShortcutItem(UIApplication application, UIApplicationShortcutItem shortcutItem, UIOperationHandler completionHandler)
+        {
+            if (shortcutItem.Type == AppActions.Type)
+            {
+                var appAction = shortcutItem.ToAppAction();
+
+                AppActions.InvokeOnAppAction(application, shortcutItem.ToAppAction());
+            }
+        }
 #endif
 
 #if __IOS__
@@ -66,7 +79,7 @@ namespace Xamarin.Essentials
 
             var window = UIApplication.SharedApplication.KeyWindow;
 
-            if (window.WindowLevel == UIWindowLevel.Normal)
+            if (window != null && window.WindowLevel == UIWindowLevel.Normal)
                 viewController = window.RootViewController;
 
             if (viewController == null)
@@ -76,13 +89,13 @@ namespace Xamarin.Essentials
                     .OrderByDescending(w => w.WindowLevel)
                     .FirstOrDefault(w => w.RootViewController != null && w.WindowLevel == UIWindowLevel.Normal);
 
-                if (window == null)
+                if (window == null && throwIfNull)
                     throw new InvalidOperationException("Could not find current view controller.");
                 else
-                    viewController = window.RootViewController;
+                    viewController = window?.RootViewController;
             }
 
-            while (viewController.PresentedViewController != null)
+            while (viewController?.PresentedViewController != null)
                 viewController = viewController.PresentedViewController;
 
             if (throwIfNull && viewController == null)
@@ -95,7 +108,7 @@ namespace Xamarin.Essentials
         {
             var window = UIApplication.SharedApplication.KeyWindow;
 
-            if (window.WindowLevel == UIWindowLevel.Normal)
+            if (window != null && window.WindowLevel == UIWindowLevel.Normal)
                 return window;
 
             if (window == null)

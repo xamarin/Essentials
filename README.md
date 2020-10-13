@@ -4,15 +4,15 @@ Xamarin.Essentials gives developers essential cross-platform APIs for their mobi
 
 iOS, Android, and UWP offer unique operating system and platform APIs that developers have access to, all in C# leveraging Xamarin. It is great that developers have 100% API access in C# with Xamarin, but these APIs are different per platform. This means developers have to learn three different APIs to access platform-specific features. With Xamarin.Essentials, developers have a single cross-platform API that works with any iOS, Android, or UWP application that can be accessed from shared code no matter how the user interface is created.
 
-[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/xamarin/Essentials)
+[![Discord](https://img.shields.io/discord/732297728826277939?label=discord&style=plastic)](https://discord.com/invite/Y8828kE)
 
 ## Build Status
 
 | Build Server | Type         | Platform | Status                                                                                                                                                                                 |
 |--------------|--------------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| VSTS         | Build        | Windows  | [![Build Status](https://dev.azure.com/devdiv/DevDiv/_apis/build/status/Xamarin/Components/Xamarin.Essentials?branchName=master)](https://dev.azure.com/xamarin/public/_build?definitionId=7&_a=summary)                                                  |
-| App Center   | Sample App   | Android  | [![Build status](https://build.appcenter.ms/v0.1/apps/7a1f46ca-ba2f-477e-aacc-ff013c7d5f7a/branches/master/badge)](https://appcenter.ms) |
-| App Center   | Sample App   | iOS      | [![Build status](https://build.appcenter.ms/v0.1/apps/43b39e9e-2b2b-482f-8afa-e9906334c85e/branches/master/badge)](https://appcenter.ms) |
+| VSTS         | Build        | Windows  | [![Build Status](https://dev.azure.com/devdiv/DevDiv/_apis/build/status/Xamarin/Components/Xamarin.Essentials?branchName=main)](https://dev.azure.com/xamarin/public/_build?definitionId=7&_a=summary)                                                  |
+| App Center   | Sample App   | Android  | [![Build status](https://build.appcenter.ms/v0.1/apps/7a1f46ca-ba2f-477e-aacc-ff013c7d5f7a/branches/main/badge)](https://appcenter.ms) |
+| App Center   | Sample App   | iOS      | [![Build status](https://build.appcenter.ms/v0.1/apps/43b39e9e-2b2b-482f-8afa-e9906334c85e/branches/main/badge)](https://appcenter.ms) |
 
 ## Sample App
 
