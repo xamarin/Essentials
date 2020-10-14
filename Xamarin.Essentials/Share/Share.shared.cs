@@ -122,28 +122,40 @@ namespace Xamarin.Essentials
         {
         }
 
-        public ShareMultipleFilesRequest(IEnumerable<ShareFile> files, string title = null)
+        public ShareMultipleFilesRequest(IEnumerable<ShareFile> files)
         {
             Files = files;
+        }
+
+        public ShareMultipleFilesRequest(IEnumerable<FileBase> files)
+            : this(ConvertList(files))
+        {
+        }
+
+        public ShareMultipleFilesRequest(string title, IEnumerable<ShareFile> files)
+            : this(files)
+        {
             Title = title;
         }
 
-        public ShareMultipleFilesRequest(IEnumerable<FileBase> files, string title = null)
+        public ShareMultipleFilesRequest(string title, IEnumerable<FileBase> files)
+            : this(title, ConvertList(files))
         {
-            Files = files?.Select(file => new ShareFile(file));
-            Title = title;
         }
 
         public IEnumerable<ShareFile> Files { get; set; }
 
         public static explicit operator ShareMultipleFilesRequest(ShareFileRequest request)
         {
-            var requestFiles = new ShareMultipleFilesRequest(new ShareFile[] { request.File }, request.Title);
+            var requestFiles = new ShareMultipleFilesRequest(request.Title, new ShareFile[] { request.File });
 #if !NETSTANDARD1_0
             requestFiles.PresentationSourceBounds = request.PresentationSourceBounds;
 #endif
             return requestFiles;
         }
+
+        static IEnumerable<ShareFile> ConvertList(IEnumerable<FileBase> files)
+            => files?.Select(file => new ShareFile(file));
     }
 
     public class ShareFile : FileBase
