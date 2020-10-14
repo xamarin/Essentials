@@ -58,9 +58,6 @@ namespace Xamarin.Essentials
 
         static Task<IEnumerable<CalendarEvent>> PlatformGetEventsAsync(string calendarId, DateTimeOffset? startDate, DateTimeOffset? endDate)
         {
-            if (!int.TryParse(calendarId, out _))
-                throw InvalidCalendar(calendarId);
-
             var sDate = startDate ?? DateTimeOffset.Now.Add(defaultStartTimeFromNow);
             var eDate = endDate ?? sDate.Add(defaultEndTimeFromStartTime);
             var sTime = new TCalendar.CalendarTime(sDate.UtcTicks);
@@ -77,7 +74,7 @@ namespace Xamarin.Essentials
                 TCalendarViews.Event.End,
                 TCalendar.CalendarFilter.IntegerMatchType.LessThanOrEqual,
                 eTime);
-            if (!string.IsNullOrEmpty(calendarId))
+            if (!string.IsNullOrEmpty(calendarId) && !int.TryParse(calendarId, out _))
             {
                 filter.AddCondition(
                     TCalendar.CalendarFilter.LogicalOperator.And,
@@ -130,7 +127,11 @@ namespace Xamarin.Essentials
 
             var eventUri = TCalendarViews.Event.Uri;
             var query = new TCalendar.CalendarQuery(eventUri);
-            var filter = new TCalendar.CalendarFilter(TCalendarViews.Event.Uri, TCalendarViews.Event.Id, TCalendar.CalendarFilter.StringMatchType.FullString, eventId);
+            var filter = new TCalendar.CalendarFilter(
+                TCalendarViews.Event.Uri,
+                TCalendarViews.Event.Id,
+                TCalendar.CalendarFilter.StringMatchType.FullString,
+                eventId);
             query.SetFilter(filter);
 
             var recordList = manager.Database.GetRecordsWithQuery(query, 0, 0);
