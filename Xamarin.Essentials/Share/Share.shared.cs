@@ -122,10 +122,7 @@ namespace Xamarin.Essentials
         {
         }
 
-        public ShareMultipleFilesRequest(IEnumerable<ShareFile> files)
-        {
-            Files = files;
-        }
+        public ShareMultipleFilesRequest(IEnumerable<ShareFile> files) => Files = files;
 
         public ShareMultipleFilesRequest(IEnumerable<FileBase> files)
             : this(ConvertList(files))
@@ -133,10 +130,7 @@ namespace Xamarin.Essentials
         }
 
         public ShareMultipleFilesRequest(string title, IEnumerable<ShareFile> files)
-            : this(files)
-        {
-            Title = title;
-        }
+            : this(files) => Title = title;
 
         public ShareMultipleFilesRequest(string title, IEnumerable<FileBase> files)
             : this(title, ConvertList(files))
