@@ -144,6 +144,7 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-Small-40.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-Small-40%402x.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-167.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-1024.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets.xcassets\battery_action_icon.imageset\" />
