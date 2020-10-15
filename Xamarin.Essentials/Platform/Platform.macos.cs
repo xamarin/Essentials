@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using AppKit;
 using CoreFoundation;
-using CoreGraphics;
 using Foundation;
 using ObjCRuntime;
 
