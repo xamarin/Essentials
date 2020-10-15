@@ -106,7 +106,6 @@
     <BundleResource Include="Resources\Icon-Small%403x.png" />
     <BundleResource Include="Resources\Icon-60.png" />
     <BundleResource Include="Resources\Icon-76%403x.png" />
-    <BundleResource Include="Resources\Icon-167.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
@@ -144,6 +143,7 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-Small%402x.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-Small-40.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-Small-40%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-167.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets.xcassets\battery_action_icon.imageset\" />
