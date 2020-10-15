@@ -15,8 +15,17 @@ namespace Xamarin.Essentials
 
         static Task<ScreenshotResult> PlatformCaptureAsync()
         {
-            using var image = ApplicationServices.GetScreenshot();
-            var result = new ScreenshotResult(new NSImage(image, new CGSize(image.Width, image.Height)));
+            var window = Platform.GetCurrentWindow(false);
+            if (window == null)
+            {
+                throw new InvalidOperationException("No window found");
+            }
+
+            var rep = window.ContentView.BitmapImageRepForCachingDisplayInRect(window.ContentView.Bounds);
+            window.ContentView.CacheDisplay(window.ContentView.Bounds, rep);
+            var nsImage = new NSImage();
+            nsImage.AddRepresentation(rep);
+            var result = new ScreenshotResult(nsImage);
             return Task.FromResult(result);
         }
     }

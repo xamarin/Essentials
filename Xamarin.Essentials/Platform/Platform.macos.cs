@@ -23,47 +23,6 @@ namespace Xamarin.Essentials
         }
     }
 
-    internal static class ApplicationServices
-    {
-        const string appServicesPath = "/System/Library/Frameworks/ApplicationServices.framework/Versions/Current/ApplicationServices";
-
-        // CGWindowListCreateImage and CGImage.ScreenImage not working, so we have to use this
-        // https://developer.apple.com/documentation/coregraphics/1454595-cgdisplaycreateimage
-        [DllImport(appServicesPath, EntryPoint = "CGDisplayCreateImage")]
-        static extern /* CGImageRef */ IntPtr CGDisplayCreateImage(int displayId);
-
-        internal static CGImage GetScreenshot()
-        {
-            using var pool = new NSAutoreleasePool();
-
-            // Get location from current window,
-            // if there is no window (e.g. menu bar app) we use the mouse location
-            CGPoint location;
-            var window = Platform.GetCurrentWindow(false);
-            if (window != null)
-            {
-                location = window.Frame.Location;
-            }
-            else
-            {
-                location = NSEvent.CurrentMouseLocation;
-            }
-
-            var screens = new List<NSScreen>(NSScreen.Screens);
-            var screen = screens.FirstOrDefault(obj => obj.Frame.Contains(location));
-            if (screen == null)
-            {
-                throw new InvalidOperationException("No screen found");
-            }
-
-            var windowNumber = (NSNumber)screen.DeviceDescription["NSScreenNumber"];
-            var displayId = windowNumber.Int32Value;
-            var handle = CGDisplayCreateImage(displayId);
-            var image = new CGImage(handle);
-            return image;
-        }
-    }
-
     internal static class IOKit
     {
         const string IOKitLibrary = "/System/Library/Frameworks/IOKit.framework/IOKit";
