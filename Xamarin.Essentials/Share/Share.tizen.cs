@@ -35,7 +35,7 @@ namespace Xamarin.Essentials
 
             var appControl = new AppControl
             {
-                Operation = AppControlOperations.ShareText,
+                Operation = AppControlOperations.Share,
             };
 
             if (!string.IsNullOrEmpty(request.Title))
