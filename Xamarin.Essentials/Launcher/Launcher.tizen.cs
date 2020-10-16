@@ -48,7 +48,7 @@ namespace Xamarin.Essentials
             };
 
             if (!string.IsNullOrEmpty(request.File.FullPath))
-                appControl.ExtraData.Add("http://tizen.org/appcontrol/data/path", request.File.FullPath);
+                appControl.ExtraData.Add(AppControlData.Path, request.File.FullPath);
 
             AppControl.SendLaunchRequest(appControl);
 
