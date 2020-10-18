@@ -5,22 +5,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using AppKit;
 using Contacts;
-using ContactsUI;
+using Foundation;
 
 namespace Xamarin.Essentials
 {
     public static partial class Contacts
     {
-        static Task<Contact> PlatformPickContactAsync() => null;
+        static Task<Contact> PlatformPickContactAsync() => throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        static IEnumerable<Contact> PlatformGetAllAsync()
-        {
-            // await Task.CompletedTask;
-            // return GetAll();
-            return null;
-        }
-
-        static IEnumerable<Contact> GetAll()
+        static IEnumerable<Task<IEnumerable<Contact>>> PlatformGetAllTasks()
         {
             var keys = new[]
             {
@@ -34,25 +27,17 @@ namespace Xamarin.Essentials
                 CNContactKey.Type
             };
 
-            var results = new List<Contact>();
-            using (var store = new CNContactStore())
-            {
-                var containers = store.GetContainers(null, out var error);
+            using var store = new CNContactStore();
+            var containers = store.GetContainers(null, out var error);
+            foreach (var container in containers)
+                yield return Task.FromResult(GetContacts(container, store, keys, out error));
+        }
 
-                foreach (var container in containers)
-                {
-                    try
-                    {
-                        using var pred = CNContact.GetPredicateForContactsInContainer(container.Identifier);
-                        results.AddRange(store.GetUnifiedContacts(pred, keys, out error)?.Select(a => ConvertContact(a)));
-                    }
-                    catch
-                    {
-                    }
-                }
-            }
-
-            return results;
+        static IEnumerable<Contact> GetContacts(CNContainer container, CNContactStore store, NSString[] keys, out NSError error)
+        {
+            using var pred = CNContact.GetPredicateForContactsInContainer(container.Identifier);
+            var contacts = store.GetUnifiedContacts(pred, keys, out error);
+            return contacts?.Select(item => ConvertContact(item));
         }
 
         internal static Contact ConvertContact(CNContact contact)

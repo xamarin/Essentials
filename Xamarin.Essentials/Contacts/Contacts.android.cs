@@ -27,19 +27,10 @@ namespace Xamarin.Essentials
             return null;
         }
 
-        // static ObservableCollection<Contact> PlatformGetAllAsync()
-        // {
-        //    var collect = new ObservableCollection<Contact>(GetAll());
-        //    Task.Run(() =>
-        //    {
-        //        var all = GetAll();
-        //        foreach (var a in all)
-        //            collect.Add(a);
-        //    });
-        //    return collect;
-        // }
+        static IEnumerable<Task<IEnumerable<Contact>>> PlatformGetAllTasks()
+            => new List<Task<IEnumerable<Contact>>> { Task.FromResult(PlatformGetAll()) };
 
-        static IEnumerable<Contact> PlatformGetAllAsync()
+        static IEnumerable<Contact> PlatformGetAll()
         {
             using var context = Platform.AppContext.ContentResolver;
             using var cursor = context.Query(ContactsContract.Contacts.ContentUri, null, null, null, null);
@@ -52,7 +43,6 @@ namespace Xamarin.Essentials
                 do
                 {
                     var contact = GetContact(cursor, context, ContactsContract.Contacts.InterfaceConsts.Id);
-
                     if (contact != null)
                         yield return contact;
                 }

@@ -53,7 +53,7 @@ namespace Samples.ViewModel
         public ContactsViewModel()
         {
             GetContactCommand = new Command(OnGetContact);
-            GetAllContactCommand = new Command(OnGetAllContact);
+            GetAllContactCommand = new Command(async () => await OnGetAllContact());
         }
 
         async void OnGetContact()
@@ -91,29 +91,38 @@ namespace Samples.ViewModel
             }
         }
 
-        void OnGetAllContact()
+        async Task OnGetAllContact()
+        {
+            if (DeviceInfo.Platform != DevicePlatform.iOS)
+                await Permissions.RequestAsync<Permissions.ContactsRead>();
+            GetAllContact();
+        }
+
+        void GetAllContact()
         {
             if (IsBusy)
                 return;
             IsBusy = true;
             try
             {
-                var collect = Contacts.GetAllAsync();
-
-                Task.Run(() =>
+                var tasks = Contacts.GetAllAsync();
+                if (tasks != null)
                 {
-                    foreach (var a in collect)
-                        MainThread.BeginInvokeOnMainThread(() => ContactsList.Add(a));
-                });
+                    foreach (var task in tasks)
+                    {
+                        Task.Run(async () =>
+                        {
+                             foreach (var contact in await task)
+                                 MainThread.BeginInvokeOnMainThread(() => ContactsList.Add(contact));
+                        });
+                    }
+                }
             }
             catch (Exception ex)
             {
                 MainThread.BeginInvokeOnMainThread(async () => await DisplayAlertAsync($"Error:{ex.Message}"));
             }
-            finally
-            {
-                IsBusy = false;
-            }
+            IsBusy = false;
         }
     }
 }

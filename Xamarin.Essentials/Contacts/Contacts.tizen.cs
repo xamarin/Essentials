@@ -50,27 +50,13 @@ namespace Xamarin.Essentials
             return await tcs.Task;
         }
 
-        static IEnumerable<Contact> PlatformGetAllAsync()
+        static IEnumerable<Task<IEnumerable<Contact>>> PlatformGetAllTasks()
+            => new List<Task<IEnumerable<Contact>>> { Task.FromResult(PlatformGetAll()) };
+
+        static IEnumerable<Contact> PlatformGetAll()
         {
-            // await Task.CompletedTask;
-            // return GetAll();
-            return null;
-        }
-
-        // static async Task<IEnumerable<Contact>> PlatformGetAllAsync()
-        // {
-        //    Permissions.EnsureDeclared<Permissions.ContactsRead>();
-        //    await Permissions.RequestAsync<Permissions.ContactsRead>();
-
-        // var contactsList = manager.Database.GetAll(TizenContact.Uri, 0, 0);
-        //    if (contactsList.Count > 0)
-        //        contactsList.MoveFirst();
-        //    return await Task.FromResult<IEnumerable<Contact>>(ToContacts(contactsList).ToList());
-        // }
-
-        static IEnumerable<Contact> ToContacts(ContactsList contactsList)
-        {
-            for (var i = 0; i < contactsList.Count; i++)
+            var contactsList = manager.Database.GetAll(TizenContact.Uri, 0, 0);
+            for (var i = 0; i < contactsList?.Count; i++)
             {
                 yield return ToContact(contactsList.GetCurrentRecord());
                 contactsList.MoveNext();
