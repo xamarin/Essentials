@@ -27,7 +27,6 @@ namespace Xamarin.Essentials
             var rectangleRegion = IntPtr.Zero;
             try
             {
-
                 using var gfxBmp = Graphics.FromImage(bmp);
                 IntPtr hdcBitmap;
                 hdcBitmap = gfxBmp.GetHdc();
