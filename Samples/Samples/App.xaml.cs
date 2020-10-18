@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AppCenter;
@@ -30,7 +31,14 @@ namespace Samples
 
             MainPage = new NavigationPage(new HomePage());
 
-            AppActions.OnAppAction += AppActions_OnAppAction;
+            try
+            {
+                AppActions.OnAppAction += AppActions_OnAppAction;
+            }
+            catch (FeatureNotSupportedException ex)
+            {
+                Debug.WriteLine($"{nameof(AppActions)} Exception: {ex}");
+            }
         }
 
         protected override async void OnStart()
@@ -54,8 +62,10 @@ namespace Samples
                     new AppAction("app_info", "App Info", icon: "app_info_action_icon"),
                     new AppAction("battery_info", "Battery Info"));
             }
-            catch (FeatureNotSupportedException)
+
+            catch (FeatureNotSupportedException ex)
             {
+                Debug.WriteLine($"{nameof(AppActions)} Exception: {ex}");
             }
         }
 
@@ -63,6 +73,7 @@ namespace Samples
         {
             // Don't handle events fired for old application instances
             // and cleanup the old instance's event handler
+
             if (Application.Current != this && Application.Current is App app)
             {
                 AppActions.OnAppAction -= app.AppActions_OnAppAction;
