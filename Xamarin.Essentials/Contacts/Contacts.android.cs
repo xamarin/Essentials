@@ -27,8 +27,8 @@ namespace Xamarin.Essentials
             return null;
         }
 
-        static IEnumerable<Task<IEnumerable<Contact>>> PlatformGetAllTasks()
-            => new List<Task<IEnumerable<Contact>>> { Task.FromResult(PlatformGetAll()) };
+        static Task<IEnumerable<Contact>> PlatformGetAllTasks()
+            => Task.FromResult(PlatformGetAll());
 
         static IEnumerable<Contact> PlatformGetAll()
         {

@@ -98,25 +98,20 @@ namespace Samples.ViewModel
             GetAllContact();
         }
 
-        void GetAllContact()
+        async void GetAllContact()
         {
             if (IsBusy)
                 return;
             IsBusy = true;
             try
             {
-                var tasks = Contacts.GetAllAsync();
-                if (tasks != null)
-                {
-                    foreach (var task in tasks)
-                    {
-                        Task.Run(async () =>
-                        {
-                             foreach (var contact in await task)
-                                 MainThread.BeginInvokeOnMainThread(() => ContactsList.Add(contact));
-                        });
-                    }
-                }
+                var contacts = await Contacts.GetAllAsync();
+
+                _ = Task.Run(() =>
+                      {
+                          foreach (var contact in contacts)
+                              MainThread.BeginInvokeOnMainThread(() => ContactsList.Add(contact));
+                      });
             }
             catch (Exception ex)
             {

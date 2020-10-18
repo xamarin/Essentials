@@ -17,7 +17,7 @@ namespace Xamarin.Essentials
             return await PlatformPickContactAsync();
         }
 
-        public static IEnumerable<Task<IEnumerable<Contact>>> GetAllAsync() =>
+        public static Task<IEnumerable<Contact>> GetAllAsync() =>
             PlatformGetAllTasks();
     }
 

@@ -31,7 +31,10 @@ namespace Xamarin.Essentials
             return source.Task;
         }
 
-        static IEnumerable<Task<IEnumerable<Contact>>> PlatformGetAllTasks()
+        static Task<IEnumerable<Contact>> PlatformGetAllTasks()
+            => Task.FromResult(PlatformGetAllTasksq());
+
+        static IEnumerable<Contact> PlatformGetAllTasksq()
         {
             var keys = new[]
             {
@@ -48,14 +51,12 @@ namespace Xamarin.Essentials
             using var store = new CNContactStore();
             var containers = store.GetContainers(null, out var error);
             foreach (var container in containers)
-                yield return Task.FromResult(GetContacts(container, store, keys, out error));
-        }
-
-        static IEnumerable<Contact> GetContacts(CNContainer container, CNContactStore store, NSString[] keys, out NSError error)
-        {
-            using var pred = CNContact.GetPredicateForContactsInContainer(container.Identifier);
-            var contacts = store.GetUnifiedContacts(pred, keys, out error);
-            return contacts?.Select(item => ConvertContact(item));
+            {
+                using var pred = CNContact.GetPredicateForContactsInContainer(container.Identifier);
+                var contacts = store.GetUnifiedContacts(pred, keys, out error);
+                foreach (var contact in contacts)
+                    yield return ConvertContact(contact);
+            }
         }
 
         internal static Contact ConvertContact(CNContact contact)
