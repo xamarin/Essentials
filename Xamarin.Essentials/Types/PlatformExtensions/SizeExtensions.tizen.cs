@@ -14,6 +14,9 @@ namespace Xamarin.Essentials
         public static ESize ToPlatformSize(this Size size) =>
             new ESize(size.Width, size.Height);
 
+        public static ESize ToPlatformSize(this SizeF size) =>
+            ToPlatformSizeF(size);
+
         public static ESize ToPlatformSizeF(this SizeF size) =>
             new ESize((int)size.Width, (int)size.Height);
     }

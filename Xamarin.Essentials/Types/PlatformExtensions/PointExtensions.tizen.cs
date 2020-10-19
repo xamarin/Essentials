@@ -14,6 +14,9 @@ namespace Xamarin.Essentials
         public static EPoint ToPlatformPoint(this Point point) =>
             new EPoint() { X = point.X, Y = point.Y };
 
+        public static EPoint ToPlatformPoint(this PointF point) =>
+            ToPlatformPointF(point);
+
         public static EPoint ToPlatformPointF(this PointF point) =>
             new EPoint() { X = (int)point.X, Y = (int)point.Y };
     }
