@@ -13,11 +13,9 @@ namespace Xamarin.Essentials
     {
         static Task<Contact> PlatformPickContactAsync() => throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        static Task<IEnumerable<Contact>> PlatformGetAllTasks()
-            => Task.FromResult(PlatformGetAllTasksq());
-
-        static IEnumerable<Contact> PlatformGetAllTasksq()
+        static async IAsyncEnumerable<Contact> PlatformGetAllAsync()
         {
+            await Task.CompletedTask;
             var keys = new[]
             {
                 CNContactKey.NamePrefix,
@@ -32,6 +30,9 @@ namespace Xamarin.Essentials
 
             using var store = new CNContactStore();
             var containers = store.GetContainers(null, out var error);
+            if (containers == null)
+                yield break;
+
             foreach (var container in containers)
             {
                 using var pred = CNContact.GetPredicateForContactsInContainer(container.Identifier);

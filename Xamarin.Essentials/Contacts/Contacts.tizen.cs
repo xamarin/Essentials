@@ -50,11 +50,10 @@ namespace Xamarin.Essentials
             return await tcs.Task;
         }
 
-        static Task<IEnumerable<Contact>> PlatformGetAllTasks()
-            => Task.FromResult(PlatformGetAll());
-
-        static IEnumerable<Contact> PlatformGetAll()
+        static async IAsyncEnumerable<Contact> PlatformGetAllAsync()
         {
+            await Task.CompletedTask;
+
             var contactsList = manager.Database.GetAll(TizenContact.Uri, 0, 0);
             for (var i = 0; i < contactsList?.Count; i++)
             {

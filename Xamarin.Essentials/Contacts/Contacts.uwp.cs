@@ -25,16 +25,18 @@ namespace Xamarin.Essentials
             }
         }
 
-        public static Task<IEnumerable<Contact>> PlatformGetAllTasks()
-            => PlatformGetAllAsync();
-
-        static async Task<IEnumerable<Contact>> PlatformGetAllAsync()
+        public static async IAsyncEnumerable<Contact> PlatformGetAllAsync()
         {
             var contactStore = await ContactManager.RequestStoreAsync();
-
             if (contactStore == null)
-                return null;
-            return (await contactStore.FindContactsAsync())?.Select(a => ConvertContact(a));
+                yield break;
+
+            var contacts = await contactStore.FindContactsAsync();
+            if (contacts == null)
+                yield break;
+
+            foreach (var item in contacts)
+                yield return ConvertContact(item);
         }
 
         internal static Contact ConvertContact(Windows.ApplicationModel.Contacts.Contact contact)

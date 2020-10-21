@@ -27,15 +27,13 @@ namespace Xamarin.Essentials
             return null;
         }
 
-        static Task<IEnumerable<Contact>> PlatformGetAllTasks()
-            => Task.FromResult(PlatformGetAll());
-
-        static IEnumerable<Contact> PlatformGetAll()
+        static async IAsyncEnumerable<Contact> PlatformGetAllAsync()
         {
+            await Task.CompletedTask;
             using var context = Platform.AppContext.ContentResolver;
             using var cursor = context.Query(ContactsContract.Contacts.ContentUri, null, null, null, null);
 
-            if (cursor.Count == 0)
+            if (cursor == null)
                 yield break;
 
             if (cursor.MoveToFirst())

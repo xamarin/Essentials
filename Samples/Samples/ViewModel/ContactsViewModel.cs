@@ -95,21 +95,24 @@ namespace Samples.ViewModel
         {
             if (DeviceInfo.Platform != DevicePlatform.iOS)
                 await Permissions.RequestAsync<Permissions.ContactsRead>();
+            if (await Permissions.CheckStatusAsync<Permissions.ContactsRead>() != PermissionStatus.Granted)
+                return;
+
             GetAllContact();
         }
 
-        async void GetAllContact()
+        void GetAllContact()
         {
             if (IsBusy)
                 return;
             IsBusy = true;
             try
             {
-                var contacts = await Contacts.GetAllAsync();
+                var contacts = Contacts.GetAllAsync();
 
-                _ = Task.Run(() =>
+                _ = Task.Run(async () =>
                       {
-                          foreach (var contact in contacts)
+                          await foreach (var contact in contacts)
                               MainThread.BeginInvokeOnMainThread(() => ContactsList.Add(contact));
                       });
             }
@@ -119,5 +122,29 @@ namespace Samples.ViewModel
             }
             IsBusy = false;
         }
+
+        // async Task GetAllContacts()
+        // {
+        //    if (DeviceInfo.Platform != DevicePlatform.iOS)
+        //        await Permissions.RequestAsync<Permissions.ContactsRead>();
+        //    if (await Permissions.CheckStatusAsync<Permissions.ContactsRead>() != PermissionStatus.Granted)
+        //        return;
+
+        // if (IsBusy)
+        //        return;
+        //    IsBusy = true;
+        //    try
+        //    {
+        //        var contacts = Contacts.GetAllAsync();
+
+        // await foreach (var contact in contacts)
+        //            MainThread.BeginInvokeOnMainThread(() => ContactsList.Add(contact));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MainThread.BeginInvokeOnMainThread(async () => await DisplayAlertAsync($"Error:{ex.Message}"));
+        //    }
+        //    IsBusy = false;
+        // }
     }
 }

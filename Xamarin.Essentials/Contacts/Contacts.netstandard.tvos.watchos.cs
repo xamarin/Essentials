@@ -10,6 +10,8 @@ namespace Xamarin.Essentials
     {
         static Task<Contact> PlatformPickContactAsync() => throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        static Task<IEnumerable<Contact>> PlatformGetAllTasks() => throw ExceptionUtils.NotSupportedOrImplementedException;
+#if !NETSTANDARD1_0
+        static IAsyncEnumerable<Contact> PlatformGetAllAsync() => throw ExceptionUtils.NotSupportedOrImplementedException;
+#endif
     }
 }
