@@ -20,10 +20,8 @@ namespace Xamarin.Essentials
             var result = await IntermediateActivity.StartAsync(intent, Platform.requestCodePickContact).ConfigureAwait(false);
 
             if (result?.Data != null)
-            {
-                var contact = GetContact(result.Data);
-                return contact;
-            }
+                return GetContact(result.Data);
+
             return null;
         }
 
@@ -40,7 +38,7 @@ namespace Xamarin.Essentials
             {
                 do
                 {
-                    var contact = GetContact(cursor, context, ContactsContract.Contacts.InterfaceConsts.Id);
+                    var contact = GetContact(cursor, context, ContactsContract.Contacts.InterfaceConsts.Id, null);
                     if (contact != null)
                         yield return contact;
                 }
@@ -56,58 +54,62 @@ namespace Xamarin.Essentials
             using var context = Platform.AppContext.ContentResolver;
             using var cursor = context.Query(contactUri, null, null, null, null);
 
-            // TODO Emails and Numbers
             if (cursor.MoveToFirst())
-                return GetContact(cursor, context, ContactsContract.CommonDataKinds.Email.InterfaceConsts.ContactId);
+            {
+                return GetContact(
+                    cursor,
+                    context,
+                    ContactsContract.CommonDataKinds.Phone.InterfaceConsts.ContactId,
+                    ContactsContract.CommonDataKinds.Phone.InterfaceConsts.Type);
+            }
 
             return default;
         }
 
-        static Contact GetContact(ICursor cursor, ContentResolver context, string idKey)
+        static Contact GetContact(ICursor cursor, ContentResolver context, string idKey, string typeKey)
         {
             var name = cursor.GetString(cursor.GetColumnIndex(ContactsContract.Contacts.InterfaceConsts.DisplayName));
+            var idQ = new string[1] { cursor.GetString(cursor.GetColumnIndex(idKey)) };
+            var phones = GetNumbers(context, idQ)?.Select(a => new ContactPhone(a.data, GetPhoneContactType(a.type)))?.ToList();
+            var emails = GetEmails(context, idQ)?.Select(a => new ContactEmail(a.data, GetEmailContactType(a.type)))?.ToList();
 
-            var id = cursor.GetString(cursor.GetColumnIndex(idKey));
-            var idQ = new string[1] { id };
-            var phones = GetNumbers(context, idQ);
-            var emails = GetEmails(context, idQ);
+            ContactType type;
 
-            // TODO ContactType
-            // var typeOfContact = cur.GetString(cur.GetColumnIndex(ContactsContract.CommonDataKinds.Phone.InterfaceConsts.Type));
-            // GetPhoneContactType(typeOfContact)
-            return new Contact(
-                name,
-                phones?.Select(a => new ContactPhone(a, ContactType.Unknown))?.ToList(),
-                emails?.Select(a => new ContactEmail(a, ContactType.Unknown))?.ToList(),
-                ContactType.Unknown);
+            if (typeKey != null)
+                type = GetPhoneContactType(cursor.GetString(cursor.GetColumnIndex(typeKey)));
+            else
+                type = phones?.FirstOrDefault()?.ContactType ?? ContactType.Unknown;
+
+            return new Contact(name, phones, emails, type);
         }
 
-        static IEnumerable<string> GetNumbers(ContentResolver context, string[] idQ)
+        static IEnumerable<(string data, string type)> GetNumbers(ContentResolver context, string[] idQ)
         {
             var uri = ContactsContract.CommonDataKinds.Phone.ContentUri.BuildUpon().AppendQueryParameter(ContactsContract.RemoveDuplicateEntries, "1").Build();
             var cursor = context.Query(uri, null, $"{ContactsContract.CommonDataKinds.Phone.InterfaceConsts.ContactId}=?", idQ, null);
 
-            return ReadCursorItems(cursor, ContactsContract.CommonDataKinds.Phone.Number);
+            return ReadCursorItems(cursor, ContactsContract.CommonDataKinds.Phone.Number, ContactsContract.CommonDataKinds.Phone.InterfaceConsts.Type);
         }
 
-        static IEnumerable<string> GetEmails(ContentResolver context, string[] idQ)
+        static IEnumerable<(string data, string type)> GetEmails(ContentResolver context, string[] idQ)
         {
             var uri = ContactsContract.CommonDataKinds.Email.ContentUri.BuildUpon().AppendQueryParameter(ContactsContract.RemoveDuplicateEntries, "1").Build();
             var cursor = context.Query(uri, null, $"{ContactsContract.CommonDataKinds.Phone.InterfaceConsts.ContactId}=?", idQ, null);
 
-            return ReadCursorItems(cursor, ContactsContract.CommonDataKinds.Email.Address);
+            return ReadCursorItems(cursor, ContactsContract.CommonDataKinds.Email.Address, ContactsContract.CommonDataKinds.Email.InterfaceConsts.Type);
         }
 
-        static IEnumerable<string> ReadCursorItems(ICursor cursor, string dataKey)
+        static IEnumerable<(string data, string type)> ReadCursorItems(ICursor cursor, string dataKey, string typeKey)
         {
             if (cursor.MoveToFirst())
             {
                 do
                 {
-                    var value = cursor.GetString(cursor.GetColumnIndex(dataKey));
+                    var data = cursor.GetString(cursor.GetColumnIndex(dataKey));
+                    var type = cursor.GetString(cursor.GetColumnIndex(typeKey));
 
-                    if (value != null)
-                        yield return value;
+                    if (data != null)
+                        yield return (data, type);
                 }
                 while (cursor.MoveToNext());
             }
@@ -161,64 +163,6 @@ namespace Xamarin.Essentials
                 }
             }
             return ContactType.Unknown;
-        }
-
-        static void GetPhones(ref string[] idQ, ref global::Android.Database.ICursor cursor, List<ContactPhone> phones, ContentResolver context)
-        {
-            var projection = new string[2]
-            {
-                    ContactsContract.CommonDataKinds.Phone.Number,
-                    ContactsContract.CommonDataKinds.Phone.InterfaceConsts.Type,
-            };
-
-            var uri = ContactsContract.CommonDataKinds.Phone.ContentUri.BuildUpon().AppendQueryParameter(ContactsContract.RemoveDuplicateEntries, "1").Build();
-
-            cursor = context.Query(
-                  uri,
-                  null,
-                  ContactsContract.CommonDataKinds.Phone.InterfaceConsts.ContactId + "=?",
-                  idQ,
-                  null);
-
-            if (cursor.MoveToFirst())
-            {
-                do
-                {
-                    var phone = cursor.GetString(cursor.GetColumnIndex(projection[0]));
-                    var phoneType = cursor.GetString(cursor.GetColumnIndex(projection[1]));
-
-                    var contactType = GetPhoneContactType(phoneType);
-
-                    phones.Add(new ContactPhone(phone, contactType));
-                }
-                while (cursor.MoveToNext());
-            }
-            cursor.Close();
-        }
-
-        static void GetEmails(ref string[] idQ, ref global::Android.Database.ICursor cursor, List<ContactEmail> emails, ContentResolver context)
-        {
-            var projection = new string[2]
-            {
-                    ContactsContract.CommonDataKinds.Email.Address,
-                    ContactsContract.CommonDataKinds.Email.InterfaceConsts.Type
-            };
-
-            var uri = ContactsContract.CommonDataKinds.Email.ContentUri.BuildUpon().AppendQueryParameter(ContactsContract.RemoveDuplicateEntries, "1").Build();
-
-            cursor = context.Query(uri, null, ContactsContract.CommonDataKinds.Email.InterfaceConsts.ContactId + "=?", idQ, null);
-
-            while (cursor.MoveToNext())
-            {
-                var email = cursor.GetString(cursor.GetColumnIndex(projection[0]));
-                var emailType = cursor.GetString(cursor.GetColumnIndex(projection[1]));
-
-                var contactType = GetEmailContactType(emailType);
-
-                emails.Add(new ContactEmail(email, contactType));
-            }
-
-            cursor.Close();
         }
     }
 }
