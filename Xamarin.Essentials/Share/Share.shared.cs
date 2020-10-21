@@ -35,9 +35,6 @@ namespace Xamarin.Essentials
             if (request.File == null)
                 throw new ArgumentException(FileNullExeption(nameof(request.File)));
 
-            if (string.IsNullOrEmpty(request.File.FullPath))
-                throw new ArgumentException(EmptyPathExeption(nameof(request.File.FullPath)));
-
             return PlatformRequestAsync((ShareMultipleFilesRequest)request);
         }
 
@@ -49,17 +46,14 @@ namespace Xamarin.Essentials
             if (!(request.Files?.Count() > 0))
                 throw new ArgumentException(FileNullExeption(nameof(request.Files)));
 
-            if (request.Files.Any(file => string.IsNullOrEmpty(file.FullPath)))
-                throw new ArgumentException(EmptyPathExeption(nameof(ShareFile.FullPath)));
+            if (request.Files.Any(file => file == null))
+                throw new ArgumentException(FileNullExeption(nameof(request.Files)));
 
             return PlatformRequestAsync(request);
         }
 
         static string FileNullExeption(string file)
-            => $"The request file's {file} is invalid.";
-
-        static string EmptyPathExeption(string path)
-            => $"The request file's {path} is invalid.";
+            => $"The {file} parameter in the request files is invalid";
     }
 
     public abstract class ShareRequestBase

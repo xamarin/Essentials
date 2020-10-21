@@ -25,6 +25,6 @@ namespace Tests
 
         [Fact]
         public async Task Request_Multiple_Files_Request_NetStandard() =>
-            await Assert.ThrowsAsync<NotImplementedInReferenceAssemblyException>(() => Share.RequestAsync(new ShareMultipleFilesRequest()));
+            await Assert.ThrowsAsync<ArgumentException>(() => Share.RequestAsync(new ShareMultipleFilesRequest()));
     }
 }

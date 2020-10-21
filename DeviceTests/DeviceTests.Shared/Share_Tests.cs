@@ -37,16 +37,6 @@ namespace DeviceTests
         }
 
         [Fact]
-        public async Task Share_ShareFileRequestWithInvalidFilePath()
-        {
-            var request = new ShareFileRequest
-            {
-                File = new ShareFile(fullPath: null)
-            };
-            await Assert.ThrowsAsync<ArgumentException>(() => Share.RequestAsync(request));
-        }
-
-        [Fact]
         public async Task Share_NullShareFileRequest()
         {
             ShareFileRequest request = null;
@@ -54,7 +44,7 @@ namespace DeviceTests
         }
 
         [Fact]
-        public async Task Share_ShareMultipleFilesRequestWithInvalidFilesList()
+        public async Task Share_ShareMultipleFilesRequestWithEmptyFilesList()
         {
             var request = new ShareMultipleFilesRequest
             {
@@ -64,11 +54,11 @@ namespace DeviceTests
         }
 
         [Fact]
-        public async Task Share_ShareMultipleFilesRequestWithInvalidFilePath()
+        public async Task Share_ShareMultipleFilesRequestWithInvalidFilesList()
         {
             var request = new ShareMultipleFilesRequest
             {
-                Files = new List<ShareFile> { new ShareFile(fullPath: null) }
+                Files = new List<ShareFile>() { null }
             };
             await Assert.ThrowsAsync<ArgumentException>(() => Share.RequestAsync(request));
         }
@@ -79,5 +69,13 @@ namespace DeviceTests
             ShareMultipleFilesRequest request = null;
             await Assert.ThrowsAsync<ArgumentNullException>(() => Share.RequestAsync(request));
         }
+
+        [Fact]
+        public void Share_FiletWithInvalidFilePath()
+            => Assert.Throws<ArgumentException>(() => new ShareFile(fullPath: " "));
+
+        [Fact]
+        public void Share_FiletWithNullFilePath()
+            => Assert.Throws<ArgumentNullException>(() => new ShareFile(fullPath: null));
     }
 }
