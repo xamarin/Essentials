@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Contacts;
 using ContactsUI;
-using Foundation;
 
 namespace Xamarin.Essentials
 {
@@ -55,11 +52,11 @@ namespace Xamarin.Essentials
             {
                 using var pred = CNContact.GetPredicateForContactsInContainer(container.Identifier);
                 var contacts = store.GetUnifiedContacts(pred, keys, out error);
-                if (contacts != null)
-                {
-                    foreach (var contact in contacts)
-                        yield return ConvertContact(contact);
-                }
+                if (contacts == null)
+                    continue;
+
+                foreach (var contact in contacts)
+                    yield return ConvertContact(contact);
             }
         }
 
@@ -71,23 +68,10 @@ namespace Xamarin.Essentials
             try
             {
                 var contactType = ToPhoneContact(contact.ContactType);
-                var phones = new List<ContactPhone>();
-
-                foreach (var item in contact.PhoneNumbers)
-                    phones.Add(new ContactPhone(item?.Value?.StringValue, contactType));
-
-                var emails = new List<ContactEmail>();
-
-                foreach (var item in contact.EmailAddresses)
-                    emails.Add(new ContactEmail(item?.Value?.ToString(), contactType));
-
-                var name = string.Empty;
-
-                // $"{item.NamePrefix} {item.GivenName} {item.MiddleName} {item.FamilyName} {item.NameSuffix}"
-                if (string.IsNullOrEmpty(contact.MiddleName))
-                    name = $"{contact.GivenName} {contact.FamilyName}";
-                else
-                    name = $"{contact.GivenName} {contact.MiddleName} {contact.FamilyName}";
+                var phones = contact.PhoneNumbers?.Select(item => new ContactPhone(item?.Value?.StringValue, contactType))?.ToList();
+                var emails = contact.EmailAddresses?.Select(item => new ContactEmail(item?.Value?.ToString(), contactType))?.ToList();
+                var name = $"{contact.NamePrefix} {contact.GivenName} {contact.MiddleName} {contact.FamilyName} {contact.NameSuffix}"
+                    .Replace("  ", " ").TrimEnd();
 
                 return new Contact(name, phones, emails, contactType);
             }

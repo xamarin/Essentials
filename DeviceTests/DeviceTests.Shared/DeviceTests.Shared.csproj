@@ -53,4 +53,9 @@
     <Reference Include="System.Numerics.Vectors" />
     <Reference Include="OpenTK-1.0" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Contacts_Tests.cs">
+      <SubType></SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

@@ -11,8 +11,8 @@
   </Base>
   <Interfaces />
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>API class for working with contacts on the device</summary>
+    <remarks></remarks>
   </Docs>
   <Members>
     <Member MemberName="PickContactAsync">
@@ -29,9 +29,28 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>To be added.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <summary>Starts file picker for selecting a single contact</summary>
+        <returns>Singel Contact</returns>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetAllAsync">
+      <MemberSignature Language="C#" Value="public static System.Collections.Generic.IAsyncEnumerable&lt;Xamarin.Essentials.Contact&gt; GetAllAsync ();" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Collections.Generic.IAsyncEnumerable`1&lt;class Xamarin.Essentials.Contact&gt; GetAllAsync() cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.Contacts.GetAllAsync" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.Generic.IAsyncEnumerable&lt;Xamarin.Essentials.Contact&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Asynchronously retrieves all contacts from the device</summary>
+        <returns>List with all the contacts</returns>
+        <remarks></remarks>
       </Docs>
     </Member>
   </Members>

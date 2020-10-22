@@ -13,16 +13,8 @@ namespace Xamarin.Essentials
         static async Task<Contact> PlatformPickContactAsync()
         {
             var contactPicker = new ContactPicker();
-
-            try
-            {
-                var contactSelected = await contactPicker.PickContactAsync();
-                return ConvertContact(contactSelected);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            var contactSelected = await contactPicker.PickContactAsync();
+            return ConvertContact(contactSelected);
         }
 
         public static async IAsyncEnumerable<Contact> PlatformGetAllAsync()
@@ -44,23 +36,13 @@ namespace Xamarin.Essentials
             if (contact == null)
                 return default;
 
-            var phones = new List<ContactPhone>();
-            var emails = new List<ContactEmail>();
-
-            foreach (var item in contact.Phones)
-                phones.Add(new ContactPhone(item.Number, GetPhoneContactType(item.Kind)));
-
-            phones = phones.Distinct().ToList();
-
-            foreach (var item in contact.Emails)
-                emails.Add(new ContactEmail(item.Address, GetEmailContactType(item.Kind)));
-
-            emails = emails.Distinct().ToList();
+            var phones = contact.Phones?.Select(item => new ContactPhone(item?.Number, GetPhoneContactType(item?.Kind)))?.Distinct()?.ToList();
+            var emails = contact.Emails?.Select(item => new ContactEmail(item?.Address, GetEmailContactType(item?.Kind)))?.Distinct()?.ToList()
 
             return new Contact(contact.Name, phones, emails, ContactType.Unknown);
         }
 
-        static ContactType GetPhoneContactType(ContactPhoneKind type)
+        static ContactType GetPhoneContactType(ContactPhoneKind? type)
             => type switch
             {
                 ContactPhoneKind.Home => ContactType.Personal,
@@ -73,11 +55,12 @@ namespace Xamarin.Essentials
                 _ => ContactType.Unknown
             };
 
-        static ContactType GetEmailContactType(ContactEmailKind type) => type switch
-        {
-            ContactEmailKind.Personal => ContactType.Personal,
-            ContactEmailKind.Work => ContactType.Work,
-            _ => ContactType.Unknown,
-        };
+        static ContactType GetEmailContactType(ContactEmailKind? type)
+            => type switch
+            {
+                ContactEmailKind.Personal => ContactType.Personal,
+                ContactEmailKind.Work => ContactType.Work,
+                _ => ContactType.Unknown,
+            };
     }
 }

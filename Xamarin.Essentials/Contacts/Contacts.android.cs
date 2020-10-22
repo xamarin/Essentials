@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Android.App;
 using Android.Content;
 using Android.Database;
 using Android.Provider;
@@ -72,7 +70,6 @@ namespace Xamarin.Essentials
             var idQ = new string[1] { cursor.GetString(cursor.GetColumnIndex(idKey)) };
             var phones = GetNumbers(context, idQ)?.Select(a => new ContactPhone(a.data, GetPhoneContactType(a.type)))?.ToList();
             var emails = GetEmails(context, idQ)?.Select(a => new ContactEmail(a.data, GetEmailContactType(a.type)))?.ToList();
-
             ContactType type;
 
             if (typeKey != null)
