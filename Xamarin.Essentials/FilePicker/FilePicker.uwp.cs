@@ -76,6 +76,12 @@ namespace Xamarin.Essentials
                 { DevicePlatform.UWP, new[] { "*.png" } }
             });
 
+        static FilePickerFileType PlatformJpegFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.UWP, new[] { "*.jpg", "*.jpeg" } }
+            });
+
         static FilePickerFileType PlatformVideoFileType() =>
            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
            {

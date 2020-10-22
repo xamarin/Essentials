@@ -60,6 +60,12 @@ namespace Xamarin.Essentials
                 { DevicePlatform.Tizen, new[] { "image/png" } }
             });
 
+        static FilePickerFileType PlatformJpegFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.Tizen, new[] { "image/jpeg" } }
+            });
+
         static FilePickerFileType PlatformVideoFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {

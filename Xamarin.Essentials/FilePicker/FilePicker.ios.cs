@@ -86,6 +86,12 @@ namespace Xamarin.Essentials
                 { DevicePlatform.iOS, new[] { (string)UTType.PNG } }
             });
 
+        static FilePickerFileType PlatformJpegFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.iOS, new[] { (string)UTType.JPEG } }
+            });
+
         static FilePickerFileType PlatformVideoFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
