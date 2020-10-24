@@ -42,7 +42,8 @@ namespace Xamarin.Essentials
                 height: displayMetrics?.HeightPixels ?? 0,
                 density: displayMetrics?.Density ?? 0,
                 orientation: CalculateOrientation(),
-                rotation: CalculateRotation());
+                rotation: CalculateRotation(),
+                rate: display?.RefreshRate ?? 0);
         }
 
         static void StartScreenMetricsListeners()

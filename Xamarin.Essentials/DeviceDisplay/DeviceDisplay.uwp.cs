@@ -59,7 +59,8 @@ namespace Xamarin.Essentials
                 height: perpendicular ? w : h,
                 density: di.LogicalDpi / 96.0,
                 orientation: CalculateOrientation(di),
-                rotation: rotation);
+                rotation: rotation,
+                rate: 0);
         }
 
         static void StartScreenMetricsListeners()

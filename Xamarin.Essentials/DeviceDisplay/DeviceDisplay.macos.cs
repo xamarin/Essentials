@@ -43,7 +43,8 @@ namespace Xamarin.Essentials
                 height: frame.Height,
                 density: scale,
                 orientation: DisplayOrientation.Portrait,
-                rotation: DisplayRotation.Rotation0);
+                rotation: DisplayRotation.Rotation0,
+                rate: 0);
         }
 
         static void StartScreenMetricsListeners()
