@@ -71,7 +71,7 @@ namespace Xamarin.Essentials
                 name = $"{first} {last}".Trim();
             }
 
-            var phones = new List<ContactProperty>();
+            var phones = new List<ContactPhone>();
             var nameCount = contactsRecord.GetChildRecordCount(TizenContact.Number);
             for (var i = 0; i < nameCount; i++)
             {
@@ -79,10 +79,10 @@ namespace Xamarin.Essentials
                 var number = nameRecord.Get<string>(TizenNumber.NumberData);
                 var type = (TizenNumber.Types)nameRecord.Get<int>(TizenNumber.Type);
 
-                phones.Add(new ContactProperty(number, GetContactType(type), type.ToString()));
+                phones.Add(new ContactPhone(number, GetContactType(type), type.ToString()));
             }
 
-            var emails = new List<ContactProperty>();
+            var emails = new List<ContactEmail>();
             var emailCount = contactsRecord.GetChildRecordCount(TizenContact.Email);
             for (var i = 0; i < emailCount; i++)
             {
@@ -90,7 +90,7 @@ namespace Xamarin.Essentials
                 var addr = emailRecord.Get<string>(TizenEmail.Address);
                 var type = (TizenEmail.Types)emailRecord.Get<int>(TizenEmail.Type);
 
-                emails.Add(new ContactProperty(addr, GetContactType(type), type.ToString()));
+                emails.Add(new ContactEmail(addr, GetContactType(type), type.ToString()));
             }
 
             return new Contact(name, phones, emails);

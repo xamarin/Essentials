@@ -64,7 +64,7 @@ namespace Samples.ViewModel
                 if (contact == null)
                     return;
 
-                foreach (var number in contact?.Numbers)
+                foreach (var number in contact?.Phones)
                 {
                     Phones += $"{number.Value}{Environment.NewLine}({number.Type})({number.PlatformSpecificType})"
                         + Environment.NewLine + Environment.NewLine;
@@ -112,8 +112,8 @@ namespace Samples.ViewModel
                               MainThread.BeginInvokeOnMainThread(()
                                   => ContactsList.Add(
                                       $"{contact}" +
-                                      $" {contact.Numbers?.FirstOrDefault()} " +
-                                      $"({contact.Numbers?.FirstOrDefault()?.Type})"));
+                                      $" {contact.Phones?.FirstOrDefault()} " +
+                                      $"({contact.Phones?.FirstOrDefault()?.Type})"));
                           }
                       });
             }

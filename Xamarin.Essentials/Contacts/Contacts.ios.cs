@@ -69,13 +69,13 @@ namespace Xamarin.Essentials
             try
             {
                 var phones = contact.PhoneNumbers?.Select(
-                   item => new ContactProperty(
+                   item => new ContactPhone(
                        item?.Value?.StringValue,
                        TypeConvert(item.Label?.ToString()),
                        item.Label?.ToString()));
 
                 var emails = contact.EmailAddresses?.Select(
-                   item => new ContactProperty(
+                   item => new ContactEmail(
                        item?.Value?.ToString(),
                        TypeConvert(item.Label?.ToString()),
                        item.Label?.ToString()));

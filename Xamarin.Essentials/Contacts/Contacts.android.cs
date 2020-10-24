@@ -69,12 +69,12 @@ namespace Xamarin.Essentials
             var name = cursor.GetString(cursor.GetColumnIndex(ContactsContract.Contacts.InterfaceConsts.DisplayName));
             var idQ = new string[1] { cursor.GetString(cursor.GetColumnIndex(idKey)) };
             var phones = GetNumbers(context, idQ)?.Select(
-                a => new ContactProperty(
+                a => new ContactPhone(
                     a.data,
                     GetPhoneContactType(a.type),
                     a.type.ToString()));
             var emails = GetEmails(context, idQ)?.Select(
-                a => new ContactProperty(
+                a => new ContactEmail(
                     a.data,
                     GetEmailContactType(a.type),
                     a.type.ToString()));
