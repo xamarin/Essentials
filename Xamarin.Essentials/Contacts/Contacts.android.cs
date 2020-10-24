@@ -68,16 +68,18 @@ namespace Xamarin.Essentials
         {
             var name = cursor.GetString(cursor.GetColumnIndex(ContactsContract.Contacts.InterfaceConsts.DisplayName));
             var idQ = new string[1] { cursor.GetString(cursor.GetColumnIndex(idKey)) };
-            var phones = GetNumbers(context, idQ)?.Select(a => new ContactPhone(a.data, GetPhoneContactType(a.type)))?.ToList();
-            var emails = GetEmails(context, idQ)?.Select(a => new ContactEmail(a.data, GetEmailContactType(a.type)))?.ToList();
-            ContactType type;
+            var phones = GetNumbers(context, idQ)?.Select(
+                a => new ContactProperty(
+                    a.data,
+                    GetPhoneContactType(a.type),
+                    a.type.ToString()));
+            var emails = GetEmails(context, idQ)?.Select(
+                a => new ContactProperty(
+                    a.data,
+                    GetEmailContactType(a.type),
+                    a.type.ToString()));
 
-            if (typeKey != null)
-                type = GetPhoneContactType(cursor.GetString(cursor.GetColumnIndex(typeKey)));
-            else
-                type = phones?.FirstOrDefault()?.ContactType ?? ContactType.Unknown;
-
-            return new Contact(name, phones, emails, type);
+            return new Contact(name, phones, emails);
         }
 
         static IEnumerable<(string data, string type)> GetNumbers(ContentResolver context, string[] idQ)

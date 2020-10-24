@@ -6,50 +6,37 @@ namespace Xamarin.Essentials
 {
     public class Contact
     {
-        public string Name { get; }
-
-        public ContactType ContactType { get; }
-
-        public IReadOnlyList<ContactPhone> Numbers { get; }
-
-        public IReadOnlyList<ContactEmail> Emails { get; }
-
-        internal Contact(
-            string name,
-            List<ContactPhone> numbers,
-            List<ContactEmail> email,
-            ContactType contactType)
+        internal Contact(string name, IEnumerable<ContactProperty> numbers, IEnumerable<ContactProperty> email)
         {
             Name = name;
-            Emails = email;
-            Numbers = numbers;
-            ContactType = contactType;
+            Emails = email?.ToList();
+            Numbers = numbers?.ToList();
         }
+
+        public string Name { get; }
+
+        public IReadOnlyList<ContactProperty> Numbers { get; }
+
+        public IReadOnlyList<ContactProperty> Emails { get; }
+
+        public override string ToString() => Name;
     }
 
-    public class ContactEmail
+    public class ContactProperty
     {
-        public string EmailAddress { get; }
-
-        public ContactType ContactType { get; }
-
-        internal ContactEmail(string email, ContactType contactType)
+        internal ContactProperty(string value, ContactType type, string platformSpecificType)
         {
-            EmailAddress = email;
-            ContactType = contactType;
+            Value = value;
+            Type = type;
+            PlatformSpecificType = platformSpecificType;
         }
-    }
 
-    public class ContactPhone
-    {
-        public string PhoneNumber { get; }
+        public string Value { get; }
 
-        public ContactType ContactType { get; }
+        public ContactType Type { get; }
 
-        internal ContactPhone(string phoneNumber, ContactType contactType)
-        {
-            PhoneNumber = phoneNumber;
-            ContactType = contactType;
-        }
+        public string PlatformSpecificType { get; }
+
+        public override string ToString() => Value;
     }
 }
