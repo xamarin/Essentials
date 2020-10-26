@@ -58,9 +58,12 @@ namespace Samples
 
             try
             {
-                await AppActions.SetAsync(
-                    new AppAction("app_info", "App Info", icon: "app_info_action_icon"),
-                    new AppAction("battery_info", "Battery Info"));
+                if (Device.RuntimePlatform != Device.Tizen)
+                {
+                    await AppActions.SetAsync(
+                        new AppAction("app_info", "App Info", icon: "app_info_action_icon"),
+                        new AppAction("battery_info", "Battery Info"));
+                }
             }
             catch (FeatureNotSupportedException ex)
             {
