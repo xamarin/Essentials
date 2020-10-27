@@ -178,7 +178,7 @@ namespace Xamarin.Essentials
             public Action<PHPickerResult[]> CompletedHandler { get; set; }
 
             public override void DidFinishPicking(PHPickerViewController picker, PHPickerResult[] results) =>
-                CompletedHandler?.Invoke(results.Length == 0 ? null : results);
+                CompletedHandler?.Invoke(results?.Length > 0 ? results : null);
         }
     }
 }
