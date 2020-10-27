@@ -54,99 +54,99 @@ stages:
                 Write-Host "##vso[build.updatebuildnumber]$env:NUGET_VERSION"
               displayName: Update the build number with a more readable one
 
-  - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
-    - stage: signing
-      displayName: Sign Artifacts
-      dependsOn: [ 'build' ]
-      jobs:
-        - template: sign-artifacts/jobs/v2.yml@internal-templates
-          parameters:
-            signMain: true
-            signTags: true
-            realSign: true
+#   - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
+#     - stage: signing
+#       displayName: Sign Artifacts
+#       dependsOn: [ 'build' ]
+#       jobs:
+#         - template: sign-artifacts/jobs/v2.yml@internal-templates
+#           parameters:
+#             signMain: true
+#             signTags: true
+#             realSign: true
 
-  - stage: devicetests
-    displayName: Device Tests
-    dependsOn: []
-    jobs:
-      - job: devicetests_uwp
-        displayName: UWP
-        # skip for now
-        condition: and(succeeded(), not(succeeded()))
-        pool:
-          vmImage: windows-2019
-        steps:
-          - script: 'certutil -importpfx $(Build.SourcesDirectory)\DeviceTests\DeviceTests.UWP\DeviceTests.UWP_TemporaryKey.pfx'
-            displayName: 'Run certutil'
-          - powershell: |
-              cd DeviceTests
-              .\build.ps1 --target=test-uwp-emu --settings_skipverification=true --verbosity=diagnostic
-            displayName: 'Run Device Tests - UWP'
-          - task: PublishTestResults@2
-            displayName: 'Publish Test Results'
-            inputs:
-              testResultsFormat: XUnit
-              testResultsFiles: '**/xunit-*.xml'
-              testRunTitle: 'Device Tests - UWP'
+#   - stage: devicetests
+#     displayName: Device Tests
+#     dependsOn: []
+#     jobs:
+#       - job: devicetests_uwp
+#         displayName: UWP
+#         # skip for now
+#         condition: and(succeeded(), not(succeeded()))
+#         pool:
+#           vmImage: windows-2019
+#         steps:
+#           - script: 'certutil -importpfx $(Build.SourcesDirectory)\DeviceTests\DeviceTests.UWP\DeviceTests.UWP_TemporaryKey.pfx'
+#             displayName: 'Run certutil'
+#           - powershell: |
+#               cd DeviceTests
+#               .\build.ps1 --target=test-uwp-emu --settings_skipverification=true --verbosity=diagnostic
+#             displayName: 'Run Device Tests - UWP'
+#           - task: PublishTestResults@2
+#             displayName: 'Publish Test Results'
+#             inputs:
+#               testResultsFormat: XUnit
+#               testResultsFiles: '**/xunit-*.xml'
+#               testRunTitle: 'Device Tests - UWP'
 
-      - template: .ci/build.yml@components
-        parameters:
-          name: devicetests_ios
-          runChecks: false
-          displayName: iOS
-          windowsImage: ''
-          areaPath: 'DevDiv\Xamarin SDK\Build and Tools'
-          verbosity: diagnostic
-          cakeFile: DeviceTests/build.cake
-          cakeTarget: test-ios-emu
+#       - template: .ci/build.yml@components
+#         parameters:
+#           name: devicetests_ios
+#           runChecks: false
+#           displayName: iOS
+#           windowsImage: ''
+#           areaPath: 'DevDiv\Xamarin SDK\Build and Tools'
+#           verbosity: diagnostic
+#           cakeFile: DeviceTests/build.cake
+#           cakeTarget: test-ios-emu
 
-      - template: .ci/build.yml@components
-        parameters:
-          name: devicetests_android_api_23
-          runChecks: false
-          displayName: Android API 23
-          windowsImage: ''
-          macosImage: 'macos-10.14'
-          xcode: '11.3.1'
-          areaPath: 'DevDiv\Xamarin SDK\Build and Tools'
-          verbosity: diagnostic
-          cakeFile: DeviceTests/build.cake
-          cakeTarget: test-android-emu
-          cakeExtraArgs: --avd-target="`"system-images;android-23;google_apis;x86`""
-          preBuildSteps:
-            - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-23;google_apis;x86\""
-              displayName: Install the Android emulators
+#       - template: .ci/build.yml@components
+#         parameters:
+#           name: devicetests_android_api_23
+#           runChecks: false
+#           displayName: Android API 23
+#           windowsImage: ''
+#           macosImage: 'macos-10.14'
+#           xcode: '11.3.1'
+#           areaPath: 'DevDiv\Xamarin SDK\Build and Tools'
+#           verbosity: diagnostic
+#           cakeFile: DeviceTests/build.cake
+#           cakeTarget: test-android-emu
+#           cakeExtraArgs: --avd-target="`"system-images;android-23;google_apis;x86`""
+#           preBuildSteps:
+#             - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-23;google_apis;x86\""
+#               displayName: Install the Android emulators
 
-      - template: .ci/build.yml@components
-        parameters:
-          name: devicetests_android_api_26
-          runChecks: false
-          displayName: Android API 26
-          windowsImage: ''
-          macosImage: 'macos-10.14'
-          xcode: '11.3.1'
-          areaPath: 'DevDiv\Xamarin SDK\Build and Tools'
-          verbosity: diagnostic
-          cakeFile: DeviceTests/build.cake
-          cakeTarget: test-android-emu
-          cakeExtraArgs: --avd-target="`"system-images;android-26;google_apis;x86`""
-          preBuildSteps:
-            - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-26;google_apis;x86\""
-              displayName: Install the Android emulators
+#       - template: .ci/build.yml@components
+#         parameters:
+#           name: devicetests_android_api_26
+#           runChecks: false
+#           displayName: Android API 26
+#           windowsImage: ''
+#           macosImage: 'macos-10.14'
+#           xcode: '11.3.1'
+#           areaPath: 'DevDiv\Xamarin SDK\Build and Tools'
+#           verbosity: diagnostic
+#           cakeFile: DeviceTests/build.cake
+#           cakeTarget: test-android-emu
+#           cakeExtraArgs: --avd-target="`"system-images;android-26;google_apis;x86`""
+#           preBuildSteps:
+#             - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-26;google_apis;x86\""
+#               displayName: Install the Android emulators
 
-      - template: .ci/build.yml@components
-        parameters:
-          name: devicetests_android_api_29
-          runChecks: false
-          displayName: Android API 29
-          windowsImage: ''
-          macosImage: 'macos-10.14'
-          xcode: '11.3.1'
-          areaPath: 'DevDiv\Xamarin SDK\Build and Tools'
-          verbosity: diagnostic
-          cakeFile: DeviceTests/build.cake
-          cakeTarget: test-android-emu
-          cakeExtraArgs: --avd-target="`"system-images;android-29;google_apis_playstore;x86`""
-          preBuildSteps:
-            - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-29;google_apis_playstore;x86\""
-              displayName: Install the Android emulators
+#       - template: .ci/build.yml@components
+#         parameters:
+#           name: devicetests_android_api_29
+#           runChecks: false
+#           displayName: Android API 29
+#           windowsImage: ''
+#           macosImage: 'macos-10.14'
+#           xcode: '11.3.1'
+#           areaPath: 'DevDiv\Xamarin SDK\Build and Tools'
+#           verbosity: diagnostic
+#           cakeFile: DeviceTests/build.cake
+#           cakeTarget: test-android-emu
+#           cakeExtraArgs: --avd-target="`"system-images;android-29;google_apis_playstore;x86`""
+#           preBuildSteps:
+#             - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-29;google_apis_playstore;x86\""
+#               displayName: Install the Android emulators
