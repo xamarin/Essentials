@@ -54,16 +54,12 @@ stages:
                 Write-Host "##vso[build.updatebuildnumber]$env:NUGET_VERSION"
               displayName: Update the build number with a more readable one
 
-#   - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
-#     - stage: signing
-#       displayName: Sign Artifacts
-#       dependsOn: [ 'build' ]
-#       jobs:
-#         - template: sign-artifacts/jobs/v2.yml@internal-templates
-#           parameters:
-#             signMain: true
-#             signTags: true
-#             realSign: true
+  - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
+    - stage: signing
+      displayName: Sign Artifacts
+      dependsOn: [ 'build' ]
+      jobs:
+        - template: sign-artifacts/jobs/v2.yml@internal-templates
 
 #   - stage: devicetests
 #     displayName: Device Tests
