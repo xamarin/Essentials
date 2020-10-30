@@ -42,7 +42,7 @@ namespace Xamarin.Essentials
                 appControl.ExtraData.Add(AppControlData.Title, request.Title);
 
             foreach (var file in request.Files)
-                appControl.ExtraData.Add("http://tizen.org/appcontrol/data/path", file.FullPath);
+                appControl.ExtraData.Add(AppControlData.Path, file.FullPath);
 
             AppControl.SendLaunchRequest(appControl);
 
