@@ -139,24 +139,47 @@ namespace Xamarin.Essentials
 
                 var tcs = new TaskCompletionSource<PermissionStatus>(locationManager);
 
-                var previousState = CLLocationManager.Status;
+                CLAuthorizationStatus previousState;
 
-                locationManager.AuthorizationChanged += LocationAuthCallback;
+                Action unsubscribeAuthorizationChangedEvent = null;
+
+#if __WATCHOS__
+                if (Platform.HasOSVersion(7, 0))
+#else
+                if (Platform.HasOSVersion(14, 0))
+#endif
+                {
+                    previousState = locationManager.AuthorizationStatus;
+                    locationManager.DidChangeAuthorization += LocationAuthCallbackNew;
+                    unsubscribeAuthorizationChangedEvent = () => { locationManager.DidChangeAuthorization -= LocationAuthCallbackNew; };
+                }
+                else
+                {
+                    previousState = CLLocationManager.Status;
+                    locationManager.AuthorizationChanged += LocationAuthCallbackOld;
+                    unsubscribeAuthorizationChangedEvent = () => { locationManager.AuthorizationChanged -= LocationAuthCallbackOld; };
+                }
 
                 invokeRequest(locationManager);
 
                 return tcs.Task;
 
-                void LocationAuthCallback(object sender, CLAuthorizationChangedEventArgs e)
+                void LocationAuthCallbackNew(object sender, EventArgs e) =>
+                    LocationAuthCallback(((CLLocationManager)sender).AuthorizationStatus);
+
+                void LocationAuthCallbackOld(object sender, CLAuthorizationChangedEventArgs e) =>
+                    LocationAuthCallback(e.Status);
+
+                void LocationAuthCallback(CLAuthorizationStatus status)
                 {
-                    if (e.Status == CLAuthorizationStatus.NotDetermined)
+                    if (status == CLAuthorizationStatus.NotDetermined)
                         return;
 
                     try
                     {
                         if (previousState == CLAuthorizationStatus.AuthorizedWhenInUse && !whenInUse)
                         {
-                            if (e.Status == CLAuthorizationStatus.AuthorizedWhenInUse)
+                            if (status == CLAuthorizationStatus.AuthorizedWhenInUse)
                             {
                                 Utils.WithTimeout(tcs.Task, LocationTimeout).ContinueWith(t =>
                                 {
@@ -165,7 +188,7 @@ namespace Xamarin.Essentials
                                         // Wait for a timeout to see if the check is complete
                                         if (tcs != null && !tcs.Task.IsCompleted)
                                         {
-                                            locationManager.AuthorizationChanged -= LocationAuthCallback;
+                                            unsubscribeAuthorizationChangedEvent();
                                             tcs.TrySetResult(GetLocationStatus(whenInUse));
                                         }
                                     }
@@ -184,7 +207,7 @@ namespace Xamarin.Essentials
                             }
                         }
 
-                        locationManager.AuthorizationChanged -= LocationAuthCallback;
+                        unsubscribeAuthorizationChangedEvent();
 
                         tcs.TrySetResult(GetLocationStatus(whenInUse));
                         locationManager?.Dispose();
