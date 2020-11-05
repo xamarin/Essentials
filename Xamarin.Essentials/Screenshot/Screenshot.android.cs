@@ -18,7 +18,7 @@ namespace Xamarin.Essentials
 
             var view = Platform.GetCurrentActivity(true)?.Window?.DecorView?.RootView;
             if (view == null)
-                throw new NullReferenceException("Unable to find the main window.");
+                throw new Exception("Unable to find the main window.");
 
             var bitmap = Bitmap.CreateBitmap(view.Width, view.Height, Bitmap.Config.Argb8888);
 
