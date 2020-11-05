@@ -141,24 +141,23 @@ namespace Xamarin.Essentials
                 var tcs = new TaskCompletionSource<PermissionStatus>(locationManager);
 
                 var del = new ManagerDelegate();
-                del.AuthorizationStatusChanged += OnAuthorizationStatusChanged;
+                del.AuthorizationStatusChanged += LocationAuthCallback;
                 locationManager.Delegate = del;
 
                 invokeRequest(locationManager);
 
                 return tcs.Task;
 
-                void OnAuthorizationStatusChanged(object sender, CLAuthorizationChangedEventArgs e)
+                void LocationAuthCallback(object sender, CLAuthorizationChangedEventArgs e)
                 {
-                    var status = e.Status;
-                    if (status == CLAuthorizationStatus.NotDetermined)
+                    if (e.Status == CLAuthorizationStatus.NotDetermined)
                         return;
 
                     try
                     {
                         if (previousState == CLAuthorizationStatus.AuthorizedWhenInUse && !whenInUse)
                         {
-                            if (status == CLAuthorizationStatus.AuthorizedWhenInUse)
+                            if (e.Status == CLAuthorizationStatus.AuthorizedWhenInUse)
                             {
                                 Utils.WithTimeout(tcs.Task, LocationTimeout).ContinueWith(t =>
                                 {
@@ -166,7 +165,10 @@ namespace Xamarin.Essentials
                                     {
                                         // Wait for a timeout to see if the check is complete
                                         if (tcs != null && !tcs.Task.IsCompleted)
+                                        {
+                                            del.AuthorizationStatusChanged -= LocationAuthCallback;
                                             tcs.TrySetResult(GetLocationStatus(whenInUse));
+                                        }
                                     }
                                     catch (Exception ex)
                                     {
@@ -183,6 +185,7 @@ namespace Xamarin.Essentials
                             }
                         }
 
+                        del.AuthorizationStatusChanged -= LocationAuthCallback;
                         tcs.TrySetResult(GetLocationStatus(whenInUse));
                         locationManager?.Dispose();
                         locationManager = null;
