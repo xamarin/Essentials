@@ -136,42 +136,21 @@ namespace Xamarin.Essentials
                     return Task.FromResult(PermissionStatus.Disabled);
 
                 locationManager = new CLLocationManager();
+                var previousState = locationManager.GetAuthorizationStatus();
 
                 var tcs = new TaskCompletionSource<PermissionStatus>(locationManager);
 
-                CLAuthorizationStatus previousState;
-
-                Action unsubscribeAuthorizationChangedEvent = null;
-
-#if __WATCHOS__
-                if (Platform.HasOSVersion(7, 0))
-#else
-                if (Platform.HasOSVersion(14, 0))
-#endif
-                {
-                    previousState = locationManager.AuthorizationStatus;
-                    locationManager.DidChangeAuthorization += LocationAuthCallbackNew;
-                    unsubscribeAuthorizationChangedEvent = () => { locationManager.DidChangeAuthorization -= LocationAuthCallbackNew; };
-                }
-                else
-                {
-                    previousState = CLLocationManager.Status;
-                    locationManager.AuthorizationChanged += LocationAuthCallbackOld;
-                    unsubscribeAuthorizationChangedEvent = () => { locationManager.AuthorizationChanged -= LocationAuthCallbackOld; };
-                }
+                var del = new ManagerDelegate();
+                del.AuthorizationStatusChanged += OnAuthorizationStatusChanged;
+                locationManager.Delegate = del;
 
                 invokeRequest(locationManager);
 
                 return tcs.Task;
 
-                void LocationAuthCallbackNew(object sender, EventArgs e) =>
-                    LocationAuthCallback(((CLLocationManager)sender).AuthorizationStatus);
-
-                void LocationAuthCallbackOld(object sender, CLAuthorizationChangedEventArgs e) =>
-                    LocationAuthCallback(e.Status);
-
-                void LocationAuthCallback(CLAuthorizationStatus status)
+                void OnAuthorizationStatusChanged(object sender, CLAuthorizationChangedEventArgs e)
                 {
+                    var status = e.Status;
                     if (status == CLAuthorizationStatus.NotDetermined)
                         return;
 
@@ -187,10 +166,7 @@ namespace Xamarin.Essentials
                                     {
                                         // Wait for a timeout to see if the check is complete
                                         if (tcs != null && !tcs.Task.IsCompleted)
-                                        {
-                                            unsubscribeAuthorizationChangedEvent();
                                             tcs.TrySetResult(GetLocationStatus(whenInUse));
-                                        }
                                     }
                                     catch (Exception ex)
                                     {
@@ -207,8 +183,6 @@ namespace Xamarin.Essentials
                             }
                         }
 
-                        unsubscribeAuthorizationChangedEvent();
-
                         tcs.TrySetResult(GetLocationStatus(whenInUse));
                         locationManager?.Dispose();
                         locationManager = null;
@@ -221,6 +195,19 @@ namespace Xamarin.Essentials
                         locationManager = null;
                     }
                 }
+            }
+
+            class ManagerDelegate : NSObject, ICLLocationManagerDelegate
+            {
+                public event EventHandler<CLAuthorizationChangedEventArgs> AuthorizationStatusChanged;
+
+                [Export("locationManager:didChangeAuthorizationStatus:")]
+                public void AuthorizationChanged(CLLocationManager manager, CLAuthorizationStatus status) =>
+                    AuthorizationStatusChanged?.Invoke(this, new CLAuthorizationChangedEventArgs(status));
+
+                [Export("locationManagerDidChangeAuthorization:")]
+                public void DidChangeAuthorization(CLLocationManager manager) =>
+                    AuthorizationStatusChanged?.Invoke(this, new CLAuthorizationChangedEventArgs(manager.AuthorizationStatus));
             }
         }
 
