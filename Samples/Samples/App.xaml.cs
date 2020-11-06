@@ -58,11 +58,9 @@ namespace Samples
 
             try
             {
-#if !TIZEN40
                 await AppActions.SetAsync(
                     new AppAction("app_info", "App Info", icon: "app_info_action_icon"),
                     new AppAction("battery_info", "Battery Info"));
-#endif
             }
             catch (FeatureNotSupportedException ex)
             {
