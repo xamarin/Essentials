@@ -11,6 +11,7 @@ namespace Samples.Tizen
         protected override void OnCreate()
         {
             base.OnCreate();
+
             MaterialComponents.Init(DirectoryInfo.Resource);
             LoadApplication(formsApp ??= new App());
         }
