@@ -15,7 +15,7 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <TargetFrameworkVersion>v10.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v11.0</TargetFrameworkVersion>
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
@@ -33,6 +33,8 @@
     <EnableLLVM>false</EnableLLVM>
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     <BundleAssemblies>false</BundleAssemblies>
+    <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
