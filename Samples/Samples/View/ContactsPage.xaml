@@ -26,10 +26,6 @@
                     <Label FontAttributes="Bold" Text="Emails:" />
                     <Label Text="{Binding Emails}" />
 
-                    <Label FontAttributes="Bold" Text="Contact Type:" />
-
-                    <Label Text="{Binding ContactType}" />
-
                     <Button Command="{Binding GetContactCommand}" Text="Get Contact" />
 
                     <Button Command="{Binding GetAllContactCommand}" Text="Get All Contact" />
@@ -39,7 +35,9 @@
         </ListView.Header>
         <ListView.ItemTemplate>
             <DataTemplate>
-                <TextCell Text="{Binding Name}" />
+                <ViewCell>
+                    <Label Text="{Binding .}" LineBreakMode="TailTruncation"/>
+                </ViewCell>
             </DataTemplate>
         </ListView.ItemTemplate>
     </ListView>

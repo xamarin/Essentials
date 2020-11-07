@@ -6,50 +6,53 @@ namespace Xamarin.Essentials
 {
     public class Contact
     {
+        internal Contact(string name, IEnumerable<ContactPhone> phones, IEnumerable<ContactEmail> email)
+        {
+            Name = name;
+            Emails = email?.ToList();
+            Phones = phones?.ToList();
+        }
+
         public string Name { get; }
 
-        public ContactType ContactType { get; }
-
-        public IReadOnlyList<ContactPhone> Numbers { get; }
+        public IReadOnlyList<ContactPropertyBase> Phones { get; }
 
         public IReadOnlyList<ContactEmail> Emails { get; }
 
-        internal Contact(
-            string name,
-            List<ContactPhone> numbers,
-            List<ContactEmail> email,
-            ContactType contactType)
+        public override string ToString() => Name;
+    }
+
+    public class ContactEmail : ContactPropertyBase
+    {
+        internal ContactEmail(string value, ContactType type, string platformSpecificType)
+            : base(value, type, platformSpecificType)
         {
-            Name = name;
-            Emails = email;
-            Numbers = numbers;
-            ContactType = contactType;
         }
     }
 
-    public class ContactEmail
+    public class ContactPhone : ContactPropertyBase
     {
-        public string EmailAddress { get; }
-
-        public ContactType ContactType { get; }
-
-        internal ContactEmail(string email, ContactType contactType)
+        internal ContactPhone(string value, ContactType type, string platformSpecificType)
+            : base(value, type, platformSpecificType)
         {
-            EmailAddress = email;
-            ContactType = contactType;
         }
     }
 
-    public class ContactPhone
+    public class ContactPropertyBase
     {
-        public string PhoneNumber { get; }
-
-        public ContactType ContactType { get; }
-
-        internal ContactPhone(string phoneNumber, ContactType contactType)
+        internal ContactPropertyBase(string value, ContactType type, string platformSpecificType)
         {
-            PhoneNumber = phoneNumber;
-            ContactType = contactType;
+            Value = value;
+            Type = type;
+            PlatformSpecificType = platformSpecificType;
         }
+
+        public string Value { get; }
+
+        public ContactType Type { get; }
+
+        public string PlatformSpecificType { get; }
+
+        public override string ToString() => Value;
     }
 }

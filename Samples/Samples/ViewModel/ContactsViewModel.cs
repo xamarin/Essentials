@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
@@ -34,17 +35,9 @@ namespace Samples.ViewModel
             set => SetProperty(ref emails, value);
         }
 
-        string contactType;
+        ObservableCollection<string> contactsList = new ObservableCollection<string>();
 
-        public string ContactType
-        {
-            get => contactType;
-            set => SetProperty(ref contactType, value);
-        }
-
-        ObservableCollection<Contact> contactsList = new ObservableCollection<Contact>();
-
-        public ObservableCollection<Contact> ContactsList { get => contactsList; set => SetProperty(ref contactsList, value); }
+        public ObservableCollection<string> ContactsList { get => contactsList; set => SetProperty(ref contactsList, value); }
 
         public ICommand GetContactCommand { get; }
 
@@ -66,20 +59,24 @@ namespace Samples.ViewModel
                 Phones = string.Empty;
                 Emails = string.Empty;
                 Name = string.Empty;
-                ContactType = string.Empty;
 
                 var contact = await Contacts.PickContactAsync();
                 if (contact == null)
                     return;
 
-                foreach (var number in contact?.Numbers)
-                    Phones += $"{number.PhoneNumber} ({number.ContactType})" + Environment.NewLine;
+                foreach (var number in contact?.Phones)
+                {
+                    Phones += $"{number.Value}{Environment.NewLine}({number.Type})({number.PlatformSpecificType})"
+                        + Environment.NewLine + Environment.NewLine;
+                }
 
                 foreach (var email in contact?.Emails)
-                    Emails += $"{email.EmailAddress} ({email.ContactType})" + Environment.NewLine;
+                {
+                    Emails += $"{email.Value}{Environment.NewLine}({email.Type})({email.PlatformSpecificType})"
+                        + Environment.NewLine + Environment.NewLine;
+                }
 
                 Name = contact?.Name;
-                ContactType = contact?.ContactType.ToString();
             }
             catch (Exception ex)
             {
@@ -111,7 +108,13 @@ namespace Samples.ViewModel
                 _ = Task.Run(async () =>
                       {
                           await foreach (var contact in contacts)
-                              MainThread.BeginInvokeOnMainThread(() => ContactsList.Add(contact));
+                          {
+                              MainThread.BeginInvokeOnMainThread(()
+                                  => ContactsList.Add(
+                                      $"{contact}" +
+                                      $" {contact.Phones?.FirstOrDefault()} " +
+                                      $"({contact.Phones?.FirstOrDefault()?.Type})"));
+                          }
                       });
             }
             catch (Exception ex)

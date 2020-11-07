@@ -49,13 +49,22 @@ namespace Xamarin.Essentials
 
             try
             {
-                var contactType = ToPhoneContact(contact.ContactType);
-                var phones = contact.PhoneNumbers?.Select(item => new ContactPhone(item?.Value?.StringValue, contactType))?.ToList();
-                var emails = contact.EmailAddresses?.Select(item => new ContactEmail(item?.Value?.ToString(), contactType))?.ToList();
+                var phones = contact.PhoneNumbers?.Select(
+                   item => new ContactPhone(
+                       item?.Value?.StringValue,
+                       TypeConvert(item.Label?.ToString()),
+                       item.Label?.ToString()));
+
+                var emails = contact.EmailAddresses?.Select(
+                   item => new ContactEmail(
+                       item?.Value?.ToString(),
+                       TypeConvert(item.Label?.ToString()),
+                       item.Label?.ToString()));
+
                 var name = $"{contact.NamePrefix} {contact.GivenName} {contact.MiddleName} {contact.FamilyName} {contact.NameSuffix}"
                     .Replace("  ", " ").TrimEnd();
 
-                return new Contact(name, phones, emails, contactType);
+                return new Contact(name, phones, emails);
             }
             catch (Exception ex)
             {
@@ -67,11 +76,19 @@ namespace Xamarin.Essentials
             }
         }
 
-        static ContactType ToPhoneContact(CNContactType type) => type switch
+        static ContactType TypeConvert(string type)
         {
-            CNContactType.Person => ContactType.Personal,
-            CNContactType.Organization => ContactType.Work,
-            _ => ContactType.Unknown,
-        };
+            if (type == CNLabelKey.Work || type == CNLabelPhoneNumberKey.WorkFax)
+                return ContactType.Work;
+            else if (
+                type == CNLabelPhoneNumberKey.Main ||
+                type == CNLabelPhoneNumberKey.Mobile ||
+                type == CNLabelPhoneNumberKey.HomeFax ||
+                type == CNLabelPhoneNumberKey.iPhone ||
+                type == CNLabelKey.Home)
+                return ContactType.Personal;
+            else
+                return ContactType.Unknown;
+        }
     }
 }
