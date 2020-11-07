@@ -66,13 +66,13 @@ namespace Samples.ViewModel
 
                 foreach (var number in contact?.Phones)
                 {
-                    Phones += $"{number.Value}{Environment.NewLine}({number.Type})({number.PlatformSpecificType})"
+                    Phones += $"{number.Value}{Environment.NewLine}({number.Type})"
                         + Environment.NewLine + Environment.NewLine;
                 }
 
                 foreach (var email in contact?.Emails)
                 {
-                    Emails += $"{email.Value}{Environment.NewLine}({email.Type})({email.PlatformSpecificType})"
+                    Emails += $"{email.Value}{Environment.NewLine}({email.Type})"
                         + Environment.NewLine + Environment.NewLine;
                 }
 
@@ -101,6 +101,7 @@ namespace Samples.ViewModel
             if (IsBusy)
                 return;
             IsBusy = true;
+            ContactsList?.Clear();
             try
             {
                 var contacts = Contacts.GetAllAsync();

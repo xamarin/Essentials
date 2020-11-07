@@ -69,6 +69,19 @@ namespace Xamarin.Essentials
                 var first = record.Get<string>(TizenName.First) ?? string.Empty;
                 var last = record.Get<string>(TizenName.Last) ?? string.Empty;
                 name = $"{first} {last}".Trim();
+
+                if (!string.IsNullOrWhiteSpace(first))
+                {
+                    if (!string.IsNullOrWhiteSpace(last))
+                        name = first + last;
+                    else
+                        name = first;
+                }
+                else
+                {
+                    if (!string.IsNullOrWhiteSpace(last))
+                        name = last;
+                }
             }
 
             var phones = new List<ContactPhone>();
@@ -79,7 +92,7 @@ namespace Xamarin.Essentials
                 var number = nameRecord.Get<string>(TizenNumber.NumberData);
                 var type = (TizenNumber.Types)nameRecord.Get<int>(TizenNumber.Type);
 
-                phones.Add(new ContactPhone(number, GetContactType(type), type.ToString()));
+                phones.Add(new ContactPhone(number, GetContactType(type)));
             }
 
             var emails = new List<ContactEmail>();
@@ -90,7 +103,7 @@ namespace Xamarin.Essentials
                 var addr = emailRecord.Get<string>(TizenEmail.Address);
                 var type = (TizenEmail.Types)emailRecord.Get<int>(TizenEmail.Type);
 
-                emails.Add(new ContactEmail(addr, GetContactType(type), type.ToString()));
+                emails.Add(new ContactEmail(addr, GetContactType(type)));
             }
 
             return new Contact(name, phones, emails);

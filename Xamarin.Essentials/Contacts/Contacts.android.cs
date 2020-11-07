@@ -32,7 +32,7 @@ namespace Xamarin.Essentials
             if (cursor == null)
                 yield break;
 
-            if (cursor.MoveToFirst())
+            if (cursor?.MoveToFirst() ?? false)
             {
                 do
                 {
@@ -69,15 +69,9 @@ namespace Xamarin.Essentials
             var name = cursor.GetString(cursor.GetColumnIndex(ContactsContract.Contacts.InterfaceConsts.DisplayName));
             var idQ = new string[1] { cursor.GetString(cursor.GetColumnIndex(idKey)) };
             var phones = GetNumbers(context, idQ)?.Select(
-                a => new ContactPhone(
-                    a.data,
-                    GetPhoneContactType(a.type),
-                    a.type.ToString()));
+                item => new ContactPhone(item.data, GetPhoneContactType(item.type)));
             var emails = GetEmails(context, idQ)?.Select(
-                a => new ContactEmail(
-                    a.data,
-                    GetEmailContactType(a.type),
-                    a.type.ToString()));
+                item => new ContactEmail(item.data, GetEmailContactType(item.type)));
 
             return new Contact(name, phones, emails);
         }
@@ -100,7 +94,7 @@ namespace Xamarin.Essentials
 
         static IEnumerable<(string data, string type)> ReadCursorItems(ICursor cursor, string dataKey, string typeKey)
         {
-            if (cursor.MoveToFirst())
+            if (cursor?.MoveToFirst() ?? false)
             {
                 do
                 {
@@ -112,7 +106,7 @@ namespace Xamarin.Essentials
                 }
                 while (cursor.MoveToNext());
             }
-            cursor.Close();
+            cursor?.Close();
         }
 
         static ContactType GetPhoneContactType(string type)
@@ -121,12 +115,11 @@ namespace Xamarin.Essentials
             {
                 try
                 {
-                    var phoneKind = (PhoneDataKind)typeInt;
-                    return phoneKind switch
+                    return (PhoneDataKind)typeInt switch
                     {
+                        PhoneDataKind.Main => ContactType.Personal,
                         PhoneDataKind.Home => ContactType.Personal,
                         PhoneDataKind.Mobile => ContactType.Personal,
-                        PhoneDataKind.Main => ContactType.Personal,
                         PhoneDataKind.Work => ContactType.Work,
                         PhoneDataKind.WorkMobile => ContactType.Work,
                         PhoneDataKind.CompanyMain => ContactType.Work,
@@ -148,8 +141,7 @@ namespace Xamarin.Essentials
             {
                 try
                 {
-                    var emailKind = (EmailDataKind)typeInt;
-                    return emailKind switch
+                    return (EmailDataKind)typeInt switch
                     {
                         EmailDataKind.Home => ContactType.Personal,
                         EmailDataKind.Work => ContactType.Work,

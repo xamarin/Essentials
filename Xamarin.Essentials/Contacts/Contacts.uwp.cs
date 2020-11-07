@@ -36,8 +36,10 @@ namespace Xamarin.Essentials
             if (contact == null)
                 return default;
 
-            var phones = contact.Phones?.Select(item => new ContactPhone(item?.Number, GetPhoneContactType(item?.Kind), item?.Kind?.ToString()))?.Distinct()?.ToList();
-            var emails = contact.Emails?.Select(item => new ContactEmail(item?.Address, GetEmailContactType(item?.Kind), item?.Kind?.ToString()))?.Distinct()?.ToList()
+            var phones = contact.Phones?.Select(
+                item => new ContactPhone(item?.Number, GetPhoneContactType(item?.Kind)))?.ToList();
+            var emails = contact.Emails?.Select(
+                item => new ContactEmail(item?.Address, GetEmailContactType(item?.Kind)))?.ToList();
 
             return new Contact(contact.Name, phones, emails);
         }

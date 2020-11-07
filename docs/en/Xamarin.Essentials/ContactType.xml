@@ -10,8 +10,8 @@
     <BaseTypeName>System.Enum</BaseTypeName>
   </Base>
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Types of phone numbers and email addresses</summary>
+    <remarks></remarks>
   </Docs>
   <Members>
     <Member MemberName="Personal">
@@ -28,7 +28,7 @@
       </ReturnValue>
       <MemberValue>1</MemberValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Personal phone numbers or email addresses</summary>
       </Docs>
     </Member>
     <Member MemberName="Unknown">
@@ -45,7 +45,7 @@
       </ReturnValue>
       <MemberValue>0</MemberValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Unknown phone numbers or email addresses</summary>
       </Docs>
     </Member>
     <Member MemberName="Work">
@@ -62,7 +62,7 @@
       </ReturnValue>
       <MemberValue>2</MemberValue>
       <Docs>
-        <summary>To be added.</summary>
+        <summary>Work phone numbers or email addresses</summary>
       </Docs>
     </Member>
   </Members>

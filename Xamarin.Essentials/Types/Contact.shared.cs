@@ -15,44 +15,34 @@ namespace Xamarin.Essentials
 
         public string Name { get; }
 
-        public IReadOnlyList<ContactPropertyBase> Phones { get; }
+        public IReadOnlyList<ContactPhone> Phones { get; }
 
         public IReadOnlyList<ContactEmail> Emails { get; }
-
-        public override string ToString() => Name;
     }
 
-    public class ContactEmail : ContactPropertyBase
+    public class ContactEmail
     {
-        internal ContactEmail(string value, ContactType type, string platformSpecificType)
-            : base(value, type, platformSpecificType)
-        {
-        }
-    }
-
-    public class ContactPhone : ContactPropertyBase
-    {
-        internal ContactPhone(string value, ContactType type, string platformSpecificType)
-            : base(value, type, platformSpecificType)
-        {
-        }
-    }
-
-    public class ContactPropertyBase
-    {
-        internal ContactPropertyBase(string value, ContactType type, string platformSpecificType)
+        internal ContactEmail(string value, ContactType type)
         {
             Value = value;
             Type = type;
-            PlatformSpecificType = platformSpecificType;
         }
 
         public string Value { get; }
 
         public ContactType Type { get; }
+    }
 
-        public string PlatformSpecificType { get; }
+    public class ContactPhone
+    {
+        internal ContactPhone(string value, ContactType type)
+        {
+            Value = value;
+            Type = type;
+        }
 
-        public override string ToString() => Value;
+        public string Value { get; }
+
+        public ContactType Type { get; }
     }
 }

@@ -13,7 +13,7 @@
     <ListView ItemsSource="{Binding ContactsList}">
         <ListView.Header>
             <StackLayout>
-                <Label Text="Get and add contacts in your device." FontAttributes="Bold" Margin="12" />
+                <Label Text="Get contacts in your device." FontAttributes="Bold" Margin="12" />
 
                 <StackLayout Padding="12,0,12,12" Spacing="6">
 

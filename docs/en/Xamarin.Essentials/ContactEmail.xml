@@ -11,14 +11,14 @@
   </Base>
   <Interfaces />
   <Docs>
-    <summary>To be added.</summary>
-    <remarks>To be added.</remarks>
+    <summary>Info about the email address</summary>
+    <remarks></remarks>
   </Docs>
   <Members>
-    <Member MemberName="ContactType">
-      <MemberSignature Language="C#" Value="public Xamarin.Essentials.ContactType ContactType { get; }" />
-      <MemberSignature Language="ILAsm" Value=".property instance valuetype Xamarin.Essentials.ContactType ContactType" />
-      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.ContactEmail.ContactType" />
+    <Member MemberName="Type">
+      <MemberSignature Language="C#" Value="public Xamarin.Essentials.ContactType Type { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype Xamarin.Essentials.ContactType Type" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.ContactEmail.Type" />
       <MemberType>Property</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -28,15 +28,15 @@
         <ReturnType>Xamarin.Essentials.ContactType</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Type of email address</summary>
+        <value>Unknown, Personal, Work</value>
+        <remarks></remarks>
       </Docs>
     </Member>
-    <Member MemberName="EmailAddress">
-      <MemberSignature Language="C#" Value="public string EmailAddress { get; }" />
-      <MemberSignature Language="ILAsm" Value=".property instance string EmailAddress" />
-      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.ContactEmail.EmailAddress" />
+    <Member MemberName="Value">
+      <MemberSignature Language="C#" Value="public string Value { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string Value" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.ContactEmail.Value" />
       <MemberType>Property</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -46,9 +46,9 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>To be added.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <summary>Email address</summary>
+        <value></value>
+        <remarks></remarks>
       </Docs>
     </Member>
   </Members>
