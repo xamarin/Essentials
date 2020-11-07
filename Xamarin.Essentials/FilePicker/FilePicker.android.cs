@@ -50,13 +50,7 @@ namespace Xamarin.Essentials
                 }
 
                 foreach (var contentUri in clipData)
-                {
-                    Platform.AppContext.ContentResolver.TakePersistableUriPermission(
-                        contentUri,
-                        ActivityFlags.GrantReadUriPermission);
-
                     resultList.Add(new FileResult(contentUri));
-                }
 
                 return resultList;
             }
