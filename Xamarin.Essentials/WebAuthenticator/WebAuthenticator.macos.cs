@@ -47,7 +47,7 @@ namespace Xamarin.Essentials
                             tcsResponse.TrySetException(new NSErrorException(error));
                     }
 
-                    var was = new ASWebAuthenticationSession(new NSUrl(url.OriginalString), scheme, AuthSessionCallback);
+                    var was = new ASWebAuthenticationSession(WebUtils.GetNativeUrl(url), scheme, AuthSessionCallback);
 
                     var ctx = new ContextProvider(Platform.GetCurrentWindow());
                     was.PresentationContextProvider = ctx;
@@ -116,7 +116,8 @@ namespace Xamarin.Essentials
             public void HandleAppleEvent(NSAppleEventDescriptor evt, NSAppleEventDescriptor replyEvt)
             {
                 var url = evt.ParamDescriptorForKeyword(DirectObject).StringValue;
-                OpenUrl(new NSUrl(url));
+                var uri = new Uri(url);
+                OpenUrl(WebUtils.GetNativeUrl(uri));
             }
 
             static uint GetDescriptor(string s) =>

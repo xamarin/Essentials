@@ -67,7 +67,7 @@ namespace Xamarin.Essentials
 
             if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
             {
-                was = new ASWebAuthenticationSession(new NSUrl(url.OriginalString), scheme, AuthSessionCallback);
+                was = new ASWebAuthenticationSession(WebUtils.GetNativeUrl(url), scheme, AuthSessionCallback);
 
                 if (UIDevice.CurrentDevice.CheckSystemVersion(13, 0))
                 {
@@ -84,7 +84,7 @@ namespace Xamarin.Essentials
 
             if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
             {
-                sf = new SFAuthenticationSession(new NSUrl(url.OriginalString), scheme, AuthSessionCallback);
+                sf = new SFAuthenticationSession(WebUtils.GetNativeUrl(url), scheme, AuthSessionCallback);
                 using (sf)
                 {
                     sf.Start();
@@ -93,7 +93,7 @@ namespace Xamarin.Essentials
             }
 
             // This is only on iOS9+ but we only support 10+ in Essentials anyway
-            var controller = new SFSafariViewController(new NSUrl(url.OriginalString), false)
+            var controller = new SFSafariViewController(WebUtils.GetNativeUrl(url), false)
             {
                 Delegate = new NativeSFSafariViewControllerDelegate
                 {
