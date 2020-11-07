@@ -30,6 +30,7 @@ namespace Xamarin.Essentials
         static TaskCompletionSource<WebAuthenticatorResult> tcsResponse;
         static UIViewController currentViewController;
         static Uri redirectUri;
+
 #if __IOS__
         static ASWebAuthenticationSession was;
         static SFAuthenticationSession sf;
@@ -46,7 +47,6 @@ namespace Xamarin.Essentials
 
             tcsResponse = new TaskCompletionSource<WebAuthenticatorResult>();
             redirectUri = callbackUrl;
-
             var scheme = redirectUri.Scheme;
 
 #if __IOS__
@@ -60,6 +60,9 @@ namespace Xamarin.Essentials
                     tcsResponse.TrySetCanceled();
                 else
                     tcsResponse.TrySetException(new NSErrorException(error));
+
+                was = null;
+                sf = null;
             }
 
             if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
