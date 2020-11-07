@@ -23,7 +23,6 @@ namespace Xamarin.Essentials
 
             var intent = new Intent(action);
             intent.SetType("*/*");
-            intent.AddFlags(ActivityFlags.GrantPersistableUriPermission);
             intent.PutExtra(Intent.ExtraAllowMultiple, allowMultiple);
 
             var allowedTypes = options?.FileTypes?.Value?.ToArray();
