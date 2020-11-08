@@ -36,7 +36,7 @@ namespace Xamarin.Essentials
             {
                 do
                 {
-                    var contact = GetContact(cursor, context, ContactsContract.Contacts.InterfaceConsts.Id, null);
+                    var contact = GetContact(cursor, context, ContactsContract.Contacts.InterfaceConsts.Id);
                     if (contact != null)
                         yield return contact;
                 }
@@ -57,14 +57,13 @@ namespace Xamarin.Essentials
                 return GetContact(
                     cursor,
                     context,
-                    ContactsContract.CommonDataKinds.Phone.InterfaceConsts.ContactId,
-                    ContactsContract.CommonDataKinds.Phone.InterfaceConsts.Type);
+                    ContactsContract.CommonDataKinds.Phone.InterfaceConsts.ContactId);
             }
 
             return default;
         }
 
-        static Contact GetContact(ICursor cursor, ContentResolver context, string idKey, string typeKey)
+        static Contact GetContact(ICursor cursor, ContentResolver context, string idKey)
         {
             var name = cursor.GetString(cursor.GetColumnIndex(ContactsContract.Contacts.InterfaceConsts.DisplayName));
             var idQ = new string[1] { cursor.GetString(cursor.GetColumnIndex(idKey)) };

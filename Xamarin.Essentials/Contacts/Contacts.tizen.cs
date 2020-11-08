@@ -66,9 +66,9 @@ namespace Xamarin.Essentials
             var record = contactsRecord.GetChildRecord(TizenContact.Name, 0);
             if (record != null)
             {
-                var first = record.Get<string>(TizenName.First) ?? string.Empty;
-                var last = record.Get<string>(TizenName.Last) ?? string.Empty;
-                name = $"{first} {last}".Trim();
+                var first = record.Get<string>(TizenName.First);
+                var last = record.Get<string>(TizenName.Last);
+                name = $"{first}{GetName(last)}";
 
                 if (!string.IsNullOrWhiteSpace(first))
                 {

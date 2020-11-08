@@ -85,8 +85,7 @@ namespace Xamarin.Essentials
                        item?.Value?.ToString(),
                        TypeConvert(item.Label?.ToString())));
 
-                var name = $"{contact.NamePrefix} {contact.GivenName} {contact.MiddleName} {contact.FamilyName} {contact.NameSuffix}"
-                    .Replace("  ", " ").Trim();
+                var name = $"{contact.NamePrefix}{GetName(contact.GivenName)}{GetName(contact.MiddleName)}{GetName(contact.FamilyName)}{GetName(contact.NameSuffix)}";
 
                 return new Contact(name, phones, emails);
             }

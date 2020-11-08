@@ -112,8 +112,8 @@ namespace Samples.ViewModel
                           {
                               MainThread.BeginInvokeOnMainThread(()
                                   => ContactsList.Add(
-                                      $"{contact}" +
-                                      $" {contact.Phones?.FirstOrDefault()} " +
+                                      $"{contact.Name}" +
+                                      $" {contact.Phones?.FirstOrDefault()?.Value} " +
                                       $"({contact.Phones?.FirstOrDefault()?.Type})"));
                           }
                       });

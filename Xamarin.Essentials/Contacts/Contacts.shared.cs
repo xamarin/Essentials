@@ -16,6 +16,11 @@ namespace Xamarin.Essentials
 #if !NETSTANDARD1_0
         public static IAsyncEnumerable<Contact> GetAllAsync()
             => PlatformGetAllAsync();
+
+#endif
+#if __IOS__ || __MACOS__ || TIZEN
+        static string GetName(string name)
+            => string.IsNullOrWhiteSpace(name) ? string.Empty : $" {name}";
 #endif
     }
 
