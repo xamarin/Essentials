@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Xamarin.Essentials
@@ -14,8 +16,8 @@ namespace Xamarin.Essentials
         }
 
 #if !NETSTANDARD1_0
-        public static IAsyncEnumerable<Contact> GetAllAsync()
-            => PlatformGetAllAsync();
+        public static IAsyncEnumerable<Contact> GetAllAsync(CancellationToken cancellationToken = default)
+            => PlatformGetAllAsync(cancellationToken);
 
 #endif
 #if __IOS__ || __MACOS__ || TIZEN

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Xamarin.Essentials
@@ -8,7 +9,7 @@ namespace Xamarin.Essentials
         static Task<Contact> PlatformPickContactAsync() => throw ExceptionUtils.NotSupportedOrImplementedException;
 
 #if !NETSTANDARD1_0
-        static IAsyncEnumerable<Contact> PlatformGetAllAsync() => throw ExceptionUtils.NotSupportedOrImplementedException;
+        static IAsyncEnumerable<Contact> PlatformGetAllAsync(CancellationToken cancellationToken) => throw ExceptionUtils.NotSupportedOrImplementedException;
 #endif
     }
 }

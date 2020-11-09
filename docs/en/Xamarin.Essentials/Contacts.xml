@@ -15,6 +15,27 @@
     <remarks></remarks>
   </Docs>
   <Members>
+    <Member MemberName="GetAllAsync">
+      <MemberSignature Language="C#" Value="public static System.Collections.Generic.IAsyncEnumerable&lt;Xamarin.Essentials.Contact&gt; GetAllAsync (System.Threading.CancellationToken cancellationToken = null);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Collections.Generic.IAsyncEnumerable`1&lt;class Xamarin.Essentials.Contact&gt; GetAllAsync(valuetype System.Threading.CancellationToken cancellationToken) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.Contacts.GetAllAsync(System.Threading.CancellationToken)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.Generic.IAsyncEnumerable&lt;Xamarin.Essentials.Contact&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="cancellationToken" Type="System.Threading.CancellationToken" />
+      </Parameters>
+      <Docs>
+        <param name="cancellationToken">A token for cancelling the operation</param>
+        <summary>Return List of phone numbers</summary>
+        <returns>List of phone numbers</returns>
+      </Docs>
+    </Member>
     <Member MemberName="PickContactAsync">
       <MemberSignature Language="C#" Value="public static System.Threading.Tasks.Task&lt;Xamarin.Essentials.Contact&gt; PickContactAsync ();" />
       <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Tasks.Task`1&lt;class Xamarin.Essentials.Contact&gt; PickContactAsync() cil managed" />
@@ -31,25 +52,6 @@
       <Docs>
         <summary>Starts file picker for selecting a single contact</summary>
         <returns>Singel Contact</returns>
-        <remarks></remarks>
-      </Docs>
-    </Member>
-    <Member MemberName="GetAllAsync">
-      <MemberSignature Language="C#" Value="public static System.Collections.Generic.IAsyncEnumerable&lt;Xamarin.Essentials.Contact&gt; GetAllAsync ();" />
-      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Collections.Generic.IAsyncEnumerable`1&lt;class Xamarin.Essentials.Contact&gt; GetAllAsync() cil managed" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.Contacts.GetAllAsync" />
-      <MemberType>Method</MemberType>
-      <AssemblyInfo>
-        <AssemblyName>Xamarin.Essentials</AssemblyName>
-        <AssemblyVersion>1.0.0.0</AssemblyVersion>
-      </AssemblyInfo>
-      <ReturnValue>
-        <ReturnType>System.Collections.Generic.IAsyncEnumerable&lt;Xamarin.Essentials.Contact&gt;</ReturnType>
-      </ReturnValue>
-      <Parameters />
-      <Docs>
-        <summary>Asynchronously retrieves all contacts from the device</summary>
-        <returns>List with all the contacts</returns>
         <remarks></remarks>
       </Docs>
     </Member>

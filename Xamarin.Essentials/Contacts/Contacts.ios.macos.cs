@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using Contacts;
 #if __IOS__
@@ -36,7 +38,7 @@ namespace Xamarin.Essentials
         }
 
 #endif
-        static async IAsyncEnumerable<Contact> PlatformGetAllAsync()
+        static async IAsyncEnumerable<Contact> PlatformGetAllAsync([EnumeratorCancellation] CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
             var keys = new[]
@@ -64,7 +66,11 @@ namespace Xamarin.Essentials
                     continue;
 
                 foreach (var contact in contacts)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     yield return ConvertContact(contact);
+                }
             }
         }
 

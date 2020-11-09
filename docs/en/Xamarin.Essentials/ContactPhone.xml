@@ -15,6 +15,24 @@
     <remarks></remarks>
   </Docs>
   <Members>
+    <Member MemberName="Value">
+      <MemberSignature Language="C#" Value="public string Value { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string Value" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.ContactPhone.Value" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Phone number</summary>
+        <value></value>
+        <remarks></remarks>
+      </Docs>
+    </Member>
     <Member MemberName="Type">
       <MemberSignature Language="C#" Value="public Xamarin.Essentials.ContactType Type { get; }" />
       <MemberSignature Language="ILAsm" Value=".property instance valuetype Xamarin.Essentials.ContactType Type" />
@@ -30,24 +48,6 @@
       <Docs>
         <summary>Type of phone number</summary>
         <value>Unknown, Personal, Work</value>
-        <remarks></remarks>
-      </Docs>
-    </Member>
-    <Member MemberName="PhoneNumber">
-      <MemberSignature Language="C#" Value="public string Value { get; }" />
-      <MemberSignature Language="ILAsm" Value=".property instance string Value" />
-      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.ContactPhone.Value" />
-      <MemberType>Property</MemberType>
-      <AssemblyInfo>
-        <AssemblyName>Xamarin.Essentials</AssemblyName>
-        <AssemblyVersion>1.0.0.0</AssemblyVersion>
-      </AssemblyInfo>
-      <ReturnValue>
-        <ReturnType>System.String</ReturnType>
-      </ReturnValue>
-      <Docs>
-        <summary>Phone number</summary>
-        <value></value>
         <remarks></remarks>
       </Docs>
     </Member>

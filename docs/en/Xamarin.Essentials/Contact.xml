@@ -51,10 +51,10 @@
         <remarks></remarks>
       </Docs>
     </Member>
-    <Member MemberName="Numbers">
-      <MemberSignature Language="C#" Value="public System.Collections.Generic.IReadOnlyList&lt;Xamarin.Essentials.ContactPhone&gt; Numbers { get; }" />
-      <MemberSignature Language="ILAsm" Value=".property instance class System.Collections.Generic.IReadOnlyList`1&lt;class Xamarin.Essentials.ContactPhone&gt; Numbers" />
-      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.Contact.Numbers" />
+    <Member MemberName="Phones">
+      <MemberSignature Language="C#" Value="public System.Collections.Generic.IReadOnlyList&lt;Xamarin.Essentials.ContactPhone&gt; Phones { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance class System.Collections.Generic.IReadOnlyList`1&lt;class Xamarin.Essentials.ContactPhone&gt; Phones" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.Contact.Phones" />
       <MemberType>Property</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>

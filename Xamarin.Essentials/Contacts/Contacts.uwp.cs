@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Contacts;
 
@@ -17,18 +19,23 @@ namespace Xamarin.Essentials
             return ConvertContact(contactSelected);
         }
 
-        public static async IAsyncEnumerable<Contact> PlatformGetAllAsync()
+        static async IAsyncEnumerable<Contact> PlatformGetAllAsync([EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            var contactStore = await ContactManager.RequestStoreAsync();
+            var contactStore = await ContactManager.RequestStoreAsync()
+                .AsTask(cancellationToken).ConfigureAwait(false);
             if (contactStore == null)
                 yield break;
 
-            var contacts = await contactStore.FindContactsAsync();
+            var contacts = await contactStore.FindContactsAsync()
+                .AsTask(cancellationToken).ConfigureAwait(false);
             if (contacts == null)
                 yield break;
 
             foreach (var item in contacts)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
                 yield return ConvertContact(item);
+            }
         }
 
         internal static Contact ConvertContact(Windows.ApplicationModel.Contacts.Contact contact)

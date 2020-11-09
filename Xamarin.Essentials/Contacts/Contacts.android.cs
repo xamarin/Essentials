@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using Android.Content;
 using Android.Database;
@@ -23,7 +25,7 @@ namespace Xamarin.Essentials
             return null;
         }
 
-        static async IAsyncEnumerable<Contact> PlatformGetAllAsync()
+        static async IAsyncEnumerable<Contact> PlatformGetAllAsync([EnumeratorCancellation] CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
             using var context = Platform.AppContext.ContentResolver;
@@ -36,6 +38,8 @@ namespace Xamarin.Essentials
             {
                 do
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var contact = GetContact(cursor, context, ContactsContract.Contacts.InterfaceConsts.Id);
                     if (contact != null)
                         yield return contact;
