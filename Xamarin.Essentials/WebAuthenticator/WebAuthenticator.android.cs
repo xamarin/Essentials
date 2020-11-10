@@ -74,7 +74,6 @@ namespace Xamarin.Essentials
             var parentActivity = Platform.GetCurrentActivity(true);
 
             var customTabsActivityManager = CustomTabsActivityManager.From(parentActivity);
-            customTabsActivityManager.NavigationEvent += OnNavigationEvent;
             try
             {
                 if (await BindServiceAsync(customTabsActivityManager))
@@ -98,7 +97,6 @@ namespace Xamarin.Essentials
             }
             finally
             {
-                customTabsActivityManager.NavigationEvent -= OnNavigationEvent;
                 try
                 {
                     customTabsActivityManager.Client?.Dispose();
@@ -108,9 +106,6 @@ namespace Xamarin.Essentials
                 }
             }
         }
-
-        static void OnNavigationEvent(int navigationEvent, global::Android.OS.Bundle extras) =>
-            System.Diagnostics.Debug.WriteLine($"CustomTabs.NavigationEvent: {navigationEvent}");
 
         static Task<bool> BindServiceAsync(CustomTabsActivityManager manager)
         {
