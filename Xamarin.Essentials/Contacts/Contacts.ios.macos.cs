@@ -38,7 +38,7 @@ namespace Xamarin.Essentials
         }
 
 #endif
-        static async IAsyncEnumerable<Contact> PlatformGetAllAsync([EnumeratorCancellation] CancellationToken cancellationToken)
+        static async Task<IEnumerable<Contact>> PlatformGetAllAsync(CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
             var keys = new[]
@@ -56,20 +56,23 @@ namespace Xamarin.Essentials
             using var store = new CNContactStore();
             var containers = store.GetContainers(null, out var error);
             if (containers == null)
-                yield break;
+                return Array.Empty<Contact>();
 
-            foreach (var container in containers)
+            return GetEnumerable();
+
+            IEnumerable<Contact> GetEnumerable()
             {
-                using var pred = CNContact.GetPredicateForContactsInContainer(container.Identifier);
-                var contacts = store.GetUnifiedContacts(pred, keys, out error);
-                if (contacts == null)
-                    continue;
-
-                foreach (var contact in contacts)
+                foreach (var container in containers)
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
+                    using var pred = CNContact.GetPredicateForContactsInContainer(container.Identifier);
+                    var contacts = store.GetUnifiedContacts(pred, keys, out error);
+                    if (contacts == null)
+                        continue;
 
-                    yield return ConvertContact(contact);
+                    foreach (var contact in contacts)
+                    {
+                        yield return ConvertContact(contact);
+                    }
                 }
             }
         }

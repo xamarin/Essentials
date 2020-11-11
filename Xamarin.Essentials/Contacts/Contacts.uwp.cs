@@ -19,22 +19,27 @@ namespace Xamarin.Essentials
             return ConvertContact(contactSelected);
         }
 
-        static async IAsyncEnumerable<Contact> PlatformGetAllAsync([EnumeratorCancellation] CancellationToken cancellationToken)
+        static async Task<IEnumerable<Contact>> PlatformGetAllAsync(CancellationToken cancellationToken)
         {
             var contactStore = await ContactManager.RequestStoreAsync()
                 .AsTask(cancellationToken).ConfigureAwait(false);
             if (contactStore == null)
-                yield break;
+                return Array.Empty<Contact>();
 
             var contacts = await contactStore.FindContactsAsync()
                 .AsTask(cancellationToken).ConfigureAwait(false);
             if (contacts == null)
-                yield break;
+                return Array.Empty<Contact>();
 
-            foreach (var item in contacts)
+            return GetEnumerable();
+
+            IEnumerable<Contact> GetEnumerable()
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                yield return ConvertContact(item);
+                foreach (var item in contacts)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    yield return ConvertContact(item);
+                }
             }
         }
 

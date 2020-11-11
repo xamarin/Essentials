@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Tizen.Applications;
@@ -50,17 +49,18 @@ namespace Xamarin.Essentials
             return await tcs.Task;
         }
 
-        static async IAsyncEnumerable<Contact> PlatformGetAllAsync([EnumeratorCancellation] CancellationToken cancellationToken)
+        static Task<IEnumerable<Contact>> PlatformGetAllAsync(CancellationToken cancellationToken)
         {
-            await Task.CompletedTask;
-
             var contactsList = manager.Database.GetAll(TizenContact.Uri, 0, 0);
-            for (var i = 0; i < contactsList?.Count; i++)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
+            return Task.FromResult(GetEnumerable());
 
-                yield return ToContact(contactsList.GetCurrentRecord());
-                contactsList.MoveNext();
+            IEnumerable<Contact> GetEnumerable()
+            {
+                for (var i = 0; i < contactsList?.Count; i++)
+                {
+                    yield return ToContact(contactsList.GetCurrentRecord());
+                    contactsList.MoveNext();
+                }
             }
         }
 

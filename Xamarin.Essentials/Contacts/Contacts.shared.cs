@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
         }
 
 #if !NETSTANDARD1_0
-        public static IAsyncEnumerable<Contact> GetAllAsync(CancellationToken cancellationToken = default)
+        public static Task<IEnumerable<Contact>> GetAllAsync(CancellationToken cancellationToken = default)
             => PlatformGetAllAsync(cancellationToken);
 
 #endif

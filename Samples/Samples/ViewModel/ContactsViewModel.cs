@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -96,7 +95,7 @@ namespace Samples.ViewModel
             GetAllContact();
         }
 
-        void GetAllContact()
+        async void GetAllContact()
         {
             if (IsBusy)
                 return;
@@ -104,23 +103,24 @@ namespace Samples.ViewModel
             ContactsList?.Clear();
             try
             {
-                var contacts = Contacts.GetAllAsync();
+                await Task.Run(async () =>
+                {
+                    var contacts = await Contacts.GetAllAsync();
 
-                _ = Task.Run(async () =>
-                      {
-                          await foreach (var contact in contacts)
-                          {
-                              MainThread.BeginInvokeOnMainThread(()
-                                  => ContactsList.Add(
-                                      $"{contact.Name}" +
-                                      $" {contact.Phones?.FirstOrDefault()?.Value} " +
-                                      $"({contact.Phones?.FirstOrDefault()?.Type})"));
-                          }
-                      });
+                    foreach (var contact in contacts)
+                    {
+                        var c =
+                            $"{contact.Name}" +
+                            $" {contact.Phones?.FirstOrDefault()?.Value} " +
+                            $"({contact.Phones?.FirstOrDefault()?.Type})";
+
+                        await MainThread.InvokeOnMainThreadAsync(() => ContactsList.Add(c));
+                    }
+                });
             }
             catch (Exception ex)
             {
-                MainThread.BeginInvokeOnMainThread(async () => await DisplayAlertAsync($"Error:{ex.Message}"));
+                await DisplayAlertAsync($"Error:{ex.Message}");
             }
             IsBusy = false;
         }
