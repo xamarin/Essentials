@@ -105,6 +105,7 @@ namespace Samples.ViewModel
             {
                 await Task.Run(async () =>
                 {
+                    var count = 0;
                     var contacts = await Contacts.GetAllAsync();
 
                     foreach (var contact in contacts)
@@ -115,7 +116,10 @@ namespace Samples.ViewModel
                             $"({contact.Phones?.FirstOrDefault()?.Type})";
 
                         await MainThread.InvokeOnMainThreadAsync(() => ContactsList.Add(c));
+                        count++;
                     }
+
+                    await MainThread.InvokeOnMainThreadAsync(() => ContactsList.Add($"Added {count} contacts."));
                 });
             }
             catch (Exception ex)
