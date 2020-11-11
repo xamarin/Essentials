@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using CoreGraphics;
 using Foundation;
 using MobileCoreServices;
 using Photos;
@@ -116,9 +117,14 @@ namespace Xamarin.Essentials
             if (phAsset == null || assetUrl == null)
             {
                 var img = info.ValueForKey(UIImagePickerController.OriginalImage) as UIImage;
+                var imgUrl = info.ValueForKey(UIImagePickerController.ImageUrl) as NSString;
 
                 if (img != null)
-                    return new UIImageFileResult(img);
+                {
+                    var rotatedImg = CorrectImageRotation(img);
+
+                    return new UIImageFileResult(rotatedImg ?? img);
+                }
             }
 
             if (phAsset == null || assetUrl == null)
@@ -132,6 +138,91 @@ namespace Xamarin.Essentials
                 originalFilename = phAsset.ValueForKey(new NSString("filename")) as NSString;
 
             return new PHAssetFileResult(assetUrl, phAsset, originalFilename);
+        }
+
+        public static UIImage CorrectImageRotation(UIImage image)
+        {
+            UIImage imageToReturn = null;
+            if (image.Orientation == UIImageOrientation.Up)
+            {
+                imageToReturn = image;
+            }
+            else
+            {
+                var transform = CGAffineTransform.MakeIdentity();
+
+                switch (image.Orientation)
+                {
+                    case UIImageOrientation.Down:
+                    case UIImageOrientation.DownMirrored:
+                        transform.Rotate((float)Math.PI);
+                        transform.Translate(image.Size.Width, image.Size.Height);
+                        break;
+
+                    case UIImageOrientation.Left:
+                    case UIImageOrientation.LeftMirrored:
+                        transform.Rotate((float)Math.PI / 2);
+                        transform.Translate(image.Size.Width, 0);
+                        break;
+
+                    case UIImageOrientation.Right:
+                    case UIImageOrientation.RightMirrored:
+                        transform.Rotate(-(float)Math.PI / 2);
+                        transform.Translate(0, image.Size.Height);
+                        break;
+                    case UIImageOrientation.Up:
+                    case UIImageOrientation.UpMirrored:
+                        break;
+                }
+
+                switch (image.Orientation)
+                {
+                    case UIImageOrientation.UpMirrored:
+                    case UIImageOrientation.DownMirrored:
+                        transform.Translate(image.Size.Width, 0);
+                        transform.Scale(-1, 1);
+                        break;
+
+                    case UIImageOrientation.LeftMirrored:
+                    case UIImageOrientation.RightMirrored:
+                        transform.Translate(image.Size.Height, 0);
+                        transform.Scale(-1, 1);
+                        break;
+                    case UIImageOrientation.Up:
+                    case UIImageOrientation.Down:
+                    case UIImageOrientation.Left:
+                    case UIImageOrientation.Right:
+                        break;
+                }
+
+                using var context = new CGBitmapContext(
+                    IntPtr.Zero,
+                    (int)image.Size.Width,
+                    (int)image.Size.Height,
+                    image.CGImage.BitsPerComponent,
+                    image.CGImage.BytesPerRow,
+                    image.CGImage.ColorSpace,
+                    image.CGImage.BitmapInfo);
+
+                context.ConcatCTM(transform);
+                switch (image.Orientation)
+                {
+                    case UIImageOrientation.Left:
+                    case UIImageOrientation.LeftMirrored:
+                    case UIImageOrientation.Right:
+                    case UIImageOrientation.RightMirrored:
+                        context.DrawImage(new CGRect(0, 0, image.Size.Height, image.Size.Width), image.CGImage);
+                        break;
+                    default:
+                        context.DrawImage(new CGRect(0, 0, image.Size.Width, image.Size.Height), image.CGImage);
+                        break;
+                }
+
+                using var imageRef = context.ToImage();
+                imageToReturn = new UIImage(imageRef, 1, UIImageOrientation.Up);
+            }
+
+            return imageToReturn;
         }
 
         class PhotoPickerDelegate : UIImagePickerControllerDelegate
