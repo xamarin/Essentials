@@ -13,7 +13,6 @@ using Android.Net;
 using Android.Net.Wifi;
 using Android.OS;
 using Android.Provider;
-using Android.Util;
 using Android.Views;
 using AndroidIntent = Android.Content.Intent;
 using AndroidUri = Android.Net.Uri;
@@ -107,8 +106,6 @@ namespace Xamarin.Essentials
         {
             if (activity != null)
                 CheckAppActions(activity.Intent);
-
-            WebAuthenticator.OnResume(null);
         }
 
         static void CheckAppActions(AndroidIntent intent)
@@ -455,7 +452,10 @@ namespace Xamarin.Essentials
                 else
                 {
                     if (outputUri != null)
+                    {
+                        data ??= new AndroidIntent();
                         data.PutExtra(OutputUriExtra, outputUri);
+                    }
 
                     tcs.TrySetResult(data);
                 }

@@ -13,9 +13,6 @@ namespace Xamarin.Essentials
     {
         static Task<IEnumerable<FileResult>> PlatformPickAsync(PickOptions options, bool allowMultiple = false)
         {
-            if (allowMultiple && !Platform.HasOSVersion(11, 0))
-                throw new FeatureNotSupportedException("Multiple file picking is only available on iOS 11 or later.");
-
             var allowedUtis = options?.FileTypes?.Value?.ToArray() ?? new string[]
             {
                 UTType.Content,
@@ -29,7 +26,8 @@ namespace Xamarin.Essentials
             // while opening (UIDocumentPickerMode.Open) opens the document directly. We do the
             // latter, so the user accesses the original file.
             var documentPicker = new UIDocumentPickerViewController(allowedUtis, UIDocumentPickerMode.Open);
-            documentPicker.AllowsMultipleSelection = allowMultiple;
+            if (Platform.HasOSVersion(11, 0))
+                documentPicker.AllowsMultipleSelection = allowMultiple;
             documentPicker.Delegate = new PickerDelegate
             {
                 PickHandler = urls =>
@@ -74,22 +72,34 @@ namespace Xamarin.Essentials
 
     public partial class FilePickerFileType
     {
-        public static FilePickerFileType PlatformImageFileType() =>
+        static FilePickerFileType PlatformImageFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
                 { DevicePlatform.iOS, new[] { (string)UTType.Image } }
             });
 
-        public static FilePickerFileType PlatformPngFileType() =>
+        static FilePickerFileType PlatformPngFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
                 { DevicePlatform.iOS, new[] { (string)UTType.PNG } }
             });
 
-        public static FilePickerFileType PlatformVideoFileType() =>
+        static FilePickerFileType PlatformJpegFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.iOS, new[] { (string)UTType.JPEG } }
+            });
+
+        static FilePickerFileType PlatformVideoFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
                 { DevicePlatform.iOS, new string[] { UTType.MPEG4, UTType.Video, UTType.AVIMovie, UTType.AppleProtectedMPEG4Video, "mp4", "m4v", "mpg", "mpeg", "mp2", "mov", "avi", "mkv", "flv", "gifv", "qt" } }
+            });
+
+        static FilePickerFileType PlatformPdfFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.iOS, new[] { (string)UTType.PDF } }
             });
     }
 }
