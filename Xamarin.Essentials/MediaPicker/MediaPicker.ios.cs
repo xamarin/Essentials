@@ -68,11 +68,14 @@ namespace Xamarin.Essentials
                     tcs.TrySetResult(DictionaryToMediaFile(info))
             };
 
-            picker.PresentationController.Delegate = new PhotoPickerPresentationControllerDelegate
+            if (picker.PresentationController != null)
             {
-                CompletedHandler = info =>
-                    tcs.TrySetResult(DictionaryToMediaFile(info))
-            };
+                picker.PresentationController.Delegate = new PhotoPickerPresentationControllerDelegate
+                {
+                    CompletedHandler = info =>
+                        tcs.TrySetResult(DictionaryToMediaFile(info))
+                };
+            }
 
             await vc.PresentViewControllerAsync(picker, true);
 
