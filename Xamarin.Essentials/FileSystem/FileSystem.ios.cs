@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using CoreGraphics;
 using Foundation;
 using Photos;
 using UIKit;
@@ -51,9 +52,14 @@ namespace Xamarin.Essentials
 
         internal override Task<Stream> PlatformOpenReadAsync()
         {
-            data ??= uiImage.AsPNG();
+            UIGraphics.BeginImageContext(uiImage.Size);
+            uiImage.Draw(new CGPoint(0, 0));
+            var normalizedImage = UIGraphics.GetImageFromCurrentImageContext();
+            UIGraphics.EndImageContext();
 
-            return Task.FromResult(data.AsStream());
+            data ??= normalizedImage?.AsPNG();
+
+            return Task.FromResult(data?.AsStream());
         }
     }
 
