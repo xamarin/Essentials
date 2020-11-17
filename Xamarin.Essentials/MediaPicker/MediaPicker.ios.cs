@@ -41,9 +41,10 @@ namespace Xamarin.Essentials
                 await Permissions.EnsureGrantedAsync<Permissions.Microphone>();
 
             // Check if picking existing or not and ensure permission accordingly as they can be set independently from each other
-            if (pickExisting)
+            if (pickExisting && !Platform.HasOSVersion(11, 0))
                 await Permissions.EnsureGrantedAsync<Permissions.Photos>();
-            else
+
+            if (!pickExisting)
                 await Permissions.EnsureGrantedAsync<Permissions.Camera>();
 
             var vc = Platform.GetCurrentViewController(true);
