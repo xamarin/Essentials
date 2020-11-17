@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Contacts;
@@ -16,8 +15,7 @@ namespace Xamarin.Essentials
 #if __MACOS__
         static Task<Contact> PlatformPickContactAsync() => throw ExceptionUtils.NotSupportedOrImplementedException;
 
-#endif
-#if __IOS__
+#elif __IOS__
         static Task<Contact> PlatformPickContactAsync()
         {
             var uiView = Platform.GetCurrentViewController();
@@ -38,9 +36,8 @@ namespace Xamarin.Essentials
         }
 
 #endif
-        static async Task<IEnumerable<Contact>> PlatformGetAllAsync(CancellationToken cancellationToken)
+        static Task<IEnumerable<Contact>> PlatformGetAllAsync(CancellationToken cancellationToken)
         {
-            await Task.CompletedTask;
             var keys = new[]
             {
                 CNContactKey.NamePrefix,
@@ -53,19 +50,19 @@ namespace Xamarin.Essentials
                 CNContactKey.Type
             };
 
-            using var store = new CNContactStore();
-            var containers = store.GetContainers(null, out var error);
+            var store = new CNContactStore();
+            var containers = store.GetContainers(null, out var createError);
             if (containers == null)
-                return Array.Empty<Contact>();
+                return Task.FromResult<IEnumerable<Contact>>(Array.Empty<Contact>());
 
-            return GetEnumerable();
+            return Task.FromResult(GetEnumerable());
 
             IEnumerable<Contact> GetEnumerable()
             {
                 foreach (var container in containers)
                 {
                     using var pred = CNContact.GetPredicateForContactsInContainer(container.Identifier);
-                    var contacts = store.GetUnifiedContacts(pred, keys, out error);
+                    var contacts = store.GetUnifiedContacts(pred, keys, out var error);
                     if (contacts == null)
                         continue;
 

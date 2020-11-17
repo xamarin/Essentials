@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Contacts;
@@ -24,11 +21,11 @@ namespace Xamarin.Essentials
             var contactStore = await ContactManager.RequestStoreAsync()
                 .AsTask(cancellationToken).ConfigureAwait(false);
             if (contactStore == null)
-                return Array.Empty<Contact>();
+                throw new PermissionException("Permission to access the contacts was denied.");
 
             var contacts = await contactStore.FindContactsAsync()
                 .AsTask(cancellationToken).ConfigureAwait(false);
-            if (contacts == null)
+            if (contacts == null || contacts.Count == 0)
                 return Array.Empty<Contact>();
 
             return GetEnumerable();

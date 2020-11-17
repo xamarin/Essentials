@@ -12,8 +12,6 @@ namespace Xamarin.Essentials
 {
     public static partial class Contacts
     {
-        static ContentResolver ContentResolver => Platform.AppContext.ContentResolver;
-
         static async Task<Contact> PlatformPickContactAsync()
         {
             using var intent = new Intent(Intent.ActionPick);
@@ -28,7 +26,7 @@ namespace Xamarin.Essentials
 
         static Task<IEnumerable<Contact>> PlatformGetAllAsync(CancellationToken cancellationToken)
         {
-            var cursor = ContentResolver.Query(ContactsContract.Contacts.ContentUri, null, null, null, null);
+            var cursor = Platform.ContentResolver.Query(ContactsContract.Contacts.ContentUri, null, null, null, null);
             return Task.FromResult(GetEnumerable());
 
             IEnumerable<Contact> GetEnumerable()
@@ -53,7 +51,7 @@ namespace Xamarin.Essentials
             if (contactUri == null)
                 return default;
 
-            using var cursor = ContentResolver.Query(contactUri, null, null, null, null);
+            using var cursor = Platform.ContentResolver.Query(contactUri, null, null, null, null);
 
             if (cursor.MoveToFirst())
             {
@@ -80,7 +78,7 @@ namespace Xamarin.Essentials
         static IEnumerable<(string data, string type)> GetNumbers(string[] idQ)
         {
             var uri = ContactsContract.CommonDataKinds.Phone.ContentUri.BuildUpon().AppendQueryParameter(ContactsContract.RemoveDuplicateEntries, "1").Build();
-            var cursor = ContentResolver.Query(uri, null, $"{ContactsContract.CommonDataKinds.Phone.InterfaceConsts.ContactId}=?", idQ, null);
+            var cursor = Platform.ContentResolver.Query(uri, null, $"{ContactsContract.CommonDataKinds.Phone.InterfaceConsts.ContactId}=?", idQ, null);
 
             return ReadCursorItems(cursor, ContactsContract.CommonDataKinds.Phone.Number, ContactsContract.CommonDataKinds.Phone.InterfaceConsts.Type);
         }
@@ -88,7 +86,7 @@ namespace Xamarin.Essentials
         static IEnumerable<(string data, string type)> GetEmails(string[] idQ)
         {
             var uri = ContactsContract.CommonDataKinds.Email.ContentUri.BuildUpon().AppendQueryParameter(ContactsContract.RemoveDuplicateEntries, "1").Build();
-            var cursor = ContentResolver.Query(uri, null, $"{ContactsContract.CommonDataKinds.Phone.InterfaceConsts.ContactId}=?", idQ, null);
+            var cursor = Platform.ContentResolver.Query(uri, null, $"{ContactsContract.CommonDataKinds.Phone.InterfaceConsts.ContactId}=?", idQ, null);
 
             return ReadCursorItems(cursor, ContactsContract.CommonDataKinds.Email.Address, ContactsContract.CommonDataKinds.Email.InterfaceConsts.Type);
         }
