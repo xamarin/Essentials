@@ -66,6 +66,7 @@ namespace Samples.ViewModel
             if (IsBusy)
                 return;
             IsBusy = true;
+            ContactsList?.Clear();
             try
             {
                 var contacts = Contacts.GetAllAsync();
