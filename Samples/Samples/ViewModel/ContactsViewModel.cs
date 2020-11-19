@@ -10,14 +10,17 @@ namespace Samples.ViewModel
     class ContactsViewModel : BaseViewModel
     {
         ObservableCollection<Contact> contactsList = new ObservableCollection<Contact>();
-        int count = 0;
         Contact selectedContact;
 
         public ContactsViewModel()
         {
             GetContactCommand = new Command(OnGetContact);
-            GetAllContactCommand = new Command(OnGetAllContact);
+            GetAllContactCommand = new Command(async () => await OnGetAllContact());
         }
+
+        public ICommand GetContactCommand { get; }
+
+        public ICommand GetAllContactCommand { get; }
 
         public ObservableCollection<Contact> ContactsList
         {
@@ -25,21 +28,11 @@ namespace Samples.ViewModel
             set => SetProperty(ref contactsList, value);
         }
 
-        public int Count
-        {
-            get => count;
-            set => SetProperty(ref count, value);
-        }
-
         public Contact SelectedContact
         {
             get => selectedContact;
             set => SetProperty(ref selectedContact, value, onChanged: OnContactSelected);
         }
-
-        public ICommand GetContactCommand { get; }
-
-        public ICommand GetAllContactCommand { get; }
 
         async void OnGetContact()
         {
@@ -75,17 +68,13 @@ namespace Samples.ViewModel
             IsBusy = true;
             try
             {
-                Count = 0;
-                ContactsList?.Clear();
+                var contacts = Contacts.GetAllAsync();
 
                 await Task.Run(async () =>
                 {
-                    var contacts = await Contacts.GetAllAsync();
-
-                    foreach (var contact in contacts)
+                    await foreach (var contact in contacts)
                     {
-                        await MainThread.InvokeOnMainThreadAsync(() => ContactsList.Add(contact));
-                        Count++;
+                        MainThread.BeginInvokeOnMainThread(() => ContactsList.Add(contact));
                     }
                 });
             }
