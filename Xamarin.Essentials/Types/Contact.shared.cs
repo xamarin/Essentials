@@ -5,10 +5,6 @@ namespace Xamarin.Essentials
 {
     public class Contact
     {
-        public Contact()
-        {
-        }
-
         public Contact(string name, IEnumerable<ContactPhone> phones, IEnumerable<ContactEmail> email)
         {
             Name = name;
@@ -16,44 +12,36 @@ namespace Xamarin.Essentials
             Phones = phones?.ToList();
         }
 
-        public string Name { get; set; }
+        public string Name { get; }
 
-        public List<ContactPhone> Phones { get; set; } = new List<ContactPhone>();
+        public List<ContactPhone> Phones { get; } = new List<ContactPhone>();
 
-        public List<ContactEmail> Emails { get; set; } = new List<ContactEmail>();
+        public List<ContactEmail> Emails { get; } = new List<ContactEmail>();
     }
 
     public class ContactEmail
     {
-        public ContactEmail()
-        {
-        }
-
         public ContactEmail(string value, ContactType type)
         {
             Value = value;
             Type = type;
         }
 
-        public string Value { get; set; }
+        public string Value { get; }
 
-        public ContactType Type { get; set; }
+        public ContactType Type { get; }
     }
 
     public class ContactPhone
     {
-        public ContactPhone()
-        {
-        }
-
         public ContactPhone(string value, ContactType type)
         {
             Value = value;
             Type = type;
         }
 
-        public string Value { get; set; }
+        public string Value { get; }
 
-        public ContactType Type { get; set; }
+        public ContactType Type { get; }
     }
 }
