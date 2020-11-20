@@ -34,7 +34,6 @@ namespace Xamarin.Essentials
             {
                 foreach (var item in contacts)
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
                     yield return ConvertContact(item);
                 }
             }
