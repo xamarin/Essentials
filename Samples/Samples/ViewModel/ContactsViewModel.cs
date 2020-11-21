@@ -58,7 +58,7 @@ namespace Samples.ViewModel
             }
         }
 
-        async Task OnGetAllContact()
+        async void OnGetAllContact()
         {
             if (await Permissions.RequestAsync<Permissions.ContactsRead>() != PermissionStatus.Granted)
                 return;
@@ -81,7 +81,7 @@ namespace Samples.ViewModel
             }
             catch (Exception ex)
             {
-                MainThread.BeginInvokeOnMainThread(async () => await DisplayAlertAsync($"Error:{ex.Message}"));
+                await DisplayAlertAsync($"Error:{ex.Message}");
             }
             finally
             {

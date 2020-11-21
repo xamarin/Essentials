@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Contacts;
@@ -16,8 +15,7 @@ namespace Xamarin.Essentials
 #if __MACOS__
         static Task<Contact> PlatformPickContactAsync() => throw ExceptionUtils.NotSupportedOrImplementedException;
 
-#endif
-#if __IOS__
+#elif __IOS__
         static Task<Contact> PlatformPickContactAsync()
         {
             var uiView = Platform.GetCurrentViewController();
@@ -38,9 +36,8 @@ namespace Xamarin.Essentials
         }
 
 #endif
-        static async IAsyncEnumerable<Contact> PlatformGetAllAsync([EnumeratorCancellation] CancellationToken cancellationToken)
+        static Task<IEnumerable<Contact>> PlatformGetAllAsync(CancellationToken cancellationToken)
         {
-            await Task.CompletedTask;
             var keys = new[]
             {
                 CNContactKey.NamePrefix,
@@ -53,23 +50,26 @@ namespace Xamarin.Essentials
                 CNContactKey.Type
             };
 
-            using var store = new CNContactStore();
-            var containers = store.GetContainers(null, out var error);
+            var store = new CNContactStore();
+            var containers = store.GetContainers(null, out var createError);
             if (containers == null)
-                yield break;
+                return Task.FromResult<IEnumerable<Contact>>(Array.Empty<Contact>());
 
-            foreach (var container in containers)
+            return Task.FromResult(GetEnumerable());
+
+            IEnumerable<Contact> GetEnumerable()
             {
-                using var pred = CNContact.GetPredicateForContactsInContainer(container.Identifier);
-                var contacts = store.GetUnifiedContacts(pred, keys, out error);
-                if (contacts == null)
-                    continue;
-
-                foreach (var contact in contacts)
+                foreach (var container in containers)
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
+                    using var pred = CNContact.GetPredicateForContactsInContainer(container.Identifier);
+                    var contacts = store.GetUnifiedContacts(pred, keys, out var error);
+                    if (contacts == null)
+                        continue;
 
-                    yield return ConvertContact(contact);
+                    foreach (var contact in contacts)
+                    {
+                        yield return ConvertContact(contact);
+                    }
                 }
             }
         }
