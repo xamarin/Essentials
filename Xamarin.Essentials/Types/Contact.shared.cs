@@ -15,8 +15,8 @@ namespace Xamarin.Essentials
         {
             Id = id;
             DisplayName = displayName;
-            Emails = email?.ToList();
-            Phones = phones?.ToList();
+            Phones.AddRange(phones?.ToList());
+            Emails.AddRange(email?.ToList());
         }
 
         public string Id { get; private set; }
@@ -34,7 +34,7 @@ namespace Xamarin.Essentials
         {
         }
 
-        public ContactEmail(string value, ContactType type)
+        public ContactEmail(string value, ContactEmailType type)
         {
             Value = value;
             Type = type;
@@ -42,7 +42,7 @@ namespace Xamarin.Essentials
 
         public string Value { get; set; }
 
-        public ContactType Type { get; set; }
+        public ContactEmailType Type { get; set; }
     }
 
     public class ContactPhone
@@ -51,7 +51,7 @@ namespace Xamarin.Essentials
         {
         }
 
-        public ContactPhone(string value, ContactType type)
+        public ContactPhone(string value, ContactPhoneType type)
         {
             Value = value;
             Type = type;
@@ -59,6 +59,6 @@ namespace Xamarin.Essentials
 
         public string Value { get; set; }
 
-        public ContactType Type { get; set; }
+        public ContactPhoneType Type { get; set; }
     }
 }

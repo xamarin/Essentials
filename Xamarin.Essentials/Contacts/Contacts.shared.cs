@@ -23,7 +23,16 @@ namespace Xamarin.Essentials
 #endif
     }
 
-    public enum ContactType
+    public enum ContactPhoneType
+    {
+        Unknown = 0,
+        Personal = 1,
+        Work = 2,
+        Main = 3,
+        Mobile = 4
+    }
+
+    public enum ContactEmailType
     {
         Unknown = 0,
         Personal = 1,

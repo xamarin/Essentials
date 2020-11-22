@@ -85,12 +85,12 @@ namespace Xamarin.Essentials
                 var phones = contact.PhoneNumbers?.Select(
                    item => new ContactPhone(
                        item?.Value?.StringValue,
-                       TypeConvert(item.Label?.ToString())));
+                       TypePhoneConvert(item.Label?.ToString())));
 
                 var emails = contact.EmailAddresses?.Select(
                    item => new ContactEmail(
                        item?.Value?.ToString(),
-                       TypeConvert(item.Label?.ToString())));
+                       TypeEmailConvert(item.Label?.ToString())));
 
                 var name = $"{contact.NamePrefix}{GetName(contact.GivenName)}{GetName(contact.MiddleName)}{GetName(contact.FamilyName)}{GetName(contact.NameSuffix)}";
 
@@ -106,19 +106,30 @@ namespace Xamarin.Essentials
             }
         }
 
-        static ContactType TypeConvert(string type)
+        static ContactPhoneType TypePhoneConvert(string type)
         {
-            if (type == CNLabelKey.Work || type == CNLabelPhoneNumberKey.WorkFax)
-                return ContactType.Work;
+            if (type == CNLabelPhoneNumberKey.WorkFax)
+                return ContactPhoneType.Work;
+            else if (type == CNLabelPhoneNumberKey.Main)
+                return ContactPhoneType.Main;
+            else if (type == CNLabelPhoneNumberKey.Mobile)
+                return ContactPhoneType.Mobile;
             else if (
-                type == CNLabelPhoneNumberKey.Main ||
-                type == CNLabelPhoneNumberKey.Mobile ||
                 type == CNLabelPhoneNumberKey.HomeFax ||
-                type == CNLabelPhoneNumberKey.iPhone ||
-                type == CNLabelKey.Home)
-                return ContactType.Personal;
+                type == CNLabelPhoneNumberKey.iPhone)
+                return ContactPhoneType.Personal;
             else
-                return ContactType.Unknown;
+                return ContactPhoneType.Unknown;
+        }
+
+        static ContactEmailType TypeEmailConvert(string type)
+        {
+            if (type == CNLabelKey.Work)
+                return ContactEmailType.Work;
+            else if (type == CNLabelKey.Home)
+                return ContactEmailType.Personal;
+            else
+                return ContactEmailType.Unknown;
         }
 
 #if __IOS__

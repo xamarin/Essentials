@@ -108,7 +108,7 @@ namespace Xamarin.Essentials
             cursor?.Close();
         }
 
-        static ContactType GetPhoneContactType(string type)
+        static ContactPhoneType GetPhoneContactType(string type)
         {
             if (int.TryParse(type, out var typeInt))
             {
@@ -116,25 +116,25 @@ namespace Xamarin.Essentials
                 {
                     return (PhoneDataKind)typeInt switch
                     {
-                        PhoneDataKind.Main => ContactType.Personal,
-                        PhoneDataKind.Home => ContactType.Personal,
-                        PhoneDataKind.Mobile => ContactType.Personal,
-                        PhoneDataKind.Work => ContactType.Work,
-                        PhoneDataKind.WorkMobile => ContactType.Work,
-                        PhoneDataKind.CompanyMain => ContactType.Work,
-                        PhoneDataKind.WorkPager => ContactType.Work,
-                        _ => ContactType.Unknown
+                        PhoneDataKind.Mobile => ContactPhoneType.Mobile,
+                        PhoneDataKind.Main => ContactPhoneType.Main,
+                        PhoneDataKind.Home => ContactPhoneType.Personal,
+                        PhoneDataKind.Work => ContactPhoneType.Work,
+                        PhoneDataKind.WorkMobile => ContactPhoneType.Work,
+                        PhoneDataKind.CompanyMain => ContactPhoneType.Work,
+                        PhoneDataKind.WorkPager => ContactPhoneType.Work,
+                        _ => ContactPhoneType.Unknown
                     };
                 }
                 catch (Exception)
                 {
-                    return ContactType.Unknown;
+                    return ContactPhoneType.Unknown;
                 }
             }
-            return ContactType.Unknown;
+            return ContactPhoneType.Unknown;
         }
 
-        static ContactType GetEmailContactType(string type)
+        static ContactEmailType GetEmailContactType(string type)
         {
             if (int.TryParse(type, out var typeInt))
             {
@@ -142,17 +142,17 @@ namespace Xamarin.Essentials
                 {
                     return (EmailDataKind)typeInt switch
                     {
-                        EmailDataKind.Home => ContactType.Personal,
-                        EmailDataKind.Work => ContactType.Work,
-                        _ => ContactType.Unknown
+                        EmailDataKind.Home => ContactEmailType.Personal,
+                        EmailDataKind.Work => ContactEmailType.Work,
+                        _ => ContactEmailType.Unknown
                     };
                 }
                 catch (Exception)
                 {
-                    return ContactType.Unknown;
+                    return ContactEmailType.Unknown;
                 }
             }
-            return ContactType.Unknown;
+            return ContactEmailType.Unknown;
         }
     }
 }

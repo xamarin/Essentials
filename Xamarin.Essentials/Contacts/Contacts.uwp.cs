@@ -45,32 +45,32 @@ namespace Xamarin.Essentials
                 return default;
 
             var phones = contact.Phones?.Select(
-                item => new ContactPhone(item?.Number, GetPhoneContactType(item?.Kind)))?.ToList();
+                item => new ContactPhone(item?.Number, GetContactType(item?.Kind)))?.ToList();
             var emails = contact.Emails?.Select(
-                item => new ContactEmail(item?.Address, GetEmailContactType(item?.Kind)))?.ToList();
+                item => new ContactEmail(item?.Address, GetContactType(item?.Kind)))?.ToList();
 
             return new Contact(contact.Id, contact.DisplayName, phones, emails);
         }
 
-        static ContactType GetPhoneContactType(ContactPhoneKind? type)
+        static ContactPhoneType GetContactType(ContactPhoneKind? type)
             => type switch
             {
-                ContactPhoneKind.Home => ContactType.Personal,
-                ContactPhoneKind.HomeFax => ContactType.Personal,
-                ContactPhoneKind.Mobile => ContactType.Personal,
-                ContactPhoneKind.Work => ContactType.Work,
-                ContactPhoneKind.Pager => ContactType.Work,
-                ContactPhoneKind.BusinessFax => ContactType.Work,
-                ContactPhoneKind.Company => ContactType.Work,
-                _ => ContactType.Unknown
+                ContactPhoneKind.Mobile => ContactPhoneType.Mobile,
+                ContactPhoneKind.Home => ContactPhoneType.Personal,
+                ContactPhoneKind.HomeFax => ContactPhoneType.Personal,
+                ContactPhoneKind.Work => ContactPhoneType.Work,
+                ContactPhoneKind.Pager => ContactPhoneType.Work,
+                ContactPhoneKind.BusinessFax => ContactPhoneType.Work,
+                ContactPhoneKind.Company => ContactPhoneType.Work,
+                _ => ContactPhoneType.Unknown
             };
 
-        static ContactType GetEmailContactType(ContactEmailKind? type)
+        static ContactEmailType GetContactType(ContactEmailKind? type)
             => type switch
             {
-                ContactEmailKind.Personal => ContactType.Personal,
-                ContactEmailKind.Work => ContactType.Work,
-                _ => ContactType.Unknown,
+                ContactEmailKind.Personal => ContactEmailType.Personal,
+                ContactEmailKind.Work => ContactEmailType.Work,
+                _ => ContactEmailType.Unknown
             };
     }
 }
