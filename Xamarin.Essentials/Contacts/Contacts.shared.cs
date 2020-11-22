@@ -16,11 +16,6 @@ namespace Xamarin.Essentials
 
         public static Task<IEnumerable<Contact>> GetAllAsync(CancellationToken cancellationToken = default)
             => PlatformGetAllAsync(cancellationToken);
-
-#if __IOS__ || __MACOS__ || TIZEN
-        static string GetName(string name)
-            => string.IsNullOrWhiteSpace(name) ? string.Empty : $" {name}";
-#endif
     }
 
     public enum ContactPhoneType

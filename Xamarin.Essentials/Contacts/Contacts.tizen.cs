@@ -66,33 +66,11 @@ namespace Xamarin.Essentials
 
         static Contact ToContact(ContactsRecord contactsRecord)
         {
-            var name = string.Empty;
-            var id = string.Empty;
             var record = contactsRecord.GetChildRecord(TizenContact.Name, 0);
-            if (record != null)
-            {
-                id = record.Get<string>(TizenName.ContactId);
-                var first = record.Get<string>(TizenName.First);
-                var last = record.Get<string>(TizenName.Last);
-                name = $"{first}{GetName(last)}";
-
-                if (!string.IsNullOrWhiteSpace(first))
-                {
-                    if (!string.IsNullOrWhiteSpace(last))
-                        name = first + last;
-                    else
-                        name = first;
-                }
-                else
-                {
-                    if (!string.IsNullOrWhiteSpace(last))
-                        name = last;
-                }
-            }
 
             var phones = new List<ContactPhone>();
-            var nameCount = contactsRecord.GetChildRecordCount(TizenContact.Number);
-            for (var i = 0; i < nameCount; i++)
+            var phonesCount = contactsRecord.GetChildRecordCount(TizenContact.Number);
+            for (var i = 0; i < phonesCount; i++)
             {
                 var nameRecord = contactsRecord.GetChildRecord(TizenContact.Number, i);
                 var number = nameRecord.Get<string>(TizenNumber.NumberData);
@@ -112,7 +90,15 @@ namespace Xamarin.Essentials
                 emails.Add(new ContactEmail(addr, GetContactType(type)));
             }
 
-            return new Contact(id, name, phones, emails);
+            return new Contact(
+                    record?.Get<string>(TizenName.ContactId),
+                    record?.Get<string>(TizenName.Prefix),
+                    record?.Get<string>(TizenName.First),
+                    record?.Get<string>(TizenName.Addition),
+                    record?.Get<string>(TizenName.Last),
+                    record?.Get<string>(TizenName.Suffix),
+                    phones,
+                    emails);
         }
 
         static ContactEmailType GetContactType(TizenEmail.Types emailType)

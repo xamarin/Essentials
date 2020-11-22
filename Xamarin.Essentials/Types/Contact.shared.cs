@@ -11,21 +11,52 @@ namespace Xamarin.Essentials
         {
         }
 
-        public Contact(string id, string displayName, IEnumerable<ContactPhone> phones, IEnumerable<ContactEmail> email)
+        public Contact(
+            string id,
+            string namePrefix,
+            string givenName,
+            string middleName,
+            string familyName,
+            string nameSuffix,
+            IEnumerable<ContactPhone> phones,
+            IEnumerable<ContactEmail> email,
+            string displayName = null)
         {
             Id = id;
-            DisplayName = displayName;
+            NamePrefix = namePrefix;
+            GivenName = givenName;
+            MiddleName = middleName;
+            FamilyName = familyName;
+            NameSuffix = nameSuffix;
             Phones.AddRange(phones?.ToList());
             Emails.AddRange(email?.ToList());
+            DisplayName = displayName;
         }
 
         public string Id { get; private set; }
 
-        public string DisplayName { get => displayName; private set => displayName = value; }
+        public string DisplayName
+        {
+            get => !string.IsNullOrWhiteSpace(displayName) ? displayName : $"{GivenName}{GetName(FamilyName)}";
+            private set => displayName = value;
+        }
+
+        public string NamePrefix { get; set; }
+
+        public string GivenName { get; set; }
+
+        public string MiddleName { get; set; }
+
+        public string FamilyName { get; set; }
+
+        public string NameSuffix { get; set; }
 
         public List<ContactPhone> Phones { get; set; } = new List<ContactPhone>();
 
         public List<ContactEmail> Emails { get; set; } = new List<ContactEmail>();
+
+        string GetName(string name)
+            => string.IsNullOrWhiteSpace(name) ? string.Empty : $" {name}";
     }
 
     public class ContactEmail

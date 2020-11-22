@@ -65,14 +65,15 @@ namespace Xamarin.Essentials
 
         static Contact GetContact(ICursor cursor, string idKey)
         {
-            var name = cursor.GetString(cursor.GetColumnIndex(ContactsContract.Contacts.InterfaceConsts.DisplayName));
+            var displayName = cursor.GetString(cursor.GetColumnIndex(ContactsContract.Contacts.InterfaceConsts.DisplayName));
             var idQ = new string[1] { cursor.GetString(cursor.GetColumnIndex(idKey)) };
             var phones = GetNumbers(idQ)?.Select(
                 item => new ContactPhone(item.data, GetPhoneContactType(item.type)));
             var emails = GetEmails(idQ)?.Select(
                 item => new ContactEmail(item.data, GetEmailContactType(item.type)));
+            var name = GetName(idQ[0]);
 
-            return new Contact(idQ[0], name, phones, emails);
+            return new Contact(idQ[0], name.Prefix, name.Given, name.Middle, name.Family, name.Suffix, phones, emails, displayName);
         }
 
         static IEnumerable<(string data, string type)> GetNumbers(string[] idQ)
@@ -106,6 +107,29 @@ namespace Xamarin.Essentials
                 while (cursor.MoveToNext());
             }
             cursor?.Close();
+        }
+
+        static (string Prefix, string Given, string Middle, string Family, string Suffix) GetName(string idQ)
+        {
+            var whereNameParams = new string[] { ContactsContract.CommonDataKinds.StructuredName.ContentItemType };
+            var whereName = $"{ContactsContract.Data.InterfaceConsts.Mimetype} = ? AND {ContactsContract.CommonDataKinds.StructuredName.InterfaceConsts.ContactId} = {idQ}";
+            using var cursor = Platform.ContentResolver.Query(
+                ContactsContract.Data.ContentUri,
+                null,
+                whereName,
+                whereNameParams,
+                null);
+
+            if (cursor?.MoveToFirst() ?? false)
+            {
+                return (cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.StructuredName.Prefix)),
+                        cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.StructuredName.GivenName)),
+                        cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.StructuredName.MiddleName)),
+                        cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.StructuredName.FamilyName)),
+                        cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.StructuredName.Suffix)));
+            }
+
+            return (null, null, null, null, null);
         }
 
         static ContactPhoneType GetPhoneContactType(string type)

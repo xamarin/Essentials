@@ -15,6 +15,17 @@
 
             <Label FontAttributes="Bold" Text="DisplayName:" />
             <Label Text="{Binding Contact.DisplayName}" />
+
+            <Label FontAttributes="Bold" Text="NamePrefix:" />
+            <Label Text="{Binding Contact.NamePrefix}" />
+            <Label FontAttributes="Bold" Text="GivenName:" />
+            <Label Text="{Binding Contact.GivenName}" />
+            <Label FontAttributes="Bold" Text="MiddleName:" />
+            <Label Text="{Binding Contact.MiddleName}" />
+            <Label FontAttributes="Bold" Text="FamilyName:" />
+            <Label Text="{Binding Contact.FamilyName}" />
+            <Label FontAttributes="Bold" Text="NameSuffix:" />
+            <Label Text="{Binding Contact.NameSuffix}" />
             
             <Label FontAttributes="Bold" Text="Numbers:" />
             <StackLayout BindableLayout.ItemsSource="{Binding Contact.Phones}">

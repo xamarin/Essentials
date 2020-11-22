@@ -49,7 +49,16 @@ namespace Xamarin.Essentials
             var emails = contact.Emails?.Select(
                 item => new ContactEmail(item?.Address, GetContactType(item?.Kind)))?.ToList();
 
-            return new Contact(contact.Id, contact.DisplayName, phones, emails);
+            return new Contact(
+                contact.Id,
+                contact.HonorificNamePrefix,
+                contact.FirstName,
+                contact.MiddleName,
+                contact.LastName,
+                contact.HonorificNameSuffix,
+                phones,
+                emails,
+                contact.DisplayName);
         }
 
         static ContactPhoneType GetContactType(ContactPhoneKind? type)

@@ -92,9 +92,15 @@ namespace Xamarin.Essentials
                        item?.Value?.ToString(),
                        TypeEmailConvert(item.Label?.ToString())));
 
-                var name = $"{contact.NamePrefix}{GetName(contact.GivenName)}{GetName(contact.MiddleName)}{GetName(contact.FamilyName)}{GetName(contact.NameSuffix)}";
-
-                return new Contact(contact.Identifier, name, phones, emails);
+                return new Contact(
+                    contact.Identifier,
+                    contact.NamePrefix,
+                    contact.GivenName,
+                    contact.MiddleName,
+                    contact.FamilyName,
+                    contact.NameSuffix,
+                    phones,
+                    emails);
             }
             catch (Exception ex)
             {
