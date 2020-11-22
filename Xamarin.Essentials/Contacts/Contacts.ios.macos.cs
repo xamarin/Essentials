@@ -40,6 +40,7 @@ namespace Xamarin.Essentials
         {
             var keys = new[]
             {
+                CNContactKey.Identifier,
                 CNContactKey.NamePrefix,
                 CNContactKey.GivenName,
                 CNContactKey.MiddleName,
@@ -93,7 +94,7 @@ namespace Xamarin.Essentials
 
                 var name = $"{contact.NamePrefix}{GetName(contact.GivenName)}{GetName(contact.MiddleName)}{GetName(contact.FamilyName)}{GetName(contact.NameSuffix)}";
 
-                return new Contact(name, phones, emails);
+                return new Contact(contact.Identifier, name, phones, emails);
             }
             catch (Exception ex)
             {

@@ -72,7 +72,7 @@ namespace Xamarin.Essentials
             var emails = GetEmails(idQ)?.Select(
                 item => new ContactEmail(item.data, GetEmailContactType(item.type)));
 
-            return new Contact(name, phones, emails);
+            return new Contact(idQ[0], name, phones, emails);
         }
 
         static IEnumerable<(string data, string type)> GetNumbers(string[] idQ)

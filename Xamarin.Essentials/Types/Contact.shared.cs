@@ -5,18 +5,23 @@ namespace Xamarin.Essentials
 {
     public class Contact
     {
+        string displayName;
+
         public Contact()
         {
         }
 
-        public Contact(string name, IEnumerable<ContactPhone> phones, IEnumerable<ContactEmail> email)
+        public Contact(string id, string displayName, IEnumerable<ContactPhone> phones, IEnumerable<ContactEmail> email)
         {
-            Name = name;
+            Id = id;
+            DisplayName = displayName;
             Emails = email?.ToList();
             Phones = phones?.ToList();
         }
 
-        public string Name { get; set; }
+        public string Id { get; private set; }
+
+        public string DisplayName { get => displayName; private set => displayName = value; }
 
         public List<ContactPhone> Phones { get; set; } = new List<ContactPhone>();
 

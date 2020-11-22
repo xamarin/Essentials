@@ -67,9 +67,11 @@ namespace Xamarin.Essentials
         static Contact ToContact(ContactsRecord contactsRecord)
         {
             var name = string.Empty;
+            var id = string.Empty;
             var record = contactsRecord.GetChildRecord(TizenContact.Name, 0);
             if (record != null)
             {
+                id = record.Get<string>(TizenName.ContactId);
                 var first = record.Get<string>(TizenName.First);
                 var last = record.Get<string>(TizenName.Last);
                 name = $"{first}{GetName(last)}";
@@ -110,7 +112,7 @@ namespace Xamarin.Essentials
                 emails.Add(new ContactEmail(addr, GetContactType(type)));
             }
 
-            return new Contact(name, phones, emails);
+            return new Contact(id, name, phones, emails);
         }
 
         static ContactType GetContactType(TizenEmail.Types emailType)

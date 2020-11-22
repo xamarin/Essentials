@@ -22,7 +22,7 @@
                 <DataTemplate>
                     <ViewCell>
                         <Grid Padding="12">
-                            <Label Text="{Binding Name}" LineBreakMode="TailTruncation"/>
+                            <Label Text="{Binding DisplayName}" LineBreakMode="TailTruncation"/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
