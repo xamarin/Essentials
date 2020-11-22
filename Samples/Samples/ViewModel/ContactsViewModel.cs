@@ -15,7 +15,7 @@ namespace Samples.ViewModel
         public ContactsViewModel()
         {
             GetContactCommand = new Command(OnGetContact);
-            GetAllContactCommand = new Command(async () => await OnGetAllContact());
+            GetAllContactCommand = new Command(() => OnGetAllContact());
         }
 
         public ICommand GetContactCommand { get; }
@@ -69,11 +69,11 @@ namespace Samples.ViewModel
             ContactsList?.Clear();
             try
             {
-                var contacts = Contacts.GetAllAsync();
+                var contacts = await Contacts.GetAllAsync();
 
-                await Task.Run(async () =>
+                await Task.Run(() =>
                 {
-                    await foreach (var contact in contacts)
+                    foreach (var contact in contacts)
                     {
                         MainThread.BeginInvokeOnMainThread(() => ContactsList.Add(contact));
                     }
