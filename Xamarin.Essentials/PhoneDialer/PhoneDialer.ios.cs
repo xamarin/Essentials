@@ -16,7 +16,10 @@ namespace Xamarin.Essentials
             ValidateOpen(number);
 
             var nsUrl = CreateNsUrl(number);
-            UIApplication.SharedApplication.OpenUrl(nsUrl);
+            if (Platform.HasOSVersion(10, 0))
+                UIApplication.SharedApplication.OpenUrlAsync(nsUrl, new UIApplicationOpenUrlOptions()).ConfigureAwait(false);
+            else
+                UIApplication.SharedApplication.OpenUrl(nsUrl);
         }
 
         static NSUrl CreateNsUrl(string number) => new NSUrl(new Uri($"tel:{number}").AbsoluteUri);

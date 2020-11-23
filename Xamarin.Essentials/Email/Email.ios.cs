@@ -66,7 +66,11 @@ namespace Xamarin.Essentials
 
             var tcs = new TaskCompletionSource<bool>();
             var nsurl = NSUrl.FromString(url);
-            UIApplication.SharedApplication.OpenUrl(nsurl, new UIApplicationOpenUrlOptions(), r => tcs.TrySetResult(r));
+            if (Platform.HasOSVersion(10, 0))
+                UIApplication.SharedApplication.OpenUrl(nsurl, new UIApplicationOpenUrlOptions(), r => tcs.TrySetResult(r));
+            else
+                UIApplication.SharedApplication.OpenUrl(nsurl);
+
             return tcs.Task;
         }
     }

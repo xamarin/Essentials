@@ -25,9 +25,7 @@ namespace Xamarin.Essentials
                         sfViewController.PreferredControlTintColor = options.PreferredControlColor.Value.ToPlatformColor();
 
                     if (sfViewController.PopoverPresentationController != null)
-                    {
                         sfViewController.PopoverPresentationController.SourceView = vc.View;
-                    }
 
                     if (options.HasFlag(BrowserLaunchFlags.PresentAsFormSheet))
                         sfViewController.ModalPresentationStyle = UIModalPresentationStyle.FormSheet;
@@ -38,13 +36,10 @@ namespace Xamarin.Essentials
                     break;
                 case BrowserLaunchMode.External:
                     if (Platform.HasOSVersion(10, 0))
-                    {
                         return await UIApplication.SharedApplication.OpenUrlAsync(nativeUrl, new UIApplicationOpenUrlOptions());
-                    }
                     else
-                    {
                         UIApplication.SharedApplication.OpenUrl(nativeUrl);
-                    }
+
                     break;
             }
 
