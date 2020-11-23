@@ -19,7 +19,7 @@ namespace Xamarin.Essentials
         {
             Permissions.EnsureDeclared<Permissions.ContactsRead>();
             Permissions.EnsureDeclared<Permissions.LaunchApp>();
-            await Permissions.RequestAsync<Permissions.ContactsRead>();
+            await Permissions.EnsureGrantedAsync<Permissions.ContactsRead>();
 
             var tcs = new TaskCompletionSource<Contact>();
 
@@ -91,7 +91,7 @@ namespace Xamarin.Essentials
             }
 
             return new Contact(
-                    record?.Get<string>(TizenName.ContactId),
+                    (record?.Get<int>(TizenName.ContactId))?.ToString(),
                     record?.Get<string>(TizenName.Prefix),
                     record?.Get<string>(TizenName.First),
                     record?.Get<string>(TizenName.Addition),
