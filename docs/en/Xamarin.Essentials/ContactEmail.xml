@@ -11,7 +11,7 @@
   </Base>
   <Interfaces />
   <Docs>
-    <summary>Info about the email address</summary>
+    <summary>This type contains information about a particular email address.</summary>
     <remarks></remarks>
   </Docs>
   <Members>
@@ -26,7 +26,7 @@
       </AssemblyInfo>
       <Parameters />
       <Docs>
-        <summary></summary>
+        <summary>Constructs a new instance of <see cref="T:Xamarin.Essentials.ContactEmail" />.</summary>
         <remarks></remarks>
       </Docs>
     </Member>
@@ -43,8 +43,8 @@
         <Parameter Name="emailAddress" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="emailAddress">email address</param>
-        <summary></summary>
+        <param name="emailAddress">The email address.</param>
+        <summary>Constructs a new instance of <see cref="T:Xamarin.Essentials.ContactEmail" /> using the various parameters.</summary>
         <remarks></remarks>
       </Docs>
     </Member>
@@ -61,7 +61,7 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>email address</summary>
+        <summary>Gets or sets the email address.</summary>
         <value></value>
         <remarks></remarks>
       </Docs>
@@ -80,10 +80,10 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary></summary>
-        <returns>
-          <see cref="ContactEmail.EmailAddress" />
-        </returns>
+        <summary>
+          <see cref="P:Xamarin.Essentials.ContactEmail.EmailAddress" />
+        </summary>
+        <returns></returns>
         <remarks></remarks>
       </Docs>
     </Member>

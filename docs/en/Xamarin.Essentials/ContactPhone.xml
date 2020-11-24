@@ -11,7 +11,7 @@
   </Base>
   <Interfaces />
   <Docs>
-    <summary>Info about the phone number</summary>
+    <summary>This type contains information about a particular phone number.</summary>
     <remarks></remarks>
   </Docs>
   <Members>
@@ -26,7 +26,7 @@
       </AssemblyInfo>
       <Parameters />
       <Docs>
-        <summary></summary>
+        <summary>Constructs a new instance of <see cref="T:Xamarin.Essentials.ContactPhone" />.</summary>
         <remarks></remarks>
       </Docs>
     </Member>
@@ -43,8 +43,8 @@
         <Parameter Name="phoneNumber" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="phoneNumber">phone number</param>
-        <summary></summary>
+        <param name="phoneNumber">The phone number.</param>
+        <summary>Constructs a new instance of <see cref="T:Xamarin.Essentials.ContactPhone" /> using the various parameters.</summary>
         <remarks></remarks>
       </Docs>
     </Member>
@@ -61,7 +61,7 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>phone number</summary>
+        <summary>Gets or sets the phone number.</summary>
         <value></value>
         <remarks></remarks>
       </Docs>
@@ -80,10 +80,10 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary></summary>
-        <returns>
-          <see cref="ContactPhone.PhoneNumber" />
-        </returns>
+        <summary>
+          <see cref="P:Xamarin.Essentials.ContactPhone.PhoneNumber" />
+        </summary>
+        <returns></returns>
         <remarks></remarks>
       </Docs>
     </Member>

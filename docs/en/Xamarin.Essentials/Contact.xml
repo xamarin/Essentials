@@ -11,7 +11,7 @@
   </Base>
   <Interfaces />
   <Docs>
-    <summary>Info about the Contact</summary>
+    <summary>This type contains information about a particular contact.</summary>
     <remarks></remarks>
   </Docs>
   <Members>
@@ -26,7 +26,7 @@
       </AssemblyInfo>
       <Parameters />
       <Docs>
-        <summary></summary>
+        <summary>Constructs a new instance of <see cref="T:Xamarin.Essentials.Contact" />.</summary>
         <remarks></remarks>
       </Docs>
     </Member>
@@ -51,21 +51,21 @@
         <Parameter Name="displayName" Type="System.String" />
       </Parameters>
       <Docs>
-        <param name="id">Identifier</param>
-        <param name="namePrefix">namePrefix</param>
-        <param name="givenName">givenName or firstName</param>
-        <param name="middleName">middleName or addition</param>
-        <param name="familyName">familyName or lastName</param>
-        <param name="nameSuffix">nameSuffix</param>
-        <param name="phones">phone numbers list</param>
-        <param name="email">list of email addresses</param>
-        <param name="displayName">displayName</param>
-        <summary></summary>
+        <param name="id">The identifier of the contact.</param>
+        <param name="namePrefix">The prefix of the contact.</param>
+        <param name="givenName">The given name or first name of the contact.</param>
+        <param name="middleName">The middle name(s) of the contact.</param>
+        <param name="familyName">The family name or last name of the contact.</param>
+        <param name="nameSuffix">The suffix of the contact.</param>
+        <param name="phones">A collection of phone numbers for the contact.</param>
+        <param name="email">A collection of email addresses for the contact.</param>
+        <param name="displayName">The display name of the contact.</param>
+        <summary>Constructs a new instance of <see cref="T:Xamarin.Essentials.Contact" /> using the various parameters.</summary>
         <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="DisplayName">
-      <MemberSignature Language="C#" Value="public string DisplayName { get; }" />
+      <MemberSignature Language="C#" Value="public string DisplayName { get; set; }" />
       <MemberSignature Language="ILAsm" Value=".property instance string DisplayName" />
       <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.Contact.DisplayName" />
       <MemberType>Property</MemberType>
@@ -77,7 +77,7 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>displayName</summary>
+        <summary>Gets or sets the display name of the contact.</summary>
         <value></value>
         <remarks></remarks>
       </Docs>
@@ -95,7 +95,7 @@
         <ReturnType>System.Collections.Generic.List&lt;Xamarin.Essentials.ContactEmail&gt;</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>list of email addresses</summary>
+        <summary>Gets or sets a collection of email addresses of the contact.</summary>
         <value></value>
         <remarks></remarks>
       </Docs>
@@ -113,7 +113,7 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>familyName or lastName</summary>
+        <summary>Gets or sets the family name or last name of the contact.</summary>
         <value></value>
         <remarks></remarks>
       </Docs>
@@ -131,7 +131,7 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>givenName or firstName</summary>
+        <summary>Gets or sets the given name or first name of the contact.</summary>
         <value></value>
         <remarks></remarks>
       </Docs>
@@ -149,7 +149,7 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>identifier</summary>
+        <summary>Gets or sets the identifier of the contact.</summary>
         <value></value>
         <remarks></remarks>
       </Docs>
@@ -167,7 +167,7 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>middleName or addition</summary>
+        <summary>Gets or sets the middle name(s) of the contact.</summary>
         <value></value>
         <remarks></remarks>
       </Docs>
@@ -185,7 +185,7 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>namePrefix</summary>
+        <summary>Gets or sets the name prefix of the contact.</summary>
         <value></value>
         <remarks></remarks>
       </Docs>
@@ -203,7 +203,7 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>nameSuffix</summary>
+        <summary>Gets or sets the name suffix of the contact.</summary>
         <value></value>
         <remarks></remarks>
       </Docs>
@@ -221,7 +221,7 @@
         <ReturnType>System.Collections.Generic.List&lt;Xamarin.Essentials.ContactPhone&gt;</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>list of phone numbers</summary>
+        <summary>Gets or sets a collection of phone numbers of the contact.</summary>
         <value></value>
         <remarks></remarks>
       </Docs>
@@ -240,10 +240,10 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary></summary>
-        <returns>
-          <see cref="Contact.DisplayName" />
-        </returns>
+        <summary>
+          <see cref="P:Xamarin.Essentials.Contact.DisplayName" />
+        </summary>
+        <returns></returns>
         <remarks></remarks>
       </Docs>
     </Member>

@@ -11,7 +11,7 @@
   </Base>
   <Interfaces />
   <Docs>
-    <summary>API class for working with contacts on the device</summary>
+    <summary>API class for working with contacts on the device.</summary>
     <remarks></remarks>
   </Docs>
   <Members>
@@ -32,8 +32,8 @@
       </Parameters>
       <Docs>
         <param name="cancellationToken">A token for cancelling the operation</param>
-        <summary>Return List of phone numbers</summary>
-        <returns>List of phone numbers</returns>
+        <summary>Gets a collection of all the contacts on the device.</summary>
+        <returns>Returns a collection of contacts on the device.</returns>
         <remarks></remarks>
       </Docs>
     </Member>
@@ -51,8 +51,8 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>Starts file picker for selecting a single contact</summary>
-        <returns>Singel Contact</returns>
+        <summary>Starts file picker for selecting a single contact.</summary>
+        <returns>Returns a single contact, or null if the user cancelled the operation.</returns>
         <remarks></remarks>
       </Docs>
     </Member>
