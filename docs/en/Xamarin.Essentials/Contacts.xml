@@ -16,8 +16,8 @@
   </Docs>
   <Members>
     <Member MemberName="GetAllAsync">
-      <MemberSignature Language="C#" Value="public static System.Collections.Generic.IAsyncEnumerable&lt;Xamarin.Essentials.Contact&gt; GetAllAsync (System.Threading.CancellationToken cancellationToken = null);" />
-      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Collections.Generic.IAsyncEnumerable`1&lt;class Xamarin.Essentials.Contact&gt; GetAllAsync(valuetype System.Threading.CancellationToken cancellationToken) cil managed" />
+      <MemberSignature Language="C#" Value="public static System.Threading.Tasks.Task&lt;System.Collections.Generic.IEnumerable&lt;Xamarin.Essentials.Contact&gt;&gt; GetAllAsync (System.Threading.CancellationToken cancellationToken = null);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Tasks.Task`1&lt;class System.Collections.Generic.IEnumerable`1&lt;class Xamarin.Essentials.Contact&gt;&gt; GetAllAsync(valuetype System.Threading.CancellationToken cancellationToken) cil managed" />
       <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.Contacts.GetAllAsync(System.Threading.CancellationToken)" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
@@ -25,7 +25,7 @@
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
-        <ReturnType>System.Collections.Generic.IAsyncEnumerable&lt;Xamarin.Essentials.Contact&gt;</ReturnType>
+        <ReturnType>System.Threading.Tasks.Task&lt;System.Collections.Generic.IEnumerable&lt;Xamarin.Essentials.Contact&gt;&gt;</ReturnType>
       </ReturnValue>
       <Parameters>
         <Parameter Name="cancellationToken" Type="System.Threading.CancellationToken" />
@@ -34,6 +34,7 @@
         <param name="cancellationToken">A token for cancelling the operation</param>
         <summary>Return List of phone numbers</summary>
         <returns>List of phone numbers</returns>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="PickContactAsync">

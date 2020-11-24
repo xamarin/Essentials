@@ -15,28 +15,43 @@
     <remarks></remarks>
   </Docs>
   <Members>
-    <Member MemberName="Type">
-      <MemberSignature Language="C#" Value="public Xamarin.Essentials.ContactType Type { get; }" />
-      <MemberSignature Language="ILAsm" Value=".property instance valuetype Xamarin.Essentials.ContactType Type" />
-      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.ContactEmail.Type" />
-      <MemberType>Property</MemberType>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public ContactEmail ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor() cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.ContactEmail.#ctor" />
+      <MemberType>Constructor</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
       </AssemblyInfo>
-      <ReturnValue>
-        <ReturnType>Xamarin.Essentials.ContactType</ReturnType>
-      </ReturnValue>
+      <Parameters />
       <Docs>
-        <summary>Type of email address</summary>
-        <value>Unknown, Personal, Work</value>
+        <summary></summary>
         <remarks></remarks>
       </Docs>
     </Member>
-    <Member MemberName="Value">
-      <MemberSignature Language="C#" Value="public string Value { get; }" />
-      <MemberSignature Language="ILAsm" Value=".property instance string Value" />
-      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.ContactEmail.Value" />
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public ContactEmail (string emailAddress);" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig specialname rtspecialname instance void .ctor(string emailAddress) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.ContactEmail.#ctor(System.String)" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="emailAddress" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="emailAddress">email address</param>
+        <summary></summary>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="EmailAddress">
+      <MemberSignature Language="C#" Value="public string EmailAddress { get; set; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance string EmailAddress" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.ContactEmail.EmailAddress" />
       <MemberType>Property</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -46,8 +61,27 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Email address</summary>
+        <summary>email address</summary>
         <value></value>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public override string ToString ();" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig virtual instance string ToString() cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.ContactEmail.ToString" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary></summary>
+        <returns><see cref="ContactEmail.EmailAddress"/></returns>
         <remarks></remarks>
       </Docs>
     </Member>
