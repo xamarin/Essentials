@@ -12,8 +12,9 @@ namespace Xamarin.Essentials
     {
         static async Task<Contact> PlatformPickContactAsync()
         {
-            using var intent = new Intent(Intent.ActionPick);
+            var intent = new Intent(Intent.ActionPick);
             intent.SetType(ContactsContract.CommonDataKinds.Phone.ContentType);
+
             var result = await IntermediateActivity.StartAsync(intent, Platform.requestCodePickContact).ConfigureAwait(false);
 
             if (result?.Data != null)
