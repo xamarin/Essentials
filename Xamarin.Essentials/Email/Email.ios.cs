@@ -61,7 +61,8 @@ namespace Xamarin.Essentials
         static async Task ComposeWithUrl(EmailMessage message)
         {
             var url = GetMailToUri(message);
-            await Launcher.OpenAsync(url);
+            var nsurl = NSUrl.FromString(url);
+            await Launcher.PlatformOpenAsync(nsurl);
         }
     }
 }
