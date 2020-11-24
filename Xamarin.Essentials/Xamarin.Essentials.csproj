@@ -129,6 +129,7 @@
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.Mac20')) ">
     <Compile Include="**\*.macos.cs" />
