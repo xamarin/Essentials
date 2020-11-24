@@ -24,14 +24,8 @@ namespace Xamarin.Essentials
            => NSBundle.MainBundle.ObjectForInfoDictionary(key)?.ToString();
 
 #if __IOS__ || __TVOS__
-        static void PlatformShowSettingsUI()
-        {
-            var nsurl = new NSUrl(UIApplication.OpenSettingsUrlString);
-            if (Platform.HasOSVersion(10, 0))
-                UIApplication.SharedApplication.OpenUrlAsync(nsurl, new UIApplicationOpenUrlOptions()).ConfigureAwait(false);
-            else
-                UIApplication.SharedApplication.OpenUrl(nsurl);
-        }
+        static async void PlatformShowSettingsUI()
+            => await Launcher.OpenAsync(UIApplication.OpenSettingsUrlString);
 #elif __MACOS__
         static void PlatformShowSettingsUI()
         {
