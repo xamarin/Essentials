@@ -137,7 +137,7 @@
       </Docs>
     </Member>
     <Member MemberName="Id">
-      <MemberSignature Language="C#" Value="public string Id { get; }" />
+      <MemberSignature Language="C#" Value="public string Id { get; set; }" />
       <MemberSignature Language="ILAsm" Value=".property instance string Id" />
       <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.Contact.Id" />
       <MemberType>Property</MemberType>
@@ -241,7 +241,9 @@
       <Parameters />
       <Docs>
         <summary></summary>
-        <returns><see cref="Contact.DisplayName"/></returns>
+        <returns>
+          <see cref="Contact.DisplayName" />
+        </returns>
         <remarks></remarks>
       </Docs>
     </Member>

@@ -81,7 +81,9 @@
       <Parameters />
       <Docs>
         <summary></summary>
-        <returns><see cref="ContactPhone.PhoneNumber"/></returns>
+        <returns>
+          <see cref="ContactPhone.PhoneNumber" />
+        </returns>
         <remarks></remarks>
       </Docs>
     </Member>

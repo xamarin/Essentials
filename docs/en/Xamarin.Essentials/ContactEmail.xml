@@ -81,7 +81,9 @@
       <Parameters />
       <Docs>
         <summary></summary>
-        <returns><see cref="ContactEmail.EmailAddress"/></returns>
+        <returns>
+          <see cref="ContactEmail.EmailAddress" />
+        </returns>
         <remarks></remarks>
       </Docs>
     </Member>
