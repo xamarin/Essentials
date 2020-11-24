@@ -68,9 +68,9 @@ namespace Xamarin.Essentials
             var displayName = cursor.GetString(cursor.GetColumnIndex(ContactsContract.Contacts.InterfaceConsts.DisplayName));
             var idQ = new string[1] { cursor.GetString(cursor.GetColumnIndex(idKey)) };
             var phones = GetNumbers(idQ)?.Select(
-                item => new ContactPhone(item.data, GetPhoneContactType(item.type)));
+                item => new ContactPhone(item.data));
             var emails = GetEmails(idQ)?.Select(
-                item => new ContactEmail(item.data, GetEmailContactType(item.type)));
+                item => new ContactEmail(item.data));
             var name = GetName(idQ[0]);
 
             return new Contact(idQ[0], name.Prefix, name.Given, name.Middle, name.Family, name.Suffix, phones, emails, displayName);
@@ -130,53 +130,6 @@ namespace Xamarin.Essentials
             }
 
             return (null, null, null, null, null);
-        }
-
-        static ContactPhoneType GetPhoneContactType(string type)
-        {
-            if (int.TryParse(type, out var typeInt))
-            {
-                try
-                {
-                    return (PhoneDataKind)typeInt switch
-                    {
-                        PhoneDataKind.Mobile => ContactPhoneType.Mobile,
-                        PhoneDataKind.Main => ContactPhoneType.Main,
-                        PhoneDataKind.Home => ContactPhoneType.Personal,
-                        PhoneDataKind.Work => ContactPhoneType.Work,
-                        PhoneDataKind.WorkMobile => ContactPhoneType.Work,
-                        PhoneDataKind.CompanyMain => ContactPhoneType.Work,
-                        PhoneDataKind.WorkPager => ContactPhoneType.Work,
-                        _ => ContactPhoneType.Unknown
-                    };
-                }
-                catch (Exception)
-                {
-                    return ContactPhoneType.Unknown;
-                }
-            }
-            return ContactPhoneType.Unknown;
-        }
-
-        static ContactEmailType GetEmailContactType(string type)
-        {
-            if (int.TryParse(type, out var typeInt))
-            {
-                try
-                {
-                    return (EmailDataKind)typeInt switch
-                    {
-                        EmailDataKind.Home => ContactEmailType.Personal,
-                        EmailDataKind.Work => ContactEmailType.Work,
-                        _ => ContactEmailType.Unknown
-                    };
-                }
-                catch (Exception)
-                {
-                    return ContactEmailType.Unknown;
-                }
-            }
-            return ContactEmailType.Unknown;
         }
     }
 }

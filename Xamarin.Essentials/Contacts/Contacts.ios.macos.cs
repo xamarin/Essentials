@@ -83,14 +83,9 @@ namespace Xamarin.Essentials
             try
             {
                 var phones = contact.PhoneNumbers?.Select(
-                   item => new ContactPhone(
-                       item?.Value?.StringValue,
-                       TypePhoneConvert(item.Label?.ToString())));
-
+                   item => new ContactPhone(item?.Value?.StringValue));
                 var emails = contact.EmailAddresses?.Select(
-                   item => new ContactEmail(
-                       item?.Value?.ToString(),
-                       TypeEmailConvert(item.Label?.ToString())));
+                   item => new ContactEmail(item?.Value?.ToString()));
 
                 return new Contact(
                     contact.Identifier,
@@ -110,32 +105,6 @@ namespace Xamarin.Essentials
             {
                 contact.Dispose();
             }
-        }
-
-        static ContactPhoneType TypePhoneConvert(string type)
-        {
-            if (type == CNLabelPhoneNumberKey.WorkFax)
-                return ContactPhoneType.Work;
-            else if (type == CNLabelPhoneNumberKey.Main)
-                return ContactPhoneType.Main;
-            else if (type == CNLabelPhoneNumberKey.Mobile)
-                return ContactPhoneType.Mobile;
-            else if (
-                type == CNLabelPhoneNumberKey.HomeFax ||
-                type == CNLabelPhoneNumberKey.iPhone)
-                return ContactPhoneType.Personal;
-            else
-                return ContactPhoneType.Unknown;
-        }
-
-        static ContactEmailType TypeEmailConvert(string type)
-        {
-            if (type == CNLabelKey.Work)
-                return ContactEmailType.Work;
-            else if (type == CNLabelKey.Home)
-                return ContactEmailType.Personal;
-            else
-                return ContactEmailType.Unknown;
         }
 
 #if __IOS__

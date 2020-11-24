@@ -17,20 +17,4 @@ namespace Xamarin.Essentials
         public static Task<IEnumerable<Contact>> GetAllAsync(CancellationToken cancellationToken = default)
             => PlatformGetAllAsync(cancellationToken);
     }
-
-    public enum ContactPhoneType
-    {
-        Unknown = 0,
-        Personal = 1,
-        Work = 2,
-        Main = 3,
-        Mobile = 4
-    }
-
-    public enum ContactEmailType
-    {
-        Unknown = 0,
-        Personal = 1,
-        Work = 2
-    }
 }

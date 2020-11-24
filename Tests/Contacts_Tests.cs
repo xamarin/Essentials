@@ -1,4 +1,5 @@
-﻿using Xamarin.Essentials;
+﻿using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xunit;
 
 namespace Tests
@@ -6,7 +7,7 @@ namespace Tests
     public class Contacts_Tests
     {
         [Fact]
-        public void Contacts_GetAll() =>
-            Assert.Throws<NotImplementedInReferenceAssemblyException>(() => Contacts.GetAllAsync());
+        public async Task Contacts_GetAll() =>
+            await Assert.ThrowsAsync<NotImplementedInReferenceAssemblyException>(() => Contacts.GetAllAsync());
     }
 }

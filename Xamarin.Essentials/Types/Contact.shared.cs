@@ -55,6 +55,8 @@ namespace Xamarin.Essentials
 
         public List<ContactEmail> Emails { get; set; } = new List<ContactEmail>();
 
+        public override string ToString() => DisplayName;
+
         string GetName(string name)
             => string.IsNullOrWhiteSpace(name) ? string.Empty : $" {name}";
     }
@@ -65,15 +67,12 @@ namespace Xamarin.Essentials
         {
         }
 
-        public ContactEmail(string emailAddress, ContactEmailType type)
-        {
-            EmailAddress = emailAddress;
-            Type = type;
-        }
+        public ContactEmail(string emailAddress)
+            => EmailAddress = emailAddress;
 
         public string EmailAddress { get; set; }
 
-        public ContactEmailType Type { get; set; }
+        public override string ToString() => EmailAddress;
     }
 
     public class ContactPhone
@@ -82,14 +81,11 @@ namespace Xamarin.Essentials
         {
         }
 
-        public ContactPhone(string phoneNumber, ContactPhoneType type)
-        {
-            PhoneNumber = phoneNumber;
-            Type = type;
-        }
+        public ContactPhone(string phoneNumber)
+            => PhoneNumber = phoneNumber;
 
         public string PhoneNumber { get; set; }
 
-        public ContactPhoneType Type { get; set; }
+        public override string ToString() => PhoneNumber;
     }
 }

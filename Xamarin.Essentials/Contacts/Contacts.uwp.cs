@@ -45,9 +45,9 @@ namespace Xamarin.Essentials
                 return default;
 
             var phones = contact.Phones?.Select(
-                item => new ContactPhone(item?.Number, GetContactType(item?.Kind)))?.ToList();
+                item => new ContactPhone(item?.Number))?.ToList();
             var emails = contact.Emails?.Select(
-                item => new ContactEmail(item?.Address, GetContactType(item?.Kind)))?.ToList();
+                item => new ContactEmail(item?.Address))?.ToList();
 
             return new Contact(
                 contact.Id,
@@ -60,26 +60,5 @@ namespace Xamarin.Essentials
                 emails,
                 contact.DisplayName);
         }
-
-        static ContactPhoneType GetContactType(ContactPhoneKind? type)
-            => type switch
-            {
-                ContactPhoneKind.Mobile => ContactPhoneType.Mobile,
-                ContactPhoneKind.Home => ContactPhoneType.Personal,
-                ContactPhoneKind.HomeFax => ContactPhoneType.Personal,
-                ContactPhoneKind.Work => ContactPhoneType.Work,
-                ContactPhoneKind.Pager => ContactPhoneType.Work,
-                ContactPhoneKind.BusinessFax => ContactPhoneType.Work,
-                ContactPhoneKind.Company => ContactPhoneType.Work,
-                _ => ContactPhoneType.Unknown
-            };
-
-        static ContactEmailType GetContactType(ContactEmailKind? type)
-            => type switch
-            {
-                ContactEmailKind.Personal => ContactEmailType.Personal,
-                ContactEmailKind.Work => ContactEmailType.Work,
-                _ => ContactEmailType.Unknown
-            };
     }
 }

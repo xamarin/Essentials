@@ -74,9 +74,8 @@ namespace Xamarin.Essentials
             {
                 var nameRecord = contactsRecord.GetChildRecord(TizenContact.Number, i);
                 var number = nameRecord.Get<string>(TizenNumber.NumberData);
-                var type = (TizenNumber.Types)nameRecord.Get<int>(TizenNumber.Type);
 
-                phones.Add(new ContactPhone(number, GetContactType(type)));
+                phones.Add(new ContactPhone(number));
             }
 
             var emails = new List<ContactEmail>();
@@ -85,9 +84,8 @@ namespace Xamarin.Essentials
             {
                 var emailRecord = contactsRecord.GetChildRecord(TizenContact.Email, i);
                 var addr = emailRecord.Get<string>(TizenEmail.Address);
-                var type = (TizenEmail.Types)emailRecord.Get<int>(TizenEmail.Type);
 
-                emails.Add(new ContactEmail(addr, GetContactType(type)));
+                emails.Add(new ContactEmail(addr));
             }
 
             return new Contact(
@@ -100,32 +98,5 @@ namespace Xamarin.Essentials
                     phones,
                     emails);
         }
-
-        static ContactEmailType GetContactType(TizenEmail.Types emailType)
-            => emailType switch
-            {
-                TizenEmail.Types.Home => ContactEmailType.Personal,
-                TizenEmail.Types.Mobile => ContactEmailType.Personal,
-                TizenEmail.Types.Work => ContactEmailType.Work,
-                _ => ContactEmailType.Unknown
-            };
-
-        static ContactPhoneType GetContactType(TizenNumber.Types numberType)
-            => numberType switch
-            {
-                TizenNumber.Types.Main => ContactPhoneType.Main,
-                TizenNumber.Types.Car => ContactPhoneType.Personal,
-                TizenNumber.Types.Cell => ContactPhoneType.Personal,
-                TizenNumber.Types.Home => ContactPhoneType.Personal,
-                TizenNumber.Types.Message => ContactPhoneType.Personal,
-                TizenNumber.Types.Video => ContactPhoneType.Personal,
-                TizenNumber.Types.Voice => ContactPhoneType.Personal,
-                TizenNumber.Types.Work => ContactPhoneType.Work,
-                TizenNumber.Types.Pager => ContactPhoneType.Work,
-                TizenNumber.Types.Assistant => ContactPhoneType.Work,
-                TizenNumber.Types.Company => ContactPhoneType.Work,
-                TizenNumber.Types.Fax => ContactPhoneType.Work,
-                _ => ContactPhoneType.Unknown
-            };
     }
 }
