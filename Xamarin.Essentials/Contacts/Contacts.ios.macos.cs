@@ -27,7 +27,7 @@ namespace Xamarin.Essentials
             using var picker = new CNContactPickerViewController
             {
                 Delegate = new ContactPickerDelegate(phoneContact =>
-                    source?.TrySetResult(Contacts.ConvertContact(phoneContact)))
+                    source?.TrySetResult(ConvertContact(phoneContact)))
             };
 
             uiView.PresentViewController(picker, true, null);
@@ -52,7 +52,7 @@ namespace Xamarin.Essentials
             };
 
             var store = new CNContactStore();
-            var containers = store.GetContainers(null, out var createError);
+            var containers = store.GetContainers(null, out _);
             if (containers == null)
                 return Task.FromResult<IEnumerable<Contact>>(Array.Empty<Contact>());
 

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.Content;
 using Android.Database;
 using Android.Provider;
-using Net = Android.Net;
 
 namespace Xamarin.Essentials
 {
@@ -46,7 +44,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        internal static Contact GetContact(Net.Uri contactUri)
+        internal static Contact GetContact(global::Android.Net.Uri contactUri)
         {
             if (contactUri == null)
                 return default;
@@ -122,11 +120,12 @@ namespace Xamarin.Essentials
 
             if (cursor?.MoveToFirst() ?? false)
             {
-                return (cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.StructuredName.Prefix)),
-                        cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.StructuredName.GivenName)),
-                        cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.StructuredName.MiddleName)),
-                        cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.StructuredName.FamilyName)),
-                        cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.StructuredName.Suffix)));
+                return (
+                    cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.StructuredName.Prefix)),
+                    cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.StructuredName.GivenName)),
+                    cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.StructuredName.MiddleName)),
+                    cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.StructuredName.FamilyName)),
+                    cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.StructuredName.Suffix)));
             }
 
             return (null, null, null, null, null);

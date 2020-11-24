@@ -52,6 +52,7 @@ namespace Xamarin.Essentials
         static Task<IEnumerable<Contact>> PlatformGetAllAsync(CancellationToken cancellationToken)
         {
             var contactsList = manager.Database.GetAll(TizenContact.Uri, 0, 0);
+
             return Task.FromResult(GetEnumerable());
 
             IEnumerable<Contact> GetEnumerable()
@@ -59,6 +60,7 @@ namespace Xamarin.Essentials
                 for (var i = 0; i < contactsList?.Count; i++)
                 {
                     yield return ToContact(contactsList.GetCurrentRecord());
+
                     contactsList.MoveNext();
                 }
             }
@@ -89,14 +91,14 @@ namespace Xamarin.Essentials
             }
 
             return new Contact(
-                    (record?.Get<int>(TizenName.ContactId))?.ToString(),
-                    record?.Get<string>(TizenName.Prefix),
-                    record?.Get<string>(TizenName.First),
-                    record?.Get<string>(TizenName.Addition),
-                    record?.Get<string>(TizenName.Last),
-                    record?.Get<string>(TizenName.Suffix),
-                    phones,
-                    emails);
+                (record?.Get<int>(TizenName.ContactId))?.ToString(),
+                record?.Get<string>(TizenName.Prefix),
+                record?.Get<string>(TizenName.First),
+                record?.Get<string>(TizenName.Addition),
+                record?.Get<string>(TizenName.Last),
+                record?.Get<string>(TizenName.Suffix),
+                phones,
+                emails);
         }
     }
 }

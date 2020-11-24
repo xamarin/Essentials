@@ -33,11 +33,11 @@ namespace Xamarin.Essentials
             DisplayName = displayName;
         }
 
-        public string Id { get; private set; }
+        public string Id { get; set; }
 
         public string DisplayName
         {
-            get => !string.IsNullOrWhiteSpace(displayName) ? displayName : $"{GivenName}{GetName(FamilyName)}";
+            get => !string.IsNullOrWhiteSpace(displayName) ? displayName : BuildDisplayName();
             private set => displayName = value;
         }
 
@@ -57,8 +57,15 @@ namespace Xamarin.Essentials
 
         public override string ToString() => DisplayName;
 
-        string GetName(string name)
-            => string.IsNullOrWhiteSpace(name) ? string.Empty : $" {name}";
+        string BuildDisplayName()
+        {
+            if (string.IsNullOrWhiteSpace(GivenName))
+                return FamilyName;
+            if (string.IsNullOrWhiteSpace(FamilyName))
+                return GivenName;
+
+            return $"{GivenName} {FamilyName}";
+        }
     }
 
     public class ContactEmail
@@ -68,7 +75,9 @@ namespace Xamarin.Essentials
         }
 
         public ContactEmail(string emailAddress)
-            => EmailAddress = emailAddress;
+        {
+            EmailAddress = emailAddress;
+        }
 
         public string EmailAddress { get; set; }
 
@@ -82,7 +91,9 @@ namespace Xamarin.Essentials
         }
 
         public ContactPhone(string phoneNumber)
-            => PhoneNumber = phoneNumber;
+        {
+            PhoneNumber = phoneNumber;
+        }
 
         public string PhoneNumber { get; set; }
 
