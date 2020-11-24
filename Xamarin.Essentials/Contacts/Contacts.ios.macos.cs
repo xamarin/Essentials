@@ -24,7 +24,7 @@ namespace Xamarin.Essentials
 
             var source = new TaskCompletionSource<Contact>();
 
-            using var picker = new CNContactPickerViewController
+            var picker = new CNContactPickerViewController
             {
                 Delegate = new ContactPickerDelegate(phoneContact =>
                     source?.TrySetResult(ConvertContact(phoneContact)))
