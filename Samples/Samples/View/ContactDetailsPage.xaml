@@ -34,7 +34,7 @@
                         <Label>
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <Span Text="{Binding Value}" />
+                                    <Span Text="{Binding PhoneNumber}" />
                                     <Span Text="{Binding Type, StringFormat=' ({0})'}" FontAttributes="Italic" />
                                 </FormattedString>
                             </Label.FormattedText>
@@ -50,7 +50,7 @@
                         <Label>
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <Span Text="{Binding Value}" />
+                                    <Span Text="{Binding EmailAddress}" />
                                     <Span Text="{Binding Type, StringFormat=' ({0})'}" FontAttributes="Italic" />
                                 </FormattedString>
                             </Label.FormattedText>

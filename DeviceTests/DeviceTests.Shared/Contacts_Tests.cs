@@ -18,9 +18,9 @@ namespace DeviceTests.Shared
             });
 
             var list = new List<Xamarin.Essentials.Contact>();
-            var contacts = Xamarin.Essentials.Contacts.GetAllAsync();
+            var contacts = await Xamarin.Essentials.Contacts.GetAllAsync();
 
-            await foreach (var contact in contacts)
+            foreach (var contact in contacts)
                 list?.Add(contact);
         }
     }

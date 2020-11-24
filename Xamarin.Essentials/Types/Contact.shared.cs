@@ -65,13 +65,13 @@ namespace Xamarin.Essentials
         {
         }
 
-        public ContactEmail(string value, ContactEmailType type)
+        public ContactEmail(string emailAddress, ContactEmailType type)
         {
-            Value = value;
+            EmailAddress = emailAddress;
             Type = type;
         }
 
-        public string Value { get; set; }
+        public string EmailAddress { get; set; }
 
         public ContactEmailType Type { get; set; }
     }
@@ -82,13 +82,13 @@ namespace Xamarin.Essentials
         {
         }
 
-        public ContactPhone(string value, ContactPhoneType type)
+        public ContactPhone(string phoneNumber, ContactPhoneType type)
         {
-            Value = value;
+            PhoneNumber = phoneNumber;
             Type = type;
         }
 
-        public string Value { get; set; }
+        public string PhoneNumber { get; set; }
 
         public ContactPhoneType Type { get; set; }
     }
