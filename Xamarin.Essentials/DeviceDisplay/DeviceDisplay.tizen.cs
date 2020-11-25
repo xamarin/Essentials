@@ -1,62 +1,45 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using ElmSharp;
 
 namespace Xamarin.Essentials
 {
     public static partial class DeviceDisplay
     {
-        [DllImport("libcapi-system-device.so.0", EntryPoint = "device_power_request_lock", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void ScreenLockDevicePowerRequestLock(int type, int timeout);
+        [DllImport("libcapi-system-device.so.0", EntryPoint = "device_power_request_lock")]
+        static extern void RequestKeepScreenOn(int type = 1, int timeout = 0);
 
-        [DllImport("libcapi-system-device.so.0", EntryPoint = "device_power_release_lock", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void ScreenLockDevicePowerReleaseLock(int type);
+        [DllImport("libcapi-system-device.so.0", EntryPoint = "device_power_release_lock")]
+        static extern void ReleaseKeepScreenOn(int type = 1);
 
-        static bool screenLock = false;
+        static bool keepScreenOn = false;
 
         static bool PlatformKeepScreenOn
         {
-            get
-            {
-                if (!screenLock)
-                    ScreenLockDevicePowerReleaseLock(1);
-                return screenLock;
-            }
-
+            get => keepScreenOn;
             set
             {
                 if (value)
-                    ScreenLockDevicePowerRequestLock(1, 0);
+                    RequestKeepScreenOn();
                 else
-                    ScreenLockDevicePowerReleaseLock(1);
-                screenLock = value;
+                    ReleaseKeepScreenOn();
+                keepScreenOn = value;
             }
         }
 
-        [DllImport("libcapi-appfw-application.so.0", EntryPoint = "app_get_device_orientation")]
-        internal static extern int AppGetDeviceOrientation();
-
         static DisplayInfo GetMainDisplayInfo()
         {
+            var display = Platform.MainWindow;
             return new DisplayInfo(
-                width: Platform.MainWindow != null ? Platform.MainWindow.ScreenSize.Width : Platform.GetFeatureInfo<int>("screen.width"),
-                height: Platform.MainWindow != null ? Platform.MainWindow.ScreenSize.Height : Platform.GetFeatureInfo<int>("screen.height"),
-                density: GetDensity(),
+                width: display.ScreenSize.Width,
+                height: display.ScreenSize.Height,
+                density: display.ScreenDpi.X / (DeviceInfo.Idiom == DeviceIdiom.TV ? 72.0 : 160.0),
                 orientation: GetOrientation(),
                 rotation: GetRotation());
         }
 
-        static double GetDensity()
-        {
-            var dpi = Platform.MainWindow != null ? Platform.MainWindow.ScreenDpi.X : Platform.GetFeatureInfo<int>("screen.dpi");
-            var unit = DeviceInfo.Idiom == DeviceIdiom.TV ? 72.0 : 160.0;
-            return dpi / unit;
-        }
-
         static DisplayOrientation GetOrientation()
         {
-            var orientation = Platform.MainWindow != null ? Platform.MainWindow.Rotation : AppGetDeviceOrientation();
-            return orientation switch
+            return Platform.MainWindow.Rotation switch
             {
                 0 => DisplayOrientation.Portrait,
                 90 => DisplayOrientation.Landscape,
@@ -68,8 +51,7 @@ namespace Xamarin.Essentials
 
         static DisplayRotation GetRotation()
         {
-            var orientation = Platform.MainWindow != null ? Platform.MainWindow.Rotation : AppGetDeviceOrientation();
-            return orientation switch
+            return Platform.MainWindow.Rotation switch
             {
                 0 => DisplayRotation.Rotation0,
                 90 => DisplayRotation.Rotation90,
@@ -81,20 +63,17 @@ namespace Xamarin.Essentials
 
         static void StartScreenMetricsListeners()
         {
-            if (Platform.MainWindow != null)
-                Platform.MainWindow.RotationChanged += OnRotationChanged;
+            Platform.MainWindow.RotationChanged += OnRotationChanged;
         }
 
         static void StopScreenMetricsListeners()
         {
-            if (Platform.MainWindow != null)
-                Platform.MainWindow.RotationChanged -= OnRotationChanged;
+            Platform.MainWindow.RotationChanged -= OnRotationChanged;
         }
 
         static void OnRotationChanged(object s, EventArgs e)
         {
-            var metrics = GetMainDisplayInfo();
-            OnMainDisplayInfoChanged(metrics);
+            OnMainDisplayInfoChanged(GetMainDisplayInfo());
         }
     }
 }

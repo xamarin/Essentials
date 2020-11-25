@@ -13,7 +13,7 @@ namespace Samples.Tizen
             base.OnCreate();
 
             MaterialComponents.Init(DirectoryInfo.Resource);
-            Xamarin.Essentials.Platform.MainWindow = MainWindow;
+            Xamarin.Essentials.Platform.Init(MainWindow);
             LoadApplication(formsApp ??= new App());
         }
 
