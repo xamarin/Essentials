@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using Android.App;
 using Android.Content;
-using Android.Provider;
 
 namespace Xamarin.Essentials
 {
@@ -33,23 +30,30 @@ namespace Xamarin.Essentials
 
             try
             {
-                var result = await IntermediateActivity.StartAsync(pickerIntent, Platform.requestCodeFilePicker);
                 var resultList = new List<FileResult>();
-
-                var clipData = new List<global::Android.Net.Uri>();
-
-                if (result.ClipData == null)
+                void OnResult(Intent intent)
                 {
-                    clipData.Add(result.Data);
-                }
-                else
-                {
-                    for (var i = 0; i < result.ClipData.ItemCount; i++)
-                        clipData.Add(result.ClipData.GetItemAt(i).Uri);
+                    // The uri returned is only temporary and only lives as long as the Activity that requested it,
+                    // so this means that it will always be cleaned up by the time we need it because we are using
+                    // an intermediate activity.
+
+                    if (intent.ClipData == null)
+                    {
+                        var path = FileSystem.EnsurePhysicalPath(intent.Data);
+                        resultList.Add(new FileResult(path));
+                    }
+                    else
+                    {
+                        for (var i = 0; i < intent.ClipData.ItemCount; i++)
+                        {
+                            var uri = intent.ClipData.GetItemAt(i).Uri;
+                            var path = FileSystem.EnsurePhysicalPath(uri);
+                            resultList.Add(new FileResult(path));
+                        }
+                    }
                 }
 
-                foreach (var contentUri in clipData)
-                    resultList.Add(new FileResult(contentUri));
+                await IntermediateActivity.StartAsync(pickerIntent, Platform.requestCodeFilePicker, onResult: OnResult);
 
                 return resultList;
             }
