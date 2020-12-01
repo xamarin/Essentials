@@ -19,7 +19,7 @@ namespace Xamarin.Essentials
             var action = Intent.ActionOpenDocument;
 
             var intent = new Intent(action);
-            intent.SetType("*/*");
+            intent.SetType(FileSystem.MimeTypes.All);
             intent.PutExtra(Intent.ExtraAllowMultiple, allowMultiple);
 
             var allowedTypes = options?.FileTypes?.Value?.ToArray();
@@ -69,31 +69,31 @@ namespace Xamarin.Essentials
         static FilePickerFileType PlatformImageFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.Android, new[] { "image/png", "image/jpeg" } }
+                { DevicePlatform.Android, new[] { FileSystem.MimeTypes.ImagePng, FileSystem.MimeTypes.ImageJpg } }
             });
 
         static FilePickerFileType PlatformPngFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.Android, new[] { "image/png" } }
+                { DevicePlatform.Android, new[] { FileSystem.MimeTypes.ImagePng } }
             });
 
         static FilePickerFileType PlatformJpegFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.Android, new[] { "image/jpeg" } }
+                { DevicePlatform.Android, new[] { FileSystem.MimeTypes.ImageJpg } }
             });
 
         static FilePickerFileType PlatformVideoFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.Android, new[] { "video/*" } }
+                { DevicePlatform.Android, new[] { FileSystem.MimeTypes.VideoAll } }
             });
 
         static FilePickerFileType PlatformPdfFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.Android, new[] { "application/pdf" } }
+                { DevicePlatform.Android, new[] { FileSystem.MimeTypes.Pdf } }
             });
     }
 }

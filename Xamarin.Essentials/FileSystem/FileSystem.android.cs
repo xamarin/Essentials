@@ -10,6 +10,27 @@ namespace Xamarin.Essentials
 {
     public partial class FileSystem
     {
+        internal const string EssentialsFolderHash = "2203693cc04e0be7f4f024d5f9499e13";
+
+        const string storageTypePrimary = "primary";
+        const string storageTypeRaw = "raw";
+        const string storageTypeImage = "image";
+        const string storageTypeVideo = "video";
+        const string storageTypeAudio = "audio";
+        static readonly string[] contentUriPrefixes =
+        {
+            "content://downloads/public_downloads",
+            "content://downloads/my_downloads",
+            "content://downloads/all_downloads",
+        };
+
+        internal const string UriSchemeFile = "file";
+        internal const string UriSchemeContent = "content";
+
+        internal const string UriAuthorityExternalStorage = "com.android.externalstorage.documents";
+        internal const string UriAuthorityDownloads = "com.android.providers.downloads.documents";
+        internal const string UriAuthorityMedia = "com.android.providers.media.documents";
+
         static string PlatformCacheDirectory
             => Platform.AppContext.CacheDir.AbsolutePath;
 
@@ -35,7 +56,7 @@ namespace Xamarin.Essentials
         internal static Java.IO.File GetEssentialsTemporaryFile(Java.IO.File root, string fileName)
         {
             // create the directory for all Essentials files
-            var rootDir = new Java.IO.File(root, "2203693cc04e0be7f4f024d5f9499e13");
+            var rootDir = new Java.IO.File(root, EssentialsFolderHash);
             rootDir.Mkdirs();
             rootDir.DeleteOnExit();
 
@@ -54,7 +75,7 @@ namespace Xamarin.Essentials
         internal static string EnsurePhysicalPath(AndroidUri uri)
         {
             // if this is a file, use that
-            if (uri.Scheme.Equals("file", StringComparison.OrdinalIgnoreCase))
+            if (uri.Scheme.Equals(UriSchemeFile, StringComparison.OrdinalIgnoreCase))
                 return uri.Path;
 
             // try resolve using the content provider
@@ -79,13 +100,13 @@ namespace Xamarin.Essentials
                     return resolved;
             }
 
-            if (uri.Scheme.Equals("content", StringComparison.OrdinalIgnoreCase))
+            if (uri.Scheme.Equals(UriSchemeContent, StringComparison.OrdinalIgnoreCase))
             {
                 var resolved = ResolveContentPath(uri);
                 if (File.Exists(resolved))
                     return resolved;
             }
-            else if (uri.Scheme.Equals("file", StringComparison.OrdinalIgnoreCase))
+            else if (uri.Scheme.Equals(UriSchemeFile, StringComparison.OrdinalIgnoreCase))
             {
                 var resolved = uri.Path;
                 if (File.Exists(resolved))
@@ -105,7 +126,7 @@ namespace Xamarin.Essentials
             if (docIdParts == null || docIdParts.Length == 0)
                 return null;
 
-            if (uri.Authority.Equals("com.android.externalstorage.documents", StringComparison.OrdinalIgnoreCase))
+            if (uri.Authority.Equals(UriAuthorityExternalStorage, StringComparison.OrdinalIgnoreCase))
             {
                 Debug.WriteLine($"Resolving external storage URI: '{uri}'");
 
@@ -115,7 +136,7 @@ namespace Xamarin.Essentials
                     var uriPath = docIdParts[1];
 
                     // This is the internal "external" memory, NOT the SD Card
-                    if (storageType.Equals("primary", StringComparison.OrdinalIgnoreCase))
+                    if (storageType.Equals(storageTypePrimary, StringComparison.OrdinalIgnoreCase))
                     {
 #pragma warning disable CS0618 // Type or member is obsolete
                         var root = global::Android.OS.Environment.ExternalStorageDirectory.Path;
@@ -127,7 +148,7 @@ namespace Xamarin.Essentials
                     // TODO: support other types, such as actual SD Cards
                 }
             }
-            else if (uri.Authority.Equals("com.android.providers.downloads.documents", StringComparison.OrdinalIgnoreCase))
+            else if (uri.Authority.Equals(UriAuthorityDownloads, StringComparison.OrdinalIgnoreCase))
             {
                 Debug.WriteLine($"Resolving downloads URI: '{uri}'");
 
@@ -138,16 +159,9 @@ namespace Xamarin.Essentials
                     var storageType = docIdParts[0];
                     var uriPath = docIdParts[1];
 
-                    if (storageType.Equals("raw", StringComparison.OrdinalIgnoreCase))
+                    if (storageType.Equals(storageTypeRaw, StringComparison.OrdinalIgnoreCase))
                         return uriPath;
                 }
-
-                var contentUriPrefixes = new[]
-                {
-                    "content://downloads/public_downloads",
-                    "content://downloads/my_downloads",
-                    "content://downloads/all_downloads",
-                };
 
                 // ID could be "###" or "msf:###"
                 var fileId = docIdParts.Length == 2
@@ -163,7 +177,7 @@ namespace Xamarin.Essentials
                         return filePath;
                 }
             }
-            else if (uri.Authority.Equals("com.android.providers.media.documents", StringComparison.OrdinalIgnoreCase))
+            else if (uri.Authority.Equals(UriAuthorityMedia, StringComparison.OrdinalIgnoreCase))
             {
                 Debug.WriteLine($"Resolving media URI: '{uri}'");
 
@@ -173,14 +187,14 @@ namespace Xamarin.Essentials
                     var uriPath = docIdParts[1];
 
                     AndroidUri contentUri = null;
-                    if (storageType.Equals("image", StringComparison.OrdinalIgnoreCase))
+                    if (storageType.Equals(storageTypeImage, StringComparison.OrdinalIgnoreCase))
                         contentUri = MediaStore.Images.Media.ExternalContentUri;
-                    else if (storageType.Equals("video", StringComparison.OrdinalIgnoreCase))
+                    else if (storageType.Equals(storageTypeVideo, StringComparison.OrdinalIgnoreCase))
                         contentUri = MediaStore.Video.Media.ExternalContentUri;
-                    else if (storageType.Equals("audio", StringComparison.OrdinalIgnoreCase))
+                    else if (storageType.Equals(storageTypeAudio, StringComparison.OrdinalIgnoreCase))
                         contentUri = MediaStore.Audio.Media.ExternalContentUri;
 
-                    if (contentUri != null && GetDataFilePath(contentUri, "_id=?", new[] { uriPath }) is string filePath)
+                    if (contentUri != null && GetDataFilePath(contentUri, $"{MediaStore.MediaColumns.Id}=?", new[] { uriPath }) is string filePath)
                         return filePath;
                 }
             }
@@ -206,7 +220,7 @@ namespace Xamarin.Essentials
 
         static string CacheContentFile(AndroidUri uri)
         {
-            if (!uri.Scheme.Equals("content", StringComparison.OrdinalIgnoreCase))
+            if (!uri.Scheme.Equals(UriSchemeContent, StringComparison.OrdinalIgnoreCase))
                 return null;
 
             Debug.WriteLine($"Copying content URI to local cache: '{uri}'");
@@ -261,7 +275,7 @@ namespace Xamarin.Essentials
 
         static Stream GetVirtualFileStream(AndroidUri uri, out string extension)
         {
-            var mimeTypes = Platform.ContentResolver.GetStreamTypes(uri, "*/*");
+            var mimeTypes = Platform.ContentResolver.GetStreamTypes(uri, FileSystem.MimeTypes.All);
             if (mimeTypes?.Length >= 1)
             {
                 var mimeType = mimeTypes[0];

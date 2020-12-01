@@ -25,7 +25,7 @@ namespace Xamarin.Essentials
             await Permissions.RequestAsync<Permissions.StorageRead>();
 
             var intent = new Intent(Intent.ActionGetContent);
-            intent.SetType(photo ? "image/*" : "video/*");
+            intent.SetType(photo ? FileSystem.MimeTypes.ImageAll : FileSystem.MimeTypes.VideoAll);
 
             var pickerIntent = Intent.CreateChooser(intent, options?.Title);
 
@@ -75,7 +75,9 @@ namespace Xamarin.Essentials
                 var activity = Platform.GetCurrentActivity(true);
 
                 // Create the temporary file
-                var ext = photo ? ".jpg" : ".mp4";
+                var ext = photo
+                    ? FileSystem.Extensions.Jpg
+                    : FileSystem.Extensions.Mp4;
                 var fileName = Guid.NewGuid().ToString("N") + ext;
                 var tmpFile = FileSystem.GetEssentialsTemporaryFile(Platform.AppContext.CacheDir, fileName);
 
