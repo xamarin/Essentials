@@ -38,6 +38,22 @@ namespace Xamarin.Essentials
             }
             return dirs[0];
         }
+
+        static string[] PlatformGetAppResourceDirectories(string path)
+        {
+            if (Directory.Exists(path))
+                return Directory.GetDirectories(path);
+            else
+                return null;
+        }
+
+        static string[] PlatformGetAppResourceFiles(string path)
+        {
+            if (Directory.Exists(path))
+                return Directory.GetFiles(path);
+            else
+                return null;
+        }
     }
 
     public partial class FileBase

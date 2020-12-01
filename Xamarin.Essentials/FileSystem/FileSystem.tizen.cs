@@ -22,6 +22,22 @@ namespace Xamarin.Essentials
             Stream fs = File.OpenRead(Path.Combine(Application.Current.DirectoryInfo.Resource, filename));
             return Task.FromResult(fs);
         }
+
+        static string[] PlatformGetAppResourceDirectories(string path)
+        {
+            if (Directory.Exists(path))
+                return Directory.GetFiles(path);
+            else
+                return null;
+        }
+
+        static string[] PlatformGetAppResourceFiles(string path)
+        {
+            if (Directory.Exists(path))
+                return Directory.GetFiles(path);
+            else
+                return null;
+        }
     }
 
     public partial class FileBase

@@ -13,6 +13,12 @@ namespace Xamarin.Essentials
 
         static Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
              => throw ExceptionUtils.NotSupportedOrImplementedException;
+
+        static string[] PlatformGetAppResourceDirectories(string path)
+            => throw ExceptionUtils.NotSupportedOrImplementedException;
+
+        static string[] PlatformGetAppResourceFiles(string path)
+            => throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 
     public partial class FileBase

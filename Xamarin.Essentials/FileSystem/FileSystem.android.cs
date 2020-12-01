@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Android.App;
@@ -31,6 +32,17 @@ namespace Xamarin.Essentials
                 throw new FileNotFoundException(ex.Message, filename, ex);
             }
         }
+
+        // Android does't have the concept for returning Directories (AFICT).
+        // As such, we only return string with no . in them. Not ideal but
+        // should work in most cases as Folders rarely contain dots
+        static string[] PlatformGetAppResourceDirectories(string path)
+            => Platform.AppContext.Assets.List(path).Where(file => !file.Contains(".")).ToArray();
+
+        // This may also return Directories, but we can't restrict the list,
+        // as some files may not have an extention. So user is on their own from here.
+        static string[] PlatformGetAppResourceFiles(string path)
+            => Platform.AppContext.Assets.List(path);
     }
 
     public partial class FileBase
