@@ -34,7 +34,7 @@ namespace Xamarin.Essentials
                 {
                     try
                     {
-                        tcs.TrySetResult(GetFiles(urls));
+                        tcs.TrySetResult(GetFileResults(urls));
                     }
                     catch (Exception ex)
                     {
@@ -48,7 +48,19 @@ namespace Xamarin.Essentials
             {
                 documentPicker.PresentationController.Delegate = new PickerPresentationControllerDelegate
                 {
-                    PickHandler = urls => tcs.TrySetResult(Enumerable.Empty<FileResult>())
+                    PickHandler = urls =>
+                    {
+                        try
+                        {
+                            // there was a cancellation
+                            tcs.TrySetResult(GetFileResults(urls));
+                        }
+                        catch (Exception ex)
+                        {
+                            // pass exception to task so that it doesn't get lost in the UI main loop
+                            tcs.SetException(ex);
+                        }
+                    }
                 };
             }
 
@@ -59,7 +71,7 @@ namespace Xamarin.Essentials
             return tcs.Task;
         }
 
-        static IEnumerable<FileResult> GetFiles(NSUrl[] urls) =>
+        static IEnumerable<FileResult> GetFileResults(NSUrl[] urls) =>
             urls?.Length > 0
                 ? urls.Select(url => new UIDocumentFileResult(url))
                 : Enumerable.Empty<FileResult>();
@@ -80,7 +92,7 @@ namespace Xamarin.Essentials
 
         class PickerPresentationControllerDelegate : UIAdaptivePresentationControllerDelegate
         {
-            public Action<IEnumerable<NSUrl>> PickHandler { get; set; }
+            public Action<NSUrl[]> PickHandler { get; set; }
 
             public override void DidDismiss(UIPresentationController presentationController) =>
                 PickHandler?.Invoke(null);
