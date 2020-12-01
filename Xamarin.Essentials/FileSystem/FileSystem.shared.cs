@@ -80,6 +80,12 @@ namespace Xamarin.Essentials
                 return extension;
             }
         }
+
+        public static string[] GetAppResourceDirectories(string path)
+            => PlatformGetAppResourceDirectories(path);
+
+        public static string[] GetAppResourceFiles(string path)
+            => PlatformGetAppResourceFiles(path);
     }
 
     public abstract partial class FileBase

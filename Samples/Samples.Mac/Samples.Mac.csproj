@@ -102,6 +102,16 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\FileSystemTemplate.txt" />
+    <BundleResource Include="Resources\FileSystemTemplate.txt">
+      <Link>Resources\Folder\FileSystemTemplate.txt</Link>
+    </BundleResource>
+    <BundleResource Include="Resources\FileSystemTemplate.txt">
+      <Link>Resources\Folder\SubFolder\FileSystemTemplate.txt</Link>
+    </BundleResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\Folder\" />
+    <Folder Include="Resources\Folder\SubFolder\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>
