@@ -15,6 +15,7 @@ namespace Xamarin.Essentials
 
         static Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
         {
+            Tizen.Log.Info("Xamarin.Essentials", "File" + filename);
             if (string.IsNullOrWhiteSpace(filename))
                 throw new ArgumentNullException(nameof(filename));
 
@@ -25,16 +26,16 @@ namespace Xamarin.Essentials
 
         static string[] PlatformGetAppResourceDirectories(string path)
         {
-            if (Directory.Exists(path))
-                return Directory.GetFiles(path);
+            if (Directory.Exists(Path.Combine(Application.Current.DirectoryInfo.Resource, path)))
+                return Directory.GetDirectories(Path.Combine(Application.Current.DirectoryInfo.Resource, path));
             else
                 return null;
         }
 
         static string[] PlatformGetAppResourceFiles(string path)
         {
-            if (Directory.Exists(path))
-                return Directory.GetFiles(path);
+            if (Directory.Exists(Path.Combine(Application.Current.DirectoryInfo.Resource, path)))
+                return Directory.GetFiles(Path.Combine(Application.Current.DirectoryInfo.Resource, path));
             else
                 return null;
         }
