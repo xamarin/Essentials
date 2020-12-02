@@ -15,10 +15,10 @@
         <Label Text="{Binding CacheDirectory, StringFormat='Cache: {0}'}" />
         <Label Text="{Binding AppDataDirectory, StringFormat='App Data: {0}'}" />
 
-        <Label Text="Directories:" FontAttributes="Bold" Margin="0,6,0,0" />
+        <Label Text="Resource Directories:" FontAttributes="Bold" Margin="0,6,0,0" />
         <ListView ItemsSource="{Binding AppResourceDirectories}"/>
 
-        <Label Text="Files:" FontAttributes="Bold" Margin="0,6,0,0" />
+        <Label Text="Resource Files:" FontAttributes="Bold" Margin="0,6,0,0" />
         <ListView ItemsSource="{Binding AppResourceFiles}"/>
 
         <Label Text="Operations:" FontAttributes="Bold" Margin="0,6,0,0" />
