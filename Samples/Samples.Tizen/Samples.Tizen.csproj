@@ -19,6 +19,8 @@
   <ItemGroup>
     <Folder Include="lib\" />
     <Folder Include="res\" />
+    <Folder Include="res\Folder" />
+    <Folder Include="res\Folder\SubFolder" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,4 +29,13 @@
     <PackageReference Include="Tizen.NET.MaterialComponents" Version="0.9.9-pre2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="res\FileSystemTemplate.txt" />
+    <None Include="res\FileSystemTemplate.txt">
+      <Link>res\Folder\FileSystemTemplate.txt</Link>
+    </None>
+    <None Include="res\FileSystemTemplate.txt">
+      <Link>res\Folder\SubFolder\FileSystemTemplate.txt</Link>
+    </None>
+  </ItemGroup>
 </Project>
