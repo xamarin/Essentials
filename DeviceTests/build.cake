@@ -184,6 +184,9 @@ Task("test-android-emu")
     .IsDependentOn("build-android")
     .Does(() =>
 {
+    // Clean up after previous runs
+    CleanDirectories(ANDROID_TEST_RESULTS_PATH.FullPath);
+
     var avdSettings = new AndroidAvdManagerToolSettings { SdkRoot = ANDROID_HOME };
     var adbSettings = new AdbToolSettings { SdkRoot = ANDROID_HOME };
     var emuSettings = new AndroidEmulatorToolSettings { SdkRoot = ANDROID_HOME, ArgumentCustomization = args => args.Append("-no-window") };

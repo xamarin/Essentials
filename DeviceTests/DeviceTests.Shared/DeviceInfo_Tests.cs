@@ -115,6 +115,7 @@ namespace DeviceTests
         }
 
         [Fact]
+        [Trait(Traits.UI, Traits.FeatureSupport.Supported)]
         public Task ScreenLock_Locks()
         {
             return Utils.OnMainThread(() =>
@@ -130,6 +131,7 @@ namespace DeviceTests
         }
 
         [Fact]
+        [Trait(Traits.UI, Traits.FeatureSupport.Supported)]
         public Task ScreenLock_Unlocks_Without_Locking()
         {
             return Utils.OnMainThread(() =>
@@ -142,6 +144,7 @@ namespace DeviceTests
         }
 
         [Fact]
+        [Trait(Traits.UI, Traits.FeatureSupport.Supported)]
         public Task ScreenLock_Locks_Only_Once()
         {
             return Utils.OnMainThread(() =>

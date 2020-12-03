@@ -57,8 +57,8 @@ namespace DeviceTests.Droid
 
             await entryPoint.RunAsync();
 
-            // if (File.Exists(entryPoint.TestsResultsFinalPath))
-            //    bundle.PutString("test-results-path", entryPoint.TestsResultsFinalPath);
+            if (File.Exists(entryPoint.TestsResultsFinalPath))
+                bundle.PutString("test-results-path", entryPoint.TestsResultsFinalPath);
 
             if (bundle.GetLong("return-code", -1) == -1)
                 bundle.PutLong("return-code", 1);
@@ -76,8 +76,10 @@ namespace DeviceTests.Droid
                 if (!Directory.Exists(docsDir))
                     Directory.CreateDirectory(docsDir);
 
-                resultsPath = Path.Combine(docsDir, resultsFileName);
+                resultsPath = Path.Combine(docsDir, "Documents", resultsFileName);
             }
+
+            protected override bool LogExcludedTests => true;
 
             public override TextWriter Logger => null;
 
@@ -100,20 +102,7 @@ namespace DeviceTests.Droid
             protected override TestRunner GetTestRunner(LogWriter logWriter)
             {
                 var testRunner = base.GetTestRunner(logWriter);
-
-                var traits = new[]
-                {
-                    $"{Traits.DeviceType}={Traits.DeviceTypes.ToExclude}",
-                    $"{Traits.Hardware.Accelerometer}={Traits.FeatureSupport.ToExclude(HardwareSupport.HasAccelerometer)}",
-                    $"{Traits.Hardware.Compass}={Traits.FeatureSupport.ToExclude(HardwareSupport.HasCompass)}",
-                    $"{Traits.Hardware.Gyroscope}={Traits.FeatureSupport.ToExclude(HardwareSupport.HasGyroscope)}",
-                    $"{Traits.Hardware.Magnetometer}={Traits.FeatureSupport.ToExclude(HardwareSupport.HasMagnetometer)}",
-                    $"{Traits.Hardware.Battery}={Traits.FeatureSupport.ToExclude(HardwareSupport.HasBattery)}",
-                    $"{Traits.Hardware.Flash}={Traits.FeatureSupport.ToExclude(HardwareSupport.HasFlash)}",
-                };
-
-                testRunner.SkipCategories(traits);
-
+                testRunner.SkipCategories(Traits.GetSkipTraits());
                 return testRunner;
             }
         }
