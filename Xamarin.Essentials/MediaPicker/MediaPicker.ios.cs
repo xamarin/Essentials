@@ -60,45 +60,31 @@ namespace Xamarin.Essentials
             if (!string.IsNullOrWhiteSpace(options?.Title))
                 picker.Title = options.Title;
 
+            var tcs = new TaskCompletionSource<FileResult>(picker);
+
+            picker.Delegate = new PhotoPickerDelegate
+            {
+                CompletedHandler = info => HandleCompletion(info, tcs)
+            };
+
             if (options != null && options.PresentationSourceBounds != Rectangle.Empty)
             {
                 picker.ModalPresentationStyle = UIModalPresentationStyle.Popover;
 
                 picker.PopoverPresentationController.SourceView = vc.View;
                 picker.PopoverPresentationController.SourceRect = options.PresentationSourceBounds.ToPlatformRectangle();
-            }
 
-            var tcs = new TaskCompletionSource<FileResult>(picker);
-            picker.Delegate = new PhotoPickerDelegate
-            {
-                CompletedHandler = info =>
+                picker.PopoverPresentationController.Delegate = new PopoverPresentationControllerDelegate
                 {
-                    try
-                    {
-                        tcs.TrySetResult(DictionaryToMediaFile(info));
-                    }
-                    catch (Exception ex)
-                    {
-                        tcs.TrySetException(ex);
-                    }
-                }
-            };
+                    CompletedHandler = info => HandleCompletion(info, tcs)
+                };
+            }
 
             if (picker.PresentationController != null)
             {
                 picker.PresentationController.Delegate = new PhotoPickerPresentationControllerDelegate
                 {
-                    CompletedHandler = info =>
-                    {
-                        try
-                        {
-                            tcs.TrySetResult(DictionaryToMediaFile(info));
-                        }
-                        catch (Exception ex)
-                        {
-                            tcs.TrySetException(ex);
-                        }
-                    }
+                    CompletedHandler = info => HandleCompletion(info, tcs)
                 };
             }
 
@@ -112,6 +98,18 @@ namespace Xamarin.Essentials
             picker = null;
 
             return result;
+        }
+
+        static void HandleCompletion(NSDictionary info, TaskCompletionSource<FileResult> tcs)
+        {
+            try
+            {
+                tcs.TrySetResult(DictionaryToMediaFile(info));
+            }
+            catch (Exception ex)
+            {
+                tcs.TrySetException(ex);
+            }
         }
 
         static FileResult DictionaryToMediaFile(NSDictionary info)
@@ -184,6 +182,14 @@ namespace Xamarin.Essentials
             public Action<NSDictionary> CompletedHandler { get; set; }
 
             public override void DidDismiss(UIPresentationController presentationController) =>
+                CompletedHandler?.Invoke(null);
+        }
+
+        class PopoverPresentationControllerDelegate : UIPopoverPresentationControllerDelegate
+        {
+            public Action<NSDictionary> CompletedHandler { get; set; }
+
+            public override void DidDismissPopover(UIPopoverPresentationController popoverPresentationController) =>
                 CompletedHandler?.Invoke(null);
         }
     }

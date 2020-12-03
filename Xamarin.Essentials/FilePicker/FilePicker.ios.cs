@@ -33,18 +33,7 @@ namespace Xamarin.Essentials
                 documentPicker.AllowsMultipleSelection = allowMultiple;
             documentPicker.Delegate = new PickerDelegate
             {
-                PickHandler = urls =>
-                {
-                    try
-                    {
-                        tcs.TrySetResult(GetFileResults(urls));
-                    }
-                    catch (Exception ex)
-                    {
-                        // pass exception to task so that it doesn't get lost in the UI main loop
-                        tcs.SetException(ex);
-                    }
-                }
+                PickHandler = urls => HandleCompletion(urls, tcs)
             };
 
             if (options != null && options.PresentationSourceBounds != Rectangle.Empty)
@@ -53,31 +42,37 @@ namespace Xamarin.Essentials
 
                 documentPicker.PopoverPresentationController.SourceView = parentController.View;
                 documentPicker.PopoverPresentationController.SourceRect = options.PresentationSourceBounds.ToPlatformRectangle();
+
+                documentPicker.PopoverPresentationController.Delegate = new PopoverPresentationControllerDelegate
+                {
+                    PickHandler = urls => HandleCompletion(urls, tcs)
+                };
             }
 
             if (documentPicker.PresentationController != null)
             {
                 documentPicker.PresentationController.Delegate = new PickerPresentationControllerDelegate
                 {
-                    PickHandler = urls =>
-                    {
-                        try
-                        {
-                            // there was a cancellation
-                            tcs.TrySetResult(GetFileResults(urls));
-                        }
-                        catch (Exception ex)
-                        {
-                            // pass exception to task so that it doesn't get lost in the UI main loop
-                            tcs.SetException(ex);
-                        }
-                    }
+                    PickHandler = urls => HandleCompletion(urls, tcs)
                 };
             }
 
             parentController.PresentViewController(documentPicker, true, null);
 
             return tcs.Task;
+        }
+
+        static void HandleCompletion(NSUrl[] urls, TaskCompletionSource<IEnumerable<FileResult>> tcs)
+        {
+            try
+            {
+                tcs.TrySetResult(GetFileResults(urls));
+            }
+            catch (Exception ex)
+            {
+                // pass exception to task so that it doesn't get lost in the UI main loop
+                tcs.SetException(ex);
+            }
         }
 
         static IEnumerable<FileResult> GetFileResults(NSUrl[] urls) =>
@@ -104,6 +99,14 @@ namespace Xamarin.Essentials
             public Action<NSUrl[]> PickHandler { get; set; }
 
             public override void DidDismiss(UIPresentationController presentationController) =>
+                PickHandler?.Invoke(null);
+        }
+
+        class PopoverPresentationControllerDelegate : UIPopoverPresentationControllerDelegate
+        {
+            public Action<NSUrl[]> PickHandler { get; set; }
+
+            public override void DidDismissPopover(UIPopoverPresentationController popoverPresentationController) =>
                 PickHandler?.Invoke(null);
         }
     }
