@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,6 +22,8 @@ namespace Xamarin.Essentials
             };
 
             var tcs = new TaskCompletionSource<IEnumerable<FileResult>>();
+
+            var parentController = Platform.GetCurrentViewController();
 
             // Note: Importing (UIDocumentPickerMode.Import) makes a local copy of the document,
             // while opening (UIDocumentPickerMode.Open) opens the document directly. We do the
@@ -44,6 +47,14 @@ namespace Xamarin.Essentials
                 }
             };
 
+            if (options != null && options.PresentationSourceBounds != Rectangle.Empty)
+            {
+                documentPicker.ModalPresentationStyle = UIModalPresentationStyle.Popover;
+
+                documentPicker.PopoverPresentationController.SourceView = parentController.View;
+                documentPicker.PopoverPresentationController.SourceRect = options.PresentationSourceBounds.ToPlatformRectangle();
+            }
+
             if (documentPicker.PresentationController != null)
             {
                 documentPicker.PresentationController.Delegate = new PickerPresentationControllerDelegate
@@ -63,8 +74,6 @@ namespace Xamarin.Essentials
                     }
                 };
             }
-
-            var parentController = Platform.GetCurrentViewController();
 
             parentController.PresentViewController(documentPicker, true, null);
 

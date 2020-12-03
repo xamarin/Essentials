@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -60,5 +59,9 @@ namespace Xamarin.Essentials
         public string PickerTitle { get; set; }
 
         public FilePickerFileType FileTypes { get; set; }
+
+#if !NETSTANDARD1_0
+        public System.Drawing.Rectangle PresentationSourceBounds { get; set; } = System.Drawing.Rectangle.Empty;
+#endif
     }
 }

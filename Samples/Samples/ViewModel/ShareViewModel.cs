@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Windows.Input;
-using Samples.Helpers;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -11,7 +10,7 @@ namespace Samples.ViewModel
     {
         bool shareText = true;
         bool shareUri;
-        string text;
+        string text = "This is a message.";
         string uri;
         string subject;
         string title;
@@ -170,7 +169,5 @@ namespace Samples.ViewModel
             File.WriteAllText(file, fileContents);
             return file;
         }
-
-        System.Drawing.Rectangle GetRectangle(Xamarin.Forms.View element) => element.GetAbsoluteBounds().ToSystemRectangle();
     }
 }

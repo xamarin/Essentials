@@ -11,14 +11,25 @@
     <StackLayout Padding="12" Spacing="6">
         <Label Text="Pick files from storage." FontAttributes="Bold" />
 
-        <FlexLayout Direction="Row" Wrap="Wrap">
-            <Button Text="Pick file" Command="{Binding PickFileCommand}" HorizontalOptions="FillAndExpand" />
-            <Button Text="Pick image" Command="{Binding PickImageCommand}" HorizontalOptions="FillAndExpand" />
-            <Button Text="Pick pdf" Command="{Binding PickPdfCommand}" HorizontalOptions="FillAndExpand" />
-            <Button Text="Pick custom type" Command="{Binding PickCustomTypeCommand}" HorizontalOptions="FillAndExpand" />
-            <Button Text="Pick image and send email" Command="{Binding PickAndSendCommand}" HorizontalOptions="FillAndExpand" />
-            <Button Text="Pick multiple files" Command="{Binding PickMultipleFilesCommand}" HorizontalOptions="FillAndExpand" />
-        </FlexLayout>
+        <StackLayout Spacing="6">
+            <Button Text="Pick file" HorizontalOptions="FillAndExpand"
+                    Command="{Binding PickFileCommand}" CommandParameter="{Binding Source={RelativeSource Self}}" />
+            <Button Text="Pick image" HorizontalOptions="FillAndExpand"
+                    Command="{Binding PickImageCommand}" CommandParameter="{Binding Source={RelativeSource Self}}" />
+            <Button Text="Pick pdf" HorizontalOptions="FillAndExpand"
+                    Command="{Binding PickPdfCommand}" CommandParameter="{Binding Source={RelativeSource Self}}" />
+            <Button Text="Pick custom type" HorizontalOptions="FillAndExpand"
+                    Command="{Binding PickCustomTypeCommand}" CommandParameter="{Binding Source={RelativeSource Self}}" />
+            <Button Text="Pick image and send email" HorizontalOptions="FillAndExpand"
+                    Command="{Binding PickAndSendCommand}" CommandParameter="{Binding Source={RelativeSource Self}}" />
+            <Button Text="Pick multiple files" HorizontalOptions="FillAndExpand"
+                    Command="{Binding PickMultipleFilesCommand}" CommandParameter="{Binding Source={RelativeSource Self}}" />
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Use Popover (on iOS)" HorizontalOptions="StartAndExpand" VerticalOptions="End" />
+            <Switch HorizontalOptions="End" IsToggled="{Binding UsePopover}" VerticalOptions="End" />
+        </StackLayout>
 
         <Label Text="{Binding Text}" HorizontalOptions="FillAndExpand" />
 

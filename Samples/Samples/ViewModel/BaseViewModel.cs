@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Samples.Helpers;
 
 namespace Samples.ViewModel
 {
@@ -36,5 +37,8 @@ namespace Samples.ViewModel
         {
             return DoNavigate?.Invoke(vm, showModal) ?? Task.CompletedTask;
         }
+
+        protected static System.Drawing.Rectangle GetRectangle(Xamarin.Forms.View element) =>
+            element.GetAbsoluteBounds().ToSystemRectangle();
     }
 }

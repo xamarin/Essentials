@@ -14,15 +14,16 @@ namespace Samples.ViewModel
         string text;
         ImageSource image;
         bool isImageVisible;
+        bool usePopover;
 
         public FilePickerViewModel()
         {
-            PickFileCommand = new Command(() => DoPickFile());
-            PickImageCommand = new Command(() => DoPickImage());
-            PickPdfCommand = new Command(() => DoPickPdf());
-            PickCustomTypeCommand = new Command(() => DoPickCustomType());
-            PickAndSendCommand = new Command(() => DoPickAndSend());
-            PickMultipleFilesCommand = new Command(() => DoPickMultipleFiles());
+            PickFileCommand = new Command<Xamarin.Forms.View>(DoPickFile);
+            PickImageCommand = new Command<Xamarin.Forms.View>(DoPickImage);
+            PickPdfCommand = new Command<Xamarin.Forms.View>(DoPickPdf);
+            PickCustomTypeCommand = new Command<Xamarin.Forms.View>(DoPickCustomType);
+            PickAndSendCommand = new Command<Xamarin.Forms.View>(DoPickAndSend);
+            PickMultipleFilesCommand = new Command<Xamarin.Forms.View>(DoPickMultipleFiles);
         }
 
         public ICommand PickFileCommand { get; }
@@ -55,34 +56,46 @@ namespace Samples.ViewModel
             set => SetProperty(ref isImageVisible, value);
         }
 
-        async void DoPickFile()
+        public bool UsePopover
         {
-            await PickAndShow(PickOptions.Default);
+            get => usePopover;
+            set => SetProperty(ref usePopover, value);
         }
 
-        async void DoPickImage()
+        async void DoPickFile(Xamarin.Forms.View view)
+        {
+            var options = PickOptions.Default;
+            if (UsePopover)
+                options.PresentationSourceBounds = GetRectangle(view);
+
+            await PickAndShow(options);
+        }
+
+        async void DoPickImage(Xamarin.Forms.View view)
         {
             var options = new PickOptions
             {
                 PickerTitle = "Please select an image",
                 FileTypes = FilePickerFileType.Images,
+                PresentationSourceBounds = UsePopover ? GetRectangle(view) : default,
             };
 
             await PickAndShow(options);
         }
 
-        async void DoPickPdf()
+        async void DoPickPdf(Xamarin.Forms.View view)
         {
             var options = new PickOptions
             {
                 PickerTitle = "Please select a pdf",
                 FileTypes = FilePickerFileType.Pdf,
+                PresentationSourceBounds = UsePopover ? GetRectangle(view) : default,
             };
 
             await PickAndShow(options);
         }
 
-        async void DoPickCustomType()
+        async void DoPickCustomType(Xamarin.Forms.View view)
         {
             var customFileType =
                 new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
@@ -98,15 +111,20 @@ namespace Samples.ViewModel
             {
                 PickerTitle = "Please select a comic file",
                 FileTypes = customFileType,
+                PresentationSourceBounds = UsePopover ? GetRectangle(view) : default,
             };
 
             await PickAndShow(options);
         }
 
-        async void DoPickAndSend()
+        async void DoPickAndSend(Xamarin.Forms.View view)
         {
+            var options = PickOptions.Images;
+            if (UsePopover)
+                options.PresentationSourceBounds = GetRectangle(view);
+
             // pick a file
-            var result = await PickAndShow(PickOptions.Images);
+            var result = await PickAndShow(options);
             if (result == null)
                 return;
 
@@ -165,7 +183,7 @@ namespace Samples.ViewModel
             }
         }
 
-        async void DoPickMultipleFiles()
+        async void DoPickMultipleFiles(Xamarin.Forms.View view)
         {
             try
             {

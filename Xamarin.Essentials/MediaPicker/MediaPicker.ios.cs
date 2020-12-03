@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using Foundation;
@@ -59,8 +60,13 @@ namespace Xamarin.Essentials
             if (!string.IsNullOrWhiteSpace(options?.Title))
                 picker.Title = options.Title;
 
-            if (DeviceInfo.Idiom == DeviceIdiom.Tablet && picker.PopoverPresentationController != null && vc.View != null)
-                picker.PopoverPresentationController.SourceRect = vc.View.Bounds;
+            if (options != null && options.PresentationSourceBounds != Rectangle.Empty)
+            {
+                picker.ModalPresentationStyle = UIModalPresentationStyle.Popover;
+
+                picker.PopoverPresentationController.SourceView = vc.View;
+                picker.PopoverPresentationController.SourceRect = options.PresentationSourceBounds.ToPlatformRectangle();
+            }
 
             var tcs = new TaskCompletionSource<FileResult>(picker);
             picker.Delegate = new PhotoPickerDelegate

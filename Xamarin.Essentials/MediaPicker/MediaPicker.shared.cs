@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Xamarin.Essentials
 {
@@ -35,5 +33,9 @@ namespace Xamarin.Essentials
     public class MediaPickerOptions
     {
         public string Title { get; set; }
+
+#if !NETSTANDARD1_0
+        public System.Drawing.Rectangle PresentationSourceBounds { get; set; } = System.Drawing.Rectangle.Empty;
+#endif
     }
 }

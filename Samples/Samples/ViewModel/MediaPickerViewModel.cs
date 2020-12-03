@@ -15,13 +15,15 @@ namespace Samples.ViewModel
         bool showPhoto;
         bool showVideo;
 
+        bool usePopover;
+
         public MediaPickerViewModel()
         {
-            PickPhotoCommand = new Command(DoPickPhoto);
-            CapturePhotoCommand = new Command(DoCapturePhoto, () => MediaPicker.IsCaptureSupported);
+            PickPhotoCommand = new Command<Xamarin.Forms.View>(DoPickPhoto);
+            CapturePhotoCommand = new Command<Xamarin.Forms.View>(DoCapturePhoto, _ => MediaPicker.IsCaptureSupported);
 
-            PickVideoCommand = new Command(DoPickVideo);
-            CaptureVideoCommand = new Command(DoCaptureVideo, () => MediaPicker.IsCaptureSupported);
+            PickVideoCommand = new Command<Xamarin.Forms.View>(DoPickVideo);
+            CaptureVideoCommand = new Command<Xamarin.Forms.View>(DoCaptureVideo, _ => MediaPicker.IsCaptureSupported);
         }
 
         public ICommand PickPhotoCommand { get; }
@@ -56,11 +58,21 @@ namespace Samples.ViewModel
             set => SetProperty(ref videoPath, value);
         }
 
-        async void DoPickPhoto()
+        public bool UsePopover
+        {
+            get => usePopover;
+            set => SetProperty(ref usePopover, value);
+        }
+
+        async void DoPickPhoto(Xamarin.Forms.View view)
         {
             try
             {
-                var photo = await MediaPicker.PickPhotoAsync();
+                var options = UsePopover
+                    ? new MediaPickerOptions { PresentationSourceBounds = GetRectangle(view), }
+                    : null;
+
+                var photo = await MediaPicker.PickPhotoAsync(options);
 
                 await LoadPhotoAsync(photo);
 
@@ -72,11 +84,15 @@ namespace Samples.ViewModel
             }
         }
 
-        async void DoCapturePhoto()
+        async void DoCapturePhoto(Xamarin.Forms.View view)
         {
             try
             {
-                var photo = await MediaPicker.CapturePhotoAsync();
+                var options = UsePopover
+                    ? new MediaPickerOptions { PresentationSourceBounds = GetRectangle(view), }
+                    : null;
+
+                var photo = await MediaPicker.CapturePhotoAsync(options);
 
                 await LoadPhotoAsync(photo);
 
@@ -88,11 +104,15 @@ namespace Samples.ViewModel
             }
         }
 
-        async void DoPickVideo()
+        async void DoPickVideo(Xamarin.Forms.View view)
         {
             try
             {
-                var video = await MediaPicker.PickVideoAsync();
+                var options = UsePopover
+                    ? new MediaPickerOptions { PresentationSourceBounds = GetRectangle(view), }
+                    : null;
+
+                var video = await MediaPicker.PickVideoAsync(options);
 
                 await LoadVideoAsync(video);
 
@@ -104,11 +124,15 @@ namespace Samples.ViewModel
             }
         }
 
-        async void DoCaptureVideo()
+        async void DoCaptureVideo(Xamarin.Forms.View view)
         {
             try
             {
-                var photo = await MediaPicker.CaptureVideoAsync();
+                var options = UsePopover
+                    ? new MediaPickerOptions { PresentationSourceBounds = GetRectangle(view), }
+                    : null;
+
+                var photo = await MediaPicker.CaptureVideoAsync(options);
 
                 await LoadVideoAsync(photo);
 
