@@ -33,6 +33,10 @@ namespace Samples.ViewModel
 
         public string CacheDirectory => FileSystem.CacheDirectory;
 
+        public string[] AppResourceDirectories => FileSystem.GetAppResourceDirectories("Folder");
+
+        public string[] AppResourceFiles => FileSystem.GetAppResourceFiles("Folder");
+
         public string CurrentContents
         {
             get => currentContents;

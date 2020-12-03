@@ -24,6 +24,12 @@ namespace Xamarin.Essentials
 
         internal static string NormalizePath(string path)
             => path.Replace('/', Path.DirectorySeparatorChar);
+
+        static string[] PlatformGetAppResourceDirectories(string path)
+            => Directory.GetDirectories(Path.Combine(Application.Current.InstalledLocation, NormalizePath(path)));
+
+        static string[] PlatformGetAppResourceFiles(string path)
+            => Directory.GetFiles(Path.Combine(Application.Current.InstalledLocation, NormalizePath(path)))
     }
 
     public partial class FileBase
