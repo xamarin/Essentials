@@ -204,6 +204,13 @@ Task("test-android-emu")
     Information("Starting Emulator: {0}...", ANDROID_AVD);
     var emulatorProcess = AndroidEmulatorStart(ANDROID_AVD, emuSettings);
 
+    var retries = 60 * 10;
+    while (AdbShell("getprop sys.boot_completed", adbSettings).FirstOrDefault() != "1") {
+        System.Threading.Thread.Sleep(1000);
+        if (retries-- <= 0)
+            break;
+    }
+
     // Run the tests
     var resultCode = StartProcess("xharness", "android test " +
         $"--app=\"{ANDROID_APK_PATH}\" " +
