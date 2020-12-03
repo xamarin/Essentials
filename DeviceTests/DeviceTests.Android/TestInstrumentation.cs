@@ -41,8 +41,8 @@ namespace DeviceTests.Droid
 
             var bundle = new Bundle();
 
-            var runner = new TestRunner(resultsFileName);
-            runner.TestsCompleted += (sender, results) =>
+            var entryPoint = new TestsEntryPoint(resultsFileName);
+            entryPoint.TestsCompleted += (sender, results) =>
             {
                 var message =
                     $"Tests run: {results.ExecutedTests} " +
@@ -55,10 +55,10 @@ namespace DeviceTests.Droid
                 bundle.PutLong("return-code", results.FailedTests == 0 ? 0 : 1);
             };
 
-            await runner.RunAsync();
+            await entryPoint.RunAsync();
 
-            // if (File.Exists(runner.TestsResultsFinalPath))
-            //    bundle.PutString("test-results-path", runner.TestsResultsFinalPath);
+            // if (File.Exists(entryPoint.TestsResultsFinalPath))
+            //    bundle.PutString("test-results-path", entryPoint.TestsResultsFinalPath);
 
             if (bundle.GetLong("return-code", -1) == -1)
                 bundle.PutLong("return-code", 1);
@@ -66,11 +66,11 @@ namespace DeviceTests.Droid
             Finish(Result.Ok, bundle);
         }
 
-        class TestRunner : AndroidApplicationEntryPoint
+        class TestsEntryPoint : AndroidApplicationEntryPoint
         {
             readonly string resultsPath;
 
-            public TestRunner(string resultsFileName)
+            public TestsEntryPoint(string resultsFileName)
             {
                 var docsDir = Application.Context.GetExternalFilesDir(null)?.AbsolutePath ?? FileSystem.AppDataDirectory;
                 if (!Directory.Exists(docsDir))
@@ -95,6 +95,26 @@ namespace DeviceTests.Droid
 
             protected override void TerminateWithSuccess()
             {
+            }
+
+            protected override TestRunner GetTestRunner(LogWriter logWriter)
+            {
+                var testRunner = base.GetTestRunner(logWriter);
+
+                var traits = new[]
+                {
+                    $"{Traits.DeviceType}={Traits.DeviceTypes.ToExclude}",
+                    $"{Traits.Hardware.Accelerometer}={Traits.FeatureSupport.ToExclude(HardwareSupport.HasAccelerometer)}",
+                    $"{Traits.Hardware.Compass}={Traits.FeatureSupport.ToExclude(HardwareSupport.HasCompass)}",
+                    $"{Traits.Hardware.Gyroscope}={Traits.FeatureSupport.ToExclude(HardwareSupport.HasGyroscope)}",
+                    $"{Traits.Hardware.Magnetometer}={Traits.FeatureSupport.ToExclude(HardwareSupport.HasMagnetometer)}",
+                    $"{Traits.Hardware.Battery}={Traits.FeatureSupport.ToExclude(HardwareSupport.HasBattery)}",
+                    $"{Traits.Hardware.Flash}={Traits.FeatureSupport.ToExclude(HardwareSupport.HasFlash)}",
+                };
+
+                testRunner.SkipCategories(traits);
+
+                return testRunner;
             }
         }
 
