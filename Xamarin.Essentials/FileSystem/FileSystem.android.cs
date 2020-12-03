@@ -40,7 +40,7 @@ namespace Xamarin.Essentials
 
         static Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
         {
-            if (string.IsNullOrEmpty (filename))
+            if (string.IsNullOrEmpty(filename))
                 throw new ArgumentNullException(nameof(filename));
 
             filename = filename.Replace('\\', Path.DirectorySeparatorChar);
