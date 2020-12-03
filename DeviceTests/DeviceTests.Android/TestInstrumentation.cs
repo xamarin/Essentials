@@ -73,10 +73,12 @@ namespace DeviceTests.Droid
             public TestsEntryPoint(string resultsFileName)
             {
                 var docsDir = Application.Context.GetExternalFilesDir(null)?.AbsolutePath ?? FileSystem.AppDataDirectory;
+                docsDir = Path.Combine(docsDir, "Documents");
+
                 if (!Directory.Exists(docsDir))
                     Directory.CreateDirectory(docsDir);
 
-                resultsPath = Path.Combine(docsDir, "Documents", resultsFileName);
+                resultsPath = Path.Combine(docsDir, resultsFileName);
             }
 
             protected override bool LogExcludedTests => true;
