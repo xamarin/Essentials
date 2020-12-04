@@ -26,10 +26,10 @@ namespace Xamarin.Essentials
             => path.Replace('/', Path.DirectorySeparatorChar);
 
         static string[] PlatformGetAppResourceDirectories(string path)
-            => Directory.GetDirectories(Path.Combine(Package.Current.InstalledLocation.DisplayName, NormalizePath(path)));
+            => Directory.GetDirectories(Path.Combine(Package.Current.InstalledLocation.Path, NormalizePath(path)));
 
         static string[] PlatformGetAppResourceFiles(string path)
-            => Directory.GetFiles(Path.Combine(Package.Current.InstalledLocation.DisplayName, NormalizePath(path)));
+            => Directory.GetFiles(Path.Combine(Package.Current.InstalledLocation.Path, NormalizePath(path)));
     }
 
     public partial class FileBase
