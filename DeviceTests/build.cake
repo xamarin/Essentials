@@ -207,9 +207,8 @@ Task("test-android-emu")
     var waited = 0;
     while (AdbShell("getprop sys.boot_completed", adbSettings).FirstOrDefault() != "1") {
         System.Threading.Thread.Sleep(1000);
-        if (retries-- > 60 * 10)
+        if (waited++ > 60 * 10)
             break;
-        waited++;
     }
     Information("Waited {0} seconds for the emulator to boot up.", waited);
 
