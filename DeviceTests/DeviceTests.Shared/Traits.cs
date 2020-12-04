@@ -11,6 +11,7 @@ namespace DeviceTests
         public const string DeviceType = "DeviceType";
         public const string InteractionType = "InteractionType";
         public const string UI = "UI";
+        public const string FileProvider = "FileProvider";
 
         internal static class Hardware
         {
@@ -69,7 +70,7 @@ namespace DeviceTests
             return filters;
         }
 
-        internal static IEnumerable<string> GetSkipTraits()
+        internal static IEnumerable<string> GetSkipTraits(IEnumerable<string> additionalFilters)
         {
             yield return $"{DeviceType}={DeviceTypes.ToExclude}";
             yield return $"{InteractionType}={InteractionTypes.ToExclude}";
@@ -80,6 +81,14 @@ namespace DeviceTests
             yield return $"{Hardware.Magnetometer}={FeatureSupport.ToExclude(HardwareSupport.HasMagnetometer)}";
             yield return $"{Hardware.Battery}={FeatureSupport.ToExclude(HardwareSupport.HasBattery)}";
             yield return $"{Hardware.Flash}={FeatureSupport.ToExclude(HardwareSupport.HasFlash)}";
+
+            if (additionalFilters != null)
+            {
+                foreach (var filter in additionalFilters)
+                {
+                    yield return filter;
+                }
+            }
         }
     }
 }

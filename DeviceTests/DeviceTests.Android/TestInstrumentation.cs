@@ -109,7 +109,11 @@ namespace DeviceTests.Droid
             protected override TestRunner GetTestRunner(LogWriter logWriter)
             {
                 var testRunner = base.GetTestRunner(logWriter);
-                testRunner.SkipCategories(Traits.GetSkipTraits());
+                var additional = new List<string>
+                {
+                    $"{Traits.FileProvider}={Traits.FeatureSupport.ToExclude(Platform.HasApiLevel(24))}",
+                };
+                testRunner.SkipCategories(Traits.GetSkipTraits(additional));
                 return testRunner;
             }
         }
