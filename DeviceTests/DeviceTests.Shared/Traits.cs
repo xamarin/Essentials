@@ -70,7 +70,7 @@ namespace DeviceTests
             return filters;
         }
 
-        internal static IEnumerable<string> GetSkipTraits(IEnumerable<string> additionalFilters)
+        internal static IEnumerable<string> GetSkipTraits(IEnumerable<string> additionalFilters = null)
         {
             yield return $"{DeviceType}={DeviceTypes.ToExclude}";
             yield return $"{InteractionType}={InteractionTypes.ToExclude}";

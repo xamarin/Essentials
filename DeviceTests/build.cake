@@ -93,9 +93,6 @@ Task DownloadTcpTextAsync(int port, FilePath filename, Action waitAction = null)
 Task("build-ios")
     .Does(() =>
 {
-    // Setup the test listener config to be built into the app
-    FileWriteText((new FilePath(IOS_PROJ)).GetDirectory().CombineWithFilePath("tests.cfg"), $"{TCP_LISTEN_HOST}:{TCP_LISTEN_PORT}");
-
     MSBuild(IOS_PROJ, c => {
         c.Configuration = "Release";
         c.Restore = true;
