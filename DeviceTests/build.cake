@@ -10,7 +10,7 @@ var IOS_SIM_RUNTIME = Argument("ios-runtime", EnvironmentVariable("IOS_SIM_RUNTI
 var IOS_PROJ = "./DeviceTests.iOS/DeviceTests.iOS.csproj";
 var IOS_BUNDLE_ID = "com.xamarin.essentials.devicetests";
 var IOS_IPA_PATH = "./DeviceTests.iOS/bin/iPhoneSimulator/Release/XamarinEssentialsDeviceTestsiOS.app";
-var IOS_TEST_RESULTS_PATH = MakeAbsolute((FilePath)"../output/test-results/ios/TestResults.xml");
+var IOS_TEST_RESULTS_PATH = MakeAbsolute((FilePath)"../output/test-results/ios");
 
 var ANDROID_PROJ = "./DeviceTests.Android/DeviceTests.Android.csproj";
 var ANDROID_APK_PATH = MakeAbsolute((FilePath)"./DeviceTests.Android/bin/Debug/com.xamarin.essentials.devicetests-Signed.apk");
@@ -112,52 +112,24 @@ Task("test-ios-emu")
     .IsDependentOn("build-ios")
     .Does(() =>
 {
-    var sims = ListAppleSimulators();
-    foreach (var s in sims) {
-        Information("Info: {0}({1} - {2} - {3})", s.Name, s.Runtime, s.UDID, s.Availability);
+    // Clean up after previous runs
+    CleanDirectories(IOS_TEST_RESULTS_PATH.FullPath);
+
+    // Run the tests
+    var resultCode = StartProcess("xharness", "ios test " +
+        $"--app=\"{IOS_IPA_PATH}\" " +
+        $"--targets=\"ios-simulator-64\" " +
+        $"--output-directory=\"{IOS_TEST_RESULTS_PATH}\" " +
+        $"--verbosity=\"Debug\" ");
+
+    // Rename test result files
+    var resultFiles = GetFiles($"{IOS_TEST_RESULTS_PATH}/*.xml");
+    foreach (var resultFile in resultFiles) {
+        MoveFile(resultFile, resultFile.ChangeExtension("TestResults.xml"));
     }
 
-    // Look for a matching simulator on the system
-    var sim = sims.First(s => s.Name == IOS_SIM_NAME && s.Runtime == IOS_SIM_RUNTIME);
-
-    // Boot the simulator
-    Information("Booting: {0}({1} - {2})", sim.Name, sim.Runtime, sim.UDID);
-    if (!sim.State.ToLower().Contains("booted"))
-        BootAppleSimulator(sim.UDID);
-
-    // Wait for it to be booted
-    var booted = false;
-    for (int i = 0; i < 100; i++) {
-        if (ListAppleSimulators().Any(s => s.UDID == sim.UDID && s.State.ToLower().Contains("booted"))) {
-            booted = true;
-            break;
-        }
-        System.Threading.Thread.Sleep(1000);
-    }
-
-    // Install the IPA that was previously built
-    var ipaPath = new FilePath(IOS_IPA_PATH);
-    Information("Installing: {0}", ipaPath);
-    InstalliOSApplication(sim.UDID, MakeAbsolute(ipaPath).FullPath);
-
-    // Start our Test Results TCP listener
-    Information("Started TCP Test Results Listener on port: {0}", TCP_LISTEN_PORT);
-    var tcpListenerTask = DownloadTcpTextAsync(TCP_LISTEN_PORT, IOS_TEST_RESULTS_PATH);
-
-    // Launch the IPA
-    Information("Launching: {0}", IOS_BUNDLE_ID);
-    LaunchiOSApplication(sim.UDID, IOS_BUNDLE_ID);
-
-    // Wait for the TCP listener to get results
-    Information("Waiting for tests...");
-    tcpListenerTask.Wait();
-
-    // Close up simulators
-    Information("Closing Simulator");
-    ShutdownAllAppleSimulators();
-
-    if (FindTextInFiles(IOS_TEST_RESULTS_PATH.FullPath, "result=\"Fail\"").Length > 0)
-        throw new Exception("Some tests failed.");
+    if (resultCode != 0)
+        throw new Exception("xharness had an error.");
 });
 
 
