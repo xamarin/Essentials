@@ -73,7 +73,9 @@ namespace DeviceTests.Droid
             public TestsEntryPoint(string resultsFileName)
             {
 #pragma warning disable CS0618 // Type or member is obsolete
-                var root = Android.OS.Environment.ExternalStorageDirectory.Path;
+                var root = Platform.HasApiLevel(30)
+                    ? Android.OS.Environment.ExternalStorageDirectory.AbsolutePath
+                    : Application.Context.GetExternalFilesDir(null)?.AbsolutePath ?? FileSystem.AppDataDirectory;
 #pragma warning restore CS0618 // Type or member is obsolete
 
                 var docsDir = Path.Combine(root, "Documents");
