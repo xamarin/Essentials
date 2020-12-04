@@ -211,8 +211,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\Folder\" />
-    <Folder Include="Resources\Folder\SubFolder\" />
+    <Folder Include="Folder\" />
+    <Folder Include="Folder\SubFolder\" />
   </ItemGroup>
   <ItemGroup>
     <SDKReference Include="WindowsMobile, Version=10.0.18362.0">
