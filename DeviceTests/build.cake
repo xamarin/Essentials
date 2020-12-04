@@ -93,9 +93,6 @@ Task DownloadTcpTextAsync(int port, FilePath filename, Action waitAction = null)
 Task("build-ios")
     .Does(() =>
 {
-    // Setup the test listener config to be built into the app
-    FileWriteText((new FilePath(IOS_PROJ)).GetDirectory().CombineWithFilePath("tests.cfg"), $"{TCP_LISTEN_HOST}:{TCP_LISTEN_PORT}");
-
     MSBuild(IOS_PROJ, c => {
         c.Configuration = "Release";
         c.Restore = true;
@@ -103,7 +100,7 @@ Task("build-ios")
         c.Properties["BuildIpa"] = new List<string> { "true" };
         c.Properties["ContinuousIntegrationBuild"] = new List<string> { "false" };
         c.Targets.Clear();
-        c.Targets.Add("Rebuild");
+        c.Targets.Add("Build");
         c.BinaryLogger = new MSBuildBinaryLogSettings {
             Enabled = true,
             FileName = OUTPUT_PATH.CombineWithFilePath("binlogs/device-tests-ios-build.binlog").FullPath,

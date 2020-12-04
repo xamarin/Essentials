@@ -1,4 +1,7 @@
-﻿using UIKit;
+﻿using System;
+using System.Threading.Tasks;
+using UIKit;
+using Xunit;
 
 namespace DeviceTests.iOS
 {
@@ -6,7 +9,20 @@ namespace DeviceTests.iOS
     {
         static void Main(string[] args)
         {
-            UIApplication.Main(args, null, nameof(AppDelegate));
+            // UIApplication.Main(args, null, nameof(AppDelegate));
+
+            TestInstrumentation.StartAsync(args).Wait();
+
+            Console.WriteLine("----- Done -----");
+        }
+    }
+
+    public class MyTEsts
+    {
+        [Fact]
+        public void TheTest()
+        {
+            Assert.True(true);
         }
     }
 }
