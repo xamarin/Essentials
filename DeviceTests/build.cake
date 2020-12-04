@@ -158,6 +158,9 @@ Task("test-ios-emu")
     // Close up simulators
     Information("Closing Simulator");
     ShutdownAllAppleSimulators();
+
+    if (FindTextInFiles(IOS_TEST_RESULTS_PATH.FullPath, "result=\"Fail\"").Length > 0)
+        throw new Exception("Some tests failed.");
 });
 
 
