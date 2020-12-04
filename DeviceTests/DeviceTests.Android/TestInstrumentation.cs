@@ -72,8 +72,11 @@ namespace DeviceTests.Droid
 
             public TestsEntryPoint(string resultsFileName)
             {
-                var docsDir = Application.Context.GetExternalFilesDir(null)?.AbsolutePath ?? FileSystem.AppDataDirectory;
-                docsDir = Path.Combine(docsDir, "Documents");
+#pragma warning disable CS0618 // Type or member is obsolete
+                var root = Android.OS.Environment.ExternalStorageDirectory.Path;
+#pragma warning restore CS0618 // Type or member is obsolete
+
+                var docsDir = Path.Combine(root, "Documents");
 
                 if (!Directory.Exists(docsDir))
                     Directory.CreateDirectory(docsDir);
