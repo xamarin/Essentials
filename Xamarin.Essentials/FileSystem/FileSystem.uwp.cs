@@ -29,7 +29,7 @@ namespace Xamarin.Essentials
             => Directory.GetDirectories(Path.Combine(Application.Current.InstalledLocation, NormalizePath(path)));
 
         static string[] PlatformGetAppResourceFiles(string path)
-            => Directory.GetFiles(Path.Combine(Application.Current.InstalledLocation, NormalizePath(path)))
+            => Directory.GetFiles(Path.Combine(Application.Current.InstalledLocation, NormalizePath(path)));
     }
 
     public partial class FileBase
