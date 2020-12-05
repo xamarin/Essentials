@@ -135,7 +135,7 @@ stages:
 
       - template: .ci/build.yml@components
         parameters:
-          name: devicetests_android_api_23
+          name: devicetests_android_api_23_google
           runChecks: false
           displayName: Android API 23
           publishOutputSuffix: '-android23'
@@ -199,7 +199,7 @@ stages:
 
       - template: .ci/build.yml@components
         parameters:
-          name: devicetests_android_api_29
+          name: devicetests_android_api_29_google
           runChecks: false
           displayName: Android API 29
           publishOutputSuffix: '-android29'
@@ -231,7 +231,7 @@ stages:
 
       - template: .ci/build.yml@components
         parameters:
-          name: devicetests_android_api_30
+          name: devicetests_android_api_30_google
           runChecks: false
           displayName: Android API 30
           publishOutputSuffix: '-android30'
