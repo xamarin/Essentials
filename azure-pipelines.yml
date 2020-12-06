@@ -135,22 +135,6 @@ stages:
 
       - template: .ci/build.yml@components
         parameters:
-          name: devicetests_android_api_23_google
-          runChecks: false
-          displayName: Android API 23
-          publishOutputSuffix: '-android23'
-          windowsImage: ''
-          areaPath: $(AREA_PATH)
-          verbosity: diagnostic
-          cakeFile: DeviceTests/build.cake
-          cakeTarget: test-android-emu
-          cakeExtraArgs: --avd-target="`"system-images;android-23;google_apis_playstore;x86`""
-          preBuildSteps:
-            - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-23;google_apis_playstore;x86\""
-              displayName: Install the Android emulators
-
-      - template: .ci/build.yml@components
-        parameters:
           name: devicetests_android_api_24
           runChecks: false
           displayName: Android API 24
