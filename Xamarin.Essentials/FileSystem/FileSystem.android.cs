@@ -242,7 +242,11 @@ namespace Xamarin.Essentials
                 filename = Path.ChangeExtension(filename, extension);
 
             // create a temporary file
-            var tmpFile = GetEssentialsTemporaryFile(Platform.AppContext.CacheDir, filename);
+            var hasPermission = Permissions.IsDeclaredInManifest(global::Android.Manifest.Permission.WriteExternalStorage);
+            var root = hasPermission
+                ? Platform.AppContext.ExternalCacheDir
+                : Platform.AppContext.CacheDir;
+            var tmpFile = GetEssentialsTemporaryFile(root, filename);
 
             // copy to the destination
             using var dstStream = File.Create(tmpFile.CanonicalPath);
