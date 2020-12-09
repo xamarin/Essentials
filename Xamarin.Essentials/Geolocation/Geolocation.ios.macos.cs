@@ -67,6 +67,14 @@ namespace Xamarin.Essentials
                 tcs.TrySetResult(null);
             }
         }
+
+        static bool PlatformIsListening() => false;
+
+        static Task<bool> PlatformStartListeningForegroundAsync(GeolocationRequest request) =>
+            throw ExceptionUtils.NotSupportedOrImplementedException;
+
+        static Task<bool> PlatformStopListeningForegroundAsync() =>
+            throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 
     class SingleLocationListener : CLLocationManagerDelegate

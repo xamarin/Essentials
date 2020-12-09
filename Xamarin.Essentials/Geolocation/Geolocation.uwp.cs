@@ -50,5 +50,13 @@ namespace Xamarin.Essentials
                 }
             }
         }
+
+        static bool PlatformIsListening() => false;
+
+        static Task<bool> PlatformStartListeningForegroundAsync(GeolocationRequest request) =>
+            throw ExceptionUtils.NotSupportedOrImplementedException;
+
+        static Task<bool> PlatformStopListeningForegroundAsync() =>
+            throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }
