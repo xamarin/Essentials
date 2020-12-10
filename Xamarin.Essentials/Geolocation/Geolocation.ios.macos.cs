@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CoreLocation;
-using Foundation;
 
 namespace Xamarin.Essentials
 {
@@ -68,13 +67,57 @@ namespace Xamarin.Essentials
             }
         }
 
-        static bool PlatformIsListening() => false;
+        static CLLocationManager listeningManager;
 
-        static Task<bool> PlatformStartListeningForegroundAsync(GeolocationRequest request) =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+        static bool PlatformIsListening() => listeningManager != null;
 
-        static Task<bool> PlatformStopListeningForegroundAsync() =>
-            throw ExceptionUtils.NotSupportedOrImplementedException;
+        static async Task<bool> PlatformStartListeningForegroundAsync(GeolocationRequest request)
+        {
+            if (PlatformIsListening())
+                throw new InvalidOperationException("already listening to location changes");
+
+            if (!CLLocationManager.LocationServicesEnabled)
+                throw new FeatureNotEnabledException("Location services are not enabled on device.");
+
+            await Permissions.EnsureGrantedAsync<Permissions.LocationWhenInUse>();
+
+            // the location manager requires an active run loop
+            // so just use the main loop
+            listeningManager = MainThread.InvokeOnMainThread(() => new CLLocationManager());
+
+            var listener = new ContinuousLocationListener();
+            listener.LocationHandler += HandleLocation;
+
+            listeningManager.DesiredAccuracy = request.PlatformDesiredAccuracy;
+            listeningManager.Delegate = listener;
+
+#if __IOS__
+            // allow pausing updates
+            listeningManager.PausesLocationUpdatesAutomatically = true;
+#endif
+
+            listeningManager.StartUpdatingLocation();
+
+            return true;
+
+            static void HandleLocation(CLLocation location)
+            {
+                OnLocationChanged(location.ToLocation());
+            }
+        }
+
+        static Task<bool> PlatformStopListeningForegroundAsync()
+        {
+            if (!PlatformIsListening())
+                return Task.FromResult(true);
+
+            listeningManager.StopUpdatingLocation();
+            listeningManager.Delegate = null;
+
+            listeningManager = null;
+
+            return Task.FromResult<bool>(true);
+        }
     }
 
     class SingleLocationListener : CLLocationManagerDelegate
@@ -90,6 +133,23 @@ namespace Xamarin.Essentials
 
             wasRaised = true;
 
+            var location = locations?.LastOrDefault();
+
+            if (location == null)
+                return;
+
+            LocationHandler?.Invoke(location);
+        }
+
+        public override bool ShouldDisplayHeadingCalibration(CLLocationManager manager) => false;
+    }
+
+    class ContinuousLocationListener : CLLocationManagerDelegate
+    {
+        internal Action<CLLocation> LocationHandler { get; set; }
+
+        public override void LocationsUpdated(CLLocationManager manager, CLLocation[] locations)
+        {
             var location = locations?.LastOrDefault();
 
             if (location == null)
