@@ -140,9 +140,8 @@ namespace Samples.ViewModel
 
                     Text = $"File Name: {result.FileName} ({size:0.00} KB)";
 
-                    if (result.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) ||
-                        result.FileName.EndsWith("jpeg", StringComparison.OrdinalIgnoreCase) ||
-                        result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
+                    var ext = Path.GetExtension(result.FileName).ToLowerInvariant();
+                    if (ext == ".jpg" || ext == ".jpeg" || ext == ".png" || ext == ".gif")
                     {
                         var stream = await result.OpenReadAsync();
 
