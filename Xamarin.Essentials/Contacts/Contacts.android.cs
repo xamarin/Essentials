@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,8 +12,7 @@ namespace Xamarin.Essentials
     {
         static async Task<Contact> PlatformPickContactAsync()
         {
-            var intent = new Intent(Intent.ActionPick);
-            intent.SetType(ContactsContract.CommonDataKinds.Phone.ContentType);
+            var intent = new Intent(Intent.ActionPick, ContactsContract.Contacts.ContentUri);
 
             var result = await IntermediateActivity.StartAsync(intent, Platform.requestCodePickContact).ConfigureAwait(false);
 
@@ -34,7 +33,7 @@ namespace Xamarin.Essentials
                 {
                     do
                     {
-                        var contact = GetContact(cursor, ContactsContract.Contacts.InterfaceConsts.Id);
+                        var contact = GetContact(cursor);
                         if (contact != null)
                             yield return contact;
                     }
@@ -54,18 +53,19 @@ namespace Xamarin.Essentials
 
             if (cursor.MoveToFirst())
             {
-                return GetContact(
-                    cursor,
-                    ContactsContract.CommonDataKinds.Phone.InterfaceConsts.ContactId);
+                return GetContact(cursor);
             }
 
             return default;
         }
 
-        static Contact GetContact(ICursor cursor, string idKey)
+        static Contact GetContact(ICursor cursor)
         {
             var displayName = cursor.GetString(cursor.GetColumnIndex(ContactsContract.Contacts.InterfaceConsts.DisplayName));
-            var idQ = new string[1] { cursor.GetString(cursor.GetColumnIndex(idKey)) };
+            var idQ = new string[1]
+            {
+                cursor.GetString(cursor.GetColumnIndex(ContactsContract.Contacts.InterfaceConsts.Id))
+            };
             var phones = GetNumbers(idQ)?.Select(
                 item => new ContactPhone(item.data));
             var emails = GetEmails(idQ)?.Select(
