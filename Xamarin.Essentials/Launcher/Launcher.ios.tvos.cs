@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using CoreGraphics;
 using Foundation;
 using UIKit;
 
@@ -30,6 +31,7 @@ namespace Xamarin.Essentials
         }
 
 #if __IOS__
+
         static UIDocumentInteractionController documentController;
 
         static Task PlatformOpenAsync(OpenFileRequest request)
@@ -38,42 +40,18 @@ namespace Xamarin.Essentials
             {
                 Name = request.File.FileName,
                 Url = NSUrl.FromFilename(request.File.FullPath),
-                Uti = request.File.ContentType,
-                Delegate = new DocumentControllerDelegate
-                {
-                    DismissHandler = () =>
-                    {
-                        documentController?.Dispose();
-                        documentController = null;
-                    }
-                }
+                Uti = request.File.ContentType
             };
 
-            var vc = Platform.GetCurrentViewController();
+            var view = Platform.GetCurrentUIViewController().View;
+            var rect = DeviceInfo.Idiom == DeviceIdiom.Tablet
+                ? new CGRect(new CGPoint(view.Bounds.Width / 2, view.Bounds.Height), CGRect.Empty.Size)
+                : view.Bounds;
 
-            CoreGraphics.CGRect? rect = null;
-            if (DeviceInfo.Idiom == DeviceIdiom.Tablet)
-            {
-                rect = new CoreGraphics.CGRect(new CoreGraphics.CGPoint(vc.View.Bounds.Width / 2, vc.View.Bounds.Height), CoreGraphics.CGRect.Empty.Size);
-            }
-            else
-            {
-                rect = vc.View.Bounds;
-            }
-
-            documentController.PresentPreview(true);
-            documentController.PresentOpenInMenu(rect.Value, vc.View, true);
-
+            documentController.PresentOpenInMenu(rect, view, true);
             return Task.CompletedTask;
         }
 
-        class DocumentControllerDelegate : UIDocumentInteractionControllerDelegate
-        {
-            public Action DismissHandler { get; set; }
-
-            public override void DidDismissOpenInMenu(UIDocumentInteractionController controller)
-                => DismissHandler?.Invoke();
-        }
 #else
         static Task PlatformOpenAsync(OpenFileRequest request) =>
             throw new FeatureNotSupportedException();
