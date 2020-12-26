@@ -34,18 +34,20 @@ namespace Xamarin.Essentials
 
         static Task PlatformOpenAsync(OpenFileRequest request)
         {
-            var fileUrl = NSUrl.FromFilename(request.File.FullPath);
-
-            documentController = UIDocumentInteractionController.FromUrl(fileUrl);
-            documentController.Delegate = new DocumentControllerDelegate
+            documentController = new UIDocumentInteractionController()
             {
-                DismissHandler = () =>
+                Name = request.File.FileName,
+                Url = NSUrl.FromFilename(request.File.FullPath),
+                Uti = request.File.ContentType,
+                Delegate = new DocumentControllerDelegate
                 {
-                    documentController?.Dispose();
-                    documentController = null;
+                    DismissHandler = () =>
+                    {
+                        documentController?.Dispose();
+                        documentController = null;
+                    }
                 }
             };
-            documentController.Uti = request.File.ContentType;
 
             var vc = Platform.GetCurrentViewController();
 
@@ -59,6 +61,7 @@ namespace Xamarin.Essentials
                 rect = vc.View.Bounds;
             }
 
+            documentController.PresentPreview(true);
             documentController.PresentOpenInMenu(rect.Value, vc.View, true);
 
             return Task.CompletedTask;
