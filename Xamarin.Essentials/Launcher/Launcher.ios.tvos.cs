@@ -31,7 +31,6 @@ namespace Xamarin.Essentials
         }
 
 #if __IOS__
-
         static UIDocumentInteractionController documentController;
 
         static Task PlatformOpenAsync(OpenFileRequest request)

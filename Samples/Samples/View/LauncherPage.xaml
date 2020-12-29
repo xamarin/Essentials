@@ -22,7 +22,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Entry Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding LaunchUri}" TextColor="Black" />
+                <Entry Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding LaunchUri}" />
                 <Button Grid.Row="1" Text="Check Launch" Command="{Binding CanLaunchCommand}"/>
                 <Button Grid.Row="1" Grid.Column="1"  Text=" Launch" Command="{Binding LaunchCommand}"/>
                 <Button Grid.Row="2" Grid.Column="0" Text="Launch Browser" Command="{Binding LaunchBrowserCommand}"/>
@@ -31,9 +31,9 @@
                 <StackLayout Grid.Row="3" Grid.ColumnSpan="2">
                     <Label Text="Open File" FontAttributes="Bold" Margin="0,6,0,0" />
                     <Label Text="File Name:" />
-                    <Entry Text="{Binding FileAttachmentName}" TextColor="Black"/>
+                    <Entry Text="{Binding FileAttachmentName}" />
                     <Label Text="File Contents:" />
-                    <Editor Text="{Binding FileAttachmentContents}" AutoSize="TextChanges" TextColor="Black" />
+                    <Editor Text="{Binding FileAttachmentContents}" AutoSize="TextChanges" />
 
                     <Button Text="Open File" Command="{Binding LaunchFileCommand}" />
 
