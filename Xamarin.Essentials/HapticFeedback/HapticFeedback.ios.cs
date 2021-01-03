@@ -6,41 +6,58 @@ namespace Xamarin.Essentials
 {
     public static partial class HapticFeedback
     {
-        internal static bool IsSupported => true;
-
         static void PlatformPerform(HapticFeedbackType type)
         {
-            switch (type)
-            {
-                case HapticFeedbackType.LongPress:
-                    PlatformLongPress();
-                    break;
-                default:
-                    PlatformClick();
-                    break;
-            }
+            var generator = PlatformGetGenerator(type);
+            generator?.Perform();
+            generator?.Dispose();
         }
 
-        static void PlatformClick()
+        public static HapticFeedbackGenerator PlatformGetGenerator(HapticFeedbackType type = HapticFeedbackType.Click)
         {
-            if (Platform.HasOSVersion(10, 0))
-            {
-                var impact = new UIImpactFeedbackGenerator(UIImpactFeedbackStyle.Light);
-                impact.Prepare();
-                impact.ImpactOccurred();
-                impact.Dispose();
-            }
+            if (!Platform.HasOSVersion(10, 0))
+                return null;
+
+            return new ImpactHapticFeedbackGenerator(ConvertType(type));
         }
 
-        static void PlatformLongPress()
-        {
-            if (Platform.HasOSVersion(10, 0))
+        static UIImpactFeedbackStyle ConvertType(HapticFeedbackType type) =>
+            type switch
             {
-                var impact = new UIImpactFeedbackGenerator(UIImpactFeedbackStyle.Medium);
-                impact.Prepare();
-                impact.ImpactOccurred();
-                impact.Dispose();
-            }
+                HapticFeedbackType.LongPress => UIImpactFeedbackStyle.Medium,
+                _ => UIImpactFeedbackStyle.Light
+            };
+    }
+
+    public partial class ImpactHapticFeedbackGenerator : HapticFeedbackGenerator
+    {
+        UIImpactFeedbackGenerator impact;
+
+        internal ImpactHapticFeedbackGenerator(UIImpactFeedbackStyle style)
+            : base()
+        {
+            impact = new UIImpactFeedbackGenerator(style);
+            impact.Prepare();
+        }
+
+        public override void PlatformPerform()
+            => impact.ImpactOccurred();
+
+        public override void PlatformDispose()
+        {
+            impact?.Dispose();
+            impact = null;
+        }
+    }
+
+    public partial class HapticFeedbackGenerator
+    {
+        public virtual void PlatformPerform()
+        {
+        }
+
+        public virtual void PlatformDispose()
+        {
         }
     }
 }

@@ -23,11 +23,28 @@ namespace Xamarin.Essentials
             }
         }
 
+        public static HapticFeedbackGenerator PlatformGetGenerator(HapticFeedbackType type = HapticFeedbackType.Click)
+            => new HapticFeedbackGenerator(() => PlatformPerform(type));
+
         static FeedbackConstants ConvertType(HapticFeedbackType type) =>
             type switch
             {
                 HapticFeedbackType.LongPress => FeedbackConstants.LongPress,
                 _ => FeedbackConstants.ContextClick
             };
+    }
+
+    public partial class HapticFeedbackGenerator
+    {
+        Action perform;
+
+        internal HapticFeedbackGenerator(Action perform)
+            => this.perform = perform;
+
+        public virtual void PlatformPerform()
+            => perform.Invoke();
+
+        public virtual void PlatformDispose()
+            => perform = null;
     }
 }

@@ -6,8 +6,6 @@ namespace Xamarin.Essentials
 {
     public static partial class HapticFeedback
     {
-        internal static bool IsSupported => true;
-
         static void PlatformPerform(HapticFeedbackType type)
         {
             Permissions.EnsureDeclared<Permissions.Vibrate>();
@@ -24,11 +22,28 @@ namespace Xamarin.Essentials
             }
         }
 
+        public static HapticFeedbackGenerator PlatformGetGenerator(HapticFeedbackType type = HapticFeedbackType.Click)
+            => new HapticFeedbackGenerator(() => PlatformPerform(type));
+
         static string ConvertType(HapticFeedbackType type) =>
             type switch
             {
                 HapticFeedbackType.LongPress => "Hold",
                 _ => "Tap"
             };
+    }
+
+    public partial class HapticFeedbackGenerator
+    {
+        Action perform;
+
+        internal HapticFeedbackGenerator(Action perform)
+            => this.perform = perform;
+
+        public virtual void PlatformPerform()
+            => perform.Invoke();
+
+        public virtual void PlatformDispose()
+            => perform = null;
     }
 }
