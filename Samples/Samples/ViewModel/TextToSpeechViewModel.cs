@@ -88,11 +88,11 @@ namespace Samples.ViewModel
         async Task OnPickLocale()
         {
             var locales = await TextToSpeech.GetLocalesAsync();
-            var names = locales.Select(i => i.Name).ToArray();
+            var languages = locales.Select(i => i.Language).ToArray();
 
-            var result = await Application.Current.MainPage.DisplayActionSheet("Pick", "OK", null, names);
+            var result = await Application.Current.MainPage.DisplayActionSheet("Pick", "OK", null, languages);
 
-            selectedLocale = locales.FirstOrDefault(i => i.Name == result);
+            selectedLocale = locales.FirstOrDefault(i => i.Language == result);
             Locale = (result == "OK" || string.IsNullOrEmpty(result)) ? "Default" : result;
         }
 
