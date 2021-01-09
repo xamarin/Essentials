@@ -240,6 +240,12 @@ namespace Samples.ViewModel
                     typeof(WebAuthenticatorPage),
                     "Quickly and easily authenticate and wait for a callback.",
                     new[] { "auth", "authenticate", "authenticator", "web", "webauth" }),
+                new SampleItem(
+                    "🖼",
+                    "Save To Galery",
+                    typeof(SaveToGaleryPage),
+                    "Save To Galery",
+                    new[] { "save", "galery", "image", "jpg", "png" })
             };
             filteredItems = samples;
             filterText = string.Empty;

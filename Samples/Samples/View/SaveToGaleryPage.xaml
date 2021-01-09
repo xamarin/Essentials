@@ -1,0 +1,19 @@
+﻿<views:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:views="clr-namespace:Samples.View"
+                xmlns:viewmodels="clr-namespace:Samples.ViewModel"
+                x:Class="Samples.View.SaveToGaleryPage"
+                Title="Vibration">
+    <views:BasePage.BindingContext>
+        <viewmodels:SaveToGaleryViewModel />
+    </views:BasePage.BindingContext>
+
+
+    <ScrollView>
+        <StackLayout Padding="12" Spacing="12">
+            <Image Source="{Binding ImageUrl}"/>
+            <Button Text="Save image" Command="{Binding SaveCommand}" />
+        </StackLayout>
+    </ScrollView>
+
+</views:BasePage>
