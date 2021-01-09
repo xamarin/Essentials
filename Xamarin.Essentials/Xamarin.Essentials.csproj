@@ -124,5 +124,8 @@
   <ItemGroup>
     <None Remove="mdoc.targets" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SaveToGalery\" />
+  </ItemGroup>
   <Import Project="$(MSBuildThisFileDirectory)mdoc.targets" />
 </Project>
