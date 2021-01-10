@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Foundation;
 using UIKit;
 
-namespace Xamarin.Essentials.SaveToGalery
+namespace Xamarin.Essentials.SaveToGallery
 {
-    public static partial class SaveToGalery
+    public static partial class SaveToGallery
     {
         static Task PlatformSaveImageAsync(byte[] data, string filename, string albumName)
         {

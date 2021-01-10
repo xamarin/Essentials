@@ -2,14 +2,14 @@
 using System.Net;
 using System.Windows.Input;
 using Xamarin.Essentials;
-using Xamarin.Essentials.SaveToGalery;
+using Xamarin.Essentials.SaveToGallery;
 using Xamarin.Forms;
 
 namespace Samples.ViewModel
 {
-    public class SaveToGaleryViewModel : BaseViewModel
+    public class SaveToGalleryViewModel : BaseViewModel
     {
-        public SaveToGaleryViewModel()
+        public SaveToGalleryViewModel()
             => SaveCommand = new Command(Save);
 
         public ICommand SaveCommand { get; }
@@ -23,7 +23,7 @@ namespace Samples.ViewModel
             {
                 using var client = new WebClient();
                 var data = await client.DownloadDataTaskAsync(ImageUrl);
-                await SaveToGalery.SaveImageAsync(data, "hhhh.png");
+                await SaveToGallery.SaveImageAsync(data, "hhhh.png");
             }
             catch (Exception ex)
             {

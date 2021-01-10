@@ -12,9 +12,9 @@ using Environment = Android.OS.Environment;
 using File = Java.IO.File;
 using Path = System.IO.Path;
 
-namespace Xamarin.Essentials.SaveToGalery
+namespace Xamarin.Essentials.SaveToGallery
 {
-    public static partial class SaveToGalery
+    public static partial class SaveToGallery
     {
         static async Task PlatformSaveImageAsync(byte[] data, string filename, string hhh)
         {
