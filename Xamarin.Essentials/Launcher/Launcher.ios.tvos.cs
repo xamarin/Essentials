@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Threading.Tasks;
 using CoreGraphics;
 using Foundation;
@@ -43,9 +44,19 @@ namespace Xamarin.Essentials
             };
 
             var view = Platform.GetCurrentUIViewController().View;
-            var rect = DeviceInfo.Idiom == DeviceIdiom.Tablet
-                ? new CGRect(new CGPoint(view.Bounds.Width / 2, view.Bounds.Height), CGRect.Empty.Size)
-                : view.Bounds;
+
+            CGRect rect;
+
+            if (DeviceInfo.Idiom == DeviceIdiom.Tablet)
+            {
+                rect = request.PresentationSourceBounds != Rectangle.Empty
+                    ? request.PresentationSourceBounds.ToPlatformRectangle()
+                    : new CGRect(new CGPoint(view.Bounds.Width / 2, view.Bounds.Height), CGRect.Empty.Size);
+            }
+            else
+            {
+                rect = view.Bounds;
+            }
 
             documentController.PresentOpenInMenu(rect, view, true);
             return Task.CompletedTask;
