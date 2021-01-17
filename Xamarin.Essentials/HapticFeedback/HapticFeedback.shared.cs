@@ -8,7 +8,7 @@ namespace Xamarin.Essentials
             => PlatformPerform(type);
 
         public static HapticFeedbackGenerator PrepareGenerator(HapticFeedbackType type = HapticFeedbackType.Click)
-#if MONOANDROID || UWP || __MACOS__ || TIZEN
+#if MONOANDROID || WINDOWS_UWP || __MACOS__ || TIZEN
             => new HapticFeedbackGenerator(() => PlatformPerform(type));
 
 #else
@@ -18,7 +18,7 @@ namespace Xamarin.Essentials
 
     public partial class HapticFeedbackGenerator : IDisposable
     {
-#if MONOANDROID || UWP || __MACOS__ || TIZEN
+#if MONOANDROID || WINDOWS_UWP || __MACOS__ || TIZEN
         Action perform;
 
         internal HapticFeedbackGenerator(Action perform)
@@ -30,14 +30,14 @@ namespace Xamarin.Essentials
         }
 
         public void Perform()
-#if MONOANDROID || UWP || __MACOS__ || TIZEN
+#if MONOANDROID || WINDOWS_UWP || __MACOS__ || TIZEN
             => perform.Invoke();
 #else
             => PlatformPerform();
 #endif
 
         public void Dispose()
-#if MONOANDROID || UWP || __MACOS__ || TIZEN
+#if MONOANDROID || WINDOWS_UWP || __MACOS__ || TIZEN
             => perform = null;
 #else
         {
