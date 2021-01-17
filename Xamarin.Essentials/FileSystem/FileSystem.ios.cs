@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CoreGraphics;
+using CoreImage;
 using Foundation;
 using Photos;
 using UIKit;
@@ -176,25 +179,62 @@ namespace Xamarin.Essentials
         }
     }
 
+    // TODO: Think if we should rename it as UIImage is just an input
     class UIImageFileResult : FileResult
     {
-        readonly UIImage uiImage;
-        NSData data;
-
-        internal UIImageFileResult(UIImage image)
+        internal UIImageFileResult(UIImage image, NSDictionary metadata)
             : base()
         {
-            uiImage = image;
-
-            FullPath = Guid.NewGuid().ToString() + FileSystem.Extensions.Png;
-            FileName = FullPath;
+            FileName = Guid.NewGuid() + FileSystem.Extensions.Jpg;
+            var tempDir = NSFileManager.DefaultManager.GetTemporaryDirectory().Path;
+            FullPath = Path.Combine(tempDir, FileName);
+            SaveImageWithMetadata(image, metadata);
         }
 
         internal override Task<Stream> PlatformOpenReadAsync()
         {
-            data ??= uiImage.AsPNG();
+            Stream fileStream = File.OpenRead(FullPath);
 
-            return Task.FromResult(data.AsStream());
+            return Task.FromResult(fileStream);
+        }
+
+        void SaveImageWithMetadata(UIImage image, NSDictionary metadata)
+        {
+            try
+            {
+                var imageData = image.AsJPEG();
+
+                if (imageData == null)
+                {
+                    // TODO: Throw custom exception
+                }
+
+                // Copy over meta data
+                using var ciImage = CIImage.FromData(imageData);
+                var originalColorSpace = ciImage.ColorSpace;
+                using var newImageSource = ciImage.CreateBySettingProperties(metadata);
+                using var ciContext = new CIContext();
+                var result = ciContext.WriteJpegRepresentation(newImageSource, NSUrl.FromFilename(FullPath), originalColorSpace ?? CGColorSpace.CreateSrgb(), new NSDictionary(), out var error);
+                if (result)
+                {
+                    if (error != null)
+                    {
+                        // TODO: Throw custom exception and include the error
+                    }
+
+                    // TODO: Throw custom exception
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"<||> {ex}");
+
+                // TODO: Throw custom exception and include ex
+            }
+            finally
+            {
+                image.Dispose();
+            }
         }
     }
 
