@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using UIKit;
+﻿using UIKit;
 
 namespace Xamarin.Essentials
 {
@@ -8,12 +6,11 @@ namespace Xamarin.Essentials
     {
         static void PlatformPerform(HapticFeedbackType type)
         {
-            var generator = PlatformGetGenerator(type);
+            using var generator = PlatformPrepareGenerator(type);
             generator?.Perform();
-            generator?.Dispose();
         }
 
-        public static HapticFeedbackGenerator PlatformGetGenerator(HapticFeedbackType type = HapticFeedbackType.Click)
+        public static HapticFeedbackGenerator PlatformPrepareGenerator(HapticFeedbackType type = HapticFeedbackType.Click)
         {
             if (!Platform.HasOSVersion(10, 0))
                 return null;
@@ -29,7 +26,18 @@ namespace Xamarin.Essentials
             };
     }
 
-    public partial class ImpactHapticFeedbackGenerator : HapticFeedbackGenerator
+    public partial class HapticFeedbackGenerator
+    {
+        protected virtual void PlatformPerform()
+        {
+        }
+
+        protected virtual void PlatformDispose()
+        {
+        }
+    }
+
+    class ImpactHapticFeedbackGenerator : HapticFeedbackGenerator
     {
         UIImpactFeedbackGenerator impact;
 
@@ -40,24 +48,13 @@ namespace Xamarin.Essentials
             impact.Prepare();
         }
 
-        public override void PlatformPerform()
+        protected override void PlatformPerform()
             => impact.ImpactOccurred();
 
-        public override void PlatformDispose()
+        protected override void PlatformDispose()
         {
             impact?.Dispose();
             impact = null;
-        }
-    }
-
-    public partial class HapticFeedbackGenerator
-    {
-        public virtual void PlatformPerform()
-        {
-        }
-
-        public virtual void PlatformDispose()
-        {
         }
     }
 }

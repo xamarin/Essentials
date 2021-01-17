@@ -7,16 +7,16 @@ namespace Xamarin.Essentials
         static void PlatformPerform(HapticFeedbackType type)
             => throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        static HapticFeedbackGenerator PlatformGetGenerator(HapticFeedbackType type)
+        static HapticFeedbackGenerator PlatformPrepareGenerator(HapticFeedbackType type)
             => throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 
     public partial class HapticFeedbackGenerator : IDisposable
     {
-        public void PlatformPerform()
+        void PlatformPerform()
             => throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        public void PlatformDispose()
+        void PlatformDispose()
             => throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }

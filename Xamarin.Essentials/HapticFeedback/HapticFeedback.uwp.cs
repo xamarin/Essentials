@@ -32,9 +32,6 @@ namespace Xamarin.Essentials
             }
         }
 
-        public static HapticFeedbackGenerator PlatformGetGenerator(HapticFeedbackType type = HapticFeedbackType.Click)
-            => new HapticFeedbackGenerator(() => PlatformPerform(type));
-
         static SimpleHapticsControllerFeedback FindFeedback(SimpleHapticsController controller, ushort type)
         {
             foreach (var feedback in controller.SupportedFeedback)
@@ -51,19 +48,5 @@ namespace Xamarin.Essentials
                 HapticFeedbackType.LongPress => KnownSimpleHapticsControllerWaveforms.Press,
                 _ => KnownSimpleHapticsControllerWaveforms.Click
             };
-    }
-
-    public partial class HapticFeedbackGenerator
-    {
-        Action perform;
-
-        internal HapticFeedbackGenerator(Action perform)
-            => this.perform = perform;
-
-        public virtual void PlatformPerform()
-            => perform.Invoke();
-
-        public virtual void PlatformDispose()
-            => perform = null;
     }
 }
