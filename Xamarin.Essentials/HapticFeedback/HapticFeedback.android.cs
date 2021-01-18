@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using Android.Views;
 
 namespace Xamarin.Essentials
@@ -12,16 +10,11 @@ namespace Xamarin.Essentials
         static void PlatformPerform(HapticFeedbackType type)
         {
             Permissions.EnsureDeclared<Permissions.Vibrate>();
-
-            try
-            {
-                Platform.CurrentActivity?.Window?.DecorView?.PerformHapticFeedback(ConvertType(type));
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"HapticFeedback Exception: {ex.Message}");
-            }
+            Platform.CurrentActivity?.Window?.DecorView?.PerformHapticFeedback(ConvertType(type));
         }
+
+        static HapticFeedbackGenerator PlatformPrepareGenerator(HapticFeedbackType type)
+            => new HapticFeedbackGenerator(() => PlatformPerform(type));
 
         static FeedbackConstants ConvertType(HapticFeedbackType type) =>
             type switch
@@ -29,5 +22,19 @@ namespace Xamarin.Essentials
                 HapticFeedbackType.LongPress => FeedbackConstants.LongPress,
                 _ => FeedbackConstants.ContextClick
             };
+    }
+
+    public partial class HapticFeedbackGenerator : IDisposable
+    {
+        Action perform;
+
+        internal HapticFeedbackGenerator(Action perform)
+            => this.perform = perform;
+
+        void PlatformPerform()
+            => perform.Invoke();
+
+        void PlatformDispose()
+            => perform = null;
     }
 }

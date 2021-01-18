@@ -15,15 +15,8 @@ namespace Xamarin.Essentials
             if (!Platform.HasOSVersion(10, 0))
                 return null;
 
-            return new ImpactHapticFeedbackGenerator(ConvertType(type));
+            return new ImpactHapticFeedbackGenerator(type);
         }
-
-        static UIImpactFeedbackStyle ConvertType(HapticFeedbackType type) =>
-            type switch
-            {
-                HapticFeedbackType.LongPress => UIImpactFeedbackStyle.Medium,
-                _ => UIImpactFeedbackStyle.Light
-            };
     }
 
     public partial class HapticFeedbackGenerator
@@ -41,10 +34,10 @@ namespace Xamarin.Essentials
     {
         UIImpactFeedbackGenerator impact;
 
-        internal ImpactHapticFeedbackGenerator(UIImpactFeedbackStyle style)
-            : base()
+        internal ImpactHapticFeedbackGenerator(HapticFeedbackType type)
+            : base(type)
         {
-            impact = new UIImpactFeedbackGenerator(style);
+            impact = new UIImpactFeedbackGenerator(ConvertType(type));
             impact.Prepare();
         }
 
@@ -56,5 +49,12 @@ namespace Xamarin.Essentials
             impact?.Dispose();
             impact = null;
         }
+
+        UIImpactFeedbackStyle ConvertType(HapticFeedbackType type)
+            => type switch
+            {
+                HapticFeedbackType.LongPress => UIImpactFeedbackStyle.Medium,
+                _ => UIImpactFeedbackStyle.Light
+            };
     }
 }

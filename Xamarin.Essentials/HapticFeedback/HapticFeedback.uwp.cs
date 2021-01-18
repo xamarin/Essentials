@@ -11,26 +11,22 @@ namespace Xamarin.Essentials
 
         static async void PlatformPerform(HapticFeedbackType type)
         {
-            try
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent(vibrationDeviceApiType)
+                && await VibrationDevice.RequestAccessAsync() == VibrationAccessStatus.Allowed)
             {
-                if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent(vibrationDeviceApiType)
-                    && await VibrationDevice.RequestAccessAsync() == VibrationAccessStatus.Allowed)
-                {
-                    var controller = (await VibrationDevice.GetDefaultAsync())?.SimpleHapticsController;
+                var controller = (await VibrationDevice.GetDefaultAsync())?.SimpleHapticsController;
 
-                    if (controller != null)
-                    {
-                        var feedback = FindFeedback(controller, ConvertType(type));
-                        if (feedback != null)
-                            controller.SendHapticFeedback(feedback);
-                    }
+                if (controller != null)
+                {
+                    var feedback = FindFeedback(controller, ConvertType(type));
+                    if (feedback != null)
+                        controller.SendHapticFeedback(feedback);
                 }
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"HapticFeedback Exception: {ex.Message}");
-            }
         }
+
+        static HapticFeedbackGenerator PlatformPrepareGenerator(HapticFeedbackType type)
+            => new HapticFeedbackGenerator(() => PlatformPerform(type));
 
         static SimpleHapticsControllerFeedback FindFeedback(SimpleHapticsController controller, ushort type)
         {
@@ -48,5 +44,19 @@ namespace Xamarin.Essentials
                 HapticFeedbackType.LongPress => KnownSimpleHapticsControllerWaveforms.Press,
                 _ => KnownSimpleHapticsControllerWaveforms.Click
             };
+    }
+
+    public partial class HapticFeedbackGenerator : IDisposable
+    {
+        Action perform;
+
+        internal HapticFeedbackGenerator(Action perform)
+            => this.perform = perform;
+
+        void PlatformPerform()
+            => perform.Invoke();
+
+        void PlatformDispose()
+            => perform = null;
     }
 }

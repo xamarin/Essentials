@@ -1,4 +1,5 @@
-﻿using AppKit;
+﻿using System;
+using AppKit;
 
 namespace Xamarin.Essentials
 {
@@ -10,6 +11,23 @@ namespace Xamarin.Essentials
                 Performer.PerformFeedback(NSHapticFeedbackPattern.Generic, NSHapticFeedbackPerformanceTime.Default);
         }
 
+        static HapticFeedbackGenerator PlatformPrepareGenerator(HapticFeedbackType type)
+            => new HapticFeedbackGenerator(() => PlatformPerform(type));
+
         internal static INSHapticFeedbackPerformer Performer => NSHapticFeedbackManager.DefaultPerformer;
+    }
+
+    public partial class HapticFeedbackGenerator : IDisposable
+    {
+        Action perform;
+
+        internal HapticFeedbackGenerator(Action perform)
+            => this.perform = perform;
+
+        void PlatformPerform()
+            => perform.Invoke();
+
+        void PlatformDispose()
+            => perform = null;
     }
 }

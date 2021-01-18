@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using Tizen.System;
 
 namespace Xamarin.Essentials
@@ -8,24 +7,46 @@ namespace Xamarin.Essentials
     {
         static void PlatformPerform(HapticFeedbackType type)
         {
-            Permissions.EnsureDeclared<Permissions.Vibrate>();
-            try
-            {
-                var feedback = new Feedback();
-                var pattern = ConvertType(type);
-                if (feedback.IsSupportedPattern(FeedbackType.Vibration, pattern))
-                    feedback.Play(FeedbackType.Vibration, pattern);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"HapticFeedback Exception: {ex.Message}");
-            }
+            using var generator = PlatformPrepareGenerator(type);
+            generator?.Perform();
         }
 
-        static string ConvertType(HapticFeedbackType type) =>
-            type switch
+        static HapticFeedbackGenerator PlatformPrepareGenerator(HapticFeedbackType type)
+            => new HapticFeedbackGenerator(type).Init();
+    }
+
+    public partial class HapticFeedbackGenerator : IDisposable
+    {
+        bool isSupportedPattern;
+        string pattern;
+        Feedback feedback;
+
+        internal HapticFeedbackGenerator Init()
+        {
+            Permissions.EnsureDeclared<Permissions.Vibrate>();
+            pattern = ConvertType(Type);
+            feedback = new Feedback();
+            isSupportedPattern = feedback.IsSupportedPattern(FeedbackType.Vibration, pattern);
+            return this;
+        }
+
+        void PlatformPerform()
+        {
+            if (isSupportedPattern)
+                feedback.Play(FeedbackType.Vibration, pattern);
+        }
+
+        void PlatformDispose()
+        {
+            pattern = null;
+            feedback = null;
+        }
+
+        string ConvertType(HapticFeedbackType type)
+            => type switch
             {
                 HapticFeedbackType.LongPress => "Hold",
+                HapticFeedbackType.Click => throw new NotImplementedException(),
                 _ => "Tap"
             };
     }
