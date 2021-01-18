@@ -48,7 +48,7 @@ namespace DeviceTests
         }
 
         [Theory]
-        [InlineData("Microsoft Building 25 Redmond WA")]
+        [InlineData("Redmond, WA, USA")]
         public async Task Get_Locations(string address)
         {
             try
