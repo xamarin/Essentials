@@ -1,62 +1,59 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
+using System.Linq;
 using Windows.Devices.Haptics;
 
 namespace Xamarin.Essentials
 {
     public static partial class HapticFeedback
     {
-        const string vibrationDeviceApiType = "Windows.Devices.Haptics.VibrationDevice";
-
-        static async void PlatformPerform(HapticFeedbackType type)
+        static void PlatformPerform(HapticFeedbackType type)
         {
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent(vibrationDeviceApiType)
-                && await VibrationDevice.RequestAccessAsync() == VibrationAccessStatus.Allowed)
-            {
-                var controller = (await VibrationDevice.GetDefaultAsync())?.SimpleHapticsController;
-
-                if (controller != null)
-                {
-                    var feedback = FindFeedback(controller, ConvertType(type));
-                    if (feedback != null)
-                        controller.SendHapticFeedback(feedback);
-                }
-            }
+            using var generator = PlatformPrepareGenerator(type);
+            generator?.Perform();
         }
 
         static HapticFeedbackGenerator PlatformPrepareGenerator(HapticFeedbackType type)
-            => new HapticFeedbackGenerator(() => PlatformPerform(type));
-
-        static SimpleHapticsControllerFeedback FindFeedback(SimpleHapticsController controller, ushort type)
         {
-            foreach (var feedback in controller.SupportedFeedback)
-            {
-                if (feedback.Waveform == type)
-                    return feedback;
-            }
-            return null;
+            var generator = new HapticFeedbackGenerator(type);
+            generator.Init();
+            return generator;
+        }
+    }
+
+    public partial class HapticFeedbackGenerator : IDisposable
+    {
+        const string vibrationDeviceApiType = "Windows.Devices.Haptics.VibrationDevice";
+        SimpleHapticsControllerFeedback feedback;
+        SimpleHapticsController controller;
+
+        internal async void Init()
+        {
+            if (!(Windows.Foundation.Metadata.ApiInformation.IsTypePresent(vibrationDeviceApiType)
+                && await VibrationDevice.RequestAccessAsync() == VibrationAccessStatus.Allowed))
+                throw new FeatureNotSupportedException(HapticFeedback.notSupportedMessage);
+
+            controller = (await VibrationDevice.GetDefaultAsync())?.SimpleHapticsController;
+            if (controller != null)
+                feedback = FindFeedback(controller, ConvertType(Type));
         }
 
-        static ushort ConvertType(HapticFeedbackType type) =>
+        void PlatformPerform()
+            => controller?.SendHapticFeedback(feedback);
+
+        void PlatformDispose()
+        {
+            controller = null;
+            feedback = null;
+        }
+
+        SimpleHapticsControllerFeedback FindFeedback(SimpleHapticsController controller, ushort type)
+            => controller?.SupportedFeedback?.FirstOrDefault(a => a.Waveform == type);
+
+        ushort ConvertType(HapticFeedbackType type) =>
             type switch
             {
                 HapticFeedbackType.LongPress => KnownSimpleHapticsControllerWaveforms.Press,
                 _ => KnownSimpleHapticsControllerWaveforms.Click
             };
-    }
-
-    public partial class HapticFeedbackGenerator : IDisposable
-    {
-        Action perform;
-
-        internal HapticFeedbackGenerator(Action perform)
-            => this.perform = perform;
-
-        void PlatformPerform()
-            => perform.Invoke();
-
-        void PlatformDispose()
-            => perform = null;
     }
 }

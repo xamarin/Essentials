@@ -17,7 +17,6 @@ namespace Xamarin.Essentials
 
     public partial class HapticFeedbackGenerator : IDisposable
     {
-        bool isSupportedPattern;
         string pattern;
         Feedback feedback;
 
@@ -26,15 +25,15 @@ namespace Xamarin.Essentials
             Permissions.EnsureDeclared<Permissions.Vibrate>();
             pattern = ConvertType(Type);
             feedback = new Feedback();
-            isSupportedPattern = feedback.IsSupportedPattern(FeedbackType.Vibration, pattern);
+
+            if (!feedback.IsSupportedPattern(FeedbackType.Vibration, pattern))
+               throw new FeatureNotSupportedException(HapticFeedback.notSupportedMessage);
+
             return this;
         }
 
         void PlatformPerform()
-        {
-            if (isSupportedPattern)
-                feedback.Play(FeedbackType.Vibration, pattern);
-        }
+            => feedback.Play(FeedbackType.Vibration, pattern);
 
         void PlatformDispose()
         {

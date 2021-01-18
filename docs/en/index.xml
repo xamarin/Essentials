@@ -102,7 +102,7 @@
           <AttributeName>System.Reflection.AssemblyMetadata("RepositoryUrl", "https://github.com/xamarin/Essentials")</AttributeName>
         </Attribute>
         <Attribute>
-          <AttributeName>System.Reflection.AssemblyInformationalVersion("1.0.0+0f9e4a511a645eaf76ac5ae3d463e83ecb53676c")</AttributeName>
+          <AttributeName>System.Reflection.AssemblyInformationalVersion("1.0.0+839a4842d00599dc916b2991fa5363e764c2e838")</AttributeName>
         </Attribute>
       </Attributes>
     </Assembly>

@@ -58,5 +58,23 @@
         <remarks></remarks>
       </Docs>
     </Member>
+    <Member MemberName="Type">
+      <MemberSignature Language="C#" Value="public Xamarin.Essentials.HapticFeedbackType Type { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property instance valuetype Xamarin.Essentials.HapticFeedbackType Type" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.HapticFeedbackGenerator.Type" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>Xamarin.Essentials.HapticFeedbackType</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>The type of a HapticFeedback response that will be called</summary>
+        <value></value>
+        <remarks></remarks>
+      </Docs>
+    </Member>
   </Members>
 </Type>

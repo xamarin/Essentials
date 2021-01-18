@@ -4,6 +4,9 @@ namespace Xamarin.Essentials
 {
     public static partial class HapticFeedback
     {
+        internal const string notSupportedMessage =
+            "Haptic Feedback is not supported on the current device";
+
         public static void Perform(HapticFeedbackType type = HapticFeedbackType.Click)
             => PlatformPerform(type);
 

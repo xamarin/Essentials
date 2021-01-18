@@ -475,6 +475,7 @@
     <Type Name="Xamarin.Essentials.HapticFeedbackGenerator" Id="T:Xamarin.Essentials.HapticFeedbackGenerator">
       <Member Id="M:Xamarin.Essentials.HapticFeedbackGenerator.Dispose" />
       <Member Id="M:Xamarin.Essentials.HapticFeedbackGenerator.Perform" />
+      <Member Id="P:Xamarin.Essentials.HapticFeedbackGenerator.Type" />
     </Type>
     <Type Name="Xamarin.Essentials.HapticFeedbackType" Id="T:Xamarin.Essentials.HapticFeedbackType">
       <Member Id="F:Xamarin.Essentials.HapticFeedbackType.Click" />

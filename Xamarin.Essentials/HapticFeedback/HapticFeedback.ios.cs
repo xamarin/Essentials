@@ -7,13 +7,13 @@ namespace Xamarin.Essentials
         static void PlatformPerform(HapticFeedbackType type)
         {
             using var generator = PlatformPrepareGenerator(type);
-            generator?.Perform();
+            generator.Perform();
         }
 
         static HapticFeedbackGenerator PlatformPrepareGenerator(HapticFeedbackType type = HapticFeedbackType.Click)
         {
             if (!Platform.HasOSVersion(10, 0))
-                return null;
+                throw new FeatureNotSupportedException(HapticFeedback.notSupportedMessage);
 
             return new ImpactHapticFeedbackGenerator(type);
         }
