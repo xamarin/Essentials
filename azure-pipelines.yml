@@ -90,6 +90,7 @@ stages:
 
       - template: .ci/build.yml@components
         parameters:
+          xcode: '12.3'
           name: devicetests_ios
           runChecks: false
           displayName: iOS
