@@ -34,7 +34,7 @@ namespace Xamarin.Essentials
         static DisplayInfo GetMainDisplayInfo()
         {
             using var displayMetrics = new DisplayMetrics();
-            using var display = GetDefaultDisplay();
+            var display = GetDefaultDisplay();
             display?.GetRealMetrics(displayMetrics);
 
             return new DisplayInfo(
@@ -67,7 +67,7 @@ namespace Xamarin.Essentials
 
         static DisplayRotation CalculateRotation()
         {
-            using var display = GetDefaultDisplay();
+            var display = GetDefaultDisplay();
 
             return display?.Rotation switch
             {
