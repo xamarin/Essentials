@@ -197,6 +197,25 @@
     <Content Include="Properties\Default.rd.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="FileSystemTemplate.txt" />
+    <Content Include="FileSystemTemplate.txt">
+      <Link>Folder\FileSystemTemplate.txt</Link>
+    </Content>
+    <Content Include="FileSystemTemplate.txt">
+      <Link>Folder\FileSystemTemplate1.txt</Link>
+    </Content>
+    <Content Include="FileSystemTemplate.txt">
+      <Link>Folder\FileSystemTemplate2.txt</Link>
+    </Content>
+    <Content Include="FileSystemTemplate.txt">
+      <Link>Folder\SubFolder\FileSystemTemplate.txt</Link>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Folder\" />
+    <Folder Include="Folder\SubFolder\" />
+  </ItemGroup>
+  <ItemGroup>
     <SDKReference Include="WindowsMobile, Version=10.0.18362.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
