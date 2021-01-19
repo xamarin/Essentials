@@ -14,11 +14,14 @@ namespace Samples.ViewModel
         {
             CopyCommand = new Command(OnCopy);
             PasteCommand = new Command(OnPaste);
+            CheckCommand = new Command(OnCheck);
         }
 
         public ICommand CopyCommand { get; }
 
         public ICommand PasteCommand { get; }
+
+        public ICommand CheckCommand { get; }
 
         public string FieldValue
         {
@@ -59,7 +62,10 @@ namespace Samples.ViewModel
             LastCopied = $"Last copied text at {DateTime.UtcNow:T}";
         }
 
-        async void OnCopy() => await Clipboard.SetTextAsync(FieldValue);
+        async void OnCopy()
+        {
+            await Clipboard.SetTextAsync(FieldValue);
+        }
 
         async void OnPaste()
         {
@@ -68,6 +74,11 @@ namespace Samples.ViewModel
             {
                 FieldValue = text;
             }
+        }
+
+        async void OnCheck()
+        {
+            await DisplayAlertAsync($"Has text: {Clipboard.HasText}");
         }
     }
 }

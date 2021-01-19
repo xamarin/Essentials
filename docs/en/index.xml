@@ -99,7 +99,10 @@
           <AttributeName>System.Runtime.Versioning.TargetFramework("Xamarin.Mac,Version=v2.0", FrameworkDisplayName="Xamarin.Mac")</AttributeName>
         </Attribute>
         <Attribute>
-          <AttributeName>System.Reflection.AssemblyInformationalVersion("1.0.0+ed1281b320c4ff8fcd73f1cba0d94a1eceda9ce3")</AttributeName>
+          <AttributeName>System.Reflection.AssemblyMetadata("RepositoryUrl", "https://github.com/xamarin/Essentials")</AttributeName>
+        </Attribute>
+        <Attribute>
+          <AttributeName>System.Reflection.AssemblyInformationalVersion("1.0.0+2fb7c9ee75e244e990677fa4ef85bbfd730a97e7")</AttributeName>
         </Attribute>
       </Attributes>
     </Assembly>
@@ -114,6 +117,9 @@
       <Type Name="ActivityState" Kind="Enumeration" />
       <Type Name="ActivityStateChangedEventArgs" Kind="Class" />
       <Type Name="AltitudeReferenceSystem" Kind="Enumeration" />
+      <Type Name="AppAction" Kind="Class" />
+      <Type Name="AppActionEventArgs" Kind="Class" />
+      <Type Name="AppActions" Kind="Class" />
       <Type Name="AppInfo" Kind="Class" />
       <Type Name="AppleSignInAuthenticator" Kind="Class" />
       <Type Name="AppleSignInAuthenticator+Options" Kind="Class" />
@@ -139,6 +145,10 @@
       <Type Name="ConnectionProfile" Kind="Enumeration" />
       <Type Name="Connectivity" Kind="Class" />
       <Type Name="ConnectivityChangedEventArgs" Kind="Class" />
+      <Type Name="Contact" Kind="Class" />
+      <Type Name="ContactEmail" Kind="Class" />
+      <Type Name="ContactPhone" Kind="Class" />
+      <Type Name="Contacts" Kind="Class" />
       <Type Name="DeviceDisplay" Kind="Class" />
       <Type Name="DeviceIdiom" Kind="Structure" />
       <Type Name="DeviceInfo" Kind="Class" />
@@ -161,9 +171,9 @@
       <Type Name="FileBase" Kind="Class" />
       <Type Name="FilePicker" Kind="Class" />
       <Type Name="FilePickerFileType" Kind="Class" />
-      <Type Name="FilePickerResult" Kind="Class" />
       <Type Name="FileProvider" Kind="Class" />
       <Type Name="FileProviderLocation" Kind="Enumeration" />
+      <Type Name="FileResult" Kind="Class" />
       <Type Name="FileSystem" Kind="Class" />
       <Type Name="Flashlight" Kind="Class" />
       <Type Name="Geocoding" Kind="Class" />
@@ -185,6 +195,8 @@
       <Type Name="MainThread" Kind="Class" />
       <Type Name="Map" Kind="Class" />
       <Type Name="MapLaunchOptions" Kind="Class" />
+      <Type Name="MediaPicker" Kind="Class" />
+      <Type Name="MediaPickerOptions" Kind="Class" />
       <Type Name="NavigationMode" Kind="Enumeration" />
       <Type Name="NetworkAccess" Kind="Enumeration" />
       <Type Name="NotImplementedInReferenceAssemblyException" Kind="Class" />
@@ -226,15 +238,20 @@
       <Type Name="Placemark" Kind="Class" />
       <Type Name="PlacemarkExtensions" Kind="Class" />
       <Type Name="Platform" Kind="Class" />
+      <Type Name="Platform+Intent" Kind="Class" />
       <Type Name="PointExtensions" Kind="Class" />
       <Type Name="Preferences" Kind="Class" />
       <Type Name="ReadOnlyFile" Kind="Class" />
       <Type Name="RectangleExtensions" Kind="Class" />
+      <Type Name="Screenshot" Kind="Class" />
+      <Type Name="ScreenshotFormat" Kind="Enumeration" />
+      <Type Name="ScreenshotResult" Kind="Class" />
       <Type Name="SecureStorage" Kind="Class" />
       <Type Name="SensorSpeed" Kind="Enumeration" />
       <Type Name="Share" Kind="Class" />
       <Type Name="ShareFile" Kind="Class" />
       <Type Name="ShareFileRequest" Kind="Class" />
+      <Type Name="ShareMultipleFilesRequest" Kind="Class" />
       <Type Name="ShareRequestBase" Kind="Class" />
       <Type Name="ShareTextRequest" Kind="Class" />
       <Type Name="SizeExtensions" Kind="Class" />

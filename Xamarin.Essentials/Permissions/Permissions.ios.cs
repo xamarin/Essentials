@@ -105,12 +105,21 @@ namespace Xamarin.Essentials
 
             internal static Task<PermissionStatus> RequestAddressBookPermission()
             {
-                var addressBook = new ABAddressBook();
+                var addressBook = ABAddressBook.Create(out var createError);
+
+                // if the permission was denied, then we can't create the object
+                if (createError?.Code == (int)ABAddressBookError.OperationNotPermittedByUserError)
+                    return Task.FromResult(PermissionStatus.Denied);
 
                 var tcs = new TaskCompletionSource<PermissionStatus>();
 
                 addressBook.RequestAccess((success, error) =>
-                    tcs.TrySetResult(success ? PermissionStatus.Granted : PermissionStatus.Denied));
+                {
+                    tcs.TrySetResult(success ? PermissionStatus.Granted : PermissionStatus.Denied);
+
+                    addressBook?.Dispose();
+                    addressBook = null;
+                });
 
                 return tcs.Task;
             }

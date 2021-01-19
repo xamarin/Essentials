@@ -44,9 +44,7 @@ namespace Xamarin.Essentials
                 {
                     var data = NSData.FromFile(attachment.FullPath);
                     if (data == null)
-                    {
                         throw new FileNotFoundException($"Attachment {attachment.FileName} not found.", attachment.FullPath);
-                    }
 
                     controller.AddAttachmentData(data, attachment.ContentType, attachment.FileName);
                 }
@@ -57,21 +55,18 @@ namespace Xamarin.Essentials
             controller.Finished += (sender, e) =>
             {
                 controller.DismissViewController(true, null);
-                tcs.SetResult(e.Result == MFMailComposeResult.Sent);
+                tcs.TrySetResult(e.Result == MFMailComposeResult.Sent);
             };
             parentController.PresentViewController(controller, true, null);
 
             return tcs.Task;
         }
 
-        static Task ComposeWithUrl(EmailMessage message)
+        static async Task ComposeWithUrl(EmailMessage message)
         {
             var url = GetMailToUri(message);
-
-            var tcs = new TaskCompletionSource<bool>();
             var nsurl = NSUrl.FromString(url);
-            UIApplication.SharedApplication.OpenUrl(nsurl, new UIApplicationOpenUrlOptions(), r => tcs.TrySetResult(r));
-            return tcs.Task;
+            await Launcher.PlatformOpenAsync(nsurl);
         }
     }
 }

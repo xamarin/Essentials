@@ -6,22 +6,25 @@ namespace Xamarin.Essentials
 {
     public static partial class FilePicker
     {
-        static Task<IEnumerable<FilePickerResult>> PlatformPickAsync(PickOptions options, bool allowMultiple = false)
+        static Task<IEnumerable<FileResult>> PlatformPickAsync(PickOptions options, bool allowMultiple = false)
             => throw new NotImplementedInReferenceAssemblyException();
     }
 
     public partial class FilePickerFileType
     {
-        public static FilePickerFileType PlatformImageFileType()
+        static FilePickerFileType PlatformImageFileType()
             => throw new NotImplementedInReferenceAssemblyException();
 
-        public static FilePickerFileType PlatformPngFileType()
+        static FilePickerFileType PlatformPngFileType()
             => throw new NotImplementedInReferenceAssemblyException();
-    }
 
-    public partial class FilePickerResult
-    {
-        Task<Stream> PlatformOpenReadStreamAsync()
+        static FilePickerFileType PlatformJpegFileType()
+            => throw new NotImplementedInReferenceAssemblyException();
+
+        static FilePickerFileType PlatformVideoFileType()
+            => throw new NotImplementedInReferenceAssemblyException();
+
+        static FilePickerFileType PlatformPdfFileType()
             => throw new NotImplementedInReferenceAssemblyException();
     }
 }

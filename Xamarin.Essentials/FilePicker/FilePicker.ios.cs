@@ -11,11 +11,8 @@ namespace Xamarin.Essentials
 {
     public static partial class FilePicker
     {
-        static Task<IEnumerable<FilePickerResult>> PlatformPickAsync(PickOptions options, bool allowMultiple = false)
+        static async Task<IEnumerable<FileResult>> PlatformPickAsync(PickOptions options, bool allowMultiple = false)
         {
-            if (allowMultiple && !Platform.HasOSVersion(11, 0))
-                throw new FeatureNotSupportedException("Multiple file picking is only available on iOS 11 or later.");
-
             var allowedUtis = options?.FileTypes?.Value?.ToArray() ?? new string[]
             {
                 UTType.Content,
@@ -23,43 +20,50 @@ namespace Xamarin.Essentials
                 "public.data"
             };
 
-            var tcs = new TaskCompletionSource<IEnumerable<FilePickerResult>>();
+            var tcs = new TaskCompletionSource<IEnumerable<FileResult>>();
 
-            // Note: Importing (UIDocumentPickerMode.Import) makes a local copy of the document,
-            // while opening (UIDocumentPickerMode.Open) opens the document directly. We do the
-            // latter, so the user accesses the original file.
-            var documentPicker = new UIDocumentPickerViewController(allowedUtis, UIDocumentPickerMode.Open);
-            documentPicker.AllowsMultipleSelection = allowMultiple;
+            // Use Open instead of Import so that we can attempt to use the original file.
+            // If the file is from an external provider, then it will be downloaded.
+            using var documentPicker = new UIDocumentPickerViewController(allowedUtis, UIDocumentPickerMode.Open);
+            if (Platform.HasOSVersion(11, 0))
+                documentPicker.AllowsMultipleSelection = allowMultiple;
             documentPicker.Delegate = new PickerDelegate
             {
-                PickHandler = urls =>
-                {
-                    try
-                    {
-                        // there was a cancellation
-                        if (urls?.Any() ?? false)
-                            tcs.TrySetResult(urls.Select(url => new FilePickerResult(url)));
-                        else
-                            tcs.TrySetResult(Enumerable.Empty<FilePickerResult>());
-                    }
-                    catch (Exception ex)
-                    {
-                        // pass exception to task so that it doesn't get lost in the UI main loop
-                        tcs.SetException(ex);
-                    }
-                }
+                PickHandler = urls => GetFileResults(urls, tcs)
             };
+
+            if (documentPicker.PresentationController != null)
+            {
+                documentPicker.PresentationController.Delegate = new PickerPresentationControllerDelegate
+                {
+                    PickHandler = urls => GetFileResults(urls, tcs)
+                };
+            }
 
             var parentController = Platform.GetCurrentViewController();
 
             parentController.PresentViewController(documentPicker, true, null);
 
-            return tcs.Task;
+            return await tcs.Task;
+        }
+
+        static async void GetFileResults(NSUrl[] urls, TaskCompletionSource<IEnumerable<FileResult>> tcs)
+        {
+            try
+            {
+                var results = await FileSystem.EnsurePhysicalFileResultsAsync(urls);
+
+                tcs.TrySetResult(results);
+            }
+            catch (Exception ex)
+            {
+                tcs.TrySetException(ex);
+            }
         }
 
         class PickerDelegate : UIDocumentPickerDelegate
         {
-            public Action<IEnumerable<NSUrl>> PickHandler { get; set; }
+            public Action<NSUrl[]> PickHandler { get; set; }
 
             public override void WasCancelled(UIDocumentPickerViewController controller)
                 => PickHandler?.Invoke(null);
@@ -68,50 +72,48 @@ namespace Xamarin.Essentials
                 => PickHandler?.Invoke(urls);
 
             public override void DidPickDocument(UIDocumentPickerViewController controller, NSUrl url)
-                => PickHandler?.Invoke(new List<NSUrl> { url });
+                => PickHandler?.Invoke(new NSUrl[] { url });
+        }
+
+        class PickerPresentationControllerDelegate : UIAdaptivePresentationControllerDelegate
+        {
+            public Action<NSUrl[]> PickHandler { get; set; }
+
+            public override void DidDismiss(UIPresentationController presentationController) =>
+                PickHandler?.Invoke(null);
         }
     }
 
     public partial class FilePickerFileType
     {
-        public static FilePickerFileType PlatformImageFileType() =>
+        static FilePickerFileType PlatformImageFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
                 { DevicePlatform.iOS, new[] { (string)UTType.Image } }
             });
 
-        public static FilePickerFileType PlatformPngFileType() =>
+        static FilePickerFileType PlatformPngFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
                 { DevicePlatform.iOS, new[] { (string)UTType.PNG } }
             });
-    }
 
-    public partial class FilePickerResult
-    {
-        Stream fileStream;
+        static FilePickerFileType PlatformJpegFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.iOS, new[] { (string)UTType.JPEG } }
+            });
 
-        internal FilePickerResult(NSUrl url)
-            : base()
-        {
-            url.StartAccessingSecurityScopedResource();
+        static FilePickerFileType PlatformVideoFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.iOS, new string[] { UTType.MPEG4, UTType.Video, UTType.AVIMovie, UTType.AppleProtectedMPEG4Video, "mp4", "m4v", "mpg", "mpeg", "mp2", "mov", "avi", "mkv", "flv", "gifv", "qt" } }
+            });
 
-            var doc = new UIDocument(url);
-            FullPath = doc.FileUrl?.Path;
-            FileName = doc.LocalizedName ?? Path.GetFileName(FullPath);
-
-            url.StopAccessingSecurityScopedResource();
-
-            // immediately open a file stream, in case iOS cleans up the picked file
-            fileStream = File.OpenRead(FullPath);
-        }
-
-        Task<Stream> PlatformOpenReadStreamAsync()
-        {
-            // make sure we are at he beginning
-            fileStream.Seek(0, SeekOrigin.Begin);
-
-            return Task.FromResult(fileStream);
-        }
+        static FilePickerFileType PlatformPdfFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.iOS, new[] { (string)UTType.PDF } }
+            });
     }
 }
