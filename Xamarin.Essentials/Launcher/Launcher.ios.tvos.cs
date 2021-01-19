@@ -47,15 +47,15 @@ namespace Xamarin.Essentials
 
             CGRect rect;
 
-            if (DeviceInfo.Idiom == DeviceIdiom.Tablet)
+            if (request.PresentationSourceBounds != Rectangle.Empty)
             {
-                rect = request.PresentationSourceBounds != Rectangle.Empty
-                    ? request.PresentationSourceBounds.ToPlatformRectangle()
-                    : new CGRect(new CGPoint(view.Bounds.Width / 2, view.Bounds.Height), CGRect.Empty.Size);
+                rect = request.PresentationSourceBounds.ToPlatformRectangle();
             }
             else
             {
-                rect = view.Bounds;
+                rect = DeviceInfo.Idiom == DeviceIdiom.Tablet
+                    ? new CGRect(new CGPoint(view.Bounds.Width / 2, view.Bounds.Height), CGRect.Empty.Size)
+                    : view.Bounds;
             }
 
             documentController.PresentOpenInMenu(rect, view, true);
