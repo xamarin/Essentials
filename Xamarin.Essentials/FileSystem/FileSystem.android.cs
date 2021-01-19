@@ -57,13 +57,26 @@ namespace Xamarin.Essentials
         // Android does't have the concept for returning Directories (AFICT).
         // As such, we only return string with no . in them. Not ideal but
         // should work in most cases as Folders rarely contain dots
-        static string[] PlatformGetAppResourceDirectories(string path)
-            => Platform.AppContext.Assets.List(path).Where(file => !file.Contains(".")).Select(x => Path.Combine(path, x)).ToArray();
+        static string[] PlatformGetAppPackageDirectories(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+
+            return Platform.AppContext.Assets.List(path)
+                .Where(file => !file.Contains("."))
+                .Select(x => Path.Combine(path, x)).ToArray();
+        }
 
         // This may also return Directories, but we can't restrict the list,
         // as some files may not have an extention. So user is on their own from here.
-        static string[] PlatformGetAppResourceFiles(string path)
-            => Platform.AppContext.Assets.List(path).Select(x => Path.Combine(path, x)).ToArray();
+        static string[] PlatformGetAppPackageFiles(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+
+            return Platform.AppContext.Assets.List(path)
+                .Select(x => Path.Combine(path, x)).ToArray();
+        }
 
         internal static Java.IO.File GetEssentialsTemporaryFile(Java.IO.File root, string fileName)
         {

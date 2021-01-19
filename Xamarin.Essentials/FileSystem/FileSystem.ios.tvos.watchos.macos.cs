@@ -39,20 +39,26 @@ namespace Xamarin.Essentials
             return dirs[0];
         }
 
-        static string[] PlatformGetAppResourceDirectories(string path)
+        static string[] PlatformGetAppPackageDirectories(string path)
         {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+
             if (Directory.Exists(path))
                 return Directory.GetDirectories(path);
             else
-                return null;
+                throw new DirectoryNotFoundException(path);
         }
 
-        static string[] PlatformGetAppResourceFiles(string path)
+        static string[] PlatformGetAppPackageFiles(string path)
         {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+
             if (Directory.Exists(path))
                 return Directory.GetFiles(path);
             else
-                return null;
+                throw new DirectoryNotFoundException(path);
         }
     }
 

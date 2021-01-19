@@ -25,20 +25,28 @@ namespace Xamarin.Essentials
         internal static string NormalizePath(string path)
             => path.Replace('/', Path.DirectorySeparatorChar);
 
-        static string[] PlatformGetAppResourceDirectories(string path)
+        static string[] PlatformGetAppPackageDirectories(string path)
         {
-            if (Directory.Exists(path))
-                return Directory.GetDirectories(NormalizePath(path));
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+
+            var normalizedPath = NormalizePath(path);
+            if (Directory.Exists(normalizedPath))
+                return Directory.GetDirectories(normalizedPath);
             else
-                return null;
+                throw new DirectoryNotFoundException(path);
         }
 
-        static string[] PlatformGetAppResourceFiles(string path)
+        static string[] PlatformGetAppPackageFiles(string path)
         {
-            if (Directory.Exists(path))
-                return Directory.GetFiles(NormalizePath(path));
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+
+            var normalizedPath = NormalizePath(path);
+            if (Directory.Exists(normalizedPath))
+                return Directory.GetFiles(normalizedPath);
             else
-                return null;
+                throw new DirectoryNotFoundException(path);
         }
     }
 

@@ -14,10 +14,10 @@ namespace Xamarin.Essentials
         static Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
              => throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        static string[] PlatformGetAppResourceDirectories(string path)
+        static string[] PlatformGetAppPackageDirectories(string path)
             => throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        static string[] PlatformGetAppResourceFiles(string path)
+        static string[] PlatformGetAppPackageFiles(string path)
             => throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 

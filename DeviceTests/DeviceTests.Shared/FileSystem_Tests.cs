@@ -51,7 +51,7 @@ namespace DeviceTests
         [InlineData("Folder")]
         public void AppResourceDirectories_Is_Valid(string path)
         {
-            var directories = FileSystem.GetAppResourceDirectories(path);
+            var directories = FileSystem.GetAppPackageDirectories(path);
             Assert.True(directories != null);
         }
 
@@ -59,7 +59,7 @@ namespace DeviceTests
         [InlineData("Folder")]
         public void AppResourceFiles_Is_Valid(string path)
         {
-            var files = FileSystem.GetAppResourceFiles(path);
+            var files = FileSystem.GetAppPackageFiles(path);
             Assert.True(files != null);
         }
     }
