@@ -44,7 +44,7 @@ namespace Xamarin.Essentials
                 density: scale,
                 orientation: DisplayOrientation.Portrait,
                 rotation: DisplayRotation.Rotation0,
-                rate: 0);
+                rate: (float)CoreGraphicsInterop.MainScreenRefreshRate);
         }
 
         static void StartScreenMetricsListeners()

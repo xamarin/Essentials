@@ -20,6 +20,37 @@ namespace Xamarin.Essentials
         }
     }
 
+    internal static class CoreGraphicsInterop
+    {
+        public static double MainScreenRefreshRate
+            => GetRefreshRate(CGMainDisplayID());
+
+        [DllImport(Constants.CoreGraphicsLibrary)]
+        static extern IntPtr CGDisplayCopyDisplayMode(uint display);
+
+        [DllImport(Constants.CoreGraphicsLibrary)]
+        static extern void CGDisplayModeRelease(IntPtr mode);
+
+        [DllImport(Constants.CoreGraphicsLibrary)]
+        static extern double CGDisplayModeGetRefreshRate(IntPtr mode);
+
+        [DllImport(Constants.CoreGraphicsLibrary)]
+        static extern uint CGMainDisplayID();
+
+        public static double GetRefreshRate(uint display)
+        {
+            var mode = CGDisplayCopyDisplayMode(display);
+            if (mode == IntPtr.Zero)
+                return 0.0;
+
+            var refreshRate = CGDisplayModeGetRefreshRate(mode);
+
+            CGDisplayModeRelease(mode);
+
+            return refreshRate;
+        }
+    }
+
     internal static class IOKit
     {
         const string IOKitLibrary = "/System/Library/Frameworks/IOKit.framework/IOKit";
