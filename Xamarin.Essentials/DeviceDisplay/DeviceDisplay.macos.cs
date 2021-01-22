@@ -41,9 +41,12 @@ namespace Xamarin.Essentials
 
             var mainDisplayId = CoreGraphicsInterop.MainDisplayId;
 
+            // try determine the refresh rate, but fall back to 60Hz
             var refreshRate = CoreGraphicsInterop.GetRefreshRate(mainDisplayId);
             if (refreshRate == 0)
                 refreshRate = CVDisplayLinkInterop.GetRefreshRate(mainDisplayId);
+            if (refreshRate == 0)
+                refreshRate = 60.0;
 
             return new DisplayInfo(
                 width: frame.Width,
