@@ -33,9 +33,9 @@ namespace Samples.ViewModel
 
         public string CacheDirectory => FileSystem.CacheDirectory;
 
-        public string[] AppResourceDirectories => FileSystem.GetAppResourceDirectories("Folder");
+        public string[] AppPackageDirectories => FileSystem.GetAppPackageDirectories("Folder");
 
-        public string[] AppResourceFiles => FileSystem.GetAppResourceFiles("Folder");
+        public string[] AppPackageFiles => FileSystem.GetAppPackageFiles("Folder");
 
         public string CurrentContents
         {
