@@ -10,8 +10,14 @@
 
     <ScrollView>
         <StackLayout Padding="12" Spacing="12">
-            <Image Source="{Binding ImageUrl}"/>
-            <Button Text="Save image" Command="{Binding SaveCommand}" />
+            <Image Source="{Binding PngUrl}"/>
+            <Button Text="Save image" Command="{Binding SaveCommand}"
+                    CommandParameter="png"/>
+
+            <Image Source="{Binding JpgUrl}" HeightRequest="300"/>
+            <Button Text="Save image" Command="{Binding SaveCommand}"
+                    CommandParameter="jpg"/>
+
         </StackLayout>
     </ScrollView>
 
