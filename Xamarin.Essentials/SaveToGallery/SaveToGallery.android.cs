@@ -12,7 +12,7 @@ using Environment = Android.OS.Environment;
 using File = Java.IO.File;
 using Path = System.IO.Path;
 
-namespace Xamarin.Essentials.SaveToGallery
+namespace Xamarin.Essentials
 {
     public static partial class SaveToGallery
     {
@@ -78,5 +78,8 @@ namespace Xamarin.Essentials.SaveToGallery
             //            new string[] { "image/png", "image/jpeg" },
             //            null);
         }
+
+        static async Task PlatformSaveVideoAsync(byte[] data, string filename, string albumName)
+            => await Task.CompletedTask;
     }
 }
