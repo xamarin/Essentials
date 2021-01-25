@@ -11,14 +11,17 @@
     <ScrollView>
         <StackLayout Padding="12" Spacing="12">
             <Image Source="{Binding PngUrl}"/>
-            <Button Text="Save image" Command="{Binding SaveCommand}"
-                    CommandParameter="png"/>
+            <Button Text="Save Png" Command="{Binding SavevPngCommand}"/>
 
-            <Image Source="{Binding JpgUrl}" HeightRequest="300"/>
-            <Button Text="Save image" Command="{Binding SaveCommand}"
-                    CommandParameter="jpg"/>
+            <Image Source="{Binding JpgUrl}" HeightRequest="200"/>
+            <Button Text="Save Jpg" Command="{Binding SaveJpgCommand}"/>
+
+             <Image Source="{Binding GifUrl}" HeightRequest="200" IsAnimationPlaying="True"/>
+            <Button Text="Save Gif" Command="{Binding SaveGifCommand}"/>
+
+             <MediaElement Source="{Binding Mp4Url}" HeightRequest="200"/>
+            <Button Text="Save Mp4" Command="{Binding SaveMp4Command}"/>
 
         </StackLayout>
     </ScrollView>
-
 </views:BasePage>
