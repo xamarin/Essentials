@@ -3,25 +3,48 @@
                 xmlns:views="clr-namespace:Samples.View"
                 xmlns:viewmodels="clr-namespace:Samples.ViewModel"
                 x:Class="Samples.View.SaveToGalleryPage"
-                Title="Vibration">
+                Title="Save To Galery">
+
     <views:BasePage.BindingContext>
         <viewmodels:SaveToGalleryViewModel />
     </views:BasePage.BindingContext>
 
     <ScrollView>
-        <StackLayout Padding="12" Spacing="12">
-            <Image Source="{Binding PngUrl}"/>
-            <Button Text="Save Png" Command="{Binding SavevPngCommand}"/>
+        <Grid RowSpacing="20" Padding="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="400"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <Image Source="{Binding JpgUrl}" HeightRequest="200"/>
-            <Button Text="Save Jpg" Command="{Binding SaveJpgCommand}"/>
+            <Grid ColumnSpacing="8" RowSpacing="8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-             <Image Source="{Binding GifUrl}" HeightRequest="200" IsAnimationPlaying="True"/>
-            <Button Text="Save Gif" Command="{Binding SaveGifCommand}"/>
+                <Image Grid.Row="0" Grid.Column="0" Source="{Binding PngUrl}"/>
+                <Button Grid.Row="1" Grid.Column="0" Text="Png" Command="{Binding SavevPngCommand}"/>
 
-             <MediaElement Source="{Binding Mp4Url}" HeightRequest="200"/>
-            <Button Text="Save Mp4" Command="{Binding SaveMp4Command}"/>
+                <Image Grid.Row="0" Grid.Column="1" Source="{Binding JpgUrl}"/>
+                <Button Grid.Row="1" Grid.Column="1" Text="Jpg" Command="{Binding SaveJpgCommand}"/>
 
-        </StackLayout>
+
+                <Image Grid.Row="2" Grid.Column="0" Source="{Binding GifUrl}" IsAnimationPlaying="True"/>
+                <Button Grid.Row="3" Grid.Column="0" Text="Gif" Command="{Binding SaveGifCommand}"/>
+
+                <MediaElement Grid.Row="2" Grid.Column="1" Source="{Binding VideoUrl}"/>
+                <Button Grid.Row="3" Grid.Column="1" Text="Video" Command="{Binding SaveVideoCommand}"/>
+            </Grid>
+
+            <Button Grid.Row="1" Text="From Cache Directory" Command="{Binding SaveFromCacheCommand}"/>
+
+        </Grid>
     </ScrollView>
 </views:BasePage>
