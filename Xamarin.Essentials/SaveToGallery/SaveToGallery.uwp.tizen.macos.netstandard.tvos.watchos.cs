@@ -5,10 +5,10 @@ namespace Xamarin.Essentials
 {
     public static partial class SaveToGallery
     {
-        static Task PlatformSaveImageAsync(byte[] data, string filename, string albumName)
+        static Task PlatformSaveAsync(MediaFileType type, byte[] data, string fileName, string albumName)
             => throw ExceptionUtils.NotSupportedOrImplementedException;
 
-        static Task PlatformSaveVideoAsync(byte[] data, string filename, string albumName)
+        static Task PlatformSaveAsync(MediaFileType type, string filePath, string albumName)
             => throw ExceptionUtils.NotSupportedOrImplementedException;
     }
 }
