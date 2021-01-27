@@ -11,19 +11,29 @@
                 <Setter Property="Visual" Value="{x:Static local:App.PreferredVisual}" />
             </Style>
             <Style TargetType="Editor">
-                <Setter Property="TextColor" Value="{OnPlatform iOS='Black'}" />
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="Visual" Value="Default" />
+                <Setter Property="BackgroundColor" Value="WhiteSmoke" />
             </Style>
             <Style TargetType="Entry">
-                <Setter Property="TextColor" Value="{OnPlatform iOS='Black'}" />
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="Visual" Value="Default" />
+                <Setter Property="BackgroundColor" Value="WhiteSmoke" />
             </Style>
             <Style TargetType="Picker">
-                <Setter Property="TextColor" Value="{OnPlatform iOS='Black'}" />
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="Visual" Value="Default" />
+                <Setter Property="BackgroundColor" Value="WhiteSmoke" />
             </Style>
             <Style TargetType="DatePicker">
-                <Setter Property="TextColor" Value="{OnPlatform iOS='Black'}" />
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="Visual" Value="Default" />
+                <Setter Property="BackgroundColor" Value="WhiteSmoke" />
             </Style>
             <Style TargetType="TimePicker">
-                <Setter Property="TextColor" Value="{OnPlatform iOS='Black'}" />
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="Visual" Value="Default" />
+                <Setter Property="BackgroundColor" Value="WhiteSmoke" />
             </Style>
         </ResourceDictionary>
     </Application.Resources>
