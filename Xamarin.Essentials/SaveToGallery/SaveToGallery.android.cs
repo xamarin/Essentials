@@ -1,82 +1,113 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Android.Content;
-using Android.Graphics;
-using Android.Media;
-using Android.OS;
 using Android.Provider;
-using Java.IO;
+using Android.Webkit;
 using Environment = Android.OS.Environment;
 using File = Java.IO.File;
 using Path = System.IO.Path;
+using Stream = System.IO.Stream;
+using Uri = Android.Net.Uri;
 
 namespace Xamarin.Essentials
 {
     public static partial class SaveToGallery
     {
         static async Task PlatformSaveAsync(MediaFileType type, byte[] data, string fileName, string albumName)
-            => await Task.CompletedTask;
+        {
+            using var ms = new MemoryStream(data);
+            await PlatformSaveAsync(type, ms, fileName, albumName);
+        }
 
         static async Task PlatformSaveAsync(MediaFileType type, string filePath, string albumName)
-            => await Task.CompletedTask;
+        {
+            if (!System.IO.File.Exists(filePath))
+                throw new ArgumentNullException(nameof(filePath));
+            using var fileStream = System.IO.File.OpenRead(filePath);
 
-        // static async Task PlatformSaveImageAsync(byte[] data, string filename, string hhh)
-        //        {
-        //            try
-        //            {
-        // #if MONOANDROID10_0
-        //                var bitmap = BitmapFactory.DecodeByteArray(data, 0, data.Length);
-        //                var resolver = Platform.AppContext.ContentResolver;
-        //                var contentValues = new ContentValues();
-        //                contentValues.Put(MediaStore.MediaColumns.DisplayName, filename);
-        //                contentValues.Put(MediaStore.MediaColumns.MimeType, "image/*");
-        //                contentValues.Put(MediaStore.MediaColumns.RelativePath, Environment.DirectoryPictures);
-        //                contentValues.Put(
-        //                    MediaStore.MediaColumns.RelativePath,
-        //                    Path.Combine(Environment.DirectoryPictures, AppInfo.Name));
-        //                var imageUri = resolver.Insert(MediaStore.Images.Media.ExternalContentUri, contentValues);
-        //                var fos = resolver.OpenOutputStream(imageUri);
-        //                var result = await bitmap.CompressAsync(Bitmap.CompressFormat.Jpeg, 100, fos);
-        //                fos?.Close();
-        // #endif
-        // #if !MONOANDROID10_0
-        //                var imagesDir = new File(
-        //                    Environment.GetExternalStoragePublicDirectory(Environment.DirectoryPictures),
-        //                    AppInfo.Name);
-        //                imagesDir.Mkdirs();
-        //                var fos = new FileOutputStream(new File(imagesDir, filename));
-        //                await fos.WriteAsync(data);
-        //                fos?.Close();
-        // #endif
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                System.Diagnostics.Debug.WriteLine($"HapticFeedback Exception: {ex.Message}");
-        //            }
-        //        var folderDirectory = Platform.AppContext.GetExternalFilesDir(Environment.DirectoryDcim);
-        //         using (var bitmapFile = new File(folderDirectory, filename))
-        //         {
-        //            bitmapFile.CreateNewFile();
-        //         using (var outputStream = new FileOutputStream(bitmapFile))
-        //                await outputStream.WriteAsync(data);
-        //    MediaScannerConnection.ScanFile(
-        //           Platform.CurrentActivity,
-        //                new string[] { bitmapFile.Path
-        // },
-        //                new string[] { "image/png", "image/jpeg" },
-        //                null);
-        //         }
-        //         MediaStore.Images.Media.InsertImage
-        //         var picturesDirectory = Environment.DirectoryPictures;
-        // var backingFile = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures), "count.png");
-        // await System.IO.File.WriteAllBytesAsync(backingFile, data);
-        // MediaScannerConnection.ScanFile(
-        //           Platform.CurrentActivity,
-        //           new string[] { backingFile },
-        //           new string[] { "image/png", "image/jpeg" },
-        //           null);
-        //        }
+            await PlatformSaveAsync(type, fileStream, Path.GetFileName(filePath), albumName);
+        }
+
+        static async Task PlatformSaveAsync(MediaFileType type, Stream fileStream, string fileName, string albumName)
+        {
+            await Permissions.EnsureGrantedAsync<Permissions.StorageWrite>();
+
+            var context = Platform.AppContext;
+            var dateTimeNow = DateTime.Now;
+
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+            var extension = Path.GetExtension(fileName).ToLower();
+            var newFileName = $"{fileNameWithoutExtension}_{dateTimeNow:yyyyMMdd_HHmmss}{extension}";
+
+            using var values = new ContentValues();
+            values.Put(MediaStore.MediaColumns.DateAdded, TimeSeconds(dateTimeNow));
+            values.Put(MediaStore.MediaColumns.Title, fileNameWithoutExtension);
+            values.Put(MediaStore.MediaColumns.DisplayName, newFileName);
+
+            var mimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(extension.Replace(".", string.Empty));
+            if (!string.IsNullOrWhiteSpace(mimeType))
+                values.Put(MediaStore.MediaColumns.MimeType, mimeType);
+
+            using var externalContentUri = type == MediaFileType.Image
+                ? MediaStore.Images.Media.ExternalContentUri
+                : MediaStore.Video.Media.ExternalContentUri;
+
+            var relativePath = type == MediaFileType.Image
+                ? Environment.DirectoryPictures
+                : Environment.DirectoryMovies;
+
+            if (Platform.HasApiLevelQ)
+            {
+#if MONOANDROID10_0
+                values.Put(MediaStore.MediaColumns.RelativePath, Path.Combine(relativePath, albumName));
+                values.Put(MediaStore.MediaColumns.DateTaken, TimeMillis(dateTimeNow));
+                values.Put(MediaStore.MediaColumns.IsPending, true);
+
+                var uri = context.ContentResolver.Insert(externalContentUri, values);
+                using var stream = context.ContentResolver.OpenOutputStream(uri);
+                fileStream.CopyTo(stream);
+                stream.Close();
+
+                values.Put(MediaStore.MediaColumns.IsPending, false);
+                context.ContentResolver.Update(uri, values, null, null);
+#else
+                throw new Exception("For using save to gallery on android 10 and newer, use the target TargetFrameworks MonoAndroid10.0 or MonoAndroid11.0");
+#endif
+            }
+            else
+            {
+#pragma warning disable CS0618 // Type or member is obsolete
+                using var directory = new File(Environment.GetExternalStoragePublicDirectory(relativePath), albumName);
+
+                directory.Mkdirs();
+                using var file = new File(directory, newFileName);
+
+                using var fileOutputStream = System.IO.File.Create(file.AbsolutePath);
+                fileStream.CopyTo(fileOutputStream);
+                fileOutputStream.Close();
+
+                values.Put(MediaStore.MediaColumns.Data, file.AbsolutePath);
+                context.ContentResolver.Insert(externalContentUri, values);
+
+                var mediaScanIntent = new Intent(Intent.ActionMediaScannerScanFile);
+                mediaScanIntent.SetData(Uri.FromFile(file));
+                context.SendBroadcast(mediaScanIntent);
+#pragma warning restore CS0618 // Type or member is obsolete
+            }
+        }
+
+        static readonly DateTime jan1st1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+        // JavaSystem.CurrentTimeMillis()
+
+        static long TimeMillis(DateTime current)
+            => (long)CalcTimeDifference(current).TotalMilliseconds;
+
+        static long TimeSeconds(DateTime current)
+            => (long)CalcTimeDifference(current).TotalMilliseconds;
+
+        static TimeSpan CalcTimeDifference(DateTime current)
+            => current.ToUniversalTime() - jan1st1970;
     }
 }
