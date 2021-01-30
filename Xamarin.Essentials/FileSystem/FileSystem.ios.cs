@@ -179,15 +179,11 @@ namespace Xamarin.Essentials
         }
     }
 
-    // TODO: Think if we should rename it as UIImage is just an input
     class UIImageFileResult : FileResult
     {
         internal UIImageFileResult(UIImage image, NSDictionary metadata)
             : base()
         {
-            FileName = Guid.NewGuid() + FileSystem.Extensions.Jpg;
-            var tempDir = NSFileManager.DefaultManager.GetTemporaryDirectory().Path;
-            FullPath = Path.Combine(tempDir, FileName);
             SaveImageWithMetadata(image, metadata);
         }
 
@@ -200,13 +196,27 @@ namespace Xamarin.Essentials
 
         void SaveImageWithMetadata(UIImage image, NSDictionary metadata)
         {
+            if (image == null)
+            {
+                throw new FileResultCreationException($"{nameof(image)} cannot be null", new ArgumentNullException(nameof(image)));
+            }
+
+            if (metadata == null)
+            {
+                throw new FileResultCreationException($"{nameof(metadata)} cannot be null", new ArgumentNullException(nameof(metadata)));
+            }
+
+            var fn = Guid.NewGuid() + FileSystem.Extensions.Jpg;
+            var tempDir = NSFileManager.DefaultManager.GetTemporaryDirectory().Path;
+            var fp = Path.Combine(tempDir, fn);
+
             try
             {
                 var imageData = image.AsJPEG();
 
                 if (imageData == null)
                 {
-                    // TODO: Throw custom exception
+                    throw new FileResultCreationException("Could not encode UIImage into NSData.");
                 }
 
                 // Copy over meta data
@@ -214,22 +224,31 @@ namespace Xamarin.Essentials
                 var originalColorSpace = ciImage.ColorSpace;
                 using var newImageSource = ciImage.CreateBySettingProperties(metadata);
                 using var ciContext = new CIContext();
-                var result = ciContext.WriteJpegRepresentation(newImageSource, NSUrl.FromFilename(FullPath), originalColorSpace ?? CGColorSpace.CreateSrgb(), new NSDictionary(), out var error);
+                var result = ciContext.WriteJpegRepresentation(newImageSource, NSUrl.FromFilename(fp), originalColorSpace ?? CGColorSpace.CreateSrgb(), new NSDictionary(), out var error);
                 if (result)
                 {
+                    FileName = fn;
+                    FullPath = fp;
+                }
+                else
+                {
+                    var msg = "Could not create final image representation.";
                     if (error != null)
                     {
-                        // TODO: Throw custom exception and include the error
+                        msg += $" Reason: {error.Description}";
                     }
-
-                    // TODO: Throw custom exception
+                    throw new FileResultCreationException(msg);
                 }
+            }
+            catch (FileResultCreationException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"<||> {ex}");
 
-                // TODO: Throw custom exception and include ex
+                throw new FileResultCreationException(ex.Message, ex);
             }
             finally
             {
