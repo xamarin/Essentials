@@ -1,10 +1,9 @@
-<views:BasePage
-    x:Class="Samples.View.MediaPickerPage"
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:viewmodels="clr-namespace:Samples.ViewModel"
-    xmlns:views="clr-namespace:Samples.View"
-    Title="Media Picker">
+<views:BasePage xmlns="http://xamarin.com/schemas/2014/forms" 
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+                xmlns:viewmodels="clr-namespace:Samples.ViewModel" 
+                xmlns:views="clr-namespace:Samples.View" 
+                x:Class="Samples.View.MediaPickerPage" 
+                Title="Media Picker">
     <views:BasePage.BindingContext>
         <viewmodels:MediaPickerViewModel />
     </views:BasePage.BindingContext>
@@ -23,49 +22,14 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Button Command="{Binding PickPhotoCommand}" Text="Pick photo" />
-            <Button
-                Grid.Row="1"
-                Command="{Binding CapturePhotoCommand}"
-                Text="Capture photo" />
-            <Button
-                Grid.Column="1"
-                Command="{Binding PickVideoCommand}"
-                Text="Pick video" />
-            <Button
-                Grid.Row="1"
-                Grid.Column="1"
-                Command="{Binding CaptureVideoCommand}"
-                Text="Capture video" />
-
-            <Image
-                Grid.Row="2"
-                Grid.ColumnSpan="2"
-                Aspect="AspectFit"
-                HorizontalOptions="FillAndExpand"
-                IsVisible="{Binding ShowPhoto}"
-                Source="{Binding PhotoPath}"
-                VerticalOptions="FillAndExpand" />
-            <MediaElement
-                Grid.Row="2"
-                Grid.ColumnSpan="2"
-                Aspect="AspectFit"
-                HorizontalOptions="FillAndExpand"
-                IsVisible="{Binding ShowVideo}"
-                ShowsPlaybackControls="True"
-                Source="{Binding VideoPath}"
-                VerticalOptions="FillAndExpand" />
-            <Label
-                Grid.Row="3"
-                Grid.ColumnSpan="2"
-                Margin="0,10"
-                FontAttributes="Bold"
-                Text="Metadata:" />
-            <Label
-                Grid.Row="4"
-                Grid.ColumnSpan="2"
-                LineBreakMode="WordWrap"
-                Text="{Binding Metadata}" />
+            <Button Text="Pick photo" Command="{Binding PickPhotoCommand}" />
+            <Button Text="Capture photo" Grid.Row="1" Command="{Binding CapturePhotoCommand}" />
+            <Button Text="Pick video" Grid.Column="1" Command="{Binding PickVideoCommand}" />
+            <Button Text="Capture video" Grid.Row="1" Grid.Column="1" Command="{Binding CaptureVideoCommand}" />
+            <Image Grid.Row="2" Grid.ColumnSpan="2" Aspect="AspectFit" HorizontalOptions="FillAndExpand" IsVisible="{Binding ShowPhoto}" Source="{Binding PhotoPath}" VerticalOptions="FillAndExpand" />
+            <MediaElement Grid.Row="2" Grid.ColumnSpan="2" Aspect="AspectFit" HorizontalOptions="FillAndExpand" IsVisible="{Binding ShowVideo}" ShowsPlaybackControls="True" Source="{Binding VideoPath}" VerticalOptions="FillAndExpand" />
+            <Label Grid.Row="3" Grid.ColumnSpan="2" Margin="0,10" FontAttributes="Bold" Text="Metadata:" />
+            <Label Grid.Row="4" Grid.ColumnSpan="2" LineBreakMode="WordWrap" Text="{Binding Metadata}" />
         </Grid>
     </ScrollView>
 
