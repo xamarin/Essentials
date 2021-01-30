@@ -11,14 +11,17 @@ namespace Samples.ViewModel
     public class SaveToGalleryViewModel : BaseViewModel
     {
         const string jpgFileName = "Lomonosov.jpg";
-        const string albumName = "Essentials";
+        const string successMsg = "Save Completed Successfully";
+        readonly string albumName;
 
         public SaveToGalleryViewModel()
         {
-            SavevPngCommand = new Command(() => Save(PngUrl, "essential.png"));
+            albumName = AppInfo.Name;
+
+            SavevPngCommand = new Command(() => SaveAsStream(PngUrl, "essential.png"));
             SaveJpgCommand = new Command(() => Save(JpgUrl, jpgFileName));
             SaveGifCommand = new Command(() => Save(GifUrl, "test.gif"));
-            SaveVideoCommand = new Command(() => Save(VideoUrl, "essential.mov"));
+            SaveVideoCommand = new Command(() => Save(VideoUrl, "essential.mp4"));
 
             SaveFromCacheCommand = new Command(SaveFromCacheDirectory);
         }
@@ -43,7 +46,29 @@ namespace Samples.ViewModel
             => "https://i.gifer.com/769R.gif";
 
         public string VideoUrl
-            => "https://xvid.ru/play/tests/qt7.mov";
+            => "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4";
+
+        async void SaveAsStream(string url, string name)
+        {
+            try
+            {
+                using var client = new WebClient();
+                var stream = client.OpenRead(url);
+
+                var data = await DownloadFile(url);
+                await SaveToGallery.SaveAsync(
+                    url == VideoUrl ? MediaFileType.Video : MediaFileType.Image,
+                    stream,
+                    name,
+                    albumName);
+
+                await DisplayAlertAsync(successMsg);
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlertAsync(ex.Message);
+            }
+        }
 
         async void Save(string url, string name)
         {
@@ -55,6 +80,8 @@ namespace Samples.ViewModel
                     data,
                     name,
                     albumName);
+
+                await DisplayAlertAsync(successMsg);
             }
             catch (Exception ex)
             {
@@ -68,6 +95,8 @@ namespace Samples.ViewModel
             {
                 var filePath = SaveFileToCache(await DownloadFile(JpgUrl), jpgFileName);
                 await SaveToGallery.SaveAsync(MediaFileType.Image, filePath, albumName);
+
+                await DisplayAlertAsync(successMsg);
             }
             catch (Exception ex)
             {

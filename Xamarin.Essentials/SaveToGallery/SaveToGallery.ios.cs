@@ -16,13 +16,33 @@ namespace Xamarin.Essentials
 
             try
             {
-                filePath = await CreateFile(data, fileName);
+                filePath = GetFilePath(fileName);
+                await File.WriteAllBytesAsync(filePath, data);
+
                 await PlatformSaveAsync(type, filePath, albumName);
             }
             finally
             {
-                if (!string.IsNullOrWhiteSpace(filePath) && File.Exists(filePath))
-                    File.Delete(filePath);
+                DeleteFile(filePath);
+            }
+        }
+
+        static async Task PlatformSaveAsync(MediaFileType type, Stream fileStream, string fileName, string albumName)
+        {
+            string filePath = null;
+
+            try
+            {
+                filePath = GetFilePath(fileName);
+                using var stream = File.Create(filePath);
+                fileStream.CopyTo(stream);
+                stream.Close();
+
+                await PlatformSaveAsync(type, filePath, albumName);
+            }
+            finally
+            {
+                DeleteFile(filePath);
             }
         }
 
@@ -102,7 +122,13 @@ namespace Xamarin.Essentials
                 throw exception;
         }
 
-        static async Task<string> CreateFile(byte[] data, string fileName)
+        static void DeleteFile(string filePath)
+        {
+            if (!string.IsNullOrWhiteSpace(filePath) && File.Exists(filePath))
+                File.Delete(filePath);
+        }
+
+        static string GetFilePath(string fileName)
         {
             fileName = fileName.Trim();
             var dirPath = Path.Combine(FileSystem.CacheDirectory, cacheDir);
@@ -110,8 +136,6 @@ namespace Xamarin.Essentials
 
             if (!Directory.Exists(dirPath))
                 Directory.CreateDirectory(dirPath);
-
-            await File.WriteAllBytesAsync(filePath, data);
             return filePath;
         }
     }
