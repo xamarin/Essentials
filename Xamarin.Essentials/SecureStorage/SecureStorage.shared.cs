@@ -10,7 +10,7 @@ namespace Xamarin.Essentials
 
         // Special alias needed to used grouping
         internal static string GetAlias(string accessGroup)
-           => string.IsNullOrWhiteSpace(accessGroup) ? Alias : $"{accessGroup}.{Alias}";
+           => string.IsNullOrWhiteSpace(accessGroup) ? Alias : accessGroup;
 
         public static Task<string> GetAsync(string key, string accessGroup)
         {
