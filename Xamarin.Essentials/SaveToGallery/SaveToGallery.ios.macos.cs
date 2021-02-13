@@ -35,7 +35,7 @@ namespace Xamarin.Essentials
             {
                 filePath = GetFilePath(fileName);
                 using var stream = File.Create(filePath);
-                fileStream.CopyTo(stream);
+                await fileStream.CopyToAsync(stream);
                 stream.Close();
 
                 await PlatformSaveAsync(type, filePath, albumName);
@@ -48,9 +48,6 @@ namespace Xamarin.Essentials
 
         static async Task PlatformSaveAsync(MediaFileType type, string filePath, string albumName)
         {
-            if (!File.Exists(filePath))
-                throw new ArgumentNullException(nameof(filePath));
-
             await Permissions.EnsureGrantedAsync<Permissions.Photos>();
 
             using var album = GetAlbum(albumName) ?? await CreateAlbumAsync(albumName);

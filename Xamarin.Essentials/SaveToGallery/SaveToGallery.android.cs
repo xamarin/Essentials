@@ -22,10 +22,7 @@ namespace Xamarin.Essentials
 
         static async Task PlatformSaveAsync(MediaFileType type, string filePath, string albumName)
         {
-            if (!System.IO.File.Exists(filePath))
-                throw new ArgumentNullException(nameof(filePath));
             using var fileStream = System.IO.File.OpenRead(filePath);
-
             await PlatformSaveAsync(type, fileStream, Path.GetFileName(filePath), albumName);
         }
 
@@ -105,7 +102,7 @@ namespace Xamarin.Essentials
             => (long)CalcTimeDifference(current).TotalMilliseconds;
 
         static long TimeSeconds(DateTime current)
-            => (long)CalcTimeDifference(current).TotalMilliseconds;
+            => (long)CalcTimeDifference(current).TotalSeconds;
 
         static TimeSpan CalcTimeDifference(DateTime current)
             => current.ToUniversalTime() - jan1st1970;

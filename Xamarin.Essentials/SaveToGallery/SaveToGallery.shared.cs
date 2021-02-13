@@ -32,8 +32,10 @@ namespace Xamarin.Essentials
 
         public static Task SaveAsync(MediaFileType type, string filePath, string albumName)
         {
-            if (string.IsNullOrWhiteSpace(filePath))
+#if !NETSTANDARD1_0
+            if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
                 throw new ArgumentException(nameof(filePath));
+#endif
             CheckParameters(albumName);
 
             return PlatformSaveAsync(type, filePath, albumName);
