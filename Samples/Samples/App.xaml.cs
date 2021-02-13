@@ -24,10 +24,10 @@ namespace Samples
 
         public App()
         {
-            InitializeComponent();
-
             // Enable currently experimental features
             Device.SetFlags(new string[] { "MediaElement_Experimental" });
+
+            InitializeComponent();
 
             VersionTracking.Track();
 

@@ -6,6 +6,7 @@ using Android.Provider;
 using Android.Webkit;
 using Environment = Android.OS.Environment;
 using File = Java.IO.File;
+using MediaColumns = Android.Provider.MediaStore.MediaColumns;
 using Path = System.IO.Path;
 using Stream = System.IO.Stream;
 using Uri = Android.Net.Uri;
@@ -38,13 +39,14 @@ namespace Xamarin.Essentials
             var newFileName = $"{fileNameWithoutExtension}_{dateTimeNow:yyyyMMdd_HHmmss}{extension}";
 
             using var values = new ContentValues();
-            values.Put(MediaStore.MediaColumns.DateAdded, TimeSeconds(dateTimeNow));
-            values.Put(MediaStore.MediaColumns.Title, fileNameWithoutExtension);
-            values.Put(MediaStore.MediaColumns.DisplayName, newFileName);
+
+            values.Put(MediaColumns.DateAdded, TimeSeconds(dateTimeNow));
+            values.Put(MediaColumns.Title, fileNameWithoutExtension);
+            values.Put(MediaColumns.DisplayName, newFileName);
 
             var mimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(extension.Replace(".", string.Empty));
             if (!string.IsNullOrWhiteSpace(mimeType))
-                values.Put(MediaStore.MediaColumns.MimeType, mimeType);
+                values.Put(MediaColumns.MimeType, mimeType);
 
             using var externalContentUri = type == MediaFileType.Image
                 ? MediaStore.Images.Media.ExternalContentUri
@@ -57,16 +59,16 @@ namespace Xamarin.Essentials
             if (Platform.HasApiLevelQ)
             {
 #if MONOANDROID10_0
-                values.Put(MediaStore.MediaColumns.RelativePath, Path.Combine(relativePath, albumName));
-                values.Put(MediaStore.MediaColumns.DateTaken, TimeMillis(dateTimeNow));
-                values.Put(MediaStore.MediaColumns.IsPending, true);
+                values.Put(MediaColumns.RelativePath, Path.Combine(relativePath, albumName));
+                values.Put(MediaColumns.DateTaken, TimeMillis(dateTimeNow));
+                values.Put(MediaColumns.IsPending, true);
 
-                var uri = context.ContentResolver.Insert(externalContentUri, values);
+                using var uri = context.ContentResolver.Insert(externalContentUri, values);
                 using var stream = context.ContentResolver.OpenOutputStream(uri);
                 fileStream.CopyTo(stream);
                 stream.Close();
 
-                values.Put(MediaStore.MediaColumns.IsPending, false);
+                values.Put(MediaColumns.IsPending, false);
                 context.ContentResolver.Update(uri, values, null, null);
 #else
                 throw new Exception("For using save to gallery on android 10 and newer, use the target TargetFrameworks MonoAndroid10.0 or MonoAndroid11.0");
@@ -84,10 +86,10 @@ namespace Xamarin.Essentials
                 fileStream.CopyTo(fileOutputStream);
                 fileOutputStream.Close();
 
-                values.Put(MediaStore.MediaColumns.Data, file.AbsolutePath);
+                values.Put(MediaColumns.Data, file.AbsolutePath);
                 context.ContentResolver.Insert(externalContentUri, values);
 
-                var mediaScanIntent = new Intent(Intent.ActionMediaScannerScanFile);
+                using var mediaScanIntent = new Intent(Intent.ActionMediaScannerScanFile);
                 mediaScanIntent.SetData(Uri.FromFile(file));
                 context.SendBroadcast(mediaScanIntent);
 #pragma warning restore CS0618 // Type or member is obsolete
