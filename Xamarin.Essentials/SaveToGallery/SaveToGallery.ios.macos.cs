@@ -48,20 +48,23 @@ namespace Xamarin.Essentials
 
         static async Task PlatformSaveAsync(MediaFileType type, string filePath, string albumName)
         {
-            await Permissions.EnsureGrantedAsync<Permissions.Photos>();
-
-            using var album = GetAlbum(albumName) ?? await CreateAlbumAsync(albumName);
+            using var album = PHPhotoLibrary.AuthorizationStatus == PHAuthorizationStatus.Authorized
+                ? GetAlbum(albumName) ?? await CreateAlbumAsync(albumName)
+                : null;
 
             using var fileUri = new NSUrl(filePath);
 
             await PhotoLibraryPerformChanges(() =>
             {
                 using var request = type == MediaFileType.Video
-                    ? PHAssetChangeRequest.FromVideo(fileUri)
-                    : PHAssetChangeRequest.FromImage(fileUri);
+                ? PHAssetChangeRequest.FromVideo(fileUri)
+                : PHAssetChangeRequest.FromImage(fileUri);
 
-                using var addRequest = PHAssetCollectionChangeRequest.ChangeRequest(album);
-                addRequest.AddAssets(new PHObject[] { request.PlaceholderForCreatedAsset });
+                if (album != null)
+                {
+                    using var addRequest = PHAssetCollectionChangeRequest.ChangeRequest(album);
+                    addRequest.AddAssets(new PHObject[] { request.PlaceholderForCreatedAsset });
+                }
             });
         }
 
