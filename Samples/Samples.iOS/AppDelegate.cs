@@ -13,6 +13,10 @@ namespace Samples.iOS
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
+#if SKIP_MATERIAL // We can't use Material with iOS Hot Restart as the static linker does not run
+            App.PreferredVisual = Xamarin.Forms.VisualMarker.Default;
+#endif
+
             Xamarin.Forms.Forms.Init();
             Xamarin.Forms.FormsMaterial.Init();
 
@@ -28,6 +32,14 @@ namespace Samples.iOS
                 return true;
 
             return base.OpenUrl(app, url, options);
+        }
+
+        public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity, UIApplicationRestorationHandler completionHandler)
+        {
+            if (Xamarin.Essentials.Platform.ContinueUserActivity(application, userActivity, completionHandler))
+                return true;
+
+            return base.ContinueUserActivity(application, userActivity, completionHandler);
         }
 
         public override void PerformActionForShortcutItem(UIApplication application, UIApplicationShortcutItem shortcutItem, UIOperationHandler completionHandler)

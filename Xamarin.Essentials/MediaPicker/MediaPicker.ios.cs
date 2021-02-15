@@ -40,11 +40,12 @@ namespace Xamarin.Essentials
             if (!photo)
                 await Permissions.EnsureGrantedAsync<Permissions.Microphone>();
 
-            // permission is not required on iOS 11 for the picker
-            if (!Platform.HasOSVersion(11, 0))
-            {
+            // Check if picking existing or not and ensure permission accordingly as they can be set independently from each other
+            if (pickExisting && !Platform.HasOSVersion(11, 0))
                 await Permissions.EnsureGrantedAsync<Permissions.Photos>();
-            }
+
+            if (!pickExisting)
+                await Permissions.EnsureGrantedAsync<Permissions.Camera>();
 
             var vc = Platform.GetCurrentViewController(true);
 
@@ -64,9 +65,16 @@ namespace Xamarin.Essentials
             var tcs = new TaskCompletionSource<FileResult>(picker);
             picker.Delegate = new PhotoPickerDelegate
             {
-                CompletedHandler = info =>
-                    tcs.TrySetResult(DictionaryToMediaFile(info))
+                CompletedHandler = info => GetFileResult(info, tcs)
             };
+
+            if (picker.PresentationController != null)
+            {
+                picker.PresentationController.Delegate = new PhotoPickerPresentationControllerDelegate
+                {
+                    CompletedHandler = info => GetFileResult(info, tcs)
+                };
+            }
 
             await vc.PresentViewControllerAsync(picker, true);
 
@@ -78,6 +86,18 @@ namespace Xamarin.Essentials
             picker = null;
 
             return result;
+        }
+
+        static void GetFileResult(NSDictionary info, TaskCompletionSource<FileResult> tcs)
+        {
+            try
+            {
+                tcs.TrySetResult(DictionaryToMediaFile(info));
+            }
+            catch (Exception ex)
+            {
+                tcs.TrySetException(ex);
+            }
         }
 
         static FileResult DictionaryToMediaFile(NSDictionary info)
@@ -142,6 +162,14 @@ namespace Xamarin.Essentials
                 CompletedHandler?.Invoke(info);
 
             public override void Canceled(UIImagePickerController picker) =>
+                CompletedHandler?.Invoke(null);
+        }
+
+        class PhotoPickerPresentationControllerDelegate : UIAdaptivePresentationControllerDelegate
+        {
+            public Action<NSDictionary> CompletedHandler { get; set; }
+
+            public override void DidDismiss(UIPresentationController presentationController) =>
                 CompletedHandler?.Invoke(null);
         }
     }
