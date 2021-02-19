@@ -60,7 +60,6 @@ namespace Xamarin.Essentials
             {
 #if MONOANDROID10_0
                 values.Put(MediaColumns.RelativePath, Path.Combine(relativePath, albumName));
-                values.Put(MediaColumns.DateTaken, TimeMillis(dateTimeNow));
                 values.Put(MediaColumns.IsPending, true);
 
                 using var uri = context.ContentResolver.Insert(externalContentUri, values);
