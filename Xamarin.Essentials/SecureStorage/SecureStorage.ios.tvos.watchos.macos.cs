@@ -17,7 +17,7 @@ namespace Xamarin.Essentials
 
         public static Task SetAsync(string key, string value, SecAccessible accessible, string accessGroup)
         {
-            var alias = GetAlias(accessGroup);
+            var alias = string.IsNullOrWhiteSpace(accessGroup) ? Alias : accessGroup;
             if (string.IsNullOrWhiteSpace(key))
                 throw new ArgumentNullException(nameof(key));
 
@@ -32,7 +32,7 @@ namespace Xamarin.Essentials
 
         static Task<string> PlatformGetAsync(string key, string accessGroup)
         {
-            var alias = GetAlias(accessGroup);
+            var alias = string.IsNullOrWhiteSpace(accessGroup) ? Alias : accessGroup;
             var kc = new KeyChain(DefaultAccessible, accessGroup);
             var value = kc.ValueForKey(key, alias);
 
@@ -44,7 +44,7 @@ namespace Xamarin.Essentials
 
         static bool PlatformRemove(string key, string accessGroup)
         {
-            var alias = GetAlias(accessGroup);
+            var alias = string.IsNullOrWhiteSpace(accessGroup) ? Alias : accessGroup;
             var kc = new KeyChain(DefaultAccessible, accessGroup);
 
             return kc.Remove(key, alias);
@@ -52,7 +52,7 @@ namespace Xamarin.Essentials
 
         static void PlatformRemoveAll(string accessGroup)
         {
-            var alias = GetAlias(accessGroup);
+            var alias = string.IsNullOrWhiteSpace(accessGroup) ? Alias : accessGroup;
             var kc = new KeyChain(DefaultAccessible, accessGroup);
 
             kc.RemoveAll(alias);
