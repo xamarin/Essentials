@@ -28,11 +28,20 @@ namespace Xamarin.Essentials
     {
         static string PlatformGetContentType(string extension)
         {
+            extension = extension.TrimStart('.');
             return Tizen.Content.MimeType.MimeUtil.GetMimeType(extension);
         }
 
         internal void PlatformInit(FileBase file)
         {
+        }
+
+        internal virtual async Task<Stream> PlatformOpenReadAsync()
+        {
+            await Permissions.RequestAsync<Permissions.StorageRead>();
+
+            var stream = File.Open(FullPath, FileMode.Open, FileAccess.Read);
+            return Task.FromResult<Stream>(stream).Result;
         }
     }
 }

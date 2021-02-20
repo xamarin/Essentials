@@ -12,9 +12,7 @@
   <Interfaces />
   <Docs>
     <summary>Platform specific helpers.</summary>
-    <remarks>
-      <para></para>
-    </remarks>
+    <remarks></remarks>
   </Docs>
   <Members>
     <Member MemberName="ActivityStateChanged">
@@ -31,9 +29,7 @@
       </ReturnValue>
       <Docs>
         <summary>Event that is triggered when any Android Activity's state changes.</summary>
-        <remarks>
-          <para></para>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="AppContext">
@@ -51,9 +47,33 @@
       <Docs>
         <summary>The current application's context.</summary>
         <value>The applications context.</value>
-        <remarks>
-          <para></para>
-        </remarks>
+        <remarks></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ContinueUserActivity">
+      <MemberSignature Language="C#" Value="public static bool ContinueUserActivity (UIKit.UIApplication application, Foundation.NSUserActivity userActivity, UIKit.UIApplicationRestorationHandler completionHandler);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool ContinueUserActivity(class UIKit.UIApplication application, class Foundation.NSUserActivity userActivity, class UIKit.UIApplicationRestorationHandler completionHandler) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.Platform.ContinueUserActivity(UIKit.UIApplication,Foundation.NSUserActivity,UIKit.UIApplicationRestorationHandler)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="application" Type="UIKit.UIApplication" Index="0" FrameworkAlternate="xamarin-essentials-ios;xamarin-essentials-tvos" />
+        <Parameter Name="userActivity" Type="Foundation.NSUserActivity" Index="1" FrameworkAlternate="xamarin-essentials-ios;xamarin-essentials-tvos" />
+        <Parameter Name="completionHandler" Type="UIKit.UIApplicationRestorationHandler" Index="2" FrameworkAlternate="xamarin-essentials-ios;xamarin-essentials-tvos" />
+      </Parameters>
+      <Docs>
+        <param name="application">The application.</param>
+        <param name="userActivity">The user activity instance.</param>
+        <param name="completionHandler">The completion handler.</param>
+        <summary>Callback forwarded from the equivalent iOS AppDelegate method.</summary>
+        <returns>True if the callback was handled.</returns>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="CurrentActivity">
@@ -71,9 +91,7 @@
       <Docs>
         <summary>Gets the current Activity. This value is set OnCreate, OnPause, and OnResume.</summary>
         <value>The current Activity or null if none or Init was not called.</value>
-        <remarks>
-          <para></para>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="GetCurrentUIViewController">
@@ -92,9 +110,7 @@
       <Docs>
         <summary>Get the currently visible UIViewController.</summary>
         <returns>The visible UIViewController or null if not found.</returns>
-        <remarks>
-          <para></para>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="Init">
@@ -115,9 +131,7 @@
       <Docs>
         <param name="application">Application to initialize with.</param>
         <summary>Initialize Xamarin.Essentials with Android's application class.</summary>
-        <remarks>
-          <para />
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="Init">
@@ -140,9 +154,7 @@
         <param name="activity">Activity to use for initialization.</param>
         <param name="bundle">Bundle of the activity.</param>
         <summary>Initialize Xamarin.Essentials with Android's activity and bundle.</summary>
-        <remarks>
-          <para />
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="MapServiceToken">
@@ -161,6 +173,48 @@
         <summary>Get or sets the map API key.</summary>
         <value>The current key for maps.</value>
         <remarks>Needed only for UWP and can be generated from Bing Maps.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnLaunched">
+      <MemberSignature Language="C#" Value="public static void OnLaunched (Windows.ApplicationModel.Activation.LaunchActivatedEventArgs e);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void OnLaunched(class Windows.ApplicationModel.Activation.LaunchActivatedEventArgs e) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.Platform.OnLaunched(Windows.ApplicationModel.Activation.LaunchActivatedEventArgs)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="e" Type="Windows.ApplicationModel.Activation.LaunchActivatedEventArgs" Index="0" FrameworkAlternate="xamarin-essentials-uwp" />
+      </Parameters>
+      <Docs>
+        <param name="e">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="OnNewIntent">
+      <MemberSignature Language="C#" Value="public static void OnNewIntent (Android.Content.Intent intent);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void OnNewIntent(class Android.Content.Intent intent) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.Platform.OnNewIntent(Android.Content.Intent)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="intent" Type="Android.Content.Intent" Index="0" FrameworkAlternate="xamarin-essentials-android" />
+      </Parameters>
+      <Docs>
+        <param name="intent">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
       </Docs>
     </Member>
     <Member MemberName="OnRequestPermissionsResult">
@@ -185,15 +239,13 @@
         <param name="permissions">The permissions from the corresponding overridden method in an activity.</param>
         <param name="grantResults">The grantResults from the corresponding overridden method in an activity.</param>
         <summary>Pass permission request results from an activity's overridden method to the library for handling internal permission requests.</summary>
-        <remarks>
-          <para></para>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="OnResume">
-      <MemberSignature Language="C#" Value="public static void OnResume ();" />
-      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void OnResume() cil managed" />
-      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.Platform.OnResume" />
+      <MemberSignature Language="C#" Value="public static void OnResume (Android.App.Activity activity = null);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void OnResume(class Android.App.Activity activity) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.Platform.OnResume(Android.App.Activity)" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyName>Xamarin.Essentials</AssemblyName>
@@ -202,9 +254,12 @@
       <ReturnValue>
         <ReturnType>System.Void</ReturnType>
       </ReturnValue>
-      <Parameters />
+      <Parameters>
+        <Parameter Name="activity" Type="Android.App.Activity" Index="0" FrameworkAlternate="xamarin-essentials-android" />
+      </Parameters>
       <Docs>
-        <summary>Pass Resume lifecycle events of your main activity to be used for internal API handling.</summary>
+        <param name="activity">To be added.</param>
+        <summary>To be added.</summary>
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
@@ -234,6 +289,31 @@
         <remarks>To be added.</remarks>
       </Docs>
     </Member>
+    <Member MemberName="PerformActionForShortcutItem">
+      <MemberSignature Language="C#" Value="public static void PerformActionForShortcutItem (UIKit.UIApplication application, UIKit.UIApplicationShortcutItem shortcutItem, UIKit.UIOperationHandler completionHandler);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig void PerformActionForShortcutItem(class UIKit.UIApplication application, class UIKit.UIApplicationShortcutItem shortcutItem, class UIKit.UIOperationHandler completionHandler) cil managed" />
+      <MemberSignature Language="DocId" Value="M:Xamarin.Essentials.Platform.PerformActionForShortcutItem(UIKit.UIApplication,UIKit.UIApplicationShortcutItem,UIKit.UIOperationHandler)" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="application" Type="UIKit.UIApplication" Index="0" FrameworkAlternate="xamarin-essentials-ios" />
+        <Parameter Name="shortcutItem" Type="UIKit.UIApplicationShortcutItem" Index="1" FrameworkAlternate="xamarin-essentials-ios" />
+        <Parameter Name="completionHandler" Type="UIKit.UIOperationHandler" Index="2" FrameworkAlternate="xamarin-essentials-ios" />
+      </Parameters>
+      <Docs>
+        <param name="application">To be added.</param>
+        <param name="shortcutItem">To be added.</param>
+        <param name="completionHandler">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
     <Member MemberName="WaitForActivityAsync">
       <MemberSignature Language="C#" Value="public static System.Threading.Tasks.Task&lt;Android.App.Activity&gt; WaitForActivityAsync (System.Threading.CancellationToken cancelToken = null);" />
       <MemberSignature Language="ILAsm" Value=".method public static hidebysig class System.Threading.Tasks.Task`1&lt;class Android.App.Activity&gt; WaitForActivityAsync(valuetype System.Threading.CancellationToken cancelToken) cil managed" />
@@ -253,9 +333,7 @@
         <param name="cancelToken">Cancellation token to stop waiting for Activity to be created or active.</param>
         <summary>Wait for an Activity to be create or active.</summary>
         <returns>The current Android Activity.</returns>
-        <remarks>
-          <para></para>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
   </Members>

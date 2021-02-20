@@ -11,12 +11,12 @@ namespace Xamarin.Essentials
 {
     public static partial class FilePicker
     {
-        static async Task<IEnumerable<FilePickerResult>> PlatformPickAsync(PickOptions options, bool allowMultiple = false)
+        static async Task<IEnumerable<FileResult>> PlatformPickAsync(PickOptions options, bool allowMultiple = false)
         {
             Permissions.EnsureDeclared<Permissions.LaunchApp>();
             await Permissions.EnsureGrantedAsync<Permissions.StorageRead>();
 
-            var tcs = new TaskCompletionSource<IEnumerable<FilePickerResult>>();
+            var tcs = new TaskCompletionSource<IEnumerable<FileResult>>();
 
             var appControl = new AppControl();
             appControl.Operation = AppControlOperations.Pick;
@@ -24,9 +24,9 @@ namespace Xamarin.Essentials
             appControl.LaunchMode = AppControlLaunchMode.Single;
 
             var fileType = options?.FileTypes?.Value?.FirstOrDefault();
-            appControl.Mime = fileType ?? "*/*";
+            appControl.Mime = fileType ?? FileSystem.MimeTypes.All;
 
-            var fileResults = new List<FilePickerResult>();
+            var fileResults = new List<FileResult>();
 
             AppControl.SendLaunchRequest(appControl, (request, reply, result) =>
             {
@@ -35,7 +35,7 @@ namespace Xamarin.Essentials
                     if (reply.ExtraData.Count() > 0)
                     {
                         var selectedFiles = reply.ExtraData.Get<IEnumerable<string>>(AppControlData.Selected).ToList();
-                        fileResults.AddRange(selectedFiles.Select(f => new FilePickerResult(f)));
+                        fileResults.AddRange(selectedFiles.Select(f => new FileResult(f)));
                     }
                 }
 
@@ -48,32 +48,34 @@ namespace Xamarin.Essentials
 
     public partial class FilePickerFileType
     {
-        public static FilePickerFileType PlatformImageFileType() =>
+        static FilePickerFileType PlatformImageFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.Tizen, new[] { "image/*" } },
+                { DevicePlatform.Tizen, new[] { FileSystem.MimeTypes.ImageAll } },
             });
 
-        public static FilePickerFileType PlatformPngFileType() =>
+        static FilePickerFileType PlatformPngFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.Tizen, new[] { "image/png" } }
+                { DevicePlatform.Tizen, new[] { FileSystem.MimeTypes.ImagePng } }
             });
-    }
 
-    public partial class FilePickerResult
-    {
-        internal FilePickerResult(string fullPath)
-            : base(fullPath)
-        {
-        }
+        static FilePickerFileType PlatformJpegFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.Tizen, new[] { FileSystem.MimeTypes.ImageJpg } }
+            });
 
-        async Task<Stream> PlatformOpenReadStreamAsync()
-        {
-            await Permissions.RequestAsync<Permissions.StorageRead>();
+        static FilePickerFileType PlatformVideoFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.Tizen, new[] { FileSystem.MimeTypes.VideoAll } }
+            });
 
-            var stream = File.Open(FullPath, FileMode.Open, FileAccess.Read);
-            return Task.FromResult<Stream>(stream).Result;
-        }
+        static FilePickerFileType PlatformPdfFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.Tizen, new[] { FileSystem.MimeTypes.Pdf } }
+            });
     }
 }

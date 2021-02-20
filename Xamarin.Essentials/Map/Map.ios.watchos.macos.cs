@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Contacts;
 using CoreLocation;
 using Foundation;
 using MapKit;
@@ -34,36 +35,51 @@ namespace Xamarin.Essentials
 #else
             var address = new NSMutableDictionary
             {
-                [Contacts.CNPostalAddressKey.City] = new NSString(placemark.Locality ?? string.Empty),
-                [Contacts.CNPostalAddressKey.Country] = new NSString(placemark.CountryName ?? string.Empty),
-                [Contacts.CNPostalAddressKey.State] = new NSString(placemark.AdminArea ?? string.Empty),
-                [Contacts.CNPostalAddressKey.Street] = new NSString(placemark.Thoroughfare ?? string.Empty),
-                [Contacts.CNPostalAddressKey.PostalCode] = new NSString(placemark.PostalCode ?? string.Empty),
-                [Contacts.CNPostalAddressKey.IsoCountryCode] = new NSString(placemark.CountryCode ?? string.Empty)
+                [CNPostalAddressKey.City] = new NSString(placemark.Locality ?? string.Empty),
+                [CNPostalAddressKey.Country] = new NSString(placemark.CountryName ?? string.Empty),
+                [CNPostalAddressKey.State] = new NSString(placemark.AdminArea ?? string.Empty),
+                [CNPostalAddressKey.Street] = new NSString(placemark.Thoroughfare ?? string.Empty),
+                [CNPostalAddressKey.PostalCode] = new NSString(placemark.PostalCode ?? string.Empty),
+                [CNPostalAddressKey.IsoCountryCode] = new NSString(placemark.CountryCode ?? string.Empty)
             };
 #endif
 
-            var coder = new CLGeocoder();
-            CLPlacemark[] placemarks;
+            var resolvedPlacemarks = await GetPlacemarksAsync(address);
+            if (resolvedPlacemarks?.Length > 0)
+            {
+                await OpenPlacemark(new MKPlacemark(resolvedPlacemarks[0].Location.Coordinate, address), options);
+            }
+            else
+            {
+#if __IOS__ || __MACOS__
+                // https://developer.apple.com/library/archive/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html
+                var uri = $"http://maps.apple.com/?q={placemark.GetEscapedAddress()}";
+                var nsurl = NSUrl.FromString(uri);
+
+                await Launcher.PlatformOpenAsync(nsurl);
+#else
+                await OpenPlacemark(new MKPlacemark(default, address), options);
+#endif
+            }
+        }
+
+        static async Task<CLPlacemark[]> GetPlacemarksAsync(NSDictionary address)
+        {
+            using var geocoder = new CLGeocoder();
+
             try
             {
-                placemarks = await coder.GeocodeAddressAsync(address);
+                // we need to await to keep the geocoder alive until after the async
+                return await geocoder.GeocodeAddressAsync(address);
             }
             catch
             {
                 Debug.WriteLine("Unable to get geocode address from address");
-                return;
+                return null;
             }
-
-            if ((placemarks?.Length ?? 0) == 0)
-            {
-                Debug.WriteLine("No locations exist, please check address.");
-            }
-
-            await OpenPlacemark(new MKPlacemark(placemarks[0].Location.Coordinate, address), options);
         }
 
-        static Task OpenPlacemark(MKPlacemark placemark, MapLaunchOptions options)
+        static Task<bool> OpenPlacemark(MKPlacemark placemark, MapLaunchOptions options)
         {
             var mapItem = new MKMapItem(placemark)
             {
@@ -97,8 +113,7 @@ namespace Xamarin.Essentials
             }
 
             var mapItems = new[] { mapItem };
-            MKMapItem.OpenMaps(mapItems, launchOptions);
-            return Task.CompletedTask;
+            return Task.FromResult(MKMapItem.OpenMaps(mapItems, launchOptions));
         }
     }
 }

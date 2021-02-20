@@ -8,9 +8,6 @@ namespace Xamarin.Essentials
     {
         static Task PlatformRequestAsync(ShareTextRequest request)
         {
-            if (string.IsNullOrEmpty(request.Text) && string.IsNullOrEmpty(request.Uri))
-                throw new ArgumentNullException(nameof(request.Text));
-
             Permissions.EnsureDeclared<Permissions.LaunchApp>();
 
             var appControl = new AppControl
@@ -19,35 +16,33 @@ namespace Xamarin.Essentials
             };
 
             if (!string.IsNullOrEmpty(request.Text))
-                appControl.ExtraData.Add("http://tizen.org/appcontrol/data/text", request.Text);
+                appControl.ExtraData.Add(AppControlData.Text, request.Text);
             if (!string.IsNullOrEmpty(request.Uri))
-                appControl.ExtraData.Add("http://tizen.org/appcontrol/data/url", request.Uri);
+                appControl.ExtraData.Add(AppControlData.Url, request.Uri);
             if (!string.IsNullOrEmpty(request.Subject))
-                appControl.ExtraData.Add("http://tizen.org/appcontrol/data/subject", request.Subject);
+                appControl.ExtraData.Add(AppControlData.Subject, request.Subject);
             if (!string.IsNullOrEmpty(request.Title))
-                appControl.ExtraData.Add("http://tizen.org/appcontrol/data/title", request.Title);
+                appControl.ExtraData.Add(AppControlData.Title, request.Title);
 
             AppControl.SendLaunchRequest(appControl);
 
             return Task.CompletedTask;
         }
 
-        static Task PlatformRequestAsync(ShareFileRequest request)
+        static Task PlatformRequestAsync(ShareMultipleFilesRequest request)
         {
-            if (string.IsNullOrEmpty(request.File.FullPath))
-                throw new ArgumentNullException(nameof(request.File.FullPath));
-
             Permissions.EnsureDeclared<Permissions.LaunchApp>();
 
             var appControl = new AppControl
             {
-                Operation = AppControlOperations.ShareText,
+                Operation = AppControlOperations.Share,
             };
 
-            if (!string.IsNullOrEmpty(request.File.FullPath))
-                appControl.ExtraData.Add("http://tizen.org/appcontrol/data/path", request.File.FullPath);
             if (!string.IsNullOrEmpty(request.Title))
-                appControl.ExtraData.Add("http://tizen.org/appcontrol/data/title", request.Title);
+                appControl.ExtraData.Add(AppControlData.Title, request.Title);
+
+            foreach (var file in request.Files)
+                appControl.ExtraData.Add(AppControlData.Path, file.FullPath);
 
             AppControl.SendLaunchRequest(appControl);
 

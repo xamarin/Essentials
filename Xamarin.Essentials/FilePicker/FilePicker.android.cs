@@ -2,30 +2,24 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using Android.App;
 using Android.Content;
-using Android.Provider;
 
 namespace Xamarin.Essentials
 {
     public static partial class FilePicker
     {
-        const int requestCodeFilePicker = 12347;
-
-        static async Task<IEnumerable<FilePickerResult>> PlatformPickAsync(PickOptions options, bool allowMultiple = false)
+        static async Task<IEnumerable<FileResult>> PlatformPickAsync(PickOptions options, bool allowMultiple = false)
         {
             // we only need the permission when accessing the file, but it's more natural
             // to ask the user first, then show the picker.
-            await Permissions.RequestAsync<Permissions.StorageRead>();
+            await Permissions.EnsureGrantedAsync<Permissions.StorageRead>();
 
             // Essentials supports >= API 19 where this action is available
             var action = Intent.ActionOpenDocument;
 
             var intent = new Intent(action);
-            intent.SetType("*/*");
-            intent.AddFlags(ActivityFlags.GrantPersistableUriPermission);
+            intent.SetType(FileSystem.MimeTypes.All);
             intent.PutExtra(Intent.ExtraAllowMultiple, allowMultiple);
 
             var allowedTypes = options?.FileTypes?.Value?.ToArray();
@@ -36,29 +30,30 @@ namespace Xamarin.Essentials
 
             try
             {
-                var result = await IntermediateActivity.StartAsync(pickerIntent, requestCodeFilePicker);
-                var resultList = new List<FilePickerResult>();
-
-                var clipData = new List<global::Android.Net.Uri>();
-
-                if (result.ClipData == null)
+                var resultList = new List<FileResult>();
+                void OnResult(Intent intent)
                 {
-                    clipData.Add(result.Data);
-                }
-                else
-                {
-                    for (var i = 0; i < result.ClipData.ItemCount; i++)
-                        clipData.Add(result.ClipData.GetItemAt(i).Uri);
+                    // The uri returned is only temporary and only lives as long as the Activity that requested it,
+                    // so this means that it will always be cleaned up by the time we need it because we are using
+                    // an intermediate activity.
+
+                    if (intent.ClipData == null)
+                    {
+                        var path = FileSystem.EnsurePhysicalPath(intent.Data);
+                        resultList.Add(new FileResult(path));
+                    }
+                    else
+                    {
+                        for (var i = 0; i < intent.ClipData.ItemCount; i++)
+                        {
+                            var uri = intent.ClipData.GetItemAt(i).Uri;
+                            var path = FileSystem.EnsurePhysicalPath(uri);
+                            resultList.Add(new FileResult(path));
+                        }
+                    }
                 }
 
-                foreach (var contentUri in clipData)
-                {
-                    Platform.AppContext.ContentResolver.TakePersistableUriPermission(
-                        contentUri,
-                        ActivityFlags.GrantReadUriPermission);
-
-                    resultList.Add(new FilePickerResult(contentUri));
-                }
+                await IntermediateActivity.StartAsync(pickerIntent, Platform.requestCodeFilePicker, onResult: OnResult);
 
                 return resultList;
             }
@@ -71,96 +66,34 @@ namespace Xamarin.Essentials
 
     public partial class FilePickerFileType
     {
-        public static FilePickerFileType PlatformImageFileType() =>
+        static FilePickerFileType PlatformImageFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.Android, new[] { "image/png", "image/jpeg" } }
+                { DevicePlatform.Android, new[] { FileSystem.MimeTypes.ImagePng, FileSystem.MimeTypes.ImageJpg } }
             });
 
-        public static FilePickerFileType PlatformPngFileType() =>
+        static FilePickerFileType PlatformPngFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.Android, new[] { "image/png" } }
+                { DevicePlatform.Android, new[] { FileSystem.MimeTypes.ImagePng } }
             });
-    }
 
-    public partial class FilePickerResult
-    {
-        internal FilePickerResult(global::Android.Net.Uri contentUri)
-            : base(GetFullPath(contentUri))
-        {
-            this.contentUri = contentUri;
-            FileName = GetFileName(contentUri);
-        }
-
-        readonly global::Android.Net.Uri contentUri;
-
-        static string GetFullPath(global::Android.Net.Uri contentUri)
-        {
-            // if this is a file, use that
-            if (contentUri.Scheme == "file")
-                return contentUri.Path;
-
-            // ask the content provider for the data column, which may contain the actual file path
-#pragma warning disable CS0618 // Type or member is obsolete
-            var path = QueryContentResolverColumn(contentUri, MediaStore.Files.FileColumns.Data);
-#pragma warning restore CS0618 // Type or member is obsolete
-
-            if (!string.IsNullOrEmpty(path) && Path.IsPathRooted(path))
-                return path;
-
-            // fallback: use content URI
-            return contentUri.ToString();
-        }
-
-        static string GetFileName(global::Android.Net.Uri contentUri)
-        {
-            // resolve file name by querying content provider for display name
-            var filename = QueryContentResolverColumn(contentUri, MediaStore.MediaColumns.DisplayName);
-
-            if (string.IsNullOrWhiteSpace(filename))
+        static FilePickerFileType PlatformJpegFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                filename = Path.GetFileName(WebUtility.UrlDecode(contentUri.ToString()));
-            }
+                { DevicePlatform.Android, new[] { FileSystem.MimeTypes.ImageJpg } }
+            });
 
-            if (!Path.HasExtension(filename))
-                filename = filename.TrimEnd('.') + '.' + GetFileExtensionFromUri(contentUri);
-
-            return filename;
-        }
-
-        static string QueryContentResolverColumn(global::Android.Net.Uri contentUri, string columnName)
-        {
-            string text = null;
-
-            var projection = new[] { columnName };
-            using var cursor = Application.Context.ContentResolver.Query(contentUri, projection, null, null, null);
-            if (cursor?.MoveToFirst() == true)
+        static FilePickerFileType PlatformVideoFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                var columnIndex = cursor.GetColumnIndex(columnName);
-                if (columnIndex != -1)
-                    text = cursor.GetString(columnIndex);
-            }
+                { DevicePlatform.Android, new[] { FileSystem.MimeTypes.VideoAll } }
+            });
 
-            return text;
-        }
-
-        static string GetFileExtensionFromUri(global::Android.Net.Uri uri)
-        {
-            var mimeType = Application.Context.ContentResolver.GetType(uri);
-            return mimeType != null ? global::Android.Webkit.MimeTypeMap.Singleton.GetExtensionFromMimeType(mimeType) : string.Empty;
-        }
-
-        Task<Stream> PlatformOpenReadStreamAsync()
-        {
-            if (contentUri.Scheme == "content")
+        static FilePickerFileType PlatformPdfFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                var content = Application.Context.ContentResolver.OpenInputStream(contentUri);
-                return Task.FromResult(content);
-            }
-
-            var stream = File.OpenRead(FullPath);
-            return Task.FromResult<Stream>(stream);
-        }
+                { DevicePlatform.Android, new[] { FileSystem.MimeTypes.Pdf } }
+            });
     }
 }

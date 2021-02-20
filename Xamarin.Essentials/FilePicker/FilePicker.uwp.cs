@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -11,7 +10,7 @@ namespace Xamarin.Essentials
 {
     public static partial class FilePicker
     {
-        static async Task<IEnumerable<FilePickerResult>> PlatformPickAsync(PickOptions options, bool allowMultiple = false)
+        static async Task<IEnumerable<FileResult>> PlatformPickAsync(PickOptions options, bool allowMultiple = false)
         {
             var picker = new FileOpenPicker
             {
@@ -39,7 +38,7 @@ namespace Xamarin.Essentials
             foreach (var file in resultList)
                 StorageApplicationPermissions.FutureAccessList.Add(file);
 
-            return resultList.Select(storageFile => new FilePickerResult(storageFile));
+            return resultList.Select(storageFile => new FileResult(storageFile));
         }
 
         static void SetFileTypes(PickOptions options, FileOpenPicker picker)
@@ -50,9 +49,10 @@ namespace Xamarin.Essentials
             {
                 foreach (var type in options.FileTypes.Value)
                 {
-                    if (type.StartsWith(".") || type.StartsWith("*."))
+                    var ext = FileSystem.Extensions.Clean(type);
+                    if (!string.IsNullOrWhiteSpace(ext))
                     {
-                        picker.FileTypeFilter.Add(type.TrimStart('*'));
+                        picker.FileTypeFilter.Add(ext);
                         hasAtLeastOneType = true;
                     }
                 }
@@ -65,34 +65,34 @@ namespace Xamarin.Essentials
 
     public partial class FilePickerFileType
     {
-        public static FilePickerFileType PlatformImageFileType() =>
+        static FilePickerFileType PlatformImageFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.UWP, new[] { "*.png", "*.jpg", "*.jpeg" } }
+                { DevicePlatform.UWP, FileSystem.Extensions.AllImage }
             });
 
-        public static FilePickerFileType PlatformPngFileType() =>
+        static FilePickerFileType PlatformPngFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.UWP, new[] { "*.png" } }
+                { DevicePlatform.UWP, new[] { FileSystem.Extensions.Png } }
             });
-    }
 
-    public partial class FilePickerResult
-    {
-        internal FilePickerResult(IStorageFile storageFile)
-            : base(storageFile)
-        {
-            this.storageFile = storageFile;
-            FileName = storageFile.Name;
-        }
+        static FilePickerFileType PlatformJpegFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.UWP, FileSystem.Extensions.AllJpeg }
+            });
 
-        readonly IStorageFile storageFile;
+        static FilePickerFileType PlatformVideoFileType() =>
+           new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+           {
+                { DevicePlatform.UWP, FileSystem.Extensions.AllVideo }
+           });
 
-        // we can make this assumption because
-        // the only way to construct this object
-        // is with an IStorageFile
-        Task<Stream> PlatformOpenReadStreamAsync()
-            => storageFile.OpenStreamForReadAsync();
+        static FilePickerFileType PlatformPdfFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.UWP, new[] { FileSystem.Extensions.Pdf } }
+            });
     }
 }

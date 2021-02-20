@@ -14,9 +14,7 @@
     <summary>
       <para>Accelerometer data of the acceleration of the device in three dimensional space.</para>
     </summary>
-    <remarks>
-      <para />
-    </remarks>
+    <remarks></remarks>
   </Docs>
   <Members>
     <Member MemberName="IsMonitoring">
@@ -32,11 +30,9 @@
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gets if acceleromter is being monitored.</summary>
+        <summary>Gets if accelerometer is being monitored.</summary>
         <value>If monitoring.</value>
-        <remarks>
-          <para />
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ReadingChanged">
@@ -53,9 +49,7 @@
       </ReturnValue>
       <Docs>
         <summary>Event triggered when reading of sensor changes.</summary>
-        <remarks>
-          <para></para>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="ShakeDetected">
@@ -72,9 +66,7 @@
       </ReturnValue>
       <Docs>
         <summary>Event triggered when a shake has been detected on the device.</summary>
-        <remarks>
-          <para></para>
-        </remarks>
+        <remarks></remarks>
       </Docs>
     </Member>
     <Member MemberName="Start">
@@ -96,7 +88,7 @@
         <param name="sensorSpeed">
           <para>Speed to monitor the sensor.</para>
         </param>
-        <summary>Start monitoring for changes to acceleromter.</summary>
+        <summary>Start monitoring for changes to accelerometer.</summary>
         <remarks>Will throw FeatureNotSupportedException if not supported on device. Will throw ArgumentNullException if handler is null.</remarks>
       </Docs>
     </Member>
@@ -114,10 +106,8 @@
       </ReturnValue>
       <Parameters />
       <Docs>
-        <summary>Stop monitoring for changes to acceleromter.</summary>
-        <remarks>
-          <para></para>
-        </remarks>
+        <summary>Stop monitoring for changes to accelerometer.</summary>
+        <remarks></remarks>
       </Docs>
     </Member>
   </Members>
