@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Samples.Helpers;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -10,21 +11,35 @@ namespace Samples.ViewModel
 {
     public class MediaGalleryViewModel : BaseViewModel
     {
-        const string jpgFileName = "Lomonosov.jpg";
-        const string successMsg = "Save Completed Successfully";
         readonly string albumName;
 
         public MediaGalleryViewModel()
         {
             albumName = AppInfo.Name;
 
-            SavevPngCommand = new Command(() => SaveAsStream(PngUrl, "essential.png"));
-            SaveJpgCommand = new Command(() => Save(JpgUrl, jpgFileName));
-            SaveGifCommand = new Command(() => Save(GifUrl, "test.gif"));
-            SaveVideoCommand = new Command(() => Save(VideoUrl, "essential.mp4"));
+            SavevPngCommand = new Command(() => Save(MediaFileType.Image, EmbeddedMedia.baboonPng));
+            SaveJpgCommand = new Command(() => Save(MediaFileType.Image, EmbeddedMedia.lomonosovJpg));
+            SaveGifCommand = new Command(() => Save(MediaFileType.Image, EmbeddedMedia.newtonsCradleGif));
+            SaveVideoCommand = new Command(() => Save(MediaFileType.Video, EmbeddedMedia.earthMp4));
 
-            SaveFromCacheCommand = new Command(SaveFromCacheDirectory);
+            PngSource = EmbeddedResourceProvider.GetImageSource(EmbeddedMedia.baboonPng);
+            JpgSource = EmbeddedResourceProvider.GetImageSource(EmbeddedMedia.lomonosovJpg);
+            GifSource = EmbeddedResourceProvider.GetImageSource(EmbeddedMedia.newtonsCradleGif);
+
+            var aaa = new MediaElement();
         }
+
+        public bool FromStream { get; set; } = true;
+
+        public bool FromByteArray { get; set; }
+
+        public bool FromCacheDirectory { get; set; }
+
+        public ImageSource PngSource { get; }
+
+        public ImageSource JpgSource { get; }
+
+        public ImageSource GifSource { get; }
 
         public ICommand SavevPngCommand { get; }
 
@@ -34,35 +49,31 @@ namespace Samples.ViewModel
 
         public ICommand SaveVideoCommand { get; }
 
-        public ICommand SaveFromCacheCommand { get; }
-
-        public string PngUrl
-            => "https://raw.githubusercontent.com/xamarin/Essentials/main/Assets/xamarin.essentials_128x128.png";
-
-        public string JpgUrl
-            => "https://raw.githubusercontent.com/dimonovdd/Essentials/featureSaveToGalery/Assets/SaveToGaleryTestPhoto.jpg";
-
-        public string GifUrl
-            => "https://i.gifer.com/769R.gif";
-
-        public string VideoUrl
-            => "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4";
-
-        async void SaveAsStream(string url, string name)
+        async void Save(MediaFileType type, string name)
         {
             try
             {
-                using var client = new WebClient();
-                var stream = client.OpenRead(url);
+                using var stream = EmbeddedResourceProvider.Load(name);
 
-                var data = await DownloadFile(url);
-                await MediaGallery.SaveAsync(
-                    url == VideoUrl ? MediaFileType.Video : MediaFileType.Image,
-                    stream,
-                    name,
-                    albumName);
+                if (FromStream)
+                {
+                    await MediaGallery.SaveAsync(type, stream, name, albumName);
+                }
+                else if (FromByteArray)
+                {
+                    using var memoryStream = new MemoryStream();
+                    stream.CopyTo(memoryStream);
 
-                await DisplayAlertAsync(successMsg);
+                    await MediaGallery.SaveAsync(type, memoryStream.ToArray(), name, albumName);
+                }
+                else if (FromCacheDirectory)
+                {
+                    var filePath = SaveFileToCache(stream, name);
+
+                    await MediaGallery.SaveAsync(type, filePath, albumName);
+                }
+
+                await DisplayAlertAsync("Save Completed Successfully");
             }
             catch (Exception ex)
             {
@@ -70,54 +81,18 @@ namespace Samples.ViewModel
             }
         }
 
-        async void Save(string url, string name)
-        {
-            try
-            {
-                var data = await DownloadFile(url);
-                await MediaGallery.SaveAsync(
-                    url == VideoUrl ? MediaFileType.Video : MediaFileType.Image,
-                    data,
-                    name,
-                    albumName);
-
-                await DisplayAlertAsync(successMsg);
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlertAsync(ex.Message);
-            }
-        }
-
-        async void SaveFromCacheDirectory()
-        {
-            try
-            {
-                var filePath = SaveFileToCache(await DownloadFile(JpgUrl), jpgFileName);
-                await MediaGallery.SaveAsync(MediaFileType.Image, filePath, albumName);
-
-                await DisplayAlertAsync(successMsg);
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlertAsync(ex.Message);
-            }
-        }
-
-        string SaveFileToCache(byte[] data, string fileName)
+        string SaveFileToCache(Stream data, string fileName)
         {
             var filePath = Path.Combine(FileSystem.CacheDirectory, fileName);
 
-            if (!File.Exists(filePath))
-                File.WriteAllBytes(filePath, data);
+            if (File.Exists(filePath))
+                File.Delete(filePath);
+
+            var stream = File.Create(filePath);
+            data.CopyTo(stream);
+            stream.Close();
 
             return filePath;
-        }
-
-        async Task<byte[]> DownloadFile(string url)
-        {
-            using var client = new WebClient();
-            return await client.DownloadDataTaskAsync(url);
         }
     }
 }

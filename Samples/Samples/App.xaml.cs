@@ -25,7 +25,7 @@ namespace Samples
         public App()
         {
             // Enable currently experimental features
-            Device.SetFlags(new string[] { "MediaElement_Experimental" });
+            Device.SetFlags(new string[] { "MediaElement_Experimental", "RadioButton_Experimental" });
 
             InitializeComponent();
 

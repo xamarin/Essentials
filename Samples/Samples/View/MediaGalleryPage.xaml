@@ -14,16 +14,22 @@
         <Grid RowSpacing="20" Padding="16">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="400"/>
-                <RowDefinition Height="40"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Label Grid.Row="0" Text="Save To Gallery"
-                   HorizontalTextAlignment="Center" FontAttributes="Bold"/>
+            <Label Grid.Row="0" Text="Save To Gallery From:"
+                   HorizontalTextAlignment="Center" FontAttributes="Bold" Margin="0"/>
 
-            <Grid Grid.Row="1" ColumnSpacing="8" RowSpacing="8">
+            <StackLayout Grid.Row="1" Orientation="Horizontal" Margin="0" Padding="0" Spacing="8">
+                <RadioButton Text="Stream" IsChecked="{Binding FromStream}" Margin="0"/>
+                <RadioButton Text="ByteArray"  IsChecked="{Binding FromByteArray}" Margin="0"/>
+                <RadioButton Text="CacheDirectory"  IsChecked="{Binding FromCacheDirectory}" Margin="0"/>
+            </StackLayout>
+
+            <Grid Grid.Row="2" ColumnSpacing="8" RowSpacing="8">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="40"/>
@@ -35,23 +41,22 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Image Grid.Row="0" Grid.Column="0" Source="{Binding PngUrl}"/>
+                <Image Grid.Row="0" Grid.Column="0" Source="{Binding PngSource}"/>
                 <Button Grid.Row="1" Grid.Column="0" Text="Png" Command="{Binding SavevPngCommand}"/>
 
-                <Image Grid.Row="0" Grid.Column="1" Source="{Binding JpgUrl}"/>
+                <Image Grid.Row="0" Grid.Column="1" Source="{Binding JpgSource}"/>
                 <Button Grid.Row="1" Grid.Column="1" Text="Jpg" Command="{Binding SaveJpgCommand}"/>
 
 
-                <Image Grid.Row="2" Grid.Column="0" Source="{Binding GifUrl}" IsAnimationPlaying="True"/>
+                <Image Grid.Row="2" Grid.Column="0" Source="{Binding GifSource}" IsAnimationPlaying="True"/>
                 <Button Grid.Row="3" Grid.Column="0" Text="Gif" Command="{Binding SaveGifCommand}"/>
 
-                <MediaElement Grid.Row="2" Grid.Column="1" Source="{Binding VideoUrl}"/>
+                <Label Grid.Row="2" Grid.Column="1" Text="Imagine a video of Earth here"
+                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
                 <Button Grid.Row="3" Grid.Column="1" Text="Video" Command="{Binding SaveVideoCommand}"/>
             </Grid>
 
-            <Button Grid.Row="2" Text="From Cache Directory" Command="{Binding SaveFromCacheCommand}"/>
-
-            <Label Grid.Row="2" Text="Other features in the future"
+            <Label Grid.Row="3" Text="Other features in the future"
                    HorizontalTextAlignment="Center" FontAttributes="Bold"/>
         </Grid>
     </ScrollView>
