@@ -242,10 +242,10 @@ namespace Samples.ViewModel
                     new[] { "auth", "authenticate", "authenticator", "web", "webauth" }),
                 new SampleItem(
                     "🖼",
-                    "Save To Gallery",
-                    typeof(SaveToGalleryPage),
-                    "Save To Gallery",
-                    new[] { "save", "gallery", "image", "jpg", "png" })
+                    "Media Gallery",
+                    typeof(MediaGalleryPage),
+                    "Quickly and easily manage media files",
+                    new[] { "save", "media", "gallery", "image", "video", "jpg", "png" })
             };
             filteredItems = samples;
             filterText = string.Empty;

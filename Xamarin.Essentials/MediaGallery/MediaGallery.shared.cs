@@ -10,7 +10,7 @@ namespace Xamarin.Essentials
         Video
     }
 
-    public static partial class SaveToGallery
+    public static partial class MediaGallery
     {
         public static Task SaveAsync(MediaFileType type, Stream fileStream, string fileName, string albumName)
         {

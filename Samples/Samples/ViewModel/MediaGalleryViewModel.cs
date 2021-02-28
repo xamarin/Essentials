@@ -8,13 +8,13 @@ using Xamarin.Forms;
 
 namespace Samples.ViewModel
 {
-    public class SaveToGalleryViewModel : BaseViewModel
+    public class MediaGalleryViewModel : BaseViewModel
     {
         const string jpgFileName = "Lomonosov.jpg";
         const string successMsg = "Save Completed Successfully";
         readonly string albumName;
 
-        public SaveToGalleryViewModel()
+        public MediaGalleryViewModel()
         {
             albumName = AppInfo.Name;
 
@@ -56,7 +56,7 @@ namespace Samples.ViewModel
                 var stream = client.OpenRead(url);
 
                 var data = await DownloadFile(url);
-                await SaveToGallery.SaveAsync(
+                await MediaGallery.SaveAsync(
                     url == VideoUrl ? MediaFileType.Video : MediaFileType.Image,
                     stream,
                     name,
@@ -75,7 +75,7 @@ namespace Samples.ViewModel
             try
             {
                 var data = await DownloadFile(url);
-                await SaveToGallery.SaveAsync(
+                await MediaGallery.SaveAsync(
                     url == VideoUrl ? MediaFileType.Video : MediaFileType.Image,
                     data,
                     name,
@@ -94,7 +94,7 @@ namespace Samples.ViewModel
             try
             {
                 var filePath = SaveFileToCache(await DownloadFile(JpgUrl), jpgFileName);
-                await SaveToGallery.SaveAsync(MediaFileType.Image, filePath, albumName);
+                await MediaGallery.SaveAsync(MediaFileType.Image, filePath, albumName);
 
                 await DisplayAlertAsync(successMsg);
             }

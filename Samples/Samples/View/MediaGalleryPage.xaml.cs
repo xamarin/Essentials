@@ -1,8 +1,8 @@
 ﻿namespace Samples.View
 {
-    public partial class SaveToGalleryPage : BasePage
+    public partial class MediaGalleryPage : BasePage
     {
-        public SaveToGalleryPage()
+        public MediaGalleryPage()
         {
             InitializeComponent();
         }

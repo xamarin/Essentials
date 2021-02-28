@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Xamarin.Essentials
 {
-    public static partial class SaveToGallery
+    public static partial class MediaGallery
     {
         static Task PlatformSaveAsync(MediaFileType type, byte[] data, string fileName, string albumName)
             => throw ExceptionUtils.NotSupportedOrImplementedException;

@@ -6,7 +6,7 @@ using Photos;
 
 namespace Xamarin.Essentials
 {
-    public static partial class SaveToGallery
+    public static partial class MediaGallery
     {
         static readonly string cacheDir = "EssentialsPhotosCacheDir";
 

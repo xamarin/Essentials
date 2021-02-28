@@ -13,7 +13,7 @@ using Uri = Android.Net.Uri;
 
 namespace Xamarin.Essentials
 {
-    public static partial class SaveToGallery
+    public static partial class MediaGallery
     {
         static async Task PlatformSaveAsync(MediaFileType type, byte[] data, string fileName, string albumName)
         {
