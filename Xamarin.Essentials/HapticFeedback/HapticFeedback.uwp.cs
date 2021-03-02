@@ -6,12 +6,6 @@ namespace Xamarin.Essentials
 {
     public static partial class HapticFeedback
     {
-        static void PlatformPerform(HapticFeedbackType type)
-        {
-            using var generator = PlatformPrepareGenerator(type);
-            generator?.Perform();
-        }
-
         static HapticFeedbackGenerator PlatformPrepareGenerator(HapticFeedbackType type)
         {
             var generator = new HapticFeedbackGenerator(type);
@@ -20,7 +14,7 @@ namespace Xamarin.Essentials
         }
     }
 
-    public partial class HapticFeedbackGenerator : IDisposable
+    public partial class HapticFeedbackGenerator
     {
         const string vibrationDeviceApiType = "Windows.Devices.Haptics.VibrationDevice";
         SimpleHapticsControllerFeedback feedback;

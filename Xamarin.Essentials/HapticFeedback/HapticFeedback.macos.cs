@@ -5,23 +5,29 @@ namespace Xamarin.Essentials
 {
     public static partial class HapticFeedback
     {
-        static void PlatformPerform(HapticFeedbackType type)
-        {
-            if (type == HapticFeedbackType.LongPress)
-                Performer.PerformFeedback(NSHapticFeedbackPattern.Generic, NSHapticFeedbackPerformanceTime.Default);
-        }
-
         static HapticFeedbackGenerator PlatformPrepareGenerator(HapticFeedbackType type)
-            => new HapticFeedbackGenerator(() => PlatformPerform(type));
+            => new HapticFeedbackGenerator(
+                type,
+                () =>
+                {
+                    if (type == HapticFeedbackType.LongPress)
+                    {
+                        Performer.PerformFeedback(
+                            NSHapticFeedbackPattern.Generic,
+                            NSHapticFeedbackPerformanceTime.Default);
+                    }
+                });
 
-        internal static INSHapticFeedbackPerformer Performer => NSHapticFeedbackManager.DefaultPerformer;
+        static INSHapticFeedbackPerformer Performer
+            => NSHapticFeedbackManager.DefaultPerformer;
     }
 
-    public partial class HapticFeedbackGenerator : IDisposable
+    public partial class HapticFeedbackGenerator
     {
         Action perform;
 
-        internal HapticFeedbackGenerator(Action perform)
+        internal HapticFeedbackGenerator(HapticFeedbackType type, Action perform)
+            : this(type)
             => this.perform = perform;
 
         void PlatformPerform()

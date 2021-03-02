@@ -5,31 +5,33 @@ namespace Xamarin.Essentials
 {
     public static partial class HapticFeedback
     {
-        static void PlatformPerform(HapticFeedbackType type)
+        static HapticFeedbackGenerator PlatformPrepareGenerator(HapticFeedbackType type)
         {
-            using var generator = PlatformPrepareGenerator(type);
-            generator?.Perform();
+            Permissions.EnsureDeclared<Permissions.Vibrate>();
+            return new HapticFeedbackGenerator(type, ConvertType(type));
         }
 
-        static HapticFeedbackGenerator PlatformPrepareGenerator(HapticFeedbackType type)
-            => new HapticFeedbackGenerator(type).Init();
+        static string ConvertType(HapticFeedbackType type)
+            => type switch
+            {
+                HapticFeedbackType.LongPress => "Hold",
+                _ => "Tap"
+            };
     }
 
-    public partial class HapticFeedbackGenerator : IDisposable
+    public partial class HapticFeedbackGenerator
     {
         string pattern;
         Feedback feedback;
 
-        internal HapticFeedbackGenerator Init()
+        internal HapticFeedbackGenerator(HapticFeedbackType type, string pattern)
+            : this(type)
         {
-            Permissions.EnsureDeclared<Permissions.Vibrate>();
-            pattern = ConvertType(Type);
+            this.pattern = pattern;
             feedback = new Feedback();
 
             if (!feedback.IsSupportedPattern(FeedbackType.Vibration, pattern))
                throw new FeatureNotSupportedException(HapticFeedback.notSupportedMessage);
-
-            return this;
         }
 
         void PlatformPerform()
@@ -40,13 +42,5 @@ namespace Xamarin.Essentials
             pattern = null;
             feedback = null;
         }
-
-        string ConvertType(HapticFeedbackType type)
-            => type switch
-            {
-                HapticFeedbackType.LongPress => "Hold",
-                HapticFeedbackType.Click => throw new NotImplementedException(),
-                _ => "Tap"
-            };
     }
 }

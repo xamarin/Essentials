@@ -5,16 +5,14 @@ namespace Xamarin.Essentials
 {
     public static partial class HapticFeedback
     {
-        internal static bool IsSupported => true;
-
-        static void PlatformPerform(HapticFeedbackType type)
+        static HapticFeedbackGenerator PlatformPrepareGenerator(HapticFeedbackType type)
         {
             Permissions.EnsureDeclared<Permissions.Vibrate>();
-            Platform.CurrentActivity?.Window?.DecorView?.PerformHapticFeedback(ConvertType(type));
-        }
 
-        static HapticFeedbackGenerator PlatformPrepareGenerator(HapticFeedbackType type)
-            => new HapticFeedbackGenerator(() => PlatformPerform(type));
+            return new HapticFeedbackGenerator(
+                type,
+                () => Platform.CurrentActivity?.Window?.DecorView?.PerformHapticFeedback(ConvertType(type)));
+        }
 
         static FeedbackConstants ConvertType(HapticFeedbackType type) =>
             type switch
@@ -24,11 +22,12 @@ namespace Xamarin.Essentials
             };
     }
 
-    public partial class HapticFeedbackGenerator : IDisposable
+    public partial class HapticFeedbackGenerator
     {
         Action perform;
 
-        internal HapticFeedbackGenerator(Action perform)
+        internal HapticFeedbackGenerator(HapticFeedbackType type, Action perform)
+            : this(type)
             => this.perform = perform;
 
         void PlatformPerform()

@@ -8,7 +8,10 @@ namespace Xamarin.Essentials
             "Haptic Feedback is not supported on the current device";
 
         public static void Perform(HapticFeedbackType type = HapticFeedbackType.Click)
-            => PlatformPerform(type);
+        {
+            using var generator = PrepareGenerator(type);
+            generator.Perform();
+        }
 
         public static HapticFeedbackGenerator PrepareGenerator(HapticFeedbackType type = HapticFeedbackType.Click)
             => PlatformPrepareGenerator(type);
@@ -16,7 +19,7 @@ namespace Xamarin.Essentials
 
     public partial class HapticFeedbackGenerator : IDisposable
     {
-        protected internal HapticFeedbackGenerator(HapticFeedbackType type)
+        internal HapticFeedbackGenerator(HapticFeedbackType type)
             => Type = type;
 
         public HapticFeedbackType Type { get; }
