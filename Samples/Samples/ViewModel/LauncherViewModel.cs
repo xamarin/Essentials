@@ -14,6 +14,8 @@ namespace Samples.ViewModel
 
         public string LaunchUri { get; set; }
 
+        public bool OpenInApp { get; set; }
+
         public ICommand LaunchCommand { get; }
 
         public ICommand CanLaunchCommand { get; }
@@ -91,11 +93,23 @@ namespace Samples.ViewModel
 
                 var rect = element.GetAbsoluteBounds().ToSystemRectangle();
                 rect.Y += 40;
-                await Launcher.OpenAsync(new OpenFileRequest
+                if (OpenInApp)
                 {
-                    File = new ReadOnlyFile(file),
-                    PresentationSourceBounds = rect
-                });
+                    await Launcher.OpenAsync(
+                        new OpenFileRequest
+                        {
+                            File = new ReadOnlyFile(file),
+                            PresentationSourceBounds = rect
+                        }, OpenInApp);
+                }
+                else
+                {
+                    await Launcher.OpenAsync(new OpenFileRequest
+                    {
+                        File = new ReadOnlyFile(file),
+                        PresentationSourceBounds = rect
+                    });
+                }
             }
         }
     }

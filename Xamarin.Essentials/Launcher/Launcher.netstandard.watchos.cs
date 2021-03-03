@@ -14,6 +14,9 @@ namespace Xamarin.Essentials
         static Task PlatformOpenAsync(OpenFileRequest request) =>
             throw ExceptionUtils.NotSupportedOrImplementedException;
 
+        static Task PlatformOpenAsync(OpenFileRequest request, bool openInApp) =>
+           throw ExceptionUtils.NotSupportedOrImplementedException;
+
         static Task<bool> PlatformTryOpenAsync(Uri uri) =>
             throw ExceptionUtils.NotSupportedOrImplementedException;
     }
