@@ -25,9 +25,6 @@ namespace Xamarin.Essentials
             await WinLauncher.LaunchFileAsync(storageFile).AsTask();
         }
 
-        static Task PlatformOpenAsync(OpenFileRequest request, bool openInApp) =>
-            throw new FeatureNotSupportedException();
-
         static async Task<bool> PlatformTryOpenAsync(Uri uri)
         {
             var canOpen = await PlatformCanOpenAsync(uri);

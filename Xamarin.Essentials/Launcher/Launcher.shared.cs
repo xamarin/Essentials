@@ -50,16 +50,6 @@ namespace Xamarin.Essentials
             return PlatformOpenAsync(request);
         }
 
-        public static Task OpenAsync(OpenFileRequest request, bool openInApp)
-        {
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-            if (request.File == null)
-                throw new ArgumentNullException(nameof(request.File));
-
-            return PlatformOpenAsync(request, openInApp);
-        }
-
         public static Task<bool> TryOpenAsync(string uri)
         {
             if (string.IsNullOrWhiteSpace(uri))
@@ -98,6 +88,8 @@ namespace Xamarin.Essentials
         public string Title { get; set; }
 
         public ReadOnlyFile File { get; set; }
+
+        public bool QuickLook { get; set; } = false;
 
 #if !NETSTANDARD1_0
         public Rectangle PresentationSourceBounds { get; set; } = Rectangle.Empty;

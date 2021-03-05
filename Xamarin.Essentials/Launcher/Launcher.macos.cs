@@ -27,8 +27,5 @@ namespace Xamarin.Essentials
 
         static Task PlatformOpenAsync(OpenFileRequest request) =>
             Task.FromResult(NSWorkspace.SharedWorkspace.OpenFile(request.File.FullPath));
-
-        static Task PlatformOpenAsync(OpenFileRequest request, bool openInApp) =>
-            throw new FeatureNotSupportedException();
     }
 }

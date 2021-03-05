@@ -57,9 +57,6 @@ namespace Xamarin.Essentials
             return Task.CompletedTask;
         }
 
-        static Task PlatformOpenAsync(OpenFileRequest request, bool openInApp) =>
-            throw new FeatureNotSupportedException();
-
         static async Task<bool> PlatformTryOpenAsync(Uri uri)
         {
             var canOpen = await PlatformCanOpenAsync(uri);

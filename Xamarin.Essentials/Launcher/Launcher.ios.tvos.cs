@@ -39,53 +39,45 @@ namespace Xamarin.Essentials
 
         static Task PlatformOpenAsync(OpenFileRequest request)
         {
-            documentController = new UIDocumentInteractionController()
+            if (request.QuickLook)
             {
-                Name = request.File.FileName,
-                Url = NSUrl.FromFilename(request.File.FullPath),
-                Uti = request.File.ContentType
-            };
-
-            var view = Platform.GetCurrentUIViewController().View;
-
-            CGRect rect;
-
-            if (request.PresentationSourceBounds != Rectangle.Empty)
-            {
-                rect = request.PresentationSourceBounds.ToPlatformRectangle();
+                Platform.GetCurrentUIViewController()?.
+                    PresentViewController(
+                    new QLPreviewController() { DataSource = new PreviewDataSource(request.File.FullPath, request.Title ?? request.File.FileName) },
+                    true,
+                    null);
             }
             else
             {
-                rect = DeviceInfo.Idiom == DeviceIdiom.Tablet
-                    ? new CGRect(new CGPoint(view.Bounds.Width / 2, view.Bounds.Height), CGRect.Empty.Size)
-                    : view.Bounds;
-            }
+                documentController = new UIDocumentInteractionController()
+                {
+                    Name = request.File.FileName,
+                    Url = NSUrl.FromFilename(request.File.FullPath),
+                    Uti = request.File.ContentType
+                };
 
-            documentController.PresentOpenInMenu(rect, view, true);
+                var view = Platform.GetCurrentUIViewController().View;
+
+                CGRect rect;
+
+                if (request.PresentationSourceBounds != Rectangle.Empty)
+                {
+                    rect = request.PresentationSourceBounds.ToPlatformRectangle();
+                }
+                else
+                {
+                    rect = DeviceInfo.Idiom == DeviceIdiom.Tablet
+                        ? new CGRect(new CGPoint(view.Bounds.Width / 2, view.Bounds.Height), CGRect.Empty.Size)
+                        : view.Bounds;
+                }
+
+                documentController.PresentOpenInMenu(rect, view, true);
+            }
             return Task.CompletedTask;
         }
 
-        static Task PlatformOpenAsync(OpenFileRequest request, bool openInApp)
-        {
-            if (openInApp)
-            {
-                UIApplication.SharedApplication?.KeyWindow?.RootViewController?.
-                   PresentViewController(
-                       new QLPreviewController() { DataSource = new PreviewDataSource(request.File.FullPath, request.File.FileName) },
-                       true,
-                       null);
-            }
-            else
-            {
-                PlatformOpenAsync(request);
-            }
-            return Task.CompletedTask;
-        }
 #else
         static Task PlatformOpenAsync(OpenFileRequest request) =>
-            throw new FeatureNotSupportedException();
-
-        static Task PlatformOpenAsync(OpenFileRequest request, bool openInApp) =>
             throw new FeatureNotSupportedException();
 #endif
     }
