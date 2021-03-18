@@ -37,7 +37,8 @@ namespace Xamarin.Essentials
             if (!UIImagePickerController.AvailableMediaTypes(sourceType).Contains(mediaType))
                 throw new FeatureNotSupportedException();
 
-            if (!photo)
+            if (!photo && !pickExisting)
+                // microphone only needed if video will be captured
                 await Permissions.EnsureGrantedAsync<Permissions.Microphone>();
 
             // Check if picking existing or not and ensure permission accordingly as they can be set independently from each other
