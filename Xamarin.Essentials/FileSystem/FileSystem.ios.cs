@@ -1,8 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Foundation;
+using MobileCoreServices;
 using Photos;
+using PhotosUI;
 using UIKit;
 
 namespace Xamarin.Essentials
@@ -78,6 +81,33 @@ namespace Xamarin.Essentials
                 tcsStream.TrySetResult(data.AsStream())));
 
             return tcsStream.Task;
+        }
+    }
+
+    class PHPickerFileResult : FileResult
+    {
+        readonly NSItemProvider provider;
+        readonly string identifier;
+
+        internal PHPickerFileResult(PHPickerResult file)
+            : base()
+        {
+            provider = file.ItemProvider;
+            identifier = provider?.RegisteredTypeIdentifiers?.FirstOrDefault();
+            var extension = identifier == null
+                ? null
+                : UTType.CopyAllTags(identifier, UTType.TagClassFilenameExtension)?.FirstOrDefault();
+            FileName = FullPath = $"{file?.ItemProvider?.SuggestedName}.{extension}";
+        }
+
+        internal async override Task<Stream> PlatformOpenReadAsync()
+        {
+            if (provider == null || identifier == null)
+                return null;
+
+            var data = await provider.LoadDataRepresentationAsync(identifier);
+
+            return data.AsStream();
         }
     }
 }

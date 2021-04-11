@@ -159,7 +159,11 @@ namespace Xamarin.Essentials
 
         static FileResult PickerResultsToMediaFile(PHPickerResult[] results)
         {
-            throw new NotImplementedException();
+            var file = results?.FirstOrDefault();
+
+            return file == null
+                ? null
+                : new PHPickerFileResult(file);
         }
 
         class PhotoPickerDelegate : UIImagePickerControllerDelegate
