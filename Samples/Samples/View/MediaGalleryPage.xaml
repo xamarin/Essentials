@@ -23,7 +23,7 @@
             <Label Grid.Row="0" Text="Save To Gallery From:"
                    HorizontalTextAlignment="Center" FontAttributes="Bold" Margin="0"/>
 
-            <StackLayout Grid.Row="1" Orientation="Horizontal" Margin="0" Padding="0" Spacing="8">
+            <StackLayout Grid.Row="1" Orientation="Vertical" Margin="0" Padding="0" Spacing="8">
                 <RadioButton Text="Stream" IsChecked="{Binding FromStream}" Margin="0"/>
                 <RadioButton Text="ByteArray"  IsChecked="{Binding FromByteArray}" Margin="0"/>
                 <RadioButton Text="CacheDirectory"  IsChecked="{Binding FromCacheDirectory}" Margin="0"/>
@@ -48,7 +48,7 @@
                 <Button Grid.Row="1" Grid.Column="1" Text="Jpg" Command="{Binding SaveJpgCommand}"/>
 
 
-                <Image Grid.Row="2" Grid.Column="0" Source="{Binding GifSource}" IsAnimationPlaying="True"/>
+                <Image Grid.Row="2" Grid.Column="0" Source="{Binding GifSource}"/>
                 <Button Grid.Row="3" Grid.Column="0" Text="Gif" Command="{Binding SaveGifCommand}"/>
 
                 <Label Grid.Row="2" Grid.Column="1" Text="Imagine a video of Earth here"

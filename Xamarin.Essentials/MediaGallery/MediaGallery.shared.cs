@@ -12,46 +12,38 @@ namespace Xamarin.Essentials
 
     public static partial class MediaGallery
     {
-        public static Task SaveAsync(MediaFileType type, Stream fileStream, string fileName, string albumName)
+        public static Task SaveAsync(MediaFileType type, Stream fileStream, string fileName)
         {
             if (fileStream == null)
                 throw new ArgumentNullException(nameof(fileStream));
-            CheckParameters(albumName, fileName);
+            CheckParameters(fileName);
 
-            return PlatformSaveAsync(type, fileStream, fileName, albumName);
+            return PlatformSaveAsync(type, fileStream, fileName);
         }
 
-        public static Task SaveAsync(MediaFileType type, byte[] data, string fileName, string albumName)
+        public static Task SaveAsync(MediaFileType type, byte[] data, string fileName)
         {
             if (data == null || !(data.Length > 0))
                 throw new ArgumentNullException(nameof(data));
-            CheckParameters(albumName, fileName);
+            CheckParameters(fileName);
 
-            return PlatformSaveAsync(type, data, fileName, albumName);
+            return PlatformSaveAsync(type, data, fileName);
         }
 
-        public static Task SaveAsync(MediaFileType type, string filePath, string albumName)
+        public static Task SaveAsync(MediaFileType type, string filePath)
         {
 #if !NETSTANDARD1_0
             if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
                 throw new ArgumentException(nameof(filePath));
 #endif
-            CheckParameters(albumName);
 
-            return PlatformSaveAsync(type, filePath, albumName);
+            return PlatformSaveAsync(type, filePath);
         }
 
-        static void CheckParameters(string albumName, string fileName)
+        static void CheckParameters(string fileName)
         {
             if (string.IsNullOrWhiteSpace(fileName))
                 throw new ArgumentException(nameof(fileName));
-            CheckParameters(albumName);
-        }
-
-        static void CheckParameters(string albumName)
-        {
-            if (string.IsNullOrWhiteSpace(albumName))
-                throw new ArgumentException(nameof(albumName));
         }
     }
 }

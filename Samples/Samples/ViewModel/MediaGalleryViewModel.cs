@@ -11,12 +11,8 @@ namespace Samples.ViewModel
 {
     public class MediaGalleryViewModel : BaseViewModel
     {
-        readonly string albumName;
-
         public MediaGalleryViewModel()
         {
-            albumName = AppInfo.Name;
-
             SavevPngCommand = new Command(() => Save(MediaFileType.Image, EmbeddedMedia.baboonPng));
             SaveJpgCommand = new Command(() => Save(MediaFileType.Image, EmbeddedMedia.lomonosovJpg));
             SaveGifCommand = new Command(() => Save(MediaFileType.Image, EmbeddedMedia.newtonsCradleGif));
@@ -25,8 +21,6 @@ namespace Samples.ViewModel
             PngSource = EmbeddedResourceProvider.GetImageSource(EmbeddedMedia.baboonPng);
             JpgSource = EmbeddedResourceProvider.GetImageSource(EmbeddedMedia.lomonosovJpg);
             GifSource = EmbeddedResourceProvider.GetImageSource(EmbeddedMedia.newtonsCradleGif);
-
-            var aaa = new MediaElement();
         }
 
         public bool FromStream { get; set; } = true;
@@ -57,20 +51,20 @@ namespace Samples.ViewModel
 
                 if (FromStream)
                 {
-                    await MediaGallery.SaveAsync(type, stream, name, albumName);
+                    await MediaGallery.SaveAsync(type, stream, name);
                 }
                 else if (FromByteArray)
                 {
                     using var memoryStream = new MemoryStream();
                     stream.CopyTo(memoryStream);
 
-                    await MediaGallery.SaveAsync(type, memoryStream.ToArray(), name, albumName);
+                    await MediaGallery.SaveAsync(type, memoryStream.ToArray(), name);
                 }
                 else if (FromCacheDirectory)
                 {
                     var filePath = SaveFileToCache(stream, name);
 
-                    await MediaGallery.SaveAsync(type, filePath, albumName);
+                    await MediaGallery.SaveAsync(type, filePath);
                 }
 
                 await DisplayAlertAsync("Save Completed Successfully");

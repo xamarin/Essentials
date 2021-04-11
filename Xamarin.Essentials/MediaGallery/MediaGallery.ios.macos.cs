@@ -10,7 +10,7 @@ namespace Xamarin.Essentials
     {
         static readonly string cacheDir = "EssentialsPhotosCacheDir";
 
-        static async Task PlatformSaveAsync(MediaFileType type, byte[] data, string fileName, string albumName)
+        static async Task PlatformSaveAsync(MediaFileType type, byte[] data, string fileName)
         {
             string filePath = null;
 
@@ -19,7 +19,7 @@ namespace Xamarin.Essentials
                 filePath = GetFilePath(fileName);
                 await File.WriteAllBytesAsync(filePath, data);
 
-                await PlatformSaveAsync(type, filePath, albumName);
+                await PlatformSaveAsync(type, filePath);
             }
             finally
             {
@@ -27,7 +27,7 @@ namespace Xamarin.Essentials
             }
         }
 
-        static async Task PlatformSaveAsync(MediaFileType type, Stream fileStream, string fileName, string albumName)
+        static async Task PlatformSaveAsync(MediaFileType type, Stream fileStream, string fileName)
         {
             string filePath = null;
 
@@ -38,7 +38,7 @@ namespace Xamarin.Essentials
                 await fileStream.CopyToAsync(stream);
                 stream.Close();
 
-                await PlatformSaveAsync(type, filePath, albumName);
+                await PlatformSaveAsync(type, filePath);
             }
             finally
             {
@@ -46,12 +46,8 @@ namespace Xamarin.Essentials
             }
         }
 
-        static async Task PlatformSaveAsync(MediaFileType type, string filePath, string albumName)
+        static async Task PlatformSaveAsync(MediaFileType type, string filePath)
         {
-            using var album = PHPhotoLibrary.AuthorizationStatus == PHAuthorizationStatus.Authorized
-                ? GetAlbum(albumName) ?? await CreateAlbumAsync(albumName)
-                : null;
-
             using var fileUri = new NSUrl(filePath);
 
             await PhotoLibraryPerformChanges(() =>
@@ -59,43 +55,7 @@ namespace Xamarin.Essentials
                 using var request = type == MediaFileType.Video
                 ? PHAssetChangeRequest.FromVideo(fileUri)
                 : PHAssetChangeRequest.FromImage(fileUri);
-
-                if (album != null)
-                {
-                    using var addRequest = PHAssetCollectionChangeRequest.ChangeRequest(album);
-                    addRequest.AddAssets(new PHObject[] { request.PlaceholderForCreatedAsset });
-                }
             });
-        }
-
-        static PHAssetCollection GetAlbum(string albumName)
-        {
-            var options = new PHFetchOptions();
-            options.Predicate = NSPredicate.FromFormat(
-                    "title=%@",
-                    new NSObject[] { NSObject.FromObject(albumName) });
-
-            var collection = PHAssetCollection.FetchAssetCollections(
-                PHAssetCollectionType.Album,
-                PHAssetCollectionSubtype.Any,
-                options);
-
-            return (PHAssetCollection)collection?.firstObject;
-        }
-
-        static async Task<PHAssetCollection> CreateAlbumAsync(string albumName)
-        {
-            PHObjectPlaceholder placeholder = null;
-
-            await PhotoLibraryPerformChanges(() =>
-            {
-                using var request = PHAssetCollectionChangeRequest.CreateAssetCollection(albumName);
-                placeholder = request.PlaceholderForCreatedAssetCollection;
-            });
-
-            var id = placeholder?.LocalIdentifier;
-            var fetchResult = PHAssetCollection.FetchAssetCollections(new string[] { id }, null);
-            return (PHAssetCollection)fetchResult.firstObject;
         }
 
         static async Task PhotoLibraryPerformChanges(Action action)
