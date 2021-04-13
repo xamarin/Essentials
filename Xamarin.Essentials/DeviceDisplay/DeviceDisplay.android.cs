@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Android.Content;
 using Android.Content.Res;
 using Android.Provider;
@@ -105,6 +106,10 @@ namespace Xamarin.Essentials
         internal Listener(Context context, Action handler)
             : base(context) => onChanged = handler;
 
-        public override void OnOrientationChanged(int orientation) => onChanged();
+        public override async void OnOrientationChanged(int orientation)
+        {
+            await Task.Delay(500);
+            onChanged();
+        }
     }
 }
