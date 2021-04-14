@@ -30,7 +30,7 @@ namespace DeviceTests.Shared
 
             using var fileStream = assembly.GetManifestResourceStream(resourceName);
 
-            await MediaGallery.SaveAsync(MediaFileType.Image, fileStream, jpgName, nameof(DeviceTests));
+            await MediaGallery.SaveAsync(MediaFileType.Image, fileStream, jpgName);
         }
     }
 }
