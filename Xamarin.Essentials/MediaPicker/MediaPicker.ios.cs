@@ -66,7 +66,11 @@ namespace Xamarin.Essentials
             var tcs = new TaskCompletionSource<FileResult>(picker);
             picker.Delegate = new PhotoPickerDelegate
             {
-                CompletedHandler = info => GetFileResult(info, tcs)
+                CompletedHandler = async info =>
+                {
+                    GetFileResult(info, tcs);
+                    await vc.DismissViewControllerAsync(true);
+                }
             };
 
             if (picker.PresentationController != null)
@@ -80,8 +84,6 @@ namespace Xamarin.Essentials
             await vc.PresentViewControllerAsync(picker, true);
 
             var result = await tcs.Task;
-
-            await vc.DismissViewControllerAsync(true);
 
             picker?.Dispose();
             picker = null;
