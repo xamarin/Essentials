@@ -218,47 +218,24 @@ namespace Xamarin.Essentials
         {
             try
             {
-                var result = new List<FileResult>();
-                foreach (var pickerResult in results)
+                var fileResults = new List<FileResult>();
+                foreach (var result in results)
                 {
-                    var taskCompletionSource = new TaskCompletionSource<FileResult>();
-                    var fileName = pickerResult.ItemProvider.SuggestedName;
-
-                    foreach (var registeredItemType in pickerResult.ItemProvider.RegisteredTypeIdentifiers)
+                    foreach (var registeredItemType in result.ItemProvider.RegisteredTypeIdentifiers)
                     {
-                        // TODO: decide the best approach to get the image info
-                        pickerResult.ItemProvider.LoadItem(registeredItemType, null, (obj, error) =>
-                        {
-                            if (error != null || obj == null)
-                                return;
-
-                            var image = obj as UIImage;
-
-                            // taskCompletionSource.SetResult(fileResult);
-                            // result.Add(taskCompletionSource.Task.Result);
-                        });
-                        pickerResult.ItemProvider.LoadDataRepresentation(registeredItemType, (data, error) =>
-                        {
-                            if (error != null || data == null)
-                                return;
-
-                            var bytes = data.ToArray();
-
-                            // taskCompletionSource.SetResult(fileResult);
-                            // result.Add(taskCompletionSource.Task.Result);
-                        });
-                        pickerResult.ItemProvider.LoadFileRepresentation(registeredItemType, (url, error) =>
+                        result.ItemProvider.LoadFileRepresentation(registeredItemType, (url, error) =>
                         {
                             if (error != null || url == null)
                                 return;
 
-                            FileResult fileResult = new UIDocumentFileResult(url);
+                            FileResult fileResult = new NSUrlFileResult(url);
+                            var taskCompletionSource = new TaskCompletionSource<FileResult>();
                             taskCompletionSource.SetResult(fileResult);
-                            result.Add(taskCompletionSource.Task.Result);
+                            fileResults.Add(taskCompletionSource.Task.Result);
                         });
                     }
                 }
-                tcs.TrySetResult(result);
+                tcs.TrySetResult(fileResults);
             }
             catch (Exception ex)
             {
