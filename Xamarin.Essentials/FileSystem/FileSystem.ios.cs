@@ -160,9 +160,12 @@ namespace Xamarin.Essentials
 
     class UIDocumentFileResult : FileResult
     {
+        NSData data;
+
         internal UIDocumentFileResult(NSUrl url)
             : base()
         {
+            data = NSData.FromUrl(url);
             var doc = new UIDocument(url);
             FullPath = doc.FileUrl?.Path;
             FileName = doc.LocalizedName ?? Path.GetFileName(FullPath);
@@ -170,8 +173,10 @@ namespace Xamarin.Essentials
 
         internal override Task<Stream> PlatformOpenReadAsync()
         {
-            Stream fileStream = File.OpenRead(FullPath);
+            if (data != null)
+                return Task.FromResult(data.AsStream());
 
+            Stream fileStream = File.OpenRead(FullPath);
             return Task.FromResult(fileStream);
         }
     }
