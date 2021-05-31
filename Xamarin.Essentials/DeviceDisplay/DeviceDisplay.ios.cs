@@ -18,13 +18,15 @@ namespace Xamarin.Essentials
             var bounds = UIScreen.MainScreen.Bounds;
             var scale = UIScreen.MainScreen.Scale;
 
+            // MaximumFramesPerSecond only available in iOS 10.3+. Fall-back to 60 Hz if not supported
+            var fpsRate = Platform.HasOSVersion(10, 3) ? UIScreen.MainScreen.MaximumFramesPerSecond : 60;
             return new DisplayInfo(
                 width: bounds.Width * scale,
                 height: bounds.Height * scale,
                 density: scale,
                 orientation: CalculateOrientation(),
                 rotation: CalculateRotation(),
-                rate: UIScreen.MainScreen.MaximumFramesPerSecond);
+                rate: fpsRate);
         }
 
         static void StartScreenMetricsListeners()
