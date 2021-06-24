@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-[assembly: System.Reflection.AssemblyMetadata ("IsTrimmable", "True")]
+[assembly: System.Reflection.AssemblyMetadata("IsTrimmable", "True")]
 
 #pragma warning disable CS0618 // Type or member is obsolete
 [assembly: LinkerSafe]
