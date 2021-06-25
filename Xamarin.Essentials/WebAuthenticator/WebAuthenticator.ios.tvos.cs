@@ -132,13 +132,19 @@ namespace Xamarin.Essentials
             void ClearCookies()
             {
                 NSUrlCache.SharedCache.RemoveAllCachedResponses();
-                WKWebsiteDataStore.DefaultDataStore.HttpCookieStore.GetAllCookies((cookies) =>
+
+#if __IOS__
+                if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
                 {
-                    foreach (var cookie in cookies)
+                    WKWebsiteDataStore.DefaultDataStore.HttpCookieStore.GetAllCookies((cookies) =>
                     {
-                        WKWebsiteDataStore.DefaultDataStore.HttpCookieStore.DeleteCookie(cookie, null);
-                    }
-                });
+                        foreach (var cookie in cookies)
+                        {
+                            WKWebsiteDataStore.DefaultDataStore.HttpCookieStore.DeleteCookie(cookie, null);
+                        }
+                    });
+                }
+#endif
             }
         }
 
