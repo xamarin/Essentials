@@ -10,6 +10,7 @@ namespace Xamarin.Essentials
     {
         public static Task<WebAuthenticatorResult> AuthenticateAsync(Uri url, Uri callbackUrl)
             => PlatformAuthenticateAsync(new WebAuthenticatorOptions { Url = url, CallbackUrl = callbackUrl });
+
         public static Task<WebAuthenticatorResult> AuthenticateAsync(WebAuthenticatorOptions webAuthenticatorOptions)
             => PlatformAuthenticateAsync(webAuthenticatorOptions);
     }
