@@ -80,6 +80,10 @@ namespace Xamarin.Essentials
                     void_objc_msgSend_IntPtr(was.Handle, ObjCRuntime.Selector.GetHandle("setPresentationContextProvider:"), ctx.Handle);
                     was.PrefersEphemeralWebBrowserSession = prefersEphemeralWebBrowserSession;
                 }
+                else if (prefersEphemeralWebBrowserSession)
+                {
+                    ClearCookies();
+                }
 
                 using (was)
                 {
@@ -89,16 +93,7 @@ namespace Xamarin.Essentials
             }
 
             if (prefersEphemeralWebBrowserSession)
-            {
-                NSUrlCache.SharedCache.RemoveAllCachedResponses();
-                WKWebsiteDataStore.DefaultDataStore.HttpCookieStore.GetAllCookies((cookies) =>
-                {
-                    foreach (var cookie in cookies)
-                    {
-                        WKWebsiteDataStore.DefaultDataStore.HttpCookieStore.DeleteCookie(cookie, null);
-                    }
-                });
-            }
+                ClearCookies();
 
             if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
             {
@@ -133,6 +128,18 @@ namespace Xamarin.Essentials
 #endif
 
             return await tcsResponse.Task;
+
+            void ClearCookies()
+            {
+                NSUrlCache.SharedCache.RemoveAllCachedResponses();
+                WKWebsiteDataStore.DefaultDataStore.HttpCookieStore.GetAllCookies((cookies) =>
+                {
+                    foreach (var cookie in cookies)
+                    {
+                        WKWebsiteDataStore.DefaultDataStore.HttpCookieStore.DeleteCookie(cookie, null);
+                    }
+                });
+            }
         }
 
         internal static bool OpenUrl(Uri uri)
