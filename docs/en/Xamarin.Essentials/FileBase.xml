@@ -82,7 +82,7 @@
         <ReturnType>System.String</ReturnType>
       </ReturnValue>
       <Docs>
-        <summary>Gets the full path and filename.</summary>
+        <summary>This property is purely informative, and does not always return the actual physical path to the file. To get the file, use OpenReadAsync method.</summary>
         <value></value>
         <remarks></remarks>
       </Docs>
