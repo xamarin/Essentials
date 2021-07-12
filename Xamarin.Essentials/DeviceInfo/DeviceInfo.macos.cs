@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using CoreFoundation;
 using Foundation;
 using ObjCRuntime;
 
@@ -28,7 +27,9 @@ namespace Xamarin.Essentials
 
             try
             {
-                return CFString.FromHandle(computerNameHandle);
+#pragma warning disable CS0618 // Type or member is obsolete
+                return NSString.FromHandle(computerNameHandle);
+#pragma warning restore CS0618 // Type or member is obsolete
             }
             finally
             {
