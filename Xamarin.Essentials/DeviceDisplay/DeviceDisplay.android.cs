@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Android.Content;
 using Android.Content.Res;
@@ -93,9 +94,17 @@ namespace Xamarin.Essentials
 
         static Display GetDefaultDisplay()
         {
-            using var service = Platform.AppContext.GetSystemService(Context.WindowService);
-            using var windowManager = service?.JavaCast<IWindowManager>();
-            return windowManager?.DefaultDisplay;
+            try
+            {
+                using var service = Platform.AppContext.GetSystemService(Context.WindowService);
+                using var windowManager = service?.JavaCast<IWindowManager>();
+                return windowManager?.DefaultDisplay;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Unable to get default display: {ex}");
+                return null;
+            }
         }
     }
 
