@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using CoreFoundation;
 using Foundation;
 using ObjCRuntime;
 
@@ -27,7 +28,7 @@ namespace Xamarin.Essentials
 
             try
             {
-                return NSString.FromHandle(computerNameHandle);
+                return CFString.FromHandle(computerNameHandle);
             }
             finally
             {
