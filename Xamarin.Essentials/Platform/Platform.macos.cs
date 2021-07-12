@@ -299,7 +299,9 @@ namespace Xamarin.Essentials
             {
                 infoHandle = IOPSCopyPowerSourcesInfo();
                 var typeHandle = IOPSGetProvidingPowerSourceType(infoHandle);
+#pragma warning disable CS0618 // Type or member is obsolete
                 switch (NSString.FromHandle(typeHandle))
+#pragma warning restore CS0618 // Type or member is obsolete
                 {
                     case kIOPMBatteryPowerKey:
                         return BatteryPowerSource.Battery;
