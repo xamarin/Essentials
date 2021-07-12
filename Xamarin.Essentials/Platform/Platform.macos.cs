@@ -232,7 +232,7 @@ namespace Xamarin.Essentials
 
                 // we weren't able to work out what was happening, so try and guess
                 var typeHandle = IOPSGetProvidingPowerSourceType(infoHandle);
-                if (NSString.FromHandle(typeHandle) == kIOPMBatteryPowerKey)
+                if (CFString.FromHandle(typeHandle) == kIOPMBatteryPowerKey)
                     return BatteryState.Discharging;
 
                 return BatteryState.NotCharging;
@@ -297,7 +297,7 @@ namespace Xamarin.Essentials
             {
                 infoHandle = IOPSCopyPowerSourcesInfo();
                 var typeHandle = IOPSGetProvidingPowerSourceType(infoHandle);
-                switch (NSString.FromHandle(typeHandle))
+                switch (CFString.FromHandle(typeHandle))
                 {
                     case kIOPMBatteryPowerKey:
                         return BatteryPowerSource.Battery;

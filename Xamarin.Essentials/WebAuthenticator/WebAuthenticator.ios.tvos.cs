@@ -128,24 +128,24 @@ namespace Xamarin.Essentials
 #endif
 
             return await tcsResponse.Task;
+        }
 
-            void ClearCookies()
-            {
-                NSUrlCache.SharedCache.RemoveAllCachedResponses();
+        static void ClearCookies()
+        {
+            NSUrlCache.SharedCache.RemoveAllCachedResponses();
 
 #if __IOS__
-                if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
+            {
+                WKWebsiteDataStore.DefaultDataStore.HttpCookieStore.GetAllCookies((cookies) =>
                 {
-                    WKWebsiteDataStore.DefaultDataStore.HttpCookieStore.GetAllCookies((cookies) =>
+                    foreach (var cookie in cookies)
                     {
-                        foreach (var cookie in cookies)
-                        {
-                            WKWebsiteDataStore.DefaultDataStore.HttpCookieStore.DeleteCookie(cookie, null);
-                        }
-                    });
-                }
-#endif
+                        WKWebsiteDataStore.DefaultDataStore.HttpCookieStore.DeleteCookie(cookie, null);
+                    }
+                });
             }
+#endif
         }
 
         internal static bool OpenUrl(Uri uri)
