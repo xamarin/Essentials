@@ -47,8 +47,10 @@ namespace Xamarin.Essentials
             }
         }
 
-        static async Task<WebAuthenticatorResult> PlatformAuthenticateAsync(Uri url, Uri callbackUrl)
+        static async Task<WebAuthenticatorResult> PlatformAuthenticateAsync(WebAuthenticatorOptions webAuthenticatorOptions)
         {
+            var url = webAuthenticatorOptions?.Url;
+            var callbackUrl = webAuthenticatorOptions?.CallbackUrl;
             var packageName = Platform.AppContext.PackageName;
 
             // Create an intent to see if the app developer wired up the callback activity correctly
@@ -59,9 +61,7 @@ namespace Xamarin.Essentials
             intent.SetData(global::Android.Net.Uri.Parse(callbackUrl.OriginalString));
 
             // Try to find the activity for the callback intent
-            var c = intent.ResolveActivity(Platform.AppContext.PackageManager);
-
-            if (c == null || c.PackageName != packageName)
+            if (!Platform.IsIntentSupported(intent, packageName))
                 throw new InvalidOperationException($"You must subclass the `{nameof(WebAuthenticatorCallbackActivity)}` and create an IntentFilter for it which matches your `{nameof(callbackUrl)}`.");
 
             // Cancel any previous task that's still pending

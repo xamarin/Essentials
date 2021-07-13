@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Threading.Tasks;
+using CoreGraphics;
 using Foundation;
 using UIKit;
 
@@ -12,22 +14,21 @@ namespace Xamarin.Essentials
             Task.FromResult(UIApplication.SharedApplication.CanOpenUrl(WebUtils.GetNativeUrl(uri)));
 
         static Task PlatformOpenAsync(Uri uri) =>
-            UIApplication.SharedApplication.OpenUrlAsync(WebUtils.GetNativeUrl(uri), new UIApplicationOpenUrlOptions());
+            PlatformOpenAsync(WebUtils.GetNativeUrl(uri));
+
+        internal static Task<bool> PlatformOpenAsync(NSUrl nativeUrl) =>
+            Platform.HasOSVersion(10, 0)
+                ? UIApplication.SharedApplication.OpenUrlAsync(nativeUrl, new UIApplicationOpenUrlOptions())
+                : Task.FromResult(UIApplication.SharedApplication.OpenUrl(nativeUrl));
 
         static Task<bool> PlatformTryOpenAsync(Uri uri)
         {
             var nativeUrl = WebUtils.GetNativeUrl(uri);
-            var canOpen = UIApplication.SharedApplication.CanOpenUrl(nativeUrl);
 
-            if (canOpen)
-            {
-                if (Platform.HasOSVersion(10, 0))
-                    return UIApplication.SharedApplication.OpenUrlAsync(nativeUrl, new UIApplicationOpenUrlOptions());
+            if (UIApplication.SharedApplication.CanOpenUrl(nativeUrl))
+                return PlatformOpenAsync(nativeUrl);
 
-                UIApplication.SharedApplication.OpenUrl(nativeUrl);
-            }
-
-            return Task.FromResult(canOpen);
+            return Task.FromResult(false);
         }
 
 #if __IOS__
@@ -35,43 +36,32 @@ namespace Xamarin.Essentials
 
         static Task PlatformOpenAsync(OpenFileRequest request)
         {
-            var fileUrl = NSUrl.FromFilename(request.File.FullPath);
-
-            documentController = UIDocumentInteractionController.FromUrl(fileUrl);
-            documentController.Delegate = new DocumentControllerDelegate
+            documentController = new UIDocumentInteractionController()
             {
-                DismissHandler = () =>
-                {
-                    documentController?.Dispose();
-                    documentController = null;
-                }
+                Name = request.File.FileName,
+                Url = NSUrl.FromFilename(request.File.FullPath),
+                Uti = request.File.ContentType
             };
-            documentController.Uti = request.File.ContentType;
 
-            var vc = Platform.GetCurrentViewController();
+            var view = Platform.GetCurrentUIViewController().View;
 
-            CoreGraphics.CGRect? rect = null;
-            if (DeviceInfo.Idiom == DeviceIdiom.Tablet)
+            CGRect rect;
+
+            if (request.PresentationSourceBounds != Rectangle.Empty)
             {
-                rect = new CoreGraphics.CGRect(new CoreGraphics.CGPoint(vc.View.Bounds.Width / 2, vc.View.Bounds.Height), CoreGraphics.CGRect.Empty.Size);
+                rect = request.PresentationSourceBounds.ToPlatformRectangle();
             }
             else
             {
-                rect = vc.View.Bounds;
+                rect = DeviceInfo.Idiom == DeviceIdiom.Tablet
+                    ? new CGRect(new CGPoint(view.Bounds.Width / 2, view.Bounds.Height), CGRect.Empty.Size)
+                    : view.Bounds;
             }
 
-            documentController.PresentOpenInMenu(rect.Value, vc.View, true);
-
+            documentController.PresentOpenInMenu(rect, view, true);
             return Task.CompletedTask;
         }
 
-        class DocumentControllerDelegate : UIDocumentInteractionControllerDelegate
-        {
-            public Action DismissHandler { get; set; }
-
-            public override void DidDismissOpenInMenu(UIDocumentInteractionController controller)
-                => DismissHandler?.Invoke();
-        }
 #else
         static Task PlatformOpenAsync(OpenFileRequest request) =>
             throw new FeatureNotSupportedException();
