@@ -107,8 +107,6 @@ namespace Xamarin.Essentials
 
             var result = await tcs.Task;
 
-            var type = result.ContentType;
-
             pickerRef?.Dispose();
             pickerRef = null;
 
