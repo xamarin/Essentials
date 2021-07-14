@@ -20,7 +20,7 @@ namespace Xamarin.Essentials
 
         public static bool IsListening => PlatformIsListening();
 
-        public static Task<bool> StartListeningForegroundAsync(GeolocationRequest request) =>
+        public static Task<bool> StartListeningForegroundAsync(ListeningRequest request) =>
             PlatformStartListeningForegroundAsync(request);
 
         public static Task<bool> StopListeningForegroundAsync() =>

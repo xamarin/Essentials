@@ -201,7 +201,7 @@ namespace Xamarin.Essentials
 
         static bool PlatformIsListening() => continuousListener != null;
 
-        static async Task<bool> PlatformStartListeningForegroundAsync(GeolocationRequest request)
+        static async Task<bool> PlatformStartListeningForegroundAsync(ListeningRequest request)
         {
             if (IsListening)
                 throw new InvalidOperationException("This Geolocation is already listening");
@@ -234,14 +234,14 @@ namespace Xamarin.Essentials
             if (listeningProviders.Count == 0)
                 listeningProviders.Add(providerInfo.Provider);
 
-            continuousListener = new ContinuousLocationListener(locationManager, request.Timeout, listeningProviders);
+            continuousListener = new ContinuousLocationListener(locationManager, request.MinimumTime, listeningProviders);
             continuousListener.LocationHandler = HandleLocation;
 
             // start getting location updates
             // make sure to use a thread with a looper
             var looper = Looper.MyLooper() ?? Looper.MainLooper;
 
-            var minTimeMilliseconds = (long)request.Timeout.TotalMilliseconds;
+            var minTimeMilliseconds = (long)request.MinimumTime.TotalMilliseconds;
 
             foreach (var provider in listeningProviders)
                 locationManager.RequestLocationUpdates(provider, minTimeMilliseconds, providerInfo.Accuracy, continuousListener, looper);

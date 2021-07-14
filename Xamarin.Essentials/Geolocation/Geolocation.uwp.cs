@@ -55,10 +55,10 @@ namespace Xamarin.Essentials
 
         static bool PlatformIsListening() => listeningGeolocator != null;
 
-        static async Task<bool> PlatformStartListeningForegroundAsync(GeolocationRequest request)
+        static async Task<bool> PlatformStartListeningForegroundAsync(ListeningRequest request)
         {
-            if (request.Timeout.TotalMilliseconds < 0)
-                throw new ArgumentOutOfRangeException(nameof(request.Timeout));
+            if (request.MinimumTime.TotalMilliseconds < 0)
+                throw new ArgumentOutOfRangeException(nameof(request.MinimumTime));
 
             if (PlatformIsListening())
                 throw new InvalidOperationException();
@@ -68,7 +68,7 @@ namespace Xamarin.Essentials
             listeningGeolocator = new Geolocator
             {
                 DesiredAccuracyInMeters = request.PlatformDesiredAccuracy,
-                ReportInterval = (uint)request.Timeout.TotalMilliseconds,
+                ReportInterval = (uint)request.MinimumTime.TotalMilliseconds,
                 MovementThreshold = request.PlatformDesiredAccuracy,
             };
 

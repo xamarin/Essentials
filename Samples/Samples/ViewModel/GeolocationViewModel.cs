@@ -118,7 +118,7 @@ namespace Samples.ViewModel
             {
                 Geolocation.LocationChanged += Geolocation_LocationChanged;
 
-                var request = new GeolocationRequest((GeolocationAccuracy)Accuracy);
+                var request = new ListeningRequest((GeolocationAccuracy)Accuracy);
 
                 var success = await Geolocation.StartListeningForegroundAsync(request);
 

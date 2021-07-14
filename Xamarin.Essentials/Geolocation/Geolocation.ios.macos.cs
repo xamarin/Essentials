@@ -71,7 +71,7 @@ namespace Xamarin.Essentials
 
         static bool PlatformIsListening() => listeningManager != null;
 
-        static async Task<bool> PlatformStartListeningForegroundAsync(GeolocationRequest request)
+        static async Task<bool> PlatformStartListeningForegroundAsync(ListeningRequest request)
         {
             if (PlatformIsListening())
                 throw new InvalidOperationException("already listening to location changes");
