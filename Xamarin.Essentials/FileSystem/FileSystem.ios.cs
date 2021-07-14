@@ -234,19 +234,18 @@ namespace Xamarin.Essentials
             this.provider = provider;
             var identifiers = provider?.RegisteredTypeIdentifiers;
 
-            identifier = (identifiers?.Any(i => i.StartsWith(UTType.LivePhoto)) ?? false) && (identifiers?.Contains(UTType.JPEG) ?? false)
+            identifier = (identifiers?.Any(i => i.StartsWith(UTType.LivePhoto)) ?? false)
+                && (identifiers?.Contains(UTType.JPEG) ?? false)
                 ? identifiers?.FirstOrDefault(i => i == UTType.JPEG)
                 : identifiers?.FirstOrDefault();
 
             if (string.IsNullOrWhiteSpace(identifier))
                 return;
-            FileName = FullPath = $"{provider?.SuggestedName}.{GetExtension(identifier)}";
+            FileName = FullPath
+                = $"{provider?.SuggestedName}.{GetTag(identifier, UTType.TagClassFilenameExtension)}";
         }
 
         internal override async Task<Stream> PlatformOpenReadAsync()
             => (await provider?.LoadDataRepresentationAsync(identifier))?.AsStream();
-
-        protected string GetExtension(string identifier)
-            => UTType.CopyAllTags(identifier, UTType.TagClassFilenameExtension)?.FirstOrDefault();
     }
 }

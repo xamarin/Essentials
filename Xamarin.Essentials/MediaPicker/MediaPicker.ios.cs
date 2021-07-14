@@ -107,6 +107,8 @@ namespace Xamarin.Essentials
 
             var result = await tcs.Task;
 
+            var type = result.ContentType;
+
             pickerRef?.Dispose();
             pickerRef = null;
 
@@ -192,11 +194,17 @@ namespace Xamarin.Essentials
         {
             public Action<NSDictionary> CompletedHandler { get; set; }
 
-            public override void FinishedPickingMedia(UIImagePickerController picker, NSDictionary info) =>
+            public override void FinishedPickingMedia(UIImagePickerController picker, NSDictionary info)
+            {
+                picker.DismissViewController(true, null);
                 CompletedHandler?.Invoke(info);
+            }
 
-            public override void Canceled(UIImagePickerController picker) =>
+            public override void Canceled(UIImagePickerController picker)
+            {
+                picker.DismissViewController(true, null);
                 CompletedHandler?.Invoke(null);
+            }
         }
 
         class PhotoPickerPresentationControllerDelegate : UIAdaptivePresentationControllerDelegate
@@ -217,8 +225,11 @@ namespace Xamarin.Essentials
         {
             public Action<PHPickerResult[]> CompletedHandler { get; set; }
 
-            public override void DidFinishPicking(PHPickerViewController picker, PHPickerResult[] results) =>
+            public override void DidFinishPicking(PHPickerViewController picker, PHPickerResult[] results)
+            {
+                picker.DismissViewController(true, null);
                 CompletedHandler?.Invoke(results?.Length > 0 ? results : null);
+            }
         }
     }
 }
