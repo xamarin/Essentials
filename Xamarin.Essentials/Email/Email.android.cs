@@ -37,7 +37,6 @@ namespace Xamarin.Essentials
             var action = (message?.Attachments?.Count ?? 0) switch
             {
                 0 => Intent.ActionSendto,
-                1 => Intent.ActionSend,
                 _ => Intent.ActionSendMultiple
             };
             var intent = new Intent(action);
@@ -88,10 +87,7 @@ namespace Xamarin.Essentials
                     uris.Add(Platform.GetShareableFileUri(attachment));
                 }
 
-                if (uris.Count > 1)
-                    intent.PutParcelableArrayListExtra(Intent.ExtraStream, uris);
-                else
-                    intent.PutExtra(Intent.ExtraStream, uris[0]);
+                intent.PutParcelableArrayListExtra(Intent.ExtraStream, uris);
 
                 intent.AddFlags(ActivityFlags.GrantReadUriPermission);
             }
