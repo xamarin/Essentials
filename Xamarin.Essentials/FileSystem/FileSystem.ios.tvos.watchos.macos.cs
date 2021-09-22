@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
 
         static Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
         {
-            if (filename == null)
+            if (string.IsNullOrEmpty(filename))
                 throw new ArgumentNullException(nameof(filename));
 
             filename = filename.Replace('\\', Path.DirectorySeparatorChar);
@@ -25,7 +25,10 @@ namespace Xamarin.Essentials
             root = Path.Combine(root, "Contents", "Resources");
 #endif
             var file = Path.Combine(root, filename);
-            return Task.FromResult((Stream)File.OpenRead(file));
+            if (File.Exists(file))
+                return Task.FromResult((Stream)File.OpenRead(file));
+            else
+                return null;
         }
 
         static string GetDirectory(NSSearchPathDirectory directory)
@@ -37,6 +40,28 @@ namespace Xamarin.Essentials
                 return null;
             }
             return dirs[0];
+        }
+
+        static string[] PlatformGetAppPackageDirectories(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+
+            if (Directory.Exists(path))
+                return Directory.GetDirectories(path);
+            else
+                throw new DirectoryNotFoundException(path);
+        }
+
+        static string[] PlatformGetAppPackageFiles(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+
+            if (Directory.Exists(path))
+                return Directory.GetFiles(path);
+            else
+                throw new DirectoryNotFoundException(path);
         }
     }
 

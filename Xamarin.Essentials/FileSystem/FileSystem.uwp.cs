@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
 
         static Task<Stream> PlatformOpenAppPackageFileAsync(string filename)
         {
-            if (filename == null)
+            if (string.IsNullOrEmpty(filename))
                 throw new ArgumentNullException(nameof(filename));
 
             return Package.Current.InstalledLocation.OpenStreamForReadAsync(NormalizePath(filename));
@@ -24,6 +24,30 @@ namespace Xamarin.Essentials
 
         internal static string NormalizePath(string path)
             => path.Replace('/', Path.DirectorySeparatorChar);
+
+        static string[] PlatformGetAppPackageDirectories(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+
+            var normalizedPath = NormalizePath(path);
+            if (Directory.Exists(normalizedPath))
+                return Directory.GetDirectories(normalizedPath);
+            else
+                throw new DirectoryNotFoundException(path);
+        }
+
+        static string[] PlatformGetAppPackageFiles(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+
+            var normalizedPath = NormalizePath(path);
+            if (Directory.Exists(normalizedPath))
+                return Directory.GetFiles(normalizedPath);
+            else
+                throw new DirectoryNotFoundException(path);
+        }
     }
 
     public partial class FileBase
