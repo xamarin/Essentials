@@ -188,6 +188,13 @@
     <Content Include="Assets\Wide310x150Logo.scale-150.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
+    <BundleResource Include="Assets\Folder\AppBundleFile_Nested.txt">
+      <Link>Assets\Folder\SubFolder\AppBundleFile_Nested.txt</Link>
+    </BundleResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\Folder\SubFolder\" />
+    <Folder Include="Assets\Folder\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DeviceTests.UWP_TemporaryKey.pfx" />

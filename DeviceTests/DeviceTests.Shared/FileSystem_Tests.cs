@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xunit;
@@ -61,6 +62,20 @@ namespace DeviceTests
         {
             var files = FileSystem.GetAppPackageFiles(path);
             Assert.True(files != null);
+        }
+
+        [Theory]
+        [InlineData("/")]
+        public void AppResourceDirectories_RootFolder_Is_Invalid(string path)
+        {
+            Assert.Throws<ArgumentException>(() => FileSystem.GetAppPackageDirectories(path));
+        }
+
+        [Theory]
+        [InlineData("/")]
+        public void AppResourceFiles_RootFolder_Is_Invalid(string path)
+        {
+            Assert.Throws<ArgumentException>(() => FileSystem.GetAppPackageFiles(path));
         }
     }
 }
