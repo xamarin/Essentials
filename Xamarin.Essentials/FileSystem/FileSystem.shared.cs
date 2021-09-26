@@ -86,6 +86,8 @@ namespace Xamarin.Essentials
                 return extension;
             }
         }
+
+        internal const string RootPathInvalid = "Root paths are invalid";
     }
 
     public abstract partial class FileBase

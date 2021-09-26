@@ -47,6 +47,9 @@ namespace Xamarin.Essentials
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException(nameof(path));
 
+            if (Path.IsPathRooted(path))
+                throw new ArgumentException(RootPathInvalid);
+
             if (Directory.Exists(path))
                 return Directory.GetDirectories(path);
             else
@@ -57,6 +60,9 @@ namespace Xamarin.Essentials
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException(nameof(path));
+
+            if (Path.IsPathRooted(path))
+                throw new ArgumentException(RootPathInvalid);
 
             if (Directory.Exists(path))
                 return Directory.GetFiles(path);

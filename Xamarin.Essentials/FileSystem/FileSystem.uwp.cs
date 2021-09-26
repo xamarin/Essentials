@@ -30,6 +30,9 @@ namespace Xamarin.Essentials
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException(nameof(path));
 
+            if (Path.IsPathRooted(path))
+                throw new ArgumentException(RootPathInvalid);
+
             var normalizedPath = NormalizePath(path);
             if (Directory.Exists(normalizedPath))
                 return Directory.GetDirectories(normalizedPath);
@@ -41,6 +44,9 @@ namespace Xamarin.Essentials
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException(nameof(path));
+
+            if (Path.IsPathRooted(path))
+                throw new ArgumentException(RootPathInvalid);
 
             var normalizedPath = NormalizePath(path);
             if (Directory.Exists(normalizedPath))
