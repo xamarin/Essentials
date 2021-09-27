@@ -88,6 +88,18 @@ namespace Xamarin.Essentials
         }
 
         internal const string RootPathInvalid = "Root paths are invalid";
+
+        internal static bool IsPathRooted(string path)
+        {
+            var pathRoot = Path.GetPathRoot(path);
+            if (!string.IsNullOrEmpty(pathRoot))
+
+                /* Extra checks as we can't use Path.GetFullPath, as it isn't supported in .NET Standard 1.x
+                 * Once we drop .NET Standard 1.x support,then use Path.GetFullPath above, for better security. */
+                return Path.IsPathRooted(path) || pathRoot.StartsWith("/") || pathRoot.StartsWith("%HOMEDRIVE%");
+            else
+                return Path.IsPathRooted(path);
+        }
     }
 
     public abstract partial class FileBase
