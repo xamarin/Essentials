@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Threading.Tasks;
 using Foundation;
 using MessageUI;
@@ -20,7 +20,7 @@ namespace Xamarin.Essentials
                 return ComposeWithUrl(message);
         }
 
-        static Task ComposeWithMailCompose(EmailMessage message)
+        static async Task ComposeWithMailCompose(EmailMessage message)
         {
             // do this first so we can throw as early as possible
             var parentController = Platform.GetCurrentViewController();
@@ -57,9 +57,9 @@ namespace Xamarin.Essentials
                 controller.DismissViewController(true, null);
                 tcs.TrySetResult(e.Result == MFMailComposeResult.Sent);
             };
-            parentController.PresentViewController(controller, true, null);
+            await parentController.PresentViewControllerAsync(controller, true);
 
-            return tcs.Task;
+            await tcs.Task;
         }
 
         static async Task ComposeWithUrl(EmailMessage message)
