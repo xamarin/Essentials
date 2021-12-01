@@ -37,7 +37,8 @@ namespace Xamarin.Essentials
             if (!UIImagePickerController.AvailableMediaTypes(sourceType).Contains(mediaType))
                 throw new FeatureNotSupportedException();
 
-            if (!photo)
+            // microphone only needed if video will be captured
+            if (!photo && !pickExisting)
                 await Permissions.EnsureGrantedAsync<Permissions.Microphone>();
 
             // Check if picking existing or not and ensure permission accordingly as they can be set independently from each other
@@ -65,16 +66,10 @@ namespace Xamarin.Essentials
             var tcs = new TaskCompletionSource<FileResult>(picker);
             picker.Delegate = new PhotoPickerDelegate
             {
-                CompletedHandler = info =>
+                CompletedHandler = async info =>
                 {
-                    try
-                    {
-                        tcs.TrySetResult(DictionaryToMediaFile(info));
-                    }
-                    catch (Exception ex)
-                    {
-                        tcs.TrySetException(ex);
-                    }
+                    GetFileResult(info, tcs);
+                    await vc.DismissViewControllerAsync(true);
                 }
             };
 
@@ -82,17 +77,7 @@ namespace Xamarin.Essentials
             {
                 picker.PresentationController.Delegate = new PhotoPickerPresentationControllerDelegate
                 {
-                    CompletedHandler = info =>
-                    {
-                        try
-                        {
-                            tcs.TrySetResult(DictionaryToMediaFile(info));
-                        }
-                        catch (Exception ex)
-                        {
-                            tcs.TrySetException(ex);
-                        }
-                    }
+                    CompletedHandler = info => GetFileResult(info, tcs)
                 };
             }
 
@@ -100,12 +85,22 @@ namespace Xamarin.Essentials
 
             var result = await tcs.Task;
 
-            await vc.DismissViewControllerAsync(true);
-
             picker?.Dispose();
             picker = null;
 
             return result;
+        }
+
+        static void GetFileResult(NSDictionary info, TaskCompletionSource<FileResult> tcs)
+        {
+            try
+            {
+                tcs.TrySetResult(DictionaryToMediaFile(info));
+            }
+            catch (Exception ex)
+            {
+                tcs.TrySetException(ex);
+            }
         }
 
         static FileResult DictionaryToMediaFile(NSDictionary info)
