@@ -271,6 +271,30 @@ namespace Xamarin.Essentials
                     return permissions.ToArray();
                 }
             }
+
+#if __ANDROID_29__
+            public override async Task<PermissionStatus> RequestAsync()
+            {
+                // Check status before requesting first
+                if (await CheckStatusAsync() == PermissionStatus.Granted)
+                    return PermissionStatus.Granted;
+
+                if (Platform.HasApiLevel(30))
+                {
+                    var permissionResult = await new LocationWhenInUse().RequestAsync();
+                    if (permissionResult == PermissionStatus.Denied)
+                        return PermissionStatus.Denied;
+
+                    var result = await DoRequest(new string[] { Manifest.Permission.AccessBackgroundLocation });
+                    if (!result.GrantResults.All(x => x == Permission.Granted))
+                        permissionResult = PermissionStatus.Restricted;
+
+                    return permissionResult;
+                }
+
+                return await base.RequestAsync();
+            }
+#endif
         }
 
         public partial class Maps : BasePlatformPermission
