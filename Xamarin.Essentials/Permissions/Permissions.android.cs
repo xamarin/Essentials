@@ -271,26 +271,6 @@ namespace Xamarin.Essentials
                     return permissions.ToArray();
                 }
             }
-
-
-            public override async Task<PermissionStatus> RequestAsync()
-            {
-                // Check status before requesting first
-                if (await CheckStatusAsync() == PermissionStatus.Granted)
-                    return PermissionStatus.Granted;
-
-                if (Platform.HasApiLevel(BuildVersionCodes.R))
-                var permissionResult = await DoRequest(new string[] { Manifest.Permission.AccessCoarseLocation, Manifest.Permission.AccessFineLocation });
-
-                // when requesting fine location, user can decline and set coarse instead
-                var count = permissionResult.GrantResults.Count(x => x == Permission.Granted);
-                var result = count switch
-                {
-                    2 => PermissionStatus.Granted,
-                    1 => PermissionStatus.Restricted,
-                    _ => PermissionStatus.Denied
-                };
-            }
         }
 
         public partial class Maps : BasePlatformPermission
