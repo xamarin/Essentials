@@ -122,7 +122,7 @@ Task("test-ios-emu")
         $"--output-directory=\"{IOS_TEST_RESULTS_PATH}\" " +
         $"--verbosity=\"Debug\" "+
         $"--timeout=\"00:10:00\" " +
-        $"--launch-timeout=\"00:10:00\" " +);
+        $"--launch-timeout=\"00:10:00\" ");
 
     // Rename test result files
     var resultFiles = GetFiles($"{IOS_TEST_RESULTS_PATH}/*.xml");
