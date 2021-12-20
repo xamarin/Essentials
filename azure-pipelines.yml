@@ -33,6 +33,7 @@ stages:
     jobs:
       - template: .ci/build.yml@components
         parameters:
+          macosImage: 'macos-latest'
           mono: '6_12_10'
           areaPath: 'DevDiv\Xamarin SDK'
           masterBranchName: 'main'
