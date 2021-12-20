@@ -100,7 +100,7 @@ stages:
           verbosity: diagnostic
           cakeFile: DeviceTests/build.cake
           cakeTarget: test-ios-emu
-          cakeExtraArgs: --ios-device="`"iPhone 11`"" --ios-runtime="`"com.apple.CoreSimulator.SimRuntime.iOS-15-2`""
+          cakeExtraArgs: --ios-device="`"iPhone 11`"" --ios-runtime="`"com.apple.CoreSimulator.SimRuntime.iOS-15-1`""
 
       - template: .ci/build.yml@components
         parameters:
