@@ -120,7 +120,9 @@ Task("test-ios-emu")
         $"--app=\"{IOS_IPA_PATH}\" " +
         $"--targets=\"ios-simulator-64\" " +
         $"--output-directory=\"{IOS_TEST_RESULTS_PATH}\" " +
-        $"--verbosity=\"Debug\" ");
+        $"--verbosity=\"Debug\" "+
+        $"--timeout=\"00:10:00\" " +
+        $"--launch-timeout=\"00:10:00\" " +);
 
     // Rename test result files
     var resultFiles = GetFiles($"{IOS_TEST_RESULTS_PATH}/*.xml");
