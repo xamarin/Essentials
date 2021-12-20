@@ -4,6 +4,8 @@ Xamarin.Essentials gives developers essential cross-platform APIs for their mobi
 
 iOS, Android, and UWP offer unique operating system and platform APIs that developers have access to, all in C# leveraging Xamarin. It is great that developers have 100% API access in C# with Xamarin, but these APIs are different per platform. This means developers have to learn three different APIs to access platform-specific features. With Xamarin.Essentials, developers have a single cross-platform API that works with any iOS, Android, or UWP application that can be accessed from shared code no matter how the user interface is created.
 
+Xamarin.Essentials has been sunset. We will continue to service Xamarin.Essentials through November 2022 and accept pull requests fixing bugs and publishing new service releases. New features and APIs will only be added to [.NET MAUI Essentials](https://github.com/dotnet/maui) going forward and pull-requests are welcome!
+
 ## Questions
 
 Get your technical questions answered by experts on [Microsoft Q&A](https://docs.microsoft.com/answers/topics/dotnet-xamarinessentials.html?WT.mc_id=friends-0000-jamont).
