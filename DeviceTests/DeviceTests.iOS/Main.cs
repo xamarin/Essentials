@@ -6,10 +6,11 @@ namespace DeviceTests.iOS
     {
         static void Main(string[] args)
         {
-            if (args?.Length > 0) // usually means this is from xharness
+            // if (args?.Length > 0) // usually means this is from xharness
                 UIApplication.Main(args, null, typeof(TestApplicationDelegate));
-            else
-                UIApplication.Main(args, null, typeof(AppDelegate));
+
+            // else
+            //    UIApplication.Main(args, null, typeof(AppDelegate));
         }
     }
 }
