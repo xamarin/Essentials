@@ -33,7 +33,6 @@ stages:
     jobs:
       - template: .ci/build.yml@components
         parameters:
-          mono: '6_12_10'
           areaPath: 'DevDiv\Xamarin SDK'
           masterBranchName: 'main'
           preBuildSteps:
@@ -100,7 +99,6 @@ stages:
           verbosity: diagnostic
           cakeFile: DeviceTests/build.cake
           cakeTarget: test-ios-emu
-          cakeExtraArgs: --ios-device="`"iPhone 11`"" --ios-runtime="`"com.apple.CoreSimulator.SimRuntime.iOS-15-1`""
 
       - template: .ci/build.yml@components
         parameters:
