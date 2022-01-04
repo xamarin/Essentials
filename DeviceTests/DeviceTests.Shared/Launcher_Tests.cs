@@ -43,7 +43,7 @@ namespace DeviceTests
             }
 #endif
 
-            Assert.True(await Launcher.CanOpenAsync(uri));
+            Assert.True(await Launcher.CanOpenAsync(uri), $"Tested URI: {uri}");
         }
 
         [Theory]
@@ -65,7 +65,7 @@ namespace DeviceTests
 
 #endif
 
-            Assert.True(await Launcher.CanOpenAsync(new Uri(uri)));
+            Assert.True(await Launcher.CanOpenAsync(new Uri(uri)), $"Tested URI: {uri}");
         }
 
 #if __IOS__
