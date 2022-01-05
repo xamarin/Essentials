@@ -8,8 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>DeviceTests.Droid</RootNamespace>
     <AssemblyName>XamarinEssentialsDeviceTestsAndroid</AssemblyName>
-    <TargetFrameworkVersion>v10.0</TargetFrameworkVersion>
-    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
+    <TargetFrameworkVersion>v11.0</TargetFrameworkVersion>
     <AndroidApplication>True</AndroidApplication>
     <AndroidUseIntermediateDesignerFile>true</AndroidUseIntermediateDesignerFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
