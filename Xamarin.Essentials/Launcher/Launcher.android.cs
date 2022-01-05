@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
@@ -13,12 +14,18 @@ namespace Xamarin.Essentials
         static Task<bool> PlatformCanOpenAsync(Uri uri)
         {
             var intent = new Intent(Intent.ActionView, AndroidUri.Parse(uri.OriginalString));
-
+            Debug.WriteLine($"got intent: {intent != null}");
             if (Platform.AppContext == null)
                 return Task.FromResult(false);
+            Debug.WriteLine($"got AppContext");
 
             var manager = Platform.AppContext.PackageManager;
+            Debug.WriteLine($"got manager: {manager != null}");
+
             var supportedResolvedInfos = manager.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly);
+            Debug.WriteLine($"got supportedResolvedInfos: {supportedResolvedInfos != null}");
+            Debug.WriteLine($"supportedResolvedInfos Any: {supportedResolvedInfos.Any()}");
+
             return Task.FromResult(supportedResolvedInfos.Any());
         }
 
