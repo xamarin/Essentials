@@ -123,7 +123,7 @@ Task("test-ios-emu")
         $"--targets=\"ios-simulator-64\" " +
         $"--output-directory=\"{IOS_TEST_RESULTS_PATH}\" " +
         $"--verbosity=\"Debug\" " +
-        $"-- foo ");
+        $"--set-env=ci-run=true ");
 
     // Rename test result files
     var resultFiles = GetFiles($"{IOS_TEST_RESULTS_PATH}/*.xml");
