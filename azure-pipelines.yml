@@ -198,18 +198,18 @@ stages:
             - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-29;google_apis;x86\""
               displayName: Install the Android emulators
 
-      - template: .ci/build.yml@components
-        parameters:
-          name: devicetests_android_api_30
-          runChecks: false
-          displayName: Android API 30
-          publishOutputSuffix: '-android30'
-          windowsImage: ''
-          areaPath: $(AREA_PATH)
-          verbosity: diagnostic
-          cakeFile: DeviceTests/build.cake
-          cakeTarget: test-android-emu
-          cakeExtraArgs: --avd-target="`"system-images;android-30;google_apis;x86`""
-          preBuildSteps:
-            - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-30;google_apis;x86\""
-              displayName: Install the Android emulators
+      # - template: .ci/build.yml@components
+      #   parameters:
+      #     name: devicetests_android_api_30
+      #     runChecks: false
+      #     displayName: Android API 30
+      #     publishOutputSuffix: '-android30'
+      #     windowsImage: ''
+      #     areaPath: $(AREA_PATH)
+      #     verbosity: diagnostic
+      #     cakeFile: DeviceTests/build.cake
+      #     cakeTarget: test-android-emu
+      #     cakeExtraArgs: --avd-target="`"system-images;android-30;google_apis;x86`""
+      #     preBuildSteps:
+      #       - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-30;google_apis;x86\""
+      #         displayName: Install the Android emulators
