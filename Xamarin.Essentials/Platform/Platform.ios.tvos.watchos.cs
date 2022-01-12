@@ -152,8 +152,11 @@ namespace Xamarin.Essentials
         {
             public Action DismissHandler { get; set; }
 
-            public override void DidDismiss(UIPresentationController presentationController) =>
+            public override void DidDismiss(UIPresentationController presentationController)
+            {
                 DismissHandler?.Invoke();
+                DismissHandler = null;
+            }
 
             protected override void Dispose(bool disposing)
             {
