@@ -1,4 +1,5 @@
-﻿using UIKit;
+﻿using System;
+using UIKit;
 
 namespace DeviceTests.iOS
 {
@@ -6,10 +7,10 @@ namespace DeviceTests.iOS
     {
         static void Main(string[] args)
         {
-            if (args?.Length > 0) // usually means this is from xharness
-                UIApplication.Main(args, null, nameof(TestApplicationDelegate));
+            if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("ci-run")))
+                UIApplication.Main(args, null, typeof(TestApplicationDelegate));
             else
-                UIApplication.Main(args, null, nameof(AppDelegate));
+                UIApplication.Main(args, null, typeof(AppDelegate));
         }
     }
 }
