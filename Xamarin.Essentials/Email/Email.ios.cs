@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
 using Foundation;
 using MessageUI;
 using UIKit;
@@ -42,17 +44,28 @@ namespace Xamarin.Essentials
                 foreach (var attachment in message.Attachments)
                 {
                     var data = NSData.FromFile(attachment.FullPath);
+                    if (data == null)
+                        throw new FileNotFoundException($"Attachment {attachment.FileName} not found.", attachment.FullPath);
+
                     controller.AddAttachmentData(data, attachment.ContentType, attachment.FileName);
                 }
             }
 
-            // show the controller
             var tcs = new TaskCompletionSource<bool>();
             controller.Finished += (sender, e) =>
             {
                 controller.DismissViewController(true, null);
                 tcs.TrySetResult(e.Result == MFMailComposeResult.Sent);
             };
+
+            if (controller.PresentationController != null)
+            {
+                controller.PresentationController.Delegate = new Platform.UIPresentationControllerDelegate
+                {
+                    DismissHandler = () => tcs.TrySetResult(false)
+                };
+            }
+
             parentController.PresentViewController(controller, true, null);
 
             return tcs.Task;

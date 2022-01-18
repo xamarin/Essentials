@@ -8,7 +8,7 @@ pr:
   - develop
 
 variables:
-  BASE_VERSION: 1.6.0
+  BASE_VERSION: 1.7.1
   PREVIEW_LABEL: 'ci'
   BUILD_NUMBER: $[counter(format('{0}_{1}_{2}', variables['BASE_VERSION'], variables['PREVIEW_LABEL'], variables['Build.SourceBranch']), 1)]
   NUGET_VERSION: $[format('{0}-{1}.{2}', variables['BASE_VERSION'], variables['PREVIEW_LABEL'], variables['BUILD_NUMBER'])]
@@ -99,7 +99,7 @@ stages:
           verbosity: diagnostic
           cakeFile: DeviceTests/build.cake
           cakeTarget: test-ios-emu
-          cakeExtraArgs: --ios-device="`"iPhone 11`"" --ios-runtime="`"com.apple.CoreSimulator.SimRuntime.iOS-14-2`""
+          xharness: '1.0.0-prerelease.21620.1'
 
       - template: .ci/build.yml@components
         parameters:
@@ -119,19 +119,36 @@ stages:
 
       - template: .ci/build.yml@components
         parameters:
-          name: devicetests_android_api_23
+          name: devicetests_android_api_22
           runChecks: false
-          displayName: Android API 23
-          publishOutputSuffix: '-android23'
+          displayName: Android API 22
+          publishOutputSuffix: '-android22'
           windowsImage: ''
           areaPath: $(AREA_PATH)
           verbosity: diagnostic
           cakeFile: DeviceTests/build.cake
           cakeTarget: test-android-emu
-          cakeExtraArgs: --avd-target="`"system-images;android-23;google_apis;x86`""
+          cakeExtraArgs: --avd-target="`"system-images;android-22;google_apis;x86`""
           preBuildSteps:
-            - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-23;google_apis;x86\""
+            - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-22;google_apis;x86\""
               displayName: Install the Android emulators
+
+#       - template: .ci/build.yml@components
+#         parameters:
+#           name: devicetests_android_api_23
+#           runChecks: false
+#           continueOnError: true
+#           displayName: Android API 23
+#           publishOutputSuffix: '-android23'
+#           windowsImage: ''
+#           areaPath: $(AREA_PATH)
+#           verbosity: diagnostic
+#           cakeFile: DeviceTests/build.cake
+#           cakeTarget: test-android-emu
+#           cakeExtraArgs: --avd-target="`"system-images;android-23;google_apis;x86`""
+#           preBuildSteps:
+#             - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-23;google_apis;x86\""
+#               displayName: Install the Android emulators
 
       - template: .ci/build.yml@components
         parameters:
@@ -181,18 +198,18 @@ stages:
             - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-29;google_apis;x86\""
               displayName: Install the Android emulators
 
-      - template: .ci/build.yml@components
-        parameters:
-          name: devicetests_android_api_30
-          runChecks: false
-          displayName: Android API 30
-          publishOutputSuffix: '-android30'
-          windowsImage: ''
-          areaPath: $(AREA_PATH)
-          verbosity: diagnostic
-          cakeFile: DeviceTests/build.cake
-          cakeTarget: test-android-emu
-          cakeExtraArgs: --avd-target="`"system-images;android-30;google_apis;x86`""
-          preBuildSteps:
-            - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-30;google_apis;x86\""
-              displayName: Install the Android emulators
+      # - template: .ci/build.yml@components
+      #   parameters:
+      #     name: devicetests_android_api_30
+      #     runChecks: false
+      #     displayName: Android API 30
+      #     publishOutputSuffix: '-android30'
+      #     windowsImage: ''
+      #     areaPath: $(AREA_PATH)
+      #     verbosity: diagnostic
+      #     cakeFile: DeviceTests/build.cake
+      #     cakeTarget: test-android-emu
+      #     cakeExtraArgs: --avd-target="`"system-images;android-30;google_apis;x86`""
+      #     preBuildSteps:
+      #       - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-30;google_apis;x86\""
+      #         displayName: Install the Android emulators
