@@ -1,4 +1,5 @@
-﻿using UIKit;
+﻿using System;
+using UIKit;
 
 namespace DeviceTests.iOS
 {
@@ -6,7 +7,10 @@ namespace DeviceTests.iOS
     {
         static void Main(string[] args)
         {
-            UIApplication.Main(args, null, nameof(AppDelegate));
+            if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("ci-run")))
+                UIApplication.Main(args, null, typeof(TestApplicationDelegate));
+            else
+                UIApplication.Main(args, null, typeof(AppDelegate));
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Xamarin.Essentials
             appControl.LaunchMode = AppControlLaunchMode.Single;
 
             var fileType = options?.FileTypes?.Value?.FirstOrDefault();
-            appControl.Mime = fileType ?? "*/*";
+            appControl.Mime = fileType ?? FileSystem.MimeTypes.All;
 
             var fileResults = new List<FileResult>();
 
@@ -48,22 +48,34 @@ namespace Xamarin.Essentials
 
     public partial class FilePickerFileType
     {
-        public static FilePickerFileType PlatformImageFileType() =>
+        static FilePickerFileType PlatformImageFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.Tizen, new[] { "image/*" } },
+                { DevicePlatform.Tizen, new[] { FileSystem.MimeTypes.ImageAll } },
             });
 
-        public static FilePickerFileType PlatformPngFileType() =>
+        static FilePickerFileType PlatformPngFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.Tizen, new[] { "image/png" } }
+                { DevicePlatform.Tizen, new[] { FileSystem.MimeTypes.ImagePng } }
             });
 
-        public static FilePickerFileType PlatformVideoFileType() =>
+        static FilePickerFileType PlatformJpegFileType() =>
             new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
             {
-                { DevicePlatform.Tizen, new[] { "video/*" } }
+                { DevicePlatform.Tizen, new[] { FileSystem.MimeTypes.ImageJpg } }
+            });
+
+        static FilePickerFileType PlatformVideoFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.Tizen, new[] { FileSystem.MimeTypes.VideoAll } }
+            });
+
+        static FilePickerFileType PlatformPdfFileType() =>
+            new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.Tizen, new[] { FileSystem.MimeTypes.Pdf } }
             });
     }
 }

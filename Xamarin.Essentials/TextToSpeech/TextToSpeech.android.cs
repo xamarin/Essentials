@@ -109,6 +109,8 @@ namespace Xamarin.Essentials
             if (tcsUtterances?.Task != null)
                 await tcsUtterances.Task;
 
+            tcsUtterances = new TaskCompletionSource<bool>();
+
             if (cancelToken != null)
             {
                 cancelToken.Register(() =>
@@ -150,7 +152,6 @@ namespace Xamarin.Essentials
             var parts = text.SplitSpeak(max);
 
             numExpectedUtterances = parts.Count;
-            tcsUtterances = new TaskCompletionSource<bool>();
 
             var guid = Guid.NewGuid().ToString();
 
@@ -177,7 +178,7 @@ namespace Xamarin.Essentials
 
         public void OnInit(OperationResult status)
         {
-            if (status.Equals(OperationResult.Success))
+            if (status == OperationResult.Success)
                 tcsInitialize.TrySetResult(true);
             else
                 tcsInitialize.TrySetException(new ArgumentException("Failed to initialize Text to Speech engine."));
