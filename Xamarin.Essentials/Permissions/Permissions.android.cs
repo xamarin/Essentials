@@ -29,10 +29,23 @@ namespace Xamarin.Essentials
         internal static void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
             => BasePlatformPermission.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        public partial class PermissionResult
+        {
+            public PermissionResult(string[] permissions, Permission[] grantResults)
+            {
+                Permissions = permissions;
+                GrantResults = grantResults;
+            }
+
+            public string[] Permissions { get; }
+
+            public Permission[] GrantResults { get; }
+        }
+
         public abstract partial class BasePlatformPermission : BasePermission
         {
-            static readonly Dictionary<string, (int requestCode, TaskCompletionSource<PermissionStatus> tcs)> requests =
-                   new Dictionary<string, (int, TaskCompletionSource<PermissionStatus>)>();
+            static readonly Dictionary<int, TaskCompletionSource<PermissionResult>> requests =
+                   new Dictionary<int, TaskCompletionSource<PermissionResult>>();
 
             static readonly object locker = new object();
             static int requestCode;
@@ -79,9 +92,6 @@ namespace Xamarin.Essentials
                 if (await CheckStatusAsync() == PermissionStatus.Granted)
                     return PermissionStatus.Granted;
 
-                TaskCompletionSource<PermissionStatus> tcs;
-                var doRequest = true;
-
                 var runtimePermissions = RequiredPermissions.Where(p => p.isRuntime)
                     ?.Select(p => p.androidPermission)?.ToArray();
 
@@ -90,38 +100,32 @@ namespace Xamarin.Essentials
                 if (runtimePermissions == null || !runtimePermissions.Any())
                     return PermissionStatus.Granted;
 
-                var permissionId = string.Join(';', runtimePermissions);
+                var permissionResult = await DoRequest(runtimePermissions);
+                if (permissionResult.GrantResults.Any(g => g == Permission.Denied))
+                    return PermissionStatus.Denied;
+
+                return PermissionStatus.Granted;
+            }
+
+            protected virtual async Task<PermissionResult> DoRequest(string[] permissions)
+            {
+                TaskCompletionSource<PermissionResult> tcs;
 
                 lock (locker)
                 {
-                    if (requests.ContainsKey(permissionId))
-                    {
-                        tcs = requests[permissionId].tcs;
-                        doRequest = false;
-                    }
-                    else
-                    {
-                        tcs = new TaskCompletionSource<PermissionStatus>();
+                    tcs = new TaskCompletionSource<PermissionResult>();
 
-                        requestCode = Platform.NextRequestCode();
+                    requestCode = Platform.NextRequestCode();
 
-                        requests.Add(permissionId, (requestCode, tcs));
-                    }
+                    requests.Add(requestCode, tcs);
                 }
-
-                if (!doRequest)
-                    return await tcs.Task;
 
                 if (!MainThread.IsMainThread)
                     throw new PermissionException("Permission request must be invoked on main thread.");
 
-                ActivityCompat.RequestPermissions(Platform.GetCurrentActivity(true), runtimePermissions.ToArray(), requestCode);
+                ActivityCompat.RequestPermissions(Platform.GetCurrentActivity(true), permissions.ToArray(), requestCode);
 
                 var result = await tcs.Task;
-
-                if (requests.ContainsKey(permissionId))
-                    requests.Remove(permissionId);
-
                 return result;
             }
 
@@ -157,22 +161,11 @@ namespace Xamarin.Essentials
             {
                 lock (locker)
                 {
-                    // Check our pending requests for one with a matching request code
-                    foreach (var kvp in requests)
+                    if (requests.ContainsKey(requestCode))
                     {
-                        if (kvp.Value.requestCode == requestCode)
-                        {
-                            var tcs = kvp.Value.tcs;
-
-                            // Look for any denied requests, and deny the whole request if so
-                            // Remember, each PermissionType is tied to 1 or more android permissions
-                            // so if any android permissions denied the whole PermissionType is considered denied
-                            if (grantResults.Any(g => g == Permission.Denied))
-                                tcs.TrySetResult(PermissionStatus.Denied);
-                            else
-                                tcs.TrySetResult(PermissionStatus.Granted);
-                            break;
-                        }
+                        var result = new PermissionResult(permissions, grantResults);
+                        requests[requestCode].TrySetResult(result);
+                        requests.Remove(requestCode);
                     }
                 }
             }
@@ -239,6 +232,24 @@ namespace Xamarin.Essentials
                     (Manifest.Permission.AccessCoarseLocation, true),
                     (Manifest.Permission.AccessFineLocation, true)
                 };
+
+            public override async Task<PermissionStatus> RequestAsync()
+            {
+                // Check status before requesting first
+                if (await CheckStatusAsync() == PermissionStatus.Granted)
+                    return PermissionStatus.Granted;
+
+                var permissionResult = await DoRequest(new string[] { Manifest.Permission.AccessCoarseLocation, Manifest.Permission.AccessFineLocation });
+
+                // when requesting fine location, user can decline and set coarse instead
+                var count = permissionResult.GrantResults.Count(x => x == Permission.Granted);
+                return count switch
+                {
+                    2 => PermissionStatus.Granted,
+                    1 => PermissionStatus.Restricted,
+                    _ => PermissionStatus.Denied
+                };
+            }
         }
 
         public partial class LocationAlways : BasePlatformPermission
@@ -260,6 +271,30 @@ namespace Xamarin.Essentials
                     return permissions.ToArray();
                 }
             }
+
+#if __ANDROID_29__
+            public override async Task<PermissionStatus> RequestAsync()
+            {
+                // Check status before requesting first
+                if (await CheckStatusAsync() == PermissionStatus.Granted)
+                    return PermissionStatus.Granted;
+
+                if (Platform.HasApiLevel(30))
+                {
+                    var permissionResult = await new LocationWhenInUse().RequestAsync();
+                    if (permissionResult == PermissionStatus.Denied)
+                        return PermissionStatus.Denied;
+
+                    var result = await DoRequest(new string[] { Manifest.Permission.AccessBackgroundLocation });
+                    if (!result.GrantResults.All(x => x == Permission.Granted))
+                        permissionResult = PermissionStatus.Restricted;
+
+                    return permissionResult;
+                }
+
+                return await base.RequestAsync();
+            }
+#endif
         }
 
         public partial class Maps : BasePlatformPermission
