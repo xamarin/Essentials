@@ -64,6 +64,19 @@ stages:
           parameters:
             condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
 
+  -stage: sbom
+   displayName: 'Software Bill of Materials'
+   ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:
+    dependsOn: [ 'build' ]
+   ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
+    dependsOn: [ 'signing' ]
+  jobs:
+  - template: compliance/sbom/job.v1.yml@internal-templates
+    parameters:
+      artifactNames: ['nuget']
+      packageName: 'Xamarin Essentials'
+      packageFilter: '*.nupkg'
+
   - stage: devicetests
     displayName: Device Tests
     dependsOn: []
