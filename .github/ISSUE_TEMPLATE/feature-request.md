@@ -6,4 +6,4 @@ labels: feature-request
 assignees: ''
 
 ---
-We are no longer accepting new feature request for Xamarin.Essentials. Please make your new feature requests in the .NET MAUI repo which contains .NET MAUI Essentials. 
+We are no longer accepting new feature request for Xamarin.Essentials. Please make your new feature requests in the .NET MAUI repo which contains .NET MAUI Essentials at https://github.com/dotnet/maui.
