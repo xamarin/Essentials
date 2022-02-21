@@ -21,15 +21,15 @@ namespace Xamarin.Essentials
             var extras = savedInstanceState ?? Intent.Extras;
 
             // read the values
-            launched = extras.GetBoolean(launchedExtra, false);
-            actualIntent = extras.GetParcelable(actualIntentExtra) as Intent;
+            launched = extras?.GetBoolean(launchedExtra, false) ?? false;
+            actualIntent = extras?.GetParcelable(actualIntentExtra) as Intent;
         }
 
         protected override void OnResume()
         {
             base.OnResume();
 
-            if (!launched)
+            if (actualIntent != null && !launched)
             {
                 // if this is the first time, start the authentication flow
                 StartActivity(actualIntent);
