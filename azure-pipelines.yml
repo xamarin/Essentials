@@ -35,6 +35,7 @@ stages:
       - template: .ci/build.yml@components
         parameters:
           windowsAgentPoolName: AzurePipelines-EO
+          windowsImage: ''  # Override the 'windows-latest' default setting
           windowsImageOverride: AzurePipelinesWindows2019compliant
           areaPath: 'DevDiv\Xamarin SDK'
           masterBranchName: 'main'
@@ -96,12 +97,12 @@ stages:
       - template: .ci/build.yml@components
         parameters:
           windowsAgentPoolName: AzurePipelines-EO
+          windowsImage: ''  # Override the 'windows-latest' default setting
           windowsImageOverride: AzurePipelinesWindows2019compliant
           name: devicetests_ios
           runChecks: false
           displayName: iOS
           publishOutputSuffix: '-ios'
-          windowsImage: ''
           areaPath: $(AREA_PATH)
           verbosity: diagnostic
           cakeFile: DeviceTests/build.cake
@@ -111,12 +112,12 @@ stages:
       - template: .ci/build.yml@components
         parameters:
           windowsAgentPoolName: AzurePipelines-EO
+          windowsImage: ''  # Override the 'windows-latest' default setting
           windowsImageOverride: AzurePipelinesWindows2019compliant
           name: devicetests_android_api_21
           runChecks: false
           displayName: Android API 21
           publishOutputSuffix: '-android21'
-          windowsImage: ''
           areaPath: $(AREA_PATH)
           verbosity: diagnostic
           cakeFile: DeviceTests/build.cake
@@ -129,12 +130,12 @@ stages:
       - template: .ci/build.yml@components
         parameters:
           windowsAgentPoolName: AzurePipelines-EO
+          windowsImage: ''  # Override the 'windows-latest' default setting
           windowsImageOverride: AzurePipelinesWindows2019compliant
           name: devicetests_android_api_22
           runChecks: false
           displayName: Android API 22
           publishOutputSuffix: '-android22'
-          windowsImage: ''
           areaPath: $(AREA_PATH)
           verbosity: diagnostic
           cakeFile: DeviceTests/build.cake
@@ -147,13 +148,13 @@ stages:
 #       - template: .ci/build.yml@components
 #         parameters:
 #           windowsAgentPoolName: AzurePipelines-EO
+#           windowsImage: ''  # Override the 'windows-latest' default setting
 #           windowsImageOverride: AzurePipelinesWindows2019compliant
 #           name: devicetests_android_api_23
 #           runChecks: false
 #           continueOnError: true
 #           displayName: Android API 23
 #           publishOutputSuffix: '-android23'
-#           windowsImage: ''
 #           areaPath: $(AREA_PATH)
 #           verbosity: diagnostic
 #           cakeFile: DeviceTests/build.cake
@@ -166,12 +167,12 @@ stages:
       - template: .ci/build.yml@components
         parameters:
           windowsAgentPoolName: AzurePipelines-EO
+          windowsImage: ''  # Override the 'windows-latest' default setting
           windowsImageOverride: AzurePipelinesWindows2019compliant
           name: devicetests_android_api_24
           runChecks: false
           displayName: Android API 24
           publishOutputSuffix: '-android24'
-          windowsImage: ''
           areaPath: $(AREA_PATH)
           verbosity: diagnostic
           cakeFile: DeviceTests/build.cake
@@ -184,12 +185,12 @@ stages:
       - template: .ci/build.yml@components
         parameters:
           windowsAgentPoolName: AzurePipelines-EO
+          windowsImage: ''  # Override the 'windows-latest' default setting
           windowsImageOverride: AzurePipelinesWindows2019compliant
           name: devicetests_android_api_26
           runChecks: false
           displayName: Android API 26
           publishOutputSuffix: '-android26'
-          windowsImage: ''
           areaPath: $(AREA_PATH)
           verbosity: diagnostic
           cakeFile: DeviceTests/build.cake
@@ -202,12 +203,12 @@ stages:
       - template: .ci/build.yml@components
         parameters:
           windowsAgentPoolName: AzurePipelines-EO
+          windowsImage: ''  # Override the 'windows-latest' default setting
           windowsImageOverride: AzurePipelinesWindows2019compliant
           name: devicetests_android_api_29
           runChecks: false
           displayName: Android API 29
           publishOutputSuffix: '-android29'
-          windowsImage: ''
           areaPath: $(AREA_PATH)
           verbosity: diagnostic
           cakeFile: DeviceTests/build.cake
@@ -220,12 +221,12 @@ stages:
       # - template: .ci/build.yml@components
       #   parameters:
       #     windowsAgentPoolName: AzurePipelines-EO
+      #     windowsImage: ''  # Override the 'windows-latest' default setting
       #     windowsImageOverride: AzurePipelinesWindows2019compliant
       #     name: devicetests_android_api_30
       #     runChecks: false
       #     displayName: Android API 30
       #     publishOutputSuffix: '-android30'
-      #     windowsImage: ''
       #     areaPath: $(AREA_PATH)
       #     verbosity: diagnostic
       #     cakeFile: DeviceTests/build.cake
