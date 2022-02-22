@@ -25,6 +25,7 @@ resources:
     - repository: components
       type: github
       name: xamarin/XamarinComponents
+      ref: refs/heads/dev/bond/eo-pools         # UNDONE: DO NOT MERGE TO MAIN
       endpoint: xamarin
 
 stages:
@@ -33,6 +34,8 @@ stages:
     jobs:
       - template: .ci/build.yml@components
         parameters:
+          windowsAgentPoolName: AzurePipelines-EO
+          windowsImageOverride: AzurePipelinesWindows2019compliant
           areaPath: 'DevDiv\Xamarin SDK'
           masterBranchName: 'main'
           preBuildSteps:
@@ -73,7 +76,9 @@ stages:
         # skip for now
         condition: false
         pool:
-          vmImage: windows-2019
+          name: AzurePipelines-EO
+          demands:
+          - ImageOverride -equals AzurePipelinesWindows2019compliant
         steps:
           - script: 'certutil -importpfx $(Build.SourcesDirectory)\DeviceTests\DeviceTests.UWP\DeviceTests.UWP_TemporaryKey.pfx'
             displayName: 'Run certutil'
@@ -90,6 +95,8 @@ stages:
 
       - template: .ci/build.yml@components
         parameters:
+          windowsAgentPoolName: AzurePipelines-EO
+          windowsImageOverride: AzurePipelinesWindows2019compliant
           name: devicetests_ios
           runChecks: false
           displayName: iOS
@@ -103,6 +110,8 @@ stages:
 
       - template: .ci/build.yml@components
         parameters:
+          windowsAgentPoolName: AzurePipelines-EO
+          windowsImageOverride: AzurePipelinesWindows2019compliant
           name: devicetests_android_api_21
           runChecks: false
           displayName: Android API 21
@@ -119,6 +128,8 @@ stages:
 
       - template: .ci/build.yml@components
         parameters:
+          windowsAgentPoolName: AzurePipelines-EO
+          windowsImageOverride: AzurePipelinesWindows2019compliant
           name: devicetests_android_api_22
           runChecks: false
           displayName: Android API 22
@@ -135,6 +146,8 @@ stages:
 
 #       - template: .ci/build.yml@components
 #         parameters:
+#           windowsAgentPoolName: AzurePipelines-EO
+#           windowsImageOverride: AzurePipelinesWindows2019compliant
 #           name: devicetests_android_api_23
 #           runChecks: false
 #           continueOnError: true
@@ -152,6 +165,8 @@ stages:
 
       - template: .ci/build.yml@components
         parameters:
+          windowsAgentPoolName: AzurePipelines-EO
+          windowsImageOverride: AzurePipelinesWindows2019compliant
           name: devicetests_android_api_24
           runChecks: false
           displayName: Android API 24
@@ -168,6 +183,8 @@ stages:
 
       - template: .ci/build.yml@components
         parameters:
+          windowsAgentPoolName: AzurePipelines-EO
+          windowsImageOverride: AzurePipelinesWindows2019compliant
           name: devicetests_android_api_26
           runChecks: false
           displayName: Android API 26
@@ -184,6 +201,8 @@ stages:
 
       - template: .ci/build.yml@components
         parameters:
+          windowsAgentPoolName: AzurePipelines-EO
+          windowsImageOverride: AzurePipelinesWindows2019compliant
           name: devicetests_android_api_29
           runChecks: false
           displayName: Android API 29
@@ -200,6 +219,8 @@ stages:
 
       # - template: .ci/build.yml@components
       #   parameters:
+      #     windowsAgentPoolName: AzurePipelines-EO
+      #     windowsImageOverride: AzurePipelinesWindows2019compliant
       #     name: devicetests_android_api_30
       #     runChecks: false
       #     displayName: Android API 30
