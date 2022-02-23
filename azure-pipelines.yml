@@ -33,7 +33,7 @@ stages:
     jobs:
       - template: .ci/build.yml@components
         parameters:
-          windowsPool: MAUI-DevDiv
+          windowsAgentPoolName: MAUI-DevDiv
           windowsImage: ''
           areaPath: 'DevDiv\Xamarin SDK'
           masterBranchName: 'main'
