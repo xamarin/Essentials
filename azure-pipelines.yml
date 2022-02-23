@@ -77,6 +77,7 @@ stages:
           artifactNames: ['nuget']
           packageName: 'Xamarin Essentials'
           packageFilter: '*.nupkg'
+          packageVersionRegex: '(?i)^Xamarin.Essentials\.(?<version>\d+\.\d+\.\d+)(.*).nupkg$'
 
   - stage: devicetests
     displayName: Device Tests
