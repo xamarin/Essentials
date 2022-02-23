@@ -25,7 +25,7 @@ resources:
     - repository: components
       type: github
       name: xamarin/XamarinComponents
-      refs: refs/heads/dev/bond/eo-pools     # UNDONE: DO NOT MERGE TO MAIN
+      ref: refs/heads/dev/bond/eo-pools     # UNDONE: DO NOT MERGE TO MAIN
       endpoint: xamarin
 
 stages:
