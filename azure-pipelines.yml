@@ -33,7 +33,8 @@ stages:
     jobs:
       - template: .ci/build.yml@components
         parameters:
-          windowsImage: windows-2019
+          windowsPool: MAUI-DevDiv
+          windowsImage: ''
           areaPath: 'DevDiv\Xamarin SDK'
           masterBranchName: 'main'
           preBuildSteps:
