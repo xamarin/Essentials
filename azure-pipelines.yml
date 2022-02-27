@@ -38,6 +38,8 @@ stages:
           windowsAgentPoolName: AzurePipelines-EO
           windowsImage: ''  # Override the 'windows-latest' default settings
           windowsImageOverride: AzurePipelinesWindows2019compliant
+        ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
+          windowsImage: windows-2019
         areaPath: 'DevDiv\Xamarin SDK'
         masterBranchName: 'main'
         preBuildSteps:
