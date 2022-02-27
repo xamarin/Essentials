@@ -32,58 +32,33 @@ stages:
   - stage: build
     displayName: Build Library
     jobs:
-      - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
-        - template: .ci/build.v1.yml@components
-          parameters:
-            windowsAgentPoolName: AzurePipelines-EO
-            windowsImage: ''  # Override the 'windows-latest' default settings
-            windowsImageOverride: AzurePipelinesWindows2019compliant
-            areaPath: 'DevDiv\Xamarin SDK'
-            masterBranchName: 'main'
-            preBuildSteps:
-              - pwsh: |
-                  $pr = "pr." + $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
-                  $nuget = $env:BASE_VERSION + "-" + $pr + "." + $env:BUILD_NUMBER
-                  Write-Host "Preview label: $pr"
-                  Write-Host "NuGet version: $nuget"
-                  Write-Host "##vso[task.setvariable variable=PREVIEW_LABEL]$pr"
-                  Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$nuget"
-                displayName: Use a special preview label for PRs
-                condition: eq(variables['Build.Reason'], 'PullRequest')
-              - pwsh: |
-                  $tagVersion = $env:BUILD_SOURCEBRANCHNAME
-                  Write-Host "Tag version: $tagVersion"
-                  Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$tagVersion"
-                displayName: Override version for tags
-                condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
-              - pwsh: |
-                  Write-Host "##vso[build.updatebuildnumber]$env:NUGET_VERSION"
-                displayName: Update the build number with a more readable one
-
-      - ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
-        - template: .ci/build.v1.yml@components
-          parameters:
-            areaPath: 'DevDiv\Xamarin SDK'
-            masterBranchName: 'main'
-            preBuildSteps:
-              - pwsh: |
-                  $pr = "pr." + $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
-                  $nuget = $env:BASE_VERSION + "-" + $pr + "." + $env:BUILD_NUMBER
-                  Write-Host "Preview label: $pr"
-                  Write-Host "NuGet version: $nuget"
-                  Write-Host "##vso[task.setvariable variable=PREVIEW_LABEL]$pr"
-                  Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$nuget"
-                displayName: Use a special preview label for PRs
-                condition: eq(variables['Build.Reason'], 'PullRequest')
-              - pwsh: |
-                  $tagVersion = $env:BUILD_SOURCEBRANCHNAME
-                  Write-Host "Tag version: $tagVersion"
-                  Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$tagVersion"
-                displayName: Override version for tags
-                condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
-              - pwsh: |
-                  Write-Host "##vso[build.updatebuildnumber]$env:NUGET_VERSION"
-                displayName: Update the build number with a more readable one
+    - template: .ci/build.v1.yml@components
+      parameters:
+        ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
+          windowsAgentPoolName: AzurePipelines-EO
+          windowsImage: ''  # Override the 'windows-latest' default settings
+          windowsImageOverride: AzurePipelinesWindows2019compliant
+        areaPath: 'DevDiv\Xamarin SDK'
+        masterBranchName: 'main'
+        preBuildSteps:
+          - pwsh: |
+              $pr = "pr." + $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
+              $nuget = $env:BASE_VERSION + "-" + $pr + "." + $env:BUILD_NUMBER
+              Write-Host "Preview label: $pr"
+              Write-Host "NuGet version: $nuget"
+              Write-Host "##vso[task.setvariable variable=PREVIEW_LABEL]$pr"
+              Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$nuget"
+            displayName: Use a special preview label for PRs
+            condition: eq(variables['Build.Reason'], 'PullRequest')
+          - pwsh: |
+              $tagVersion = $env:BUILD_SOURCEBRANCHNAME
+              Write-Host "Tag version: $tagVersion"
+              Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$tagVersion"
+            displayName: Override version for tags
+            condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
+          - pwsh: |
+              Write-Host "##vso[build.updatebuildnumber]$env:NUGET_VERSION"
+            displayName: Update the build number with a more readable one
 
   - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
     - stage: signing
@@ -103,9 +78,12 @@ stages:
         # skip for now
         condition: false
         pool:
-          name: AzurePipelines-EO
-          demands:
-          - ImageOverride -equals AzurePipelinesWindows2019compliant
+          ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
+            name: AzurePipelines-EO
+            demands:
+            - ImageOverride -equals AzurePipelinesWindows2019compliant
+          ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
+            vmImage: windows-2019
         steps:
           - script: 'certutil -importpfx $(Build.SourcesDirectory)\DeviceTests\DeviceTests.UWP\DeviceTests.UWP_TemporaryKey.pfx'
             displayName: 'Run certutil'
@@ -122,9 +100,10 @@ stages:
 
       - template: .ci/build.yml@components
         parameters:
-          windowsAgentPoolName: AzurePipelines-EO
-          windowsImage: ''  # Override the 'windows-latest' default setting
-          windowsImageOverride: AzurePipelinesWindows2019compliant
+          ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
+            windowsAgentPoolName: AzurePipelines-EO
+            windowsImage: ''  # Override the 'windows-latest' default setting
+            windowsImageOverride: AzurePipelinesWindows2019compliant
           name: devicetests_ios
           runChecks: false
           displayName: iOS
@@ -137,9 +116,10 @@ stages:
 
       - template: .ci/build.yml@components
         parameters:
-          windowsAgentPoolName: AzurePipelines-EO
-          windowsImage: ''  # Override the 'windows-latest' default setting
-          windowsImageOverride: AzurePipelinesWindows2019compliant
+          ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
+            windowsAgentPoolName: AzurePipelines-EO
+            windowsImage: ''  # Override the 'windows-latest' default setting
+            windowsImageOverride: AzurePipelinesWindows2019compliant
           name: devicetests_android_api_21
           runChecks: false
           displayName: Android API 21
@@ -155,9 +135,10 @@ stages:
 
       - template: .ci/build.yml@components
         parameters:
-          windowsAgentPoolName: AzurePipelines-EO
-          windowsImage: ''  # Override the 'windows-latest' default setting
-          windowsImageOverride: AzurePipelinesWindows2019compliant
+          ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
+            windowsAgentPoolName: AzurePipelines-EO
+            windowsImage: ''  # Override the 'windows-latest' default setting
+            windowsImageOverride: AzurePipelinesWindows2019compliant
           name: devicetests_android_api_22
           runChecks: false
           displayName: Android API 22
@@ -173,9 +154,10 @@ stages:
 
 #       - template: .ci/build.yml@components
 #         parameters:
-#           windowsAgentPoolName: AzurePipelines-EO
-#           windowsImage: ''  # Override the 'windows-latest' default setting
-#           windowsImageOverride: AzurePipelinesWindows2019compliant
+#           ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
+#             windowsAgentPoolName: AzurePipelines-EO
+#             windowsImage: ''  # Override the 'windows-latest' default setting
+#             windowsImageOverride: AzurePipelinesWindows2019compliant
 #           name: devicetests_android_api_23
 #           runChecks: false
 #           continueOnError: true
@@ -192,9 +174,10 @@ stages:
 
       - template: .ci/build.yml@components
         parameters:
-          windowsAgentPoolName: AzurePipelines-EO
-          windowsImage: ''  # Override the 'windows-latest' default setting
-          windowsImageOverride: AzurePipelinesWindows2019compliant
+          ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
+            windowsAgentPoolName: AzurePipelines-EO
+            windowsImage: ''  # Override the 'windows-latest' default setting
+            windowsImageOverride: AzurePipelinesWindows2019compliant
           name: devicetests_android_api_24
           runChecks: false
           displayName: Android API 24
@@ -210,9 +193,10 @@ stages:
 
       - template: .ci/build.yml@components
         parameters:
-          windowsAgentPoolName: AzurePipelines-EO
-          windowsImage: ''  # Override the 'windows-latest' default setting
-          windowsImageOverride: AzurePipelinesWindows2019compliant
+          ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
+            windowsAgentPoolName: AzurePipelines-EO
+            windowsImage: ''  # Override the 'windows-latest' default setting
+            windowsImageOverride: AzurePipelinesWindows2019compliant
           name: devicetests_android_api_26
           runChecks: false
           displayName: Android API 26
@@ -228,9 +212,10 @@ stages:
 
       - template: .ci/build.yml@components
         parameters:
-          windowsAgentPoolName: AzurePipelines-EO
-          windowsImage: ''  # Override the 'windows-latest' default setting
-          windowsImageOverride: AzurePipelinesWindows2019compliant
+          ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
+            windowsAgentPoolName: AzurePipelines-EO
+            windowsImage: ''  # Override the 'windows-latest' default setting
+            windowsImageOverride: AzurePipelinesWindows2019compliant
           name: devicetests_android_api_29
           runChecks: false
           displayName: Android API 29
@@ -246,9 +231,10 @@ stages:
 
       # - template: .ci/build.yml@components
       #   parameters:
-      #     windowsAgentPoolName: AzurePipelines-EO
-      #     windowsImage: ''  # Override the 'windows-latest' default setting
-      #     windowsImageOverride: AzurePipelinesWindows2019compliant
+      #     ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
+      #       windowsAgentPoolName: AzurePipelines-EO
+      #       windowsImage: ''  # Override the 'windows-latest' default setting
+      #       windowsImageOverride: AzurePipelinesWindows2019compliant
       #     name: devicetests_android_api_30
       #     runChecks: false
       #     displayName: Android API 30
