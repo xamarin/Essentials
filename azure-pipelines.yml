@@ -38,7 +38,7 @@ stages:
           windowsAgentPoolName: AzurePipelines-EO
           windowsImage: ''  # Override the 'windows-latest' default settings
           windowsImageOverride: AzurePipelinesWindows2019compliant
-        ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
+        ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:
           windowsImage: windows-2019
         areaPath: 'DevDiv\Xamarin SDK'
         masterBranchName: 'main'
@@ -100,7 +100,7 @@ stages:
               testResultsFiles: '**/xunit-*.xml'
               testRunTitle: 'Device Tests - UWP'
 
-      - template: .ci/build.yml@components
+      - template: .ci/build.v1.yml@components
         parameters:
           name: devicetests_ios
           runChecks: false
@@ -113,7 +113,7 @@ stages:
           cakeTarget: test-ios-emu
           xharness: '1.0.0-prerelease.21620.1'
 
-      - template: .ci/build.yml@components
+      - template: .ci/build.v1.yml@components
         parameters:
           name: devicetests_android_api_21
           runChecks: false
@@ -129,7 +129,7 @@ stages:
             - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-21;google_apis;x86\""
               displayName: Install the Android emulators
 
-      - template: .ci/build.yml@components
+      - template: .ci/build.v1.yml@components
         parameters:
           name: devicetests_android_api_22
           runChecks: false
@@ -145,7 +145,7 @@ stages:
             - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-22;google_apis;x86\""
               displayName: Install the Android emulators
 
-#       - template: .ci/build.yml@components
+#       - template: .ci/build.v1.yml@components
 #         parameters:
 #           name: devicetests_android_api_23
 #           runChecks: false
@@ -162,7 +162,7 @@ stages:
 #             - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-23;google_apis;x86\""
 #               displayName: Install the Android emulators
 
-      - template: .ci/build.yml@components
+      - template: .ci/build.v1.yml@components
         parameters:
           name: devicetests_android_api_24
           runChecks: false
@@ -178,7 +178,7 @@ stages:
             - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-24;google_apis;x86\""
               displayName: Install the Android emulators
 
-      - template: .ci/build.yml@components
+      - template: .ci/build.v1.yml@components
         parameters:
           name: devicetests_android_api_26
           runChecks: false
@@ -194,7 +194,7 @@ stages:
             - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-26;google_apis;x86\""
               displayName: Install the Android emulators
 
-      - template: .ci/build.yml@components
+      - template: .ci/build.v1.yml@components
         parameters:
           name: devicetests_android_api_29
           runChecks: false
@@ -210,7 +210,7 @@ stages:
             - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-29;google_apis;x86\""
               displayName: Install the Android emulators
 
-      # - template: .ci/build.yml@components
+      # - template: .ci/build.v1.yml@components
       #   parameters:
       #     name: devicetests_android_api_30
       #     runChecks: false
