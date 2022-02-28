@@ -84,7 +84,7 @@ stages:
             name: AzurePipelines-EO
             demands:
             - ImageOverride -equals AzurePipelinesWindows2019compliant
-          ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
+          ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:
             vmImage: windows-2019
         steps:
           - script: 'certutil -importpfx $(Build.SourcesDirectory)\DeviceTests\DeviceTests.UWP\DeviceTests.UWP_TemporaryKey.pfx'
