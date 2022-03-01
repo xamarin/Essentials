@@ -25,36 +25,42 @@ resources:
     - repository: components
       type: github
       name: xamarin/XamarinComponents
+      ref: refs/heads/main
       endpoint: xamarin
 
 stages:
   - stage: build
     displayName: Build Library
     jobs:
-      - template: .ci/build.v1.yml@components
-        parameters:
+    - template: .ci/build.v1.yml@components
+      parameters:
+        ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
+          windowsAgentPoolName: AzurePipelines-EO
+          windowsImage: ''  # Override the 'windows-latest' default settings
+          windowsImageOverride: AzurePipelinesWindows2019compliant
+        ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:
           windowsImage: windows-2019
-          areaPath: 'DevDiv\Xamarin SDK'
-          masterBranchName: 'main'
-          preBuildSteps:
-            - pwsh: |
-                $pr = "pr." + $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
-                $nuget = $env:BASE_VERSION + "-" + $pr + "." + $env:BUILD_NUMBER
-                Write-Host "Preview label: $pr"
-                Write-Host "NuGet version: $nuget"
-                Write-Host "##vso[task.setvariable variable=PREVIEW_LABEL]$pr"
-                Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$nuget"
-              displayName: Use a special preview label for PRs
-              condition: eq(variables['Build.Reason'], 'PullRequest')
-            - pwsh: |
-                $tagVersion = $env:BUILD_SOURCEBRANCHNAME
-                Write-Host "Tag version: $tagVersion"
-                Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$tagVersion"
-              displayName: Override version for tags
-              condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
-            - pwsh: |
-                Write-Host "##vso[build.updatebuildnumber]$env:NUGET_VERSION"
-              displayName: Update the build number with a more readable one
+        areaPath: 'DevDiv\Xamarin SDK'
+        masterBranchName: 'main'
+        preBuildSteps:
+          - pwsh: |
+              $pr = "pr." + $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
+              $nuget = $env:BASE_VERSION + "-" + $pr + "." + $env:BUILD_NUMBER
+              Write-Host "Preview label: $pr"
+              Write-Host "NuGet version: $nuget"
+              Write-Host "##vso[task.setvariable variable=PREVIEW_LABEL]$pr"
+              Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$nuget"
+            displayName: Use a special preview label for PRs
+            condition: eq(variables['Build.Reason'], 'PullRequest')
+          - pwsh: |
+              $tagVersion = $env:BUILD_SOURCEBRANCHNAME
+              Write-Host "Tag version: $tagVersion"
+              Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$tagVersion"
+            displayName: Override version for tags
+            condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
+          - pwsh: |
+              Write-Host "##vso[build.updatebuildnumber]$env:NUGET_VERSION"
+            displayName: Update the build number with a more readable one
 
   - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
     - stage: signing
@@ -88,7 +94,12 @@ stages:
         # skip for now
         condition: false
         pool:
-          vmImage: windows-2019
+          ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
+            name: AzurePipelines-EO
+            demands:
+            - ImageOverride -equals AzurePipelinesWindows2019compliant
+          ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:
+            vmImage: windows-2019
         steps:
           - script: 'certutil -importpfx $(Build.SourcesDirectory)\DeviceTests\DeviceTests.UWP\DeviceTests.UWP_TemporaryKey.pfx'
             displayName: 'Run certutil'
@@ -122,7 +133,7 @@ stages:
           runChecks: false
           displayName: Android API 21
           publishOutputSuffix: '-android21'
-          windowsImage: ''
+          windowsImage: ''                    # Mac only
           areaPath: $(AREA_PATH)
           verbosity: diagnostic
           cakeFile: DeviceTests/build.cake
@@ -138,7 +149,7 @@ stages:
           runChecks: false
           displayName: Android API 22
           publishOutputSuffix: '-android22'
-          windowsImage: ''
+          windowsImage: ''                    # Mac only
           areaPath: $(AREA_PATH)
           verbosity: diagnostic
           cakeFile: DeviceTests/build.cake
@@ -155,7 +166,7 @@ stages:
 #           continueOnError: true
 #           displayName: Android API 23
 #           publishOutputSuffix: '-android23'
-#           windowsImage: ''
+#           windowsImage: ''                   # Mac only
 #           areaPath: $(AREA_PATH)
 #           verbosity: diagnostic
 #           cakeFile: DeviceTests/build.cake
@@ -171,7 +182,7 @@ stages:
           runChecks: false
           displayName: Android API 24
           publishOutputSuffix: '-android24'
-          windowsImage: ''
+          windowsImage: ''                    # Mac only
           areaPath: $(AREA_PATH)
           verbosity: diagnostic
           cakeFile: DeviceTests/build.cake
@@ -187,7 +198,7 @@ stages:
           runChecks: false
           displayName: Android API 26
           publishOutputSuffix: '-android26'
-          windowsImage: ''
+          windowsImage: ''                    # Mac only
           areaPath: $(AREA_PATH)
           verbosity: diagnostic
           cakeFile: DeviceTests/build.cake
@@ -203,7 +214,7 @@ stages:
           runChecks: false
           displayName: Android API 29
           publishOutputSuffix: '-android29'
-          windowsImage: ''
+          windowsImage: ''                    # Mac only
           areaPath: $(AREA_PATH)
           verbosity: diagnostic
           cakeFile: DeviceTests/build.cake
@@ -219,7 +230,7 @@ stages:
       #     runChecks: false
       #     displayName: Android API 30
       #     publishOutputSuffix: '-android30'
-      #     windowsImage: ''
+      #     windowsImage: ''                   # Mac only
       #     areaPath: $(AREA_PATH)
       #     verbosity: diagnostic
       #     cakeFile: DeviceTests/build.cake
