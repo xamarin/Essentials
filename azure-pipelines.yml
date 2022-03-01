@@ -31,8 +31,9 @@ stages:
   - stage: build
     displayName: Build Library
     jobs:
-      - template: .ci/build.yml@components
+      - template: .ci/build.v1.yml@components
         parameters:
+          windowsImage: windows-2019
           areaPath: 'DevDiv\Xamarin SDK'
           masterBranchName: 'main'
           preBuildSteps:
@@ -64,6 +65,20 @@ stages:
           parameters:
             condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
 
+    - stage: sbom
+      displayName: 'Software Bill of Materials'
+      ${{ if not(startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
+        dependsOn: [ 'build' ]
+      ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}:
+        dependsOn: [ 'signing' ]
+      jobs:
+      - template: compliance/sbom/job.v1.yml@internal-templates             # Software Bill of Materials (SBOM): https://eng.ms/docs/cloud-ai-platform/devdiv/one-engineering-system-1es/1es-docs/secure-supply-chain/ado-sbom-generator
+        parameters:
+          artifactNames: ['nuget']
+          packageName: 'Xamarin Essentials'
+          packageFilter: '*.nupkg'
+          packageVersionRegex: '(?i)^Xamarin.Essentials\.(?<version>\d+\.\d+\.\d+)(.*).nupkg$'
+
   - stage: devicetests
     displayName: Device Tests
     dependsOn: []
@@ -88,7 +103,7 @@ stages:
               testResultsFiles: '**/xunit-*.xml'
               testRunTitle: 'Device Tests - UWP'
 
-      - template: .ci/build.yml@components
+      - template: .ci/build.v1.yml@components
         parameters:
           name: devicetests_ios
           runChecks: false
@@ -101,7 +116,7 @@ stages:
           cakeTarget: test-ios-emu
           xharness: '1.0.0-prerelease.21620.1'
 
-      - template: .ci/build.yml@components
+      - template: .ci/build.v1.yml@components
         parameters:
           name: devicetests_android_api_21
           runChecks: false
@@ -117,7 +132,7 @@ stages:
             - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-21;google_apis;x86\""
               displayName: Install the Android emulators
 
-      - template: .ci/build.yml@components
+      - template: .ci/build.v1.yml@components
         parameters:
           name: devicetests_android_api_22
           runChecks: false
@@ -133,7 +148,7 @@ stages:
             - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-22;google_apis;x86\""
               displayName: Install the Android emulators
 
-#       - template: .ci/build.yml@components
+#       - template: .ci/build.v1.yml@components
 #         parameters:
 #           name: devicetests_android_api_23
 #           runChecks: false
@@ -150,7 +165,7 @@ stages:
 #             - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-23;google_apis;x86\""
 #               displayName: Install the Android emulators
 
-      - template: .ci/build.yml@components
+      - template: .ci/build.v1.yml@components
         parameters:
           name: devicetests_android_api_24
           runChecks: false
@@ -166,7 +181,7 @@ stages:
             - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-24;google_apis;x86\""
               displayName: Install the Android emulators
 
-      - template: .ci/build.yml@components
+      - template: .ci/build.v1.yml@components
         parameters:
           name: devicetests_android_api_26
           runChecks: false
@@ -182,7 +197,7 @@ stages:
             - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-26;google_apis;x86\""
               displayName: Install the Android emulators
 
-      - template: .ci/build.yml@components
+      - template: .ci/build.v1.yml@components
         parameters:
           name: devicetests_android_api_29
           runChecks: false
@@ -198,7 +213,7 @@ stages:
             - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-29;google_apis;x86\""
               displayName: Install the Android emulators
 
-      # - template: .ci/build.yml@components
+      # - template: .ci/build.v1.yml@components
       #   parameters:
       #     name: devicetests_android_api_30
       #     runChecks: false
