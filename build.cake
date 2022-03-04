@@ -99,6 +99,6 @@ Task("ci")
 
 Task("ci-release")
 	.IsDependentOn("libs")
-	.IsDependentOn("nugets")
+	.IsDependentOn("nugets");
 
 RunTarget(TARGET);
