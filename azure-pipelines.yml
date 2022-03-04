@@ -15,6 +15,7 @@ variables:
   GIT_SHA: $(Build.SourceVersion)
   GIT_BRANCH_NAME: $(Build.SourceBranchName)
   AREA_PATH: 'DevDiv\Xamarin SDK\Build and Tools'
+  release: true
 
 resources:
   repositories:
@@ -42,7 +43,9 @@ stages:
           windowsImage: windows-2019
         areaPath: 'DevDiv\Xamarin SDK'
         masterBranchName: 'main'
-        cakeTarget: ci-release
+        ${{ if eq(variables['release'], 'true') }}: #we are shipping our product
+          cakeTarget: ci-release # We just want to build the library and nuget
+          macosImage: '' # We don't need the macOS build
         preBuildSteps:
           - pwsh: |
               $pr = "pr." + $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
