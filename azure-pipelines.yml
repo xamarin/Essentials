@@ -87,6 +87,7 @@ stages:
 
   - stage: devicetests
     displayName: Device Tests
+    condition: eq(variables['runTests'], 'true')
     dependsOn: []
     jobs:
       - job: devicetests_uwp
