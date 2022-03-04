@@ -97,4 +97,8 @@ Task("ci")
 	.IsDependentOn("tests")
 	.IsDependentOn("samples");
 
+Task("ci-release")
+	.IsDependentOn("libs")
+	.IsDependentOn("nugets")
+
 RunTarget(TARGET);
