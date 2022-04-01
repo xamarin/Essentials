@@ -25,7 +25,7 @@ resources:
     - repository: components
       type: github
       name: xamarin/XamarinComponents
-      ref: refs/heads/main
+      ref: refs/pull/1354/merge
       endpoint: xamarin
 
 stages:
@@ -89,7 +89,7 @@ stages:
           packageVersionRegex: '(?i)^Xamarin.Essentials\.(?<version>\d+\.\d+\.\d+)(.*).nupkg$'
 
   - ${{ if not(startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
-    - stage: devicetests_essentials
+    - stage: devicetests
       displayName: Device Tests
       dependsOn: []
       jobs:
