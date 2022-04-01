@@ -89,7 +89,7 @@ stages:
           packageVersionRegex: '(?i)^Xamarin.Essentials\.(?<version>\d+\.\d+\.\d+)(.*).nupkg$'
 
   - ${{ if not(startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
-    - stage: devicetests
+    - stage: devicetests_essentials
       displayName: Device Tests
       dependsOn: []
       jobs:
