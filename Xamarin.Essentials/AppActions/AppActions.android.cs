@@ -42,6 +42,7 @@ namespace Xamarin.Essentials
         const string extraAppActionTitle = "EXTRA_XE_APP_ACTION_TITLE";
         const string extraAppActionSubtitle = "EXTRA_XE_APP_ACTION_SUBTITLE";
         const string extraAppActionIcon = "EXTRA_XE_APP_ACTION_ICON";
+        internal const string extraAppActionHandled = "EXTRA_XE_APP_ACTION_HANDLED";
 
         internal static AppAction ToAppAction(this Intent intent)
             => new AppAction(
