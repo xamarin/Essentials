@@ -44,7 +44,7 @@ stages:
         masterBranchName: 'main'
         ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}: #we are shipping our product
           cakeTarget: ci-release # We just want to build the library and nuget
-          macosImage: '' # We don't need the macOS build 
+          macosImage: '' # We don't need the macOS build
         preBuildSteps:
           - pwsh: |
               $pr = "pr." + $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
