@@ -25,7 +25,7 @@ resources:
     - repository: components
       type: github
       name: xamarin/XamarinComponents
-      ref: refs/pull/1354/merge
+      ref: refs/pull/1357/merge
       endpoint: xamarin
 
 stages:
