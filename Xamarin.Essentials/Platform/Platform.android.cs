@@ -110,8 +110,11 @@ namespace Xamarin.Essentials
 
         static void CheckAppActions(AndroidIntent intent)
         {
-            if (intent?.Action == Intent.ActionAppAction)
+            if (intent?.Action == Intent.ActionAppAction && !intent.GetBooleanExtra(AppActions.extraAppActionHandled, false))
             {
+                // prevent launch intent getting handled on activity resume
+                intent.PutExtra(AppActions.extraAppActionHandled, true);
+
                 var appAction = intent.ToAppAction();
 
                 if (!string.IsNullOrEmpty(appAction?.Id))
