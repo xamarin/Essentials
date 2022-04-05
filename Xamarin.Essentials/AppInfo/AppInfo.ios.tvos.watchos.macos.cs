@@ -31,7 +31,7 @@ namespace Xamarin.Essentials
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                var prefsApp = ScriptingBridge.SBApplication.GetApplication("com.apple.systempreferences");
+                var prefsApp = ScriptingBridge.SBApplication.FromBundleIdentifier("com.apple.systempreferences");
                 prefsApp.SendMode = ScriptingBridge.AESendMode.NoReply;
                 prefsApp.Activate();
             });
