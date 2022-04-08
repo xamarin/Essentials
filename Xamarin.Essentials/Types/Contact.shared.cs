@@ -86,6 +86,13 @@ namespace Xamarin.Essentials
 
     public class ContactPhone
     {
+        public enum PhoneTypes
+        {
+            Unknown,
+            Mobile,
+            Land,
+        }
+
         public ContactPhone()
         {
         }
@@ -95,7 +102,18 @@ namespace Xamarin.Essentials
             PhoneNumber = phoneNumber;
         }
 
+        public ContactPhone(string phoneNumber, PhoneTypes phoneType, bool isDefault)
+        {
+            PhoneNumber = phoneNumber;
+            PhoneType = phoneType;
+            IsDefault = isDefault;
+        }
+
         public string PhoneNumber { get; set; }
+
+        public PhoneTypes PhoneType { get; set; } = PhoneTypes.Unknown;
+
+        public bool IsDefault { get; set; }
 
         public override string ToString() => PhoneNumber;
     }

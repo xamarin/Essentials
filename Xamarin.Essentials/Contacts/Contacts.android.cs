@@ -58,14 +58,27 @@ namespace Xamarin.Essentials
         {
             var id = GetString(cursor, idCol);
             var displayName = GetString(cursor, displayNameCol);
-            var phones = GetNumbers(id)?.Select(p => new ContactPhone(p));
+            var phones = GetNumbers(id)?.Select(p => new ContactPhone(p.number, p.type, p.isDefault));
             var emails = GetEmails(id)?.Select(e => new ContactEmail(e));
             var (prefix, given, middle, family, suffix) = GetName(id);
 
             return new Contact(id, prefix, given, middle, family, suffix, phones, emails, displayName);
         }
 
-        static IEnumerable<string> GetNumbers(string id)
+        static ContactPhone.PhoneTypes ToPhoneType(string typeString)
+        {
+            var typeValue = (PhoneDataKind)int.Parse(typeString);
+            return typeValue switch
+            {
+                PhoneDataKind.Mobile => ContactPhone.PhoneTypes.Mobile,
+                PhoneDataKind.WorkMobile => ContactPhone.PhoneTypes.Mobile,
+                PhoneDataKind.Home => ContactPhone.PhoneTypes.Land,
+                PhoneDataKind.Work => ContactPhone.PhoneTypes.Land,
+                _ => ContactPhone.PhoneTypes.Unknown,
+            };
+        }
+
+        static IEnumerable<(string number, ContactPhone.PhoneTypes type, bool isDefault)> GetNumbers(string id)
         {
             var uri = CommonDataKinds.Phone.ContentUri
                 .BuildUpon()
@@ -74,7 +87,8 @@ namespace Xamarin.Essentials
 
             var cursor = Platform.ContentResolver.Query(uri, null, $"{contactIdCol}=?", new[] { id }, null);
 
-            return ReadCursorItems(cursor, CommonDataKinds.Phone.Number);
+            return ReadCursorItems(cursor, CommonDataKinds.Phone.Number, CommonDataKinds.Phone.InterfaceConsts.Type, CommonDataKinds.Phone.InterfaceConsts.IsPrimary)
+                    .Select(i => (i[0], ToPhoneType(i[1]), i[2] != "0"));
         }
 
         static IEnumerable<string> GetEmails(string id)
@@ -97,6 +111,21 @@ namespace Xamarin.Essentials
                 {
                     var data = GetString(cursor, dataKey);
                     if (data != null)
+                        yield return data;
+                }
+                while (cursor.MoveToNext());
+            }
+            cursor?.Close();
+        }
+
+        static IEnumerable<string[]> ReadCursorItems(ICursor cursor, params string[] dataKey)
+        {
+            if (cursor?.MoveToFirst() == true)
+            {
+                do
+                {
+                    var data = dataKey.Select(k => GetString(cursor, k)).ToArray();
+                    if (data.Any())
                         yield return data;
                 }
                 while (cursor.MoveToNext());
