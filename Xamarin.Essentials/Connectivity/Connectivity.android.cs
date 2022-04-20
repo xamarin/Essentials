@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Android.Content;
 using Android.Net;
 using Android.OS;
+using Android.Runtime;
 using Debug = System.Diagnostics.Debug;
 
 namespace Xamarin.Essentials
@@ -94,17 +95,56 @@ namespace Xamarin.Essentials
 
         class EssentialsNetworkCallback : ConnectivityManager.NetworkCallback
         {
-            public override void OnAvailable(Network network) => Platform.AppContext.SendBroadcast(connectivityIntent);
+            bool active;
 
-            public override void OnLost(Network network) => Platform.AppContext.SendBroadcast(connectivityIntent);
+            public EssentialsNetworkCallback()
+            {
+                active = true;
+            }
 
-            public override void OnCapabilitiesChanged(Network network, NetworkCapabilities networkCapabilities) => Platform.AppContext.SendBroadcast(connectivityIntent);
+            /// <summary>
+            /// Allow JNI to create inactive wrapper in case original EssentialsNetworkCallback is already disposed.
+            ///
+            /// This avoids app crash with "NotSupportedException: Unable to activate instance of type
+            /// Xamarin.Essentials.Connectivity+EssentialsNetworkCallback from native handle" in case
+            /// callback invocation is scheduled but managed wrapper EssentialsNetworkCallback
+            /// has already been disposed. See https://github.com/xamarin/Essentials/issues/1996
+            /// </summary>
+            /// <remarks>
+            /// Any resulting callbacks to this inactive callback will be ignored.
+            /// The Callback object created this way will automatically dispose itself after callback
+            /// was invoked.
+            /// </remarks>
+            public EssentialsNetworkCallback(IntPtr javaReference, JniHandleOwnership transfer)
+                : base(javaReference, transfer)
+            {
+                active = false;
+            }
 
-            public override void OnUnavailable() => Platform.AppContext.SendBroadcast(connectivityIntent);
+            public override void OnAvailable(Network network) => DeliverIntent();
 
-            public override void OnLinkPropertiesChanged(Network network, LinkProperties linkProperties) => Platform.AppContext.SendBroadcast(connectivityIntent);
+            public override void OnLost(Network network) => DeliverIntent();
 
-            public override void OnLosing(Network network, int maxMsToLive) => Platform.AppContext.SendBroadcast(connectivityIntent);
+            public override void OnCapabilitiesChanged(Network network, NetworkCapabilities networkCapabilities) => DeliverIntent();
+
+            public override void OnUnavailable() => DeliverIntent();
+
+            public override void OnLinkPropertiesChanged(Network network, LinkProperties linkProperties) => DeliverIntent();
+
+            public override void OnLosing(Network network, int maxMsToLive) => DeliverIntent();
+
+            void DeliverIntent()
+            {
+                if (active)
+                {
+                    Platform.AppContext.SendBroadcast(connectivityIntent);
+                }
+                else
+                {
+                    // Auto-dispose since we were only created for processing/ignoring the callback
+                    Dispose();
+                }
+            }
         }
 
         static NetworkAccess IsBetterAccess(NetworkAccess currentAccess, NetworkAccess newAccess) =>
