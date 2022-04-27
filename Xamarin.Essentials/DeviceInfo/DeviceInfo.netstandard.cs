@@ -2,6 +2,8 @@
 {
     public static partial class DeviceInfo
     {
+        static string GetDeviceId() => throw ExceptionUtils.NotSupportedOrImplementedException;
+
         static string GetModel() => throw ExceptionUtils.NotSupportedOrImplementedException;
 
         static string GetManufacturer() => throw ExceptionUtils.NotSupportedOrImplementedException;

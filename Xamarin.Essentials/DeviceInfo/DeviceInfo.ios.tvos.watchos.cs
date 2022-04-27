@@ -13,6 +13,8 @@ namespace Xamarin.Essentials
 {
     public static partial class DeviceInfo
     {
+        static string GetDeviceId() => UIDevice.CurrentDevice.IdentifierForVendor.AsString();
+
         static string GetModel()
         {
             try

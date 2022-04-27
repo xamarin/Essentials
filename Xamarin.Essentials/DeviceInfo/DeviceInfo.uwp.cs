@@ -27,6 +27,8 @@ namespace Xamarin.Essentials
             }
         }
 
+        static string GetDeviceId() => SystemIdentification.GetSystemIdForPublisher();
+
         static string GetModel() => deviceInfo.SystemProductName;
 
         static string GetManufacturer() => deviceInfo.SystemManufacturer;
