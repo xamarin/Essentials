@@ -29,9 +29,7 @@ namespace Xamarin.Essentials
         static string GetModel() =>
             IOKit.GetPlatformExpertPropertyValue<NSData>("model")?.ToString() ?? string.Empty;
 
-        static string GetDeviceId() => GetSerial();
-
-        static string GetSerial()
+        static string GetDeviceId()
         {
             var serial = string.Empty;
             var platformExpert = IOServiceGetMatchingService(0, IOServiceMatching("IOPlatformExpertDevice"));
