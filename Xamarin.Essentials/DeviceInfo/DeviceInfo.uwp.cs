@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using Windows.Security.ExchangeActiveSyncProvisioning;
+using Windows.Storage.Streams;
 using Windows.System.Profile;
 using Windows.UI.ViewManagement;
 
@@ -34,10 +35,10 @@ namespace Xamarin.Essentials
             if (systemIdentificationInfo == null)
                 return null;
 
-            using (var dataReader = Windows.Storage.Streams.DataReader.FromBuffer(systemIdentificationInfo.Id))
+            using (var dataReader = DataReader.FromBuffer(systemIdentificationInfo.Id))
             {
-                dataReader.UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding.Utf8;
-                return dataReader.ReadString(theBuffer.Length);
+                dataReader.UnicodeEncoding = UnicodeEncoding.Utf8;
+                return dataReader.ReadString(systemIdentificationInfo.Id.Length);
             }
         } 
 
