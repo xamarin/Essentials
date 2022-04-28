@@ -28,19 +28,19 @@ namespace Xamarin.Essentials
             }
         }
 
-         static string GetDeviceId()
-         {
-             var systemIdentificationInfo = SystemIdentification.GetSystemIdForPublisher();
+        static string GetDeviceId()
+        {
+            var systemIdentificationInfo = SystemIdentification.GetSystemIdForPublisher();
 
-             if (systemIdentificationInfo == null)
-                 return null;
+            if (systemIdentificationInfo == null)
+                return null;
 
-             using (var dataReader = DataReader.FromBuffer(systemIdentificationInfo.Id))
-             {
-                 dataReader.UnicodeEncoding = UnicodeEncoding.Utf8;
-                 return dataReader.ReadString(systemIdentificationInfo.Id.Length);
-             }
-         }
+            using (var dataReader = DataReader.FromBuffer(systemIdentificationInfo.Id))
+            {
+                dataReader.UnicodeEncoding = UnicodeEncoding.Utf8;
+                return dataReader.ReadString(systemIdentificationInfo.Id.Length);
+            }
+        }
 
         static string GetModel() => deviceInfo.SystemProductName;
 
