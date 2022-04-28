@@ -10,6 +10,14 @@ namespace Xamarin.Essentials
     {
         const int tabletCrossover = 600;
 
+        static string GetDeviceId()
+        {
+            var context = Application.Context;
+            var id = Settings.Secure.GetString(context.ContentResolver, Settings.Secure.AndroidId);
+
+            return id;
+        }
+
         static string GetModel() => Build.Model;
 
         static string GetManufacturer() => Build.Manufacturer;

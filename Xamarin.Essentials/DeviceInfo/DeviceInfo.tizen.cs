@@ -4,6 +4,9 @@ namespace Xamarin.Essentials
 {
     public static partial class DeviceInfo
     {
+        static string GetDeviceId()
+            => Plat.GetSystemInfo("tizenid");
+            
         static string GetModel()
            => Plat.GetSystemInfo("model_name");
 

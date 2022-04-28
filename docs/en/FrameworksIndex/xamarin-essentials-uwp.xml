@@ -269,6 +269,7 @@
       <Member Id="P:Xamarin.Essentials.DeviceIdiom.Watch" />
     </Type>
     <Type Name="Xamarin.Essentials.DeviceInfo" Id="T:Xamarin.Essentials.DeviceInfo">
+      <Member Id="P:Xamarin.Essentials.DeviceInfo.DeviceId" />
       <Member Id="P:Xamarin.Essentials.DeviceInfo.DeviceType" />
       <Member Id="P:Xamarin.Essentials.DeviceInfo.Idiom" />
       <Member Id="P:Xamarin.Essentials.DeviceInfo.Manufacturer" />

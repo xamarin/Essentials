@@ -4,6 +4,8 @@ namespace Xamarin.Essentials
 {
     public static partial class DeviceInfo
     {
+        public static string DeviceId => GetDeviceId();
+        
         public static string Model => GetModel();
 
         public static string Manufacturer => GetManufacturer();
