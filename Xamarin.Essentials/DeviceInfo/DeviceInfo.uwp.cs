@@ -40,7 +40,7 @@ namespace Xamarin.Essentials
                 dataReader.UnicodeEncoding = UnicodeEncoding.Utf8;
                 return dataReader.ReadString(systemIdentificationInfo.Id.Length);
             }
-        } 
+        }
 
         static string GetModel() => deviceInfo.SystemProductName;
 
