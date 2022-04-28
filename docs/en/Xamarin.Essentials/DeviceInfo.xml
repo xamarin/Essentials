@@ -15,6 +15,24 @@
     <remarks></remarks>
   </Docs>
   <Members>
+    <Member MemberName="DeviceId">
+      <MemberSignature Language="C#" Value="public static string DeviceId { get; }" />
+      <MemberSignature Language="ILAsm" Value=".property string DeviceId" />
+      <MemberSignature Language="DocId" Value="P:Xamarin.Essentials.DeviceInfo.DeviceId" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <AssemblyName>Xamarin.Essentials</AssemblyName>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Gets the ID of the device.</summary>
+        <value>Device ID.</value>
+        <remarks></remarks>
+      </Docs>
+    </Member>
     <Member MemberName="DeviceType">
       <MemberSignature Language="C#" Value="public static Xamarin.Essentials.DeviceType DeviceType { get; }" />
       <MemberSignature Language="ILAsm" Value=".property valuetype Xamarin.Essentials.DeviceType DeviceType" />
