@@ -13,9 +13,20 @@ namespace Xamarin.Essentials
 
         static readonly string sharedName = Preferences.GetPrivatePreferencesSharedName("versiontracking");
 
-        static readonly Dictionary<string, List<string>> versionTrail;
+        static Dictionary<string, List<string>> versionTrail;
 
         static VersionTracking()
+        {
+            InitVersionTracking();
+        }
+
+        /// <summary>
+        /// Initialize VersionTracking module, load data and track current version
+        /// </summary>
+        /// <remarks>
+        /// For internal use. Usually only called once in production code, but multiple times in unit tests
+        /// </remarks>
+        internal static void InitVersionTracking()
         {
             IsFirstLaunchEver = !Preferences.ContainsKey(versionsKey, sharedName) || !Preferences.ContainsKey(buildsKey, sharedName);
             if (IsFirstLaunchEver)
@@ -35,15 +46,19 @@ namespace Xamarin.Essentials
                 };
             }
 
-            IsFirstLaunchForCurrentVersion = !versionTrail[versionsKey].Contains(CurrentVersion);
+            IsFirstLaunchForCurrentVersion = !versionTrail[versionsKey].Contains(CurrentVersion) || CurrentVersion != LastInstalledVersion;
             if (IsFirstLaunchForCurrentVersion)
             {
+                // Avoid duplicates and move current version to end of list if already present
+                versionTrail[versionsKey].RemoveAll(v => v == CurrentVersion);
                 versionTrail[versionsKey].Add(CurrentVersion);
             }
 
-            IsFirstLaunchForCurrentBuild = !versionTrail[buildsKey].Contains(CurrentBuild);
+            IsFirstLaunchForCurrentBuild = !versionTrail[buildsKey].Contains(CurrentBuild) || CurrentBuild != LastInstalledBuild;
             if (IsFirstLaunchForCurrentBuild)
             {
+                // Avoid duplicates and move current build to end of list if already present
+                versionTrail[buildsKey].RemoveAll(b => b == CurrentBuild);
                 versionTrail[buildsKey].Add(CurrentBuild);
             }
 
@@ -119,5 +134,9 @@ namespace Xamarin.Essentials
             var trail = versionTrail[key];
             return (trail.Count >= 2) ? trail[trail.Count - 2] : null;
         }
+
+        static string LastInstalledVersion => versionTrail[versionsKey].LastOrDefault();
+
+        static string LastInstalledBuild => versionTrail[buildsKey].LastOrDefault();
     }
 }
