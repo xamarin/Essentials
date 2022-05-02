@@ -71,6 +71,21 @@ namespace Xamarin.Essentials
             tcsResponse = new TaskCompletionSource<WebAuthenticatorResult>();
             currentRedirectUri = callbackUrl;
 
+            if (!(await StartCustomTabsActivity(url)))
+            {
+                // Fall back to opening the system-registered browser if necessary
+                var urlOriginalString = url.OriginalString;
+                var browserIntent = new Intent(Intent.ActionView, global::Android.Net.Uri.Parse(urlOriginalString));
+                Platform.CurrentActivity.StartActivity(browserIntent);
+            }
+
+            return await tcsResponse.Task;
+        }
+
+        static async Task<bool> StartCustomTabsActivity(Uri url)
+        {
+            // Is only set to true if BindServiceAsync succeeds and no exceptions are thrown
+            var success = false;
             var parentActivity = Platform.GetCurrentActivity(true);
 
             var customTabsActivityManager = CustomTabsActivityManager.From(parentActivity);
@@ -84,16 +99,12 @@ namespace Xamarin.Essentials
 
                     customTabsIntent.Intent.SetData(global::Android.Net.Uri.Parse(url.OriginalString));
 
-                    WebAuthenticatorIntermediateActivity.StartActivity(parentActivity, customTabsIntent.Intent);
+                    if (customTabsIntent.Intent.ResolveActivity(parentActivity.PackageManager) != null)
+                    {
+                        WebAuthenticatorIntermediateActivity.StartActivity(parentActivity, customTabsIntent.Intent);
+                        success = true;
+                    }
                 }
-                else
-                {
-                    // Fall back to opening the system browser if necessary
-                    var browserIntent = new Intent(Intent.ActionView, global::Android.Net.Uri.Parse(url.OriginalString));
-                    Platform.CurrentActivity.StartActivity(browserIntent);
-                }
-
-                return await tcsResponse.Task;
             }
             finally
             {
@@ -105,6 +116,8 @@ namespace Xamarin.Essentials
                 {
                 }
             }
+
+            return success;
         }
 
         static Task<bool> BindServiceAsync(CustomTabsActivityManager manager)
