@@ -61,7 +61,12 @@ namespace Xamarin.Essentials
                 {
                     var ap = androidPermission;
                     if (!IsDeclaredInManifest(ap))
-                        throw new PermissionException($"You need to declare using the permission: `{androidPermission}` in your AndroidManifest.xml");
+                    {
+                        if (androidPermission != Manifest.Permission.AccessFineLocation)
+                            System.Diagnostics.Debug.WriteLine($"You need to declare using the permission: `{androidPermission}` in your AndroidManifest.xml");
+
+                        return Task.FromResult(PermissionStatus.Denied);
+                    }
 
                     var status = DoCheck(ap);
                     if (status != PermissionStatus.Granted)
@@ -98,7 +103,12 @@ namespace Xamarin.Essentials
                 var targetsMOrHigher = context.ApplicationInfo.TargetSdkVersion >= BuildVersionCodes.M;
 
                 if (!IsDeclaredInManifest(androidPermission))
-                    throw new PermissionException($"You need to declare using the permission: `{androidPermission}` in your AndroidManifest.xml");
+                {
+                    if (androidPermission != Manifest.Permission.AccessFineLocation)
+                        System.Diagnostics.Debug.WriteLine($"You need to declare using the permission: `{androidPermission}` in your AndroidManifest.xml");
+
+                    return PermissionStatus.Denied;
+                }
 
                 var status = PermissionStatus.Granted;
 
