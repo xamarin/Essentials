@@ -121,9 +121,25 @@ namespace Xamarin.Essentials
                     var currentAccess = NetworkAccess.None;
                     var manager = Platform.ConnectivityManager;
 
+                    if (Platform.HasApiLevel(BuildVersionCodes.M))
+                    {
+                        var activeNetwork = manager.ActiveNetwork;
+                        var capabilities = manager.GetNetworkCapabilities(activeNetwork);
+                        if (capabilities == null)
+                            return currentAccess;
+
+                        if (capabilities.HasCapability(NetCapability.Internet))
+                            return NetworkAccess.Internet;
+
+                        // Doesn't have internet, but local is possible
+                        return IsBetterAccess(currentAccess, NetworkAccess.Local);
+                    }
+
                     if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
                     {
+#pragma warning disable CS0618 // Type or member is obsolete
                         var networks = manager.GetAllNetworks();
+#pragma warning restore CS0618 // Type or member is obsolete
 
                         // some devices running 21 and 22 only use the older api.
                         if (networks.Length == 0 && (int)Build.VERSION.SdkInt < 23)
@@ -210,11 +226,34 @@ namespace Xamarin.Essentials
                 Permissions.EnsureDeclared<Permissions.NetworkState>();
 
                 var manager = Platform.ConnectivityManager;
-                if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
+
+                if (Platform.HasApiLevel(BuildVersionCodes.M))
                 {
+                    var activeNetwork = manager.ActiveNetwork;
+                    if (activeNetwork == null)
+                        yield break;
+
+                    var capabilities = manager.GetNetworkCapabilities(activeNetwork);
+                    if (capabilities == null)
+                        yield break;
+
+                    if (capabilities.HasTransport(TransportType.Bluetooth))
+                        yield return ConnectionProfile.Bluetooth;
+
+                    if (capabilities.HasTransport(TransportType.Cellular))
+                        yield return ConnectionProfile.Cellular;
+
+                    if (capabilities.HasTransport(TransportType.Ethernet))
+                        yield return ConnectionProfile.Ethernet;
+
+                    if (capabilities.HasTransport(TransportType.Wifi))
+                        yield return ConnectionProfile.WiFi;
+                }
+                else if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
+                {
+#pragma warning disable CS0618 // Type or member is obsolete
                     foreach (var network in manager.GetAllNetworks())
                     {
-#pragma warning disable CS0618 // Type or member is obsolete
                         NetworkInfo info = null;
                         try
                         {
