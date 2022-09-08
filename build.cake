@@ -74,7 +74,8 @@ Task("samples")
 	MSBuild("./Xamarin.Essentials.sln", new MSBuildSettings()
 		.EnableBinaryLogger("./output/binlogs/samples.binlog")
 		.SetConfiguration("Release")
-		.WithProperty("RestoreConfigFile", RESTORE_CONFIG));
+		.WithProperty("RestoreConfigFile", RESTORE_CONFIG)
+		.WithRestore());
 });
 
 Task("docs")
