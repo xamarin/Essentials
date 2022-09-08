@@ -47,7 +47,7 @@ Task("tests")
 
 	foreach (var csproj in GetFiles("./Tests/**/*.csproj")) {
 		try {
-			DotNetCoreTest(csproj.FullPath, new DotNetCoreTestSettings {
+			DotNetTest(csproj.FullPath, new DotNetTestSettings {
 				Configuration = "Release",
 				Logger = $"trx;LogFileName={csproj.GetFilenameWithoutExtension()}.trx",
 				EnvironmentVariables = new Dictionary<string, string> {
