@@ -17,7 +17,7 @@ Task("libs")
 	.IsDependentOn("prepare")
 	.Does(() =>
 {
-	DotNetCoreBuild("./Xamarin.Essentials/Xamarin.Essentials.csproj", new MSBuildSettings()
+	MSBuild("./Xamarin.Essentials/Xamarin.Essentials.csproj", new MSBuildSettings()
 		.EnableBinaryLogger("./output/binlogs/libs.binlog")
 		.SetConfiguration("Release")
 		.WithProperty("RestoreConfigFile", RESTORE_CONFIG)
@@ -30,7 +30,7 @@ Task("nugets")
 	.IsDependentOn("docs")
 	.Does(() =>
 {
-	DotNetCoreBuild("./Xamarin.Essentials/Xamarin.Essentials.csproj", new MSBuildSettings()
+	MSBuild("./Xamarin.Essentials/Xamarin.Essentials.csproj", new MSBuildSettings()
 		.EnableBinaryLogger("./output/binlogs/nugets.binlog")
 		.SetConfiguration("Release")
 		.WithRestore()
@@ -49,7 +49,7 @@ Task("tests")
 		try {
 			DotNetTest(csproj.FullPath, new DotNetTestSettings {
 				Configuration = "Release",
-				Logger = $"trx;LogFileName={csproj.GetFilenameWithoutExtension()}.trx",
+				Loggers = new [] { $"trx;LogFileName={csproj.GetFilenameWithoutExtension()}.trx" },
 				EnvironmentVariables = new Dictionary<string, string> {
 					{ "RestoreConfigFile", RESTORE_CONFIG }
 				}
@@ -71,11 +71,13 @@ Task("samples")
 	.IsDependentOn("nugets")
 	.Does(() =>
 {
-	DotNetCoreBuild("./Xamarin.Essentials.sln", new DotNetCoreBuildBuildSettings()
-		.EnableBinaryLogger("./output/binlogs/samples.binlog")
-		.SetConfiguration("Release")
-		.WithProperty("RestoreConfigFile", RESTORE_CONFIG)
-		.WithRestore());
+	DotNetCoreBuild("./Xamarin.Essentials.sln", new DotNetCoreBuildSettings()
+	{
+		MSBuildSettings = new DotNetCoreMSBuildSettings()
+			.EnableBinaryLogger("./output/binlogs/samples.binlog")
+			.SetConfiguration("Release")
+			.WithProperty("RestoreConfigFile", RESTORE_CONFIG)
+	});
 });
 
 Task("docs")
