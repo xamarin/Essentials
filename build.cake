@@ -71,13 +71,10 @@ Task("samples")
 	.IsDependentOn("nugets")
 	.Does(() =>
 {
-	DotNetCoreBuild("./Xamarin.Essentials.sln", new DotNetCoreBuildSettings()
-	{
-		MSBuildSettings = new DotNetCoreMSBuildSettings()
-			.EnableBinaryLogger("./output/binlogs/samples.binlog")
-			.SetConfiguration("Release")
-			.WithProperty("RestoreConfigFile", RESTORE_CONFIG)
-	});
+	MSBuild("./Xamarin.Essentials.sln", new MSBuildSettings()
+		.EnableBinaryLogger("./output/binlogs/samples.binlog")
+		.SetConfiguration("Release")
+		.WithProperty("RestoreConfigFile", RESTORE_CONFIG));
 });
 
 Task("docs")
