@@ -39,7 +39,7 @@ stages:
           windowsImage: ''  # Override the 'windows-latest' default settings
           windowsImageOverride: AzurePipelinesWindows2019compliant
         ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:
-          windowsImage: windows-latest
+          windowsImage: windows-2019
         areaPath: 'DevDiv\Xamarin SDK'
         masterBranchName: 'main'
         ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}: #we are shipping our product
@@ -103,7 +103,7 @@ stages:
               demands:
               - ImageOverride -equals AzurePipelinesWindows2019compliant
             ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:
-              vmImage: windows-latest
+              vmImage: windows-2019
           steps:
             - script: 'certutil -importpfx $(Build.SourcesDirectory)\DeviceTests\DeviceTests.UWP\DeviceTests.UWP_TemporaryKey.pfx'
               displayName: 'Run certutil'
