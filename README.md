@@ -77,3 +77,5 @@ Here are some frequently asked questions about Xamarin.Essentials, but be sure t
 
 Please see the [License](LICENSE).
 
+## Stats
+<img src="https://repobeats.axiom.co/api/embed/f917a77cbbdeee19b87fa1f2f932895d1df18b31.svg" />

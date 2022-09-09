@@ -41,6 +41,7 @@ System.Environment.SetEnvironmentVariable("PATH",
     $"{ANDROID_HOME}/emulator" + System.IO.Path.PathSeparator +
     EnvironmentVariable("PATH"));
 
+var RESTORE_CONFIG = MakeAbsolute((FilePath)"../devopsnuget.config").FullPath;
 
 // utils
 
@@ -99,6 +100,7 @@ Task("build-ios")
         c.Properties["Platform"] = new List<string> { "iPhoneSimulator" };
         c.Properties["BuildIpa"] = new List<string> { "true" };
         c.Properties["ContinuousIntegrationBuild"] = new List<string> { "false" };
+        c.Properties["RestoreConfigFile"] = new List<string> { RESTORE_CONFIG };
         c.Targets.Clear();
         c.Targets.Add("Rebuild");
         c.BinaryLogger = new MSBuildBinaryLogSettings {
@@ -116,11 +118,12 @@ Task("test-ios-emu")
     CleanDirectories(IOS_TEST_RESULTS_PATH.FullPath);
 
     // Run the tests
-    var resultCode = StartProcess("xharness", "ios test " +
+    var resultCode = StartProcess("xharness", "apple test " +
         $"--app=\"{IOS_IPA_PATH}\" " +
         $"--targets=\"ios-simulator-64\" " +
         $"--output-directory=\"{IOS_TEST_RESULTS_PATH}\" " +
-        $"--verbosity=\"Debug\" ");
+        $"--verbosity=\"Debug\" " +
+        $"--set-env=ci-run=true ");
 
     // Rename test result files
     var resultFiles = GetFiles($"{IOS_TEST_RESULTS_PATH}/*.xml");
@@ -142,6 +145,7 @@ Task("build-android")
         c.Configuration = "Debug"; // needs to be debug so unit tests get discovered
         c.Restore = true;
         c.Properties["ContinuousIntegrationBuild"]  = new List<string> { "false" };
+        c.Properties["RestoreConfigFile"] = new List<string> { RESTORE_CONFIG };
         c.Targets.Clear();
         c.Targets.Add("Rebuild");
         c.Targets.Add("SignAndroidPackage");
@@ -221,6 +225,7 @@ Task("build-uwp")
         c.Properties["AppxBundlePlatforms"] = new List<string> { "x86" };
         c.Properties["AppxBundle"] = new List<string> { "Always" };
         c.Properties["AppxPackageSigningEnabled"] = new List<string> { "true" };
+        c.Properties["RestoreConfigFile"] = new List<string> { RESTORE_CONFIG };
         c.Targets.Clear();
         c.Targets.Add("Rebuild");
         c.BinaryLogger = new MSBuildBinaryLogSettings {
