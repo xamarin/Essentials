@@ -200,7 +200,9 @@ namespace Xamarin.Essentials
                     else if (storageType.Equals(storageTypeAudio, StringComparison.OrdinalIgnoreCase))
                         contentUri = MediaStore.Audio.Media.ExternalContentUri;
 
+#pragma warning disable CS0618
                     if (contentUri != null && GetDataFilePath(contentUri, $"{MediaStore.MediaColumns.Id}=?", new[] { uriPath }) is string filePath)
+#pragma warning restore CS0618
                         return filePath;
                 }
             }
@@ -237,7 +239,9 @@ namespace Xamarin.Essentials
                 return null;
 
             // resolve or generate a valid destination path
+#pragma warning disable CS0618
             var filename = GetColumnValue(uri, MediaStore.Files.FileColumns.DisplayName) ?? Guid.NewGuid().ToString("N");
+#pragma warning restore CS0618
             if (!Path.HasExtension(filename) && !string.IsNullOrEmpty(extension))
                 filename = Path.ChangeExtension(filename, extension);
 

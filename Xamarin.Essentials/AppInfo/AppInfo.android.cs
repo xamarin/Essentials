@@ -26,7 +26,9 @@ namespace Xamarin.Essentials
         {
             var pm = Platform.AppContext.PackageManager;
             var packageName = Platform.AppContext.PackageName;
+#pragma warning disable CS0618
             using (var info = pm.GetPackageInfo(packageName, PackageInfoFlags.MetaData))
+#pragma warning restore CS0618
             {
                 return info.VersionName;
             }
@@ -36,7 +38,9 @@ namespace Xamarin.Essentials
         {
             var pm = Platform.AppContext.PackageManager;
             var packageName = Platform.AppContext.PackageName;
+#pragma warning disable CS0618
             using (var info = pm.GetPackageInfo(packageName, PackageInfoFlags.MetaData))
+#pragma warning restore CS0618
             {
 #if __ANDROID_28__
                 return PackageInfoCompat.GetLongVersionCode(info).ToString(CultureInfo.InvariantCulture);

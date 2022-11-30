@@ -5,7 +5,9 @@ using Android.Graphics;
 using Android.Hardware.Camera2;
 using Android.OS;
 
+#pragma warning disable CS0618
 using Camera = Android.Hardware.Camera;
+#pragma warning restore CS0618
 
 namespace Xamarin.Essentials
 {

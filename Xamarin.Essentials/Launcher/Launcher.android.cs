@@ -18,7 +18,9 @@ namespace Xamarin.Essentials
                 return Task.FromResult(false);
 
             var manager = Platform.AppContext.PackageManager;
+#pragma warning disable CS0618
             var supportedResolvedInfos = manager.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly);
+#pragma warning restore CS0618
             return Task.FromResult(supportedResolvedInfos.Any());
         }
 

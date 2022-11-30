@@ -196,7 +196,9 @@ namespace Xamarin.Essentials
             AppContext.GetSystemService(Context.ConnectivityService) as ConnectivityManager;
 
         internal static Vibrator Vibrator =>
+#pragma warning disable CS0618
             AppContext.GetSystemService(Context.VibratorService) as Vibrator;
+#pragma warning restore CS0618
 
         internal static WifiManager WifiManager =>
             AppContext.GetSystemService(Context.WifiService) as WifiManager;
@@ -356,7 +358,9 @@ namespace Xamarin.Essentials
 
             // read the values
             launched = extras.GetBoolean(launchedExtra, false);
+#pragma warning disable CS0618
             actualIntent = extras.GetParcelable(actualIntentExtra) as Intent;
+#pragma warning restore CS0618
             guid = extras.GetString(guidExtra);
             requestCode = extras.GetInt(requestCodeExtra, -1);
 

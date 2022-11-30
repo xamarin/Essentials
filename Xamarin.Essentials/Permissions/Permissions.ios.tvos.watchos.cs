@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using CoreLocation;
 using Foundation;
+using UserNotifications;
 
 namespace Xamarin.Essentials
 {
@@ -268,6 +269,75 @@ namespace Xamarin.Essentials
 
         public partial class Vibrate : BasePlatformPermission
         {
+        }
+
+        internal static class PushNotificationPermissions
+        {
+            public static async Task<PermissionStatus> RequestAsync(UNAuthorizationOptions authorizationOptions)
+            {
+                var (_, error) = await UNUserNotificationCenter.Current.RequestAuthorizationAsync(authorizationOptions);
+                if (error != null)
+                {
+                    throw new NSErrorException(error);
+                }
+
+                return await CheckStatusAsync();
+            }
+
+            public static async Task<PermissionStatus> CheckStatusAsync()
+            {
+                var settings = await UNUserNotificationCenter.Current.GetNotificationSettingsAsync();
+                var authorizationStatus = settings.AuthorizationStatus;
+                return authorizationStatus switch
+                {
+                    UNAuthorizationStatus.NotDetermined => PermissionStatus.Unknown,
+                    UNAuthorizationStatus.Denied => PermissionStatus.Denied,
+                    UNAuthorizationStatus.Authorized => PermissionStatus.Granted,
+                    UNAuthorizationStatus.Provisional => PermissionStatus.Granted,
+                    UNAuthorizationStatus.Ephemeral => PermissionStatus.Granted,
+                    _ => throw new ArgumentOutOfRangeException(
+                        paramName: nameof(UNNotificationSettings.AuthorizationStatus),
+                        actualValue: authorizationStatus,
+                        message: null),
+                };
+            }
+        }
+
+        public partial class PushNotification : BasePlatformPermission
+        {
+            public override Task<PermissionStatus> RequestAsync()
+            {
+                EnsureDeclared();
+                EnsureMainThread();
+                return PushNotificationPermissions.RequestAsync(UNAuthorizationOptions.Alert |
+                                                                UNAuthorizationOptions.Sound |
+                                                                UNAuthorizationOptions.Badge);
+            }
+
+            public override Task<PermissionStatus> CheckStatusAsync()
+            {
+                EnsureDeclared();
+                return PushNotificationPermissions.CheckStatusAsync();
+            }
+        }
+
+        public partial class ProvisionalPushNotification : BasePlatformPermission
+        {
+            public override Task<PermissionStatus> RequestAsync()
+            {
+                EnsureDeclared();
+                EnsureMainThread();
+                return PushNotificationPermissions.RequestAsync(UNAuthorizationOptions.Alert |
+                                                                UNAuthorizationOptions.Sound |
+                                                                UNAuthorizationOptions.Badge |
+                                                                UNAuthorizationOptions.Provisional);
+            }
+
+            public override Task<PermissionStatus> CheckStatusAsync()
+            {
+                EnsureDeclared();
+                return PushNotificationPermissions.CheckStatusAsync();
+            }
         }
     }
 }

@@ -20,7 +20,9 @@ namespace Xamarin.Essentials
         public static bool IsDeclaredInManifest(string permission)
         {
             var context = Platform.AppContext;
+#pragma warning disable CS0618
             var packageInfo = context.PackageManager.GetPackageInfo(context.PackageName, PackageInfoFlags.Permissions);
+#pragma warning restore CS0618
             var requestedPermissions = packageInfo?.RequestedPermissions;
 
             return requestedPermissions?.Any(r => r.Equals(permission, StringComparison.OrdinalIgnoreCase)) ?? false;
@@ -465,6 +467,18 @@ namespace Xamarin.Essentials
         {
             public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
                 new (string, bool)[] { (Manifest.Permission.Vibrate, false) };
+        }
+
+        public partial class PushNotification : BasePlatformPermission
+        {
+#if __ANDROID_33__
+            public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
+                new (string, bool)[] { (Manifest.Permission.PostNotifications, true) };
+#endif
+        }
+
+        public partial class ProvisionalPushNotification : BasePlatformPermission
+        {
         }
     }
 }

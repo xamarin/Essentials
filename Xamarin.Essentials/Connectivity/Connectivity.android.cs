@@ -123,7 +123,9 @@ namespace Xamarin.Essentials
 
                     if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
                     {
+#pragma warning disable CS0618
                         var networks = manager.GetAllNetworks();
+#pragma warning restore CS0618
 
                         // some devices running 21 and 22 only use the older api.
                         if (networks.Length == 0 && (int)Build.VERSION.SdkInt < 23)
@@ -212,7 +214,9 @@ namespace Xamarin.Essentials
                 var manager = Platform.ConnectivityManager;
                 if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
                 {
+#pragma warning disable CS0618
                     foreach (var network in manager.GetAllNetworks())
+#pragma warning restore CS0618
                     {
 #pragma warning disable CS0618 // Type or member is obsolete
                         NetworkInfo info = null;

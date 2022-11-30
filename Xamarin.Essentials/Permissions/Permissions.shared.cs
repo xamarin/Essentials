@@ -145,5 +145,13 @@ namespace Xamarin.Essentials
         public partial class Vibrate
         {
         }
+
+        public partial class PushNotification
+        {
+        }
+
+        public partial class ProvisionalPushNotification
+        {
+        }
     }
 }
