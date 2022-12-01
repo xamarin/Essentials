@@ -293,7 +293,7 @@ namespace Xamarin.Essentials
                     UNAuthorizationStatus.NotDetermined => PermissionStatus.Unknown,
                     UNAuthorizationStatus.Denied => PermissionStatus.Denied,
                     UNAuthorizationStatus.Authorized => PermissionStatus.Granted,
-                    UNAuthorizationStatus.Provisional => PermissionStatus.Granted,
+                    UNAuthorizationStatus.Provisional => PermissionStatus.Restricted,
                     UNAuthorizationStatus.Ephemeral => PermissionStatus.Granted,
                     _ => throw new ArgumentOutOfRangeException(
                         paramName: nameof(UNNotificationSettings.AuthorizationStatus),
