@@ -21,10 +21,7 @@ namespace Xamarin.Essentials
         {
             var intent = CreateIntent(message);
             var flags = ActivityFlags.ClearTop | ActivityFlags.NewTask;
-#if __ANDROID_24__
-            if (Platform.HasApiLevelN)
-                flags |= ActivityFlags.LaunchAdjacent;
-#endif
+
             intent.SetFlags(flags);
 
             Platform.AppContext.StartActivity(intent);
