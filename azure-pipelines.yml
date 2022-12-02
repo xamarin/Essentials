@@ -35,8 +35,8 @@ stages:
     jobs:
     - template: .ci/build.v1.yml@components
       parameters:
-        dotnet: '5.0.102'
-        dotnetStable: '5.0.102'
+        dotnet: '3.1.415'
+        dotnetStable: '3.1.415'
         ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
           windowsAgentPoolName: AzurePipelines-EO
           windowsImage: ''  # Override the 'windows-latest' default settings
@@ -55,9 +55,9 @@ stages:
               jdkArchitectureOption: 'x64'
               jdkSourceOption: 'PreInstalled'
             displayName: 'Set Java 11'
-          # - script: |
-          #     dotnet tool install --global boots 
-          #     boots --stable Xamarin.Android
+          - script: |
+              dotnet tool install --global boots 
+              boots --stable Xamarin.Android
           - pwsh: |
               $pr = "pr." + $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
               $nuget = $env:BASE_VERSION + "-" + $pr + "." + $env:BUILD_NUMBER
@@ -142,6 +142,16 @@ stages:
             cakeFile: DeviceTests/build.cake
             cakeTarget: test-ios-emu
             xharness: '1.0.0-prerelease.21620.1'
+            preBuildSteps:
+              - task: JavaToolInstaller@0
+                inputs:
+                  versionSpec: '11'
+                  jdkArchitectureOption: 'x64'
+                  jdkSourceOption: 'PreInstalled'
+                displayName: 'Set Java 11'
+              - script: |
+                  dotnet tool install --global boots 
+                  boots --stable Xamarin.Android
   
         - template: .ci/build.v1.yml@components
           parameters:
@@ -158,6 +168,15 @@ stages:
             preBuildSteps:
               - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-21;google_apis;x86\""
                 displayName: Install the Android emulators
+              - task: JavaToolInstaller@0
+                inputs:
+                  versionSpec: '11'
+                  jdkArchitectureOption: 'x64'
+                  jdkSourceOption: 'PreInstalled'
+                displayName: 'Set Java 11'
+              - script: |
+                  dotnet tool install --global boots 
+                  boots --stable Xamarin.Android
   
         - template: .ci/build.v1.yml@components
           parameters:
@@ -174,6 +193,15 @@ stages:
             preBuildSteps:
               - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-22;google_apis;x86\""
                 displayName: Install the Android emulators
+              - task: JavaToolInstaller@0
+                inputs:
+                  versionSpec: '11'
+                  jdkArchitectureOption: 'x64'
+                  jdkSourceOption: 'PreInstalled'
+                displayName: 'Set Java 11'
+              - script: |
+                  dotnet tool install --global boots 
+                  boots --stable Xamarin.Android
   
 #         - template: .ci/build.v1.yml@components
 #           parameters:
@@ -207,6 +235,15 @@ stages:
             preBuildSteps:
               - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-24;google_apis;x86\""
                 displayName: Install the Android emulators
+              - task: JavaToolInstaller@0
+                inputs:
+                  versionSpec: '11'
+                  jdkArchitectureOption: 'x64'
+                  jdkSourceOption: 'PreInstalled'
+                displayName: 'Set Java 11'
+              - script: |
+                  dotnet tool install --global boots 
+                  boots --stable Xamarin.Android
   
         - template: .ci/build.v1.yml@components
           parameters:
@@ -223,6 +260,15 @@ stages:
             preBuildSteps:
               - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-26;google_apis;x86\""
                 displayName: Install the Android emulators
+              - task: JavaToolInstaller@0
+                inputs:
+                  versionSpec: '11'
+                  jdkArchitectureOption: 'x64'
+                  jdkSourceOption: 'PreInstalled'
+                displayName: 'Set Java 11'
+              - script: |
+                  dotnet tool install --global boots 
+                  boots --stable Xamarin.Android
   
         - template: .ci/build.v1.yml@components
           parameters:
@@ -239,6 +285,15 @@ stages:
             preBuildSteps:
               - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-29;google_apis;x86\""
                 displayName: Install the Android emulators
+              - task: JavaToolInstaller@0
+                inputs:
+                  versionSpec: '11'
+                  jdkArchitectureOption: 'x64'
+                  jdkSourceOption: 'PreInstalled'
+                displayName: 'Set Java 11'
+              - script: |
+                  dotnet tool install --global boots 
+                  boots --stable Xamarin.Android
   
         # - template: .ci/build.v1.yml@components
         #   parameters:
