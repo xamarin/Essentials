@@ -35,9 +35,6 @@ namespace Xamarin.Essentials
                     resultList.Add(file);
             }
 
-            foreach (var file in resultList)
-                StorageApplicationPermissions.FutureAccessList.Add(file);
-
             return resultList.Select(storageFile => new FileResult(storageFile));
         }
 
