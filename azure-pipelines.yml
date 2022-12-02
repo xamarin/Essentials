@@ -16,7 +16,6 @@ variables:
   GIT_BRANCH_NAME: $(Build.SourceBranchName)
   AREA_PATH: 'DevDiv\Xamarin SDK\Build and Tools'
   Codeql.Enabled: true
-  JAVA_HOME: 'JAVA_HOME_11_X64'
 
 resources:
   repositories:
@@ -50,6 +49,9 @@ stages:
           cakeTarget: ci-release # We just want to build the library and nuget
           macosImage: '' # We don't need the macOS build
         preBuildSteps:
+          - script: |
+            echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+            echo "##vso[task.setvariable variable=PATH]$(JAVA_HOME_11_X64)\bin;$(PATH)"
           - pwsh: |
               $pr = "pr." + $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
               $nuget = $env:BASE_VERSION + "-" + $pr + "." + $env:BUILD_NUMBER
