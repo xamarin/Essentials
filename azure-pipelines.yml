@@ -16,6 +16,7 @@ variables:
   GIT_BRANCH_NAME: $(Build.SourceBranchName)
   AREA_PATH: 'DevDiv\Xamarin SDK\Build and Tools'
   Codeql.Enabled: true
+  JAVA_HOME: 'JAVA_HOME_11_X64'
 
 resources:
   repositories:
