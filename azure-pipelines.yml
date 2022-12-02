@@ -49,9 +49,12 @@ stages:
           cakeTarget: ci-release # We just want to build the library and nuget
           macosImage: '' # We don't need the macOS build
         preBuildSteps:
-          - script: |
-              echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
-              echo "##vso[task.setvariable variable=PATH]$(JAVA_HOME_11_X64)\bin;$(PATH)"
+          - task: JavaToolInstaller@0
+            inputs:
+              versionSpec: '11'
+              jdkArchitectureOption: 'x64'
+              jdkSourceOption: 'PreInstalled'
+            displayName: 'Set Java'
           - pwsh: |
               $pr = "pr." + $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
               $nuget = $env:BASE_VERSION + "-" + $pr + "." + $env:BUILD_NUMBER
