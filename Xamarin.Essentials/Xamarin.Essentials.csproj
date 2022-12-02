@@ -31,7 +31,6 @@
     <MDocDocumentationDirectory>$(MSBuildThisFileDirectory)..\docs\en</MDocDocumentationDirectory>
     <DebugType>portable</DebugType>
     <Configurations>Debug;Release</Configurations>
-    <AndroidUseLatestPlatformSdk>true</AndroidUseLatestPlatformSdk>
  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
     <DebugSymbols>true</DebugSymbols>

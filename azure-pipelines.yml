@@ -49,12 +49,9 @@ stages:
           cakeTarget: ci-release # We just want to build the library and nuget
           macosImage: '' # We don't need the macOS build
         preBuildSteps:
-          - task: JavaToolInstaller@0
-            inputs:
-              versionSpec: '11'
-              jdkArchitectureOption: 'x64'
-              jdkSourceOption: 'PreInstalled'
-            displayName: 'Set Java'
+          - script: |
+              dotnet tool install --global boots 
+              boots --stable Xamarin.Android
           - pwsh: |
               $pr = "pr." + $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
               $nuget = $env:BASE_VERSION + "-" + $pr + "." + $env:BUILD_NUMBER
