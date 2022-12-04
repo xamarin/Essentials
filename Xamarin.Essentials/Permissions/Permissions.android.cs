@@ -457,8 +457,22 @@ namespace Xamarin.Essentials
 
         public partial class StorageWrite : BasePlatformPermission
         {
-            public override (string androidPermission, bool isRuntime)[] RequiredPermissions =>
-                new (string, bool)[] { (Manifest.Permission.WriteExternalStorage, true) };
+            public override (string androidPermission, bool isRuntime)[] RequiredPermissions
+            {
+                get
+                {
+                    if (Platform.HasApiLevel(BuildVersionCodes.Q))
+                    {
+                        return new (string, bool)[]
+                        {
+                            ("android.permission.READ_MEDIA_IMAGES",  true),
+                            ("android.permission.READ_MEDIA_VIDEO",  true),
+                            ("android.permission.READ_MEDIA_AUDIO",  true),
+                        };
+                    }
+                    return new (string, bool)[] { (Manifest.Permission.WriteExternalStorage, true) };
+                }
+            }
         }
 
         public partial class Vibrate : BasePlatformPermission
