@@ -113,7 +113,7 @@ stages:
             ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
               name: AzurePipelines-EO
               demands:
-              - ImageOverride -equals AzurePipelinesWindow2019compliant
+              - ImageOverride -equals AzurePipelinesWindows2019compliant
             ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:
               vmImage: windows-2019
           steps:
