@@ -5,7 +5,7 @@
       "build_source_folder": "docs/en",
       "build_output_subfolder": "XamarinEssentials",
       "locale": "en-us",
-      "monikers": [],
+      "monikers": [], 
       "moniker_ranges": [],
       "open_to_public_contributors": true,
       "type_mapping": {
@@ -61,7 +61,7 @@
       "branch": "main",
       "branch_mapping": {}
     }
-  ],
+  ], 
   "branch_target_mapping": {},
   "need_generate_pdf_url_template": false,
   "need_generate_pdf": false,
