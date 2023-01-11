@@ -3,7 +3,7 @@
 We'd love to hear your thoughts on Xamarin.Essentials. Here are a few links to help get you to the right place:
 
 ### Setup and Common Questions
-* Read through our full [Getting Started with Xamarin.Essetials Guide](https://docs.microsoft.com/xamarin/essentials/get-started)
+* Read through our full [Getting Started with Xamarin.Essetials Guide](https://learn.microsoft.com/xamarin/essentials/get-started)
 * [Frequently Asked Questions on our Wiki](https://github.com/xamarin/Essentials/wiki/FAQ-%7C-Essentials)
 
 ### Propose a Feature

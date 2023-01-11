@@ -8,8 +8,9 @@ namespace Xamarin.Essentials
 {
     public static partial class Share
     {
-        static Task PlatformRequestAsync(ShareTextRequest request)
+        static async Task PlatformRequestAsync(ShareTextRequest request)
         {
+            var src = new TaskCompletionSource<bool>();
             var items = new List<NSObject>();
             if (!string.IsNullOrWhiteSpace(request.Text))
             {
@@ -21,7 +22,13 @@ namespace Xamarin.Essentials
                 items.Add(new ShareActivityItemSource(NSUrl.FromString(request.Uri), request.Title));
             }
 
-            var activityController = new UIActivityViewController(items.ToArray(), null);
+            var activityController = new UIActivityViewController(items.ToArray(), null)
+            {
+                CompletionWithItemsHandler = (a, b, c, d) =>
+                {
+                    src.TrySetResult(true);
+                }
+            };
 
             var vc = Platform.GetCurrentViewController();
 
@@ -33,11 +40,14 @@ namespace Xamarin.Essentials
                     activityController.PopoverPresentationController.SourceRect = request.PresentationSourceBounds.ToPlatformRectangle();
             }
 
-            return vc.PresentViewControllerAsync(activityController, true);
+            await vc.PresentViewControllerAsync(activityController, true);
+            await src.Task;
         }
 
-        static Task PlatformRequestAsync(ShareMultipleFilesRequest request)
+        static async Task PlatformRequestAsync(ShareMultipleFilesRequest request)
         {
+            var src = new TaskCompletionSource<bool>();
+
             var items = new List<NSObject>();
 
             var hasTitel = !string.IsNullOrWhiteSpace(request.Title);
@@ -50,7 +60,13 @@ namespace Xamarin.Essentials
                     items.Add(fileUrl); // No title specified
             }
 
-            var activityController = new UIActivityViewController(items.ToArray(), null);
+            var activityController = new UIActivityViewController(items.ToArray(), null)
+            {
+                CompletionWithItemsHandler = (a, b, c, d) =>
+                {
+                    src.TrySetResult(true);
+                }
+            };
 
             var vc = Platform.GetCurrentViewController();
 
@@ -58,11 +74,12 @@ namespace Xamarin.Essentials
             {
                 activityController.PopoverPresentationController.SourceView = vc.View;
 
-                if (request.PresentationSourceBounds != Rectangle.Empty)
+                if (request.PresentationSourceBounds != Rectangle.Empty || Platform.HasOSVersion(13, 0))
                     activityController.PopoverPresentationController.SourceRect = request.PresentationSourceBounds.ToPlatformRectangle();
             }
 
-            return vc.PresentViewControllerAsync(activityController, true);
+            await vc.PresentViewControllerAsync(activityController, true);
+            await src.Task;
         }
     }
 

@@ -59,10 +59,6 @@ namespace Xamarin.Essentials
 
             var flags = ActivityFlags.NewTask | ActivityFlags.NoHistory | ActivityFlags.ExcludeFromRecents;
 
-#if __ANDROID_24__
-            if (Platform.HasApiLevelN)
-                flags |= ActivityFlags.LaunchAdjacent;
-#endif
             settingsIntent.SetFlags(flags);
 
             context.StartActivity(settingsIntent);

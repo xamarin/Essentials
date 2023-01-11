@@ -31,7 +31,10 @@ namespace Xamarin.Essentials
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
+// Ignore obsolete for the time being. Will be updated in a future release.
+#pragma warning disable CS0618 // Type or member is obsolete
                 var prefsApp = ScriptingBridge.SBApplication.FromBundleIdentifier("com.apple.systempreferences");
+#pragma warning restore CS0618 // Type or member is obsolete
                 prefsApp.SendMode = ScriptingBridge.AESendMode.NoReply;
                 prefsApp.Activate();
             });

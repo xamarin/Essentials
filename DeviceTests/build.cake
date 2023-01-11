@@ -118,11 +118,12 @@ Task("test-ios-emu")
     CleanDirectories(IOS_TEST_RESULTS_PATH.FullPath);
 
     // Run the tests
-    var resultCode = StartProcess("xharness", "ios test " +
+    var resultCode = StartProcess("xharness", "apple test " +
         $"--app=\"{IOS_IPA_PATH}\" " +
         $"--targets=\"ios-simulator-64\" " +
         $"--output-directory=\"{IOS_TEST_RESULTS_PATH}\" " +
-        $"--verbosity=\"Debug\" ");
+        $"--verbosity=\"Debug\" " +
+        $"--set-env=ci-run=true ");
 
     // Rename test result files
     var resultFiles = GetFiles($"{IOS_TEST_RESULTS_PATH}/*.xml");

@@ -47,9 +47,9 @@ Task("tests")
 
 	foreach (var csproj in GetFiles("./Tests/**/*.csproj")) {
 		try {
-			DotNetCoreTest(csproj.FullPath, new DotNetCoreTestSettings {
+			DotNetTest(csproj.FullPath, new DotNetTestSettings {
 				Configuration = "Release",
-				Logger = $"trx;LogFileName={csproj.GetFilenameWithoutExtension()}.trx",
+				Loggers = new [] { $"trx;LogFileName={csproj.GetFilenameWithoutExtension()}.trx" },
 				EnvironmentVariables = new Dictionary<string, string> {
 					{ "RestoreConfigFile", RESTORE_CONFIG }
 				}
@@ -96,5 +96,9 @@ Task("ci")
 	.IsDependentOn("nugets")
 	.IsDependentOn("tests")
 	.IsDependentOn("samples");
+
+Task("ci-release")
+	.IsDependentOn("libs")
+	.IsDependentOn("nugets");
 
 RunTarget(TARGET);
