@@ -47,10 +47,7 @@ namespace Xamarin.Essentials
             var dialIntent = ResolveDialIntent(phoneNumber);
 
             var flags = ActivityFlags.ClearTop | ActivityFlags.NewTask;
-#if __ANDROID_24__
-            if (Platform.HasApiLevelN)
-                flags |= ActivityFlags.LaunchAdjacent;
-#endif
+
             dialIntent.SetFlags(flags);
 
             Platform.AppContext.StartActivity(dialIntent);
