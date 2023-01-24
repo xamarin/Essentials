@@ -56,6 +56,7 @@ namespace Xamarin.Essentials
         static async Task<FileResult> PlatformCaptureAsync(MediaPickerOptions options, bool photo)
         {
             await Permissions.EnsureGrantedAsync<Permissions.Camera>();
+
             // StorageWrite no longer exists starting from Android API 33
             if (!Platform.HasApiLevel(33))
                 await Permissions.EnsureGrantedAsync<Permissions.StorageWrite>();
