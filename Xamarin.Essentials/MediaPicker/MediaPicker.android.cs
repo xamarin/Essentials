@@ -56,9 +56,9 @@ namespace Xamarin.Essentials
         static async Task<FileResult> PlatformCaptureAsync(MediaPickerOptions options, bool photo)
         {
             await Permissions.EnsureGrantedAsync<Permissions.Camera>();
-			// StorageWrite no longer exists starting from Android API 33
-			if (!OperatingSystem.IsAndroidVersionAtLeast(33))
-				await Permissions.EnsureGrantedAsync<Permissions.StorageWrite>();
+            // StorageWrite no longer exists starting from Android API 33
+            if (!OperatingSystem.IsAndroidVersionAtLeast(33))
+                await Permissions.EnsureGrantedAsync<Permissions.StorageWrite>();
 
             var capturePhotoIntent = new Intent(photo ? MediaStore.ActionImageCapture : MediaStore.ActionVideoCapture);
 
