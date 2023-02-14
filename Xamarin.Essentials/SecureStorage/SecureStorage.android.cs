@@ -128,11 +128,11 @@ namespace Xamarin.Essentials
 
         internal static bool AlwaysUseAsymmetricKeyStorage { get; set; } = false;
 
-		// While MD5 is deemed to be not secure anymore, it is not used in a security context here.
-		// Here we hash a key value to ensure compatibility with the underlying platform's preferences storage (so the key was a determinate length and didn't exceed platform limits).
-		// As part as Microsofts ongoing efforts to secure the .NET ecosystem, this usage of an insecure hashing mechanism was flagged.
-		// An exception has been requested for the usage of this "unsafe" hashing mechanism.
-		// More details here (internal link): https://devdiv.visualstudio.com/DevDiv/_workitems/edit/1676270
+        // While MD5 is deemed to be not secure anymore, it is not used in a security context here.
+        // Here we hash a key value to ensure compatibility with the underlying platform's preferences storage (so the key was a determinate length and didn't exceed platform limits).
+        // As part as Microsofts ongoing efforts to secure the .NET ecosystem, this usage of an insecure hashing mechanism was flagged.
+        // An exception has been requested for the usage of this "unsafe" hashing mechanism.
+        // More details here (internal link): https://devdiv.visualstudio.com/DevDiv/_workitems/edit/1676270
         internal static string Md5Hash(string input)
         {
             var hash = new StringBuilder();
