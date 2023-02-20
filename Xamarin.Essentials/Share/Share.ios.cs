@@ -50,11 +50,11 @@ namespace Xamarin.Essentials
 
             var items = new List<NSObject>();
 
-            var hasTitel = !string.IsNullOrWhiteSpace(request.Title);
+            var hasTitle = !string.IsNullOrWhiteSpace(request.Title);
             foreach (var file in request.Files)
             {
                 var fileUrl = NSUrl.FromFilename(file.FullPath);
-                if (hasTitel)
+                if (hasTitle)
                     items.Add(new ShareActivityItemSource(fileUrl, request.Title)); // Share with title (subject)
                 else
                     items.Add(fileUrl); // No title specified
