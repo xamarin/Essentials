@@ -4,7 +4,7 @@ var NUGET_VERSION = EnvironmentVariable("NUGET_VERSION") ?? "1.0.0";
 var GIT_SHA = Argument("gitSha", EnvironmentVariable("GIT_SHA") ?? "");
 var GIT_BRANCH_NAME = Argument("gitBranch", EnvironmentVariable("GIT_BRANCH_NAME") ?? "");
 
-var RESTORE_CONFIG = MakeAbsolute(new FilePath("./devopsnuget.config")).FullPath;
+var RESTORE_CONFIG = MakeAbsolute(new FilePath("./NuGet.config")).FullPath;
 
 Task("prepare")
 	.Does(() =>
