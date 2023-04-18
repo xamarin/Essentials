@@ -4,8 +4,6 @@ var NUGET_VERSION = EnvironmentVariable("NUGET_VERSION") ?? "1.0.0";
 var GIT_SHA = Argument("gitSha", EnvironmentVariable("GIT_SHA") ?? "");
 var GIT_BRANCH_NAME = Argument("gitBranch", EnvironmentVariable("GIT_BRANCH_NAME") ?? "");
 
-var RESTORE_CONFIG = MakeAbsolute(new FilePath("./NuGet.config")).FullPath;
-
 Task("prepare")
 	.Does(() =>
 {
@@ -20,7 +18,6 @@ Task("libs")
 	MSBuild("./Xamarin.Essentials/Xamarin.Essentials.csproj", new MSBuildSettings()
 		.EnableBinaryLogger("./output/binlogs/libs.binlog")
 		.SetConfiguration("Release")
-		.WithProperty("RestoreConfigFile", RESTORE_CONFIG)
 		.WithRestore());
 });
 
@@ -35,7 +32,6 @@ Task("nugets")
 		.SetConfiguration("Release")
 		.WithRestore()
 		.WithProperty("PackageOutputPath", MakeAbsolute(new FilePath("./output/")).FullPath)
-		.WithProperty("RestoreConfigFile", RESTORE_CONFIG)
 		.WithTarget("Pack"));
 });
 
@@ -49,10 +45,7 @@ Task("tests")
 		try {
 			DotNetTest(csproj.FullPath, new DotNetTestSettings {
 				Configuration = "Release",
-				Loggers = new [] { $"trx;LogFileName={csproj.GetFilenameWithoutExtension()}.trx" },
-				EnvironmentVariables = new Dictionary<string, string> {
-					{ "RestoreConfigFile", RESTORE_CONFIG }
-				}
+				Loggers = new [] { $"trx;LogFileName={csproj.GetFilenameWithoutExtension()}.trx" }
 			});
 		} catch (Exception) {
 			failed++;
@@ -74,7 +67,6 @@ Task("samples")
 	MSBuild("./Xamarin.Essentials.sln", new MSBuildSettings()
 		.EnableBinaryLogger("./output/binlogs/samples.binlog")
 		.SetConfiguration("Release")
-		.WithProperty("RestoreConfigFile", RESTORE_CONFIG)
 		.WithRestore());
 });
 
@@ -87,7 +79,6 @@ Task("docs")
 		.EnableBinaryLogger("./output/binlogs/docs.binlog")
 		.SetConfiguration("Release")
 		.WithRestore()
-		.WithProperty("RestoreConfigFile", RESTORE_CONFIG)
 		.WithTarget("mdocupdatedocs"));
 });
 
