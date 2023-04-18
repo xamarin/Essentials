@@ -1,0 +1,11 @@
+{
+    "codebaseName": "xamarin.essentials_main",
+    "notificationAliases": [
+        "dotnet-maui-eng@microsoft.com"
+    ],
+    "instanceUrl": "https://devdiv.visualstudio.com/",
+    "projectName": "DevDiv",
+    "areaPath": "DevDiv\\VS Client - Runtime SDKs\\Essentials",
+    "iterationPath": "DevDiv",
+    "allTools": true
+  }
