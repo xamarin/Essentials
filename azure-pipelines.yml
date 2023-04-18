@@ -92,29 +92,33 @@ stages:
           packageFilter: '*.nupkg'
           packageVersionRegex: '(?i)^Xamarin.Essentials\.(?<version>\d+\.\d+\.\d+)(.*).nupkg$'
 
-  # Check - "Xamarin.Essentials (Compliance)"
-  - template: security/full/v0.yml@yaml-templates
-    parameters:
-      stageDependsOn: []
-      credScanSuppressionFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\CredScanSuppressions.json
-      sourceGdnSuppressionFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\source.gdnsuppress
-      tsaConfigFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\tsaoptions-v2.json
-      policheckLocScanEnabled: true
-      policheckExclusionFilesFolder: $(Build.SourcesDirectory)\build-tools\automation\guardian
-      policheckGdnSuppressionFilesFolder: $(Build.SourcesDirectory)\build-tools\automation\guardian
-      policheckChsScanFolder: $(Build.SourcesDirectory)\Localize\loc\zh-Hans
-      policheckChtScanFolder: $(Build.SourcesDirectory)\Localize\loc\zh-Hant
-      policheckCsyScanFolder: $(Build.SourcesDirectory)\Localize\loc\cs
-      policheckDeuScanFolder: $(Build.SourcesDirectory)\Localize\loc\de
-      policheckEsnScanFolder: $(Build.SourcesDirectory)\Localize\loc\es
-      policheckFraScanFolder: $(Build.SourcesDirectory)\Localize\loc\fr
-      policheckItaScanFolder: $(Build.SourcesDirectory)\Localize\loc\it
-      policheckJpnScanFolder: $(Build.SourcesDirectory)\Localize\loc\ja
-      policheckKorScanFolder: $(Build.SourcesDirectory)\Localize\loc\ko
-      policheckPlkScanFolder: $(Build.SourcesDirectory)\Localize\loc\pl
-      policheckPtbScanFolder: $(Build.SourcesDirectory)\Localize\loc\pt-BR
-      policheckRusScanFolder: $(Build.SourcesDirectory)\Localize\loc\ru
-      policheckTrkScanFolder: $(Build.SourcesDirectory)\Localize\loc\tr
+  - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
+    - stage: compliance
+      displayName: Compliance checks
+      dependsOn: [ 'build' ]
+      jobs:
+        - template: security/full/v0.yml@internal-templates
+          parameters:
+            dependsOn: [ ]
+            credScanSuppressionFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\CredScanSuppressions.json
+            sourceGdnSuppressionFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\source.gdnsuppress
+            tsaConfigFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\tsaoptions-v2.json
+            policheckLocScanEnabled: true
+            policheckExclusionFilesFolder: $(Build.SourcesDirectory)\build-tools\automation\guardian
+            policheckGdnSuppressionFilesFolder: $(Build.SourcesDirectory)\build-tools\automation\guardian
+            policheckChsScanFolder: $(Build.SourcesDirectory)\Localize\loc\zh-Hans
+            policheckChtScanFolder: $(Build.SourcesDirectory)\Localize\loc\zh-Hant
+            policheckCsyScanFolder: $(Build.SourcesDirectory)\Localize\loc\cs
+            policheckDeuScanFolder: $(Build.SourcesDirectory)\Localize\loc\de
+            policheckEsnScanFolder: $(Build.SourcesDirectory)\Localize\loc\es
+            policheckFraScanFolder: $(Build.SourcesDirectory)\Localize\loc\fr
+            policheckItaScanFolder: $(Build.SourcesDirectory)\Localize\loc\it
+            policheckJpnScanFolder: $(Build.SourcesDirectory)\Localize\loc\ja
+            policheckKorScanFolder: $(Build.SourcesDirectory)\Localize\loc\ko
+            policheckPlkScanFolder: $(Build.SourcesDirectory)\Localize\loc\pl
+            policheckPtbScanFolder: $(Build.SourcesDirectory)\Localize\loc\pt-BR
+            policheckRusScanFolder: $(Build.SourcesDirectory)\Localize\loc\ru
+            policheckTrkScanFolder: $(Build.SourcesDirectory)\Localize\loc\tr
 
   - ${{ if not(startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
     - stage: devicetests
