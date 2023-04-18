@@ -98,6 +98,7 @@ stages:
       parameters:
         dependsOn: [ ]
         credScanSuppressionFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\CredScanSuppressions.json
+        sourceGdnSuppressionFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\source.gdnsuppress
         tsaConfigFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\tsaoptions-v2.json
         policheckExclusionFilesFolder: $(Build.SourcesDirectory)\build-tools\automation\guardian
         policheckGdnSuppressionFilesFolder: $(Build.SourcesDirectory)\build-tools\automation\guardian
