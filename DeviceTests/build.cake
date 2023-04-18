@@ -41,7 +41,7 @@ System.Environment.SetEnvironmentVariable("PATH",
     $"{ANDROID_HOME}/emulator" + System.IO.Path.PathSeparator +
     EnvironmentVariable("PATH"));
 
-var RESTORE_CONFIG = MakeAbsolute((FilePath)"../NuGet.config").FullPath;
+var RESTORE_CONFIG = MakeAbsolute((FilePath)"../devopsnuget.config").FullPath;
 
 // utils
 
