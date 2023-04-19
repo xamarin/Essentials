@@ -51,12 +51,6 @@ stages:
           cakeTarget: ci-release # We just want to build the library and nuget
           macosImage: '' # We don't need the macOS build
         preBuildSteps:
-          - task: DotNetCoreCLI@2
-            displayName: Restore dotnet tools
-            inputs:
-              command: custom
-              custom: tool
-              arguments: restore
           - pwsh: |
               $pr = "pr." + $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
               $nuget = $env:BASE_VERSION + "-" + $pr + "." + $env:BUILD_NUMBER
