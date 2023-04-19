@@ -191,11 +191,12 @@ Task("provision-androidsdk")
             }
         }
 
-        await Boots (Product.XamarinAndroid, releaseChannel);
+        await Boots (Product.XamarinAndroid, ReleaseChannel.Stable);
     });
+
 Task("build-android")
     .IsDependentOn("provision-androidsdk")
-    .Does(async () =>
+    .Does(() =>
 {
     MSBuild(ANDROID_PROJ, c => {
         c.Configuration = "Debug"; // needs to be debug so unit tests get discovered
