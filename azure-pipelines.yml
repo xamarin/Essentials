@@ -71,6 +71,10 @@ stages:
           - pwsh: |
               Write-Host "##vso[build.updatebuildnumber]$env:NUGET_VERSION"
             displayName: Update the build number with a more readable one
+          # Setup JDK Paths
+          - bash: |
+              echo "##vso[task.setvariable variable=JI_JAVA_HOME]$(JAVA_HOME_11_X64)"
+            displayName: 'Setup JDK Paths'
 
   - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
     - stage: signing
