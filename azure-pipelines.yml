@@ -147,7 +147,6 @@ stages:
             cakeFile: DeviceTests/build.cake
             cakeTarget: test-ios-emu
             cake: $(CAKE_VERSION)
-            xcode: '13.3'
             xharness: '1.0.0-prerelease.21620.1'
   
         - template: .ci/build.v1.yml@components
