@@ -137,6 +137,7 @@ stages:
   
         - template: .ci/build.v1.yml@components
           parameters:
+            macosImage: 'macos-12'
             name: devicetests_ios
             runChecks: false
             displayName: iOS
