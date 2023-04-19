@@ -31,7 +31,6 @@ resources:
 
 stages:
   - stage: build
-    dependsOn: [ 'setup' ]
     variables:
       Codeql.Enabled: true
     displayName: Build Library
@@ -113,7 +112,6 @@ stages:
   - ${{ if not(startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
     - stage: devicetests
       displayName: Device Tests
-      dependsOn: [ 'setup' ]
       jobs:
         - job: devicetests_uwp
           displayName: UWP
