@@ -120,7 +120,7 @@ Task("test-ios-emu")
     // Run the tests
     var resultCode = StartProcess("xharness", "apple test " +
         $"--app=\"{IOS_IPA_PATH}\" " +
-        $"--targets=\"ios-simulator-64\" " +
+        $"--targets=\"ios-simulator-64_14.4\" " +
         $"--output-directory=\"{IOS_TEST_RESULTS_PATH}\" " +
         $"--verbosity=\"Debug\" " +
         $"--set-env=ci-run=true ");
