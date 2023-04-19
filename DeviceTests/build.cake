@@ -5,8 +5,8 @@
 
 var TARGET = Argument("target", "Default");
 
-var IOS_SIM_NAME = Argument("ios-device", EnvironmentVariable("IOS_SIM_NAME") ?? "iPhone 11");
-var IOS_SIM_RUNTIME = Argument("ios-runtime", EnvironmentVariable("IOS_SIM_RUNTIME") ?? "ios-simulator-64_14.2");
+var IOS_SIM_NAME = Argument("ios-device", EnvironmentVariable("IOS_SIM_NAME") ?? "iPhone 14");
+var IOS_SIM_RUNTIME = Argument("ios-runtime", EnvironmentVariable("IOS_SIM_RUNTIME") ?? "ios-simulator-64");
 var IOS_PROJ = "./DeviceTests.iOS/DeviceTests.iOS.csproj";
 var IOS_BUNDLE_ID = "com.xamarin.essentials.devicetests";
 var IOS_IPA_PATH = "./DeviceTests.iOS/bin/iPhoneSimulator/Release/XamarinEssentialsDeviceTestsiOS.app";
@@ -120,7 +120,7 @@ Task("test-ios-emu")
     // Run the tests
     var resultCode = StartProcess("xharness", "apple test " +
         $"--app=\"{IOS_IPA_PATH}\" " +
-        $"--targets=\"ios-simulator-64_14.4\" " +
+        $"--targets=\"ios-simulator-64\" " +
         $"--output-directory=\"{IOS_TEST_RESULTS_PATH}\" " +
         $"--verbosity=\"Debug\" " +
         $"--set-env=ci-run=true ");
