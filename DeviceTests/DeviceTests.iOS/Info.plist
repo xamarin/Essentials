@@ -57,5 +57,9 @@
 	<string>Access to your location is required for cool things to happen!</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Contacts</string>
+	<key>UIRequiredDeviceCapabilities</key>
+    <array>
+        <string>arm64</string>
+    </array>
 </dict>
 </plist>
