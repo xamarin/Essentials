@@ -137,7 +137,7 @@ Task("test-ios-emu")
 // Android tasks
 
 Task("build-android")
-    .Does(() =>
+    .Does(async () =>
 {
     // Setup latest Xamarin.Android SDK
 	await Boots (Product.XamarinAndroid, ReleaseChannel.Stable);

@@ -7,7 +7,7 @@ var GIT_SHA = Argument("gitSha", EnvironmentVariable("GIT_SHA") ?? "");
 var GIT_BRANCH_NAME = Argument("gitBranch", EnvironmentVariable("GIT_BRANCH_NAME") ?? "");
 
 Task("prepare")
-	.Does(() =>
+	.Does(async () =>
 {
 	// Setup latest Xamarin.Android SDK
 	await Boots (Product.XamarinAndroid, ReleaseChannel.Stable);
