@@ -1,4 +1,4 @@
-#addin "nuget:?package=Cake.Boots&version=1.1.0.36"
+#addin "nuget:?package=Cake.Boots&version=1.1.0.712-preview2"
 
 var TARGET = Argument("t", Argument("target", "ci"));
 

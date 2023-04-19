@@ -2,7 +2,7 @@
 #addin nuget:?package=Cake.Android.Adb&version=3.2.0
 #addin nuget:?package=Cake.Android.AvdManager&version=2.2.0
 #addin nuget:?package=Cake.FileHelpers&version=3.3.0
-#addin "nuget:?package=Cake.Boots&version=1.1.0.36"
+#addin "nuget:?package=Cake.Boots&version=1.1.0.712-preview2"
 
 var TARGET = Argument("target", "Default");
 
