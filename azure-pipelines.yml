@@ -149,7 +149,7 @@ stages:
             cakeTarget: test-ios-emu
             cake: $(CAKE_VERSION)
             xcode: '14.2'
-            xharness: '1.0.0-prerelease.21620.1'
+            xharness: '1.0.0-prerelease.23212.1'
   
         - template: .ci/build.v1.yml@components
           parameters:
