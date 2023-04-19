@@ -15,6 +15,7 @@ variables:
   GIT_SHA: $(Build.SourceVersion)
   GIT_BRANCH_NAME: $(Build.SourceBranchName)
   AREA_PATH: 'DevDiv\Xamarin SDK\Build and Tools'
+  CAKE_VERSION: '2.1.0'
 
 resources:
   repositories:
@@ -145,6 +146,7 @@ stages:
             verbosity: diagnostic
             cakeFile: DeviceTests/build.cake
             cakeTarget: test-ios-emu
+            cake: $(CAKE_VERSION)
             xharness: '1.0.0-prerelease.21620.1'
   
         - template: .ci/build.v1.yml@components
@@ -159,6 +161,7 @@ stages:
             cakeFile: DeviceTests/build.cake
             cakeTarget: test-android-emu
             cakeExtraArgs: --avd-target="`"system-images;android-21;google_apis;x86`""
+            cake: $(CAKE_VERSION)
             preBuildSteps:
               - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-21;google_apis;x86\""
                 displayName: Install the Android emulators
@@ -175,6 +178,7 @@ stages:
             cakeFile: DeviceTests/build.cake
             cakeTarget: test-android-emu
             cakeExtraArgs: --avd-target="`"system-images;android-22;google_apis;x86`""
+            cake: $(CAKE_VERSION)
             preBuildSteps:
               - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-22;google_apis;x86\""
                 displayName: Install the Android emulators
@@ -192,6 +196,7 @@ stages:
 #             cakeFile: DeviceTests/build.cake
 #             cakeTarget: test-android-emu
 #             cakeExtraArgs: --avd-target="`"system-images;android-23;google_apis;x86`""
+#             cake: $(CAKE_VERSION)
 #             preBuildSteps:
 #               - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-23;google_apis;x86\""
 #                 displayName: Install the Android emulators
@@ -208,6 +213,7 @@ stages:
             cakeFile: DeviceTests/build.cake
             cakeTarget: test-android-emu
             cakeExtraArgs: --avd-target="`"system-images;android-24;google_apis;x86`""
+            cake: $(CAKE_VERSION)
             preBuildSteps:
               - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-24;google_apis;x86\""
                 displayName: Install the Android emulators
@@ -224,6 +230,7 @@ stages:
             cakeFile: DeviceTests/build.cake
             cakeTarget: test-android-emu
             cakeExtraArgs: --avd-target="`"system-images;android-26;google_apis;x86`""
+            cake: $(CAKE_VERSION)
             preBuildSteps:
               - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-26;google_apis;x86\""
                 displayName: Install the Android emulators
@@ -240,6 +247,7 @@ stages:
             cakeFile: DeviceTests/build.cake
             cakeTarget: test-android-emu
             cakeExtraArgs: --avd-target="`"system-images;android-29;google_apis;x86`""
+            cake: $(CAKE_VERSION)
             preBuildSteps:
               - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-29;google_apis;x86\""
                 displayName: Install the Android emulators
@@ -256,6 +264,7 @@ stages:
         #     cakeFile: DeviceTests/build.cake
         #     cakeTarget: test-android-emu
         #     cakeExtraArgs: --avd-target="`"system-images;android-30;google_apis;x86`""
+        #     cake: $(CAKE_VERSION)
         #     preBuildSteps:
         #       - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-30;google_apis;x86\""
         #         displayName: Install the Android emulators
