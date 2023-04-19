@@ -1,6 +1,7 @@
 #addin nuget:?package=Cake.AppleSimulator&version=0.2.0
 #addin nuget:?package=Cake.Android.Adb&version=3.2.0
 #addin nuget:?package=Cake.Android.AvdManager&version=2.2.0
+#addin "nuget:?package=Cake.Android.SdkManager&version=3.0.2"
 #addin nuget:?package=Cake.FileHelpers&version=3.3.0
 #addin "nuget:?package=Cake.Boots&version=1.1.0.712-preview2"
 
@@ -41,6 +42,11 @@ System.Environment.SetEnvironmentVariable("PATH",
     $"{ANDROID_HOME}/platform-tools" + System.IO.Path.PathSeparator +
     $"{ANDROID_HOME}/emulator" + System.IO.Path.PathSeparator +
     EnvironmentVariable("PATH"));
+
+string androidSdks = EnvironmentVariable("ANDROID_API_SDKS", "platform-tools,platforms;android-26,platforms;android-27,platforms;android-28,platforms;android-29,build-tools;29.0.3,platforms;android-30,build-tools;30.0.2,platforms;android-32,build-tools;32.0.0,platforms;android-33,build-tools;33.0.2");
+
+Information("ANDROID_API_SDKS: {0}", androidSdks);
+string[] androidSdkManagerInstalls = androidSdks.Split(',');
 
 // utils
 
@@ -136,12 +142,61 @@ Task("test-ios-emu")
 
 // Android tasks
 
+Task("provision-androidsdk")
+    .Description("Install Xamarin.Android SDK")
+    .Does(async (ctx) =>
+    {
+        Information ("ANDROID_HOME: {0}", ANDROID_HOME);
+
+        if(androidSdkManagerInstalls.Length > 0)
+        {
+            Information("Updating Android SDKs");
+            var androidSdkSettings = new AndroidSdkManagerToolSettings {
+                SkipVersionCheck = true
+            };
+
+            if(!String.IsNullOrWhiteSpace(ANDROID_HOME))            
+                androidSdkSettings.SdkRoot = ANDROID_HOME;
+
+            try{
+                AcceptLicenses (androidSdkSettings);
+            }
+            catch(Exception exc)
+            {
+                Information("AcceptLicenses: {0}", exc);
+            }
+
+            try{
+                AndroidSdkManagerUpdateAll (androidSdkSettings);
+            }
+            catch(Exception exc)
+            {
+                Information("AndroidSdkManagerUpdateAll: {0}", exc);
+            }
+            
+            try{
+                AcceptLicenses (androidSdkSettings);
+            }
+            catch(Exception exc)
+            {
+                Information("AcceptLicenses: {0}", exc);
+            }
+
+            try{
+                AndroidSdkManagerInstall (androidSdkManagerInstalls, androidSdkSettings);
+            }
+            catch(Exception exc)
+            {
+                Information("AndroidSdkManagerInstall: {0}", exc);
+            }
+        }
+
+        await Boots (Product.XamarinAndroid, releaseChannel);
+    });
 Task("build-android")
+    .IsDependentOn("provision-androidsdk")
     .Does(async () =>
 {
-    // Setup latest Xamarin.Android SDK
-	await Boots (Product.XamarinAndroid, ReleaseChannel.Stable);
-
     MSBuild(ANDROID_PROJ, c => {
         c.Configuration = "Debug"; // needs to be debug so unit tests get discovered
         c.Restore = true;
