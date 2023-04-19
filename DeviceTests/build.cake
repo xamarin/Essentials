@@ -41,8 +41,6 @@ System.Environment.SetEnvironmentVariable("PATH",
     $"{ANDROID_HOME}/emulator" + System.IO.Path.PathSeparator +
     EnvironmentVariable("PATH"));
 
-var RESTORE_CONFIG = MakeAbsolute((FilePath)"../devopsnuget.config").FullPath;
-
 // utils
 
 Task DownloadTcpTextAsync(int port, FilePath filename, Action waitAction = null)
@@ -100,7 +98,6 @@ Task("build-ios")
         c.Properties["Platform"] = new List<string> { "iPhoneSimulator" };
         c.Properties["BuildIpa"] = new List<string> { "true" };
         c.Properties["ContinuousIntegrationBuild"] = new List<string> { "false" };
-        c.Properties["RestoreConfigFile"] = new List<string> { RESTORE_CONFIG };
         c.Targets.Clear();
         c.Targets.Add("Rebuild");
         c.BinaryLogger = new MSBuildBinaryLogSettings {
@@ -145,7 +142,6 @@ Task("build-android")
         c.Configuration = "Debug"; // needs to be debug so unit tests get discovered
         c.Restore = true;
         c.Properties["ContinuousIntegrationBuild"]  = new List<string> { "false" };
-        c.Properties["RestoreConfigFile"] = new List<string> { RESTORE_CONFIG };
         c.Targets.Clear();
         c.Targets.Add("Rebuild");
         c.Targets.Add("SignAndroidPackage");
@@ -225,7 +221,6 @@ Task("build-uwp")
         c.Properties["AppxBundlePlatforms"] = new List<string> { "x86" };
         c.Properties["AppxBundle"] = new List<string> { "Always" };
         c.Properties["AppxPackageSigningEnabled"] = new List<string> { "true" };
-        c.Properties["RestoreConfigFile"] = new List<string> { RESTORE_CONFIG };
         c.Targets.Clear();
         c.Targets.Add("Rebuild");
         c.BinaryLogger = new MSBuildBinaryLogSettings {
