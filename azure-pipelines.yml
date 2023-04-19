@@ -111,6 +111,7 @@ stages:
 
   - ${{ if not(startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
     - stage: devicetests
+      dependsOn: []
       displayName: Device Tests
       jobs:
         - job: devicetests_uwp

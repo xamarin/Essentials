@@ -2,6 +2,7 @@
 #addin nuget:?package=Cake.Android.Adb&version=3.2.0
 #addin nuget:?package=Cake.Android.AvdManager&version=2.2.0
 #addin nuget:?package=Cake.FileHelpers&version=3.3.0
+#addin "nuget:?package=Cake.Boots&version=1.1.0.36"
 
 var TARGET = Argument("target", "Default");
 
@@ -138,6 +139,9 @@ Task("test-ios-emu")
 Task("build-android")
     .Does(() =>
 {
+    // Setup latest Xamarin.Android SDK
+	await Boots (Product.XamarinAndroid, ReleaseChannel.Stable);
+
     MSBuild(ANDROID_PROJ, c => {
         c.Configuration = "Debug"; // needs to be debug so unit tests get discovered
         c.Restore = true;
