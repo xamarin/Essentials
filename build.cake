@@ -1,3 +1,5 @@
+#addin "nuget:?package=Cake.Boots&version=1.1.0.36"
+
 var TARGET = Argument("t", Argument("target", "ci"));
 
 var NUGET_VERSION = EnvironmentVariable("NUGET_VERSION") ?? "1.0.0";
@@ -9,6 +11,9 @@ var RESTORE_CONFIG = MakeAbsolute(new FilePath("./devopsnuget.config")).FullPath
 Task("prepare")
 	.Does(() =>
 {
+	// Setup latest Xamarin.Android SDK
+	await Boots (Product.XamarinAndroid, ReleaseChannel.Stable);
+
 	// Update .csproj nuget versions
 	XmlPoke("./Xamarin.Essentials/Xamarin.Essentials.csproj", "/Project/PropertyGroup/PackageVersion", NUGET_VERSION);
 });
