@@ -80,7 +80,7 @@ SetEnvironmentVariable("PATH", $"{ANDROID_SDK_ROOT}/emulator", prepend: true);
 
 Information("Android SDK Root: {0}", ANDROID_SDK_ROOT);
 
-string androidSdks = EnvironmentVariable("ANDROID_API_SDKS", "platform-tools,platforms;android-26,platforms;android-27,platforms;android-28,platforms;android-29,build-tools;29.0.3,platforms;android-30,build-tools;30.0.2,platforms;android-32,build-tools;32.0.0,platforms;android-33,build-tools;33.0.2");
+string androidSdks = EnvironmentVariable("ANDROID_API_SDKS", "system-images;android-30;google_apis_playstore;x86,platform-tools,platforms;android-26,platforms;android-27,platforms;android-28,platforms;android-29,build-tools;29.0.3,platforms;android-30,build-tools;30.0.2,platforms;android-32,build-tools;32.0.0,platforms;android-33,build-tools;33.0.2");
 
 Information("ANDROID_API_SDKS: {0}", androidSdks);
 string[] androidSdkManagerInstalls = androidSdks.Split(',');
