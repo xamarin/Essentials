@@ -196,6 +196,14 @@ Task("provision-androidsdk")
                 androidSdkSettings.SdkRoot = ANDROID_HOME;
 
             try{
+                AdbStartServer(androidSdkSettings)
+            }
+            catch(Exception exc)
+            {
+                Information("AdbStartServer: {0}", exc);
+            }
+
+            try{
                 AcceptLicenses (androidSdkSettings);
             }
             catch(Exception exc)
