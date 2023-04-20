@@ -35,13 +35,42 @@ var TCP_LISTEN_HOST = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName())
 
 var OUTPUT_PATH = MakeAbsolute((DirectoryPath)"../output/");
 
-var ANDROID_HOME = EnvironmentVariable("ANDROID_HOME");
+// var ANDROID_HOME = EnvironmentVariable("ANDROID_HOME");
 
-System.Environment.SetEnvironmentVariable("PATH",
-    $"{ANDROID_HOME}/tools/bin" + System.IO.Path.PathSeparator +
-    $"{ANDROID_HOME}/platform-tools" + System.IO.Path.PathSeparator +
-    $"{ANDROID_HOME}/emulator" + System.IO.Path.PathSeparator +
-    EnvironmentVariable("PATH"));
+// System.Environment.SetEnvironmentVariable("PATH",
+//     $"{ANDROID_HOME}/tools/bin" + System.IO.Path.PathSeparator +
+//     $"{ANDROID_HOME}/platform-tools" + System.IO.Path.PathSeparator +
+//     $"{ANDROID_HOME}/emulator" + System.IO.Path.PathSeparator +
+//     EnvironmentVariable("PATH"));
+
+void SetEnvironmentVariable(string name, string value, bool prepend = false)
+{
+    var target = EnvironmentVariableTarget.Process;
+
+    if (prepend)
+        value = value + System.IO.Path.PathSeparator + EnvironmentVariable(name);
+
+    Environment.SetEnvironmentVariable(name, value, target);
+
+    Information("Setting environment variable: {0} = '{1}'", name, value);
+}
+
+// set up env
+var ANDROID_SDK_ROOT = GetAndroidSDKPath();
+var ANDROID_HOME = ANDROID_SDK_ROOT;
+
+SetEnvironmentVariable("PATH", $"{ANDROID_SDK_ROOT}/tools/bin", prepend: true);
+SetEnvironmentVariable("PATH", $"{ANDROID_SDK_ROOT}/cmdline-tools/5.0/bin", prepend: true);
+SetEnvironmentVariable("PATH", $"{ANDROID_SDK_ROOT}/cmdline-tools/7.0/bin", prepend: true);
+SetEnvironmentVariable("PATH", $"{ANDROID_SDK_ROOT}/cmdline-tools/latest/bin", prepend: true);
+
+SetEnvironmentVariable("PATH", $"{ANDROID_SDK_ROOT}/platform-tools", prepend: true);
+SetEnvironmentVariable("PATH", $"{ANDROID_SDK_ROOT}/emulator", prepend: true);
+
+Information("Android SDK Root: {0}", ANDROID_SDK_ROOT);
+Information("Project File: {0}", PROJECT);
+Information("Build Binary Log (binlog): {0}", BINLOG_DIR);
+Information("Build Configuration: {0}", CONFIGURATION);
 
 string androidSdks = EnvironmentVariable("ANDROID_API_SDKS", "platform-tools,platforms;android-26,platforms;android-27,platforms;android-28,platforms;android-29,build-tools;29.0.3,platforms;android-30,build-tools;30.0.2,platforms;android-32,build-tools;32.0.0,platforms;android-33,build-tools;33.0.2");
 

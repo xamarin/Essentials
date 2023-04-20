@@ -175,8 +175,6 @@ stages:
                 displayName: 'Setup JDK Paths'
               - bash: |
                   cd $ANDROID_HOME/tools/bin/
-                  sh -c "echo \"y\" | sdkmanager \"system-images;android-21;google_apis;x86\""
-                displayName: Install the Android emulators
   
         - template: .ci/build.v1.yml@components
           parameters:
@@ -196,8 +194,6 @@ stages:
               - bash: |
                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
                 displayName: 'Setup JDK Paths'
-              - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-22;google_apis;x86\""
-                displayName: Install the Android emulators
   
 #         - template: .ci/build.v1.yml@components
 #           parameters:
@@ -218,8 +214,6 @@ stages:
 #                - bash: |
 #                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
 #                 displayName: 'Setup JDK Paths'
-#               - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-23;google_apis;x86\""
-#                 displayName: Install the Android emulators
   
         - template: .ci/build.v1.yml@components
           parameters:
@@ -239,8 +233,6 @@ stages:
               - bash: |
                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
                 displayName: 'Setup JDK Paths'
-              - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-24;google_apis;x86\""
-                displayName: Install the Android emulators
   
         - template: .ci/build.v1.yml@components
           parameters:
@@ -260,8 +252,6 @@ stages:
               - bash: |
                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
                 displayName: 'Setup JDK Paths'
-              - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-26;google_apis;x86\""
-                displayName: Install the Android emulators
   
         - template: .ci/build.v1.yml@components
           parameters:
@@ -281,8 +271,6 @@ stages:
               - bash: |
                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
                 displayName: 'Setup JDK Paths'
-              - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-29;google_apis;x86\""
-                displayName: Install the Android emulators
   
         # - template: .ci/build.v1.yml@components
         #   parameters:
@@ -302,5 +290,3 @@ stages:
         #       - bash: |
         #          echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
         #         displayName: 'Setup JDK Paths'
-        #       - bash: sh -c "echo \"y\" | $ANDROID_HOME/tools/bin/sdkmanager \"system-images;android-30;google_apis;x86\""
-        #         displayName: Install the Android emulators
