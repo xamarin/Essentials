@@ -79,9 +79,6 @@ SetEnvironmentVariable("PATH", $"{ANDROID_SDK_ROOT}/platform-tools", prepend: tr
 SetEnvironmentVariable("PATH", $"{ANDROID_SDK_ROOT}/emulator", prepend: true);
 
 Information("Android SDK Root: {0}", ANDROID_SDK_ROOT);
-Information("Project File: {0}", PROJECT);
-Information("Build Binary Log (binlog): {0}", BINLOG_DIR);
-Information("Build Configuration: {0}", CONFIGURATION);
 
 string androidSdks = EnvironmentVariable("ANDROID_API_SDKS", "platform-tools,platforms;android-26,platforms;android-27,platforms;android-28,platforms;android-29,build-tools;29.0.3,platforms;android-30,build-tools;30.0.2,platforms;android-32,build-tools;32.0.0,platforms;android-33,build-tools;33.0.2");
 
