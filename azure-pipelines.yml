@@ -175,7 +175,7 @@ stages:
                 displayName: 'Setup JDK Paths'
               - bash: |
                   cd $ANDROID_HOME/tools/bin/
-                  sh -c "echo \"y\" | sdkmanager "system-images;android-21;google_apis;x86"
+                  sh -c "echo \"y\" | sdkmanager \"system-images;android-21;google_apis;x86\""
                 displayName: Install the Android emulators
   
         - template: .ci/build.v1.yml@components
