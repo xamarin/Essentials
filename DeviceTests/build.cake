@@ -179,9 +179,15 @@ Task("test-ios-emu")
 
 // Android tasks
 
+Task("boots")
+    .Does(async () =>
+    {
+        await Boots (Product.XamarinAndroid, ReleaseChannel.Stable);
+    });
+
 Task("provision-androidsdk")
     .Description("Install Xamarin.Android SDK")
-    .Does(async (ctx) =>
+    .Does(() =>
     {
         Information ("ANDROID_HOME: {0}", ANDROID_HOME);
 
@@ -194,26 +200,6 @@ Task("provision-androidsdk")
 
             if(!String.IsNullOrWhiteSpace(ANDROID_HOME))            
                 androidSdkSettings.SdkRoot = ANDROID_HOME;
-
-            try{
-                AdbKillServer();
-            }
-            catch(Exception exc)
-            {
-                Information("AdbKillServer: {0}", exc);
-            }
-
-            try{
-                AdbStartServer(new AdbToolSettings {
-                    SdkRoot = ANDROID_HOME
-                });
-            }
-            catch(Exception exc)
-            {
-                Information("AdbStartServer: {0}", exc);
-            }
-
-            System.Threading.Thread.Sleep(5000);
 
             try{
                 AcceptLicenses (androidSdkSettings);
@@ -247,12 +233,11 @@ Task("provision-androidsdk")
                 Information("AndroidSdkManagerInstall: {0}", exc);
             }
         }
-
-        await Boots (Product.XamarinAndroid, ReleaseChannel.Stable);
     });
 
 Task("build-android")
     .IsDependentOn("provision-androidsdk")
+    .IsDependentOn("boots")
     .Does(() =>
 {
     MSBuild(ANDROID_PROJ, c => {
