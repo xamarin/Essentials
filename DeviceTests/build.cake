@@ -196,7 +196,17 @@ Task("provision-androidsdk")
                 androidSdkSettings.SdkRoot = ANDROID_HOME;
 
             try{
-                AdbStartServer(androidSdkSettings)
+                AdbKillServer();
+            }
+            catch(Exception exc)
+            {
+                Information("AdbKillServer: {0}", exc);
+            }
+
+            try{
+                AdbStartServer(new AdbToolSettings {
+                    SdkRoot = ANDROID_HOME
+                });
             }
             catch(Exception exc)
             {
