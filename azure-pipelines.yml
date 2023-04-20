@@ -173,8 +173,6 @@ stages:
               - bash: |
                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
                 displayName: 'Setup JDK Paths'
-              - bash: |
-                  cd $ANDROID_HOME/tools/bin/
   
         - template: .ci/build.v1.yml@components
           parameters:

@@ -55,6 +55,17 @@ void SetEnvironmentVariable(string name, string value, bool prepend = false)
     Information("Setting environment variable: {0} = '{1}'", name, value);
 }
 
+string GetAndroidSDKPath()
+{
+    var ANDROID_SDK_ROOT = Argument("android", EnvironmentVariable("ANDROID_SDK_ROOT") ?? EnvironmentVariable("ANDROID_HOME"));
+
+    if (string.IsNullOrEmpty(ANDROID_SDK_ROOT)) {
+        throw new Exception("Environment variable 'ANDROID_SDK_ROOT' or 'ANDROID_HOME' must be set to the Android SDK root.");    
+    }
+
+    return ANDROID_SDK_ROOT;
+}
+
 // set up env
 var ANDROID_SDK_ROOT = GetAndroidSDKPath();
 var ANDROID_HOME = ANDROID_SDK_ROOT;
