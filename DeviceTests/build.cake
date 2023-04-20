@@ -213,6 +213,8 @@ Task("provision-androidsdk")
                 Information("AdbStartServer: {0}", exc);
             }
 
+            System.Threading.Thread.Sleep(5000);
+
             try{
                 AcceptLicenses (androidSdkSettings);
             }
