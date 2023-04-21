@@ -197,27 +197,27 @@ stages:
               - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-22;google_apis;x86\""
                 displayName: Install the Android emulators
 
-#         - template: .ci/build.v1.yml@components
-#           parameters:
-#             name: devicetests_android_api_23
-#             runChecks: false
-#             continueOnError: true
-#             displayName: Android API 23
-#             publishOutputSuffix: '-android23'
-#             windowsImage: ''                   # Mac only
-#             areaPath: $(AREA_PATH)
-#             verbosity: diagnostic
-#             cakeFile: DeviceTests/build.cake
-#             cakeTarget: test-android-emu
-#             cakeExtraArgs: --avd-target="`"system-images;android-23;google_apis;x86`""
-#             cake: $(CAKE_VERSION)
-#             preBuildSteps:
-#                # Setup JDK Paths
-#                - bash: |
-#                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
-#                 displayName: 'Setup JDK Paths'
-#               - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-23;google_apis;x86\""
-#               displayName: Install the Android emulators
+        - template: .ci/build.v1.yml@components
+          parameters:
+            name: devicetests_android_api_23
+            runChecks: false
+            continueOnError: true
+            displayName: Android API 23
+            publishOutputSuffix: '-android23'
+            windowsImage: ''                   # Mac only
+            areaPath: $(AREA_PATH)
+            verbosity: diagnostic
+            cakeFile: DeviceTests/build.cake
+            cakeTarget: test-android-emu
+            cakeExtraArgs: --avd-target="`"system-images;android-23;google_apis;x86`""
+            cake: $(CAKE_VERSION)
+            preBuildSteps:
+             # Setup JDK Paths
+             - bash: |
+                  echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+               displayName: 'Setup JDK Paths'
+             - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-23;google_apis;x86\""
+               displayName: Install the Android emulators
   
         - template: .ci/build.v1.yml@components
           parameters:
