@@ -314,12 +314,12 @@ stages:
             verbosity: diagnostic
             cakeFile: DeviceTests/build.cake
             cakeTarget: test-android-emu
-            cakeExtraArgs: --avd-target="`"system-images;android-33;google_apis;x86_64`""
+            cakeExtraArgs: --avd-target="`"system-images;android-33;google_apis_playstore;x86_64`""
             cake: $(CAKE_VERSION)
             preBuildSteps:
               # Setup JDK Paths
               - bash: |
                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
                 displayName: 'Setup JDK Paths'
-              - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-33;google_apis;x86_64\""
+              - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-33;google_apis_playstore;x86_64\""
                 displayName: Install the Android emulators
