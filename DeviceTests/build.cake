@@ -277,12 +277,14 @@ Task("test-android-emu")
     }
     Information("Waited {0} seconds for the emulator to boot up.", waited);
 
+    var targetArch = ANDROID_EMU_TARGET.Split(';').Last();
+
     // Run the tests
     var resultCode = StartProcess("xharness", "android test " +
         $"--app=\"{ANDROID_APK_PATH}\" " +
         $"--package-name=\"{ANDROID_PKG_NAME}\" " +
         $"--instrumentation=\"{ANDROID_INSTRUMENTATION_NAME}\" " +
-        $"--device-arch=\"x86\" " +
+        $"--device-arch=\"{targetArch}\" " +
         $"--output-directory=\"{ANDROID_TEST_RESULTS_PATH}\" " +
         $"--verbosity=\"Debug\" ");
 
