@@ -282,23 +282,23 @@ stages:
               - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-29;google_apis;x86\""
                 displayName: Install the Android emulators
   
-        # - template: .ci/build.v1.yml@components
-        #   parameters:
-        #     name: devicetests_android_api_30
-        #     runChecks: false
-        #     displayName: Android API 30
-        #     publishOutputSuffix: '-android30'
-        #     windowsImage: ''                   # Mac only
-        #     areaPath: $(AREA_PATH)
-        #     verbosity: diagnostic
-        #     cakeFile: DeviceTests/build.cake
-        #     cakeTarget: test-android-emu
-        #     cakeExtraArgs: --avd-target="`"system-images;android-30;google_apis;x86`""
-        #     cake: $(CAKE_VERSION)
-        #     preBuildSteps:
-        #       # Setup JDK Paths
-        #       - bash: |
-        #          echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
-        #         displayName: 'Setup JDK Paths'
-        #       - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-30;google_apis;x86\""
-        #       displayName: Install the Android emulators
+        - template: .ci/build.v1.yml@components
+          parameters:
+            name: devicetests_android_api_30
+            runChecks: false
+            displayName: Android API 30
+            publishOutputSuffix: '-android30'
+            windowsImage: ''                   # Mac only
+            areaPath: $(AREA_PATH)
+            verbosity: diagnostic
+            cakeFile: DeviceTests/build.cake
+            cakeTarget: test-android-emu
+            cakeExtraArgs: --avd-target="`"system-images;android-30;google_apis;x86`""
+            cake: $(CAKE_VERSION)
+            preBuildSteps:
+              # Setup JDK Paths
+              - bash: |
+                 echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+                displayName: 'Setup JDK Paths'
+              - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-30;google_apis;x86\""
+                displayName: Install the Android emulators
