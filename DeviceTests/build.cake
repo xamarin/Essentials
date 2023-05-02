@@ -1,7 +1,9 @@
 #addin nuget:?package=Cake.AppleSimulator&version=0.2.0
 #addin nuget:?package=Cake.Android.Adb&version=3.2.0
 #addin nuget:?package=Cake.Android.AvdManager&version=2.2.0
+#addin nuget:?package=Cake.Android.SdkManager&version=3.0.2
 #addin nuget:?package=Cake.FileHelpers&version=3.3.0
+#addin nuget:?package=Cake.Boots&version=1.1.0.712-preview2
 
 var TARGET = Argument("target", "Default");
 
@@ -33,15 +35,24 @@ var TCP_LISTEN_HOST = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName())
 
 var OUTPUT_PATH = MakeAbsolute((DirectoryPath)"../output/");
 
-var ANDROID_HOME = EnvironmentVariable("ANDROID_HOME");
+// set up env
+var ANDROID_SDK_ROOT = GetAndroidSDKPath();
+var ANDROID_HOME = ANDROID_SDK_ROOT;
 
-System.Environment.SetEnvironmentVariable("PATH",
-    $"{ANDROID_HOME}/tools/bin" + System.IO.Path.PathSeparator +
-    $"{ANDROID_HOME}/platform-tools" + System.IO.Path.PathSeparator +
-    $"{ANDROID_HOME}/emulator" + System.IO.Path.PathSeparator +
-    EnvironmentVariable("PATH"));
+SetEnvironmentVariable("PATH", $"{ANDROID_SDK_ROOT}/tools/bin", prepend: true);
+SetEnvironmentVariable("PATH", $"{ANDROID_SDK_ROOT}/cmdline-tools/5.0/bin", prepend: true);
+SetEnvironmentVariable("PATH", $"{ANDROID_SDK_ROOT}/cmdline-tools/7.0/bin", prepend: true);
+SetEnvironmentVariable("PATH", $"{ANDROID_SDK_ROOT}/cmdline-tools/latest/bin", prepend: true);
 
-var RESTORE_CONFIG = MakeAbsolute((FilePath)"../devopsnuget.config").FullPath;
+SetEnvironmentVariable("PATH", $"{ANDROID_SDK_ROOT}/platform-tools", prepend: true);
+SetEnvironmentVariable("PATH", $"{ANDROID_SDK_ROOT}/emulator", prepend: true);
+
+Information("Android SDK Root: {0}", ANDROID_SDK_ROOT);
+
+string androidSdks = EnvironmentVariable("ANDROID_API_SDKS", "platform-tools,platforms;android-26,platforms;android-27,platforms;android-28,platforms;android-29,build-tools;29.0.3,platforms;android-30,build-tools;30.0.2,platforms;android-32,build-tools;32.0.0,platforms;android-33,build-tools;33.0.2");
+
+Information("ANDROID_API_SDKS: {0}", androidSdks);
+string[] androidSdkManagerInstalls = androidSdks.Split(',');
 
 // utils
 
@@ -88,6 +99,28 @@ Task DownloadTcpTextAsync(int port, FilePath filename, Action waitAction = null)
     });
 }
 
+void SetEnvironmentVariable(string name, string value, bool prepend = false)
+{
+    var target = EnvironmentVariableTarget.Process;
+
+    if (prepend)
+        value = value + System.IO.Path.PathSeparator + EnvironmentVariable(name);
+
+    Environment.SetEnvironmentVariable(name, value, target);
+
+    Information("Setting environment variable: {0} = '{1}'", name, value);
+}
+
+string GetAndroidSDKPath()
+{
+    var ANDROID_SDK_ROOT = Argument("android", EnvironmentVariable("ANDROID_SDK_ROOT") ?? EnvironmentVariable("ANDROID_HOME"));
+
+    if (string.IsNullOrEmpty(ANDROID_SDK_ROOT)) {
+        throw new Exception("Environment variable 'ANDROID_SDK_ROOT' or 'ANDROID_HOME' must be set to the Android SDK root.");    
+    }
+
+    return ANDROID_SDK_ROOT;
+}
 
 // iOS tasks
 
@@ -100,7 +133,6 @@ Task("build-ios")
         c.Properties["Platform"] = new List<string> { "iPhoneSimulator" };
         c.Properties["BuildIpa"] = new List<string> { "true" };
         c.Properties["ContinuousIntegrationBuild"] = new List<string> { "false" };
-        c.Properties["RestoreConfigFile"] = new List<string> { RESTORE_CONFIG };
         c.Targets.Clear();
         c.Targets.Add("Rebuild");
         c.BinaryLogger = new MSBuildBinaryLogSettings {
@@ -138,14 +170,71 @@ Task("test-ios-emu")
 
 // Android tasks
 
+Task("boots")
+    .Does(async () =>
+    {
+        await Boots (Product.XamarinAndroid, ReleaseChannel.Stable);
+    });
+
+Task("provision-androidsdk")
+    .Description("Install Xamarin.Android SDK")
+    .Does(() =>
+    {
+        Information ("ANDROID_HOME: {0}", ANDROID_HOME);
+
+        if(androidSdkManagerInstalls.Length > 0)
+        {
+            Information("Updating Android SDKs");
+            var androidSdkSettings = new AndroidSdkManagerToolSettings {
+                SkipVersionCheck = true
+            };
+
+            if(!String.IsNullOrWhiteSpace(ANDROID_HOME))            
+                androidSdkSettings.SdkRoot = ANDROID_HOME;
+
+            try{
+                AcceptLicenses (androidSdkSettings);
+            }
+            catch(Exception exc)
+            {
+                Information("AcceptLicenses: {0}", exc);
+            }
+
+            try{
+                AndroidSdkManagerUpdateAll (androidSdkSettings);
+            }
+            catch(Exception exc)
+            {
+                Information("AndroidSdkManagerUpdateAll: {0}", exc);
+            }
+            
+            try{
+                AcceptLicenses (androidSdkSettings);
+            }
+            catch(Exception exc)
+            {
+                Information("AcceptLicenses: {0}", exc);
+            }
+
+            try{
+                AndroidSdkManagerInstall (androidSdkManagerInstalls, androidSdkSettings);
+            }
+            catch(Exception exc)
+            {
+                Information("AndroidSdkManagerInstall: {0}", exc);
+            }
+        }
+    });
+
 Task("build-android")
+    .IsDependentOn("provision-androidsdk")
+    .IsDependentOn("boots")
     .Does(() =>
 {
     MSBuild(ANDROID_PROJ, c => {
         c.Configuration = "Debug"; // needs to be debug so unit tests get discovered
         c.Restore = true;
         c.Properties["ContinuousIntegrationBuild"]  = new List<string> { "false" };
-        c.Properties["RestoreConfigFile"] = new List<string> { RESTORE_CONFIG };
         c.Targets.Clear();
         c.Targets.Add("Rebuild");
         c.Targets.Add("SignAndroidPackage");
@@ -188,12 +277,14 @@ Task("test-android-emu")
     }
     Information("Waited {0} seconds for the emulator to boot up.", waited);
 
+    var targetArch = ANDROID_EMU_TARGET.Split(';').Last();
+
     // Run the tests
     var resultCode = StartProcess("xharness", "android test " +
         $"--app=\"{ANDROID_APK_PATH}\" " +
         $"--package-name=\"{ANDROID_PKG_NAME}\" " +
         $"--instrumentation=\"{ANDROID_INSTRUMENTATION_NAME}\" " +
-        $"--device-arch=\"x86\" " +
+        $"--device-arch=\"{targetArch}\" " +
         $"--output-directory=\"{ANDROID_TEST_RESULTS_PATH}\" " +
         $"--verbosity=\"Debug\" ");
 
@@ -225,7 +316,6 @@ Task("build-uwp")
         c.Properties["AppxBundlePlatforms"] = new List<string> { "x86" };
         c.Properties["AppxBundle"] = new List<string> { "Always" };
         c.Properties["AppxPackageSigningEnabled"] = new List<string> { "true" };
-        c.Properties["RestoreConfigFile"] = new List<string> { RESTORE_CONFIG };
         c.Targets.Clear();
         c.Targets.Add("Rebuild");
         c.BinaryLogger = new MSBuildBinaryLogSettings {
