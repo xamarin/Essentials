@@ -59,7 +59,7 @@ namespace Xamarin.Essentials
             {
                 Debug.WriteLine("Connectivity receiver already unregistered. Disposing of it.");
             }
-            conectivityReceiver.Dispose();
+
             conectivityReceiver = null;
         }
 
@@ -88,7 +88,6 @@ namespace Xamarin.Essentials
 
             manager.UnregisterNetworkCallback(networkCallback);
 
-            networkCallback?.Dispose();
             networkCallback = null;
         }
 
