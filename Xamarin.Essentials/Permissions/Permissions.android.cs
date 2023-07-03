@@ -20,7 +20,9 @@ namespace Xamarin.Essentials
         public static bool IsDeclaredInManifest(string permission)
         {
             var context = Platform.AppContext;
+#pragma warning disable CS0618 // Type or member is obsolete
             var packageInfo = context.PackageManager.GetPackageInfo(context.PackageName, PackageInfoFlags.Permissions);
+#pragma warning restore CS0618 // Type or member is obsolete
             var requestedPermissions = packageInfo?.RequestedPermissions;
 
             return requestedPermissions?.Any(r => r.Equals(permission, StringComparison.OrdinalIgnoreCase)) ?? false;
@@ -57,28 +59,13 @@ namespace Xamarin.Essentials
                 if (RequiredPermissions == null || RequiredPermissions.Length <= 0)
                     return Task.FromResult(PermissionStatus.Granted);
 
-                var context = Platform.AppContext;
-                var targetsMOrHigher = context.ApplicationInfo.TargetSdkVersion >= BuildVersionCodes.M;
-
                 foreach (var (androidPermission, isRuntime) in RequiredPermissions)
                 {
                     var ap = androidPermission;
                     if (!IsDeclaredInManifest(ap))
                         throw new PermissionException($"You need to declare using the permission: `{androidPermission}` in your AndroidManifest.xml");
 
-                    var status = PermissionStatus.Granted;
-
-                    if (targetsMOrHigher)
-                    {
-                        if (ContextCompat.CheckSelfPermission(context, androidPermission) != Permission.Granted)
-                            status = PermissionStatus.Denied;
-                    }
-                    else
-                    {
-                        if (PermissionChecker.CheckSelfPermission(context, androidPermission) != PermissionChecker.PermissionGranted)
-                            status = PermissionStatus.Denied;
-                    }
-
+                    var status = DoCheck(ap);
                     if (status != PermissionStatus.Granted)
                         return Task.FromResult(PermissionStatus.Denied);
                 }
@@ -105,6 +92,38 @@ namespace Xamarin.Essentials
                     return PermissionStatus.Denied;
 
                 return PermissionStatus.Granted;
+            }
+
+            protected virtual PermissionStatus DoCheck(string androidPermission)
+            {
+                var context = Platform.AppContext;
+                var targetsMOrHigher = context.ApplicationInfo.TargetSdkVersion >= BuildVersionCodes.M;
+
+                if (!IsDeclaredInManifest(androidPermission))
+                    throw new PermissionException($"You need to declare using the permission: `{androidPermission}` in your AndroidManifest.xml");
+
+                var status = PermissionStatus.Granted;
+
+                if (targetsMOrHigher)
+                {
+                    status = ContextCompat.CheckSelfPermission(context, androidPermission) switch
+                    {
+                        Permission.Granted => PermissionStatus.Granted,
+                        Permission.Denied => PermissionStatus.Denied,
+                        _ => PermissionStatus.Unknown
+                    };
+                }
+                else
+                {
+                    status = PermissionChecker.CheckSelfPermission(context, androidPermission) switch
+                    {
+                        PermissionChecker.PermissionGranted => PermissionStatus.Granted,
+                        PermissionChecker.PermissionDenied => PermissionStatus.Denied,
+                        PermissionChecker.PermissionDeniedAppOp => PermissionStatus.Denied,
+                        _ => PermissionStatus.Unknown
+                    };
+                }
+                return status;
             }
 
             protected virtual async Task<PermissionResult> DoRequest(string[] permissions)
@@ -232,6 +251,17 @@ namespace Xamarin.Essentials
                     (Manifest.Permission.AccessCoarseLocation, true),
                     (Manifest.Permission.AccessFineLocation, true)
                 };
+
+            public override Task<PermissionStatus> CheckStatusAsync()
+            {
+                if (DoCheck(Manifest.Permission.AccessFineLocation) == PermissionStatus.Granted)
+                    return Task.FromResult(PermissionStatus.Granted);
+
+                if (DoCheck(Manifest.Permission.AccessCoarseLocation) == PermissionStatus.Granted)
+                    return Task.FromResult(PermissionStatus.Restricted);
+
+                return Task.FromResult(PermissionStatus.Denied);
+            }
 
             public override async Task<PermissionStatus> RequestAsync()
             {

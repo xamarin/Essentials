@@ -37,7 +37,9 @@ namespace Xamarin.Essentials
                 ReducedAccuracy = false,
                 Course = location.HasBearing ? location.Bearing : default(double?),
                 Speed = location.HasSpeed ? location.Speed : default(double?),
+#pragma warning disable CS0618 // Type or member is obsolete
                 IsFromMockProvider = Platform.HasApiLevel(global::Android.OS.BuildVersionCodes.JellyBeanMr2) ? location.IsFromMockProvider : false,
+#pragma warning restore CS0618 // Type or member is obsolete
                 AltitudeReferenceSystem = AltitudeReferenceSystem.Ellipsoid
             };
 

@@ -26,7 +26,9 @@ namespace Xamarin.Essentials
         {
             var pm = Platform.AppContext.PackageManager;
             var packageName = Platform.AppContext.PackageName;
+#pragma warning disable CS0618 // Type or member is obsolete
             using (var info = pm.GetPackageInfo(packageName, PackageInfoFlags.MetaData))
+#pragma warning restore CS0618 // Type or member is obsolete
             {
                 return info.VersionName;
             }
@@ -36,7 +38,9 @@ namespace Xamarin.Essentials
         {
             var pm = Platform.AppContext.PackageManager;
             var packageName = Platform.AppContext.PackageName;
+#pragma warning disable CS0618 // Type or member is obsolete
             using (var info = pm.GetPackageInfo(packageName, PackageInfoFlags.MetaData))
+#pragma warning restore CS0618 // Type or member is obsolete
             {
 #if __ANDROID_28__
                 return PackageInfoCompat.GetLongVersionCode(info).ToString(CultureInfo.InvariantCulture);
@@ -59,10 +63,6 @@ namespace Xamarin.Essentials
 
             var flags = ActivityFlags.NewTask | ActivityFlags.NoHistory | ActivityFlags.ExcludeFromRecents;
 
-#if __ANDROID_24__
-            if (Platform.HasApiLevelN)
-                flags |= ActivityFlags.LaunchAdjacent;
-#endif
             settingsIntent.SetFlags(flags);
 
             context.StartActivity(settingsIntent);

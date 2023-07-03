@@ -6,7 +6,7 @@ iOS, Android, and UWP offer unique operating system and platform APIs that devel
 
 ## Questions
 
-Get your technical questions answered by experts on [Microsoft Q&A](https://docs.microsoft.com/answers/topics/dotnet-xamarinessentials.html?WT.mc_id=friends-0000-jamont).
+Get your technical questions answered by experts on [Microsoft Q&A](https://learn.microsoft.com/answers/topics/dotnet-xamarinessentials.html?WT.mc_id=friends-0000-jamont).
 
 ## Contribution Discussion
 
@@ -16,15 +16,7 @@ Contributing to Xamarin.Essentials? Join our [Discord server](https://discord.co
 
 | Build Server | Type         | Platform | Status                                                                                                                                                                                 |
 |--------------|--------------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| VSTS         | Build        | Windows  | [![Build Status](https://dev.azure.com/devdiv/DevDiv/_apis/build/status/Xamarin/Components/Xamarin.Essentials?branchName=main)](https://dev.azure.com/xamarin/public/_build?definitionId=7&_a=summary)                                                  |
-| App Center   | Sample App   | Android  | [![Build status](https://build.appcenter.ms/v0.1/apps/7a1f46ca-ba2f-477e-aacc-ff013c7d5f7a/branches/main/badge)](https://appcenter.ms) |
-| App Center   | Sample App   | iOS      | [![Build status](https://build.appcenter.ms/v0.1/apps/43b39e9e-2b2b-482f-8afa-e9906334c85e/branches/main/badge)](https://appcenter.ms) |
-
-## Sample App
-
-Try out Xamarin.Essentials on your device!
-
-* [Android Sample App](https://install.appcenter.ms/orgs/microsoft-liveplayer/apps/essentials-android/distribution_groups/public%20testers) via App Center.
+| Azure DevOps         | Build        | Windows  | [![Build Status](https://dev.azure.com/xamarin/public/_apis/build/status/xamarin/Essentials/Xamarin.Essentials%20(Public)?repoName=xamarin%2FEssentials&branchName=main)](https://dev.azure.com/xamarin/public/_build/latest?definitionId=7&repoName=xamarin%2FEssentials&branchName=main) |
 
 ## Installation
 
@@ -33,15 +25,27 @@ Xamarin.Essentials is available via NuGet & is included in every template:
 * NuGet Official Releases: [![NuGet](https://img.shields.io/nuget/vpre/Xamarin.Essentials.svg?label=NuGet)](https://www.nuget.org/packages/Xamarin.Essentials)
 * Nightly / CI Releases: https://aka.ms/xamarin-essentials-ci/index.json
 
-Please read our [Getting Started with Xamarin.Essentials guide](https://docs.microsoft.com/xamarin/essentials/get-started?WT.mc_id=friends-0000-jamont) for full setup instructions.
+Please read our [Getting Started with Xamarin.Essentials guide](https://learn.microsoft.com/xamarin/essentials/get-started?WT.mc_id=friends-0000-jamont) for full setup instructions.
+
+## Xamarin.Essentials with .NET MAUI and iOS/Android .NET projects
+
+Starting in .NET 6, Xamarin.Essentials was added into .NET MAUI directly. The team has worked hard to ensure that while it comes pre-configured with every .NET MAUI application, it is still available to all iOS and Android apps built with .NET. If you are building a .NET MAUI project there is nothing more for you to do, just start using the APIs. If you are migrating a Xamarin.iOS or Xamarin.Android app and want to use the Essentials APIs, then add the following into your project's csproj file:
+
+```xml
+<PropertyGroup>
+  <UseMauiEssentials>true</UseMauiEssentials>
+</PropertyGroup>
+```
+
+Once you update to .NET MAUI Essentials, you will need to update any `using Xamarin.Essentials;` using statements (and any other namespace references) to the new .NET MAUI Essentials namespaces, which you can find in the [documentation](https://learn.microsoft.com/dotnet/maui/platform-integration).
 
 ## Documentation
 
-Browse our [full documentation for Xamarin.Essentials](https://docs.microsoft.com/xamarin/essentials?WT.mc_id=friends-0000-jamont), including feature guides, on how to use each feature.
+Browse our [full documentation for Xamarin.Essentials](https://learn.microsoft.com/xamarin/essentials?WT.mc_id=friends-0000-jamont), including feature guides, on how to use each feature.
 
 ## Supported Platforms
 
-Platform support & feature support can be found on our [documentation](https://docs.microsoft.com/xamarin/essentials/platform-feature-support?WT.mc_id=friends-0000-jamont)
+Platform support & feature support can be found on our [documentation](https://learn.microsoft.com/xamarin/essentials/platform-feature-support?WT.mc_id=friends-0000-jamont)
 
 
 ## Contributing

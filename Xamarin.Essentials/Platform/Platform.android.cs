@@ -195,8 +195,10 @@ namespace Xamarin.Essentials
         internal static ConnectivityManager ConnectivityManager =>
             AppContext.GetSystemService(Context.ConnectivityService) as ConnectivityManager;
 
+#pragma warning disable CS0618 // Type or member is obsolete
         internal static Vibrator Vibrator =>
             AppContext.GetSystemService(Context.VibratorService) as Vibrator;
+#pragma warning restore CS0618 // Type or member is obsolete
 
         internal static WifiManager WifiManager =>
             AppContext.GetSystemService(Context.WifiService) as WifiManager;
@@ -356,7 +358,9 @@ namespace Xamarin.Essentials
 
             // read the values
             launched = extras.GetBoolean(launchedExtra, false);
+#pragma warning disable CS0618 // Type or member is obsolete
             actualIntent = extras.GetParcelable(actualIntentExtra) as Intent;
+#pragma warning restore CS0618 // Type or member is obsolete
             guid = extras.GetString(guidExtra);
             requestCode = extras.GetInt(requestCodeExtra, -1);
 
