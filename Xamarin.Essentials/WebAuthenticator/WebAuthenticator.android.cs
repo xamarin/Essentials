@@ -14,6 +14,8 @@ namespace Xamarin.Essentials
         static TaskCompletionSource<WebAuthenticatorResult> tcsResponse = null;
         static Uri currentRedirectUri = null;
 
+        internal static bool AuthenticatingWithCustomTabs { get; private set; } = false;
+
         internal static bool OnResume(Intent intent)
         {
             // If we aren't waiting on a task, don't handle the url
@@ -71,7 +73,11 @@ namespace Xamarin.Essentials
             tcsResponse = new TaskCompletionSource<WebAuthenticatorResult>();
             currentRedirectUri = callbackUrl;
 
-            if (!(await StartCustomTabsActivity(url)))
+            // Try to start with custom tabs if the system supports it and we resolve it
+            AuthenticatingWithCustomTabs = await StartCustomTabsActivity(url);
+
+            // Fall back to using the system browser if necessary
+            if (!AuthenticatingWithCustomTabs)
             {
                 // Fall back to opening the system-registered browser if necessary
                 var urlOriginalString = url.OriginalString;
