@@ -34,6 +34,7 @@ namespace Xamarin.Essentials
 #else
                     default(float?),
 #endif
+                ReducedAccuracy = false,
                 Course = location.HasBearing ? location.Bearing : default(double?),
                 Speed = location.HasSpeed ? location.Speed : default(double?),
 #pragma warning disable CS0618 // Type or member is obsolete
