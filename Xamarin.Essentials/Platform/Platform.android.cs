@@ -122,6 +122,19 @@ namespace Xamarin.Essentials
             }
         }
 
+        internal static AndroidIntent RegisterBroadcastReceiver(BroadcastReceiver receiver, IntentFilter filter, bool exported)
+        {
+            if (HasApiLevel(34))
+            {
+                var flags = exported ? ReceiverFlags.Exported : ReceiverFlags.NotExported;
+
+                // Explicit cast of flags because of: https://github.com/xamarin/xamarin-android/issues/7503
+                return AppContext.RegisterReceiver(receiver, filter, (ActivityFlags)flags);
+            }
+
+            return AppContext.RegisterReceiver(receiver, filter);
+        }
+
         internal static bool HasSystemFeature(string systemFeature)
         {
             var packageManager = AppContext.PackageManager;
