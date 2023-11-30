@@ -8,7 +8,7 @@ pr:
   - develop
 
 variables:
-  BASE_VERSION: 1.8.0
+  BASE_VERSION: 1.8.1
   PREVIEW_LABEL: 'ci'
   BUILD_NUMBER: $[counter(format('{0}_{1}_{2}', variables['BASE_VERSION'], variables['PREVIEW_LABEL'], variables['Build.SourceBranch']), 1)]
   NUGET_VERSION: $[format('{0}-{1}.{2}', variables['BASE_VERSION'], variables['PREVIEW_LABEL'], variables['BUILD_NUMBER'])]
@@ -47,6 +47,8 @@ stages:
           windowsImageOverride: AzurePipelinesWindows2019compliant
         ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:
           windowsImage: windows-2019
+          macosImage: 'macos-13'
+          xcode: '15.0.1'
         areaPath: 'DevDiv\Xamarin SDK'
         masterBranchName: 'main'
         ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}: #we are shipping our product
@@ -141,7 +143,7 @@ stages:
   
         - template: .ci/build.v1.yml@components
           parameters:
-            macosImage: 'macos-12'
+            macosImage: 'macos-13'
             name: devicetests_ios
             runChecks: false
             displayName: iOS
@@ -152,7 +154,7 @@ stages:
             cakeFile: DeviceTests/build.cake
             cakeTarget: test-ios-emu
             cake: $(CAKE_VERSION)
-            xcode: '14.2'
+            xcode: '15.0.1'
             xharness: '1.0.0-prerelease.23212.1'
   
         - template: .ci/build.v1.yml@components
