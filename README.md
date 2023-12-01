@@ -27,6 +27,18 @@ Xamarin.Essentials is available via NuGet & is included in every template:
 
 Please read our [Getting Started with Xamarin.Essentials guide](https://learn.microsoft.com/xamarin/essentials/get-started?WT.mc_id=friends-0000-jamont) for full setup instructions.
 
+## Xamarin.Essentials with .NET MAUI and iOS/Android .NET projects
+
+Starting in .NET 6, Xamarin.Essentials was added into .NET MAUI directly. The team has worked hard to ensure that while it comes pre-configured with every .NET MAUI application, it is still available to all iOS and Android apps built with .NET. If you are building a .NET MAUI project there is nothing more for you to do, just start using the APIs. If you are migrating a Xamarin.iOS or Xamarin.Android app and want to use the Essentials APIs, then add the following into your project's csproj file:
+
+```xml
+<PropertyGroup>
+  <UseMauiEssentials>true</UseMauiEssentials>
+</PropertyGroup>
+```
+
+Once you update to .NET MAUI Essentials, you will need to update any `using Xamarin.Essentials;` using statements (and any other namespace references) to the new .NET MAUI Essentials namespaces, which you can find in the [documentation](https://learn.microsoft.com/dotnet/maui/platform-integration).
+
 ## Documentation
 
 Browse our [full documentation for Xamarin.Essentials](https://learn.microsoft.com/xamarin/essentials?WT.mc_id=friends-0000-jamont), including feature guides, on how to use each feature.
