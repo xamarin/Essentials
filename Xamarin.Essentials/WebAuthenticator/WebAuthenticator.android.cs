@@ -14,6 +14,8 @@ namespace Xamarin.Essentials
         static TaskCompletionSource<WebAuthenticatorResult> tcsResponse = null;
         static Uri currentRedirectUri = null;
 
+        internal static bool AuthenticatingWithCustomTabs { get; private set; } = false;
+
         internal static bool OnResume(Intent intent)
         {
             // If we aren't waiting on a task, don't handle the url
@@ -71,6 +73,25 @@ namespace Xamarin.Essentials
             tcsResponse = new TaskCompletionSource<WebAuthenticatorResult>();
             currentRedirectUri = callbackUrl;
 
+            // Try to start with custom tabs if the system supports it and we resolve it
+            AuthenticatingWithCustomTabs = await StartCustomTabsActivity(url);
+
+            // Fall back to using the system browser if necessary
+            if (!AuthenticatingWithCustomTabs)
+            {
+                // Fall back to opening the system-registered browser if necessary
+                var urlOriginalString = url.OriginalString;
+                var browserIntent = new Intent(Intent.ActionView, global::Android.Net.Uri.Parse(urlOriginalString));
+                Platform.CurrentActivity.StartActivity(browserIntent);
+            }
+
+            return await tcsResponse.Task;
+        }
+
+        static async Task<bool> StartCustomTabsActivity(Uri url)
+        {
+            // Is only set to true if BindServiceAsync succeeds and no exceptions are thrown
+            var success = false;
             var parentActivity = Platform.GetCurrentActivity(true);
 
             var customTabsActivityManager = CustomTabsActivityManager.From(parentActivity);
@@ -84,16 +105,12 @@ namespace Xamarin.Essentials
 
                     customTabsIntent.Intent.SetData(global::Android.Net.Uri.Parse(url.OriginalString));
 
-                    WebAuthenticatorIntermediateActivity.StartActivity(parentActivity, customTabsIntent.Intent);
+                    if (customTabsIntent.Intent.ResolveActivity(parentActivity.PackageManager) != null)
+                    {
+                        WebAuthenticatorIntermediateActivity.StartActivity(parentActivity, customTabsIntent.Intent);
+                        success = true;
+                    }
                 }
-                else
-                {
-                    // Fall back to opening the system browser if necessary
-                    var browserIntent = new Intent(Intent.ActionView, global::Android.Net.Uri.Parse(url.OriginalString));
-                    Platform.CurrentActivity.StartActivity(browserIntent);
-                }
-
-                return await tcsResponse.Task;
             }
             finally
             {
@@ -105,6 +122,8 @@ namespace Xamarin.Essentials
                 {
                 }
             }
+
+            return success;
         }
 
         static Task<bool> BindServiceAsync(CustomTabsActivityManager manager)

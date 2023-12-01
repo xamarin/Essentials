@@ -87,10 +87,10 @@
           <AttributeName>System.Runtime.Versioning.TargetFramework("Xamarin.WatchOS,Version=v1.0", FrameworkDisplayName="Xamarin.WatchOS")</AttributeName>
         </Attribute>
         <Attribute FrameworkAlternate="xamarin-essentials-android">
-          <AttributeName>System.Reflection.AssemblyProduct("Xamarin.Essentials (MonoAndroid10.0)")</AttributeName>
+          <AttributeName>System.Reflection.AssemblyProduct("Xamarin.Essentials (MonoAndroid13.0)")</AttributeName>
         </Attribute>
         <Attribute FrameworkAlternate="xamarin-essentials-android">
-          <AttributeName>System.Runtime.Versioning.TargetFramework("MonoAndroid,Version=v10.0", FrameworkDisplayName="Xamarin.Android v10.0 Support")</AttributeName>
+          <AttributeName>System.Runtime.Versioning.TargetFramework("MonoAndroid,Version=v13.0", FrameworkDisplayName="Xamarin.Android v13.0 Support")</AttributeName>
         </Attribute>
         <Attribute FrameworkAlternate="xamarin-essentials-macos">
           <AttributeName>System.Reflection.AssemblyProduct("Xamarin.Essentials (Xamarin.Mac20)")</AttributeName>

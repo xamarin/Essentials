@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Android.Content;
 using Android.Content.Res;
 using Android.Provider;
@@ -36,7 +37,9 @@ namespace Xamarin.Essentials
         {
             using var displayMetrics = new DisplayMetrics();
             var display = GetDefaultDisplay();
+#pragma warning disable CS0618 // Type or member is obsolete
             display?.GetRealMetrics(displayMetrics);
+#pragma warning restore CS0618 // Type or member is obsolete
 
             return new DisplayInfo(
                 width: displayMetrics?.WidthPixels ?? 0,
@@ -114,6 +117,10 @@ namespace Xamarin.Essentials
         internal Listener(Context context, Action handler)
             : base(context) => onChanged = handler;
 
-        public override void OnOrientationChanged(int orientation) => onChanged();
+        public override async void OnOrientationChanged(int orientation)
+        {
+            await Task.Delay(500);
+            onChanged();
+        }
     }
 }

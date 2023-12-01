@@ -11,22 +11,46 @@ namespace Xamarin.Essentials
     public partial class Connectivity
     {
         static ConnectivityBroadcastReceiver conectivityReceiver;
+        static Intent connectivityIntent = new Intent(Platform.EssentialsConnectivityChanged);
+        static EssentialsNetworkCallback networkCallback;
 
         static void StartListeners()
         {
             Permissions.EnsureDeclared<Permissions.NetworkState>();
 
+            var filter = new IntentFilter();
+
+            if (Platform.HasApiLevelN)
+            {
+                RegisterNetworkCallback();
+                filter.AddAction(Platform.EssentialsConnectivityChanged);
+            }
+            else
+            {
+#pragma warning disable CS0618 // Type or member is obsolete
+                filter.AddAction(ConnectivityManager.ConnectivityAction);
+#pragma warning restore CS0618 // Type or member is obsolete
+            }
+
             conectivityReceiver = new ConnectivityBroadcastReceiver(OnConnectivityChanged);
 
-#pragma warning disable CS0618 // Type or member is obsolete
-            Platform.AppContext.RegisterReceiver(conectivityReceiver, new IntentFilter(ConnectivityManager.ConnectivityAction));
-#pragma warning restore CS0618 // Type or member is obsolete
+            Platform.AppContext.RegisterReceiver(conectivityReceiver, filter);
         }
 
         static void StopListeners()
         {
             if (conectivityReceiver == null)
                 return;
+
+            try
+            {
+                UnregisterNetworkCallback();
+            }
+            catch
+            {
+                Debug.WriteLine("Connectivity receiver already unregistered. Disposing of it.");
+            }
+
             try
             {
                 Platform.AppContext.UnregisterReceiver(conectivityReceiver);
@@ -35,8 +59,51 @@ namespace Xamarin.Essentials
             {
                 Debug.WriteLine("Connectivity receiver already unregistered. Disposing of it.");
             }
-            conectivityReceiver.Dispose();
+
             conectivityReceiver = null;
+        }
+
+        static void RegisterNetworkCallback()
+        {
+            if (!Platform.HasApiLevelN)
+                return;
+
+            var manager = Platform.ConnectivityManager;
+            if (manager == null)
+                return;
+
+            var request = new NetworkRequest.Builder().Build();
+            networkCallback = new EssentialsNetworkCallback();
+            manager.RegisterNetworkCallback(request, networkCallback);
+        }
+
+        static void UnregisterNetworkCallback()
+        {
+            if (!Platform.HasApiLevelN)
+                return;
+
+            var manager = Platform.ConnectivityManager;
+            if (manager == null || networkCallback == null)
+                return;
+
+            manager.UnregisterNetworkCallback(networkCallback);
+
+            networkCallback = null;
+        }
+
+        class EssentialsNetworkCallback : ConnectivityManager.NetworkCallback
+        {
+            public override void OnAvailable(Network network) => Platform.AppContext.SendBroadcast(connectivityIntent);
+
+            public override void OnLost(Network network) => Platform.AppContext.SendBroadcast(connectivityIntent);
+
+            public override void OnCapabilitiesChanged(Network network, NetworkCapabilities networkCapabilities) => Platform.AppContext.SendBroadcast(connectivityIntent);
+
+            public override void OnUnavailable() => Platform.AppContext.SendBroadcast(connectivityIntent);
+
+            public override void OnLinkPropertiesChanged(Network network, LinkProperties linkProperties) => Platform.AppContext.SendBroadcast(connectivityIntent);
+
+            public override void OnLosing(Network network, int maxMsToLive) => Platform.AppContext.SendBroadcast(connectivityIntent);
         }
 
         static NetworkAccess IsBetterAccess(NetworkAccess currentAccess, NetworkAccess newAccess) =>
@@ -55,7 +122,9 @@ namespace Xamarin.Essentials
 
                     if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
                     {
+#pragma warning disable CS0618 // Type or member is obsolete
                         var networks = manager.GetAllNetworks();
+#pragma warning restore CS0618 // Type or member is obsolete
 
                         // some devices running 21 and 22 only use the older api.
                         if (networks.Length == 0 && (int)Build.VERSION.SdkInt < 23)
@@ -144,9 +213,9 @@ namespace Xamarin.Essentials
                 var manager = Platform.ConnectivityManager;
                 if (Platform.HasApiLevel(BuildVersionCodes.Lollipop))
                 {
+#pragma warning disable CS0618 // Type or member is obsolete
                     foreach (var network in manager.GetAllNetworks())
                     {
-#pragma warning disable CS0618 // Type or member is obsolete
                         NetworkInfo info = null;
                         try
                         {
@@ -245,7 +314,7 @@ namespace Xamarin.Essentials
         public override async void OnReceive(Context context, Intent intent)
         {
 #pragma warning disable CS0618 // Type or member is obsolete
-            if (intent.Action != ConnectivityManager.ConnectivityAction)
+            if (intent.Action != ConnectivityManager.ConnectivityAction && intent.Action != Platform.EssentialsConnectivityChanged)
 #pragma warning restore CS0618 // Type or member is obsolete
                 return;
 

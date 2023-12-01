@@ -20,10 +20,6 @@ namespace Xamarin.Essentials
 
         static async Task<FileResult> PlatformPickAsync(MediaPickerOptions options, bool photo)
         {
-            // We only need the permission when accessing the file, but it's more natural
-            // to ask the user first, then show the picker.
-            await Permissions.EnsureGrantedAsync<Permissions.StorageRead>();
-
             var intent = new Intent(Intent.ActionGetContent);
             intent.SetType(photo ? FileSystem.MimeTypes.ImageAll : FileSystem.MimeTypes.VideoAll);
 
@@ -60,7 +56,10 @@ namespace Xamarin.Essentials
         static async Task<FileResult> PlatformCaptureAsync(MediaPickerOptions options, bool photo)
         {
             await Permissions.EnsureGrantedAsync<Permissions.Camera>();
-            await Permissions.EnsureGrantedAsync<Permissions.StorageWrite>();
+
+            // StorageWrite no longer exists starting from Android API 33
+            if (!Platform.HasApiLevel(33))
+                await Permissions.EnsureGrantedAsync<Permissions.StorageWrite>();
 
             var capturePhotoIntent = new Intent(photo ? MediaStore.ActionImageCapture : MediaStore.ActionVideoCapture);
 
