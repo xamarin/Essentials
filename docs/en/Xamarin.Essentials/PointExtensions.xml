@@ -32,7 +32,7 @@
       </Parameters>
       <Docs>
         <param name="point">The point to convert.</param>
-        <summary>Converts the point ot the system representation.</summary>
+        <summary>Converts the point to the system representation.</summary>
         <returns>The converted point.</returns>
         <remarks></remarks>
       </Docs>
@@ -54,7 +54,7 @@
       </Parameters>
       <Docs>
         <param name="point">The point to convert.</param>
-        <summary>Converts the point ot the system representation.</summary>
+        <summary>Converts the point to the system representation.</summary>
         <returns>The converted point.</returns>
         <remarks></remarks>
       </Docs>
@@ -76,7 +76,7 @@
       </Parameters>
       <Docs>
         <param name="point">The point to convert.</param>
-        <summary>Converts the point ot the system representation.</summary>
+        <summary>Converts the point to the system representation.</summary>
         <returns>The converted point.</returns>
         <remarks></remarks>
       </Docs>
@@ -98,7 +98,7 @@
       </Parameters>
       <Docs>
         <param name="point">The point to convert.</param>
-        <summary>Converts the point ot the system representation.</summary>
+        <summary>Converts the point to the system representation.</summary>
         <returns>The converted point.</returns>
         <remarks></remarks>
       </Docs>
@@ -120,7 +120,7 @@
       </Parameters>
       <Docs>
         <param name="point">The point to convert.</param>
-        <summary>Converts the point ot the system representation.</summary>
+        <summary>Converts the point to the system representation.</summary>
         <returns>The converted point.</returns>
         <remarks></remarks>
       </Docs>
@@ -142,7 +142,7 @@
       </Parameters>
       <Docs>
         <param name="point">The point to convert.</param>
-        <summary>Converts the point ot the system representation.</summary>
+        <summary>Converts the point to the system representation.</summary>
         <returns>The converted point.</returns>
         <remarks></remarks>
       </Docs>

@@ -37,7 +37,9 @@ namespace Xamarin.Essentials
         {
             using var displayMetrics = new DisplayMetrics();
             var display = GetDefaultDisplay();
+#pragma warning disable CS0618 // Type or member is obsolete
             display?.GetRealMetrics(displayMetrics);
+#pragma warning restore CS0618 // Type or member is obsolete
 
             return new DisplayInfo(
                 width: displayMetrics?.WidthPixels ?? 0,
