@@ -59,7 +59,7 @@ namespace Xamarin.Essentials
             {
                 Platform.AppContext.UnregisterReceiver(receiver);
             }
-            catch(Java.Lang.IllegalArgumentException)
+            catch (Java.Lang.IllegalArgumentException)
             {
                 System.Diagnostics.Debug.WriteLine($"{receiver.GetType().Name} already unregistered. Disposing of it.");
             }
