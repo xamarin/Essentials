@@ -23,15 +23,7 @@ namespace Xamarin.Essentials
             if (!Platform.HasApiLevel(BuildVersionCodes.Lollipop))
                 return;
 
-            try
-            {
-                Platform.AppContext.UnregisterReceiver(powerReceiver);
-            }
-            catch (Java.Lang.IllegalArgumentException)
-            {
-                System.Diagnostics.Debug.WriteLine("Energy saver receiver already unregistered. Disposing of it.");
-            }
-            powerReceiver.Dispose();
+            UnregisterReceiver(powerReceiver);
             powerReceiver = null;
         }
 
@@ -57,16 +49,21 @@ namespace Xamarin.Essentials
 
         static void StopBatteryListeners()
         {
+            UnregisterReceiver(batteryReceiver);
+            batteryReceiver = null;
+        }
+
+        static void UnregisterReceiver(BroadcastReceiver receiver)
+        {
             try
             {
-                Platform.AppContext.UnregisterReceiver(batteryReceiver);
+                Platform.AppContext.UnregisterReceiver(receiver);
             }
-            catch (Java.Lang.IllegalArgumentException)
+            catch(Java.Lang.IllegalArgumentException)
             {
-                System.Diagnostics.Debug.WriteLine("Battery receiver already unregistered. Disposing of it.");
+                System.Diagnostics.Debug.WriteLine($"{receiver.GetType().Name} already unregistered. Disposing of it.");
             }
-            batteryReceiver.Dispose();
-            batteryReceiver = null;
+            receiver.Dispose();
         }
 
         static double PlatformChargeLevel
