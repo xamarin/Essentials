@@ -34,7 +34,7 @@ namespace Xamarin.Essentials
 
             conectivityReceiver = new ConnectivityBroadcastReceiver(OnConnectivityChanged);
 
-            Platform.AppContext.RegisterReceiver(conectivityReceiver, filter);
+            Platform.RegisterBroadcastReceiver(conectivityReceiver, filter, false);
         }
 
         static void StopListeners()
