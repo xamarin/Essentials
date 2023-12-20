@@ -108,6 +108,9 @@ stages:
         tsaConfigFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\tsaoptions-v2.json
         policheckExclusionFilesFolder: $(Build.SourcesDirectory)\build-tools\automation\guardian
         policheckGdnSuppressionFilesFolder: $(Build.SourcesDirectory)\build-tools\automation\guardian
+        apiScanEnabled: true
+        apiScanSoftwareName: 'Xamarin.Essentials'
+        apiScanSoftwareVersionNum: $(BUILD_NUMBER)
 
   - ${{ if not(startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
     - stage: devicetests
