@@ -100,7 +100,7 @@ stages:
           packageVersionRegex: '(?i)^Xamarin.Essentials\.(?<version>\d+\.\d+\.\d+)(.*).nupkg$'
 
   - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
-    - template: security/full/v0.yml@internal-templates
+    - template: security/full/v1.yml@internal-templates
       parameters:
         dependsOn: [ ]
         credScanSuppressionFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\CredScanSuppressions.json
