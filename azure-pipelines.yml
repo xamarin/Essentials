@@ -103,6 +103,10 @@ stages:
     - template: security/full/v1.yml@internal-templates
       parameters:
         dependsOn: [ ]
+        antiMalwareEnabled: true
+        binSkimEnabled: true
+        enableCodeInspector: true
+        credScanEnabled: true
         credScanSuppressionFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\CredScanSuppressions.json
         sourceGdnSuppressionFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\source.gdnsuppress
         tsaConfigFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\tsaoptions-v2.json
