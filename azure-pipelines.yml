@@ -106,7 +106,7 @@ stages:
         scanArtifacts: [ 'nuget' ]
         antiMalwareEnabled: true
         binSkimEnabled: true
-        binSkimTargetGlob: 'output/**/*.dll'
+        binSkimTargetGlob: '**.dll'
         enableCodeInspector: true
         credScanEnabled: true
         credScanSuppressionFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\CredScanSuppressions.json
