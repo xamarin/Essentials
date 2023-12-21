@@ -80,10 +80,8 @@ stages:
             displayName: 'Copy Files (DLLs, PDBs, MDBs & binlogs)'
             inputs:
               Contents: |
-                **/bin/**/*.dll
-                **/bin/**/*.pdb
-                **/bin/**/*.mdb
-                **/*.binlog
+                Xamarin.Essentials/bin/**/*.dll
+                Xamarin.Essentials/bin/**/*.pdb
               TargetFolder: $(build.artifactstagingdirectory)
 
           - task: PublishBuildArtifacts@1
