@@ -75,23 +75,22 @@ stages:
           - pwsh: |
               Write-Host "##vso[build.updatebuildnumber]$env:NUGET_VERSION"
             displayName: Update the build number with a more readable one
-    - job:
-      steps:
-      - task: CopyFiles@2
-        displayName: 'Copy Files (DLLs, PDBs, MDBs & binlogs)'
-        inputs:
-          Contents: |
-            **/bin/**/*.dll
-            **/bin/**/*.pdb
-            **/bin/**/*.mdb
-            **/*.binlog
-          TargetFolder: $(build.artifactstagingdirectory)
+        postBuildSteps:
+          - task: CopyFiles@2
+            displayName: 'Copy Files (DLLs, PDBs, MDBs & binlogs)'
+            inputs:
+              Contents: |
+                **/bin/**/*.dll
+                **/bin/**/*.pdb
+                **/bin/**/*.mdb
+                **/*.binlog
+              TargetFolder: $(build.artifactstagingdirectory)
 
-      - task: PublishBuildArtifacts@1
-        displayName: 'Publish Artifact Binaries'
-        condition: always()
-        inputs:
-          ArtifactName: 'binaries'
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Artifact Binaries'
+            condition: always()
+            inputs:
+              ArtifactName: 'binaries'
 
   - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
     - stage: signing
