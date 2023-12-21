@@ -100,25 +100,29 @@ stages:
           packageVersionRegex: '(?i)^Xamarin.Essentials\.(?<version>\d+\.\d+\.\d+)(.*).nupkg$'
 
   - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
-    - task: CopyFiles@2
-      displayName: 'Copy Files dlls'
-      inputs:
-        Contents: |
-          **/bin/**/*.dll
-          **/bin/**/*.pdb
-          **/bin/**/*.mdb
-          **/*.binlog
-      TargetFolder: $(build.artifactstagingdirectory)
+    - stage: PublishArtifacts
+      jobs:
+        - job:
+          steps:
+          - task: CopyFiles@2
+            displayName: 'Copy Files dlls'
+            inputs:
+              Contents: |
+                **/bin/**/*.dll
+                **/bin/**/*.pdb
+                **/bin/**/*.mdb
+                **/*.binlog
+              TargetFolder: $(build.artifactstagingdirectory)
 
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact Binaries'
-      condition: always()
-      inputs:
-        ArtifactName: 'binaries'
-        
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Artifact Binaries'
+            condition: always()
+            inputs:
+              ArtifactName: 'binaries'
+          
     - template: security/full/v1.yml@internal-templates
       parameters:
-        dependsOn: [ ]
+        dependsOn: [ 'PublishArtifacts' ]
         scanArtifacts: [ 'nuget', 'binaries' ]
         antiMalwareEnabled: true
         binSkimEnabled: true
