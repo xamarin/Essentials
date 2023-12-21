@@ -122,7 +122,7 @@ stages:
           
     - template: security/full/v1.yml@internal-templates
       parameters:
-        dependsOn: [ 'PublishArtifacts' ]
+        stageDependsOn: [ 'PublishArtifacts' ]
         scanArtifacts: [ 'nuget', 'binaries' ]
         antiMalwareEnabled: true
         binSkimEnabled: true
