@@ -101,13 +101,13 @@ stages:
 
   - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
     - task: CopyFiles@2
-    displayName: 'Copy Files dlls'
-    inputs:
-      Contents: |
-        **/bin/**/*.dll
-        **/bin/**/*.pdb
-        **/bin/**/*.mdb
-        **/*.binlog
+      displayName: 'Copy Files dlls'
+      inputs:
+        Contents: |
+          **/bin/**/*.dll
+          **/bin/**/*.pdb
+          **/bin/**/*.mdb
+          **/*.binlog
       TargetFolder: $(build.artifactstagingdirectory)
 
     - task: PublishBuildArtifacts@1
