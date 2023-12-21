@@ -75,6 +75,23 @@ stages:
           - pwsh: |
               Write-Host "##vso[build.updatebuildnumber]$env:NUGET_VERSION"
             displayName: Update the build number with a more readable one
+    - job:
+      steps:
+      - task: CopyFiles@2
+        displayName: 'Copy Files (DLLs, PDBs, MDBs & binlogs)'
+        inputs:
+          Contents: |
+            **/bin/**/*.dll
+            **/bin/**/*.pdb
+            **/bin/**/*.mdb
+            **/*.binlog
+          TargetFolder: $(build.artifactstagingdirectory)
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact Binaries'
+        condition: always()
+        inputs:
+          ArtifactName: 'binaries'
 
   - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
     - stage: signing
@@ -100,29 +117,8 @@ stages:
           packageVersionRegex: '(?i)^Xamarin.Essentials\.(?<version>\d+\.\d+\.\d+)(.*).nupkg$'
 
   - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
-    - stage: PublishArtifacts
-      jobs:
-        - job:
-          steps:
-          - task: CopyFiles@2
-            displayName: 'Copy Files dlls'
-            inputs:
-              Contents: |
-                **/bin/**/*.dll
-                **/bin/**/*.pdb
-                **/bin/**/*.mdb
-                **/*.binlog
-              TargetFolder: $(build.artifactstagingdirectory)
-
-          - task: PublishBuildArtifacts@1
-            displayName: 'Publish Artifact Binaries'
-            condition: always()
-            inputs:
-              ArtifactName: 'binaries'
-          
     - template: security/full/v1.yml@internal-templates
       parameters:
-        stageDependsOn: [ 'PublishArtifacts' ]
         scanArtifacts: [ 'nuget', 'binaries' ]
         antiMalwareEnabled: true
         binSkimEnabled: true
