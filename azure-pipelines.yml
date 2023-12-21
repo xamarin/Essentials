@@ -100,13 +100,28 @@ stages:
           packageVersionRegex: '(?i)^Xamarin.Essentials\.(?<version>\d+\.\d+\.\d+)(.*).nupkg$'
 
   - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
+    - task: CopyFiles@2
+    displayName: 'Copy Files dlls'
+    inputs:
+      Contents: |
+        **/bin/**/*.dll
+        **/bin/**/*.pdb
+        **/bin/**/*.mdb
+        **/*.binlog
+      TargetFolder: $(build.artifactstagingdirectory)
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact Binaries'
+      condition: always()
+      inputs:
+        ArtifactName: 'binaries'
+        
     - template: security/full/v1.yml@internal-templates
       parameters:
         dependsOn: [ ]
-        scanArtifacts: [ 'nuget' ]
+        scanArtifacts: [ 'nuget', 'binaries' ]
         antiMalwareEnabled: true
         binSkimEnabled: true
-        binSkimTargetGlob: '**.dll'
         enableCodeInspector: true
         credScanEnabled: true
         credScanSuppressionFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\CredScanSuppressions.json
