@@ -75,6 +75,20 @@ stages:
           - pwsh: |
               Write-Host "##vso[build.updatebuildnumber]$env:NUGET_VERSION"
             displayName: Update the build number with a more readable one
+        postBuildSteps:
+          - task: CopyFiles@2
+            displayName: 'Copy Files (DLLs, PDBs, MDBs & binlogs)'
+            inputs:
+              Contents: |
+                Xamarin.Essentials/bin/**/*.dll
+                Xamarin.Essentials/bin/**/*.pdb
+              TargetFolder: $(build.artifactstagingdirectory)
+
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Artifact Binaries'
+            condition: always()
+            inputs:
+              ArtifactName: 'binaries'
 
   - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
     - stage: signing
@@ -100,14 +114,21 @@ stages:
           packageVersionRegex: '(?i)^Xamarin.Essentials\.(?<version>\d+\.\d+\.\d+)(.*).nupkg$'
 
   - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
-    - template: security/full/v0.yml@internal-templates
+    - template: security/full/v1.yml@internal-templates
       parameters:
-        dependsOn: [ ]
+        scanArtifacts: [ 'nuget', 'binaries' ]
+        antiMalwareEnabled: true
+        binSkimEnabled: true
+        enableCodeInspector: true
+        credScanEnabled: true
         credScanSuppressionFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\CredScanSuppressions.json
         sourceGdnSuppressionFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\source.gdnsuppress
         tsaConfigFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\tsaoptions-v2.json
         policheckExclusionFilesFolder: $(Build.SourcesDirectory)\build-tools\automation\guardian
         policheckGdnSuppressionFilesFolder: $(Build.SourcesDirectory)\build-tools\automation\guardian
+        apiScanEnabled: true
+        apiScanSoftwareName: 'Xamarin.Essentials'
+        apiScanSoftwareVersionNum: $(BUILD_NUMBER)
 
   - ${{ if not(startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
     - stage: devicetests
