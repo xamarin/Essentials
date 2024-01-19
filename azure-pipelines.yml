@@ -128,7 +128,7 @@ stages:
         policheckGdnSuppressionFilesFolder: $(Build.SourcesDirectory)\build-tools\automation\guardian
         apiScanEnabled: true
         apiScanSoftwareName: 'Xamarin.Essentials'
-        apiScanSoftwareVersionNum: $(BUILD_NUMBER)
+        apiScanSoftwareVersionNum: '1.8'
 
   - ${{ if not(startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
     - stage: devicetests
