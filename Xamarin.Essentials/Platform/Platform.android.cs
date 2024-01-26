@@ -122,6 +122,19 @@ namespace Xamarin.Essentials
             }
         }
 
+        internal static AndroidIntent RegisterBroadcastReceiver(BroadcastReceiver receiver, IntentFilter filter, bool exported)
+        {
+            if (HasApiLevel(34))
+            {
+                var flags = exported ? ReceiverFlags.Exported : ReceiverFlags.NotExported;
+
+                // Explicit cast of flags because of: https://github.com/xamarin/xamarin-android/issues/7503
+                return AppContext.RegisterReceiver(receiver, filter, (ActivityFlags)flags);
+            }
+
+            return AppContext.RegisterReceiver(receiver, filter);
+        }
+
         internal static bool HasSystemFeature(string systemFeature)
         {
             var packageManager = AppContext.PackageManager;
@@ -195,8 +208,10 @@ namespace Xamarin.Essentials
         internal static ConnectivityManager ConnectivityManager =>
             AppContext.GetSystemService(Context.ConnectivityService) as ConnectivityManager;
 
+#pragma warning disable CS0618 // Type or member is obsolete
         internal static Vibrator Vibrator =>
             AppContext.GetSystemService(Context.VibratorService) as Vibrator;
+#pragma warning restore CS0618 // Type or member is obsolete
 
         internal static WifiManager WifiManager =>
             AppContext.GetSystemService(Context.WifiService) as WifiManager;
@@ -356,7 +371,9 @@ namespace Xamarin.Essentials
 
             // read the values
             launched = extras.GetBoolean(launchedExtra, false);
+#pragma warning disable CS0618 // Type or member is obsolete
             actualIntent = extras.GetParcelable(actualIntentExtra) as Intent;
+#pragma warning restore CS0618 // Type or member is obsolete
             guid = extras.GetString(guidExtra);
             requestCode = extras.GetInt(requestCodeExtra, -1);
 

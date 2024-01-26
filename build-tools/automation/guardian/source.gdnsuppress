@@ -1,0 +1,362 @@
+{
+  "version": "latest",
+  "suppressionSets": {
+    "default": {
+      "name": "default",
+      "createdDate": "2023-04-18 13:34:41Z",
+      "lastUpdatedDate": "2023-04-18 13:34:41Z"
+    }
+  },
+  "results": {
+    "5a675308c48c317fd90f47c806f31d20bf5d6b0b33444e1d94d5d157c2fe0b89": {
+      "signature": "5a675308c48c317fd90f47c806f31d20bf5d6b0b33444e1d94d5d157c2fe0b89",
+      "alternativeSignatures": [],
+      "target": "Xamarin.Essentials/Map/Map.ios.watchos.macos.cs",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "fb1e6c870dda03dcbd32ccee3413ebd5897ebe798c45d47eaa859c9e554c978d": {
+      "signature": "fb1e6c870dda03dcbd32ccee3413ebd5897ebe798c45d47eaa859c9e554c978d",
+      "alternativeSignatures": [],
+      "target": "Xamarin.Essentials/PhoneDialer/PhoneDialer.android.cs",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "78afc5647e3f5fa6b3750985de6f4f22abe9ea8bc7bac8644ad85932100def07": {
+      "signature": "78afc5647e3f5fa6b3750985de6f4f22abe9ea8bc7bac8644ad85932100def07",
+      "alternativeSignatures": [],
+      "target": "Xamarin.Essentials/TextToSpeech/TextToSpeech.android.cs",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "0a832140f6014aa30ad0a4cf2ef31a89f9995fbcb9c6529a10a804de8c005440": {
+      "signature": "0a832140f6014aa30ad0a4cf2ef31a89f9995fbcb9c6529a10a804de8c005440",
+      "alternativeSignatures": [],
+      "target": "Xamarin.Essentials/TextToSpeech/TextToSpeech.android.cs",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "7769e7cbe736ae5a130e9973a0038a79292825fb6b867f2eb96a76ce45e64017": {
+      "signature": "7769e7cbe736ae5a130e9973a0038a79292825fb6b867f2eb96a76ce45e64017",
+      "alternativeSignatures": [],
+      "target": "Xamarin.Essentials/TextToSpeech/TextToSpeech.android.cs",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "09b47b85f2f4d3172c413cf812174c452e014b3c7a6008222787b1485131fb1e": {
+      "signature": "09b47b85f2f4d3172c413cf812174c452e014b3c7a6008222787b1485131fb1e",
+      "alternativeSignatures": [],
+      "target": "Xamarin.Essentials/TextToSpeech/TextToSpeech.android.cs",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "b40dd2811301f51ab7a9a00177173a9884f1162149d0f1f572ca85468b969845": {
+      "signature": "b40dd2811301f51ab7a9a00177173a9884f1162149d0f1f572ca85468b969845",
+      "alternativeSignatures": [],
+      "target": "Xamarin.Essentials/TextToSpeech/TextToSpeech.shared.cs",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "16d9cb8c64e4467ed3bcce765822d1a99cf5640f455177cede1345a305458fb9": {
+      "signature": "16d9cb8c64e4467ed3bcce765822d1a99cf5640f455177cede1345a305458fb9",
+      "alternativeSignatures": [],
+      "target": "docs/en/FrameworksIndex/xamarin-essentials-android.xml",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "d1b6f5630cbf688ba2eed6ed484358eb05147f173906839abf55b93cb8a808f4": {
+      "signature": "d1b6f5630cbf688ba2eed6ed484358eb05147f173906839abf55b93cb8a808f4",
+      "alternativeSignatures": [],
+      "target": "docs/en/FrameworksIndex/xamarin-essentials-ios.xml",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "b3116cbbe2fb859c5b5edd025c8ed01c27bd93087ef1204e259e3e7b60acfc33": {
+      "signature": "b3116cbbe2fb859c5b5edd025c8ed01c27bd93087ef1204e259e3e7b60acfc33",
+      "alternativeSignatures": [],
+      "target": "docs/en/FrameworksIndex/xamarin-essentials-macos.xml",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "1ed1a93c0fbe895d45b2199369a236933225d818541e996109d41702cf66493a": {
+      "signature": "1ed1a93c0fbe895d45b2199369a236933225d818541e996109d41702cf66493a",
+      "alternativeSignatures": [],
+      "target": "docs/en/FrameworksIndex/xamarin-essentials-tvos.xml",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "408381d08fecad9ae6b21306c0103e94df21b43a92582caba80dbde08fc51d01": {
+      "signature": "408381d08fecad9ae6b21306c0103e94df21b43a92582caba80dbde08fc51d01",
+      "alternativeSignatures": [],
+      "target": "docs/en/FrameworksIndex/xamarin-essentials-uwp.xml",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "6eb50c111a933cb67cae1924b9e327a4570109283b131d65396c03fa16d368ed": {
+      "signature": "6eb50c111a933cb67cae1924b9e327a4570109283b131d65396c03fa16d368ed",
+      "alternativeSignatures": [],
+      "target": "docs/en/FrameworksIndex/xamarin-essentials-watchos.xml",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "4d514026b2bfe8a453923852e13baed4ab6dc8aacb0598f8ebc130ecc117de22": {
+      "signature": "4d514026b2bfe8a453923852e13baed4ab6dc8aacb0598f8ebc130ecc117de22",
+      "alternativeSignatures": [],
+      "target": "docs/en/FrameworksIndex/xamarin-essentials.xml",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "73bf22912754448bbf701b778f2326bcb2c4c57601928d85924f2615a20c6df0": {
+      "signature": "73bf22912754448bbf701b778f2326bcb2c4c57601928d85924f2615a20c6df0",
+      "alternativeSignatures": [],
+      "target": "docs/en/Xamarin.Essentials/Locale.xml",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "ec12075cf92d1259496e1da271a41e4da6bdbdf9e79291d37f9ba0df15a4440e": {
+      "signature": "ec12075cf92d1259496e1da271a41e4da6bdbdf9e79291d37f9ba0df15a4440e",
+      "alternativeSignatures": [],
+      "target": "docs/en/Xamarin.Essentials/Locale.xml",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "9d115b4695878e06b4a271c42efe4322c684bc3bb0d59424c7bfe1a9a727b779": {
+      "signature": "9d115b4695878e06b4a271c42efe4322c684bc3bb0d59424c7bfe1a9a727b779",
+      "alternativeSignatures": [],
+      "target": "docs/en/Xamarin.Essentials/Locale.xml",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "a2f847c390b1eda3600aea3f88da1e506d8306656e63ef1ce4c304721542abc9": {
+      "signature": "a2f847c390b1eda3600aea3f88da1e506d8306656e63ef1ce4c304721542abc9",
+      "alternativeSignatures": [],
+      "target": "docs/en/Xamarin.Essentials/Placemark.xml",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "3a13a5980f4d18542f7b9cf3211c6674a7126fc65795324e7c62c8a184659cf3": {
+      "signature": "3a13a5980f4d18542f7b9cf3211c6674a7126fc65795324e7c62c8a184659cf3",
+      "alternativeSignatures": [],
+      "target": "docs/en/Xamarin.Essentials/Placemark.xml",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "3741fd22e291ea57f55e1faeef9b51b8493e07b0dcc5ed95d9f6af1081685d7a": {
+      "signature": "3741fd22e291ea57f55e1faeef9b51b8493e07b0dcc5ed95d9f6af1081685d7a",
+      "alternativeSignatures": [],
+      "target": "Samples/Samples/View/MapsPage.xaml",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "e9ee31c7f6d0b8e1311b35421ff2364e7dc1b5da6ffd9a904fe97f944c979fd2": {
+      "signature": "e9ee31c7f6d0b8e1311b35421ff2364e7dc1b5da6ffd9a904fe97f944c979fd2",
+      "alternativeSignatures": [],
+      "target": "Samples/Samples/View/MapsPage.xaml",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "30f9130981959f3b7c4eb3a47011b3fbbb1d601a7c82eeb68703dbdd7c4db12a": {
+      "signature": "30f9130981959f3b7c4eb3a47011b3fbbb1d601a7c82eeb68703dbdd7c4db12a",
+      "alternativeSignatures": [],
+      "target": "Samples/Samples/ViewModel/MapsViewModel.cs",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "8dc0c6b473199bfdd564c498884b33ef9b02225cd709e5316b4db29e9d4b3348": {
+      "signature": "8dc0c6b473199bfdd564c498884b33ef9b02225cd709e5316b4db29e9d4b3348",
+      "alternativeSignatures": [],
+      "target": "Samples/Samples/ViewModel/MapsViewModel.cs",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "336a7af404ecaaf89ae89b9d9c49b10946adee56d3c7629a0d371da858d4f010": {
+      "signature": "336a7af404ecaaf89ae89b9d9c49b10946adee56d3c7629a0d371da858d4f010",
+      "alternativeSignatures": [],
+      "target": "Samples/Samples/ViewModel/MapsViewModel.cs",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    },
+    "a22326aba66800c006bc3c3c46cbaa19fedd069a8b3581f29ebe0b8af721bbb7": {
+      "signature": "a22326aba66800c006bc3c3c46cbaa19fedd069a8b3581f29ebe0b8af721bbb7",
+      "alternativeSignatures": [],
+      "target": "Samples/Samples/ViewModel/TextToSpeechViewModel.cs",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "policheck",
+      "ruleId": "79570",
+      "justification": null,
+      "createdDate": "2023-04-18 13:34:41Z",
+      "expirationDate": null,
+      "type": null
+    }
+  }
+}

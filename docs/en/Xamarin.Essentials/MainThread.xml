@@ -72,7 +72,7 @@
       </Parameters>
       <Docs>
         <param name="action">Action to invoke</param>
-        <summary>Invoke the main thread aysnc</summary>
+        <summary>Invoke the main thread async</summary>
         <returns>A task that can be awaited</returns>
         <remarks>To be added.</remarks>
       </Docs>
@@ -94,7 +94,7 @@
       </Parameters>
       <Docs>
         <param name="funcTask">A function task to execute</param>
-        <summary>Invoke the main thread aysnc</summary>
+        <summary>Invoke the main thread async</summary>
         <returns>A task that can be awaited</returns>
         <remarks>To be added.</remarks>
       </Docs>
@@ -120,7 +120,7 @@
       <Docs>
         <typeparam name="T">To be added.</typeparam>
         <param name="funcTask">A function task to execute</param>
-        <summary>Invoke the main thread aysnc</summary>
+        <summary>Invoke the main thread async</summary>
         <returns>A task that can be awaited</returns>
         <remarks>To be added.</remarks>
       </Docs>
@@ -146,7 +146,7 @@
       <Docs>
         <typeparam name="T">To be added.</typeparam>
         <param name="func">A function to execute</param>
-        <summary>Invoke the main thread aysnc</summary>
+        <summary>Invoke the main thread async</summary>
         <returns>A task that can be awaited</returns>
         <remarks>To be added.</remarks>
       </Docs>

@@ -15,7 +15,7 @@ namespace Xamarin.Essentials
                 return;
 
             powerReceiver = new EnergySaverBroadcastReceiver(OnEnergySaverChanged);
-            Platform.AppContext.RegisterReceiver(powerReceiver, new IntentFilter(PowerManager.ActionPowerSaveModeChanged));
+            Platform.RegisterBroadcastReceiver(powerReceiver, new IntentFilter(PowerManager.ActionPowerSaveModeChanged), false);
         }
 
         static void StopEnergySaverListeners()
@@ -52,7 +52,7 @@ namespace Xamarin.Essentials
             Permissions.EnsureDeclared<Permissions.Battery>();
 
             batteryReceiver = new BatteryBroadcastReceiver(OnBatteryInfoChanged);
-            Platform.AppContext.RegisterReceiver(batteryReceiver, new IntentFilter(Intent.ActionBatteryChanged));
+            Platform.RegisterBroadcastReceiver(batteryReceiver, new IntentFilter(Intent.ActionBatteryChanged), false);
         }
 
         static void StopBatteryListeners()
@@ -76,7 +76,7 @@ namespace Xamarin.Essentials
                 Permissions.EnsureDeclared<Permissions.Battery>();
 
                 using (var filter = new IntentFilter(Intent.ActionBatteryChanged))
-                using (var battery = Platform.AppContext.RegisterReceiver(null, filter))
+                using (var battery = Platform.RegisterBroadcastReceiver(null, filter, false))
                 {
                     var level = battery.GetIntExtra(BatteryManager.ExtraLevel, -1);
                     var scale = battery.GetIntExtra(BatteryManager.ExtraScale, -1);
@@ -96,7 +96,7 @@ namespace Xamarin.Essentials
                 Permissions.EnsureDeclared<Permissions.Battery>();
 
                 using (var filter = new IntentFilter(Intent.ActionBatteryChanged))
-                using (var battery = Platform.AppContext.RegisterReceiver(null, filter))
+                using (var battery = Platform.RegisterBroadcastReceiver(null, filter, false))
                 {
                     var status = battery.GetIntExtra(BatteryManager.ExtraStatus, -1);
                     switch (status)
@@ -123,7 +123,7 @@ namespace Xamarin.Essentials
                 Permissions.EnsureDeclared<Permissions.Battery>();
 
                 using (var filter = new IntentFilter(Intent.ActionBatteryChanged))
-                using (var battery = Platform.AppContext.RegisterReceiver(null, filter))
+                using (var battery = Platform.RegisterBroadcastReceiver(null, filter, false))
                 {
                     var chargePlug = battery.GetIntExtra(BatteryManager.ExtraPlugged, -1);
 
