@@ -45,13 +45,19 @@
       "breadcrumb_path": "~/breadcrumb/toc.yml",
       "author": "dotnet-bot",
       "ms.author": "dotnetcontent",
-      "manager": "crdun",
       "ms.date": "12/21/2018",
       "searchScope": ["Xamarin"],
       "uhfHeaderId": "MSDocsHeader-DotNet",
       "ms.topic": "managed-reference",
-      "feedback_system": "GitHub",      
-      "feedback_product_url": "https://github.com/xamarin/Essentials/blob/main/PRODUCT-FEEDBACK.md"
+      "feedback_system": "OpenSource",
+      "feedback_github_repo": "xamarin/Essentials",
+      "feedback_product_url": "https://developercommunity.visualstudio.com/",
+      "open_source_feedback_contributorGuideUrl": "https://github.com/MicrosoftDocs/xamarin-docs/blob/live/CONTRIBUTING.md",
+      "open_source_feedback_issueUrl": "https://github.com/xamarin/Essentials/issues/new?template=customer-feedback.yml",
+      "open_source_feedback_productName": "Xamarin.Essentials",
+      "open_source_feedback_issueTitle": "",
+      "open_source_feedback_productLogoLightUrl": "https://learn.microsoft.com/media/logos/logo_xamarin.svg",
+      "open_source_feedback_productLogoDarkUrl": "https://learn.microsoft.com/media/logos/logo_xamarin.svg",
     },
     "fileMetadata": {
       "author": {
