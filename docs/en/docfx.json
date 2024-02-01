@@ -53,7 +53,7 @@
       "feedback_github_repo": "xamarin/essentials",
       "feedback_product_url": "https://developercommunity.visualstudio.com/",
       "open_source_feedback_contributorGuideUrl": "https://github.com/MicrosoftDocs/xamarin-docs/blob/live/CONTRIBUTING.md",
-      "open_source_feedback_issueUrl": "https://github.com/xamarin/essentials/issues/new?template=customer-feedback.yml",
+      "open_source_feedback_issueUrl": "https://github.com/xamarin/Essentials/issues/new?template=customer-feedback.yml",
       "open_source_feedback_productName": "Xamarin.Essentials",
       "open_source_feedback_issueTitle": "",
       "open_source_feedback_productLogoLightUrl": "https://learn.microsoft.com/media/logos/logo_xamarin.svg",
