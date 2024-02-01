@@ -16,7 +16,7 @@ namespace Xamarin.Essentials
             manager.DeviceMotionUpdateInterval = sensorSpeed.ToPlatform();
 
             // use a fixed reference frame where X points north and Z points vertically into the sky
-            manager.StartDeviceMotionUpdates(CMAttitudeReferenceFrame.XTrueNorthZVertical, Platform.GetCurrentQueue(), DataUpdated);
+            manager.StartDeviceMotionUpdates(CMAttitudeReferenceFrame.XMagneticNorthZVertical, Platform.GetCurrentQueue(), DataUpdated);
         }
 
         static void DataUpdated(CMDeviceMotion data, NSError error)
