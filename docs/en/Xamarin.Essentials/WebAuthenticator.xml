@@ -36,6 +36,7 @@
         <param name="callbackUrl">Expected callback url that the navigation flow will eventually redirect to.</param>
         <summary>Begin an authentication flow by navigating to the specified url and waiting for a callback/redirect to the callbackUrl scheme.</summary>
         <returns>Returns a result parsed out from the callback url.</returns>
+        <exception cref="TaskCanceledException">The user canceled the authentication flow.</exception>
         <remarks></remarks>
       </Docs>
     </Member>
