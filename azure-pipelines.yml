@@ -38,10 +38,11 @@ parameters:
 
 resources:
   repositories:
-    - repository: internal-templates
+    - repository: xamarin-templates
       type: github
       name: xamarin/yaml-templates
       endpoint: xamarin
+      ref: refs/heads/main
     - repository: components
       type: github
       name: xamarin/XamarinComponents
