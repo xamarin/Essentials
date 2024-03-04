@@ -140,11 +140,11 @@ extends:
                       Xamarin.Essentials/bin/**/*.pdb
                     TargetFolder: $(build.artifactstagingdirectory)
 
-                - task: PublishBuildArtifacts@1
-                  displayName: 'Publish Artifact Binaries'
-                  condition: always()
-                  inputs:
-                    ArtifactName: 'binaries'
+                # - task: PublishBuildArtifacts@1
+                #   displayName: 'Publish Artifact Binaries'
+                #   condition: always()
+                #   inputs:
+                #     ArtifactName: 'binaries'
 
       - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
         - stage: signing
