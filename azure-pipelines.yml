@@ -16,6 +16,7 @@ variables:
   GIT_BRANCH_NAME: $(Build.SourceBranchName)
   AREA_PATH: 'DevDiv\Xamarin SDK\Build and Tools'
   CAKE_VERSION: '2.1.0'
+  signingCondition: and(succeeded(), or(eq(variables['Sign'], 'true'), startsWith(variables['Build.SourceBranch'],'refs/tags/')))
 
 parameters:
   - name: artifactsPath
@@ -388,7 +389,7 @@ extends:
             - template: sign-artifacts/jobs/v2.yml@xamarin-templates
               parameters:
                 displayName: Sign Phase
-                condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
+                condition: ${{ variables.signingCondition }}
                 use1ESTemplate: true
                 usePipelineArtifactTasks: true
 
