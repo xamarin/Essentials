@@ -236,7 +236,7 @@ extends:
       - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
         - stage: signing
           displayName: Sign Artifacts
-          dependsOn: [ 'build' ]
+          dependsOn: [ 'windows' ]
           jobs:
             - template: sign-artifacts/jobs/v2.yml@xamarin-templates
               parameters:
