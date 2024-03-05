@@ -262,215 +262,215 @@ extends:
       #       apiScanSoftwareName: 'Xamarin.Essentials'
       #       apiScanSoftwareVersionNum: '1.8'
 
-      - ${{ if not(startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
-        - stage: devicetests
-          dependsOn: []
-          displayName: Device Tests
-          jobs:
-            - job: devicetests_uwp
-              displayName: UWP
-              # skip for now
-              condition: false
-              pool:
-                ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
-                  pool: ${{ parameters.VM_IMAGE_HOST }}
-                ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:
-                  vmImage: windows-2019
-              steps:
-                - script: 'certutil -importpfx $(Build.SourcesDirectory)\DeviceTests\DeviceTests.UWP\DeviceTests.UWP_TemporaryKey.pfx'
-                  displayName: 'Run certutil'
-                - powershell: |
-                    cd DeviceTests
-                    .\build.ps1 --target=test-uwp-emu --settings_skipverification=true --verbosity=diagnostic
-                  displayName: 'Run Device Tests - UWP'
-                - task: PublishTestResults@2
-                  displayName: 'Publish Test Results'
-                  inputs:
-                    testResultsFormat: XUnit
-                    testResultsFiles: '**/xunit-*.xml'
-                    testRunTitle: 'Device Tests - UWP'
+    #   - ${{ if not(startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
+    #     - stage: devicetests
+    #       dependsOn: []
+    #       displayName: Device Tests
+    #       jobs:
+    #         - job: devicetests_uwp
+    #           displayName: UWP
+    #           # skip for now
+    #           condition: false
+    #           pool:
+    #             ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
+    #               pool: ${{ parameters.VM_IMAGE_HOST }}
+    #             ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:
+    #               vmImage: windows-2019
+    #           steps:
+    #             - script: 'certutil -importpfx $(Build.SourcesDirectory)\DeviceTests\DeviceTests.UWP\DeviceTests.UWP_TemporaryKey.pfx'
+    #               displayName: 'Run certutil'
+    #             - powershell: |
+    #                 cd DeviceTests
+    #                 .\build.ps1 --target=test-uwp-emu --settings_skipverification=true --verbosity=diagnostic
+    #               displayName: 'Run Device Tests - UWP'
+    #             - task: PublishTestResults@2
+    #               displayName: 'Publish Test Results'
+    #               inputs:
+    #                 testResultsFormat: XUnit
+    #                 testResultsFiles: '**/xunit-*.xml'
+    #                 testRunTitle: 'Device Tests - UWP'
       
-            - template: .ci/build.v1.yml@components
-              parameters:
-                macosImage: 'macos-12'
-                name: devicetests_ios
-                runChecks: false
-                displayName: iOS
-                publishOutputSuffix: '-ios'
-                windowsImage: ''
-                areaPath: $(AREA_PATH)
-                verbosity: diagnostic
-                cakeFile: DeviceTests/build.cake
-                cakeTarget: test-ios-emu
-                cake: $(CAKE_VERSION)
-                xcode: '14.2'
-                xharness: '1.0.0-prerelease.23212.1'
-      
-            - template: .ci/build.v1.yml@components
-              parameters:
-                name: devicetests_android_api_21
-                runChecks: false
-                displayName: Android API 21
-                publishOutputSuffix: '-android21'
-                windowsImage: ''                    # Mac only
-                areaPath: $(AREA_PATH)
-                verbosity: diagnostic
-                cakeFile: DeviceTests/build.cake
-                cakeTarget: test-android-emu
-                cakeExtraArgs: --avd-target="`"system-images;android-21;google_apis;x86`""
-                cake: $(CAKE_VERSION)
-                preBuildSteps:
-                  # Setup JDK Paths
-                  - bash: |
-                      echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
-                    displayName: 'Setup JDK Paths'
-                  - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-21;google_apis;x86\""
-                    displayName: Install the Android emulators
-      
-            - template: .ci/build.v1.yml@components
-              parameters:
-                name: devicetests_android_api_22
-                runChecks: false
-                displayName: Android API 22
-                publishOutputSuffix: '-android22'
-                windowsImage: ''                    # Mac only
-                areaPath: $(AREA_PATH)
-                verbosity: diagnostic
-                cakeFile: DeviceTests/build.cake
-                cakeTarget: test-android-emu
-                cakeExtraArgs: --avd-target="`"system-images;android-22;google_apis;x86`""
-                cake: $(CAKE_VERSION)
-                preBuildSteps:
-                  # Setup JDK Paths
-                  - bash: |
-                      echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
-                    displayName: 'Setup JDK Paths'
-                  - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-22;google_apis;x86\""
-                    displayName: Install the Android emulators
-
     #         - template: .ci/build.v1.yml@components
     #           parameters:
-    #             name: devicetests_android_api_23
+    #             macosImage: 'macos-12'
+    #             name: devicetests_ios
     #             runChecks: false
-    #             continueOnError: true
-    #             displayName: Android API 23
-    #             publishOutputSuffix: '-android23'
-    #             windowsImage: ''                   # Mac only
+    #             displayName: iOS
+    #             publishOutputSuffix: '-ios'
+    #             windowsImage: ''
+    #             areaPath: $(AREA_PATH)
+    #             verbosity: diagnostic
+    #             cakeFile: DeviceTests/build.cake
+    #             cakeTarget: test-ios-emu
+    #             cake: $(CAKE_VERSION)
+    #             xcode: '14.2'
+    #             xharness: '1.0.0-prerelease.23212.1'
+      
+    #         - template: .ci/build.v1.yml@components
+    #           parameters:
+    #             name: devicetests_android_api_21
+    #             runChecks: false
+    #             displayName: Android API 21
+    #             publishOutputSuffix: '-android21'
+    #             windowsImage: ''                    # Mac only
     #             areaPath: $(AREA_PATH)
     #             verbosity: diagnostic
     #             cakeFile: DeviceTests/build.cake
     #             cakeTarget: test-android-emu
-    #             cakeExtraArgs: --avd-target="`"system-images;android-23;google_apis;x86`""
+    #             cakeExtraArgs: --avd-target="`"system-images;android-21;google_apis;x86`""
     #             cake: $(CAKE_VERSION)
     #             preBuildSteps:
-    #                # Setup JDK Paths
-    #                - bash: |
+    #               # Setup JDK Paths
+    #               - bash: |
     #                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
     #                 displayName: 'Setup JDK Paths'
-    #               - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-23;google_apis;x86\""
-    #               displayName: Install the Android emulators
+    #               - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-21;google_apis;x86\""
+    #                 displayName: Install the Android emulators
       
-            - template: .ci/build.v1.yml@components
-              parameters:
-                name: devicetests_android_api_24
-                runChecks: false
-                displayName: Android API 24
-                publishOutputSuffix: '-android24'
-                windowsImage: ''                    # Mac only
-                areaPath: $(AREA_PATH)
-                verbosity: diagnostic
-                cakeFile: DeviceTests/build.cake
-                cakeTarget: test-android-emu
-                cakeExtraArgs: --avd-target="`"system-images;android-24;google_apis;x86`""
-                cake: $(CAKE_VERSION)
-                preBuildSteps:
-                  # Setup JDK Paths
-                  - bash: |
-                      echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
-                    displayName: 'Setup JDK Paths'
-                  - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-24;google_apis;x86\""
-                    displayName: Install the Android emulators
-      
-            - template: .ci/build.v1.yml@components
-              parameters:
-                name: devicetests_android_api_26
-                runChecks: false
-                displayName: Android API 26
-                publishOutputSuffix: '-android26'
-                windowsImage: ''                    # Mac only
-                areaPath: $(AREA_PATH)
-                verbosity: diagnostic
-                cakeFile: DeviceTests/build.cake
-                cakeTarget: test-android-emu
-                cakeExtraArgs: --avd-target="`"system-images;android-26;google_apis;x86`""
-                cake: $(CAKE_VERSION)
-                preBuildSteps:
-                  # Setup JDK Paths
-                  - bash: |
-                      echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
-                    displayName: 'Setup JDK Paths'
-                  - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-26;google_apis;x86\""
-                    displayName: Install the Android emulators
-      
-            - template: .ci/build.v1.yml@components
-              parameters:
-                name: devicetests_android_api_29
-                runChecks: false
-                displayName: Android API 29
-                publishOutputSuffix: '-android29'
-                windowsImage: ''                    # Mac only
-                areaPath: $(AREA_PATH)
-                verbosity: diagnostic
-                cakeFile: DeviceTests/build.cake
-                cakeTarget: test-android-emu
-                cakeExtraArgs: --avd-target="`"system-images;android-29;google_apis;x86`""
-                cake: $(CAKE_VERSION)
-                preBuildSteps:
-                  # Setup JDK Paths
-                  - bash: |
-                      echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
-                    displayName: 'Setup JDK Paths'
-                  - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-29;google_apis;x86\""
-                    displayName: Install the Android emulators
-      
-            # - template: .ci/build.v1.yml@components
-            #   parameters:
-            #     name: devicetests_android_api_30
-            #     runChecks: false
-            #     displayName: Android API 30
-            #     publishOutputSuffix: '-android30'
-            #     windowsImage: ''                   # Mac only
-            #     areaPath: $(AREA_PATH)
-            #     verbosity: diagnostic
-            #     cakeFile: DeviceTests/build.cake
-            #     cakeTarget: test-android-emu
-            #     cakeExtraArgs: --avd-target="`"system-images;android-30;google_apis_playstore;x86`""
-            #     cake: $(CAKE_VERSION)
-            #     preBuildSteps:
-            #       # Setup JDK Paths
-            #       - bash: |
-            #          echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
-            #         displayName: 'Setup JDK Paths'
-            #       - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-30;google_apis_playstore;x86\""
-            #         displayName: Install the Android emulators
+    #         - template: .ci/build.v1.yml@components
+    #           parameters:
+    #             name: devicetests_android_api_22
+    #             runChecks: false
+    #             displayName: Android API 22
+    #             publishOutputSuffix: '-android22'
+    #             windowsImage: ''                    # Mac only
+    #             areaPath: $(AREA_PATH)
+    #             verbosity: diagnostic
+    #             cakeFile: DeviceTests/build.cake
+    #             cakeTarget: test-android-emu
+    #             cakeExtraArgs: --avd-target="`"system-images;android-22;google_apis;x86`""
+    #             cake: $(CAKE_VERSION)
+    #             preBuildSteps:
+    #               # Setup JDK Paths
+    #               - bash: |
+    #                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+    #                 displayName: 'Setup JDK Paths'
+    #               - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-22;google_apis;x86\""
+    #                 displayName: Install the Android emulators
 
-            # - template: .ci/build.v1.yml@components
-            #   parameters:
-            #     name: devicetests_android_api_33
-            #     runChecks: false
-            #     displayName: Android API 33
-            #     publishOutputSuffix: '-android33'
-            #     windowsImage: ''                   # Mac only
-            #     areaPath: $(AREA_PATH)
-            #     verbosity: diagnostic
-            #     cakeFile: DeviceTests/build.cake
-            #     cakeTarget: test-android-emu
-            #     cakeExtraArgs: --avd-target="`"system-images;android-33;google_apis_playstore;x86_64`""
-            #     cake: $(CAKE_VERSION)
-            #     preBuildSteps:
-            #       # Setup JDK Paths
-            #       - bash: |
-            #           echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
-            #         displayName: 'Setup JDK Paths'
-            #       - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-33;google_apis_playstore;x86_64\""
-            #         displayName: Install the Android emulators
+    # #         - template: .ci/build.v1.yml@components
+    # #           parameters:
+    # #             name: devicetests_android_api_23
+    # #             runChecks: false
+    # #             continueOnError: true
+    # #             displayName: Android API 23
+    # #             publishOutputSuffix: '-android23'
+    # #             windowsImage: ''                   # Mac only
+    # #             areaPath: $(AREA_PATH)
+    # #             verbosity: diagnostic
+    # #             cakeFile: DeviceTests/build.cake
+    # #             cakeTarget: test-android-emu
+    # #             cakeExtraArgs: --avd-target="`"system-images;android-23;google_apis;x86`""
+    # #             cake: $(CAKE_VERSION)
+    # #             preBuildSteps:
+    # #                # Setup JDK Paths
+    # #                - bash: |
+    # #                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+    # #                 displayName: 'Setup JDK Paths'
+    # #               - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-23;google_apis;x86\""
+    # #               displayName: Install the Android emulators
+      
+    #         - template: .ci/build.v1.yml@components
+    #           parameters:
+    #             name: devicetests_android_api_24
+    #             runChecks: false
+    #             displayName: Android API 24
+    #             publishOutputSuffix: '-android24'
+    #             windowsImage: ''                    # Mac only
+    #             areaPath: $(AREA_PATH)
+    #             verbosity: diagnostic
+    #             cakeFile: DeviceTests/build.cake
+    #             cakeTarget: test-android-emu
+    #             cakeExtraArgs: --avd-target="`"system-images;android-24;google_apis;x86`""
+    #             cake: $(CAKE_VERSION)
+    #             preBuildSteps:
+    #               # Setup JDK Paths
+    #               - bash: |
+    #                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+    #                 displayName: 'Setup JDK Paths'
+    #               - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-24;google_apis;x86\""
+    #                 displayName: Install the Android emulators
+      
+    #         - template: .ci/build.v1.yml@components
+    #           parameters:
+    #             name: devicetests_android_api_26
+    #             runChecks: false
+    #             displayName: Android API 26
+    #             publishOutputSuffix: '-android26'
+    #             windowsImage: ''                    # Mac only
+    #             areaPath: $(AREA_PATH)
+    #             verbosity: diagnostic
+    #             cakeFile: DeviceTests/build.cake
+    #             cakeTarget: test-android-emu
+    #             cakeExtraArgs: --avd-target="`"system-images;android-26;google_apis;x86`""
+    #             cake: $(CAKE_VERSION)
+    #             preBuildSteps:
+    #               # Setup JDK Paths
+    #               - bash: |
+    #                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+    #                 displayName: 'Setup JDK Paths'
+    #               - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-26;google_apis;x86\""
+    #                 displayName: Install the Android emulators
+      
+    #         - template: .ci/build.v1.yml@components
+    #           parameters:
+    #             name: devicetests_android_api_29
+    #             runChecks: false
+    #             displayName: Android API 29
+    #             publishOutputSuffix: '-android29'
+    #             windowsImage: ''                    # Mac only
+    #             areaPath: $(AREA_PATH)
+    #             verbosity: diagnostic
+    #             cakeFile: DeviceTests/build.cake
+    #             cakeTarget: test-android-emu
+    #             cakeExtraArgs: --avd-target="`"system-images;android-29;google_apis;x86`""
+    #             cake: $(CAKE_VERSION)
+    #             preBuildSteps:
+    #               # Setup JDK Paths
+    #               - bash: |
+    #                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+    #                 displayName: 'Setup JDK Paths'
+    #               - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-29;google_apis;x86\""
+    #                 displayName: Install the Android emulators
+      
+    #         # - template: .ci/build.v1.yml@components
+    #         #   parameters:
+    #         #     name: devicetests_android_api_30
+    #         #     runChecks: false
+    #         #     displayName: Android API 30
+    #         #     publishOutputSuffix: '-android30'
+    #         #     windowsImage: ''                   # Mac only
+    #         #     areaPath: $(AREA_PATH)
+    #         #     verbosity: diagnostic
+    #         #     cakeFile: DeviceTests/build.cake
+    #         #     cakeTarget: test-android-emu
+    #         #     cakeExtraArgs: --avd-target="`"system-images;android-30;google_apis_playstore;x86`""
+    #         #     cake: $(CAKE_VERSION)
+    #         #     preBuildSteps:
+    #         #       # Setup JDK Paths
+    #         #       - bash: |
+    #         #          echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+    #         #         displayName: 'Setup JDK Paths'
+    #         #       - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-30;google_apis_playstore;x86\""
+    #         #         displayName: Install the Android emulators
+
+    #         # - template: .ci/build.v1.yml@components
+    #         #   parameters:
+    #         #     name: devicetests_android_api_33
+    #         #     runChecks: false
+    #         #     displayName: Android API 33
+    #         #     publishOutputSuffix: '-android33'
+    #         #     windowsImage: ''                   # Mac only
+    #         #     areaPath: $(AREA_PATH)
+    #         #     verbosity: diagnostic
+    #         #     cakeFile: DeviceTests/build.cake
+    #         #     cakeTarget: test-android-emu
+    #         #     cakeExtraArgs: --avd-target="`"system-images;android-33;google_apis_playstore;x86_64`""
+    #         #     cake: $(CAKE_VERSION)
+    #         #     preBuildSteps:
+    #         #       # Setup JDK Paths
+    #         #       - bash: |
+    #         #           echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+    #         #         displayName: 'Setup JDK Paths'
+    #         #       - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-33;google_apis_playstore;x86_64\""
+    #         #         displayName: Install the Android emulators
