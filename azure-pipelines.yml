@@ -133,7 +133,7 @@ extends:
 
               - pwsh: |
                   Get-Content $MyInvocation.MyCommand.Definition
-                  dotnet cake ${{ parameters.cakeFile }} ${{ parameters.cakeExtraArgs }} `
+                  dotnet cake build.cake `
                     --gitpreviouscommit="$(GitLastSuccessfulCommit)" `
                     --gitcommit="$(Build.SourceVersion)" `
                     --gitbranch="$(Build.SourceBranch)" `
