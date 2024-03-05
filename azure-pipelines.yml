@@ -22,6 +22,7 @@ parameters:
     default: 'output'
 
   - name: validPackagePrefixes
+    type: object
     default: [ 'Xamarin', 'Mono' ]
 
   - name: verbosity
