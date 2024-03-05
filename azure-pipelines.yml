@@ -322,17 +322,17 @@ extends:
           #       #   inputs:
           #       #     ArtifactName: 'binaries'
 
-          - template: security/apiscan/v0.yml@xamarin-templates
-            parameters:
-              windowsPoolName: ${{ parameters.VM_IMAGE_HOST.name }}
-              windowsImageOverride: ${{ parameters.VM_IMAGE_HOST.image }}
-              stageDependsOn: 'windows'
-              timeoutInMinutes: 600
-              scanArtifacts: [ '${{ parameters.PackPlatform.artifact }}', '${{ parameters.PackPlatform.binariesArtifact }}' ]
-              sourceGdnSuppressionFile: '$(Build.SourcesDirectory)\build-tools\automation\guardian\source.gdnsuppress'
-              tsaConfigFile: '$(Build.SourcesDirectory)\build-tools\automation\guardian\tsaoptions-v2.json'
-              apiScanSoftwareName: 'Xamarin.Essentials'
-              apiScanSoftwareVersionNum: '1.8'
+      - template: security/apiscan/v0.yml@xamarin-templates
+        parameters:
+          windowsPoolName: ${{ parameters.VM_IMAGE_HOST.name }}
+          windowsImageOverride: ${{ parameters.VM_IMAGE_HOST.image }}
+          stageDependsOn: 'windows'
+          timeoutInMinutes: 600
+          scanArtifacts: [ '${{ parameters.PackPlatform.artifact }}', '${{ parameters.PackPlatform.binariesArtifact }}' ]
+          sourceGdnSuppressionFile: '$(Build.SourcesDirectory)\build-tools\automation\guardian\source.gdnsuppress'
+          tsaConfigFile: '$(Build.SourcesDirectory)\build-tools\automation\guardian\tsaoptions-v2.json'
+          apiScanSoftwareName: 'Xamarin.Essentials'
+          apiScanSoftwareVersionNum: '1.8'
 
       - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
         - stage: signing
