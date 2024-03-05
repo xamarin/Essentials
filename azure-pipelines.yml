@@ -138,7 +138,7 @@ extends:
                     --gitcommit="$(Build.SourceVersion)" `
                     --gitbranch="$(Build.SourceBranch)" `
                     --target="ci-release" `
-                    --configuration="${{ parameters.configuration }}" `
+                    --configuration="Release" `
                     --verbosity="normal"
                 displayName: 'Run basic build'
                 env:
