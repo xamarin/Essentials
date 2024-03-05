@@ -111,7 +111,7 @@ extends:
                 - output: pipelineArtifact
                   displayName: 'Publish the ${{ parameters.PackPlatform.artifact }} artifacts'
                   artifactName: ${{ parameters.PackPlatform.artifact }}
-                  targetPath: '$(Build.ArtifactStagingDirectory)/output'
+                  targetPath: '$(Build.ArtifactStagingDirectory)\output'
             steps:
               - bash: |
                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
@@ -281,6 +281,12 @@ extends:
                     Xamarin.Essentials/bin/**/*.dll
                     Xamarin.Essentials/bin/**/*.pdb
                   TargetFolder: $(build.artifactstagingdirectory)
+
+              - task: CopyFiles@2
+                displayName: 'Copy NuGet package to artifacts staging'
+                inputs:
+                  Contents: '$(Build.SourcesDirectory)\**\Xamarin.Essentials.*.nupkg'
+                  TargetFolder: $(build.artifactstagingdirectory)\output
 
               - pwsh: |
                   dotnet cake validation.cake `
