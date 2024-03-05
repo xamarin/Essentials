@@ -18,6 +18,18 @@ variables:
   CAKE_VERSION: '2.1.0'
 
 parameters:
+  - name: artifactsPath
+    default: 'output'
+
+  - name: validPackagePrefixes
+    default: [ 'Xamarin', 'Mono' ]
+
+  - name: verbosity
+    default: 'normal'
+
+  - name: signListPath
+    default: 'SignList.xml'
+
   - name: VM_IMAGE_HOST
     type: object
     default:
@@ -92,6 +104,10 @@ extends:
                   displayName: 'Publish the ${{ parameters.PackPlatform.binariesArtifact }} artifacts'
                   artifactName: ${{ parameters.PackPlatform.binariesArtifact }}
                   targetPath: '$(Build.ArtifactStagingDirectory)'
+                - output: pipelineArtifact
+                  displayName: 'Publish the ${{ parameters.PackPlatform.artifact }} artifacts'
+                  artifactName: ${{ parameters.PackPlatform.artifact }}
+                  targetPath: '$(Build.ArtifactStagingDirectory)/output'
             steps:
               - bash: |
                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
@@ -184,7 +200,7 @@ extends:
                     --gitbranch="$(Build.SourceBranch)" `
                     --target="ci-release" `
                     --configuration="Release" `
-                    --verbosity="normal"
+                    --verbosity="${{ parameters.verbosity }}"
                 displayName: 'Run basic build'
                 env:
                   JavaSdkDirectory: $(JAVA_HOME)
@@ -224,6 +240,33 @@ extends:
                     Xamarin.Essentials/bin/**/*.dll
                     Xamarin.Essentials/bin/**/*.pdb
                   TargetFolder: $(build.artifactstagingdirectory)
+
+              - pwsh: |
+                  dotnet cake validation.cake `
+                    --namespaces="${{ join(',', parameters.validPackagePrefixes) }}" `
+                    --verbosity="${{ parameters.verbosity }}"
+                displayName: 'Run NuGet package validation'
+
+              - pwsh: |
+                  dotnet cake nuget-diff.cake `
+                    --artifacts="${{ parameters.artifactsPath }}" `
+                    --output="${{ parameters.artifactsPath }}/api-diff" `
+                    --cache="$(Agent.TempDirectory)/api-diff" `
+                    --verbosity="${{ parameters.verbosity }}"
+                displayName: 'Generate API diff'
+
+              - pwsh: |
+                  $srcExists = (Test-Path "${{ parameters.signListPath }}")
+                  $dstExists = (Test-Path "${{ parameters.artifactsPath }}\SignList.xml")
+                  if ($srcExists -and !$dstExists) {
+                    Copy-Item "${{ parameters.signListPath }}" "${{ parameters.artifactsPath }}\SignList.xml"
+                    Write-Host "Copied ${{ parameters.signListPath }} to ${{ parameters.artifactsPath }}\SignList.xml"
+                  } elseif (!$srcExists) {
+                    Write-Host "${{ parameters.signListPath }} did not exist, nothing copied."
+                  } elseif ($dstExists) {
+                    Write-Host "${{ parameters.artifactsPath }}\SignList.xml already existed, nothing copied."
+                  }
+                displayName: 'Copy SignList.xml to the nuget artifact'
 
           # - template: .ci/build.v1.yml@components
           #   parameters:
@@ -277,6 +320,18 @@ extends:
           #       #   condition: always()
           #       #   inputs:
           #       #     ArtifactName: 'binaries'
+
+          - template: security/apiscan/v0.yml@xamarin-templates
+            parameters:
+              windowsPoolName: ${{ parameters.VM_IMAGE_HOST.name }}
+              windowsImageOverride: ${{ parameters.VM_IMAGE_HOST.image }}
+              stageDependsOn: 'windows'
+              timeoutInMinutes: 600
+              scanArtifacts: [ '${{ parameters.PackPlatform.artifact }}', '${{ parameters.PackPlatform.binariesArtifact }}' ]
+              sourceGdnSuppressionFile: '$(Build.SourcesDirectory)\build-tools\automation\guardian\source.gdnsuppress'
+              tsaConfigFile: '$(Build.SourcesDirectory)\build-tools\automation\guardian\tsaoptions-v2.json'
+              apiScanSoftwareName: 'Xamarin.Essentials'
+              apiScanSoftwareVersionNum: '1.8'
 
       - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
         - stage: signing
