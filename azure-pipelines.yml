@@ -83,7 +83,7 @@ extends:
               clean: all
             displayName: ${{ parameters.PackPlatform.name }}
             timeoutInMinutes: 60
-
+            
             pool: ${{ parameters.VM_IMAGE_HOST }}
 
             templateContext:
@@ -92,59 +92,146 @@ extends:
                   displayName: 'Publish the ${{ parameters.PackPlatform.binariesArtifact }} artifacts'
                   artifactName: ${{ parameters.PackPlatform.binariesArtifact }}
                   targetPath: '$(Build.ArtifactStagingDirectory)'
+            steps:
+              - bash: |
+                  echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+                displayName: 'Setup JDK Paths'
 
-          - template: .ci/build.v1.yml@components
-            parameters:
-              runChecks: false
-              dotnet: '3.1.415'
-              dotnetStable: '3.1.415'
-              cake: '2.1.0'
-              ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
-                pool: ${{ parameters.VM_IMAGE_HOST }}
-              ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:
-                windowsImage: windows-2019
-              areaPath: 'DevDiv\Xamarin SDK'
-              masterBranchName: 'main'
-              ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}: #we are shipping our product
-                cakeTarget: ci-release # We just want to build the library and nuget
-                macosImage: '' # We don't need the macOS build
-              preBuildSteps:
-                # Setup JDK Paths
-                - bash: |
-                    echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
-                  displayName: 'Setup JDK Paths'
-                - pwsh: |
-                    $pr = "pr." + $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
-                    $nuget = $env:BASE_VERSION + "-" + $pr + "." + $env:BUILD_NUMBER
-                    Write-Host "Preview label: $pr"
-                    Write-Host "NuGet version: $nuget"
-                    Write-Host "##vso[task.setvariable variable=PREVIEW_LABEL]$pr"
-                    Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$nuget"
-                  displayName: Use a special preview label for PRs
-                  condition: eq(variables['Build.Reason'], 'PullRequest')
-                - pwsh: |
-                    $tagVersion = $env:BUILD_SOURCEBRANCHNAME
-                    Write-Host "Tag version: $tagVersion"
-                    Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$tagVersion"
-                  displayName: Override version for tags
-                  condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
-                - pwsh: |
-                    Write-Host "##vso[build.updatebuildnumber]$env:NUGET_VERSION"
-                  displayName: Update the build number with a more readable one
-              postBuildSteps:
-                - task: CopyFiles@2
-                  displayName: 'Copy Files (DLLs, PDBs, MDBs & binlogs)'
-                  inputs:
-                    Contents: |
-                      Xamarin.Essentials/bin/**/*.dll
-                      Xamarin.Essentials/bin/**/*.pdb
-                    TargetFolder: $(build.artifactstagingdirectory)
+              - task: UseDotNet@2
+                displayName: 'Switch to the correct version of the .NET Core SDK'
+                inputs:
+                  version: '3.1.415'
+                  performMultiLevelLookup: true
+                  includePreviewVersions: true
+              
+              - pwsh: |
+                  dotnet tool install -g api-tools --version 1.3.4
+                  dotnet tool install -g cake.tool --version 2.1.0
+                  dotnet tool install -g Microsoft.DotNet.XHarness.CLI --version 1.0.0-prerelease.20602.1 --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-eng/nuget/v3/index.json
+                displayName: 'Install required .NET Core global tools'
 
-                # - task: PublishBuildArtifacts@1
-                #   displayName: 'Publish Artifact Binaries'
-                #   condition: always()
-                #   inputs:
-                #     ArtifactName: 'binaries'
+              - pwsh: |
+                  $pr = "pr." + $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
+                  $nuget = $env:BASE_VERSION + "-" + $pr + "." + $env:BUILD_NUMBER
+                  Write-Host "Preview label: $pr"
+                  Write-Host "NuGet version: $nuget"
+                  Write-Host "##vso[task.setvariable variable=PREVIEW_LABEL]$pr"
+                  Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$nuget"
+                displayName: Use a special preview label for PRs
+                condition: eq(variables['Build.Reason'], 'PullRequest')
+
+              - pwsh: |
+                  $tagVersion = $env:BUILD_SOURCEBRANCHNAME
+                  Write-Host "Tag version: $tagVersion"
+                  Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$tagVersion"
+                displayName: Override version for tags
+                condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
+                
+              - pwsh: |
+                  Write-Host "##vso[build.updatebuildnumber]$env:NUGET_VERSION"
+                displayName: Update the build number with a more readable one
+
+              - pwsh: |
+                  Get-Content $MyInvocation.MyCommand.Definition
+                  dotnet cake ${{ parameters.cakeFile }} ${{ parameters.cakeExtraArgs }} `
+                    --gitpreviouscommit="$(GitLastSuccessfulCommit)" `
+                    --gitcommit="$(Build.SourceVersion)" `
+                    --gitbranch="$(Build.SourceBranch)" `
+                    --target="ci-release" `
+                    --configuration="${{ parameters.configuration }}" `
+                    --verbosity="normal"
+                displayName: 'Run basic build'
+                env:
+                  JavaSdkDirectory: $(JAVA_HOME)
+                  RepositoryCommit: $(Build.SourceVersion)
+                  RepositoryBranch: $(Build.SourceBranchName)
+                  RepositoryUrl: $(Build.Repository.Uri)
+                  RepositoryType: "git"
+
+              - task: PublishTestResults@2
+                displayName: Publish the test results (xUnit)
+                condition: always()
+                inputs:
+                  testResultsFormat: xUnit
+                  testResultsFiles: 'output/**/*TestResults.xml'
+                  testRunTitle: 'xUnit Test results for $(System.JobName)'
+
+              - task: PublishTestResults@2
+                displayName: Publish the test results (NUnit)
+                condition: always()
+                inputs:
+                  testResultsFormat: NUnit
+                  testResultsFiles: 'output/**/*TestResults.xml'
+                  testRunTitle: 'NUnit Test results for $(System.JobName)'
+
+              - task: PublishTestResults@2
+                displayName: Publish the test results (VSTest)
+                condition: always()
+                inputs:
+                  testResultsFormat: VSTest
+                  testResultsFiles: 'output/**/*.trx'
+                  testRunTitle: 'VS Test results for $(System.JobName)'
+
+              - task: CopyFiles@2
+                displayName: 'Copy Files (DLLs, PDBs, MDBs & binlogs)'
+                inputs:
+                  Contents: |
+                    Xamarin.Essentials/bin/**/*.dll
+                    Xamarin.Essentials/bin/**/*.pdb
+                  TargetFolder: $(build.artifactstagingdirectory)
+
+          # - template: .ci/build.v1.yml@components
+          #   parameters:
+          #     runChecks: false
+          #     # dotnet: '3.1.415'
+          #     # dotnetStable: '3.1.415'
+          #     # cake: '2.1.0'
+          #     # ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
+          #     #   pool: ${{ parameters.VM_IMAGE_HOST }}
+          #     # ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:
+          #     #   windowsImage: windows-2019
+          #     areaPath: 'DevDiv\Xamarin SDK'
+          #     masterBranchName: 'main'
+          #     ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}: #we are shipping our product
+          #       cakeTarget: ci-release # We just want to build the library and nuget
+          #       macosImage: '' # We don't need the macOS build
+          #     preBuildSteps:
+          #       # Setup JDK Paths
+          #       # - bash: |
+          #       #     echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+          #       #   displayName: 'Setup JDK Paths'
+          #       # - pwsh: |
+          #       #     $pr = "pr." + $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
+          #       #     $nuget = $env:BASE_VERSION + "-" + $pr + "." + $env:BUILD_NUMBER
+          #       #     Write-Host "Preview label: $pr"
+          #       #     Write-Host "NuGet version: $nuget"
+          #       #     Write-Host "##vso[task.setvariable variable=PREVIEW_LABEL]$pr"
+          #       #     Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$nuget"
+          #       #   displayName: Use a special preview label for PRs
+          #       #   condition: eq(variables['Build.Reason'], 'PullRequest')
+          #       # - pwsh: |
+          #       #     $tagVersion = $env:BUILD_SOURCEBRANCHNAME
+          #       #     Write-Host "Tag version: $tagVersion"
+          #       #     Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$tagVersion"
+          #       #   displayName: Override version for tags
+          #       #   condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
+          #       # - pwsh: |
+          #       #     Write-Host "##vso[build.updatebuildnumber]$env:NUGET_VERSION"
+          #       #   displayName: Update the build number with a more readable one
+          #     # postBuildSteps:
+          #     #   - task: CopyFiles@2
+          #     #     displayName: 'Copy Files (DLLs, PDBs, MDBs & binlogs)'
+          #     #     inputs:
+          #     #       Contents: |
+          #     #         Xamarin.Essentials/bin/**/*.dll
+          #     #         Xamarin.Essentials/bin/**/*.pdb
+          #     #       TargetFolder: $(build.artifactstagingdirectory)
+
+          #       # - task: PublishBuildArtifacts@1
+          #       #   displayName: 'Publish Artifact Binaries'
+          #       #   condition: always()
+          #       #   inputs:
+          #       #     ArtifactName: 'binaries'
 
       - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
         - stage: signing
@@ -186,9 +273,7 @@ extends:
               condition: false
               pool:
                 ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
-                  name: AzurePipelines-EO
-                  demands:
-                  - ImageOverride -equals AzurePipelinesWindows2019compliant
+                  pool: ${{ parameters.VM_IMAGE_HOST }}
                 ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:
                   vmImage: windows-2019
               steps:
