@@ -48,7 +48,6 @@ parameters:
       name: Windows
       artifact: nuget
       binariesArtifact: win_build
-      docsArtifact: xml-docs
 
   - name: Skip1ESComplianceTasks
     default: false
@@ -305,14 +304,14 @@ extends:
 
               - pwsh: |
                   $srcExists = (Test-Path "${{ parameters.signListPath }}")
-                  $dstExists = (Test-Path "${{ parameters.artifactsPath }}\SignList.xml")
+                  $dstExists = (Test-Path "$(Build.ArtifactStagingDirectory)\output\SignList.xml")
                   if ($srcExists -and !$dstExists) {
-                    Copy-Item "${{ parameters.signListPath }}" "${{ parameters.artifactsPath }}\SignList.xml"
-                    Write-Host "Copied ${{ parameters.signListPath }} to ${{ parameters.artifactsPath }}\SignList.xml"
+                    Copy-Item "${{ parameters.signListPath }}" "$(Build.ArtifactStagingDirectory)\output\SignList.xml"
+                    Write-Host "Copied ${{ parameters.signListPath }} to $(Build.ArtifactStagingDirectory)\output\SignList.xml"
                   } elseif (!$srcExists) {
                     Write-Host "${{ parameters.signListPath }} did not exist, nothing copied."
                   } elseif ($dstExists) {
-                    Write-Host "${{ parameters.artifactsPath }}\SignList.xml already existed, nothing copied."
+                    Write-Host "$(Build.ArtifactStagingDirectory)\output\SignList.xml already existed, nothing copied."
                   }
                 displayName: 'Copy SignList.xml to the nuget artifact'
 
