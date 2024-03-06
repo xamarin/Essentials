@@ -16,331 +16,608 @@ variables:
   GIT_BRANCH_NAME: $(Build.SourceBranchName)
   AREA_PATH: 'DevDiv\Xamarin SDK\Build and Tools'
   CAKE_VERSION: '2.1.0'
+  signingCondition: and(succeeded(), or(eq(variables['Sign'], 'true'), startsWith(variables['Build.SourceBranch'],'refs/tags/')))
+
+parameters:
+  - name: artifactsPath
+    default: 'output'
+
+  - name: validPackagePrefixes
+    type: object
+    default: [ 'Xamarin', 'Mono' ]
+
+  - name: verbosity
+    default: 'normal'
+
+  - name: signListPath
+    default: 'SignList.xml'
+  
+  - name: cakeTemplatesBranch
+    default: 'main'
+
+  - name: VM_IMAGE_HOST
+    type: object
+    default:
+      name: AzurePipelines-EO
+      image: 1ESPT-Windows2019
+      os: windows
+
+  - name: PackPlatform
+    type: object
+    default:
+      name: Windows
+      artifact: nuget
+      binariesArtifact: win_build
+
+  - name: Skip1ESComplianceTasks
+    default: false
 
 resources:
   repositories:
-    - repository: internal-templates
+    - repository: xamarin-templates
       type: github
       name: xamarin/yaml-templates
       endpoint: xamarin
+      ref: refs/heads/main
     - repository: components
       type: github
       name: xamarin/XamarinComponents
       ref: refs/heads/main
       endpoint: xamarin
+    - repository: 1ESPipelineTemplates
+      type: git
+      name: 1ESPipelineTemplates/1ESPipelineTemplates
+      ref: refs/tags/release
 
-stages:
-  - stage: build
-    variables:
-      Codeql.Enabled: true
-    displayName: Build Library
-    jobs:
-    - template: .ci/build.v1.yml@components
-      parameters:
-        runChecks: false
-        dotnet: '3.1.415'
-        dotnetStable: '3.1.415'
-        cake: '2.1.0'
-        ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
-          windowsAgentPoolName: AzurePipelines-EO
-          windowsImage: ''  # Override the 'windows-latest' default settings
-          windowsImageOverride: AzurePipelinesWindows2019compliant
-        ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:
-          windowsImage: windows-2019
-        areaPath: 'DevDiv\Xamarin SDK'
-        masterBranchName: 'main'
-        ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}: #we are shipping our product
-          cakeTarget: ci-release # We just want to build the library and nuget
-          macosImage: '' # We don't need the macOS build
-        preBuildSteps:
-          # Setup JDK Paths
-          - bash: |
-              echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
-            displayName: 'Setup JDK Paths'
-          - pwsh: |
-              $pr = "pr." + $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
-              $nuget = $env:BASE_VERSION + "-" + $pr + "." + $env:BUILD_NUMBER
-              Write-Host "Preview label: $pr"
-              Write-Host "NuGet version: $nuget"
-              Write-Host "##vso[task.setvariable variable=PREVIEW_LABEL]$pr"
-              Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$nuget"
-            displayName: Use a special preview label for PRs
-            condition: eq(variables['Build.Reason'], 'PullRequest')
-          - pwsh: |
-              $tagVersion = $env:BUILD_SOURCEBRANCHNAME
-              Write-Host "Tag version: $tagVersion"
-              Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$tagVersion"
-            displayName: Override version for tags
-            condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
-          - pwsh: |
-              Write-Host "##vso[build.updatebuildnumber]$env:NUGET_VERSION"
-            displayName: Update the build number with a more readable one
-        postBuildSteps:
-          - task: CopyFiles@2
-            displayName: 'Copy Files (DLLs, PDBs, MDBs & binlogs)'
-            inputs:
-              Contents: |
-                Xamarin.Essentials/bin/**/*.dll
-                Xamarin.Essentials/bin/**/*.pdb
-              TargetFolder: $(build.artifactstagingdirectory)
+extends:
+  template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
+  parameters:
+    pool: ${{ parameters.VM_IMAGE_HOST }}
+    sdl:
+      ${{ if eq('${{ parameters.Skip1ESComplianceTasks }}', 'true') }}:
+        enableAllTools: false
+      binskim:
+        scanOutputDirectoryOnly: true
+      codeql:
+        runSourceLanguagesInSourceAnalysis: true
+      policheck:
+        enabled: true
+      spotBugs:
+        enabled: false
+        justification: 'Failing with "Could not successfully find the java tool launcher"'
+      sourceRepositoriesToScan:
+        exclude:
+        - repository: yaml-templates
+      suppression:
+        suppressionFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\source.gdnsuppress
+    stages:
+      - stage: windows
+        displayName: Build Windows
+        jobs:
+          - job: win_hosted
+            workspace:
+              clean: all
+            displayName: ${{ parameters.PackPlatform.name }}
+            timeoutInMinutes: 60
+            
+            pool: ${{ parameters.VM_IMAGE_HOST }}
 
-          - task: PublishBuildArtifacts@1
-            displayName: 'Publish Artifact Binaries'
-            condition: always()
-            inputs:
-              ArtifactName: 'binaries'
+            templateContext:
+              outputs:
+                - output: pipelineArtifact
+                  displayName: 'Publish the ${{ parameters.PackPlatform.binariesArtifact }} artifacts'
+                  artifactName: ${{ parameters.PackPlatform.binariesArtifact }}
+                  targetPath: '$(Build.ArtifactStagingDirectory)'
+                - output: pipelineArtifact
+                  displayName: 'Publish the ${{ parameters.PackPlatform.artifact }} artifacts'
+                  artifactName: ${{ parameters.PackPlatform.artifact }}
+                  targetPath: '$(Build.ArtifactStagingDirectory)\output'
+            steps:
+              - bash: |
+                  echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+                displayName: 'Setup JDK Paths'
 
-  - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
-    - stage: signing
-      displayName: Sign Artifacts
-      dependsOn: [ 'build' ]
-      jobs:
-        - template: sign-artifacts/jobs/v2.yml@internal-templates
-          parameters:
-            condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
+              - task: UseDotNet@2
+                displayName: 'Switch to the correct version of the .NET Core SDK'
+                inputs:
+                  version: '3.1.415'
+                  performMultiLevelLookup: true
+                  includePreviewVersions: true
+              
+              - pwsh: |
+                  dotnet tool install -g api-tools --version 1.3.4
+                  dotnet tool install -g cake.tool --version 2.1.0
+                  dotnet tool install -g Microsoft.DotNet.XHarness.CLI --version 1.0.0-prerelease.20602.1 --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-eng/nuget/v3/index.json
+                displayName: 'Install required .NET Core global tools'
 
-    - stage: sbom
-      displayName: 'Software Bill of Materials'
-      ${{ if not(startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
-        dependsOn: [ 'build' ]
-      ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}:
-        dependsOn: [ 'signing' ]
-      jobs:
-      - template: compliance/sbom/job.v1.yml@internal-templates             # Software Bill of Materials (SBOM): https://eng.ms/docs/cloud-ai-platform/devdiv/one-engineering-system-1es/1es-docs/secure-supply-chain/ado-sbom-generator
+              - task: NuGetToolInstaller@1
+                inputs:
+                  checkLatest: true
+                displayName: 'Download the latest nuget.exe'
+
+              - pwsh: |
+                  $branch = "${{ parameters.cakeTemplatesBranch }}"
+                  if (("$(Build.Repository.Id)" -eq "xamarin/XamarinComponents") -and ("$(System.PullRequest.IsFork)" -eq "False") -and ("$env:FORCE_MASTER_TEMPLATES" -ne "True")) {
+                    if ("$env:SYSTEM_PULLREQUEST_SOURCEBRANCH") {
+                      $branch = "$env:SYSTEM_PULLREQUEST_SOURCEBRANCH"
+                    } else {
+                      $branch = "$(Build.SourceBranch)"
+                    }
+                  }
+                  if ($branch.StartsWith("refs/heads/")) {
+                    $branch = $branch.Substring(11)
+                  }
+                  if ($branch.StartsWith("refs/tags/")) {
+                    $branch = $branch.Substring(10)
+                  }
+                  $root = "https://raw.githubusercontent.com/xamarin/XamarinComponents/$branch/.ci"
+                  Write-Host "##vso[task.setvariable variable=TemplateRootUri]$root"
+                  Write-Host "URL root for templates: $root"
+                displayName: 'Resolve the cake templates URL'
+
+              - pwsh: |
+                  $uri = "$(TemplateRootUri)/validation.cake"
+                  Write-Host "Downloading script from $uri..."
+                  Invoke-WebRequest -Uri $uri -OutFile "validation.cake"
+                displayName: 'Download the cake script to validate NuGet packages'
+
+              - pwsh: |
+                  $uri = "$(TemplateRootUri)/nuget-diff.cake"
+                  Write-Host "Downloading script from $uri..."
+                  Invoke-WebRequest -Uri $uri -OutFile "nuget-diff.cake"
+                displayName: 'Download the cake script to diff NuGet packages'
+
+              - pwsh: |
+                  $pr = "pr." + $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
+                  $nuget = $env:BASE_VERSION + "-" + $pr + "." + $env:BUILD_NUMBER
+                  Write-Host "Preview label: $pr"
+                  Write-Host "NuGet version: $nuget"
+                  Write-Host "##vso[task.setvariable variable=PREVIEW_LABEL]$pr"
+                  Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$nuget"
+                displayName: Use a special preview label for PRs
+                condition: eq(variables['Build.Reason'], 'PullRequest')
+
+              - pwsh: |
+                  $tagVersion = $env:BUILD_SOURCEBRANCHNAME
+                  Write-Host "Tag version: $tagVersion"
+                  Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$tagVersion"
+                displayName: Override version for tags
+                condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
+                
+              - pwsh: |
+                  Write-Host "##vso[build.updatebuildnumber]$env:NUGET_VERSION"
+                displayName: Update the build number with a more readable one
+
+              - pwsh: |
+                  # determine the "main" branch
+                  $masterBranch = "main"
+                  $encodedBranch = [Uri]::EscapeDataString("refs/heads/$masterBranch")
+                  Write-Host "Master branch: $masterBranch"
+            
+                  # determine the "current" branch
+                  $branch = "$(Build.SourceBranch)"
+                  if ("$env:SYSTEM_PULLREQUEST_TARGETBRANCH") {
+                    $branch = "$env:SYSTEM_PULLREQUEST_TARGETBRANCH"
+                  }
+                  if ($branch.StartsWith("refs/heads/")) {
+                    $branch = $branch.Substring(11)
+                    Write-Host "Current branch: $branch"
+                  }
+                  if ($branch.StartsWith("refs/tags/")) {
+                    $branch = $branch.Substring(10)
+                    Write-Host "Current tag: $branch"
+                  }
+            
+                  if (($branch -eq $masterBranch) -and ("$(System.PullRequest.IsFork)" -eq "False")) {
+                    Write-Host "Branch is master, fetching last successful build commit..."
+            
+                    $url = "$(System.TeamFoundationCollectionUri)$(System.TeamProjectId)/_apis/build/builds/?definitions=$(System.DefinitionId)&branchName=$encodedBranch&statusFilter=completed&resultFilter=succeeded&api-version=5.0"
+                    Write-Host "URL for last successful master build: $url"
+            
+                    $json = Invoke-RestMethod -Uri $url -Headers @{
+                        Authorization = "Bearer $(System.AccessToken)"
+                    }
+                    Write-Host "JSON response:"
+                    Write-Host "$json"
+            
+                    $lastSuccessfulBuildCommit = try { $json.value[0].sourceVersion; } catch { $null }
+                  }
+            
+                  if ($lastSuccessfulBuildCommit) {
+                    Write-Host "Last successful commit found: $lastSuccessfulBuildCommit"
+                  } else {
+                    $lastSuccessfulBuildCommit = "origin/$masterBranch"
+                    Write-Host "No previously successful build found, using $lastSuccessfulBuildCommit."
+                  }
+            
+                  Write-Host "##vso[task.setvariable variable=GitLastSuccessfulCommit]$lastSuccessfulBuildCommit"
+                displayName: 'Find the last successful commit'
+
+              - pwsh: |
+                  Get-Content $MyInvocation.MyCommand.Definition
+                  dotnet cake build.cake `
+                    --gitpreviouscommit="$(GitLastSuccessfulCommit)" `
+                    --gitcommit="$(Build.SourceVersion)" `
+                    --gitbranch="$(Build.SourceBranch)" `
+                    --target="ci-release" `
+                    --configuration="Release" `
+                    --verbosity="${{ parameters.verbosity }}"
+                displayName: 'Run basic build'
+                env:
+                  JavaSdkDirectory: $(JAVA_HOME)
+                  RepositoryCommit: $(Build.SourceVersion)
+                  RepositoryBranch: $(Build.SourceBranchName)
+                  RepositoryUrl: $(Build.Repository.Uri)
+                  RepositoryType: "git"
+
+              - task: PublishTestResults@2
+                displayName: Publish the test results (xUnit)
+                condition: always()
+                inputs:
+                  testResultsFormat: xUnit
+                  testResultsFiles: 'output/**/*TestResults.xml'
+                  testRunTitle: 'xUnit Test results for $(System.JobName)'
+
+              - task: PublishTestResults@2
+                displayName: Publish the test results (NUnit)
+                condition: always()
+                inputs:
+                  testResultsFormat: NUnit
+                  testResultsFiles: 'output/**/*TestResults.xml'
+                  testRunTitle: 'NUnit Test results for $(System.JobName)'
+
+              - task: PublishTestResults@2
+                displayName: Publish the test results (VSTest)
+                condition: always()
+                inputs:
+                  testResultsFormat: VSTest
+                  testResultsFiles: 'output/**/*.trx'
+                  testRunTitle: 'VS Test results for $(System.JobName)'
+
+              - task: CopyFiles@2
+                displayName: 'Copy Files (DLLs, PDBs, MDBs & binlogs)'
+                inputs:
+                  Contents: |
+                    Xamarin.Essentials/bin/**/*.dll
+                    Xamarin.Essentials/bin/**/*.pdb
+                  TargetFolder: $(build.artifactstagingdirectory)
+
+              - task: CopyFiles@2
+                displayName: 'Copy NuGet package to artifacts staging'
+                inputs:
+                  Contents: '$(Build.SourcesDirectory)\**\Xamarin.Essentials.*.nupkg'
+                  TargetFolder: $(build.artifactstagingdirectory)\output
+
+              - pwsh: |
+                  dotnet cake validation.cake `
+                    --namespaces="${{ join(',', parameters.validPackagePrefixes) }}" `
+                    --verbosity="${{ parameters.verbosity }}"
+                displayName: 'Run NuGet package validation'
+
+              - pwsh: |
+                  dotnet cake nuget-diff.cake `
+                    --artifacts="${{ parameters.artifactsPath }}" `
+                    --output="${{ parameters.artifactsPath }}/api-diff" `
+                    --cache="$(Agent.TempDirectory)/api-diff" `
+                    --verbosity="${{ parameters.verbosity }}"
+                displayName: 'Generate API diff'
+
+              - pwsh: |
+                  $srcExists = (Test-Path "${{ parameters.signListPath }}")
+                  $dstExists = (Test-Path "$(Build.ArtifactStagingDirectory)\output\SignList.xml")
+                  if ($srcExists -and !$dstExists) {
+                    Copy-Item "${{ parameters.signListPath }}" "$(Build.ArtifactStagingDirectory)\output\SignList.xml"
+                    Write-Host "Copied ${{ parameters.signListPath }} to $(Build.ArtifactStagingDirectory)\output\SignList.xml"
+                  } elseif (!$srcExists) {
+                    Write-Host "${{ parameters.signListPath }} did not exist, nothing copied."
+                  } elseif ($dstExists) {
+                    Write-Host "$(Build.ArtifactStagingDirectory)\output\SignList.xml already existed, nothing copied."
+                  }
+                displayName: 'Copy SignList.xml to the nuget artifact'
+
+          # - template: .ci/build.v1.yml@components
+          #   parameters:
+          #     runChecks: false
+          #     # dotnet: '3.1.415'
+          #     # dotnetStable: '3.1.415'
+          #     # cake: '2.1.0'
+          #     # ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
+          #     #   pool: ${{ parameters.VM_IMAGE_HOST }}
+          #     # ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:
+          #     #   windowsImage: windows-2019
+          #     areaPath: 'DevDiv\Xamarin SDK'
+          #     masterBranchName: 'main'
+          #     ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}: #we are shipping our product
+          #       cakeTarget: ci-release # We just want to build the library and nuget
+          #       macosImage: '' # We don't need the macOS build
+          #     preBuildSteps:
+          #       # Setup JDK Paths
+          #       # - bash: |
+          #       #     echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+          #       #   displayName: 'Setup JDK Paths'
+          #       # - pwsh: |
+          #       #     $pr = "pr." + $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
+          #       #     $nuget = $env:BASE_VERSION + "-" + $pr + "." + $env:BUILD_NUMBER
+          #       #     Write-Host "Preview label: $pr"
+          #       #     Write-Host "NuGet version: $nuget"
+          #       #     Write-Host "##vso[task.setvariable variable=PREVIEW_LABEL]$pr"
+          #       #     Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$nuget"
+          #       #   displayName: Use a special preview label for PRs
+          #       #   condition: eq(variables['Build.Reason'], 'PullRequest')
+          #       # - pwsh: |
+          #       #     $tagVersion = $env:BUILD_SOURCEBRANCHNAME
+          #       #     Write-Host "Tag version: $tagVersion"
+          #       #     Write-Host "##vso[task.setvariable variable=NUGET_VERSION]$tagVersion"
+          #       #   displayName: Override version for tags
+          #       #   condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
+          #       # - pwsh: |
+          #       #     Write-Host "##vso[build.updatebuildnumber]$env:NUGET_VERSION"
+          #       #   displayName: Update the build number with a more readable one
+          #     # postBuildSteps:
+          #     #   - task: CopyFiles@2
+          #     #     displayName: 'Copy Files (DLLs, PDBs, MDBs & binlogs)'
+          #     #     inputs:
+          #     #       Contents: |
+          #     #         Xamarin.Essentials/bin/**/*.dll
+          #     #         Xamarin.Essentials/bin/**/*.pdb
+          #     #       TargetFolder: $(build.artifactstagingdirectory)
+
+          #       # - task: PublishBuildArtifacts@1
+          #       #   displayName: 'Publish Artifact Binaries'
+          #       #   condition: always()
+          #       #   inputs:
+          #       #     ArtifactName: 'binaries'
+
+      - template: security/apiscan/v0.yml@xamarin-templates
         parameters:
-          artifactNames: ['nuget']
-          packageName: 'Xamarin Essentials'
-          packageFilter: '*.nupkg'
-          packageVersionRegex: '(?i)^Xamarin.Essentials\.(?<version>\d+\.\d+\.\d+)(.*).nupkg$'
+          windowsPoolName: ${{ parameters.VM_IMAGE_HOST.name }}
+          windowsImageOverride: ${{ parameters.VM_IMAGE_HOST.image }}
+          stageDependsOn: 'windows'
+          timeoutInMinutes: 600
+          scanArtifacts: [ '${{ parameters.PackPlatform.artifact }}', '${{ parameters.PackPlatform.binariesArtifact }}' ]
+          sourceGdnSuppressionFile: '$(Build.SourcesDirectory)\build-tools\automation\guardian\source.gdnsuppress'
+          tsaConfigFile: '$(Build.SourcesDirectory)\build-tools\automation\guardian\tsaoptions-v2.json'
+          apiScanSoftwareName: 'Xamarin.Essentials'
+          apiScanSoftwareVersionNum: '1.8'
 
-  - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
-    - template: security/full/v1.yml@internal-templates
-      parameters:
-        scanArtifacts: [ 'nuget', 'binaries' ]
-        antiMalwareEnabled: true
-        binSkimEnabled: true
-        enableCodeInspector: true
-        credScanEnabled: true
-        credScanSuppressionFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\CredScanSuppressions.json
-        sourceGdnSuppressionFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\source.gdnsuppress
-        tsaConfigFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\tsaoptions-v2.json
-        policheckExclusionFilesFolder: $(Build.SourcesDirectory)\build-tools\automation\guardian
-        policheckGdnSuppressionFilesFolder: $(Build.SourcesDirectory)\build-tools\automation\guardian
-        apiScanEnabled: true
-        apiScanSoftwareName: 'Xamarin.Essentials'
-        apiScanSoftwareVersionNum: '1.8'
+      - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
+        - stage: signing
+          displayName: Sign Artifacts
+          dependsOn: [ 'windows' ]
+          jobs:
+            - template: sign-artifacts/jobs/v2.yml@xamarin-templates
+              parameters:
+                displayName: Sign Phase
+                condition: ${{ variables.signingCondition }}
+                use1ESTemplate: true
+                usePipelineArtifactTasks: true
 
-  - ${{ if not(startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
-    - stage: devicetests
-      dependsOn: []
-      displayName: Device Tests
-      jobs:
-        - job: devicetests_uwp
-          displayName: UWP
-          # skip for now
-          condition: false
-          pool:
-            ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
-              name: AzurePipelines-EO
-              demands:
-              - ImageOverride -equals AzurePipelinesWindows2019compliant
-            ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:
-              vmImage: windows-2019
-          steps:
-            - script: 'certutil -importpfx $(Build.SourcesDirectory)\DeviceTests\DeviceTests.UWP\DeviceTests.UWP_TemporaryKey.pfx'
-              displayName: 'Run certutil'
-            - powershell: |
-                cd DeviceTests
-                .\build.ps1 --target=test-uwp-emu --settings_skipverification=true --verbosity=diagnostic
-              displayName: 'Run Device Tests - UWP'
-            - task: PublishTestResults@2
-              displayName: 'Publish Test Results'
-              inputs:
-                testResultsFormat: XUnit
-                testResultsFiles: '**/xunit-*.xml'
-                testRunTitle: 'Device Tests - UWP'
-  
-        - template: .ci/build.v1.yml@components
-          parameters:
-            macosImage: 'macos-12'
-            name: devicetests_ios
-            runChecks: false
-            displayName: iOS
-            publishOutputSuffix: '-ios'
-            windowsImage: ''
-            areaPath: $(AREA_PATH)
-            verbosity: diagnostic
-            cakeFile: DeviceTests/build.cake
-            cakeTarget: test-ios-emu
-            cake: $(CAKE_VERSION)
-            xcode: '14.2'
-            xharness: '1.0.0-prerelease.23212.1'
-  
-        - template: .ci/build.v1.yml@components
-          parameters:
-            name: devicetests_android_api_21
-            runChecks: false
-            displayName: Android API 21
-            publishOutputSuffix: '-android21'
-            windowsImage: ''                    # Mac only
-            areaPath: $(AREA_PATH)
-            verbosity: diagnostic
-            cakeFile: DeviceTests/build.cake
-            cakeTarget: test-android-emu
-            cakeExtraArgs: --avd-target="`"system-images;android-21;google_apis;x86`""
-            cake: $(CAKE_VERSION)
-            preBuildSteps:
-              # Setup JDK Paths
-              - bash: |
-                  echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
-                displayName: 'Setup JDK Paths'
-              - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-21;google_apis;x86\""
-                displayName: Install the Android emulators
-  
-        - template: .ci/build.v1.yml@components
-          parameters:
-            name: devicetests_android_api_22
-            runChecks: false
-            displayName: Android API 22
-            publishOutputSuffix: '-android22'
-            windowsImage: ''                    # Mac only
-            areaPath: $(AREA_PATH)
-            verbosity: diagnostic
-            cakeFile: DeviceTests/build.cake
-            cakeTarget: test-android-emu
-            cakeExtraArgs: --avd-target="`"system-images;android-22;google_apis;x86`""
-            cake: $(CAKE_VERSION)
-            preBuildSteps:
-              # Setup JDK Paths
-              - bash: |
-                  echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
-                displayName: 'Setup JDK Paths'
-              - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-22;google_apis;x86\""
-                displayName: Install the Android emulators
+      # - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
+      #   - template: security/full/v1.yml@internal-templates
+      #     parameters:
+      #       scanArtifacts: [ 'nuget', 'binaries' ]
+      #       antiMalwareEnabled: true
+      #       binSkimEnabled: true
+      #       enableCodeInspector: true
+      #       credScanEnabled: true
+      #       credScanSuppressionFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\CredScanSuppressions.json
+      #       sourceGdnSuppressionFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\source.gdnsuppress
+      #       tsaConfigFile: $(Build.SourcesDirectory)\build-tools\automation\guardian\tsaoptions-v2.json
+      #       policheckExclusionFilesFolder: $(Build.SourcesDirectory)\build-tools\automation\guardian
+      #       policheckGdnSuppressionFilesFolder: $(Build.SourcesDirectory)\build-tools\automation\guardian
+      #       apiScanEnabled: true
+      #       apiScanSoftwareName: 'Xamarin.Essentials'
+      #       apiScanSoftwareVersionNum: '1.8'
 
-#         - template: .ci/build.v1.yml@components
-#           parameters:
-#             name: devicetests_android_api_23
-#             runChecks: false
-#             continueOnError: true
-#             displayName: Android API 23
-#             publishOutputSuffix: '-android23'
-#             windowsImage: ''                   # Mac only
-#             areaPath: $(AREA_PATH)
-#             verbosity: diagnostic
-#             cakeFile: DeviceTests/build.cake
-#             cakeTarget: test-android-emu
-#             cakeExtraArgs: --avd-target="`"system-images;android-23;google_apis;x86`""
-#             cake: $(CAKE_VERSION)
-#             preBuildSteps:
-#                # Setup JDK Paths
-#                - bash: |
-#                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
-#                 displayName: 'Setup JDK Paths'
-#               - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-23;google_apis;x86\""
-#               displayName: Install the Android emulators
-  
-        - template: .ci/build.v1.yml@components
-          parameters:
-            name: devicetests_android_api_24
-            runChecks: false
-            displayName: Android API 24
-            publishOutputSuffix: '-android24'
-            windowsImage: ''                    # Mac only
-            areaPath: $(AREA_PATH)
-            verbosity: diagnostic
-            cakeFile: DeviceTests/build.cake
-            cakeTarget: test-android-emu
-            cakeExtraArgs: --avd-target="`"system-images;android-24;google_apis;x86`""
-            cake: $(CAKE_VERSION)
-            preBuildSteps:
-              # Setup JDK Paths
-              - bash: |
-                  echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
-                displayName: 'Setup JDK Paths'
-              - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-24;google_apis;x86\""
-                displayName: Install the Android emulators
-  
-        - template: .ci/build.v1.yml@components
-          parameters:
-            name: devicetests_android_api_26
-            runChecks: false
-            displayName: Android API 26
-            publishOutputSuffix: '-android26'
-            windowsImage: ''                    # Mac only
-            areaPath: $(AREA_PATH)
-            verbosity: diagnostic
-            cakeFile: DeviceTests/build.cake
-            cakeTarget: test-android-emu
-            cakeExtraArgs: --avd-target="`"system-images;android-26;google_apis;x86`""
-            cake: $(CAKE_VERSION)
-            preBuildSteps:
-              # Setup JDK Paths
-              - bash: |
-                  echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
-                displayName: 'Setup JDK Paths'
-              - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-26;google_apis;x86\""
-                displayName: Install the Android emulators
-  
-        - template: .ci/build.v1.yml@components
-          parameters:
-            name: devicetests_android_api_29
-            runChecks: false
-            displayName: Android API 29
-            publishOutputSuffix: '-android29'
-            windowsImage: ''                    # Mac only
-            areaPath: $(AREA_PATH)
-            verbosity: diagnostic
-            cakeFile: DeviceTests/build.cake
-            cakeTarget: test-android-emu
-            cakeExtraArgs: --avd-target="`"system-images;android-29;google_apis;x86`""
-            cake: $(CAKE_VERSION)
-            preBuildSteps:
-              # Setup JDK Paths
-              - bash: |
-                  echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
-                displayName: 'Setup JDK Paths'
-              - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-29;google_apis;x86\""
-                displayName: Install the Android emulators
-  
-        # - template: .ci/build.v1.yml@components
-        #   parameters:
-        #     name: devicetests_android_api_30
-        #     runChecks: false
-        #     displayName: Android API 30
-        #     publishOutputSuffix: '-android30'
-        #     windowsImage: ''                   # Mac only
-        #     areaPath: $(AREA_PATH)
-        #     verbosity: diagnostic
-        #     cakeFile: DeviceTests/build.cake
-        #     cakeTarget: test-android-emu
-        #     cakeExtraArgs: --avd-target="`"system-images;android-30;google_apis_playstore;x86`""
-        #     cake: $(CAKE_VERSION)
-        #     preBuildSteps:
-        #       # Setup JDK Paths
-        #       - bash: |
-        #          echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
-        #         displayName: 'Setup JDK Paths'
-        #       - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-30;google_apis_playstore;x86\""
-        #         displayName: Install the Android emulators
+    #   - ${{ if not(startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
+    #     - stage: devicetests
+    #       dependsOn: []
+    #       displayName: Device Tests
+    #       jobs:
+    #         - job: devicetests_uwp
+    #           displayName: UWP
+    #           # skip for now
+    #           condition: false
+    #           pool:
+    #             ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:    # The AzurePipelines-EO pool is only available in DevDiv
+    #               pool: ${{ parameters.VM_IMAGE_HOST }}
+    #             ${{ if ne(variables['System.TeamProject'], 'devdiv') }}:
+    #               vmImage: windows-2019
+    #           steps:
+    #             - script: 'certutil -importpfx $(Build.SourcesDirectory)\DeviceTests\DeviceTests.UWP\DeviceTests.UWP_TemporaryKey.pfx'
+    #               displayName: 'Run certutil'
+    #             - powershell: |
+    #                 cd DeviceTests
+    #                 .\build.ps1 --target=test-uwp-emu --settings_skipverification=true --verbosity=diagnostic
+    #               displayName: 'Run Device Tests - UWP'
+    #             - task: PublishTestResults@2
+    #               displayName: 'Publish Test Results'
+    #               inputs:
+    #                 testResultsFormat: XUnit
+    #                 testResultsFiles: '**/xunit-*.xml'
+    #                 testRunTitle: 'Device Tests - UWP'
+      
+    #         - template: .ci/build.v1.yml@components
+    #           parameters:
+    #             macosImage: 'macos-12'
+    #             name: devicetests_ios
+    #             runChecks: false
+    #             displayName: iOS
+    #             publishOutputSuffix: '-ios'
+    #             windowsImage: ''
+    #             areaPath: $(AREA_PATH)
+    #             verbosity: diagnostic
+    #             cakeFile: DeviceTests/build.cake
+    #             cakeTarget: test-ios-emu
+    #             cake: $(CAKE_VERSION)
+    #             xcode: '14.2'
+    #             xharness: '1.0.0-prerelease.23212.1'
+      
+    #         - template: .ci/build.v1.yml@components
+    #           parameters:
+    #             name: devicetests_android_api_21
+    #             runChecks: false
+    #             displayName: Android API 21
+    #             publishOutputSuffix: '-android21'
+    #             windowsImage: ''                    # Mac only
+    #             areaPath: $(AREA_PATH)
+    #             verbosity: diagnostic
+    #             cakeFile: DeviceTests/build.cake
+    #             cakeTarget: test-android-emu
+    #             cakeExtraArgs: --avd-target="`"system-images;android-21;google_apis;x86`""
+    #             cake: $(CAKE_VERSION)
+    #             preBuildSteps:
+    #               # Setup JDK Paths
+    #               - bash: |
+    #                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+    #                 displayName: 'Setup JDK Paths'
+    #               - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-21;google_apis;x86\""
+    #                 displayName: Install the Android emulators
+      
+    #         - template: .ci/build.v1.yml@components
+    #           parameters:
+    #             name: devicetests_android_api_22
+    #             runChecks: false
+    #             displayName: Android API 22
+    #             publishOutputSuffix: '-android22'
+    #             windowsImage: ''                    # Mac only
+    #             areaPath: $(AREA_PATH)
+    #             verbosity: diagnostic
+    #             cakeFile: DeviceTests/build.cake
+    #             cakeTarget: test-android-emu
+    #             cakeExtraArgs: --avd-target="`"system-images;android-22;google_apis;x86`""
+    #             cake: $(CAKE_VERSION)
+    #             preBuildSteps:
+    #               # Setup JDK Paths
+    #               - bash: |
+    #                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+    #                 displayName: 'Setup JDK Paths'
+    #               - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-22;google_apis;x86\""
+    #                 displayName: Install the Android emulators
 
-        # - template: .ci/build.v1.yml@components
-        #   parameters:
-        #     name: devicetests_android_api_33
-        #     runChecks: false
-        #     displayName: Android API 33
-        #     publishOutputSuffix: '-android33'
-        #     windowsImage: ''                   # Mac only
-        #     areaPath: $(AREA_PATH)
-        #     verbosity: diagnostic
-        #     cakeFile: DeviceTests/build.cake
-        #     cakeTarget: test-android-emu
-        #     cakeExtraArgs: --avd-target="`"system-images;android-33;google_apis_playstore;x86_64`""
-        #     cake: $(CAKE_VERSION)
-        #     preBuildSteps:
-        #       # Setup JDK Paths
-        #       - bash: |
-        #           echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
-        #         displayName: 'Setup JDK Paths'
-        #       - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-33;google_apis_playstore;x86_64\""
-        #         displayName: Install the Android emulators
+    # #         - template: .ci/build.v1.yml@components
+    # #           parameters:
+    # #             name: devicetests_android_api_23
+    # #             runChecks: false
+    # #             continueOnError: true
+    # #             displayName: Android API 23
+    # #             publishOutputSuffix: '-android23'
+    # #             windowsImage: ''                   # Mac only
+    # #             areaPath: $(AREA_PATH)
+    # #             verbosity: diagnostic
+    # #             cakeFile: DeviceTests/build.cake
+    # #             cakeTarget: test-android-emu
+    # #             cakeExtraArgs: --avd-target="`"system-images;android-23;google_apis;x86`""
+    # #             cake: $(CAKE_VERSION)
+    # #             preBuildSteps:
+    # #                # Setup JDK Paths
+    # #                - bash: |
+    # #                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+    # #                 displayName: 'Setup JDK Paths'
+    # #               - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-23;google_apis;x86\""
+    # #               displayName: Install the Android emulators
+      
+    #         - template: .ci/build.v1.yml@components
+    #           parameters:
+    #             name: devicetests_android_api_24
+    #             runChecks: false
+    #             displayName: Android API 24
+    #             publishOutputSuffix: '-android24'
+    #             windowsImage: ''                    # Mac only
+    #             areaPath: $(AREA_PATH)
+    #             verbosity: diagnostic
+    #             cakeFile: DeviceTests/build.cake
+    #             cakeTarget: test-android-emu
+    #             cakeExtraArgs: --avd-target="`"system-images;android-24;google_apis;x86`""
+    #             cake: $(CAKE_VERSION)
+    #             preBuildSteps:
+    #               # Setup JDK Paths
+    #               - bash: |
+    #                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+    #                 displayName: 'Setup JDK Paths'
+    #               - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-24;google_apis;x86\""
+    #                 displayName: Install the Android emulators
+      
+    #         - template: .ci/build.v1.yml@components
+    #           parameters:
+    #             name: devicetests_android_api_26
+    #             runChecks: false
+    #             displayName: Android API 26
+    #             publishOutputSuffix: '-android26'
+    #             windowsImage: ''                    # Mac only
+    #             areaPath: $(AREA_PATH)
+    #             verbosity: diagnostic
+    #             cakeFile: DeviceTests/build.cake
+    #             cakeTarget: test-android-emu
+    #             cakeExtraArgs: --avd-target="`"system-images;android-26;google_apis;x86`""
+    #             cake: $(CAKE_VERSION)
+    #             preBuildSteps:
+    #               # Setup JDK Paths
+    #               - bash: |
+    #                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+    #                 displayName: 'Setup JDK Paths'
+    #               - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-26;google_apis;x86\""
+    #                 displayName: Install the Android emulators
+      
+    #         - template: .ci/build.v1.yml@components
+    #           parameters:
+    #             name: devicetests_android_api_29
+    #             runChecks: false
+    #             displayName: Android API 29
+    #             publishOutputSuffix: '-android29'
+    #             windowsImage: ''                    # Mac only
+    #             areaPath: $(AREA_PATH)
+    #             verbosity: diagnostic
+    #             cakeFile: DeviceTests/build.cake
+    #             cakeTarget: test-android-emu
+    #             cakeExtraArgs: --avd-target="`"system-images;android-29;google_apis;x86`""
+    #             cake: $(CAKE_VERSION)
+    #             preBuildSteps:
+    #               # Setup JDK Paths
+    #               - bash: |
+    #                   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+    #                 displayName: 'Setup JDK Paths'
+    #               - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-29;google_apis;x86\""
+    #                 displayName: Install the Android emulators
+      
+    #         # - template: .ci/build.v1.yml@components
+    #         #   parameters:
+    #         #     name: devicetests_android_api_30
+    #         #     runChecks: false
+    #         #     displayName: Android API 30
+    #         #     publishOutputSuffix: '-android30'
+    #         #     windowsImage: ''                   # Mac only
+    #         #     areaPath: $(AREA_PATH)
+    #         #     verbosity: diagnostic
+    #         #     cakeFile: DeviceTests/build.cake
+    #         #     cakeTarget: test-android-emu
+    #         #     cakeExtraArgs: --avd-target="`"system-images;android-30;google_apis_playstore;x86`""
+    #         #     cake: $(CAKE_VERSION)
+    #         #     preBuildSteps:
+    #         #       # Setup JDK Paths
+    #         #       - bash: |
+    #         #          echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+    #         #         displayName: 'Setup JDK Paths'
+    #         #       - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-30;google_apis_playstore;x86\""
+    #         #         displayName: Install the Android emulators
+
+    #         # - template: .ci/build.v1.yml@components
+    #         #   parameters:
+    #         #     name: devicetests_android_api_33
+    #         #     runChecks: false
+    #         #     displayName: Android API 33
+    #         #     publishOutputSuffix: '-android33'
+    #         #     windowsImage: ''                   # Mac only
+    #         #     areaPath: $(AREA_PATH)
+    #         #     verbosity: diagnostic
+    #         #     cakeFile: DeviceTests/build.cake
+    #         #     cakeTarget: test-android-emu
+    #         #     cakeExtraArgs: --avd-target="`"system-images;android-33;google_apis_playstore;x86_64`""
+    #         #     cake: $(CAKE_VERSION)
+    #         #     preBuildSteps:
+    #         #       # Setup JDK Paths
+    #         #       - bash: |
+    #         #           echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+    #         #         displayName: 'Setup JDK Paths'
+    #         #       - bash: sh -c "echo \"y\" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \"system-images;android-33;google_apis_playstore;x86_64\""
+    #         #         displayName: Install the Android emulators
