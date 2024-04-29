@@ -10,11 +10,11 @@ Support for Xamarin.Essentials ended on **May 1, 2024** as per the [Xamarin Supp
 
 > Xamarin support ended on May 1, 2024 for all Xamarin SDKs including Xamarin.Forms.
 
-Xamarin.Forms now has a successor which is .NET MAUI, and includes Essentials, as part of .NET 6+ and follows the same support lifecycle as the [MAUI Support Lifecycle][maui-support-lifecycle].
+Xamarin.Forms was succeeded by .NET MAUI (which includes Essentials), in May 2022 as part of .NET 6, and is currently supported as described on the [.NET MAUI Support Policy][maui-support-policy]. Follow the [official upgrade guidance](https://learn.microsoft.com/dotnet/maui/migration) to bring your Xamarin applications to the latest version of .NET.
 
-To all our developers and contributors, thank you so much for being a part of our Xamarin community. We hope to see you all over in [.NET MAUI][dotnet-maui-repo]!
+To all our developers and contributors, thank you so much for being a part of our Xamarin community. We'll see you all over in [.NET MAUI][dotnet-maui-repo]!
 
-[maui-support-lifecycle]: https://dotnet.microsoft.com/platform/support/policy/maui
+[maui-support-policy]: https://dotnet.microsoft.com/platform/support/policy/maui
 [xamarin-support-policy]: https://dotnet.microsoft.com/platform/support/policy/xamarin
 [dotnet-maui-repo]:https://github.com/dotnet/maui/
 
